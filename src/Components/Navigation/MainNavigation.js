@@ -1,11 +1,10 @@
 import React, { Component } from "react";
-import { Button, View } from "react-native";
+import { Button, Text, View } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MyTabBar from "./TabBar";
 import Details from "../../pages/Details/Details";
 import Information from "../../pages/Inf/Inf";
-import Login from "../../pages/TestPage/Login";
-import MainPage from "../../pages/TestPage/MainPage";
+import Login from "../../pages/Login/Login";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -44,24 +43,14 @@ export default class MainNavigation extends Component {
                 <Stack.Screen
                     name="Home"
                     component={MyTabBar}
-                    options={{ header: () => {} }}
-                />
-                <Stack.Screen
-                    name="Details"
-                    component={Details}
-                    options={({ route }) => ({
-                        title: route.params.article.value.name,
-                    })}
-                />
-                <Stack.Screen
-                    name="MainPage"
-                    component={MainPage}
                     options={{
-                        headerLeft: null,
-                        headerRight: InfButton, //导航右侧区域配置 默认无
+                        header: () => {
+                            <View>
+                                <Text>我是头部</Text>
+                            </View>;
+                        },
                     }}
                 />
-                <Stack.Screen name="Inf" component={Information} />
             </Stack.Navigator>
         );
     }

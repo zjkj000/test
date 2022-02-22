@@ -1,17 +1,26 @@
 import React from "react";
 import { Text, View, ActivityIndicator } from "react-native";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
-import Calculator from "../../pages/Calculator/Calculator";
-import MyTabs from "../../pages/Home/Tabs";
-import Loading from "../loading/Loading";
+import Loading from "../../utils/loading/Loading";
+import MyPage from "../../pages/My/My";
+import {
+    bindBackExitApp,
+    removeBackExitApp,
+} from "../../utils/TwiceTap/TwiceTap";
 
 export default class MyTabBar extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             selectedTab: "home",
-            isLoading: true,
+            isLoading: false,
         };
+    }
+    componentDidMount() {
+        bindBackExitApp();
+    }
+    componentWillUnmount() {
+        removeBackExitApp();
     }
     renderContent = (pageText) => {
         return (
@@ -37,13 +46,31 @@ export default class MyTabBar extends React.Component {
                 isLoading: false,
             });
             // Loading.hide();
-        }, 2000);
+        }, 1000);
     };
-    getHome = () => {
-        return <MyTabs />;
+    renderHome = () => {
+        return (
+            <View>
+                <Text>我是首页</Text>
+            </View>
+        );
     };
-    getMy = () => {
-        return <Calculator />;
+    renderMy = () => {
+        return <MyPage />;
+    };
+    renderOnlineClass = () => {
+        return (
+            <View>
+                <Text>上课页面</Text>
+            </View>
+        );
+    };
+    renderWrongTopic = () => {
+        return (
+            <View>
+                <Text>我是错题本</Text>
+            </View>
+        );
     };
     render() {
         return (
@@ -53,24 +80,36 @@ export default class MyTabBar extends React.Component {
                 barTintColor="#f5f5f5"
             >
                 <TabBar.Item
-                    title="Home"
+                    title="首页"
                     icon={<Icon name="home" />}
                     selected={this.state.selectedTab === "home"}
                     onPress={(e) => this.onChangeTab("home")}
                 >
-                    <Loading
-                        show={this.state.isLoading}
-                        list={this.getHome}
-                        color={"red"}
-                    />
+                    {this.renderHome()}
+                </TabBar.Item>
+                <TabBar.Item
+                    icon={<Icon name="schedule" />}
+                    title="线上课程"
+                    selected={this.state.selectedTab === "onlineClass"}
+                    onPress={() => this.onChangeTab("onlineClass")}
+                >
+                    {this.renderOnlineClass()}
+                </TabBar.Item>
+                <TabBar.Item
+                    icon={<Icon name="book" />}
+                    title="错题本"
+                    selected={this.state.selectedTab === "wrongTopic"}
+                    onPress={() => this.onChangeTab("wrongTopic")}
+                >
+                    {this.renderWrongTopic()}
                 </TabBar.Item>
                 <TabBar.Item
                     icon={<Icon name="user" />}
-                    title="My"
-                    selected={this.state.selectedTab === "calculator"}
-                    onPress={() => this.onChangeTab("calculator")}
+                    title="我的"
+                    selected={this.state.selectedTab === "my"}
+                    onPress={() => this.onChangeTab("my")}
                 >
-                    <Loading show={this.state.isLoading} list={this.getMy} />
+                    {this.renderMy()}
                 </TabBar.Item>
             </TabBar>
         );

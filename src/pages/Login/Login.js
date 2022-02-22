@@ -8,7 +8,6 @@ import {
     TextInput,
     TouchableHighlight,
 } from "react-native";
-import MainPage from "./MainPage";
 export default class Login extends Component {
     constructor(props) {
         super(props);
@@ -63,7 +62,7 @@ export default class Login extends Component {
     loginInMainpage() {
         this.refs.inputLoginName.blur();
         this.refs.inputLoginPwd.blur();
-        this.props.navigation.navigate("MainPage", {
+        this.props.navigation.navigate("Home", {
             logName: this.state.username,
             logPwd: this.state.userpwd,
             parentComponent: this,

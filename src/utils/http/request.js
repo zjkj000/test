@@ -92,7 +92,7 @@ export default class http {
          * params默认为数组
          */
         try {
-            let res = await axios.post(url, params);
+            let res = await axios.delete(url, params);
             return res;
         } catch (error) {
             return error;
