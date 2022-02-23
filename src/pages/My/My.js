@@ -11,6 +11,8 @@ import {
     Divider,
     Input,
     Icon,
+    OverflowMenu,
+    MenuItem,
 } from "@ui-kitten/components";
 
 export default class MyPage extends Component {
@@ -21,6 +23,8 @@ export default class MyPage extends Component {
             value: "",
             hasAvatar: false,
             userName: "小明",
+            selectedTitle: "No items selected",
+            moduleVisible: false,
         };
     }
     setValue = (value) => {
@@ -55,6 +59,7 @@ export default class MyPage extends Component {
             this.setState({
                 imgURL: response.uri,
                 hasAvatar: true,
+                moduleVisible: false,
             });
         });
 
@@ -89,7 +94,34 @@ export default class MyPage extends Component {
             this.setState({
                 imgURL: response.uri,
                 hasAvatar: true,
+                moduleVisible: false,
             });
+        });
+    };
+
+    renderAvatar = () => {
+        return (
+            <TouchableOpacity
+                onPress={() => {
+                    this.setState({ moduleVisible: true });
+                }}
+            >
+                <Avatar
+                    size={"giant"}
+                    shape={"round"}
+                    source={
+                        this.state.hasAvatar
+                            ? { uri: this.state.imgURL }
+                            : require("../../../images/1.png")
+                    }
+                />
+            </TouchableOpacity>
+        );
+    };
+    onItemSelect = (index) => {
+        this.setState({
+            selectedIndex: index,
+            moduleVisible: false,
         });
     };
 
@@ -100,18 +132,28 @@ export default class MyPage extends Component {
                     <Text>我的</Text>
                 </Layout>
                 <Layout style={styles.avatar}>
-                    <TouchableOpacity onPress={this.handleCamera}>
-                        <Avatar
-                            size={"giant"}
-                            shape={"round"}
-                            source={
-                                this.state.hasAvatar
-                                    ? { uri: this.state.imgURL }
-                                    : require("../../../images/1.png")
-                            }
+                    <OverflowMenu
+                        anchor={this.renderAvatar}
+                        backdropStyle={styles.backdrop}
+                        visible={this.state.moduleVisible}
+                        onBackdropPress={() => {
+                            this.setState({ moduleVisible: false });
+                        }}
+                    >
+                        <MenuItem title="拍照" onPress={this.handleCamera} />
+                        <MenuItem
+                            title="从相册中选择"
+                            onPress={this.handleLibrary}
                         />
-                    </TouchableOpacity>
+                        <MenuItem
+                            title="取消"
+                            onPress={() => {
+                                this.setState({ moduleVisible: false });
+                            }}
+                        />
+                    </OverflowMenu>
                 </Layout>
+
                 <Divider />
                 <TouchableOpacity>
                     <View style={styles.alternativeContainer}>
@@ -126,7 +168,6 @@ export default class MyPage extends Component {
                     <View style={styles.alternativeContainer}>
                         <Text style={styles.textLeft}>关于我们</Text>
                         <Text style={styles.textRight}>
-                            {" "}
                             <Icon
                                 style={styles.icon}
                                 fill="#8F9BB3"
@@ -251,5 +292,8 @@ const styles = StyleSheet.create({
     },
     button: {
         borderRadius: 0,
+    },
+    backdrop: {
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
 });
