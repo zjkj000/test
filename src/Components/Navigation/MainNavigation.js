@@ -44,11 +44,7 @@ export default class MainNavigation extends Component {
                     name="Home"
                     component={MyTabBar}
                     options={{
-                        header: () => {
-                            <View>
-                                <Text>我是头部</Text>
-                            </View>;
-                        },
+                        header: () => {},
                     }}
                 />
             </Stack.Navigator>
