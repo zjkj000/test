@@ -7,7 +7,7 @@ import Information from "../../pages/Inf/Inf";
 import Login from "../../pages/Login/Login";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import OnlineClassTempPage from "../../pages/OnlineClass";
 
 const Stack = createStackNavigator();
 
@@ -24,10 +24,9 @@ export default class MainNavigation extends Component {
                     headerTitleAlign: "center",
                     headerTitleStyle: {
                         fontSize: 17,
-                        color: "#333333",
+                        color: "#fff",
                         fontFamily: "PingFangSC-Semibold",
                         fontWeight: "700",
-                        backgroundColor: "red",
                     },
                     headerTintColor: "red", // 导航栏字体颜色设置 如果设置了headerTitleStyle则此处设置不生效
                     statusBarStyle: "light", //"inverted" | "auto" | "light" | "dark" | undefined 状态栏配置
@@ -41,6 +40,10 @@ export default class MainNavigation extends Component {
                     options={{
                         header: () => {},
                     }}
+                />
+                <Stack.Screen
+                    name="OnlineClassTemp"
+                    component={OnlineClassTempPage}
                 />
             </Stack.Navigator>
         );

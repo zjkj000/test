@@ -7,6 +7,7 @@ import {
     bindBackExitApp,
     removeBackExitApp,
 } from "../../utils/TwiceTap/TwiceTap";
+import ConnectClass from "../../pages/OnlineClass/ConnectClass";
 
 export default class MyTabBar extends React.Component {
     constructor(props) {
@@ -59,11 +60,7 @@ export default class MyTabBar extends React.Component {
         return <MyPage />;
     };
     renderOnlineClass = () => {
-        return (
-            <View>
-                <Text>上课页面</Text>
-            </View>
-        );
+        return <ConnectClass />;
     };
     renderWrongTopic = () => {
         return (

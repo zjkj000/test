@@ -1,5 +1,5 @@
 export default httpBaseConfig = {
-    baseUrl: "https://api.github.com",
+    baseUrl: "",
     port: "",
     prefix: "",
 };
