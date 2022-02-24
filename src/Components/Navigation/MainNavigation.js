@@ -10,12 +10,6 @@ import { useNavigation } from "@react-navigation/native";
 
 const Stack = createStackNavigator();
 
-function InfButton(props) {
-    const navigation = useNavigation();
-
-    return <Button onPress={() => navigation.navigate("Home")} title="Info" />;
-}
-
 export default class MainNavigation extends Component {
     constructor(props) {
         super(props);
