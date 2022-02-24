@@ -77,8 +77,8 @@ export default Login = () => {
           />
         </Layout>
         <Image 
-          source={require('../../assets/image/91.png')}
-          style={styles.Image}
+            source={require('../../assets/image/91.png')}
+            style={styles.Image}
         />
         <Input
             value={Name}
