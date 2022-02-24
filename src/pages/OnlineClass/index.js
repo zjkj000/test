@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { Component } from "react";
-import { View, Text } from "react-native";
+import { View, Text, StyleSheet } from "react-native";
 import Orientation from "react-native-orientation";
 
 export default function OnlineClassTempPage() {
@@ -23,9 +23,16 @@ class OnlineClassTemp extends Component {
 
     render() {
         return (
-            <View>
+            <View style={styles.mainContainer}>
                 <Text>中间屏幕</Text>
             </View>
         );
     }
 }
+
+const styles = StyleSheet.create({
+    mainContainer: {
+        justifyContent: "center",
+        alignItems: "center",
+    },
+});

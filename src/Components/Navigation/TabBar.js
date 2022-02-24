@@ -3,6 +3,7 @@ import { Text, View, ActivityIndicator } from "react-native";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import Loading from "../../utils/loading/Loading";
 import MyPage from "../../pages/My/My";
+import LatestTask from "../../pages/LatestTask/LatestTask";
 import {
     bindBackExitApp,
     removeBackExitApp,
@@ -51,9 +52,11 @@ export default class MyTabBar extends React.Component {
     };
     renderHome = () => {
         return (
+            /*
             <View>
                 <Text>我是首页</Text>
-            </View>
+            </View>*/
+            <LatestTask />
         );
     };
     renderMy = () => {
