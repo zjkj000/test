@@ -1,11 +1,44 @@
+<<<<<<< HEAD:src/pages/TestPage/Login.js
 import React from 'react';
 import { TouchableWithoutFeedback, StyleSheet, View , Image , Alert ,ImageBackground} from 'react-native';
 import { Icon , Input, Text ,Button, Layout} from '@ui-kitten/components';
+=======
+import React, { Component } from "react";
+import {
+    AppRegistry,
+    StyleSheet,
+    Text,
+    View,
+    Navigator,
+    TextInput,
+    TouchableHighlight,
+} from "react-native";
+export default class Login extends Component {
+    constructor(props) {
+        super(props);
+    }
+>>>>>>> aeca67833dbf826b6a2ec125e9b148992229e461:src/pages/Login/Login.js
 
 
+<<<<<<< HEAD:src/pages/TestPage/Login.js
 const AlertIcon = (props) => (
   <Icon {...props} name='alert-circle-outline'/>
 );
+=======
+    /**
+     * 登录进入主页面
+     */
+    loginInMainpage() {
+        this.refs.inputLoginName.blur();
+        this.refs.inputLoginPwd.blur();
+        this.props.navigation.navigate("Home", {
+            logName: this.state.username,
+            logPwd: this.state.userpwd,
+            parentComponent: this,
+            ...this.props,
+        });
+    }
+>>>>>>> aeca67833dbf826b6a2ec125e9b148992229e461:src/pages/Login/Login.js
 
 export default Login = () => {
   const [Name, setName] = React.useState('');
