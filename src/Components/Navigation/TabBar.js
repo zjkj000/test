@@ -3,6 +3,7 @@ import { Text, View, ActivityIndicator } from "react-native";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import Loading from "../../utils/loading/Loading";
 import MyPage from "../../pages/My/My";
+import Wrongbook from "../../pages/Wrongbook/Wrongbook";
 import {
     bindBackExitApp,
     removeBackExitApp,
@@ -68,7 +69,8 @@ export default class MyTabBar extends React.Component {
     renderWrongTopic = () => {
         return (
             <View>
-                <Text>我是错题本</Text>
+                <Wrongbook/>
+                
             </View>
         );
     };
