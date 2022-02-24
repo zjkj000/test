@@ -9,6 +9,7 @@ import MainPage from "../../pages/TestPage/MainPage";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
 
+
 const Stack = createStackNavigator();
 
 function InfButton(props) {
