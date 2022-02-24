@@ -8,6 +8,7 @@ import Login from "../../pages/Login/Login";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
 
+
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {

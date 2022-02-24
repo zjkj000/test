@@ -1,3 +1,8 @@
+<<<<<<< HEAD:src/pages/TestPage/Login.js
+import React from 'react';
+import { TouchableWithoutFeedback, StyleSheet, View , Image , Alert ,ImageBackground} from 'react-native';
+import { Icon , Input, Text ,Button, Layout} from '@ui-kitten/components';
+=======
 import React, { Component } from "react";
 import {
     AppRegistry,
@@ -12,50 +17,14 @@ export default class Login extends Component {
     constructor(props) {
         super(props);
     }
+>>>>>>> aeca67833dbf826b6a2ec125e9b148992229e461:src/pages/Login/Login.js
 
-    render() {
-        return (
-            <View style={styles.container}>
-                <View style={styles.item}>
-                    <Text style={styles.textStyle}>用户帐号：</Text>
-                    <TextInput
-                        ref="inputLoginName"
-                        autoFocus={true}
-                        underlineColorAndroid="gray"
-                        placeholder="请输入用户名"
-                        clearTextOnFocus={true}
-                        clearButtonMode="while-editing"
-                        style={{ flex: 1 }}
-                        onChangeText={(input) =>
-                            this.setState({ username: input })
-                        }
-                    ></TextInput>
-                </View>
-                <View style={styles.item}>
-                    <Text style={styles.textStyle}>用户密码：</Text>
-                    <TextInput
-                        ref="inputLoginPwd"
-                        underlineColorAndroid="gray"
-                        placeholder="请输入密码"
-                        clearTextOnFocus={true}
-                        clearButtonMode="while-editing"
-                        style={{ flex: 1 }}
-                        onChangeText={(input) =>
-                            this.setState({ userpwd: input })
-                        }
-                    ></TextInput>
-                </View>
-                <TouchableHighlight
-                    style={styles.login}
-                    underlayColor="transparent"
-                    onPress={() => this.loginInMainpage()}
-                >
-                    <Text style={styles.loginText}>登录</Text>
-                </TouchableHighlight>
-            </View>
-        );
-    }
 
+<<<<<<< HEAD:src/pages/TestPage/Login.js
+const AlertIcon = (props) => (
+  <Icon {...props} name='alert-circle-outline'/>
+);
+=======
     /**
      * 登录进入主页面
      */
@@ -69,39 +38,138 @@ export default class Login extends Component {
             ...this.props,
         });
     }
+>>>>>>> aeca67833dbf826b6a2ec125e9b148992229e461:src/pages/Login/Login.js
 
-    setLoginName(input) {
-        this.setState = { inputName: input };
-    }
+export default Login = () => {
+  const [Name, setName] = React.useState('');
+  const [Password, setPassword] = React.useState('');
+  const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
-    setLoginPwd(input) {
-        this.setState = { inputPwd: input };
-    }
-}
+  const toggleSecureEntry = () => {
+    setSecureTextEntry(!secureTextEntry);
+  };
+  //密码显隐图标
+  const renderEyeIcon = (props) => (
+    <TouchableWithoutFeedback onPress={toggleSecureEntry}>
+      <Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'}/>
+    </TouchableWithoutFeedback>
+  );
+
+//提示密码alert
+  const renderPasswordCaption = () => {
+    return (
+      <View style={styles.captionContainer}>
+        {AlertIcon(styles.captionIcon)}
+        <Text style={styles.captionText}>请输入密码 </Text>
+      </View>
+    )
+  }
+  //提示用户名alert
+  const renderNameCaption = () => {
+    return (
+      <View style={styles.captionContainer}>
+        {AlertIcon(styles.captionIcon)}
+        <Text style={styles.captionText}>请输入用户名</Text>
+      </View>
+    )
+  }
+  const handleLogin = () => {
+    return(
+      Alert.alert(Name,Password)
+    )
+  }
+//渲染
+  return (
+    <View style={styles.View}>
+        
+        <Layout style={styles.Layout}>
+          <Image
+            source={require('../../assets/image/bottomWave.jpg')}
+            style={styles.ImageBottom}
+          />
+        </Layout>
+        <Image 
+          source={require('../../assets/image/91.png')}
+          style={styles.Image}
+        />
+        <Input
+            value={Name}
+            placeholder='请输入用户名'
+            //caption={renderNameCaption}
+            accessoryLeft={<Icon name='person'/>}
+            onChangeText={nextValue => setName(nextValue)}
+            style={styles.Input}
+        />   
+
+        <Input
+            value={Password}
+            placeholder='请输入密码'
+            //caption={renderPasswordCaption}
+            accessoryLeft={<Icon name='lock'/>}
+            accessoryRight={renderEyeIcon}
+            secureTextEntry={secureTextEntry}
+            onChangeText={nextValue => setPassword(nextValue)}
+            style={styles.Input}
+        />
+        <Button
+            onPress={() => handleLogin(true)}
+            style={styles.Button}
+            
+        >
+          登    录
+        </Button>
+        
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: "center",
-    },
-    item: {
-        flexDirection: "row",
-        alignItems: "center",
-        margin: 10,
-    },
-    textStyle: {
-        fontSize: 18,
-        color: "black",
-        marginRight: 10,
-    },
-    login: {
-        height: 40,
-        backgroundColor: "green",
-        margin: 20,
-        justifyContent: "center",
-    },
-    loginText: {
-        fontSize: 20,
-        alignSelf: "center",
-        color: "#FFF",
-    },
+  View:{
+    flex: 1,
+    backgroundColor: "#fff",
+    alignItems:'center',
+    
+  },
+  captionContainer: {
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  captionIcon: {
+    width: 10,
+    height: 10,
+    marginRight: 5
+  },
+  captionText: {
+    fontSize: 12,
+    fontWeight: "400",
+    fontFamily: "opensans-regular",
+    color: "#8F9BB3",
+  },
+  Image:{
+    alignItems:'center',
+    margin:20,
+  },
+  Input:{
+    alignItems:"center",
+    width:'80%',
+    paddingTop:15,
+    backgroundColor:'#fff',
+    fontStyle:{
+      color:'#000'
+    }
+  },
+  Button:{
+    margin:20,
+    width:'70%',
+  },
+  Layout:{
+    position:'absolute',
+    bottom:0,
+  },
+  ImageBottom:{
+    position:'relative',
+    flex:1,
+        
+  }
 });
