@@ -23,14 +23,11 @@
     "@ui-kitten/eva-icons": "^5.1.1",
     "antd-mobile": "^5.0.0",
     "expo-font": "^10.0.5",
-<<<<<<< HEAD
-=======
     "antd-mobile-icons": "^0.2.2",
     "antd-mobile-rn": "^2.3.3",
     "axios": "^0.26.0",
     "babel-plugin-import": "^1.13.3",
     "babel-preset-react-native": "^4.0.1",
->>>>>>> 83a5b9b2c31fbffab1b1782cc7337a11f950ad1a
     "fbjs": "^3.0.4",
     "nanoid": "^3.2.0",
     "native-base": "^3.3.7",
