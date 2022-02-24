@@ -7,8 +7,7 @@ import {
     TouchableHighlight,
     Image,
 } from "react-native";
-import { Button, InputItem, Icon } from '@ant-design/react-native';
-
+import { Button, InputItem, Icon } from "@ant-design/react-native";
 
 export default class Login1 extends Component {
     constructor(props) {
@@ -22,19 +21,17 @@ export default class Login1 extends Component {
                     clear
                     error
                     value={this.state.value}
-                    onChange={value => {
-                    this.setState({
-                        value,
+                    onChange={(value) => {
+                        this.setState({
+                            value,
                         });
                     }}
                     placeholder="请输入用户名"
-            >
-                {/* <Icon
+                >
+                    {/* <Icon
                     name="team"
                 /> */}
-                    
-                
-            </InputItem>
+                </InputItem>
                 {/* <View style={styles.item}>
                     <Text style={styles.textStyle}>用户帐号：</Text>
                     <TextInput
@@ -71,9 +68,6 @@ export default class Login1 extends Component {
                 >
                     <Text style={styles.loginText}>登录</Text>
                 </TouchableHighlight> */}
-             
-
-            
             </View>
         );
     }
@@ -100,8 +94,6 @@ export default class Login1 extends Component {
         this.setState = { inputPwd: input };
     }
 }
-
-
 
 //样式style
 const styles = StyleSheet.create({
