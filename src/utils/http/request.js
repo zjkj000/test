@@ -49,6 +49,7 @@ export default class http {
         try {
             let query = await new URLSearchParams(params).toString();
             let res = null;
+            console.log(query);
             if (!params) {
                 res = await axios.get(url);
             } else {

@@ -14,8 +14,8 @@ const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 
 export default Login = () => {
     const navigation = useNavigation();
-    const [Name, setName] = React.useState("");
-    const [Password, setPassword] = React.useState("");
+    const [Name, setName] = React.useState("123");
+    const [Password, setPassword] = React.useState("123");
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
 
     const toggleSecureEntry = () => {

@@ -3,11 +3,16 @@ import { Text, View, ActivityIndicator } from "react-native";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import Loading from "../../utils/loading/Loading";
 import MyPage from "../../pages/My/My";
+<<<<<<< HEAD
 import Wrongbook from "../../pages/Wrongbook/Wrongbook";
+=======
+import LatestTask from "../../pages/LatestTask/LatestTask";
+>>>>>>> e5928c0fa68cced17f6a20b6680a94b524861482
 import {
     bindBackExitApp,
     removeBackExitApp,
 } from "../../utils/TwiceTap/TwiceTap";
+import ConnectClass from "../../pages/OnlineClass/ConnectClass";
 
 export default class MyTabBar extends React.Component {
     constructor(props) {
@@ -51,20 +56,18 @@ export default class MyTabBar extends React.Component {
     };
     renderHome = () => {
         return (
+            /*
             <View>
                 <Text>我是首页</Text>
-            </View>
+            </View>*/
+            <LatestTask />
         );
     };
     renderMy = () => {
         return <MyPage />;
     };
     renderOnlineClass = () => {
-        return (
-            <View>
-                <Text>上课页面</Text>
-            </View>
-        );
+        return <ConnectClass />;
     };
     renderWrongTopic = () => {
         return (

@@ -14,6 +14,8 @@ target 'NavigationDemo' do
 
   pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
+  pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
+
   target 'NavigationDemoTests' do
     inherit! :complete
     # Pods for testing
