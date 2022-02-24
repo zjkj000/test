@@ -5,6 +5,8 @@ import MyTabBar from "./TabBar";
 import Details from "../../pages/Details/Details";
 import Information from "../../pages/Inf/Inf";
 import Login from "../../pages/Login/Login";
+import PackagesPage from "../../pages/LatestTask/PackagesPage";
+import Todo from "../../pages/LatestTask/Todo";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -42,6 +44,8 @@ export default class MainNavigation extends Component {
                         header: () => {},
                     }}
                 />
+                <Stack.Screen name="PackagesPage" component={PackagesPage} />
+                <Stack.Screen name="Todo" component={Todo} />
             </Stack.Navigator>
         );
     }

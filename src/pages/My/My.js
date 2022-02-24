@@ -112,7 +112,7 @@ export default class MyPage extends Component {
                     source={
                         this.state.hasAvatar
                             ? { uri: this.state.imgURL }
-                            : require("../../../images/1.png")
+                            : require("../../assets/image/bottomWave.jpg")
                     }
                 />
             </TouchableOpacity>
