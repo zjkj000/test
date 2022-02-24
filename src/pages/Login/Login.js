@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { Component } from "react";
 import {
     AppRegistry,
@@ -27,6 +28,21 @@ import {
 //             ...this.props,
 //         });
 //     }
+=======
+import React from 'react';
+import { TouchableWithoutFeedback, StyleSheet, View , Image , Alert ,ImageBackground} from 'react-native';
+import { Icon , Input, Text ,Button, Layout} from '@ui-kitten/components';
+import { useNavigation } from "@react-navigation/native";
+
+
+
+const AlertIcon = (props) => (
+  <Icon {...props} name='alert-circle-outline'/>
+);
+
+const navigation = useNavigation()
+
+>>>>>>> 2ebfebb15f4f9b7ebed949b917a9a6a2347e1335
 
 export default Login = () => {
     const [Name, setName] = React.useState('');
@@ -53,6 +69,7 @@ export default Login = () => {
         )
     }
   //提示用户名alert
+<<<<<<< HEAD
     const renderNameCaption = () => {
         return (
         <View style={styles.captionContainer}>
@@ -66,6 +83,22 @@ export default Login = () => {
         Alert.alert(Name,Password)
         )
     }
+=======
+  const renderNameCaption = () => {
+    return (
+      <View style={styles.captionContainer}>
+        {AlertIcon(styles.captionIcon)}
+        <Text style={styles.captionText}>请输入用户名</Text>
+      </View>
+    )
+  }
+  const handleLogin = () => {
+    return(
+      Alert.alert(Name,Password),
+      navigation.navigate('Home')
+    )
+  }
+>>>>>>> 2ebfebb15f4f9b7ebed949b917a9a6a2347e1335
 //渲染
   return (
     <View style={styles.View}>
@@ -101,10 +134,16 @@ export default Login = () => {
         />
         <Button
             onPress={() => handleLogin(true)}
+<<<<<<< HEAD
             style={styles.Button}
             
         >
             登    录
+=======
+            style={styles.Button}  
+         >
+          登    录
+>>>>>>> 2ebfebb15f4f9b7ebed949b917a9a6a2347e1335
         </Button>
         
     </View>
