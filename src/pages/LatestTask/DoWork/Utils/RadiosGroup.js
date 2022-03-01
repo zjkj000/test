@@ -6,11 +6,13 @@ export default class RadiosGroup extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selected:[false,false,false,false,false,false],
-            data: this.props.data,
+            selected:[false,false,false,false,false,false,false,false],
+            data: [],
         };
     }
-
+    UNSAFE_componentWillMount(){
+        this.setState({data:this.props.data})
+    }
     render() {
         let newArray = this.state.data;
         return (
@@ -25,15 +27,13 @@ export default class RadiosGroup extends Component {
     }
 
     onPress = (index, item)=> {
-        let array = this.state.data;
+        let array = this.props.data;
         for (let i = 0; i < array.length; i++) {
             let item = array[i];
             if (i == index) {
                 this.state.selected[i]=!this.state.selected[i]
                 this.setState({selected:this.state.selected});
             }
-        }
-        this.props.onPress ? this.props.onPress(index, item) : ()=> {
         }
     }
 
@@ -55,8 +55,7 @@ export default class RadiosGroup extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
             },this.props.conTainStyle]}>
-                <Image style={[{width: 20, height: 20},this.props.imageStyle]} source={image}/>
-                {/* <Text style={[{marginLeft: 15},this.props.textStyle]}>{item.title}</Text> */}
+                <Image style={[{width: 25, height: 25},this.props.imageStyle]} source={image}/>
             </TouchableOpacity>
         )
     }

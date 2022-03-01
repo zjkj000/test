@@ -11,13 +11,6 @@ import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
 
 import ViewPager_ToDo from '../../pages/LatestTask/DoWork/ViewPager_ToDo'
-import Answer_judgment from '../../pages/LatestTask/DoWork/Answer_type/Answer_judgment'
-import Answer_subjective from '../../pages/LatestTask/DoWork/Answer_type/Answer_subjective'
-import Answer_read from '../../pages/LatestTask/DoWork/Answer_type/Answer_read'
-import Answer_multiple from '../../pages/LatestTask/DoWork/Answer_type/Answer_multiple'
-import Answer_single from '../../pages/LatestTask/DoWork/Answer_type/Answer_single'
-import Submit from '../../pages/LatestTask/DoWork/Answer_type/Submit'
-
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -53,13 +46,7 @@ export default class MainNavigation extends Component {
                 />
                 <Stack.Screen name="PackagesPage" component={PackagesPage} />
                 <Stack.Screen name="Todo" component={Todo} />
-                  <Stack.Screen name="ViewPager_ToDo" component={ViewPager_ToDo} />
-                  <Stack.Screen name="Answer_single" component={Answer_single} />
-                  <Stack.Screen name="Answer_multiple" component={Answer_multiple} />
-                  <Stack.Screen name="Answer_judgment" component={Answer_judgment} />
-                  <Stack.Screen name="Answer_subjective" component={Answer_subjective} />
-                  <Stack.Screen name="Answer_read" component={Answer_read} />
-                  <Stack.Screen name="交作业" component={Submit} />
+                <Stack.Screen name="ViewPager_ToDo" component={ViewPager_ToDo} />
             </Stack.Navigator>
         );
     }

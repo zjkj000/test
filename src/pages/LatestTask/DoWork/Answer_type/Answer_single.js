@@ -1,51 +1,44 @@
 import { Text, StyleSheet, View, ScrollView,Image} from 'react-native'
 import React, { Component } from 'react'
-import CircleList from '../Utils/CircleList'
-
-// 答题页面
+import RadioList from '../Utils/RadioList';
+import HTMLView from 'react-native-htmlview';
+// 答题页面--单选题组件
 export default class Answer_single extends Component {
+     constructor(props) {
+        super(props)
+        this.state = {
+                numid:'',
+                questionTypeName:'单选题',
+                questionId:'',
+                baseTypeId:'',
+                questionName:'',        //题目名称
+                questionChoiceList:'',  //题目选项
+                questionContent:'',   //题目内容
+                answer:''
+        }
+     }  
+     UNSAFE_componentWillMount(){
+        this.setState({numid:this.props.num,...this.props.datasource});
+        }
   render() {
-    return (
+        const HTML = this.state.questionContent;
+        const questionChoiceList = this.state.questionChoiceList;
+    return (  
       <View>
           {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
-                <Text>1/3题 </Text>
-                <Text style={{marginLeft:20}}>单项选择</Text>
+                <Text>{this.state.numid+1}/{this.props.sum}题 </Text>
+                <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
             </View>
           {/* 题目展示区域 */}
             <ScrollView style={styles.answer_area}>
-                <Text>
-                        The flexWrap property is set on containers and it controls what happens when children overflow the size of the container along the main axis. By default, children are forced into a single line (which can shrink elements). If wrapping is allowed, items are wrapped into multiple lines along the main axis if needed.
-                </Text>
-                <Text>
-                        The flexWrap property is set on containers and it controls what happens when children overflow the size of the container along the main axis. By default, children are forced into a single line (which can shrink elements). If wrapping is allowed, items are wrapped into multiple lines along the main axis if needed.
-                </Text>
-                <Text>
-                        The flexWrap property is set on containers and it controls what happens when children overflow the size of the container along the main axis. By default, children are forced into a single line (which can shrink elements). If wrapping is allowed, items are wrapped into multiple lines along the main axis if needed.
-                </Text>
-                <Text>
-                        The flexWrap property is set on containers and it controls what happens when children overflow the size of the container along the main axis. By default, children are forced into a single line (which can shrink elements). If wrapping is allowed, items are wrapped into multiple lines along the main axis if needed.
-                </Text>
-                <Text>
-                        The flexWrap property is set on containers and it controls what happens when children overflow the size of the container along the main axis. By default, children are forced into a single line (which can shrink elements). If wrapping is allowed, items are wrapped into multiple lines along the main axis if needed.
-                </Text>
-                <Text>
-                        The flexWrap property is set on containers and it controls what happens when children overflow the size of the container along the main axis. By default, children are forced into a single line (which can shrink elements). If wrapping is allowed, items are wrapped into multiple lines along the main axis if needed.
-                </Text>
-                <Text>
-                        The flexWrap property is set on containers and it controls what happens when children overflow the size of the container along the main axis. By default, children are forced into a single line (which can shrink elements). If wrapping is allowed, items are wrapped into multiple lines along the main axis if needed.
-                </Text>
-                <Text>
-                        The flexWrap property is set on containers and it controls what happens when children overflow the size of the container along the main axis. By default, children are forced into a single line (which can shrink elements). If wrapping is allowed, items are wrapped into multiple lines along the main axis if needed.
-                </Text>
-                <Text>
-                        The flexWrap property is set on containers and it controls what happens when children overflow the size of the container along the main axis. By default, children are forced into a single line (which can shrink elements). If wrapping is allowed, items are wrapped into multiple lines along the main axis if needed.
-                </Text>
+                <HTMLView value={HTML}/>
+                <Text style={{height:50}}></Text>
             </ScrollView>
           {/* 答案区域 */}
             <View style={{backgroundColor:'#000000',height:1,width:'100%'}}></View>
             <View style={styles.answer_result}>
-                <CircleList/>
+                <RadioList ChoiceList={questionChoiceList}/>
             </View>
       </View>
     )
