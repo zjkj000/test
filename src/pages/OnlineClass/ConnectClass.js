@@ -2,69 +2,54 @@ import { useNavigation } from "@react-navigation/native";
 import React, { Component, useState } from "react";
 import {
     TouchableWithoutFeedback,
+    TouchableOpacity,
     StyleSheet,
     View,
     Image,
     Alert,
     ImageBackground,
+    ScrollView,
 } from "react-native";
-import { Icon, Input, Text, Button, Layout } from "@ui-kitten/components";
+import {
+    Icon,
+    Input,
+    Text,
+    Button,
+    Layout,
+    Autocomplete,
+    AutocompleteItem,
+} from "@ui-kitten/components";
 import http from "../../utils/http/request";
+import HistoryInput from "./HistoryInput";
+import { styles } from "./styles";
 
 export default ConnectClass = () => {
+    const historyListRemote = [
+        { title: "192.168.1.81" },
+        { title: "192.168.1.124" },
+        { title: "192.168.1.126" },
+    ];
     const navigation = useNavigation();
-    const [ipAddress, setIpAddress] = useState("192.168.1.243");
+    const [ipAddress, setIpAddress] = useState("");
     const [Name, setName] = React.useState("ming6002");
     const [Password, setPassword] = React.useState("2020");
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
+    const [moduleVisible, setModuleVisible] = React.useState(false);
+    const [historyList, setHistoryList] = React.useState(historyListRemote);
 
-    const toggleSecureEntry = () => {
-        setSecureTextEntry(!secureTextEntry);
-    };
-    // let messageUrl =
-    //     "http://" +
-    //     ip +
-    //     "/html" +
-    //     period.links +
-    //     "/" +
-    //     period.resourceId +
-    //     "Show.html";
-    //密码显隐图标
-    const renderEyeIcon = (props) => (
-        <TouchableWithoutFeedback onPress={toggleSecureEntry}>
-            <Icon {...props} name={secureTextEntry ? "eye-off" : "eye"} />
-        </TouchableWithoutFeedback>
-    );
-    //提示密码alert
-    const renderPasswordCaption = () => {
-        return (
-            <View style={styles.captionContainer}>
-                {AlertIcon(styles.captionIcon)}
-                <Text style={styles.captionText}>请输入密码 </Text>
-            </View>
-        );
-    };
-    //提示用户名alert
-    const renderNameCaption = () => {
-        return (
-            <View style={styles.captionContainer}>
-                {AlertIcon(styles.captionIcon)}
-                <Text style={styles.captionText}>请输入用户名</Text>
-            </View>
-        );
-    };
     const handleLogin = () => {
         const url =
+            "http://" +
             ipAddress +
-            ":8000" +
+            ":8901" +
             "/KeTangServer/ajax/ketang_clientKeTangPlayByStu.do";
         const params = {
             userName: Name,
-            password: Password,
+            Password: Password,
         };
-        http.get(url, params).then((res) => {
-            Alert.alert(res);
-            navigation.navigate("OnlineClassTemp");
+        http.get(url, params).then((resStr) => {
+            let resJson = JSON.parse(resStr);
+            navigation.navigate("OnlineClassTemp", { ...resJson });
         });
     };
 
@@ -76,89 +61,23 @@ export default ConnectClass = () => {
                     style={styles.ImageBottom}
                 />
             </Layout>
-            <Image
-                source={require("../../assets/image/91.png")}
-                style={styles.Image}
-            />
-            <Input
-                value={Name}
-                placeholder="请输入用户名"
-                //caption={renderNameCaption}
-                accessoryLeft={<Icon name="person" />}
-                onChangeText={(nextValue) => setName(nextValue)}
+            <TouchableOpacity style={styles.iconContainer}>
+                <Icon
+                    style={styles.icon}
+                    fill="#8F9BB3"
+                    name="camera-outline"
+                />
+            </TouchableOpacity>
+            <HistoryInput
+                icon={<Icon name="globe-outline" />}
                 style={styles.Input}
-            />
-
-            <Input
-                value={Password}
-                placeholder="请输入密码"
-                //caption={renderPasswordCaption}
-                accessoryLeft={<Icon name="lock" />}
-                accessoryRight={renderEyeIcon}
-                secureTextEntry={secureTextEntry}
-                onChangeText={(nextValue) => setPassword(nextValue)}
-                style={styles.Input}
-            />
-            <Input
+                historyList={historyListRemote}
                 value={ipAddress}
-                placeholder="请输入IP"
-                //caption={renderPasswordCaption}
-                accessoryLeft={<Icon name="globe-2-outline" />}
-                onChangeText={(nextValue) => setIpAddress(nextValue)}
-                style={styles.Input}
-            />
+                setValue={setIpAddress}
+            ></HistoryInput>
             <Button onPress={handleLogin} style={styles.Button}>
-                登 录
+                连接
             </Button>
         </View>
     );
 };
-
-const styles = StyleSheet.create({
-    View: {
-        flex: 1,
-        backgroundColor: "#fff",
-        alignItems: "center",
-    },
-    captionContainer: {
-        display: "flex",
-        flexDirection: "row",
-        alignItems: "center",
-    },
-    captionIcon: {
-        width: 10,
-        height: 10,
-        marginRight: 5,
-    },
-    captionText: {
-        fontSize: 12,
-        fontWeight: "400",
-        fontFamily: "opensans-regular",
-        color: "#8F9BB3",
-    },
-    Image: {
-        alignItems: "center",
-        margin: 20,
-    },
-    Input: {
-        alignItems: "center",
-        width: "80%",
-        paddingTop: 15,
-        backgroundColor: "#fff",
-        fontStyle: {
-            color: "#000",
-        },
-    },
-    Button: {
-        margin: 20,
-        width: "70%",
-    },
-    Layout: {
-        position: "absolute",
-        bottom: 0,
-    },
-    ImageBottom: {
-        position: "relative",
-        flex: 1,
-    },
-});

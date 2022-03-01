@@ -10,13 +10,14 @@ import Todo from "../../pages/LatestTask/Todo";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import ViewPager_ToDo from '../../pages/LatestTask/DoWork/ViewPager_ToDo'
-import Answer_judgment from '../../pages/LatestTask/DoWork/Answer_type/Answer_judgment'
-import Answer_subjective from '../../pages/LatestTask/DoWork/Answer_type/Answer_subjective'
-import Answer_read from '../../pages/LatestTask/DoWork/Answer_type/Answer_read'
-import Answer_multiple from '../../pages/LatestTask/DoWork/Answer_type/Answer_multiple'
-import Answer_single from '../../pages/LatestTask/DoWork/Answer_type/Answer_single'
-import Submit from '../../pages/LatestTask/DoWork/Answer_type/Submit'
+import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
+import Answer_judgment from "../../pages/LatestTask/DoWork/Answer_type/Answer_judgment";
+import Answer_subjective from "../../pages/LatestTask/DoWork/Answer_type/Answer_subjective";
+import Answer_read from "../../pages/LatestTask/DoWork/Answer_type/Answer_read";
+import Answer_multiple from "../../pages/LatestTask/DoWork/Answer_type/Answer_multiple";
+import Answer_single from "../../pages/LatestTask/DoWork/Answer_type/Answer_single";
+import Submit from "../../pages/LatestTask/DoWork/Answer_type/Submit";
+import OnlineClassTempPage from "../../pages/OnlineClass";
 
 const Stack = createStackNavigator();
 
@@ -36,7 +37,6 @@ export default class MainNavigation extends Component {
                         color: "#333333",
                         fontFamily: "PingFangSC-Semibold",
                         fontWeight: "700",
-                        backgroundColor: "red",
                     },
                     headerTintColor: "red", // 导航栏字体颜色设置 如果设置了headerTitleStyle则此处设置不生效
                     statusBarStyle: "light", //"inverted" | "auto" | "light" | "dark" | undefined 状态栏配置
@@ -51,15 +51,42 @@ export default class MainNavigation extends Component {
                         header: () => {},
                     }}
                 />
-                <Stack.Screen name="PackagesPage" component={PackagesPage} />
-                <Stack.Screen name="Todo" component={Todo} />
-                  <Stack.Screen name="ViewPager_ToDo" component={ViewPager_ToDo} />
-                  <Stack.Screen name="Answer_single" component={Answer_single} />
-                  <Stack.Screen name="Answer_multiple" component={Answer_multiple} />
-                  <Stack.Screen name="Answer_judgment" component={Answer_judgment} />
-                  <Stack.Screen name="Answer_subjective" component={Answer_subjective} />
-                  <Stack.Screen name="Answer_read" component={Answer_read} />
-                  <Stack.Screen name="交作业" component={Submit} />
+                <Stack.Group>
+                    <Stack.Screen
+                        name="PackagesPage"
+                        component={PackagesPage}
+                    />
+                    <Stack.Screen name="Todo" component={Todo} />
+                    <Stack.Screen
+                        name="ViewPager_ToDo"
+                        component={ViewPager_ToDo}
+                    />
+                    <Stack.Screen
+                        name="Answer_single"
+                        component={Answer_single}
+                    />
+                    <Stack.Screen
+                        name="Answer_multiple"
+                        component={Answer_multiple}
+                    />
+                    <Stack.Screen
+                        name="Answer_judgment"
+                        component={Answer_judgment}
+                    />
+                    <Stack.Screen
+                        name="Answer_subjective"
+                        component={Answer_subjective}
+                    />
+                    <Stack.Screen name="Answer_read" component={Answer_read} />
+                    <Stack.Screen name="交作业" component={Submit} />
+                </Stack.Group>
+
+                <Stack.Group>
+                    <Stack.Screen
+                        name="OnlineClassTemp"
+                        component={OnlineClassTempPage}
+                    />
+                </Stack.Group>
             </Stack.Navigator>
         );
     }
