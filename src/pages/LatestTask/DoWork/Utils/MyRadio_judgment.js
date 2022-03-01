@@ -1,22 +1,20 @@
 import React, {PureComponent} from 'react'
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image,Alert} from 'react-native';
 
+
+
+
+
+
+//暂时没用了，判断题 用的 RadioList  传的对错。
+
 import RadioGroup  from './RadioGroup';
 export default class CircleList extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
             sexArray: [
-                {
-                    title: '对',
-                    image:  require('../../../../assets/image3/T.png'),
-                    image2:require('../../../../assets/image3/T1.png'),
-                },
-                {
-                    title: '错',
-                    image: require('../../../../assets/image3/R.png'),
-                    image2:require('../../../../assets/image3/R1.png'),
-                }
+                
             ],
         };
     }

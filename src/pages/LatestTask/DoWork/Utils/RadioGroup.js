@@ -1,20 +1,19 @@
 import React, {Component} from "react";
 import {Button, StyleSheet, Text, View, Image, TouchableOpacity} from "react-native";
 
-
 export default class RadioGroup extends Component {
-
 
     constructor(props) {
         super(props)
-
         this.state = {
             selectIndex: this.props.selectIndex ? this.props.selectIndex : '',
-            data: this.props.data,
+            data:[],
         };
     }
 
-
+    UNSAFE_componentWillMount(){
+        this.setState({data:this.props.data})
+    }
     render() {
         let newArray = this.state.data;
         return (
@@ -39,12 +38,10 @@ export default class RadioGroup extends Component {
             }
         }
         this.setState({selectIndex: index});
-        this.props.onPress ? this.props.onPress(index, item) : ()=> {
-        }
+       
     }
 
     renderRadioButton(array, item, onPress, index, sexIndex) {
-
         let image = item.image
         if (item.select == true) {
             image = item.image2; 
@@ -54,8 +51,6 @@ export default class RadioGroup extends Component {
         if (sexIndex == index && sexIndex != '') {
             image = item.image2;
         }
-
-
         return (
             <TouchableOpacity key={index} onPress={()=> {
                 onPress(index, item)
@@ -67,7 +62,6 @@ export default class RadioGroup extends Component {
                 alignItems: 'center',
             },this.props.conTainStyle]}>
                 <Image style={[{width: 20, height: 20},this.props.imageStyle]} source={image}/>
-                {/* <Text style={[{marginLeft: 15},this.props.textStyle]}>{item.title}</Text> */}
             </TouchableOpacity>
         )
     }
