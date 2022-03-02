@@ -1,27 +1,11 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { Component, useState } from "react";
-import {
-    TouchableWithoutFeedback,
-    TouchableOpacity,
-    StyleSheet,
-    View,
-    Image,
-    Alert,
-    ImageBackground,
-    ScrollView,
-} from "react-native";
-import {
-    Icon,
-    Input,
-    Text,
-    Button,
-    Layout,
-    Autocomplete,
-    AutocompleteItem,
-} from "@ui-kitten/components";
+import React, { Component, useRef, useState } from "react";
+import { TouchableOpacity, View, Image } from "react-native";
+import { Icon, Button, Layout } from "@ui-kitten/components";
 import http from "../../utils/http/request";
 import HistoryInput from "./HistoryInput";
 import { styles } from "./styles";
+import Toast from "../../utils/Toast/Toast";
 
 export default ConnectClass = () => {
     const historyListRemote = [
@@ -47,10 +31,19 @@ export default ConnectClass = () => {
             userName: Name,
             Password: Password,
         };
-        http.get(url, params).then((resStr) => {
-            let resJson = JSON.parse(resStr);
-            navigation.navigate("OnlineClassTemp", { ...resJson });
-        });
+
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                navigation.navigate("OnlineClassTemp", { ...resJson });
+            })
+            .catch((error) => {
+                Toast.showWrongToast(error.toString());
+            });
+    };
+
+    const handleScan = () => {
+        navigation.navigate("QRCodeScanner");
     };
 
     return (
@@ -61,7 +54,7 @@ export default ConnectClass = () => {
                     style={styles.ImageBottom}
                 />
             </Layout>
-            <TouchableOpacity style={styles.iconContainer}>
+            <TouchableOpacity style={styles.iconContainer} onPress={handleScan}>
                 <Icon
                     style={styles.icon}
                     fill="#8F9BB3"

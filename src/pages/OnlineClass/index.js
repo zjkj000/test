@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image, BackHandler } from "react-native";
+import { View, Text, Image, BackHandler } from "react-native";
 import Orientation from "react-native-orientation";
 import { styles } from "./styles";
 

@@ -136,6 +136,9 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        // react-native-camera依赖
+        missingDimensionStrategy 'react-native-camera', 'general'
+
     }
     splits {
         abi {
@@ -194,6 +197,9 @@ dependencies {
     implementation "com.facebook.react:react-native:+"  // From node_modules
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
+    // react-native-camera依赖
+    implementation project(path: ':react-native-camera')
+
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'

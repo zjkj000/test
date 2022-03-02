@@ -18,6 +18,7 @@ import Answer_multiple from "../../pages/LatestTask/DoWork/Answer_type/Answer_mu
 import Answer_single from "../../pages/LatestTask/DoWork/Answer_type/Answer_single";
 import Submit from "../../pages/LatestTask/DoWork/Answer_type/Submit";
 import OnlineClassTempPage from "../../pages/OnlineClass";
+import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 
 const Stack = createStackNavigator();
 
@@ -85,6 +86,10 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="OnlineClassTemp"
                         component={OnlineClassTempPage}
+                    />
+                    <Stack.Screen
+                        name="QRCodeScanner"
+                        component={QRCodeScanner}
                     />
                 </Stack.Group>
             </Stack.Navigator>

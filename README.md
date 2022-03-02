@@ -181,3 +181,98 @@ onBackAndroid() {
 ## My 页面更新：
 
 为修改密码功能增加弹出框，但输入框间距有待调整。
+
+## 2022.3.2 增加扫码组件和通知组件
+
+### 今日任务
+
+-   扫码组件（未测试）
+-   通知组件（实现并测试）
+
+### 具体实现
+
+#### 通知组件
+
+通知组件使用如下第三放组件进行实现：
+
+```shell
+yarn add rn-overlay
+```
+
+使用时在 index.js 中全局引入该组件：
+
+```react
+import "rn-overlay";
+
+```
+
+之后使用则只需要从`react-native`中引入即可：
+
+```react
+import { Overlay } from "react-native";
+```
+
+封装时使用类`Toast`，将不同类型的弹出框设置为该类的类函数：
+
+```react
+import { Easing, Overlay } from "react-native";
+
+const toast = Overlay.Toast;
+
+export default class Toast {
+    static showDangerToast(message) {
+        toast.show(message, 3000, {
+            textStyle: {
+                backgroundColor: "#FFD6B3",
+                color: "#7A0C10",
+                borderWidth: 0,
+            },
+            position: toast.Position.Top,
+            animateEasing: Easing.in(Easing.bounce),
+        });
+    }
+    static showSuccessToast(message) {
+        toast.show(message, 3000, {
+            textStyle: {
+                backgroundColor: "#C0F9B1",
+                color: "#0A5E2E",
+                borderWidth: 0,
+            },
+            position: toast.Position.Top,
+            animateEasing: Easing.in(Easing.bounce),
+        });
+    }
+    static showWarningToast(message) {
+        toast.show(message, 2000, {
+            textStyle: {
+                backgroundColor: "#FFF9A4",
+                color: "#7A6C05",
+                borderWidth: 0,
+            },
+            position: toast.Position.Top,
+            animateEasing: Easing.in(Easing.bounce),
+        });
+    }
+    static showInfoToast(message) {
+        toast.show(message, 3000, {
+            textStyle: {
+                backgroundColor: "#9FD9FF",
+                color: "#02247A",
+                borderWidth: 0,
+            },
+            position: toast.Position.Top,
+            animateEasing: Easing.in(Easing.bounce),
+        });
+    }
+}
+```
+
+每个函数均接受参数：`message`，该参数用于表示需要在弹出框中显示的文字。该弹出框会根据 `message` 的内容动态调整大小.
+
+Overlay 中的 Toast 函数接收如下参数：
+
+-   message ：必须，需要显示的消息
+-   duration ：非必须，消息框显示的时长，默认为 3000
+-   option ：非必须，接收一个 styles 对象，其中应包含`textStyle`属性，用于定义弹出框的样式
+-   position ：非必须，接收一个 toast.Position 中的参数，用于指定弹出框出现的位置，默认为中间，
+-   animateEasing ：非必须，接收一个 React Native 中定义的 Easing 对象，用于定义弹出框的动画
