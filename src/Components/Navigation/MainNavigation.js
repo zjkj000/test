@@ -9,8 +9,10 @@ import PackagesPage from "../../pages/LatestTask/PackagesPage";
 import Todo from "../../pages/LatestTask/Todo";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
+
 import Menu from '../../pages/LatestTask/DoWork/Utils/Menu';
 import ViewPager_ToDo from '../../pages/LatestTask/DoWork/ViewPager_ToDo'
+import OnlineClassTempPage from "../../pages/OnlineClass";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -43,15 +45,26 @@ export default class MainNavigation extends Component {
                         header: () => {},
                     }}
                 />
-                <Stack.Screen name="PackagesPage" component={PackagesPage} />
-                <Stack.Screen name="Todo" component={Todo} />
-                <Stack.Screen name="做作业" 
+                <Stack.Group>
+                    <Stack.Screen
+                        name="PackagesPage"
+                        component={PackagesPage}
+                    />
+                    <Stack.Screen name="Todo" component={Todo} />
+                    <Stack.Screen name="做作业" 
                     component={ViewPager_ToDo} 
                     options={{
                         headerRight: () => (
                             <Menu/>
                           ),
                     }}/>
+                </Stack.Group>
+                <Stack.Group>
+                    <Stack.Screen
+                        name="OnlineClassTemp"
+                        component={OnlineClassTempPage}
+                    />
+                </Stack.Group>
             </Stack.Navigator>
         );
     }

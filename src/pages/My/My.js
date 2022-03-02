@@ -1,9 +1,7 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet } from "react-native";
-import { screenHeight, screenWidth } from "../../utils/Screen/GetSize";
+import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
 // import { Avatar } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import {
     Avatar,
     Layout,
@@ -13,7 +11,14 @@ import {
     Icon,
     OverflowMenu,
     MenuItem,
+    Modal,
+    Card,
 } from "@ui-kitten/components";
+import http from "../../utils/http/request";
+import ImageHandler from "../../utils/Camera/Camera";
+import { styles } from "./styles";
+
+const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 
 export default class MyPage extends Component {
     constructor(props) {
@@ -25,77 +30,14 @@ export default class MyPage extends Component {
             userName: "小明",
             selectedTitle: "No items selected",
             moduleVisible: false,
+            fullModuleVisible: false,
+            password: "",
+            secureTextEntry: true,
         };
     }
     setValue = (value) => {
         this.setState({
             value,
-        });
-    };
-    handleCamera = () => {
-        const option = {
-            title: "请选择",
-            cancelButtonTitle: "取消",
-            takePhotoButtonTitle: "拍照",
-            chooseFromLibraryButtonTitle: "选择照片",
-            includeBase64: true, // 拍照后生成base64字串
-            quality: 1.0,
-            allowsEditing: true,
-            maxWidth: 500,
-            maxHeight: 500,
-            saveToPhotos: true,
-            storageOptions: {
-                skipBackup: true,
-                path: "images",
-            },
-        };
-        launchCamera(option, (response) => {
-            console.log(response);
-            if (response.didCancel) {
-                return;
-            }
-            response = response.assets[0];
-            console.log(response.base64);
-            this.setState({
-                imgURL: response.uri,
-                hasAvatar: true,
-                moduleVisible: false,
-            });
-        });
-
-        // launchImageLIbrary(option, (response) => {
-        //     console.log("Response = ", response);
-
-        //     console.log(response);
-        // });
-    };
-    handleLibrary = () => {
-        const option = {
-            title: "请选择",
-            chooseFromLibraryButtonTitle: "选择照片",
-            includeBase64: true, // 拍照后生成base64字串
-            quality: 1.0,
-            allowsEditing: true,
-            maxWidth: 500,
-            maxHeight: 500,
-            saveToPhotos: true,
-            storageOptions: {
-                skipBackup: true,
-                path: "images",
-            },
-        };
-        launchImageLibrary(option, (response) => {
-            console.log(response);
-            if (response.didCancel) {
-                return;
-            }
-            response = response.assets[0];
-            console.log(response.base64);
-            this.setState({
-                imgURL: response.uri,
-                hasAvatar: true,
-                moduleVisible: false,
-            });
         });
     };
 
@@ -122,6 +64,57 @@ export default class MyPage extends Component {
         this.setState({
             selectedIndex: index,
             moduleVisible: false,
+        });
+    };
+
+    toggleSecureEntry = () => {
+        this.setState({ secureTextEntry: !this.state.secureTextEntry });
+    };
+
+    //密码显隐图标
+    renderEyeIcon = (props) => (
+        <TouchableWithoutFeedback onPress={this.toggleSecureEntry}>
+            <Icon
+                {...props}
+                name={this.state.secureTextEntry ? "eye-off" : "eye"}
+            />
+        </TouchableWithoutFeedback>
+    );
+
+    //提示密码alert
+    renderPasswordCaption = () => {
+        return (
+            <View style={styles.captionContainer}>
+                {AlertIcon(styles.captionIcon)}
+                <Text style={styles.captionText}>请输入密码 </Text>
+            </View>
+        );
+    };
+    logout = () => {};
+    handleCamera = () => {
+        ImageHandler.handleCamera().then((res) => {
+            if (res) {
+                this.setState({
+                    imgURL: res.uri,
+                    hasAvatar: true,
+                    moduleVisible: false,
+                });
+            } else {
+                // TODO: 获取图像失败
+            }
+        });
+    };
+    handleLibrary = () => {
+        ImageHandler.handleLibrary().then((res) => {
+            if (res) {
+                this.setState({
+                    imgURL: res.uri,
+                    hasAvatar: true,
+                    moduleVisible: false,
+                });
+            } else {
+                // TODO: 获取图像失败
+            }
         });
     };
 
@@ -205,7 +198,11 @@ export default class MyPage extends Component {
                     </View>
                 </TouchableOpacity>
                 <Divider />
-                <TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.setState({ fullModuleVisible: true });
+                    }}
+                >
                     <View style={styles.alternativeContainer}>
                         <Text style={styles.textLeft}>修改密码</Text>
                         <Text style={styles.textRight}>
@@ -221,79 +218,80 @@ export default class MyPage extends Component {
 
                 <Divider />
 
-                <Button style={styles.button} status="danger">
+                <Button
+                    style={styles.button}
+                    status="danger"
+                    onPress={this.logout}
+                >
                     退出当前账号
                 </Button>
+
+                {/* 修改密码弹出框 */}
+                <Modal
+                    visible={this.state.fullModuleVisible}
+                    backdropStyle={styles.backdrop}
+                    onBackdropPress={() => {
+                        this.setState({ fullModuleVisible: false });
+                    }}
+                >
+                    <Card style={styles.myCard} disabled={true}>
+                        <Input
+                            label={<Text>原密码</Text>}
+                            style={styles.cardInput}
+                            value={this.state.password}
+                            placeholder="请输入原密码"
+                            accessoryLeft={<Icon name="lock" />}
+                            accessoryRight={this.renderEyeIcon}
+                            secureTextEntry={this.state.secureTextEntry}
+                            onChangeText={(nextValue) =>
+                                this.setState({ password: nextValue })
+                            }
+                        />
+                        <Input
+                            label={<Text>新密码</Text>}
+                            style={styles.cardInput}
+                            value={this.state.password}
+                            placeholder="请输入新密码"
+                            accessoryLeft={<Icon name="lock" />}
+                            accessoryRight={this.renderEyeIcon}
+                            secureTextEntry={this.state.secureTextEntry}
+                            onChangeText={(nextValue) =>
+                                this.setState({ password: nextValue })
+                            }
+                        />
+                        <Input
+                            label={<Text>确认密码</Text>}
+                            style={styles.cardInput}
+                            value={this.state.password}
+                            placeholder="请确认新密码"
+                            accessoryLeft={<Icon name="lock" />}
+                            accessoryRight={this.renderEyeIcon}
+                            secureTextEntry={this.state.secureTextEntry}
+                            onChangeText={(nextValue) =>
+                                this.setState({ password: nextValue })
+                            }
+                        />
+                        <Layout style={styles.buttonContainer}>
+                            <Button
+                                style={styles.cardButton}
+                                status="danger"
+                                onPress={() => {
+                                    this.setState({ fullModuleVisible: false });
+                                }}
+                            >
+                                取 消
+                            </Button>
+                            <Button
+                                style={styles.cardButton}
+                                status="primary"
+                                onPress={() => {}}
+                            >
+                                确认修改
+                            </Button>
+                        </Layout>
+                    </Card>
+                </Modal>
             </Layout>
         );
     }
 }
-
-const styles = StyleSheet.create({
-    header: {
-        width: screenWidth,
-        height: screenHeight / 16,
-        padding: 16,
-        shadowColor: "#000",
-        shadowOffset: { width: 4, height: 4 },
-        shadowOpacity: 0.8,
-        shadowRadius: 600,
-        elevation: 10,
-        textAlign: "center",
-        justifyContent: "center",
-        alignItems: "center",
-        marginBottom: 10,
-    },
-    avatar: {
-        width: screenWidth,
-        height: screenHeight / 6,
-        alignItems: "center",
-        justifyContent: "center",
-    },
-    container: {
-        flex: 1,
-        flexDirection: "column",
-    },
-    layout: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-    },
-    avatarImg: {
-        width: 100,
-        height: 100,
-    },
-    button: {
-        margin: 2,
-        borderBottomWidth: 1,
-        borderTopWidth: 1,
-    },
-    alternativeContainer: {
-        borderRadius: 4,
-        marginVertical: 2,
-        padding: 5,
-        flexDirection: "row",
-    },
-    textLeft: {
-        margin: 2,
-        fontSize: 18,
-        flex: 1,
-        textAlign: "left",
-    },
-    textRight: {
-        margin: 2,
-        fontSize: 18,
-        flex: 1,
-        textAlign: "right",
-    },
-    icon: {
-        width: 16,
-        height: 16,
-    },
-    button: {
-        borderRadius: 0,
-    },
-    backdrop: {
-        backgroundColor: "rgba(0, 0, 0, 0.5)",
-    },
-});

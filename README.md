@@ -103,3 +103,81 @@ export default class App extends Component {
 在该页面中实现自定义头部，头像，以及各种按钮。
 其中需要调取摄像头权限，进行拍照并更换头像。
 头像使用 Avatar 控件，并通过 Overflow Menu 设置弹出页，通过弹出页面选择拍照或是从图库中直接选择。
+
+## 2022.2.28 增加线上课堂界面
+
+### 连接界面
+
+改页面主要实现输入 IP 地址，点击连接按钮进行连接，跳转到 Temp 界面显示课堂信息并强制横屏。
+使用如下方式实现强制横屏，增加点击输入框弹出历史记录的功能，增加可点击图标以便后期增加扫码功能。
+
+### Temp 界面
+
+显示课堂信息，并强制横屏，阻止返回事件：
+使用如下组件为组件添加监听横屏事件：
+
+```shell
+yarn add react-native-orientation
+```
+
+该组件为我们提供了一些控制横竖屏的操作，例如：
+
+```react
+import Orientation from "react-native-orientation";
+Orientation.lockToLandscape();
+Orientation.lockToPortrait();
+```
+
+接下来只需要在组件的挂载和卸载生命周期中添加监听事件即可。
+
+使用如下组件进行安卓返回操作的阻拦：
+
+```react
+import {
+    BackHandler,
+} from 'react-native';
+
+```
+
+定义监听 Back 按键处理函数：
+
+```react
+onBackAndroid() {
+
+        if(this.props.navigation.state.params&&this.props.navigation.state.params.showDialog){//当dialog存在时，先消失dialog   然后返回true ，不执行系统默认操作
+            this.props.navigation.setParams({
+                showDialog:false
+            })
+            return true;
+        }else{//返回false ，不执行系统默认操作
+            return false;
+        }
+
+    }
+```
+
+注册监听事件：
+
+```react
+ componentWillMount() {
+        if (Platform.OS === 'android') {
+            BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+        }
+
+    }
+```
+
+取消监听事件：
+
+```react
+ componentWillMount() {
+        if (Platform.OS === 'android') {
+            BackHandler.addEventListener('hardwareBackPress', this.onBackAndroid);
+        }
+
+    }
+```
+
+## My 页面更新：
+
+为修改密码功能增加弹出框，但输入框间距有待调整。

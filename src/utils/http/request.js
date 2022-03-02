@@ -50,11 +50,12 @@ export default class http {
             let query = await new URLSearchParams(params).toString();
             let res = null;
             console.log(query);
-            if (!params) {
-                res = await axios.get(url);
-            } else {
-                res = await axios.get(url + "?" + query);
+            if (params) {
+                url = url + "?" + query;
             }
+            url = encodeURI(url);
+            console.log(url);
+            res = await axios.get(url);
             return res;
         } catch (error) {
             return error;
