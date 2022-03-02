@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Text, View } from "react-native";
+import { Button, Text, View ,TouchableOpacity,Image} from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MyTabBar from "./TabBar";
 import Details from "../../pages/Details/Details";
@@ -9,7 +9,7 @@ import PackagesPage from "../../pages/LatestTask/PackagesPage";
 import Todo from "../../pages/LatestTask/Todo";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
-
+import Menu from '../../pages/LatestTask/DoWork/Utils/Menu';
 import ViewPager_ToDo from '../../pages/LatestTask/DoWork/ViewPager_ToDo'
 const Stack = createStackNavigator();
 
@@ -26,12 +26,11 @@ export default class MainNavigation extends Component {
                     headerTitleAlign: "center",
                     headerTitleStyle: {
                         fontSize: 17,
-                        color: "#333333",
+                        color: "#59B9E0",
                         fontFamily: "PingFangSC-Semibold",
                         fontWeight: "700",
-                        backgroundColor: "red",
                     },
-                    headerTintColor: "red", // 导航栏字体颜色设置 如果设置了headerTitleStyle则此处设置不生效
+                    headerTintColor: "#59B9E0", // 导航栏字体颜色设置 如果设置了headerTitleStyle则此处设置不生效
                     statusBarStyle: "light", //"inverted" | "auto" | "light" | "dark" | undefined 状态栏配置
                     headerLeft: React.ReactNode, //导航左侧区域按钮配置 不配置默认展示左箭头返回图标
                 }}
@@ -46,7 +45,13 @@ export default class MainNavigation extends Component {
                 />
                 <Stack.Screen name="PackagesPage" component={PackagesPage} />
                 <Stack.Screen name="Todo" component={Todo} />
-                <Stack.Screen name="ViewPager_ToDo" component={ViewPager_ToDo} />
+                <Stack.Screen name="做作业" 
+                    component={ViewPager_ToDo} 
+                    options={{
+                        headerRight: () => (
+                            <Menu/>
+                          ),
+                    }}/>
             </Stack.Navigator>
         );
     }

@@ -3,7 +3,9 @@ import React, { Component } from 'react'
 import RadioList from '../Utils/RadioList'
 import HTMLView from 'react-native-htmlview';
 
-// 答题页面
+// 判断题 模板页面
+//  使用时 需要传入三个参数：  sum   num  datasource
+// 需要传的参数有三个，第一个是共多少题，第二个是当前是第index题 这里用了的（index+1）显示第几题。 第三个是试题数据。
 export default class Answer_single extends Component {
   constructor(props) {
     super(props)

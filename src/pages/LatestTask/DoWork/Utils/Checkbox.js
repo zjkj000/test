@@ -2,6 +2,8 @@ import React, {PureComponent} from 'react'
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image,Alert} from 'react-native';
 
 import RadiosGroup  from './RadiosGroup';
+
+// 这个是封装的复选框
 export default class Checkbox extends PureComponent {
     constructor(props) {
         super(props)

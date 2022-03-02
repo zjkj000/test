@@ -14,7 +14,7 @@ export default class TodoList extends React.Component {
   render() {
     return (
       <View>
-          <Button title="做题" onPress={() => this.props.navigation.navigate('ViewPager_ToDo')}/>
+          <Button title="做题" onPress={() => this.props.navigation.navigate('做作业')}/>
       </View> 
     );
   }

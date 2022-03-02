@@ -3,7 +3,9 @@ import React, { Component } from 'react'
 import Checkbox from '../Utils/Checkbox'
 import HTMLView from 'react-native-htmlview';
 
-// 答题页面
+// 多选题 模板页面
+// 使用时 需要传入三个参数：  sum   num  datasource
+// 需要传的参数有三个，第一个是共多少题，第二个是当前是第index题 这里用了的（index+1）显示第几题。 第三个是试题数据。
 export default class Answer_single extends Component {
   constructor(props) {
     super(props)
@@ -13,7 +15,7 @@ export default class Answer_single extends Component {
             questionId:'',
             baseTypeId:'',
             questionName:'',        //题目名称
-            questionChoiceList:'A',  //题目选项
+            questionChoiceList:'',  //题目选项
             questionContent:'',   //题目内容
             answer:''
     }
@@ -26,19 +28,24 @@ export default class Answer_single extends Component {
     const questionChoiceList =this.state.questionChoiceList;
     return (
       <View>
-          {/* 第一行显示 第几题  题目类型 */}
+            {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text>{this.state.numid+1}/{this.props.sum}题 </Text>
                 <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
             </View>
-          {/* 题目展示区域 */}
+            
+            {/* 题目展示区域 */}
             <ScrollView style={styles.answer_area}>
               <HTMLView value={HTML}/>
             </ScrollView>
-          {/* 答案区域 */}
+            
+            {/* 分割线 */}
             <View style={{backgroundColor:'#000000',height:1,width:'100%'}}></View>
+
+            {/* 答案区域 */}
             <View style={styles.answer_result}>
-              <Checkbox ChoiceList={questionChoiceList}/>
+                {/* 调用了复选框组件，使用的时候需要传进去选项列表 */}
+                <Checkbox ChoiceList={questionChoiceList}/>
             </View>
       </View>
     )

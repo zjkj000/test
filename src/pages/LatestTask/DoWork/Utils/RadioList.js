@@ -1,6 +1,8 @@
 import React, {PureComponent} from 'react'
 import {View, Text, StyleSheet, ScrollView, TouchableOpacity, Image,Alert} from 'react-native';
 import RadioGroup  from './RadioGroup';
+
+// 这个是封装过的单选按钮，根据选项值  进行设置。
 export default class RadioList extends PureComponent {
     constructor(props) {
         super(props)
@@ -20,7 +22,7 @@ export default class RadioList extends PureComponent {
                 image2_new = require('../../../../assets/image3/20.png');
             }else if(item =="B"){
                 image_new = require('../../../../assets/image3/11.png');
-                image2_new = require('../../../../assets/image3/22.png');
+                image2_new = require('../../../../assets/image3/21.png');
             }else if(item =="C"){
                 image_new = require('../../../../assets/image3/12.png');
                 image2_new = require('../../../../assets/image3/22.png');

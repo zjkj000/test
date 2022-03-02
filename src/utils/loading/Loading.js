@@ -14,7 +14,7 @@ class Loading extends Component {
     }
     render() {
         const { show, list } = this.props;
-        const color = this.props.color ? this.props.color : "blue";
+        const color = this.props.color ? this.props.color : '#59B9E0';
         const background = this.props.background ? true : false;
         if (show) {
             return (
