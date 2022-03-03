@@ -18,10 +18,10 @@ export default class RadioList extends PureComponent {
             let image_new='';
             let image2_new='';
             if(item =="A"){
-                image_new = require('../../../../assets/image3/10.png');
+                image_new =  require('../../../../assets/image3/10.png');
                 image2_new = require('../../../../assets/image3/20.png');
             }else if(item =="B"){
-                image_new = require('../../../../assets/image3/11.png');
+                image_new =  require('../../../../assets/image3/11.png');
                 image2_new = require('../../../../assets/image3/21.png');
             }else if(item =="C"){
                 image_new = require('../../../../assets/image3/12.png');

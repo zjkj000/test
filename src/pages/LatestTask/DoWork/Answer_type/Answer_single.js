@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, ScrollView,Image} from 'react-native'
+import { Text, StyleSheet, View, ScrollView,Image,TouchableOpacity,Alert} from 'react-native'
 import React, { Component } from 'react'
 import RadioList from '../Utils/RadioList';
 import HTMLView from 'react-native-htmlview';
@@ -28,7 +28,6 @@ export default class Answer_single extends Component {
         const questionChoiceList = this.state.questionChoiceList;
     return (  
       <View>
-            
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text>{this.state.numid+1}/{this.props.sum}题 </Text>

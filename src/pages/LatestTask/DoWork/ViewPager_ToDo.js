@@ -1,4 +1,4 @@
-import React,{useState,useEffect} from 'react';
+import React,{useState,useEffect,useRef} from 'react';
 import { StyleSheet,View,Image,Alert,Text,TouchableOpacity} from 'react-native';
 import { Layout, ViewPager } from '@ui-kitten/components';
 import Answer_single from './Answer_type/Answer_single';
@@ -15,14 +15,16 @@ import Loading from '../../../utils/loading/Loading'
 //这个页面是 获取题目的页面
 export default function ViewPager_ToDo() {
 
+  const LayoutRef = useRef();
   const [selectedIndex, setSelectedIndex] = useState(0);
+  const shouldLoadComponent = (index) => index === selectedIndex;
   const [success, setSuccess] = useState(false);
   const [data, setData] = useState([]);
   const [dataNum,setDataNum] = useState(0);
   const [learnPlanId,setlearnPlanId] = useState('d58b793d-103e-43b3-880d-61217aee6fc0');
   useEffect(() => {
     getData();
-  });
+  },[]);
      //    getData()函数是为了获取试题资源，得到之后设置状态success 是否成功  data 具体试题数据  dataNum题目总数  
 function  getData() {
       // try {
@@ -73,7 +75,13 @@ function loading(success){
     if(success!=false){
       return(
         <Layout style={styles.tab} level='2'>
-            <Submit paperId={learnPlanId}/>
+            <TouchableOpacity style={{position:'absolute',left:10,top:"45%",zIndex:99}}   onPress={()=>{
+                      const index =selectedIndex-1;
+                      setSelectedIndex(index);
+                  }}>
+                    <Image source={require('../../../assets/image3/zuo_03.png')}></Image>
+            </TouchableOpacity>
+            <Submit paperId={learnPlanId} ref={LayoutRef}/>
           </Layout>  
         )
     }else{
@@ -84,16 +92,28 @@ function loading(success){
     }
 }
   return (
-    <ViewPager selectedIndex={selectedIndex} onSelect={index => setSelectedIndex(index)}>  
+    // shouldLoadComponent={shouldLoadComponent}
+    <ViewPager ref={LayoutRef}   selectedIndex={selectedIndex} onSelect={index => setSelectedIndex(index)}>  
           {/* 根据这套题的data使用map遍历加载 */}
           {
             data.map(function(item,index){
               return (
                 // 每个题目都是一页，都需要一个layout
                 // 每一个layout里面都是有左右两张图片，绝对定位悬浮在页面上面，getTimu函数是加载题目数据。
-                <Layout key={index} style={styles.tab} level='1'>
-                  <Image style={{position:'absolute',left:5,top:"45%"}} onPress={()=>alert('11')} source={require('../../../assets/image3/zuo_03.png')}></Image>
-                  <Image style={{position:'absolute',right:5,top:"45%"}} source={require('../../../assets/image3/you_03.png')}></Image>
+                <Layout key={index} style={styles.tab} level='2'>
+                  <TouchableOpacity   style={{position:'absolute',left:10,top:"45%",zIndex:99}}   onPress={()=>{
+                      const index =selectedIndex-1;
+                        setSelectedIndex(index);
+                  }}>
+                    <Image source={require('../../../assets/image3/zuo_03.png')}></Image>
+                  </TouchableOpacity>
+
+                  <TouchableOpacity  style={{position:'absolute',right:10,top:"45%",zIndex:99}} onPress={()=>{
+                      const index =selectedIndex+1;
+                      setSelectedIndex(index);
+                  }}>
+                    <Image source={require('../../../assets/image3/you_03.png')}></Image>
+                  </TouchableOpacity>
                   {getTiMu(item,index)}
                 </Layout>
               )

@@ -55,7 +55,7 @@ export default class MainNavigation extends Component {
                     component={ViewPager_ToDo} 
                     options={{
                         headerRight: () => (
-                            <Menu/>
+                            <Menu learnPlanId='1b2a59d2-8990-4672-a97b-124a96a7f8c8'/>
                           ),
                     }}/>
                 </Stack.Group>

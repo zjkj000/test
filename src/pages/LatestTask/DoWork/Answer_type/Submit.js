@@ -1,6 +1,7 @@
 import { Button, ScrollView, Text, View,StyleSheet,Alert } from 'react-native'
 import React, { Component } from 'react'
 import http from '../../../../utils/http/request'
+import { color } from 'react-native-elements/dist/helpers'
     
     // 提交作业页面
 export default class Submit extends Component {
@@ -39,7 +40,11 @@ export default class Submit extends Component {
           result.push(
             <View key={result_Item} style={styles.result}>
                 <Text>({result_Item+1}):</Text>
-                <Text>{this.state.data[result_Item].stuAnswer}</Text>
+                {this.state.data[result_Item].stuAnswer!=''
+                  ? <Text>{this.state.data[result_Item].stuAnswer}</Text>
+                  : <Text style={{fontStyle:{color:'#DC143C'}}}>未答</Text>
+                }
+                
             </View>)
       }
     return (

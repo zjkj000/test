@@ -1,10 +1,9 @@
-import { Text, StyleSheet, View, ScrollView,Image,TextInput,Button,Alert} from 'react-native'
+import { Text, StyleSheet, View, ScrollView,Image,TextInput,Button,Alert,TouchableOpacity,Modal} from 'react-native'
 import React, { Component } from 'react'
 import HTMLView from 'react-native-htmlview';
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import {OverflowMenu,MenuItem} from "@ui-kitten/components";
-
+import ImageViewer from 'react-native-image-zoom-viewer';
 
 
 // 主观题 模板页面
@@ -14,6 +13,7 @@ export default class Answer_single extends Component {
   constructor(props) {
     super(props)
     this.state = {  
+            ImageViewerstate:false,
             moduleVisible : false, //用于控制点击拍照图片，弹出选择  拍照或者从相册选取 
             numid:'',
             questionTypeName:'主观题',
@@ -109,7 +109,12 @@ export default class Answer_single extends Component {
   };
   render(){
     const HTML = this.state.questionContent;
-    let answerimage = this.state.hasImage? <Image style={{width:50,height:50}} source={{ uri: this.state.imgURL }}></Image>:null;
+    let answerimage = this.state.hasImage
+                      ?  (  <TouchableOpacity onPress={() => {this.setState({ ImageViewerstate:!this.state.ImageViewerstate });}}>
+                                <Image style={{width:50,height:50}} source={{ uri: this.state.imgURL }}></Image>
+                            </TouchableOpacity>)
+                      :  null;
+        const images = [{url: this.state.imgURL}]
     return (
       <View>
             {/* 第一行显示 第几题  题目类型 */}
@@ -117,16 +122,25 @@ export default class Answer_single extends Component {
                 <Text>{this.state.numid+1}/{this.props.sum}题</Text>
                 <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
             </View>
+            
             {/* 题目展示区域 */}
             <ScrollView style={styles.answer_area}>
                 <HTMLView value={HTML}/>
                 <Text style={{height:50}}></Text>
             </ScrollView>
+            
+            
             {/* 分割线 */}
             <View style={{backgroundColor:'#000000',height:1,width:'100%'}}></View>
+            <View>
+                    <Modal  visible={this.state.ImageViewerstate}   >
+                        <ImageViewer style={{width:"100%"}} imageUrls={images} onClick={()=>this.setState({ImageViewerstate:false})}/>
+                    </Modal>
+            </View>
             {/* 答案预览区域 */}
             <ScrollView style={styles.answer_preview}>
                 {answerimage}
+
                 <Text >{this.state.msg}</Text>
             </ScrollView>
           
