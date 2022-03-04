@@ -9,7 +9,7 @@ import {
 } from "react-native";
 import { Icon, Input, Text, Button, Layout } from "@ui-kitten/components";
 import { useNavigation } from "@react-navigation/native";
-import '../../utils/global/constants.js'
+import'../../utils/global/constants.js';
 
 const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 

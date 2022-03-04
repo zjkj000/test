@@ -23,7 +23,9 @@ export default class ImageHandler {
             if (response.didCancel) {
                 return;
             }
+            console.log(response)
             resImg = response.assets[0];
+
         });
         return resImg;
     }

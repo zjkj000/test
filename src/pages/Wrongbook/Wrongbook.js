@@ -1,6 +1,8 @@
 import Item from "antd-mobile/es/components/dropdown/item";
 import React, { Component, useState } from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+
 
 
 export default Wrongbook = () => {
@@ -11,7 +13,7 @@ export default Wrongbook = () => {
     //初始化参数
     const [data, setData] = useState([]);
 
-
+    const navigation = useNavigation()
     //获取学科数据
     fetch(ip
         + 'studentApp_ErrorQueGetSubject.do?'
@@ -33,7 +35,8 @@ export default Wrongbook = () => {
     //点击跳转到单科全部错题界面并将小红点状态置0
     const onPressButton = () => {
         // 
-        console.log(data)
+        console.log('onPressButton')
+        navigation.navigate('seeAll')
     }
     //处理小红点的显隐
     const handleVisible = (imageStatu) => {
