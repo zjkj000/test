@@ -7,6 +7,7 @@ import Information from "../../pages/Inf/Inf";
 import Login from "../../pages/Login/Login";
 import PackagesPage from "../../pages/LatestTask/PackagesPage";
 import Todo from "../../pages/LatestTask/Todo";
+import InformOrNotice from "../../pages/LatestTask/InformOrNotice";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -57,6 +58,7 @@ export default class MainNavigation extends Component {
                         component={PackagesPage}
                     />
                     <Stack.Screen name="Todo" component={Todo} />
+                    <Stack.Screen name="InformOrNotice" component={InformOrNotice} />
                     <Stack.Screen
                         name="做作业"
                         component={ViewPager_ToDo}
