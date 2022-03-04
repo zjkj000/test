@@ -16,9 +16,9 @@ import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
-import seeAll from '../../pages/Wrongbook/seeAll'
+import WrongSee from '../../pages/Wrongbook/WrongSee'
 import Wrongbook from "../../pages/Wrongbook/Wrongbook";
-import wrongDetails from'../../pages/Wrongbook/wrongDetails'
+import WrongDetails from'../../pages/Wrongbook/WrongDetails'
 
 const Stack = createStackNavigator();
 
@@ -85,16 +85,16 @@ export default class MainNavigation extends Component {
                 </Stack.Group>
                 <Stack.Group>
                     <Stack.Screen
-                        name="seeAll"
-                        component={seeAll}
+                        name="错题本"
+                        component={WrongSee}
                     />
                     <Stack.Screen
                         name="Wrongbook"
                         component={Wrongbook}
                     />
                     <Stack.Screen
-                        name="wrongDetails"
-                        component={wrongDetails}
+                        name="WrongDetails"
+                        component={WrongDetails}
                     />
                 </Stack.Group>
             </Stack.Navigator>
