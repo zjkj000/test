@@ -53,8 +53,13 @@ export default ConnectClass = () => {
         http.get(url, params)
             .then((resStr) => {
                 console.log(resStr);
+                // Toast.showDangerToast(resStr);
                 let resJson = JSON.parse(resStr);
-                navigation.navigate("OnlineClassTemp", { ...resJson });
+                navigation.navigate("OnlineClassTemp", {
+                    ...resJson,
+                    ipAddress: ipAddress,
+                    userName: Name,
+                });
             })
             .catch((error) => {
                 Toast.showDangerToast(error.toString());

@@ -276,3 +276,37 @@ Overlay 中的 Toast 函数接收如下参数：
 -   option ：非必须，接收一个 styles 对象，其中应包含`textStyle`属性，用于定义弹出框的样式
 -   position ：非必须，接收一个 toast.Position 中的参数，用于指定弹出框出现的位置，默认为中间，
 -   animateEasing ：非必须，接收一个 React Native 中定义的 Easing 对象，用于定义弹出框的动画
+
+## 2022.3.4 bug 修复
+
+### 扫码页面传参问题
+
+上节提到使用如下组件实现并封装了扫码功能：
+
+```react
+yarn add react-native-camera
+```
+
+但该组件使用轮询机制判断扫码结果并予以处理，因此该组件将会多次得到扫码结果，而在该项目中，扫码页面与其他页面独立，因此扫码得到结果后需要跳转到原页面，并将参数传递到该页面，如下所示：
+
+```react
+onBarCodeRead = (result) => {
+        const { navigation, route } = this.props;
+
+        const { data } = result;
+        if (route.params?.backPage) {
+            let { backPage } = route.params;
+            navigation.navigate({
+                name: backPage,
+                params: { ipAddress: data },
+                merge: true,
+            });
+        } else {
+            navigation.navigate({
+                name: "Home",
+                params: { ipAddress: data },
+                merge: true,
+            });
+        }
+    };
+```

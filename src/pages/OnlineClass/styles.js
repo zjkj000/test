@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { screenHeight, screenWidth } from "../LatestTask/TodoList";
 
 export const styles = StyleSheet.create({
     View: {
@@ -58,6 +59,8 @@ export const styles = StyleSheet.create({
         backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
     mainContainer: {
+        width: screenHeight,
+        height: screenWidth,
         justifyContent: "center",
         alignItems: "center",
     },

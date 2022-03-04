@@ -1,4 +1,5 @@
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
+import { PermissionsAndroid } from "react-native";
 
 export default class ImageHandler {
     static async handleCamera() {
@@ -18,14 +19,43 @@ export default class ImageHandler {
                 path: "images",
             },
         };
-        let resImg = null;
-        await launchCamera(option, (response) => {
-            if (response.didCancel) {
-                return;
+        try {
+            const granted = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.CAMERA,
+                {
+                    title: "Cool Photo App Camera Permission",
+                    message:
+                        "Cool Photo App needs access to your camera " +
+                        "so you can take awesome pictures.",
+                    buttonNeutral: "Ask Me Later",
+                    buttonNegative: "Cancel",
+                    buttonPositive: "OK",
+                }
+            );
+            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+                console.log("You have the permission of camera");
+                let resImg = null;
+                await launchCamera(option, (response) => {
+                    if (response.didCancel) {
+                        return;
+                    }
+                    resImg = response.assets[0];
+                });
+                return resImg;
+            } else {
+                console.log("Camera permission denied");
             }
-            resImg = response.assets[0];
-        });
-        return resImg;
+        } catch (error) {
+            console.warn(err);
+        }
+        // let resImg = null;
+        // await launchCamera(option, (response) => {
+        //     if (response.didCancel) {
+        //         return;
+        //     }
+        //     resImg = response.assets[0];
+        // });
+        // return resImg;
     }
     static async handleLibrary() {
         const option = {

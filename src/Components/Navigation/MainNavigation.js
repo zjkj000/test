@@ -72,6 +72,9 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="OnlineClassTemp"
                         component={OnlineClassTempPage}
+                        // options={{
+                        //     headerShown: false,
+                        // }}
                     />
                     <Stack.Screen
                         name="QRCodeScanner"

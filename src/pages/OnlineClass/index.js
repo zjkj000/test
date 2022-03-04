@@ -3,6 +3,8 @@ import React, { Component } from "react";
 import { View, Text, Image, BackHandler } from "react-native";
 import Orientation from "react-native-orientation";
 import { styles } from "./styles";
+import http from "../../utils/http/request";
+import Toast from "../../utils/Toast/Toast";
 
 export default function OnlineClassTempPage() {
     const navigation = useNavigation();
@@ -13,6 +15,33 @@ export default function OnlineClassTempPage() {
 class OnlineClassTemp extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            resJson: null,
+        };
+    }
+
+    getInfo() {
+        const { ipAddress, userName } = this.props.route.params;
+        const url =
+            "http://" +
+            ipAddress +
+            ":8901" +
+            "/KeTangServer/ajax/ketang_getMessageListByStu.do";
+        const params = {
+            userId: userName,
+        };
+        http.get(url, params)
+            .then((resStr) => {
+                // Toast.showDangerToast(resStr);
+                resJson = JSON.parse(resStr);
+                this.setState({
+                    resJson,
+                });
+                // console.log(resJson);
+            })
+            .catch((error) => {
+                // Toast.showDangerToast(error.toString());
+            });
     }
 
     componentDidMount() {
@@ -23,6 +52,19 @@ class OnlineClassTemp extends Component {
                 this.onBackAndroid
             );
         }
+
+        // 轮询
+        this.timerId = setInterval(() => {
+            this.getInfo();
+            const { resJson } = this.state;
+            if (resJson) {
+                messageList = resJson.messageList;
+                if (messageList.length !== 0) {
+                    let action = messageList[0];
+                    console.log(action);
+                }
+            }
+        }, 500);
     }
 
     componentWillUnmount() {
@@ -33,27 +75,15 @@ class OnlineClassTemp extends Component {
                 this.onBackAndroid
             );
         }
+        // 清空定时器
+        clearInterval(this.timerId);
     }
     onBackAndroid() {
-        if (
-            this.props.navigation.state.params &&
-            this.props.navigation.state.params.showDialog
-        ) {
-            //当dialog存在时，先消失dialog   然后返回true ，不执行系统默认操作
-            this.props.navigation.setParams({
-                showDialog: false,
-            });
-            return true;
-        } else {
-            //返回false ，不执行系统默认操作
-            return false;
-        }
+        return false;
     }
 
     render() {
         const routeParams = this.props.route.params;
-        console.log(routeParams);
-        console.log(typeof routeParams);
         // const { courseName, introduction, teacherName } = routeParams.learnPlan;
         return (
             <View style={styles.mainContainer}>
