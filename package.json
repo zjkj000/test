@@ -33,6 +33,8 @@
     "native-base": "^3.3.7",
     "react": "17.0.2",
     "react-native": "0.67.2",
+    "react-native-camera": "^4.2.1",
+    "react-native-easy-toast": "^2.0.0",
     "react-native-elements": "^3.4.2",
     "react-native-gesture-handler": "^2.2.0",
     "react-native-get-random-values": "^1.7.2",
@@ -43,7 +45,8 @@
     "react-native-pager-view": "^5.4.9",
     "react-native-safe-area-context": "^3.4.1",
     "react-native-svg": "^12.1.1",
-    "react-native-vector-icons": "^9.1.0"
+    "react-native-vector-icons": "^9.1.0",
+    "rn-overlay": "^0.4.0"
   },
   "devDependencies": {
     "@babel/core": "^7.17.2",

@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Text, View ,TouchableOpacity,Image} from "react-native";
+import { Button, Text, View, TouchableOpacity, Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MyTabBar from "./TabBar";
 import Details from "../../pages/Details/Details";
@@ -10,9 +10,12 @@ import Todo from "../../pages/LatestTask/Todo";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
 
-import Menu from '../../pages/LatestTask/DoWork/Utils/Menu';
-import ViewPager_ToDo from '../../pages/LatestTask/DoWork/ViewPager_ToDo'
+import Menu from "../../pages/LatestTask/DoWork/Utils/Menu";
+import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
 import OnlineClassTempPage from "../../pages/OnlineClass";
+import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
+import ConnectClass from "../../pages/OnlineClass/ConnectClass";
+
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -51,18 +54,28 @@ export default class MainNavigation extends Component {
                         component={PackagesPage}
                     />
                     <Stack.Screen name="Todo" component={Todo} />
-                    <Stack.Screen name="做作业" 
-                    component={ViewPager_ToDo} 
-                    options={{
-                        headerRight: () => (
-                            <Menu learnPlanId='1b2a59d2-8990-4672-a97b-124a96a7f8c8'/>
-                          ),
-                    }}/>
+                    <Stack.Screen
+                        name="做作业"
+                        component={ViewPager_ToDo}
+                        options={{
+                            headerRight: () => (
+                                <Menu learnPlanId="1b2a59d2-8990-4672-a97b-124a96a7f8c8" />
+                            ),
+                        }}
+                    />
                 </Stack.Group>
                 <Stack.Group>
                     <Stack.Screen
+                        name="ConnectClass"
+                        component={ConnectClass}
+                    />
+                    <Stack.Screen
                         name="OnlineClassTemp"
                         component={OnlineClassTempPage}
+                    />
+                    <Stack.Screen
+                        name="QRCodeScanner"
+                        component={QRCodeScanner}
                     />
                 </Stack.Group>
             </Stack.Navigator>
