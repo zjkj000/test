@@ -19,6 +19,7 @@ import Answer_single from "../../pages/LatestTask/DoWork/Answer_type/Answer_sing
 import Submit from "../../pages/LatestTask/DoWork/Answer_type/Submit";
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
+import ConnectClass from "../../pages/OnlineClass/ConnectClass";
 
 const Stack = createStackNavigator();
 
@@ -83,6 +84,10 @@ export default class MainNavigation extends Component {
                 </Stack.Group>
 
                 <Stack.Group>
+                    <Stack.Screen
+                        name="ConnectClass"
+                        component={ConnectClass}
+                    />
                     <Stack.Screen
                         name="OnlineClassTemp"
                         component={OnlineClassTempPage}

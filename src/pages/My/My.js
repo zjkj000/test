@@ -1,7 +1,11 @@
 import React, { Component } from "react";
-import { View, Text, StyleSheet, TouchableWithoutFeedback } from "react-native";
+import {
+    View,
+    Text,
+    TouchableWithoutFeedback,
+    TouchableOpacity,
+} from "react-native";
 // import { Avatar } from "react-native-elements";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import {
     Avatar,
     Layout,
