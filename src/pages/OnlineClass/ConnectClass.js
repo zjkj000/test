@@ -48,13 +48,11 @@ export default ConnectClass = () => {
         const params = {
             userName: Name,
             password: Password,
-            callback: "ha",
         };
 
         http.get(url, params)
             .then((resStr) => {
                 console.log(resStr);
-                // Toast.showDangerToast(resStr);
                 let resJson = JSON.parse(resStr);
                 navigation.navigate("OnlineClassTemp", { ...resJson });
             })
