@@ -1,7 +1,7 @@
-import Item from "antd-mobile/es/components/dropdown/item";
-import React, { Component, useState } from "react";
+import React, { Component, useState , useEffect,useRef} from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import res from "antd-mobile-icons/es/AaOutline";
 
 
 
@@ -12,31 +12,65 @@ export default Wrongbook = () => {
     const userName = global.constants.userName
     //初始化参数
     const [data, setData] = useState([]);
-
+    //设置导航
     const navigation = useNavigation()
     //获取学科数据
-    fetch(ip
-        + 'studentApp_ErrorQueGetSubject.do?'
-        + 'userName=' + userName
-        + '&token=' + token
-        + '&callback=ha'
-    )
-
-        .then(response => response.text())
-        .then(text => {
-
-            let res = eval('(' + text.substring(2) + ')')
-            //数据与props绑定
-            setData(res.data)
-
-        })
-        .catch(err => console.log('Request Failed', err));
+    useEffect(() => {
+        getData();
+      },[]);
+    const getData = () =>{
+        fetch(ip
+            + 'studentApp_ErrorQueGetSubject.do?'
+            + 'userName=' + userName
+            + '&token=' + token
+            + '&callback=ha'
+        )
+    
+            .then(response => response.text())
+            .then(text => {
+    
+                let res = eval('(' + text.substring(2) + ')')
+                //数据与props绑定
+                setData(res.data)
+                
+    
+            })
+            .catch(err => console.log('Request Failed', err));
+    }
+    
 
     //点击跳转到单科全部错题界面并将小红点状态置0
-    const onPressButton = () => {
-        // 
-        console.log('onPressButton')
-        navigation.navigate('seeAll')
+    const onPressButton = (subjectId , subjectName) => {
+        console.log('错题本页面测试')
+        //更改学科错题已读状态
+        fetch(ip
+            + 'studentApp_ErrorQueUpdateStatus.do?'
+            + 'userName=' + userName
+            + '&token=' + token
+            + '&subjectId=' + subjectId
+            + '&callback=ha'
+        )
+    
+            .then(response => response.text())
+            .then(text => {
+    
+                let success = eval('(' + text.substring(2) + ')')
+                //数据与props绑定
+            
+    
+            })
+            .catch(err => console.log('Request Failed', err));
+        
+        // 页面跳转，传递参数subjectId
+        navigation.navigate({
+            name:'错题本',
+            params:{
+                subjectId:subjectId,
+                subjectName:subjectName
+                
+            }
+        })
+        
     }
     //处理小红点的显隐
     const handleVisible = (imageStatu) => {
@@ -59,7 +93,7 @@ export default Wrongbook = () => {
                         return (
                             //Alert.alert(item.status),
                             //TouchableOpacity点击或长按均有半透明效果
-                            <TouchableOpacity onPress={() => onPressButton()} style={styles.TouchableOpacity} >
+                            <TouchableOpacity onPress={() => onPressButton(item.subjectId,item.subjectName)} style={styles.TouchableOpacity} >
                                 <View style={styles.Card}>
                                     <View style={styles.ViewCard}>
                                         <View style={styles.ViewCardleft}>

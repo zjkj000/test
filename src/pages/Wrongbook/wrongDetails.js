@@ -1,5 +1,6 @@
 import { View, Image, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
-export default seeAll = () =>{
+import React from "react";
+export default WrongDetails = () =>{
     return(
         <Text>
             xiangxi
