@@ -7,6 +7,7 @@ import Information from "../../pages/Inf/Inf";
 import Login from "../../pages/Login/Login";
 import PackagesPage from "../../pages/LatestTask/PackagesPage";
 import Todo from "../../pages/LatestTask/Todo";
+import InformOrNotice from "../../pages/LatestTask/InformOrNotice";
 import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
 
@@ -15,6 +16,9 @@ import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
+import seeAll from '../../pages/Wrongbook/seeAll'
+import Wrongbook from "../../pages/Wrongbook/Wrongbook";
+import wrongDetails from'../../pages/Wrongbook/wrongDetails'
 
 const Stack = createStackNavigator();
 
@@ -54,6 +58,7 @@ export default class MainNavigation extends Component {
                         component={PackagesPage}
                     />
                     <Stack.Screen name="Todo" component={Todo} />
+                    <Stack.Screen name="InformOrNotice" component={InformOrNotice} />
                     <Stack.Screen
                         name="做作业"
                         component={ViewPager_ToDo}
@@ -79,6 +84,20 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="QRCodeScanner"
                         component={QRCodeScanner}
+                    />
+                </Stack.Group>
+                <Stack.Group>
+                    <Stack.Screen
+                        name="seeAll"
+                        component={seeAll}
+                    />
+                    <Stack.Screen
+                        name="Wrongbook"
+                        component={Wrongbook}
+                    />
+                    <Stack.Screen
+                        name="wrongDetails"
+                        component={wrongDetails}
                     />
                 </Stack.Group>
             </Stack.Navigator>

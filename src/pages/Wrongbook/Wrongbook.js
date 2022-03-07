@@ -1,213 +1,170 @@
-import React, { Component } from "react";
-import { View , Image, Text ,StyleSheet} from "react-native";
-import { Card } from "@ui-kitten/components";
+import Item from "antd-mobile/es/components/dropdown/item";
+import React, { Component, useState } from "react";
+import { View, Image, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-export default Wrongbook = () =>{
+
+
+export default Wrongbook = () => {
+    //获取用户信息
+    const ip = global.constants.baseUrl
+    const token = global.constants.token
+    const userName = global.constants.userName
+    //初始化参数
+    const [data, setData] = useState([]);
+
+    const navigation = useNavigation()
+    //获取学科数据
+    fetch(ip
+        + 'studentApp_ErrorQueGetSubject.do?'
+        + 'userName=' + userName
+        + '&token=' + token
+        + '&callback=ha'
+    )
+
+        .then(response => response.text())
+        .then(text => {
+
+            let res = eval('(' + text.substring(2) + ')')
+            //数据与props绑定
+            setData(res.data)
+
+        })
+        .catch(err => console.log('Request Failed', err));
+
+    //点击跳转到单科全部错题界面并将小红点状态置0
+    const onPressButton = () => {
+        // 
+        console.log('onPressButton')
+        navigation.navigate('seeAll')
+    }
+    //处理小红点的显隐
+    const handleVisible = (imageStatu) => {
+        if(imageStatu=='0'){
+            return (<Text/>)
+        }else if(imageStatu=='1'){
+            return(
+                <Image source={require('../../assets/teaImg/rightNum.png')} style={styles.rightNum} />
+            )
+        }
+    }
     //渲染
-    return(
+    return (
         <>
-            <View style={{height:'10%'}}/>
+            <View style={{ height: '15%' }} />
             <View style={styles.Container}>
-                
+                {   
+                //循环渲染data中的数据
+                    data.map((item, index) => {
+                        return (
+                            //Alert.alert(item.status),
+                            //TouchableOpacity点击或长按均有半透明效果
+                            <TouchableOpacity onPress={() => onPressButton()} style={styles.TouchableOpacity} >
+                                <View style={styles.Card}>
+                                    <View style={styles.ViewCard}>
+                                        <View style={styles.ViewCardleft}>
+                                            <Image
+                                                source={require('../../assets/teaImg/paper.png')}
+                                                style={styles.Image}
+                                            />
+                                        </View>
+                                        <View style={styles.ViewCardright}>
+                                            <View style={styles.textView}>
+                                                <Text style={styles.Text}>{item.subjectName}</Text>
+                                                { handleVisible(item.status) }
+                                            </View>
+                                            <View>
+                                                <Text>{item.errorQueNum}道错题</Text>
+                                            </View>
 
-                <View style={styles.ContainerLeft}>
-                    <Card style={styles.Card}>
-                        <View style={styles.ViewCard}>
-                            <View style={styles.ViewCardleft}>
-                                <Image 
-                                    source={require('../../assets/teaImg/paper.png')}
-                                    style={styles.Image}
-                                />
-                            </View>
-                            <View style={styles.ViewCardright}>
-                                <Text>语文</Text>
-                            </View>
-                            
-                        </View>
-                    </Card>
-                    <Card style={styles.Card}>
-                        <View style={styles.ViewCard}>
-                                <View style={styles.ViewCardleft}>
-                                    <Image 
-                                        source={require('../../assets/teaImg/paper.png')}
-                                        style={styles.Image}
-                                    />
+                                        </View>
+                                    </View>
                                 </View>
-                                <View style={styles.ViewCardright}>
-                                    <Text>语文</Text>
-                                </View>
-                                
-                        </View>
-                    </Card>
-                    <Card style={styles.Card}>
-                        <View style={styles.ViewCard}>
-                                <View style={styles.ViewCardleft}>
-                                    <Image 
-                                        source={require('../../assets/teaImg/paper.png')}
-                                        style={styles.Image}
-                                    />
-                                </View>
-                                <View style={styles.ViewCardright}>
-                                    <Text>语文</Text>
-                                </View>
-                                
-                        </View>
-                    </Card>
-                    <Card style={styles.Card}>
-                        <View style={styles.ViewCard}>
-                                <View style={styles.ViewCardleft}>
-                                    <Image 
-                                        source={require('../../assets/teaImg/paper.png')}
-                                        style={styles.Image}
-                                    />
-                                </View>
-                                <View style={styles.ViewCardright}>
-                                    <Text>语文</Text>
-                                </View>
-                                
-                        </View>
-                    </Card>
-                    <Card style={styles.Card}>
-                        <View style={styles.ViewCard}>
-                                <View style={styles.ViewCardleft}>
-                                    <Image 
-                                        source={require('../../assets/teaImg/paper.png')}
-                                        style={styles.Image}
-                                    />
-                                </View>
-                                <View style={styles.ViewCardright}>
-                                    <Text>语文</Text>
-                                </View>
-                                
-                        </View>
-                    </Card>
-
-                </View>
-
-                
-            <View style={styles.ContainerRight}>
-                    <Card style={styles.Card}>
-                        <View style={styles.ViewCard}>
-                                <View style={styles.ViewCardleft}>
-                                    <Image 
-                                        source={require('../../assets/teaImg/paper.png')}
-                                        style={styles.Image}
-                                    />
-                                </View>
-                                <View style={styles.ViewCardright}>
-                                    <Text>语文</Text>
-                                </View>
-                                
-                        </View>
-                    </Card>
-                    <Card style={styles.Card}>
-                        <View style={styles.ViewCard}>
-                                <View style={styles.ViewCardleft}>
-                                    <Image 
-                                        source={require('../../assets/teaImg/paper.png')}
-                                        style={styles.Image}
-                                    />
-                                </View>
-                                <View style={styles.ViewCardright}>
-                                    <Text>语文</Text>
-                                </View>
-                                
-                        </View>
-                    </Card>
-                    <Card style={styles.Card}>
-                        <View style={styles.ViewCard}>
-                                <View style={styles.ViewCardleft}>
-                                    <Image 
-                                        source={require('../../assets/teaImg/paper.png')}
-                                        style={styles.Image}
-                                    />
-                                </View>
-                                <View style={styles.ViewCardright}>
-                                    <Text>语文</Text>
-                                </View>
-                                
-                        </View>
-                    </Card>
-                    <Card style={styles.Card}>
-                        <View style={styles.ViewCard}>
-                                <View style={styles.ViewCardleft}>
-                                    <Image 
-                                        source={require('../../assets/teaImg/paper.png')}
-                                        style={styles.Image}
-                                    />
-                                </View>
-                                <View style={styles.ViewCardright}>
-                                    <Text>语文</Text>
-                                </View>
-                                
-                        </View>
-                    </Card>
-                    
-            </View>
-                
-
+                            </TouchableOpacity>
+                        )
+                    })
+                }
             </View>
         </>
     )
 };
 const styles = StyleSheet.create({
-    Container:{
-        flexDirection:'row',
-        alignItems:'center',
-        justifyContent:'center',
-        height:'100%',
-        width:'100%',
-        
+    Container: {
+        flexDirection: 'row',
+        height: '100%',
+        width: '100%',
+        flexWrap: 'wrap'
+        //backgroundColor:'blue'
+
     },
-    ContainerLeft:{
-        flexDirection:'column',
-        alignItems:'center',
-        height:'100%',
-        width:'100%',
-        flex:6,
+
+    TouchableOpacity: {
+        margin: '3%',
+        width: '43%',
+        height: '9%',
+        alignItems: 'center',
+        hitSlop: ''
+
     },
-    ContainerRight:{
-        flexDirection:'column',
-        alignItems:'center',
-        height:'100%',
-        width:'100%',
-        flex:6
+    Card: {
+        // /margin:'5%',
+        width: '100%',
+        height: '100%',
+        borderColor: 'gainsboro',
+        borderWidth: 1,
+        display: 'flex',
+        borderRadius: 10,
+        //elevation:1,
+        backgroundColor: 'white'
+
     },
-    Card:{
-        margin:'5%',
-        width:'85%',
-        height:'9%',
-        backgroundColor:'black',
-        padding:0,
+    ViewCard: {
+        flexDirection: 'row',
+        padding: 0,
+        //backgroundColor:'#F5FCFF',
+        flex: 1,
+        borderRadius: 10,
     },
-    ViewCard:{
-        ...StyleSheet.absoluteFillObject,
-        
-        flexDirection:'row',
-        alignItems:'center',
-        margin:0,
-        padding:0,
-        backgroundColor:'#F5FCFF'
+    ViewCardleft: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
+        height: '100%',
+        width: '40%',
+        margin: 0,
+        padding: 0,
+
+        //backgroundColor:"yellow"
     },
-    ViewCardleft:{
-        alignItems:'center',
-        height:'100%',
-        width:'45%',
-        margin:0,
-        padding:0,
-        backgroundColor:"yellow"
-    },
-    ViewCardright:{
-        flexDirection:'column',
-        alignItems:'center',
-        height:'100%',
-        width:'55%',
-        margin:0,
-        padding:0,
+    ViewCardright: {
+
+        alignItems: 'flex-start',
+        height: '100%',
+        width: '60%',
+        margin: 0,
+        padding: 0,
+
+        borderTopLeftRadius: 10,
+        borderBottomLeftRadius: 10,
         //backgroundColor:'green'
     },
-    Image:{
-        width:50,
-        height:50,
+    textView: {
+        height: '50%',
+        flexDirection: 'row',
+        alignItems: 'center'
+    },
+    Image: {
+        width: 50,
+        height: 50,
+    },
+    rightNum: {
+        marginLeft: 5,
+        width: 12,
+        height: 12
+    },
+    Text: {
+        fontSize: 18,
+        fontWeight: '500'
     }
 })
