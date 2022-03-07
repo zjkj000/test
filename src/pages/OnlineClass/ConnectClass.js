@@ -10,6 +10,7 @@ import http from "../../utils/http/request";
 import HistoryInput from "./HistoryInput";
 import { styles } from "./styles";
 import Toast from "../../utils/Toast/Toast";
+import Loading from "../../utils/loading/Loading";
 
 export default ConnectClass = () => {
     const historyListRemote = [
@@ -32,11 +33,10 @@ export default ConnectClass = () => {
     //     Toast.showSuccessToast(scanIpAddress);
     //     // setIpAddress(scanIpAddress);
     // }
+    const [showLoading, setShowLoading] = React.useState(false);
     const [Name, setName] = React.useState("ming6002");
     const [Password, setPassword] = React.useState("2020");
     const [scanIpAddress, setScanIpAddress] = React.useState("");
-    const [secureTextEntry, setSecureTextEntry] = React.useState(true);
-    const [moduleVisible, setModuleVisible] = React.useState(false);
     const [historyList, setHistoryList] = React.useState(historyListRemote);
 
     const handleLogin = () => {
@@ -49,19 +49,25 @@ export default ConnectClass = () => {
             userName: Name,
             password: Password,
         };
-
+        setShowLoading(true);
         http.get(url, params)
             .then((resStr) => {
-                console.log(resStr);
-                // Toast.showDangerToast(resStr);
-                let resJson = JSON.parse(resStr);
-                navigation.navigate("OnlineClassTemp", {
-                    ...resJson,
-                    ipAddress: ipAddress,
-                    userName: Name,
-                });
+                setShowLoading(false);
+                console.log(typeof resStr);
+                if (typeof resStr === "undefined") {
+                    Toast.showWarningToast("暂无课程开始");
+                } else {
+                    // Toast.showDangerToast(resStr);
+                    let resJson = JSON.parse(resStr);
+                    navigation.navigate("OnlineClassTemp", {
+                        ...resJson,
+                        ipAddress: ipAddress,
+                        userName: Name,
+                    });
+                }
             })
             .catch((error) => {
+                setShowLoading(false);
                 Toast.showDangerToast(error.toString());
             });
     };
@@ -110,6 +116,7 @@ export default ConnectClass = () => {
             <Button onPress={handleLiveClass} style={styles.Button}>
                 直播课程
             </Button>
+            <Loading show={showLoading}></Loading>
         </View>
     );
 };

@@ -1,24 +1,19 @@
 import React, { Component } from "react";
-import { Button, Text, View, TouchableOpacity, Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MyTabBar from "./TabBar";
-import Details from "../../pages/Details/Details";
-import Information from "../../pages/Inf/Inf";
 import Login from "../../pages/Login/Login";
 import PackagesPage from "../../pages/LatestTask/PackagesPage";
 import Todo from "../../pages/LatestTask/Todo";
 import InformOrNotice from "../../pages/LatestTask/InformOrNotice";
-import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
-import { useNavigation } from "@react-navigation/native";
 
 import Menu from "../../pages/LatestTask/DoWork/Utils/Menu";
 import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
-import WrongSee from '../../pages/Wrongbook/WrongSee'
+import WrongSee from "../../pages/Wrongbook/WrongSee";
 import Wrongbook from "../../pages/Wrongbook/Wrongbook";
-import WrongDetails from'../../pages/Wrongbook/WrongDetails'
+import WrongDetails from "../../pages/Wrongbook/wrongDetails";
 
 const Stack = createStackNavigator();
 
@@ -58,7 +53,10 @@ export default class MainNavigation extends Component {
                         component={PackagesPage}
                     />
                     <Stack.Screen name="Todo" component={Todo} />
-                    <Stack.Screen name="InformOrNotice" component={InformOrNotice} />
+                    <Stack.Screen
+                        name="InformOrNotice"
+                        component={InformOrNotice}
+                    />
                     <Stack.Screen
                         name="做作业"
                         component={ViewPager_ToDo}
@@ -69,6 +67,8 @@ export default class MainNavigation extends Component {
                         }}
                     />
                 </Stack.Group>
+
+                {/* 在线课堂 */}
                 <Stack.Group>
                     <Stack.Screen
                         name="ConnectClass"
@@ -77,9 +77,9 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="OnlineClassTemp"
                         component={OnlineClassTempPage}
-                        // options={{
-                        //     headerShown: false,
-                        // }}
+                        options={{
+                            headerShown: false,
+                        }}
                     />
                     <Stack.Screen
                         name="QRCodeScanner"
@@ -87,14 +87,8 @@ export default class MainNavigation extends Component {
                     />
                 </Stack.Group>
                 <Stack.Group>
-                    <Stack.Screen
-                        name="错题本"
-                        component={WrongSee}
-                    />
-                    <Stack.Screen
-                        name="Wrongbook"
-                        component={Wrongbook}
-                    />
+                    <Stack.Screen name="错题本" component={WrongSee} />
+                    <Stack.Screen name="Wrongbook" component={Wrongbook} />
                     <Stack.Screen
                         name="WrongDetails"
                         component={WrongDetails}
