@@ -464,3 +464,5 @@ $ git checkout main
 ```git
 $ git merge 分支名
 ```
+
+## 2022.3.8 完成访问本地缓存功能

@@ -11,28 +11,18 @@ import HistoryInput from "./HistoryInput";
 import { styles } from "./styles";
 import Toast from "../../utils/Toast/Toast";
 import Loading from "../../utils/loading/Loading";
+import StorageUtil from "../../utils/Storage/Storage";
 
 export default ConnectClass = () => {
-    const historyListRemote = [
-        { title: "192.168.1.81" },
-        { title: "192.168.1.124" },
-        { title: "192.168.1.126" },
-    ];
+    let historyListRemote = StorageUtil.get("historyListRemote");
+    // let historyListRemote = [];
+    console.log(historyListRemote);
     const navigation = useNavigation();
     const route = useRoute();
 
     const [ipAddress, setIpAddress] = useState(
         route.params?.ipAddress ? route.params.ipAddress : ""
     );
-
-    // if (route.params?.ipAddress) {
-    //     let scanIpAddress = route.params.ipAddress;
-    //     if (ipAddress !== scanIpAddress) {
-    //         setIpAddress(scanIpAddress);
-    //     }
-    //     Toast.showSuccessToast(scanIpAddress);
-    //     // setIpAddress(scanIpAddress);
-    // }
     const [showLoading, setShowLoading] = React.useState(false);
     const [Name, setName] = React.useState("ming6002");
     const [Password, setPassword] = React.useState("2020");
@@ -59,6 +49,8 @@ export default ConnectClass = () => {
                 } else {
                     // Toast.showDangerToast(resStr);
                     let resJson = JSON.parse(resStr);
+                    historyListRemote.push(ipAddress);
+                    StorageUtil.save("historyList", historyList);
                     navigation.navigate("OnlineClassTemp", {
                         ...resJson,
                         ipAddress: ipAddress,

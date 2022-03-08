@@ -5,10 +5,14 @@ import Orientation from "react-native-orientation";
 import { styles } from "./styles";
 import http from "../../utils/http/request";
 import Toast from "../../utils/Toast/Toast";
+import { shallowEqual } from "../../utils/Compare/Compare";
 import {
     bindBackExitApp,
     removeBackExitApp,
 } from "../../utils/TwiceTap/TwiceTap";
+import TempPage from "./ClassPages/TempPage";
+import FreePage from "./ClassPages/FreePage";
+import LockedPage from "./ClassPages/LockedPage";
 
 export default function OnlineClassTempPage() {
     const navigation = useNavigation();
@@ -20,7 +24,7 @@ class OnlineClassTemp extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            resJson: null,
+            resJson: {},
             pageRender: 0,
         };
     }
@@ -52,7 +56,7 @@ class OnlineClassTemp extends Component {
     handleMessageQueue() {
         this.getInfo();
         const { resJson } = this.state;
-        if (resJson) {
+        if (resJson.hasOwnProperty("messageList")) {
             messageList = resJson.messageList;
             if (messageList.length !== 0) {
                 let events = messageList[0];
@@ -64,12 +68,21 @@ class OnlineClassTemp extends Component {
                         break;
                     case "read-lock":
                         console.log("单题模式");
-                    // TODO: 渲染单题组件
+                        this.setState({ pageRender: 1 });
+                        // TODO: 渲染单题组件
+                        break;
+
                     case "no-lock":
                         console.log("多题模式");
-                    // TODO: 渲染多题组件
+                        this.setState({ pageRender: 2 });
+
+                        // TODO: 渲染多题组件
+                        break;
                     case "lock":
                         console.log("结束答题");
+                        this.setState({ pageRender: 3 });
+
+                        break;
                     default:
                         break;
                 }
@@ -105,6 +118,16 @@ class OnlineClassTemp extends Component {
         // 清空定时器
         clearInterval(this.timerId);
     }
+
+    shouldComponentUpdate(nextProps, nextState) {
+        if (shallowEqual(this.state.resJson, nextState.resJson)) {
+            console.log(this.state.resJson !== nextState.resJson);
+            console.log(this.state.resJson);
+            console.log(nextState.resJson);
+            return true;
+        }
+        return false;
+    }
     onBackAndroid() {
         // console.log("hardware back button pressed!");
         return true;
@@ -131,37 +154,25 @@ class OnlineClassTemp extends Component {
         const routeParams = this.props.route.params;
         // const { courseName, introduction, teacherName } = routeParams.learnPlan;
         return (
-            <view>
+            <View>
                 <Image source={require("../../assets/image/music.png")}></Image>
                 <Text>课堂:{routeParams.learnPlan.courseName}</Text>
                 <Text>教师:{routeParams.learnPlan.teacherName}</Text>
                 <Text>学生:{routeParams.learnPlan.introduction}</Text>
-            </view>
+            </View>
         );
     }
 
     _renderLockedPage() {
-        return (
-            <View>
-                <Text>我是受控页面</Text>
-            </View>
-        );
+        return <LockedPage />;
     }
 
     _renderFreePage() {
-        return (
-            <View>
-                <Text>我是自由页面</Text>
-            </View>
-        );
+        return <FreePage />;
     }
 
     _renderTempPage() {
-        return (
-            <View>
-                <Text>我是空页面</Text>
-            </View>
-        );
+        return <TempPage />;
     }
 
     render() {
