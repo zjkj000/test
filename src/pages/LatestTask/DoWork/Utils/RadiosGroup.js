@@ -10,9 +10,34 @@ export default class RadiosGroup extends Component {
             data: [],
         };
     }
+
     UNSAFE_componentWillMount(){
-        this.setState({data:this.props.data})
+        //  this.props.checkedlist  是哪个已经选中了
+        const oldchecklist = this.props.checkedlist.split(',')
+        const oldselected = this.state.selected;
+            oldchecklist.map(function(item,index){
+                if(item=='A'){
+                    oldselected[0]=true
+                }else if(item=='B'){
+                    oldselected[1]=true
+                }else if(item=='C'){
+                    oldselected[2]=true
+                }else if(item=='D'){
+                    oldselected[3]=true
+                }else if(item=='E'){
+                    oldselected[4]=true
+                }else if(item=='F'){
+                    oldselected[5]=true
+                }else if(item=='G'){
+                    oldselected[6]=true
+                }else if(item=='H'){
+                    oldselected[7]=true
+                }else{}
+            }
+        )
+        this.setState({data:this.props.data,selected:oldselected})
     }
+    
     render() {
         let newArray = this.state.data;
         return (
@@ -48,6 +73,7 @@ export default class RadiosGroup extends Component {
         return (
             <TouchableOpacity key={index} onPress={()=> {
                 onPress(index, item)
+                this.props.getcheckedAnswer(item.title)
             }} style={[{
                 width: 100,
                 height: 43,

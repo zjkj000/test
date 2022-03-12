@@ -6,11 +6,36 @@ import RadioGroup  from './RadioGroup';
 export default class RadioList extends PureComponent {
     constructor(props) {
         super(props)
+        this.checkedAnswer=this.checkedAnswer.bind(this);
         this.state = {
             questionChoiceList:[],
+            type:'single',
+            TimuIndex:'',
             sexArray: [],
+            StuAnswer:''
         };
     }
+
+    //把作答结果传给 单选题 、 判断题  （根据type传给阅读题的小题） 只有单选变了才会执行，没变就不执行
+    checkedAnswer(selectindex){
+            const NewStuAnswer = this.state.sexArray[selectindex].title
+            if(NewStuAnswer==this.state.StuAnswer){
+                //选项没变就不执行
+            }else{
+                //选项变了就执行
+                this.setState({StuAnswer:this.state.sexArray[selectindex].title})
+                if(this.state.type=='single'){
+                    //单选题这么执行，只用给回传选了哪个
+                    this.props.getstuanswer(NewStuAnswer)
+                }else{
+                    //阅读题回传需要告诉是第几题在选答案
+                    this.props.getstuanswer(this.state.TimuIndex,NewStuAnswer)
+                }
+            }
+        
+        
+    }
+
     UNSAFE_componentWillMount(){
         const list = this.props.ChoiceList.split(",");
         const NewsexArray = [];
@@ -59,10 +84,27 @@ export default class RadioList extends PureComponent {
                                         }
                     )  
             })
-            this.setState({questionChoiceList:list,sexArray:NewsexArray});
+            this.setState({
+                TimuIndex:this.props.TimuIndex?this.props.TimuIndex:0,
+                type:this.props.type?this.props.type:'single',
+                questionChoiceList:list,
+                sexArray:NewsexArray,
+                StuAnswer:this.props.checkedindexID=='未答'?'':this.props.checkedindexID
+            });
     }
 
     render() {
+        const incheckedindex =   this.state.StuAnswer=='A' ? 0 
+                                : this.state.StuAnswer=='B' ? 1 
+                                : this.state.StuAnswer=='C' ? 2 
+                                : this.state.StuAnswer=='D' ? 3 
+                                : this.state.StuAnswer=='E' ? 4
+                                : this.state.StuAnswer=='F' ? 5
+                                : this.state.StuAnswer=='G' ? 6
+                                : this.state.StuAnswer=='H' ? 7
+                                : this.state.StuAnswer=='对' ? 0
+                                : this.state.StuAnswer=='错' ? 1
+                                : -1;
         return (
             <View style={{height: 44, flex: 1,marginTop:5}}>
                 <RadioGroup
@@ -70,8 +112,9 @@ export default class RadioList extends PureComponent {
                     conTainStyle={{height: 44, width: 60}}//图片和文字的容器样式
                     imageStyle={{width: 35, height: 35}}//图片样式
                     textStyle={{color: 'black'}}//文字样式
-                    selectIndex={''}//空字符串,表示不选中,数组索引表示默认选中
+                    selectIndex={incheckedindex}//空字符串,表示不选中,数组索引表示默认选中
                     data={this.state.sexArray}//数据源
+                    getcheckedAnswer={this.checkedAnswer}
                 />
             </View>
         )

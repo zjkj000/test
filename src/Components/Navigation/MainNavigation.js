@@ -8,6 +8,7 @@ import InformOrNotice from "../../pages/LatestTask/InformOrNotice";
 
 import Menu from "../../pages/LatestTask/DoWork/Utils/Menu";
 import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
+import ViewPager_SubmitContainer from "../../pages/LatestTask/DoWork/ViewPager_Submit";
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
@@ -58,13 +59,17 @@ export default class MainNavigation extends Component {
                         component={InformOrNotice}
                     />
                     <Stack.Screen
-                        name="做作业"
+                        name="DoPaper"
                         component={ViewPager_ToDo}
                         options={{
                             headerRight: () => (
                                 <Menu learnPlanId="1b2a59d2-8990-4672-a97b-124a96a7f8c8" />
                             ),
                         }}
+                    />
+                    <Stack.Screen
+                        name="SubmitPaper"
+                        component={ViewPager_SubmitContainer}
                     />
                 </Stack.Group>
 

@@ -1,189 +1,345 @@
-import { Text, StyleSheet, View, ScrollView,Image,TextInput,Button,Alert,TouchableOpacity,Modal} from 'react-native'
+import { Text, StyleSheet, View, ScrollView, Image, TextInput, Button, Alert, TouchableOpacity, Modal, Dimensions } from 'react-native'
 import React, { Component } from 'react'
-import HTMLView from 'react-native-htmlview';
+import RenderHtml from 'react-native-render-html';
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import {OverflowMenu,MenuItem} from "@ui-kitten/components";
 import ImageViewer from 'react-native-image-zoom-viewer';
-
-
+import ImageHandler from '../../../../utils/Camera/Camera';
+import http from '../../../../utils/http/request';
 // 主观题 模板页面
-//  使用时 需要传入三个参数：  sum   num  datasource
-// 需要传的参数有三个，第一个是共多少题，第二个是当前是第index题 这里用了的（index+1）显示第几题。 第三个是试题数据。
-export default class Answer_single extends Component {
-  constructor(props) {
-    super(props)
-    this.state = {  
-            ImageViewerstate:false,
-            moduleVisible : false, //用于控制点击拍照图片，弹出选择  拍照或者从相册选取 
-            numid:'',
-            questionTypeName:'主观题',
-            questionId:'',
-            baseTypeId:'',
-            questionName:'',        //题目名称
-            questionChoiceList:'',  
-            questionContent:'',   //题目内容
-            answer:'',      
-            imgURL: "",            //拍照或本地选择照片的uri
-            value: "",   
-            hasImage:false, //是否答案有照片
-            msg:''        //答案内容
+//  使用时 需要传入参数：   sum   总题目数量：                 选传 不传默认总数题   会显示1/1题
+//                         num   这是第几个题目               选传 不传默认num  0   会显示1/1题 
+//                         datasource                        必须传  试题的内容
+//                         paperId                           必须传  用于提交作业时候用到
+//                         oldAnswer_data                    选择传递   是否有历史作答记录  一般是通过api获取的历史答案。否则不建议传
+//                         getischange={setischange}         传递一个函数  用于向做作业的页面传递 是否改变了答案，便于判断是否要提交  setischange函数要自己写在做作业页面
+//                         getStu_answer={setStu_answer_i}   传递一个函数  用于获得阅读题得到的作答结果  setStu_answer_i函数要自己写在做作业页面 代表设置第几道题的答案。
+export default class Answer_single extends Component {  
+    constructor(props) {
+        super(props)
+        //传给每道题目，用于让题目告诉这个页面 他们的答案是什么，会在这个页面记录他们的答案。
+        this.stuAnswer = this.stuAnswer.bind(this);
+        //这个页面用到的状态
+        this.state = {
+            paperId:'',
+            textinputAnswer:'',       //输入文本框输入的内容
+            isLongarea: false, 
+            hasImage:false,           //控制下方题目是否有照片
+            moduleVisible: false,     //用于控制点击拍照图片，弹出选择  拍照或者从相册选取 
+            numid: '',                //题目在试题集中的索引
+            questionTypeName: '主观题',
+            questionId: '',
+            baseTypeId: '',
+            questionName: '',          //题目名称
+            questionChoiceList: '',    
+            questionContent: '',       //题目内容
+            answer: '',                 
+            imgURLArray : [],          //拍照或本地选择照片的uri数组
+            value: "", 
+            baseCode: '',             //拍照或本地选择照片的baseCode64码
+            stuAnswer: ' ',           //学生现在答案
+            oldStuAnswer: ''          //历史学生作答结果
+        }
     }
- }  
-    UNSAFE_componentWillMount(){this.setState({numid:this.props.num,...this.props.datasource});}
+
+
+    //用于将本道题写的答案  传给 Todo页面，用于提交
+    stuAnswer(str) {
+        console.log('主观题写了答案', str)
+        this.setState({ stuAnswer: str })
+        // 把结果传给ToDO，并且告诉有改变  只要作答就有改变
+        this.props.getStu_answer(str)
+        this.props.getischange(true)
+    }
+
+
+    UNSAFE_componentWillMount() {
+        //解析旧的答案里面的图片的url  设置到state里面的imgURLArray
+        const imgurlarr = this.AnalysisAnswerImgUrl(this.props.oldAnswer_data ? this.props.oldAnswer_data : '').urlarr;
+        var newimgurlarr = [];
+        if(imgurlarr!=null){
+            for(var i =0;i<imgurlarr.length;i++){
+                newimgurlarr.push(
+                    {
+                        url:imgurlarr[i]
+                    }
+                )
+            }
+        }
+        //把接到的参数全部设置到state里
+        this.setState({
+            paperId:this.props.paperId,
+            imgURLArray:newimgurlarr,
+            stuAnswer: this.props.oldAnswer_data ? this.props.oldAnswer_data : '',
+            oldStuAnswer: this.props.oldAnswer_data,
+            numid: this.props.num ? this.props.num : 0,
+            ...this.props.datasource
+        });
+
+    }
+
+    //用于将学生的答案（html）转成RN里面的格式显示出来
+    showStuAnswer(){
+        // 将学生的答案 按照RN里面的方式展示出来
+        //stuAnswer是  html 标签的
+        // 如果为空，什么也不做
+        var imgarr = this.AnalysisAnswerImgUrl(this.state.stuAnswer ? this.state.stuAnswer : '').imgarr;
+        var urlarr = this.AnalysisAnswerImgUrl(this.state.stuAnswer ? this.state.stuAnswer : '').urlarr
+        var str = this.state.stuAnswer;
+        var showhtmlarr = [];
+            if(imgarr==null){ //不存在图片的情况;
+                showhtmlarr.push(<Text>{this.state.stuAnswer}</Text>);
+            }else{
+            // 存在照片，在数组中遍历  替换成RN表示的类型
+                imgarr.map(function(item,index){
+                var newstr ="hasimageistruehasimage"
+                    str = str.replace(item,newstr)                  
+                })
+                var htmlarr = str.split('hasimage')
+                let imgnum = 0;
+                htmlarr.forEach(function(item,index){
+                    if(item=='istrue'){
+                        showhtmlarr.push(
+                            <View><TouchableOpacity key={index} onPress={()=>{
+                                // alert('想查看照片') 
+                                console.log('+++--+++',urlarr[imgnum])
+                            }}>
+                                
+                                <Image style={{width:40,height:40}} source={{uri:urlarr[imgnum]}}/>
+                            </TouchableOpacity></View>
+                        )
+                        imgnum+=1
+                    }else{
+                        showhtmlarr.push(<View><Text multiline={true}>{item}</Text></View>)
+                    }
+                });
+            }
+       
+        return(showhtmlarr) 
+    }
+
+    //将html代码里面的 url 提取出来，存在一个数组里,返回一个对象，包含两个数组 imgarr（图片数组）   urlarr（图片的url数组）
+    AnalysisAnswerImgUrl(str){
+                // 先把返回的＂转义 \"
+                var str = str.replace('"', '\"')
+                //1，匹配出图片img标签（即匹配出所有图片），过滤其他不需要的字符
+                //2.从匹配出来的结果（img标签中）循环匹配出图片地址（即src属性）
+                var imgReg = /<img.*?(?:>|\/>)/gi;
+                //匹配src属性
+                var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+                var arr= []
+                arr = str.match(imgReg);
+                //console.log('所有已成功匹配图片的数组：'+arr);
+                if(arr!=null){
+                    var newsrcarr =[]
+                    for (var i = 0; i < arr.length; i++) {
+                        let srcarr = []
+                            srcarr = arr[i].match(srcReg);
+                            newsrcarr.push(srcarr[1])
+                    }
+                    return {
+                        imgarr:arr,
+                        urlarr:newsrcarr
+                    }
+                   
+                }else
+                    return {
+                        imgarr:arr,
+                        urlarr:[]
+                    }
+    }
     
     //拍照调用的函数
     handleCamera = () => {
-        const option = {
-            title: "请选择",
-            cancelButtonTitle: "取消",
-            takePhotoButtonTitle: "拍照",
-            chooseFromLibraryButtonTitle: "选择照片",
-            includeBase64: true, // 拍照后生成base64字串
-            quality: 1.0,
-            allowsEditing: true,
-            maxWidth: 500,
-            maxHeight: 500,
-            saveToPhotos: true,
-            storageOptions: {
-                skipBackup: true,
-                path: "images",
-            },
-        };
-        launchCamera(option, (response) => {
-            // console.log(response);
-            if (response.didCancel) {
-                return;
+        ImageHandler.handleCamera().then((res) => {
+            if (res) {
+                var newurl = this.submitBaseCode(res.base64)
+                var newimageArray = this.state.imgURLArray;
+                if(newurl!=''){
+                    newimageArray.push({ url: newurl })
+                    var newstuanswer = this.state.stuAnswer;
+                    //拼接之后便于之前的APP能用
+                    newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`
+                }
+                this.setState({
+                    stuAnswer:newstuanswer,
+                    imgURLArray:newimageArray,
+                });
+                //提交照片 获取到url  并且把url添加到本地urlarr中
+            } else {
+                // TODO: 获取图像失败
             }
-            response = response.assets[0];
-            // console.log(response.base64);
-            this.setState({
-                imgURL: response.uri,
-                hasImage: true,
-                moduleVisible: false,
-            });
-        });
-      };
-
-    //从本地选择照片需要的函数
-    handleLibrary = () => {
-        const option = {
-            title: "请选择",
-            chooseFromLibraryButtonTitle: "选择照片",
-            includeBase64: true, // 拍照后生成base64字串
-            quality: 1.0,
-            allowsEditing: true,
-            maxWidth: 500,
-            maxHeight: 500,
-            saveToPhotos: true,
-            storageOptions: {
-                skipBackup: true,
-                path: "images",
-            },
-        };
-        launchImageLibrary(option, (response) => {
-            // console.log(response);
-            if (response.didCancel) {
-                return;
-            }
-            response = response.assets[0];
-            // console.log(response.base64);
-            this.setState({
-                imgURL: response.uri,
-                hasImage: true,
-                moduleVisible: false,
-            });
         });
     };
 
-    //默认弹框不显示，以及需要把弹窗效果加在的地方的  相机图片  显示
-    renderAvatar = () => {
-      return (
-          <TouchableOpacity
-              onPress={() => {
-                  this.setState({ moduleVisible: true });
-              }}
-          >
-          <Image style={{width:30,height:30}} source={require('../../../../assets/image3/camera.png')}></Image>
-          </TouchableOpacity>
-      );
-  };
-  render(){
-    const HTML = this.state.questionContent;
-    let answerimage = this.state.hasImage
-                      ?  (  <TouchableOpacity onPress={() => {this.setState({ ImageViewerstate:!this.state.ImageViewerstate });}}>
-                                <Image style={{width:50,height:50}} source={{ uri: this.state.imgURL }}></Image>
-                            </TouchableOpacity>)
-                      :  null;
-        const images = [{url: this.state.imgURL}]
-    return (
-      <View>
-            {/* 第一行显示 第几题  题目类型 */}
-            <View  style={styles.answer_title}>
-                <Text>{this.state.numid+1}/{this.props.sum}题</Text>
-                <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
-            </View>
-            
-            {/* 题目展示区域 */}
-            <ScrollView style={styles.answer_area}>
-                <HTMLView value={HTML}/>
-                <Text style={{height:50}}></Text>
-            </ScrollView>
-            
-            
-            {/* 分割线 */}
-            <View style={{backgroundColor:'#000000',height:1,width:'100%'}}></View>
-            <View>
-                    <Modal  visible={this.state.ImageViewerstate}   >
-                        <ImageViewer style={{width:"100%"}} imageUrls={images} onClick={()=>this.setState({ImageViewerstate:false})}/>
-                    </Modal>
-            </View>
-            {/* 答案预览区域 */}
-            <ScrollView style={styles.answer_preview}>
-                {answerimage}
 
-                <Text >{this.state.msg}</Text>
-            </ScrollView>
-          
-          {/* 作答区域 */}
-          <View style={{backgroundColor:'#000000',height:1,width:'100%'}}></View>
-            <View style={styles.content}>
-              <Text onPress={()=>this.setState({msg:''})} style={{color:'#B68459'}}>删除</Text>
-              <TextInput placeholder="请输入答案！" multiline style={{width:200,backgroundColor:'#FFFFFF',height:40}} value={this.state.msg} onChangeText={text=>this.setState({msg:text})}></TextInput>
-              {/* 拍照答题功能弹窗 */}
-              <OverflowMenu
-                        anchor={this.renderAvatar}
-                        visible={this.state.moduleVisible}
-                        onBackdropPress={() => {
-                            this.setState({ moduleVisible: false });
-                        }}
+    //用于提交  baseCode  提交主观题答题照片
+    submitBaseCode(baseCode) {
+        // 只要有了照片就提交
+        const url = 
+            "http://"+
+            "www.cn901.net" +
+            ":8080" +
+            "/AppServer/ajax/studentApp_saveBase64Image.do"
+        const params ={
+            baseCode :  'baseCode',
+            learnPlanId :  this.state.paperId,
+            userName    : 'ming6051'
+            }
+        console.log('请求提交照片了')
+        http.get(url,params).then((resStr)=>{
+                let resJson = JSON.parse(resStr);
+                console.log('提交结果',resJson)
+                if(resJson.success){
+                    // 返回URL地址
+                    return(resJson.data)
+                }else{
+                    return '';
+                } 
+            })
+        //提交过程设置loading效果
+
+        //返回的数据是"data": urlPath  图片回显路径   "success":true,    "message":"保存成功！"
+
+        // 根据返回的url  将图片拼接到 预览区域，并且刷新预览区域
+    }
+
+    
+    //从本地选择照片需要的函数
+    handleLibrary = () => {
+        ImageHandler.handleLibrary().then((res) => {
+            if (res) {
+                //提交照片 获取到url
+            var newurl = this.submitBaseCode(res.base64)
+            var newimageArray = this.state.imgURLArray;
+            if(newurl!=''){
+                newimageArray.push({ url: newurl })
+                var newstuanswer = this.state.stuAnswer;
+                newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`
+            }
+                this.setState({
+                    stuAnswer:newstuanswer,
+                    imgURLArray:newimageArray,
+                });
+            } else {
+                // TODO: 获取图像失败
+            }
+        });
+    };
+
+
+
+
+
+    render() {
+        const HTML = this.state.questionContent;
+        const width = Dimensions.get('window').width;
+        var questionHTML = []
+        questionHTML = this.showStuAnswer()
+        return (
+            <View>
+                {/* 第一行显示 第几题  题目类型 */}
+                <View style={styles.answer_title}>
+                    <Text>{(this.state.numid ? this.state.numid : 0) + 1}/{this.props.sum ? this.props.sum : 1}题 </Text>
+                    <Text style={{ marginLeft: 20 }}>{this.state.questionTypeName}</Text>
+                    <TouchableOpacity style={{ position: 'absolute', right: 20, top: 10 }}
+                    //    onPress={
+                    //    }
+                    // 先提交本题目，在跳转到提交页面
                     >
-                        <MenuItem title="拍照" 
-                           onPress={this.handleCamera} 
-                        />
-                        <MenuItem
-                            title="从相册中选择"
-                             onPress={this.handleLibrary}
-                        />
-                        <MenuItem
-                            title="取消"
-                            onPress={() => {
-                                this.setState({ moduleVisible: false });
+                        <Image source={require('../../../../assets/image3/look.png')}></Image>
+                    </TouchableOpacity>
+                </View>
+
+                {/* 题目展示区域 */}
+                <ScrollView style={this.state.isLongarea ? styles.answer_area_Long : styles.answer_area}>
+                    <RenderHtml contentWidth={width} source={{ html: HTML }} />
+                    <Text style={{ height: 50 }}></Text>
+                </ScrollView>
+
+                {/* 答案预览区域 */}
+                <View style={this.state.isLongarea ? styles.answer_preview_Long : styles.answer_preview}>  
+                    {/* 这个是控制主观题预览    改变上下部分区域高度的  +   删除文本的 */}
+                    <TouchableOpacity style={{flexDirection:'row-reverse'}} onPress={() => { this.setState({ isLongarea: !this.state.isLongarea }) }}>
+                                <Text style={{ margin:10,marginRight:20,marginLeft:5,color:'#B68459' }} onPress={() => {
+                                        this.setState({imgURLArray:[],hasImage:false}); 
+                                        this.stuAnswer('') 
+                                        }}>删除
+                                </Text>
+
+                    {this.state.isLongarea
+                            ? <Image style={{ marginTop:5}} source={require('../../../../assets/image3/bot.png')}></Image>
+                            : <Image style={{marginTop:5 }} source={require('../../../../assets/image3/top.png')}></Image>}
+                                
+                    </TouchableOpacity>
+                    
+                    <View>
+                            {/* 用于放大显示图片   后续所有的点击都是用过这个组件显示的   */} 
+                            <Modal visible={this.state.hasImage}   >
+                                <ImageViewer style={{ width: "100%" }} imageUrls={this.state.imgURLArray} 
+                                onClick={() => this.setState({ hasImage: false })} />
+                            </Modal>
+                    </View>
+
+                    {/* 图片文字展示区域 */}
+                    <ScrollView >
+                        <View style={{padding:20,paddingTop:10,width:width,flexDirection:'row',alignItems:'center',flexWrap:'wrap'}}>
+                            {questionHTML}
+                        </View>     
+                    </ScrollView>
+                </View>
+               
+                {/* 书写答案，选择照片 区域 */}
+                <View style={styles.content}>
+                    {/* 文本框+保存按钮区域 */}
+                    <View style={{borderColor:'#000000',borderWidth:1,flexDirection:'row'}}>
+                        <TextInput placeholder="请输入答案" multiline value={this.state.textinputAnswer}
+                            onChangeText={(text)=>{
+                                this.setState({textinputAnswer:text})
                             }}
-                        />
-              </OverflowMenu>
-              <Button title='保存' onPress={()=>alert('点了保存')} style={{width:100,height:35}}></Button>
+                            style={{ width: 200, backgroundColor: '#FFFFFF', height: 40 }} >
+                        </TextInput>
+                        {/* 保存按钮将文本输入框的内容传到学生作答答案里面 */}
+                        <Button title="保存"
+                            onPress={()=>{
+                                var newanswer = this.state.stuAnswer;
+                                newanswer += this.state.textinputAnswer;
+                                this.setState({textinputAnswer:''})
+                                this.stuAnswer(newanswer)}}
+                            style={{ width: 100, height: 35,backgroundColor:'#59B9E0'}}
+                        ></Button>
+                    </View>
+
+                    {/* 相机拍照 */}
+                    <TouchableOpacity  onPress={()=> {
+                        console.log('点了图片')
+                        this.handleCamera()
+                        }} >
+                            <Image style={{width:30,height:30}} source={require('../../../../assets/image3/camera.png')}></Image>
+                    </TouchableOpacity>
+
+                    {/* 从相册选择照片 */}
+                    <TouchableOpacity onPress={() => {
+                        console.log('点了相册')
+                        this.handleLibrary()
+                        }}>
+                        <Image style={{width:30,height:30}} source={require('../../../../assets/image3/photoalbum.png')}></Image>
+                    </TouchableOpacity>
+
+                </View>
             </View>
-      </View>
-    )
-  }
+        )
+    }
 }
 
 const styles = StyleSheet.create({
-    answer_title:{padding:10,paddingLeft:30,flexDirection:'row'},
-    answer_area:{height:"65%",padding:20},
-    answer_preview:{height:"21%",padding:20,backgroundColor:'#FFFFFF'},
+    answer_title: { padding: 10, paddingLeft: 30, flexDirection: 'row' },
+    answer_area: { height: "59%", padding: 20 },
+    answer_preview: { borderTopWidth:1,borderTopColor:'#000000', height: "20%",  backgroundColor: '#FFFFFF',  },
+    answer_area_Long: { height: "2%", padding: 20 },
+    answer_preview_Long: { borderTopWidth:1,borderTopColor:'#000000', height: "73%", backgroundColor: '#FFFFFF', },
     backdrop: {
-      backgroundColor: "rgba(0, 0, 0, 0.5)",
-},
-    content:{width:"100%",flexDirection:'row',justifyContent:'space-around',backgroundColor:'#E6DDD6',padding:10,alignItems:'center'}
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
+    },
+    content: {borderTopWidth:1,borderTopColor:'#000000', width: "100%", flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#E6DDD6', padding: 10, alignItems: 'center' }
 })

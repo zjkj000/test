@@ -215,10 +215,11 @@ class TodoList extends React.Component {
                                 <TouchableOpacity
                                     onPress={() => {
                                         if(todoType == "作业"){
-                                            this.props.navigation.navigate("Todo", 
+                                            this.props.navigation.navigate("DoPaper", 
                                             {
                                                 learnId: learnId, 
                                                 status: statusUrl, //作业状态
+                                                selectedindex:0,
                                                 //navigation: useNavigation(),
                                             });
                                         }else if(todoType == "导学案"){
