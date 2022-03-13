@@ -9,25 +9,23 @@ import Answer_multiple from './Answer_type/Answer_multiple';
 import http from '../../../utils/http/request'
 import Loading from '../../../utils/loading/Loading'
 import { useNavigation } from "@react-navigation/native";
-
+import Menu from './Utils/Menu';
 //这个页面是 获取题目的页面
 export default function ViewPager_ToDo(props) {
 
   const navigation = useNavigation();
   const [ischange,setischange] = useState(false)
-
   const [Stu_answer_i,setStu_answer_i] = useState([]);
-
   const [Stu_answer,setStu_answer] = useState([]);
-  const [selectedIndex, setSelectedIndex] = useState();
+  const [selectedIndex, setSelectedIndex] = useState(0);
   const shouldLoadComponent = (index) => index === selectedIndex;
   const [success, setSuccess] = useState(false);
   const [oldStuAnswer_success, setoldStuAnswer_success] = useState(false);
   const [oldAnswerdata, setoldAnswerdata] = useState([]);  //学生历史缓存答案的结果
   const [data, setData] = useState([]);
   const [dataNum,setDataNum] = useState(0);
-  const [learnPlanId,setlearnPlanId] = useState(props.navigation.getState().routes[2].params.learnId);
-  const [status,setstatus] = useState(props.navigation.getState().routes[2].params.status);
+  const [learnPlanId,setlearnPlanId] = useState(props.route.params.learnId);
+  const [status,setstatus] = useState(props.route.params.status);
   const [startdate,setstartdate]=useState('');   //记录总用时
   const [start_date,setstart_date]=useState(''); //记录每道题目用时
   const [date_arr,setdate_arr]=useState([]);
@@ -35,12 +33,14 @@ export default function ViewPager_ToDo(props) {
 
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
+      navigation.setOptions({title:props.route.params.papername,
+      headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)})
       setSelectedIndex(props.route.params.selectedindex)
       getData();
       var date = getDate()
       setstartdate(date)  // 记录总的开始时间
       setstart_date(date) //记录每道题的开始时间
-    },[props.route.params.selectedindex]);
+    },[props.route.params.selectedindex,]);
      
     // 获取时间返回 00::00:00
     function getDate() {
@@ -60,7 +60,7 @@ export default function ViewPager_ToDo(props) {
         ":8111" +
         "/AppServer/ajax/studentApp_getJobDetails.do"
       const data_params ={
-        learnPlanId : props.navigation.getState().routes[2].params.learnId,
+        learnPlanId : props.route.params.learnId,
         userName : 'ming6051'
       }
       if(!success){
@@ -79,7 +79,7 @@ export default function ViewPager_ToDo(props) {
         "/AppServer/ajax/studentApp_getStudentAnswerList.do"
       const oldAnswer_params ={
           
-          paperId : props.navigation.getState().routes[2].params.learnId,
+          paperId : props.route.params.learnId,
           userName : 'ming6051'
         }
       if(!oldStuAnswer_success){
@@ -130,6 +130,7 @@ export default function ViewPager_ToDo(props) {
 
     // 这个函数是为了提交学生的答案，  会先判断答案是否改变了  
     function Submit_Stu_answer(newindex,selectedIndex){
+
       var answerdate = 0;
       var nowdate = getDate();
       var startdatearr = start_date.split(':')
@@ -150,6 +151,7 @@ export default function ViewPager_ToDo(props) {
       
       //判断oldAnswerdata[selectedIndex]  是否和 Stu_answer[selectedIndex] 一样，相等的话就不提交 不同的话在提交
       const answerlist = Stu_answer;
+
       if(ischange){
         answerlist[selectedIndex] = Stu_answer_i;
         setStu_answer(answerlist)
@@ -157,18 +159,20 @@ export default function ViewPager_ToDo(props) {
       
       if(answerlist[selectedIndex]!=oldAnswerdata[selectedIndex]&&ischange){
         console.log('题目序号：',selectedIndex+1,'题目用时',answerdate,'提交的答案:',Stu_answer[selectedIndex])
-        // const submit_url = 
-        //   "http://"+
-        //   "www.cn901.net" +
-        //   ":8111" +
-        //   "/AppServer/ajax/studentApp_getJobDetails.do"
-        // const submit_params ={
-        //   learnPlanId :learnPlanId,
-        //   stuId : 'ming6051',
-        //   questionId:data[selectedIndex].questionId ,
-        //   answer:Stu_answer[selectedIndex],
-        //   answerTime: answerdate,
-        // }
+        const submit_url = 
+          "http://"+
+          "www.cn901.net" +
+          ":8111" +
+          "/AppServer/ajax/studentApp_getJobDetails.do"
+        const submit_params ={
+          learnPlanId :learnPlanId,
+          stuId : 'ming6051',
+          questionId:data[selectedIndex].questionId ,
+          answer:Stu_answer[selectedIndex],
+          answerTime: answerdate,
+        }
+
+        //提交答案
         // http.get(submit_url,submit_params).then((resStr)=>{
         //   let submit_resJson = JSON.parse(resStr);
         // })
@@ -183,6 +187,7 @@ export default function ViewPager_ToDo(props) {
         setstart_date(getDate())
         console.log('题目序号:',selectedIndex+1,'作答结果没有改变')
       }
+
       //都要翻页
       setstart_date(getDate())
       setSelectedIndex(newindex)
@@ -191,7 +196,7 @@ export default function ViewPager_ToDo(props) {
 
   return (
     // shouldLoadComponent={shouldLoadComponent}
-    <ViewPager   selectedIndex={selectedIndex} 
+    <ViewPager shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
                   onSelect={index => Submit_Stu_answer(index,selectedIndex)}>  
   
           {/* 根据这套题的data使用map遍历加载 */}
@@ -221,9 +226,11 @@ export default function ViewPager_ToDo(props) {
                       if(newindex==dataNum){
                         //alert('已经是最后一题'); 需要跳转到答题页面
                         Submit_Stu_answer(selectedIndex,selectedIndex);
-                        navigation.navigate('SubmitPaper',{paperId:learnPlanId,submit_status:status,startdate:startdate})
+                        navigation.navigate('SubmitPaper',{paperId:learnPlanId,submit_status:status,startdate:startdate,papername:props.route.params.papername})
+                        //setselectedIndex(newindex)
                       }else{
                         Submit_Stu_answer(newindex,selectedIndex);
+                       
                       }
                   }}>
                     <Image source={require('../../../assets/image3/you_03.png')}></Image>

@@ -61,11 +61,7 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="DoPaper"
                         component={ViewPager_ToDo}
-                        options={{
-                            headerRight: () => (
-                                <Menu learnPlanId="1b2a59d2-8990-4672-a97b-124a96a7f8c8" />
-                            ),
-                        }}
+                       
                     />
                     <Stack.Screen
                         name="SubmitPaper"

@@ -2,9 +2,10 @@ import { Text, View,TouchableOpacity,Alert} from 'react-native'
 import React, { Component,forwardRef } from 'react'
 import {OverflowMenu,MenuItem} from "@ui-kitten/components";
 import http from '../../../../utils/http/request'
-
+import { useNavigation } from "@react-navigation/native";
 //这个页面是做题页面，右上角  导航那一行显示的题目菜单界面
 //只有一个 目录字样，设置了一个浮窗效果，最后根据作业数据加载目录
+
 export default class Menu extends Component {
     constructor(props) {
         super(props)
@@ -67,7 +68,9 @@ export default class Menu extends Component {
                                 onPress={() => {
                                     //需要用到导航，进行跳转
                                     //nagevation.nagevite()
-                                    console.log('点了题目导航的：',item_num)
+                                    this.props.getselectedindex(item_num)
+                                    this.setState({ moduleVisible: false });
+                                    console.log('点了题目导航的：',this.props,item_num)
                                 }}/>
             // </TouchableOpacity>
                                 )

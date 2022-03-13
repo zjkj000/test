@@ -133,7 +133,7 @@ class TodoList extends React.Component {
     render() {
         const { todos , message } = this.state;
         const rsType = this.props.resourceType;
-        console.log('resourceType' , rsType);
+        // console.log('resourceType' , rsType);
         //const todo1 = todos[0];
         //console.log('todoslist' , typeof(todos) , todos,todos.length);
        
@@ -220,6 +220,7 @@ class TodoList extends React.Component {
                                                 learnId: learnId, 
                                                 status: statusUrl, //作业状态
                                                 selectedindex:0,
+                                                papername:bottomTitle,
                                                 //navigation: useNavigation(),
                                             });
                                         }else if(todoType == "导学案"){

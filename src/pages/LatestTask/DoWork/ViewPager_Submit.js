@@ -3,16 +3,18 @@ import React, { Component } from 'react'
 import http from '../../../utils/http/request'
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
+import Loading from '../../../utils/loading/Loading'
 // 提交作业页面
-
 export default function ViewPager_SubmitContainer(props) {
   const start_date = props.route.params.startdate;
   const navigation = useNavigation();
   const paperId = props.route.params.paperId;
   const submit_status = props.route.params.submit_status;
+  const papername = props.route.params.papername
   return <ViewPager_Submit navigation={navigation} 
                   startdate={start_date}  paperId={paperId}
-                  submit_status={submit_status} />;
+                  submit_status={submit_status} 
+                  papername = {papername}/>;
 }
 
 
@@ -21,7 +23,7 @@ class ViewPager_Submit extends Component {
         super(props)
         this.state = {
             paperId:'',
-            success:'',
+            success:false,
             data:[],
             submit_status:'',
             startdate:'',
@@ -74,22 +76,22 @@ class ViewPager_Submit extends Component {
             const submit_status = 0;
             //判断一下作业提交状态  ‘1’.第一次提交  ‘3’修改提交
             if(this.state.submit_status==1){
-              submit_status = 3;
+              var change_status=3;
             }else{
-              submit_status = 1;
+             var  change_status=1;
             }
             
-            const noSubmitID ='';
+            var noSubmitID ='';
             this.state.data.map(function(index,item){
-              if(item[index].stuAnswer==''){
-                noSubmitID+=noSubmitID+item[index].questionId+',';
+              if(item.stuAnswer==''){
+                noSubmitID+=noSubmitID+item.questionId+',';
               }
             })
             if(noSubmitID==''){noSubmitID='-1'}
             
             var answerdate = 0;
-            var nowdate = getDate();
-            var startdatearr = startdate.split(':')
+            var nowdate = this.getDate();
+            var startdatearr = this.props.startdate.split(':')
             var nowdatearr = nowdate.split(':')
             if(nowdatearr[0]<startdatearr[0])nowdatearr[0]+=24
             var answerdate_minute =  ((nowdatearr[0]-startdatearr[0]))*60 + (nowdatearr[1]-startdatearr[1]) ; 
@@ -104,18 +106,22 @@ class ViewPager_Submit extends Component {
               answerTime:answerdate,
               paperId : this.state.paperId,
               userName : 'ming6051',
-              status:submit_status,
+              status:change_status,
               noAnswerQueId:noSubmitID
             }
-            if(noAnswerQueId!='-1'){
+            if(noSubmitID!='-1'){
                 //弹框提醒  是否要继续提交
                 alert('还有未作答题目,是否提交？')
                 //确定就提交，取消就不提交
             }else{
                 alert('提交作业了！')
                 // 提交之后就跳转首页
+                // this.props.navigation.navigate("DoPaper" , 
+                // //                             {
+                                              
+                // //                             }
             }
-           
+            //this.props.navigation.navigate("InformOrNotice",) 
             //提交作业代码
             // http.get(url,params).then((resStr)=>{
             //         let resJson = JSON.parse(resStr); 
@@ -141,6 +147,7 @@ class ViewPager_Submit extends Component {
                                                 learnId: this.props.paperId, 
                                                 status: this.props.submit_status, //作业状态
                                                 selectedindex: result_Item,
+                                                papername:this.props.papername,
                                             });
                                           //还需要设置导航层数！！
                   }}
@@ -156,25 +163,30 @@ class ViewPager_Submit extends Component {
             </View>
             </TouchableOpacity> )
       }
-      
-    return (
-      <View>
-        {/* 答案预览区域 */}
-        <ScrollView style={styles.preview_area}>
-                {/* 题目展示内容：序号 + 答案 */}
-                {result}
-        </ScrollView>
 
-        {/* 提交作业按钮区域 */}
-        <View style={styles.submit_area}>
-            <Button onPress={()=>{
-              alert('交作业')
-              this.props.navigation.navigate("DoPaper") 
-            }
-        } style={styles.bt_submit} title='交作业'></Button>
-        </View>
-      </View>
-    )
+      if(this.state.success){
+          return (
+            <View>
+              {/* 答案预览区域 */}
+              <ScrollView style={styles.preview_area}>
+                      {/* 题目展示内容：序号 + 答案 */}
+                      {result}
+              </ScrollView>
+
+              {/* 提交作业按钮区域 */}
+              <View style={styles.submit_area}>
+                  <Button onPress={()=>{
+                    this.submit_answer()
+                  }
+              } style={styles.bt_submit} title='交作业'></Button>
+              </View>
+            </View>
+          )
+      }else{
+        return (<View> 
+          <Loading show={true}/>
+          </View>)
+      }
   }
 }
 const styles = StyleSheet.create({

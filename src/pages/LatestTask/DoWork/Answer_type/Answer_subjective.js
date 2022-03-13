@@ -96,17 +96,21 @@ export default class Answer_single extends Component {
                     str = str.replace(item,newstr)                  
                 })
                 var htmlarr = str.split('hasimage')
-                let imgnum = 0;
+                var imgnum = 0;
                 htmlarr.forEach(function(item,index){
                     if(item=='istrue'){
+                        let nowimage = 0
+                        nowimage = imgnum
                         showhtmlarr.push(
-                            <View><TouchableOpacity key={index} onPress={()=>{
-                                // alert('想查看照片') 
-                                console.log('+++--+++',urlarr[imgnum])
-                            }}>
-                                
-                                <Image style={{width:40,height:40}} source={{uri:urlarr[imgnum]}}/>
-                            </TouchableOpacity></View>
+                            <View>
+                                {/* <TouchableOpacity key={index} onPress={()=>{
+                                // alert('想查看照片')
+                                if(imgarr.length>0){this.setState({moduleVisible:true})};
+                                console.log('+++--+++',urlarr[nowimage])
+                            }}> */}
+                                    <Image style={{width:40,height:40}} source={{uri:urlarr[imgnum]}}/>
+                                {/* </TouchableOpacity> */}
+                            </View>
                         )
                         imgnum+=1
                     }else{
@@ -114,7 +118,6 @@ export default class Answer_single extends Component {
                     }
                 });
             }
-       
         return(showhtmlarr) 
     }
 
@@ -187,16 +190,20 @@ export default class Answer_single extends Component {
             userName    : 'ming6051'
             }
         console.log('请求提交照片了')
-        http.get(url,params).then((resStr)=>{
-                let resJson = JSON.parse(resStr);
-                console.log('提交结果',resJson)
-                if(resJson.success){
-                    // 返回URL地址
-                    return(resJson.data)
-                }else{
-                    return '';
-                } 
-            })
+        return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
+        // http.get(url,params).then((resStr)=>{
+        //         let resJson = JSON.parse(resStr);
+        //         console.log('提交结果',resJson)
+        //         if(resJson.success){
+        //             // 返回URL地址
+                    //this.setState({hasImage:true})
+        //             return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
+        //             //return(resJson.data)
+        //         }else{
+        //             return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
+        //             //return '';
+        //         } 
+        //     })
         //提交过程设置loading效果
 
         //返回的数据是"data": urlPath  图片回显路径   "success":true,    "message":"保存成功！"
@@ -275,17 +282,22 @@ export default class Answer_single extends Component {
                     
                     <View>
                             {/* 用于放大显示图片   后续所有的点击都是用过这个组件显示的   */} 
-                            <Modal visible={this.state.hasImage}   >
+                            <Modal visible={this.state.moduleVisible}   >
                                 <ImageViewer style={{ width: "100%" }} imageUrls={this.state.imgURLArray} 
-                                onClick={() => this.setState({ hasImage: false })} />
+                                onClick={() => this.setState({moduleVisible:false})}
+                                />
                             </Modal>
                     </View>
 
                     {/* 图片文字展示区域 */}
                     <ScrollView >
-                        <View style={{padding:20,paddingTop:10,width:width,flexDirection:'row',alignItems:'center',flexWrap:'wrap'}}>
-                            {questionHTML}
-                        </View>     
+                        <TouchableOpacity style={{padding:20,paddingTop:10,width:width,flexDirection:'row',alignItems:'center',flexWrap:'wrap'}} onPress={()=>{
+                                    if(this.state.imgURLArray.length>0){this.setState({moduleVisible:true})};  
+                                }}>
+                            {/* <View style={{padding:20,paddingTop:10,width:width,flexDirection:'row',alignItems:'center',flexWrap:'wrap'}}> */}
+                                    {questionHTML} 
+                            {/* </View>  */}
+                        </TouchableOpacity>
                     </ScrollView>
                 </View>
                
@@ -334,10 +346,10 @@ export default class Answer_single extends Component {
 
 const styles = StyleSheet.create({
     answer_title: { padding: 10, paddingLeft: 30, flexDirection: 'row' },
-    answer_area: { height: "59%", padding: 20 },
+    answer_area: { height: "65%", padding: 20 },
     answer_preview: { borderTopWidth:1,borderTopColor:'#000000', height: "20%",  backgroundColor: '#FFFFFF',  },
     answer_area_Long: { height: "2%", padding: 20 },
-    answer_preview_Long: { borderTopWidth:1,borderTopColor:'#000000', height: "73%", backgroundColor: '#FFFFFF', },
+    answer_preview_Long: { borderTopWidth:1,borderTopColor:'#000000', height: "78%", backgroundColor: '#FFFFFF', },
     backdrop: {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
