@@ -96,6 +96,7 @@ export default class MyPage extends Component {
         );
     };
     logout = () => {};
+    
     handleCamera = () => {
         ImageHandler.handleCamera().then((res) => {
             if (res) {

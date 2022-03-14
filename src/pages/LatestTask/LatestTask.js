@@ -12,7 +12,6 @@ import {
     Button,
     Divider,
     Input,
-    //Icon,
     OverflowMenu,
     MenuItem,
 } from "@ui-kitten/components";
@@ -33,7 +32,7 @@ class LatestTask extends React.Component {
             showSearch: false,
             showFilter: true,
             value: '',  //搜索栏中的内容
-            resourceType: '2', //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
+            resourceType: 'all', //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
                                 //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
         };
     }
@@ -41,30 +40,8 @@ class LatestTask extends React.Component {
     //点击文件夹图标跳转
     packagesPage = () => {
         console.log("文件夹页面跳转");
-        this.props.navigation.navigate("PackagesPage", {});
+        this.props.navigation.navigate("资料夹", {});
     };
-
-    /*
-    //点击搜索框，显示“搜索”
-    showSearch = (isShow) => {
-        //const {searchText} = this; //searchBar的ref
-        //console.log('搜索框内容' , searchText.state.value); //搜索框内容
-        const {showSearch} = this.state;
-        console.log('showSearch' , showSearch); //修改搜索状态，是否显示“搜索”
-        if(isShow == true)
-            this.setState({showSearch:isShow , showFilter:false});
-        else
-            this.setState({showSearch:isShow , showFilter:true});
-    };
-    //判断显示“搜索”还是过滤图标
-    showSerachOrFilter = () => {
-        const {showSearch,showFilter} = this.state;
-        console.log('filter' , showFilter);
-        return showSearch ? <Text onPress={() => this.showSearch(false)} style={styles.showSearch}>搜索</Text> :
-                    <Image source={require("../../assets/LatestTaskImages/filter.png")}
-                           style={styles.filterImg}
-                    />
-    };*/
 
 
     //搜索框内容改变时触发，更新value
@@ -72,16 +49,17 @@ class LatestTask extends React.Component {
         this.setState({ value });
     };
     //点击"搜索"按钮时触发
-    onSearch = (value) => {
+    onSearch = () => {
         const {searchText} = this;
         console.log('serachText' , searchText.state.value);
         //this.setState({ value });
-        this.onSubmit(value);
+        this.onSubmit(searchText.state.value);
     };
     //点击"搜索"按钮时触发
     onSubmit = (value) => {
         console.log('点击了搜索');
         //this.setState({ value: '' });
+
         if(value == '作业'){
             this.setState({ resourceType: '2' });
         }else if(value == '导学案'){
@@ -99,8 +77,8 @@ class LatestTask extends React.Component {
         console.log('点击了键盘中的提交按钮');
         //this.setState({ value: '' });
         const {searchText} = this;
-        console.log('serachText' , searchText.state.value);
-        if(searchText.state.value == '作业'){
+        const value = searchText.state.value;
+        if(value == '作业'){
             this.setState({ resourceType: '2' });
         }else if(value == '导学案'){
             this.setState({ resourceType: '1' });
@@ -165,23 +143,46 @@ class LatestTask extends React.Component {
         this.setState({ resourceType: '4'});
     };
 
+    //资料夹是否已读图标
+    showPackagesStatus = () => {
+        //第一次加载页面需要请求http://www.cn901.net:8111/AppServer/ajax/studentApp_checkMineFloder.do?&userId=ming6059&callback=ha
+        //若返回数据的data值为0则不显示红点，否则存在未读则显示
+        //state中是否需要保存data？？？还是只需要判断是否第一次加载
+
+        //设置一个变量标识是否第一次加载，fetch请求之后将变量改为已加载
+
+        return (
+            <View
+                style={styles.rightNumView}
+            >     
+                <Image
+                    source={require("../../assets/LatestTaskImages/rightNum.png")}
+                    style={styles.rightNumImg}
+                />
+            </View>
+        );
+    };
+
     //显示筛选filter
     showFilter = () => {
         return(
             <View>
                 <OverflowMenu
                     anchor={this.renderAvatar}
+                    //弹出项外部背景样式
                     backdropStyle={styles.backdrop}
+                    //backdropStyle={{backgroundColor:'white'}}
                     visible={this.state.moduleVisible}
                     onBackdropPress={() => {
                         this.setState({ moduleVisible: false});
                     }}
-                    style={{width: screenWidth*0.20,}}
+                    style={{width: screenWidth*0.22,}}
+                    //fullWidth={false}
                 >
                     <MenuItem 
                         title = "全部"
                         onPress={this.handleAll}
-                        //style={styles.menuItem}
+                        style={{fontSize:40}}
                     />
                     <MenuItem 
                         title = "作业"
@@ -231,19 +232,18 @@ class LatestTask extends React.Component {
                                 source={require("../../assets/LatestTaskImages/packages.png")}
                                 style={styles.packagesImg}
                             />
-                        </TouchableOpacity>                       
+                        </TouchableOpacity>    
+                        {this.showPackagesStatus()}         
                         <View style={styles.searchView}>
                             <SearchBar 
                                 style={styles.searchBar}
                                 value={this.state.value}
                                 placeholder="学案/作业"
                                 ref={ref => this.searchText = ref}
-                                //onFocus={() => this.showSearch(true)}
+
                                 onCancel={this.onSearch}
                                 onChange={this.onChange}
-                                //onSubmit={this.onBlur}
                                 onBlur={this.onBlur}
-                                //onSubmit={() => this.showSearch(false)}
                                 cancelText='搜索'
                                 showCancelButton
                             />
@@ -253,11 +253,6 @@ class LatestTask extends React.Component {
                             <TouchableOpacity
                                 style={styles.filterView}
                             >
-                                {/*<Image
-                                    source={require("../../assets/LatestTaskImages/filter.png")}
-                                    style={styles.filterImg}
-                                />*/}
-                                {/*this.showSerachOrFilter()*/}
                                 {this.showFilter()}
                             </TouchableOpacity>
                         </Flex>
@@ -278,19 +273,28 @@ const styles = StyleSheet.create({
         backgroundColor: "#6CC5CB",
     },
     todoList: {
-        height: screenHeight * 0.9,
+        height: screenHeight * 0.8,
     },
     flexNew: {
         paddingTop: 0,
-        paddingLeft: screenWidth*0.03,
+        paddingLeft: screenWidth*0.02,
+    },
+    packagesView: {
+        width: screenWidth * 0.1,
     },
     packagesImg: {
         height: "100%",
         width: "50%",
         resizeMode: "contain",
     },
-    packagesView: {
-        width: screenWidth * 0.1,
+    rightNumView: {
+        width: screenWidth * 0.05,
+    },
+    rightNumImg: {
+        height: "100%",
+        width: "50%",
+        resizeMode: "contain",
+        //marginLeft:0,
     },
     filterImg: {
         height: "100%",
@@ -301,7 +305,7 @@ const styles = StyleSheet.create({
         width: screenWidth * 0.08,
     },
     searchView: {
-        width: screenWidth * 0.75,
+        width: screenWidth * 0.7,
         //backgroundColor:'red',
         //borderWidth: 0,
         //borderColor: 'red',
@@ -319,5 +323,8 @@ const styles = StyleSheet.create({
         //paddingTop: 0,
         fontSize: 15,
         paddingLeft: 30,
+    },
+    backdrop: {
+        //backgroundColor: "purple",
     },
 });

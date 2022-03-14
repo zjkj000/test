@@ -7,12 +7,40 @@ import RadiosGroup  from './RadiosGroup';
 export default class Checkbox extends PureComponent {
     constructor(props) {
         super(props)
+        this.checkedAnswer=this.checkedAnswer.bind(this);
         this.state = {
             questionChoiceList:[],
-            sexArray: [
-            ],
+            sexArray: [],
+            StuAnswer:'',
         };
     }
+
+    //将多选每次改变的结果传给ToDo
+    checkedAnswer(title){
+        const NewStuAnswer = this.state.StuAnswer.split(',');
+        if(NewStuAnswer.includes(title)){
+            NewStuAnswer.splice(NewStuAnswer.indexOf(title),1)
+            //console.log('删除了',title)
+        }else{
+            //console.log('选中了',title)
+            NewStuAnswer.push(title)
+            }
+        var changedAnswer ='';
+        if(NewStuAnswer.includes('A')){changedAnswer +="A"}
+        if(NewStuAnswer.includes('B')){changedAnswer +=",B"}
+        if(NewStuAnswer.includes('C')){changedAnswer +=",C"}
+        if(NewStuAnswer.includes('D')){changedAnswer +=",D"}
+        if(NewStuAnswer.includes('E')){changedAnswer +=",E"}
+        if(NewStuAnswer.includes('F')){changedAnswer +=",F"}
+        if(NewStuAnswer.includes('G')){changedAnswer +=",G"}
+        if(NewStuAnswer.includes('H')){changedAnswer +=",H"}
+        if(changedAnswer[0]==','){changedAnswer = changedAnswer.substring(1)}
+
+        this.setState({StuAnswer:changedAnswer}) 
+        this.props.getstuanswer(changedAnswer)
+    }
+
+
     UNSAFE_componentWillMount(){
         const list = this.props.ChoiceList.split(",");
         const NewsexArray = [];
@@ -54,7 +82,7 @@ export default class Checkbox extends PureComponent {
                                         }
                     )  
             })
-            this.setState({questionChoiceList:list,sexArray:NewsexArray});
+            this.setState({StuAnswer:this.props.checkedlist,questionChoiceList:list,sexArray:NewsexArray});
     }
 
     render() {
@@ -68,6 +96,8 @@ export default class Checkbox extends PureComponent {
                     textStyle={{color: 'black'}}//文字样式
                     data={this.state.sexArray}//数据源
                     onPress={()=>{}}
+                    getcheckedAnswer={this.checkedAnswer}
+                    checkedlist={this.state.StuAnswer}
                 />
             </View>
         )

@@ -276,3 +276,193 @@ Overlay 中的 Toast 函数接收如下参数：
 -   option ：非必须，接收一个 styles 对象，其中应包含`textStyle`属性，用于定义弹出框的样式
 -   position ：非必须，接收一个 toast.Position 中的参数，用于指定弹出框出现的位置，默认为中间，
 -   animateEasing ：非必须，接收一个 React Native 中定义的 Easing 对象，用于定义弹出框的动画
+
+## 2022.3.4 bug 修复
+
+### 今日任务
+
+-   整合各个部分的开发成果
+-   解决扫码界面传参问题
+-   完善扫码界面的动画表现
+-   完成轮询请求消息队列
+-   将项目打包
+
+### 扫码页面传参问题
+
+上节提到使用如下组件实现并封装了扫码功能：
+
+```react
+yarn add react-native-camera
+```
+
+但该组件使用轮询机制判断扫码结果并予以处理，因此该组件将会多次得到扫码结果，而在该项目中，扫码页面与其他页面独立，因此扫码得到结果后需要跳转到原页面，并将参数传递到该页面，如下所示：
+
+```react
+onBarCodeRead = (result) => {
+        const { navigation, route } = this.props;
+
+        const { data } = result;
+        if (route.params?.backPage) {
+            let { backPage } = route.params;
+            navigation.navigate({
+                name: backPage,
+                params: { ipAddress: data },
+                merge: true,
+            });
+        } else {
+            navigation.navigate({
+                name: "Home",
+                params: { ipAddress: data },
+                merge: true,
+            });
+        }
+    };
+```
+
+上述函数`onBarCodeRead`将会执行多次，那么路由跳转也将执行多次，而每次执行都会引发原页面的渲染，而如果此时我们调用 set 方法进行 state 的设置，那么将会再一次导致页面渲染，最终使得渲染次数过多而报错。因此，我们需要一个方法来监听路由参数的变化，在此参数变化的情况下才进行对 state 的修改。
+最终解决方案是使用钩子函数`useEffect`：
+
+```react
+    React.useEffect(() => {
+        if (route.params?.ipAddress) {
+            if (typeof route.params.ipAddress == "string") {
+                let ipAddress = route.params.ipAddress;
+                setScanIpAddress(ipAddress);
+                setIpAddress(ipAddress);
+            }
+        }
+    }, [route]);
+```
+
+使用该函数的第二个参数`[]`设置该钩子函数监听的变量，当该变量发生变换后，才会调用第一个参数中定义的钩子函数。因此解决了如上问题。
+
+### 扫码页面动画
+
+实现类似微信扫码上的横条上下移动动画。使用`react-native`中提供的动画组件`Animated`,通过如下配置，实现了该动画效果：
+
+```react
+    startAnimation = () => {
+        this.state.moveAnim.setValue(0);
+        Animated.timing(this.state.moveAnim, {
+            toValue: -200,
+            duration: 1500,
+            easing: Easing.linear,
+            useNativeDriver: true,
+        }).start(() => this.startAnimation());
+    };
+```
+
+### 轮询请求
+
+在上课界面中需要轮询请求消息 API，以实时响应 Host 传来的消息，因此需要在组件挂载时创建一个计时器：
+
+```react
+componentDidMount() {
+        Orientation.lockToLandscape();
+        if (Platform.OS === "android") {
+            BackHandler.addEventListener(
+                "hardwareBackPress",
+                this.onBackAndroid
+            );
+        }
+
+        // 轮询
+        this.timerId = setInterval(() => {
+            this.getInfo();
+            const { resJson } = this.state;
+            if (resJson) {
+                messageList = resJson.messageList;
+                if (messageList.length !== 0) {
+                    let action = messageList[0];
+                    console.log(action);
+                }
+            }
+        }, 500);
+    }
+```
+
+并在组件卸载时将计时器清除，以免占用资源：
+
+```react
+    componentWillUnmount() {
+        Orientation.lockToPortrait();
+        if (Platform.OS === "android") {
+            BackHandler.addEventListener(
+                "hardwareBackPress",
+                this.onBackAndroid
+            );
+        }
+        // 清空定时器
+        clearInterval(this.timerId);
+    }
+```
+
+最终实现能在控制台查看实时返回的消息的功能。
+
+### 打包问题
+
+由于本项目使用了组件`react-native-orientation`组件实现强制横屏效果，因此项目在打包时遇到了如下问题：
+
+```shell
+Execution failed for task ‘:react-native-orientation:verifyReleaseResources’.
+```
+
+原因是该组件在打包时使用了自己的 build.gradle 配置，该配置中使用的 JDK 版本与本地使用的 JDK 版本发生了冲突，解决方法如下：
+
+1. 修改 node_modules\react-native-orientation\android\build.gradle 文件中、dependencies 下 compile 为 implementation。
+2. 修改 node_modules\react-native-orientation\android\build.gradle 文件、与 android\build.gradle 文件版本保持一致。
+   修改如下：
+
+```xml
+apply plugin: 'com.android.library'
+
+android {
+    // compileSdkVersion 23
+    compileSdkVersion = 30
+    // buildToolsVersion "23.0.1"
+    buildToolsVersion = "30.0.2"
+
+    defaultConfig {
+        minSdkVersion 16
+        // targetSdkVersion 22
+        targetSdkVersion = 30
+        versionCode 1
+        versionName "1.0"
+        ndk {
+            abiFilters "armeabi-v7a", "x86"
+        }
+    }
+}
+
+dependencies {
+    // compile "com.facebook.react:react-native:+"
+    implementation "com.facebook.react:react-native:+"
+}
+
+```
+
+最终打包成功
+
+### 心得体会
+
+本次整合时的 Bug 主要表现在大家完成自己的部分后没有及时 push，并且在测试重要开发环节时没有创建自己的分支，而是直接在主分支上修改。导致最终项目整合时出现了版本不一致，依赖冲突等问题。一次建议下次使用该命令：
+
+```git
+$ git branch 分支名 //创建新分支
+$ git checkout 分支名 //切换到该分支
+```
+
+切换后的所有改动，通过 add 与 commit 都将提交到新的分支上，不会影响主分支。
+当调试完毕，需要与主分支合并时，先保证该分支上所有改动都已 commit，然后切换到主分支：
+
+```git
+$ git checkout main
+```
+
+然后使用如下命令进行分支合并：
+
+```git
+$ git merge 分支名
+```
+
+## 2022.3.8 完成访问本地缓存功能

@@ -1,25 +1,26 @@
 import React, { Component } from "react";
-import { Button, Text, View, TouchableOpacity, Image } from "react-native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MyTabBar from "./TabBar";
-import Details from "../../pages/Details/Details";
-import Information from "../../pages/Inf/Inf";
 import Login from "../../pages/Login/Login";
 import PackagesPage from "../../pages/LatestTask/PackagesPage";
 import Todo from "../../pages/LatestTask/Todo";
-import InformOrNotice from "../../pages/LatestTask/InformOrNotice";
-import { Icon, SearchBar, TabBar } from "@ant-design/react-native";
-import { useNavigation } from "@react-navigation/native";
+import Inform from "../../pages/LatestTask/Inform";
+import Notice from "../../pages/LatestTask/Notice";
 
 import Menu from "../../pages/LatestTask/DoWork/Utils/Menu";
 import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
+import ViewPager_SubmitContainer from "../../pages/LatestTask/DoWork/ViewPager_Submit";
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
-import WrongSee from '../../pages/Wrongbook/WrongSee'
+import WrongSee from "../../pages/Wrongbook/WrongSee";
 import Wrongbook from "../../pages/Wrongbook/Wrongbook";
+<<<<<<< HEAD
 import WrongDetails from'../../pages/Wrongbook/WrongDetails';
 import WrongRecycleButton from "../../pages/Wrongbook/WrongRecycleButton";
+=======
+import WrongDetails from "../../pages/Wrongbook/wrongDetails";
+>>>>>>> ebb1b4518b982a00b1a68be0fd2620c21a5379a9
 
 const Stack = createStackNavigator();
 
@@ -54,22 +55,25 @@ export default class MainNavigation extends Component {
                     }}
                 />
                 <Stack.Group>
-                    <Stack.Screen
-                        name="PackagesPage"
+                <Stack.Screen
+                        name="资料夹"
                         component={PackagesPage}
                     />
                     <Stack.Screen name="Todo" component={Todo} />
-                    <Stack.Screen name="InformOrNotice" component={InformOrNotice} />
+                    <Stack.Screen name="通知" component={Inform} />
+                    <Stack.Screen name="公告" component={Notice} />
                     <Stack.Screen
-                        name="做作业"
+                        name="DoPaper"
                         component={ViewPager_ToDo}
-                        options={{
-                            headerRight: () => (
-                                <Menu learnPlanId="1b2a59d2-8990-4672-a97b-124a96a7f8c8" />
-                            ),
-                        }}
+                       
+                    />
+                    <Stack.Screen
+                        name="SubmitPaper"
+                        component={ViewPager_SubmitContainer}
                     />
                 </Stack.Group>
+
+                {/* 在线课堂 */}
                 <Stack.Group>
                     <Stack.Screen
                         name="ConnectClass"
@@ -78,12 +82,16 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="OnlineClassTemp"
                         component={OnlineClassTempPage}
+                        options={{
+                            headerShown: false,
+                        }}
                     />
                     <Stack.Screen
                         name="QRCodeScanner"
                         component={QRCodeScanner}
                     />
                 </Stack.Group>
+<<<<<<< HEAD
 
 
                 {/* 错题本模块的导航 */}
@@ -108,6 +116,16 @@ export default class MainNavigation extends Component {
                         name="Wrongbook"
                         component={Wrongbook}
                     />
+=======
+                <Stack.Group>
+                    <Stack.Screen name="错题本" component={WrongSee} />
+                    <Stack.Screen name="Wrongbook" component={Wrongbook} />
+                    <Stack.Screen
+                        name="WrongDetails"
+                        component={WrongDetails}
+                    />
+                </Stack.Group>
+>>>>>>> ebb1b4518b982a00b1a68be0fd2620c21a5379a9
             </Stack.Navigator>
         );
     }

@@ -10,33 +10,23 @@ import http from "../../utils/http/request";
 import HistoryInput from "./HistoryInput";
 import { styles } from "./styles";
 import Toast from "../../utils/Toast/Toast";
+import Loading from "../../utils/loading/Loading";
+import StorageUtil from "../../utils/Storage/Storage";
 
 export default ConnectClass = () => {
-    const historyListRemote = [
-        { title: "192.168.1.81" },
-        { title: "192.168.1.124" },
-        { title: "192.168.1.126" },
-    ];
+    let historyListRemote = StorageUtil.get("historyListRemote");
+    // let historyListRemote = [];
+    console.log(historyListRemote);
     const navigation = useNavigation();
     const route = useRoute();
 
     const [ipAddress, setIpAddress] = useState(
         route.params?.ipAddress ? route.params.ipAddress : ""
     );
-
-    // if (route.params?.ipAddress) {
-    //     let scanIpAddress = route.params.ipAddress;
-    //     if (ipAddress !== scanIpAddress) {
-    //         setIpAddress(scanIpAddress);
-    //     }
-    //     Toast.showSuccessToast(scanIpAddress);
-    //     // setIpAddress(scanIpAddress);
-    // }
+    const [showLoading, setShowLoading] = React.useState(false);
     const [Name, setName] = React.useState("ming6002");
     const [Password, setPassword] = React.useState("2020");
     const [scanIpAddress, setScanIpAddress] = React.useState("");
-    const [secureTextEntry, setSecureTextEntry] = React.useState(true);
-    const [moduleVisible, setModuleVisible] = React.useState(false);
     const [historyList, setHistoryList] = React.useState(historyListRemote);
 
     const handleLogin = () => {
@@ -49,14 +39,27 @@ export default ConnectClass = () => {
             userName: Name,
             password: Password,
         };
-
+        setShowLoading(true);
         http.get(url, params)
             .then((resStr) => {
-                console.log(resStr);
-                let resJson = JSON.parse(resStr);
-                navigation.navigate("OnlineClassTemp", { ...resJson });
+                setShowLoading(false);
+                console.log(typeof resStr);
+                if (typeof resStr === "undefined") {
+                    Toast.showWarningToast("暂无课程开始");
+                } else {
+                    // Toast.showDangerToast(resStr);
+                    let resJson = JSON.parse(resStr);
+                    historyListRemote.push(ipAddress);
+                    StorageUtil.save("historyList", historyList);
+                    navigation.navigate("OnlineClassTemp", {
+                        ...resJson,
+                        ipAddress: ipAddress,
+                        userName: Name,
+                    });
+                }
             })
             .catch((error) => {
+                setShowLoading(false);
                 Toast.showDangerToast(error.toString());
             });
     };
@@ -105,6 +108,7 @@ export default ConnectClass = () => {
             <Button onPress={handleLiveClass} style={styles.Button}>
                 直播课程
             </Button>
+            <Loading show={showLoading}></Loading>
         </View>
     );
 };

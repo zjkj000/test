@@ -6,14 +6,17 @@ export default class RadioGroup extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            selectIndex: this.props.selectIndex ? this.props.selectIndex : '',
+            selectIndex:'',
             data:[],
         };
     }
 
+    
     UNSAFE_componentWillMount(){
-        this.setState({data:this.props.data})
+        this.setState({selectIndex:this.props.selectIndex,data:this.props.data})
     }
+
+
     render() {
         let newArray = this.state.data;
         return (
@@ -37,23 +40,20 @@ export default class RadioGroup extends Component {
                 item.select = true;
             }
         }
-        this.setState({selectIndex: index});
-       
+        this.setState({selectIndex: index});  
     }
 
-    renderRadioButton(array, item, onPress, index, sexIndex) {
+    renderRadioButton(array, item, onPress, index, selectIndex) {
         let image = item.image
-        if (item.select == true) {
+        if (selectIndex!=-1 && index == selectIndex) {
             image = item.image2; 
         } else {
             image = item.image;   
         }
-        if (sexIndex == index && sexIndex != '') {
-            image = item.image2;
-        }
         return (
             <TouchableOpacity key={index} onPress={()=> {
                 onPress(index, item)
+                this.props.getcheckedAnswer(index)
             }} style={[{
                 width: 100,
                 height: 43,
@@ -61,7 +61,7 @@ export default class RadioGroup extends Component {
                 justifyContent: 'center',
                 alignItems: 'center',
             },this.props.conTainStyle]}>
-                <Image style={[{width: 20, height: 20},this.props.imageStyle]} source={image}/>
+                <Image key={index} style={[{width: 20, height: 20},this.props.imageStyle]} source={image}/>
             </TouchableOpacity>
         )
     }
