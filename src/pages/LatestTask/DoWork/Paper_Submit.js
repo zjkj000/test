@@ -5,20 +5,21 @@ import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
 import Loading from '../../../utils/loading/Loading'
 // 提交作业页面
-export default function ViewPager_SubmitContainer(props) {
+export default function Paper_SubmitContainer(props) {
   const start_date = props.route.params.startdate;
   const navigation = useNavigation();
+  navigation.setOptions({title:props.route.params.papername})
   const paperId = props.route.params.paperId;
   const submit_status = props.route.params.submit_status;
   const papername = props.route.params.papername
-  return <ViewPager_Submit navigation={navigation} 
+  return <Paper_Submit navigation={navigation} 
                   startdate={start_date}  paperId={paperId}
                   submit_status={submit_status} 
                   papername = {papername}/>;
 }
 
 
-class ViewPager_Submit extends Component {
+class Paper_Submit extends Component {
     constructor(props) {
         super(props)
         this.state = {
@@ -43,16 +44,17 @@ class ViewPager_Submit extends Component {
                   "www.cn901.net" +
                   ":8111" +
                   "/AppServer/ajax/studentApp_getStudentAnswerList.do"
+                  //console.log('woyaode ',this.props.paperId)
         const params ={
                     paperId : this.props.paperId,
                     userName : 'ming6051'
                   }
         //用于获取
         http.get(url,params).then((resStr)=>{
+          console.log('----------',resStr)
                   let resJson = JSON.parse(resStr);
                   this.setState({success:resJson.success,data:resJson.data});
                 })
-        
     }
 
     //获取时间
@@ -115,13 +117,13 @@ class ViewPager_Submit extends Component {
                 //确定就提交，取消就不提交
             }else{
                 alert('提交作业了！')
-                // 提交之后就跳转首页
-                // this.props.navigation.navigate("DoPaper" , 
-                // //                             {
-                                              
-                // //                             }
+                
             }
-            //this.props.navigation.navigate("InformOrNotice",) 
+            this.props.navigation.navigate("Home",
+            {
+              learnId: this.state.paperId,
+              status:change_status
+            }) 
             //提交作业代码
             // http.get(url,params).then((resStr)=>{
             //         let resJson = JSON.parse(resStr); 
@@ -152,9 +154,9 @@ class ViewPager_Submit extends Component {
                                           //还需要设置导航层数！！
                   }}
                 >
-            <View key={result_Item} style={styles.result}>
+            <View key={result_Item}  style={styles.result}>
                     {/* 序号 */}
-                    <Text style={{marginRight:10}}>{this.state.data[result_Item].order}</Text>
+                    <Text style={{marginRight:10}}>({this.state.data[result_Item].order})</Text>
                     {/* 具体答案  or   红色的未答 */}
                     {this.state.data[result_Item].stuAnswer!=''
                     ? <RenderHtml contentWidth={width} source={{html:this.state.data[result_Item].stuAnswer}}/>
@@ -190,8 +192,8 @@ class ViewPager_Submit extends Component {
   }
 }
 const styles = StyleSheet.create({
-    preview_area:{height:"90%",padding:20,paddingBottom:50,paddingTop:10},
-    result:{margin:20,flexDirection:'row'},
+    preview_area:{height:"90%",paddingBottom:50,paddingTop:10},
+    result:{paddingLeft:20,paddingTop:10,paddingBottom:10,flexDirection:'row',borderColor:"#000000",borderBottomWidth:0.5},
     bt_submit: { marginRight:20,},
     submit_area:{paddingLeft:30,paddingTop:20,paddingBottom:20,paddingRight:30},
   });

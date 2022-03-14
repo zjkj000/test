@@ -214,16 +214,32 @@ class TodoList extends React.Component {
                             <View key={index} style={{ flex: 1 }}>
                                 <TouchableOpacity
                                     onPress={() => {
+
                                         if(todoType == "作业"){
-                                            this.props.navigation.navigate("DoPaper", 
-                                            {
-                                                learnId: learnId, 
-                                                status: statusUrl, //作业状态
-                                                selectedindex:0,
-                                                papername:bottomTitle,
-                                                //navigation: useNavigation(),
-                                            });
+                                            // 查看已经批改的作业
+                                            // if(statusUrl==2){
+                                                this.props.navigation.navigate("ShowCorrected", 
+                                                {
+                                                    learnId: learnId, 
+                                                    selectedindex:0,
+                                                    papername:bottomTitle,
+                                                    //navigation: useNavigation(),
+                                                });
+                                            // }
+                                            // // 做作业
+                                            // else{
+                                                // this.props.navigation.navigate("DoPaper", 
+                                                // {
+                                                //     learnId: learnId, 
+                                                //     status: statusUrl, //作业状态
+                                                //     selectedindex:0,
+                                                //     papername:bottomTitle,
+                                                //     //navigation: useNavigation(),
+                                                // });
+                                            // }
+
                                         }else if(todoType == "导学案"){
+
                                             this.props.navigation.navigate("todo" , 
                                             {
                                                 learnId: learnId, 

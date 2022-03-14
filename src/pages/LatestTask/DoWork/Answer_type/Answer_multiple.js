@@ -1,7 +1,37 @@
 import { Text, StyleSheet, View, ScrollView ,TouchableOpacity,Image,Dimensions} from 'react-native'
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import Checkbox from '../Utils/Checkbox'
 import RenderHtml from 'react-native-render-html';
+import { useNavigation } from "@react-navigation/native";
+
+export default function Answer_multipleContainer(props) {
+    const navigation = useNavigation();
+    const paperId= props.paperId
+    const submit_status=props.submit_status
+    const startdate=props.startdate
+    const papername = props.papername
+    const sum=props.sum
+    const num=props.num 
+    const datasource=props.datasource
+    const oldAnswer_data=props.oldAnswer_data
+    const[ischange,setischange] = useState()
+    props.getischange(ischange)
+    const[Stu_answer,setStu_answer] = useState()
+    props.getStu_answer(Stu_answer)
+
+    return (<Answer_multiple  navigation={navigation}  
+                              papername = {papername}
+                              submit_status={submit_status}  
+                              startdate={startdate}
+                              paperId={paperId} 
+                              getischange={setischange}   
+                              getStu_answer={setStu_answer}  
+                              sum={sum} 
+                              num={num} 
+                              datasource={datasource} 
+                              oldAnswer_data={oldAnswer_data}   />)
+}
+
 
 // 多选题 模板页面
 //  使用时 需要传入参数：   sum   总题目数量：                 选传 不传默认总数题   会显示1/1题
@@ -11,7 +41,7 @@ import RenderHtml from 'react-native-render-html';
 //                         oldAnswer_data                    选择传递   是否有历史作答记录  一般是通过api获取的历史答案。否则不建议传
 //                         getischange={setischange}         传递一个函数  用于向做作业的页面传递 是否改变了答案，便于判断是否要提交  setischange函数要自己写在做作业页面
 //                         getStu_answer={setStu_answer_i}   传递一个函数  用于获得阅读题得到的作答结果  setStu_answer_i函数要自己写在做作业页面 代表设置第几道题的答案。
-export default class Answer_single extends Component {
+class Answer_multiple extends Component {
   constructor(props) {
     super(props)
     this.stuAnswer=this.stuAnswer.bind(this);
@@ -57,7 +87,16 @@ export default class Answer_single extends Component {
                 <Text>{(this.state.numid?this.state.numid:0)+1}/{this.props.sum?this.props.sum:1}题 </Text>
                 <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
                 <TouchableOpacity  style={{position:'absolute',right:20}}
-                // 先提交本题目，在跳转到提交页面
+                                  onPress={
+                                    ()=>{
+                                        //导航跳转
+                                        this.props.navigation.navigate('SubmitPaper',
+                                        {   paperId:this.props.paperId,
+                                            submit_status:this.props.submit_status,
+                                            startdate:this.props.startdate,
+                                            papername:this.props.papername})
+                                    }
+                                }
                 >
                     <Image source={require('../../../../assets/image3/look.png')}></Image>
                 </TouchableOpacity>

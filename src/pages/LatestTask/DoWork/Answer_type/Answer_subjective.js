@@ -1,11 +1,42 @@
 import { Text, StyleSheet, View, ScrollView, Image, TextInput, Button, Alert, TouchableOpacity, Modal, Dimensions } from 'react-native'
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import RenderHtml from 'react-native-render-html';
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import {OverflowMenu,MenuItem} from "@ui-kitten/components";
 import ImageViewer from 'react-native-image-zoom-viewer';
 import ImageHandler from '../../../../utils/Camera/Camera';
 import http from '../../../../utils/http/request';
+import { useNavigation } from "@react-navigation/native";
+
+export default function Answer_subjectiveContainer(props) {
+    const navigation = useNavigation();
+    const paperId= props.paperId
+    const submit_status=props.submit_status
+    const startdate=props.startdate
+    const papername = props.papername
+    const sum=props.sum
+    const num=props.num 
+    const datasource=props.datasource
+    const oldAnswer_data=props.oldAnswer_data
+    const[ischange,setischange] = useState()
+    props.getischange(ischange)
+    const[Stu_answer,setStu_answer] = useState()
+    props.getStu_answer(Stu_answer)
+    return (
+    <Answer_subjective  navigation={navigation}  
+                    papername = {papername}
+                    submit_status={submit_status}  
+                    startdate={startdate}
+                    paperId={paperId} 
+                    getischange={setischange}   
+                    getStu_answer={setStu_answer}  
+                    sum={sum} 
+                    num={num} 
+                    datasource={datasource} 
+                    oldAnswer_data={oldAnswer_data}   />
+  )
+}
+
 // 主观题 模板页面
 //  使用时 需要传入参数：   sum   总题目数量：                 选传 不传默认总数题   会显示1/1题
 //                         num   这是第几个题目               选传 不传默认num  0   会显示1/1题 
@@ -14,7 +45,7 @@ import http from '../../../../utils/http/request';
 //                         oldAnswer_data                    选择传递   是否有历史作答记录  一般是通过api获取的历史答案。否则不建议传
 //                         getischange={setischange}         传递一个函数  用于向做作业的页面传递 是否改变了答案，便于判断是否要提交  setischange函数要自己写在做作业页面
 //                         getStu_answer={setStu_answer_i}   传递一个函数  用于获得阅读题得到的作答结果  setStu_answer_i函数要自己写在做作业页面 代表设置第几道题的答案。
-export default class Answer_single extends Component {  
+class Answer_subjective extends Component {  
     constructor(props) {
         super(props)
         //传给每道题目，用于让题目告诉这个页面 他们的答案是什么，会在这个页面记录他们的答案。
@@ -179,33 +210,42 @@ export default class Answer_single extends Component {
     //用于提交  baseCode  提交主观题答题照片
     submitBaseCode(baseCode) {
         // 只要有了照片就提交
+        //console.log('baseCode是*******',baseCode)
         const url = 
             "http://"+
-            "www.cn901.net" +
-            ":8080" +
+            "192.168.1.81" +
+            ":8222" +
             "/AppServer/ajax/studentApp_saveBase64Image.do"
         const params ={
-            baseCode :  'baseCode',
+            // baseCode :  '111',
+            // learnPlanId :  '111',
+            // userName    : 'ming6051'
+            baseCode :  baseCode,
             learnPlanId :  this.state.paperId,
             userName    : 'ming6051'
             }
-        console.log('请求提交照片了')
-        return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-        // http.get(url,params).then((resStr)=>{
-        //         let resJson = JSON.parse(resStr);
-        //         console.log('提交结果',resJson)
-        //         if(resJson.success){
-        //             // 返回URL地址
-                    //this.setState({hasImage:true})
-        //             return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-        //             //return(resJson.data)
-        //         }else{
-        //             return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-        //             //return '';
-        //         } 
-        //     })
-        //提交过程设置loading效果
+        console.log('---------照片  请求提交照片了----------')
 
+        // return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
+        http.post(url,params).then((resStr)=>{
+                
+            console.log('???',resStr)
+                let resJson = JSON.parse(resStr);
+                console.log('+++提交结果++++',resJson)
+                if(resJson.success){
+                    // 返回URL地址
+                    console.log('请求提交成功！返回了！！！')
+                    this.setState({hasImage:true})
+                    // return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
+                    //return(resJson.data)
+                }else{
+                    console.log('请求提交失败！！')
+                    // return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
+                    //return '';
+                } 
+            })
+        //提交过程设置loading效果
+            return resJson.data?resJson.data:'http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png'
         //返回的数据是"data": urlPath  图片回显路径   "success":true,    "message":"保存成功！"
 
         // 根据返回的url  将图片拼接到 预览区域，并且刷新预览区域
@@ -235,9 +275,6 @@ export default class Answer_single extends Component {
     };
 
 
-
-
-
     render() {
         const HTML = this.state.questionContent;
         const width = Dimensions.get('window').width;
@@ -250,9 +287,16 @@ export default class Answer_single extends Component {
                     <Text>{(this.state.numid ? this.state.numid : 0) + 1}/{this.props.sum ? this.props.sum : 1}题 </Text>
                     <Text style={{ marginLeft: 20 }}>{this.state.questionTypeName}</Text>
                     <TouchableOpacity style={{ position: 'absolute', right: 20, top: 10 }}
-                    //    onPress={
-                    //    }
-                    // 先提交本题目，在跳转到提交页面
+                                        onPress={
+                                            ()=>{
+                                                //导航跳转
+                                                this.props.navigation.navigate('SubmitPaper',
+                                                {   paperId:this.props.paperId,
+                                                    submit_status:this.props.submit_status,
+                                                    startdate:this.props.startdate,
+                                                    papername:this.props.papername})
+                                            }
+                                        }
                     >
                         <Image source={require('../../../../assets/image3/look.png')}></Image>
                     </TouchableOpacity>

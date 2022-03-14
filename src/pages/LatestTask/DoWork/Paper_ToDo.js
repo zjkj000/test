@@ -1,17 +1,18 @@
 import React,{useState,useEffect,useRef} from 'react';
 import { StyleSheet,View,Image,Alert,Text,TouchableOpacity} from 'react-native';
 import { Layout, ViewPager } from '@ui-kitten/components';
-import Answer_single from './Answer_type/Answer_single';
-import Answer_read from './Answer_type/Answer_read';
-import Answer_judgement from './Answer_type/Answer_judgment';
-import Answer_subjective from './Answer_type/Answer_subjective';
-import Answer_multiple from './Answer_type/Answer_multiple';
+import Answer_readContainer from './Answer_type/Answer_read';
+import Answer_judgementContainer from './Answer_type/Answer_judgment';
+import Answer_subjectiveContainer from './Answer_type/Answer_subjective';
+import Answer_multipleContainer from './Answer_type/Answer_multiple';
 import http from '../../../utils/http/request'
 import Loading from '../../../utils/loading/Loading'
 import { useNavigation } from "@react-navigation/native";
 import Menu from './Utils/Menu';
+import Answer_singleContainer from './Answer_type/Answer_single';
+import Toast from '../../../utils/Toast/Toast';
 //这个页面是 获取题目的页面
-export default function ViewPager_ToDo(props) {
+export default function Paper_ToDo(props) {
 
   const navigation = useNavigation();
   const [ischange,setischange] = useState(false)
@@ -107,12 +108,12 @@ export default function ViewPager_ToDo(props) {
       switch(Item.baseTypeId){
         //在调用题目  模板时，需要传入  sum代表总题数，   num代表当前题目索引，  datasource 代表该题数据
         //                            sum  选择传不传     num 选择传不传     datasource  必须传
-        case'101': return <Answer_single          paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]}  />;
-        case'102': return <Answer_multiple        paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
-        case'103': return <Answer_judgement       paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
-        case'104': return <Answer_subjective      paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
-        case'106': return <Answer_subjective      paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
-        case'108': return <Answer_read            paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
+        case'101': return <Answer_singleContainer             submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]}  />;
+        case'102': return <Answer_multipleContainer           submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
+        case'103': return <Answer_judgementContainer          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
+        case'104': return <Answer_subjectiveContainer         submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
+        case'106': return <Answer_subjectiveContainer         submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
+        case'108': return <Answer_readContainer               submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
         default  : return '';}
     }
     
@@ -210,7 +211,7 @@ export default function ViewPager_ToDo(props) {
               
                       const newindex =selectedIndex-1;
                       if(newindex==-1){
-                          alert('已经是第一题');
+                        Toast.showInfoToast('已经是第一题')
                           //提交一下答案
                           Submit_Stu_answer(selectedIndex,selectedIndex);
                         }else{ 
@@ -224,9 +225,11 @@ export default function ViewPager_ToDo(props) {
                   <TouchableOpacity  style={{position:'absolute',right:10,top:"45%",zIndex:99}} onPress={()=>{
                       const newindex =selectedIndex+1;
                       if(newindex==dataNum){
-                        //alert('已经是最后一题'); 需要跳转到答题页面
+                        //Toast.showInfoToast('已经是最后一题') 需要跳转到答题页面
                         Submit_Stu_answer(selectedIndex,selectedIndex);
-                        navigation.navigate('SubmitPaper',{paperId:learnPlanId,submit_status:status,startdate:startdate,papername:props.route.params.papername})
+                        navigation.navigate('SubmitPaper',
+                        {paperId:learnPlanId,submit_status:status,
+                          startdate:startdate,papername:props.route.params.papername})
                         //setselectedIndex(newindex)
                       }else{
                         Submit_Stu_answer(newindex,selectedIndex);

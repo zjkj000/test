@@ -7,8 +7,9 @@ import Todo from "../../pages/LatestTask/Todo";
 import InformOrNotice from "../../pages/LatestTask/InformOrNotice";
 
 import Menu from "../../pages/LatestTask/DoWork/Utils/Menu";
-import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
-import ViewPager_SubmitContainer from "../../pages/LatestTask/DoWork/ViewPager_Submit";
+import Paper_ToDo from "../../pages/LatestTask/DoWork/Paper_ToDo";
+import Paper_ShowCorrected from "../../pages/LatestTask/DoWork/Paper_ShowCorrected";
+import Paper_SubmitContainer from "../../pages/LatestTask/DoWork/Paper_Submit";
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
@@ -60,13 +61,18 @@ export default class MainNavigation extends Component {
                     />
                     <Stack.Screen
                         name="DoPaper"
-                        component={ViewPager_ToDo}
+                        component={Paper_ToDo}
                        
                     />
                     <Stack.Screen
                         name="SubmitPaper"
-                        component={ViewPager_SubmitContainer}
+                        component={Paper_SubmitContainer}
                     />
+                    <Stack.Screen
+                        name="ShowCorrected"
+                        component={Paper_ShowCorrected}
+                    />
+                    
                 </Stack.Group>
 
                 {/* 在线课堂 */}
