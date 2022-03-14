@@ -6,6 +6,7 @@ import Loading from "../../utils/loading/Loading";
 import MyPage from "../../pages/My/My";
 import Wrongbook from "../../pages/Wrongbook/Wrongbook";
 import LatestTask from "../../pages/LatestTask/LatestTask";
+import Study from "../../pages/Study/Study";
 import {
     bindBackExitApp,
     removeBackExitApp,
@@ -61,6 +62,9 @@ export default class MyTabBar extends React.Component {
             <LatestTask />
         );
     };
+    renderStudy = () => {
+        return <Study />;
+    };
     renderMy = () => {
         return <MyPage />;
     };
@@ -89,6 +93,14 @@ export default class MyTabBar extends React.Component {
                     onPress={(e) => this.onChangeTab("home")}
                 >
                     {this.renderHome()}
+                </TabBar.Item>
+                <TabBar.Item
+                    icon={<Icon name="file" />}
+                    title="学习"
+                    selected={this.state.selectedTab === "study"}
+                    onPress={() => this.onChangeTab("study")}
+                >
+                    {this.renderStudy()}
                 </TabBar.Item>
                 <TabBar.Item
                     icon={<Icon name="schedule" />}

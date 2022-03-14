@@ -4,7 +4,8 @@ import MyTabBar from "./TabBar";
 import Login from "../../pages/Login/Login";
 import PackagesPage from "../../pages/LatestTask/PackagesPage";
 import Todo from "../../pages/LatestTask/Todo";
-import InformOrNotice from "../../pages/LatestTask/InformOrNotice";
+import Inform from "../../pages/LatestTask/Inform";
+import Notice from "../../pages/LatestTask/Notice";
 
 import Menu from "../../pages/LatestTask/DoWork/Utils/Menu";
 import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
@@ -49,15 +50,13 @@ export default class MainNavigation extends Component {
                     }}
                 />
                 <Stack.Group>
-                    <Stack.Screen
-                        name="PackagesPage"
+                <Stack.Screen
+                        name="资料夹"
                         component={PackagesPage}
                     />
                     <Stack.Screen name="Todo" component={Todo} />
-                    <Stack.Screen
-                        name="InformOrNotice"
-                        component={InformOrNotice}
-                    />
+                    <Stack.Screen name="通知" component={Inform} />
+                    <Stack.Screen name="公告" component={Notice} />
                     <Stack.Screen
                         name="DoPaper"
                         component={ViewPager_ToDo}

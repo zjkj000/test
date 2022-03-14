@@ -8,8 +8,10 @@ import {StyleSheet,
 import { Flex } from "@ant-design/react-native";
 import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
 import http from "../../utils/http/request";
+import '../../utils/global/constants';
 
-export default class InformOrNotice extends React.Component {
+
+export default class Inform extends React.Component {
   constructor(props) {
     super(props);
     this.state = { };
@@ -19,13 +21,12 @@ export default class InformOrNotice extends React.Component {
 
   //修改通知或公告的状态
   updateStatus =  (status , todoType , learnId) => {
-        const url =
-            "http://"+
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_readNotice.do"
+        const token = global.constants.token;
+        const userId = global.constants.userName;
+        const ip = global.constants.baseUrl
+        const url = ip + "studentApp_readNotice.do";
         const params ={
-            userName: 'ming6002',
+            userName: userId,
             type: todoType,    //type=3表示通知，4表示公告
             classTimeId: learnId, 
         }
@@ -38,7 +39,7 @@ export default class InformOrNotice extends React.Component {
   };
   
   render() {
-    console.log(this.props.navigation.getState().routes[2].params);
+    console.log('route' , this.props.navigation.getState().routes[2].params);
     const paramsData = this.props.navigation.getState().routes[2].params;
     const bottomTitle = paramsData.bottomTitle;
     const createrName = paramsData.createrName;
@@ -83,8 +84,8 @@ const styles = StyleSheet.create({
       marginBottom: 20,
     },
     flexContent: {
-      paddingLeft: screenWidth*0.3,
-      paddingRight: screenWidth*0.3,
+      paddingLeft: screenWidth*0.25,
+      paddingRight: screenWidth*0.25,
       marginBottom: 20,
     },
     createrNameImg: {
@@ -101,5 +102,7 @@ const styles = StyleSheet.create({
     },
     content: {
       fontSize: 16,
+      paddingLeft: 10,
+      paddingRight: 10,
     },
 });

@@ -9,17 +9,17 @@ import {
     Dimensions,
     ActivityIndicator,
     FlatList,
+    Alert,
 } from "react-native";
 import { SearchBar, TabBar } from "@ant-design/react-native";
 import { Icon, Flex } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
-import { screenWidth, screenHeight , userId , token} from "../../utils/Screen/GetSize";
+import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
 import http from "../../utils/http/request";
 import Loading from "../../utils/loading/Loading"; //Loading组件使用export {Loading}或者export default Loading;
 //import {Loading} from "../../utils/loading/Loading"; //Loading组件使用export {Loading},此时import必须加{}导入
-
-import '../../utils/global/constants';
-
+//import global from "../../utils/global/constants";
+import'../../utils/global/constants'
 
 let pageNo = 1; //当前第几页
 let itemNo = 0; //item的个数
@@ -28,16 +28,17 @@ let dataFlag = true; //此次是否请求到了数据，若请求的数据为空
 var oldtype = '';  //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
 
 
-export default function TodoListContainer(props) {
+
+export default function StudyListContainer(props) {
     //console.log(props.resourceType);
     const rsType = props.resourceType;
     const navigation = useNavigation();
     //将navigation传给TodoList组件，防止路由出错
-    return <TodoList navigation={navigation} resourceType={rsType}></TodoList>;
+    return <StudyList navigation={navigation} resourceType={rsType}></StudyList>;
 }
 
 
-class TodoList extends React.Component {
+class StudyList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -99,11 +100,6 @@ class TodoList extends React.Component {
                                             />
                 );
         }else{
-            /*todo.type == '作业'或导学案时，从路由导航中接收参数，参数应该包括作业ID（learnId）以及状态（是否提交？）
-             * 若todo.learnId == learnId && 状态为已提交，则状态图标需要修改为“绿色”
-                如何触发该组件重新渲染页面数据呢？
-                    做完作业点提交时将路由切换到当前组件会使得该组件重新渲染？
-            */
             return (<Image
                 source={statusImg}
                 style={styles.imgStatus}
@@ -114,10 +110,10 @@ class TodoList extends React.Component {
 
     //通过fetch请求数据
     fetchData(pageNo , onRefresh = false){  
-       const rsType = this.props.resourceType;    
        const token = global.constants.token;
        const userId = global.constants.userName;
-       const ip = global.constants.baseUrl;  
+       const ip = global.constants.baseUrl
+       const rsType = this.props.resourceType;    
        const url = ip + "studentApp_getStudentPlan.do";
        const params ={
             currentPage: pageNo,
@@ -128,7 +124,7 @@ class TodoList extends React.Component {
         }
         http.get(url,params).then((resStr)=>{
             let resJson = JSON.parse(resStr);
-            var todosList = resJson.data; //重要！！！
+            var todosList = resJson.data; //重要！！！！！！
 
             let dataBlob = []; 
             let i = itemNo;
@@ -144,7 +140,7 @@ class TodoList extends React.Component {
             console.log('itemNo' , itemNo);
             let foot = 0;
             if(todosList.length < 12){
-                foot = 1; //未请求到数据，数据加载完了
+                foot = 1; //未请求到数据或数据加载完了
                 dataFlag = false; //数据加载完了
             }
 
@@ -184,7 +180,7 @@ class TodoList extends React.Component {
         const { errorInfo } = this.state.errorInfo;
         return (
             <View style={styles.container}>
-                <Text>{this.state.message}</Text>
+                <Text>Fail</Text>
                 <Text>{ errorInfo }</Text>
             </View>
         );
@@ -279,12 +275,11 @@ class TodoList extends React.Component {
                     <TouchableOpacity
                         onPress={() => {
                             if(todoType == "作业"){
-                                navigation.navigate("DoPaper", 
+                                navigation.navigate("Todo", 
                                 {
                                     learnId: learnId, 
                                     status: statusUrl, //作业状态
-                                    selectedindex:0,
-                                    bpapername: bottomTitle,
+                                    bottomTitle: bottomTitle,
                                 });
                             }else if(todoType == "导学案"){
                                 navigation.navigate("Todo" , 
@@ -293,26 +288,7 @@ class TodoList extends React.Component {
                                     status: statusUrl, //作业状态
                                     bottomTitle: bottomTitle,
                                 });
-                            }else if(todoType == "通知" || todoType == "公告"){
-                                navigation.navigate(todoType == "通知" ? "通知" : "公告" , 
-                                {
-                                    bottomTitle: bottomTitle,
-                                    createrName: createrName,
-                                    time: time,
-                                    courseName: courseName, //通知或公告内容
-                                    learnId: learnId,
-                                    status: statusUrl, //通知状态
-                                    type: type, //todo类型
-                                });
-
-                                if(statusUrl == 5){ //表示未读的通知公告
-                                    //console.log('todoIndexStatus1', todosList[todoIndex].value.status)
-                                    todosList[todoIndex].value.status = 4;  //修改本地缓存数据
-                                    //console.log('todoIndexStatus2', todosList[todoIndex].value.status);
-                                    //todos = todosList; //将本地缓存数据覆盖state中的todos
-                                    this.setState({ todos: todosList });
-                                }
-                            }                                       
+                            }                             
                         }}
                         style={{
                             //borderWidth: 0.5,
