@@ -18,7 +18,8 @@ import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
 import WrongSee from '../../pages/Wrongbook/WrongSee'
 import Wrongbook from "../../pages/Wrongbook/Wrongbook";
-import WrongDetails from'../../pages/Wrongbook/WrongDetails'
+import WrongDetails from'../../pages/Wrongbook/WrongDetails';
+import WrongRecycleButton from "../../pages/Wrongbook/WrongRecycleButton";
 
 const Stack = createStackNavigator();
 
@@ -83,20 +84,30 @@ export default class MainNavigation extends Component {
                         component={QRCodeScanner}
                     />
                 </Stack.Group>
-                <Stack.Group>
+
+
+                {/* 错题本模块的导航 */}
                     <Stack.Screen
-                        name="错题本"
+                        name="WrongSee"
                         component={WrongSee}
+                        options={{
+                            headerRight:() => (
+                                <WrongRecycleButton/>),
+                            title: '错题本'
+                        }}
+                    />
+                    <Stack.Screen
+                        name="WrongDetails"
+                        component={WrongDetails}
+                        options={{
+                            
+                            title: '错题详情'
+                        }}
                     />
                     <Stack.Screen
                         name="Wrongbook"
                         component={Wrongbook}
                     />
-                    <Stack.Screen
-                        name="WrongDetails"
-                        component={WrongDetails}
-                    />
-                </Stack.Group>
             </Stack.Navigator>
         );
     }

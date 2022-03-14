@@ -1,101 +1,28 @@
 ha({
-    "message": "作业试题列表获取成功！",
-    "data": [{
-        "questionTypeName": "单项选择题",
-        "questionChoiceList": "A,B,C,D",
-        "questionId": "PRQUI9000461863",
-        "questionName": "1.单项选择题",
-        "baseTypeId": "101",
-        "questionContent": "<p>Generally speaking，________ according to the directions，the drug has no side effect.<\/p><p>A．when taking&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．when taken<\/p><p>C．when to take&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．when to be taken<\/p>",
-        "answer": "B"
-    }, {
-        "questionTypeName": "单项选择题",
-        "questionChoiceList": "A,B,C,D",
-        "questionId": "PRQUI9000461862",
-        "questionName": "2.单项选择题",
-        "baseTypeId": "101",
-        "questionContent": "<p>We don’t doubt ________ we will complete all the project before the year 2013.<\/p><p>A．when&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．if<\/p><p>C．that&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．whether<\/p>",
-        "answer": "C"
-    }, {
-        "questionTypeName": "单项选择题",
-        "questionChoiceList": "A,B,C,D",
-        "questionId": "PRQUI9000461861",
-        "questionName": "3.单项选择题",
-        "baseTypeId": "101",
-        "questionContent": "<p>Tom wanted to play football with his friends in the street，but his father told him ________.<\/p><p>A．not to&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．not to do<\/p><p>C．not do it&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．do not to<\/p>",
-        "answer": "A"
-    }, {
-        "questionTypeName": "单项选择题",
-        "questionChoiceList": "A,B,C,D",
-        "questionId": "PRQUI9000461860",
-        "questionName": "4.单项选择题",
-        "baseTypeId": "101",
-        "questionContent": "<p>It was ________ he came back from Africa that year ________ he met the girl he would like to marry.<\/p><p>A．when；then&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．not；until<\/p><p>C．not until；that&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．only；when<\/p>",
-        "answer": "C"
-    }, {
-        "questionTypeName": "单词拼写",
-        "questionChoiceList": "",
-        "questionId": "PRQUI9000461753",
-        "questionName": "5.单词拼写",
-        "baseTypeId": "104",
-        "questionContent": "<p>It is neither cold nor hot.It is <u>m<\/u>________.<\/p>",
-        "answer": "PRQUI9000461753及nbsp;及nbsp;及nbsp;及nbsp;"
-    }, {
-        "questionTypeName": "单词拼写",
-        "questionChoiceList": "",
-        "questionId": "PRQUI9000461752",
-        "questionName": "6.单词拼写",
-        "baseTypeId": "104",
-        "questionContent": "<p>The injured person lay on the ground，<u>b<\/u>________ heavily.<\/p>",
-        "answer": "PRQUI9000461752及nbsp;及nbsp;及nbsp;及nbsp;"
-    }, {
-        "questionTypeName": "单词拼写",
-        "questionChoiceList": "",
-        "questionId": "PRQUI9000461751",
-        "questionName": "7.单词拼写",
-        "baseTypeId": "104",
-        "questionContent": "<p>He got an <u>e<\/u>________ shock when&nbsp; pushing the button.<\/p>",
-        "answer": "PRQUI9000461751及nbsp;及nbsp;及nbsp;及nbsp;"
-    }, {
-        "questionTypeName": "单词拼写",
-        "questionChoiceList": "",
-        "questionId": "PRQUI9000461750",
-        "questionName": "8.单词拼写",
-        "baseTypeId": "104",
-        "questionContent": "<p>He <u>s<\/u>________&nbsp; the tube hard and the last bit of toothpaste came out.<\/p>",
-        "answer": "PRQUI9000461750及nbsp;及nbsp;及nbsp;及nbsp;"
-    }, {
-        "questionTypeName": "阅读理解题",
-        "questionChoiceList": "5",
-        "questionId": "PRQUI9000461744",
-        "questionName": "9.阅读理解题",
-        "baseTypeId": "108",
-        "questionContent": "<p class=\"imgBox\"><img src=\"http://www.cn901.com/html1/10019/20038/05AFF8031D/1C560FA0EA/6A675CC894/PRQUI9000461744/PRQUI9000461744Show.files/image001.jpg\"  style=\"vertical-align: middle;\" class=\"\"><\/p><p>External bleeding.Apply direct pressure.Place a clean，folded cloth over the injured area and firmly <u>apply<\/u> pressure.If blood soaks through，do not remove it.Instead，cover that cloth with another one and continue to apply pressure to the wound for 7-10 minutes.If the bleeding is from the ear，place a clean bandage over the ear，lay the victim on his side，and follow the blood to drain out through the bandage.<\/p><p>Elevate the injury.Position the wounded part of the body above the level of the heart if possible while you apply direct pressure.<\/p><p>Know the pressure point.If direct pressure and elevation don’t sufficiently slow the bloodflow，find a pressure point.Large arteries(动脉) found close to the skin’s surface supply blood to the head and to each arm and leg.The most common pressure points used during the first aid are located in the upper arms and in the creases(皱纹) above the upper legs.Apply pressure to the closest pressure point to the wound so that the artery is pressed between your fingers and the bone directly behind the artery.If using the pressure point on a leg，you may need to use the heel of your hand instead of your fingers.<\/p><p>Resort to tourniquet(止血带，脉压器)．On very rare occasions everything listed above may fail.To prevent the victim from dying，you should apply a tourniquet.Once a tourniquet is applied，it should not be loosened or removed until the victim has reached medical help.Use a tourniquet only if everything listed above has failed.If you use a tourniquet，write down somewhere on the victim the time when it was applied，so medical persons will know how long it has been in place.<\/p><p><span>(1)&nbsp;&nbsp;<\/span>According to the passage，if a person is wounded and bleeding，you should________.<\/p><p>A．cover the wound with a clean，folded cloth and press it<\/p><p>B．spread some salve (药膏) on the wound<\/p><p>C．press the wound firmly with your finger<\/p><p>D．place a clean bandage over the wound<\/p><p><span>(2)&nbsp;&nbsp;<\/span>If the blood soaks through the cloth，you should______.<\/p><p>A．change a clean one immediately<\/p><p>B．wash the wound at once<\/p><p>C．press the wound firmly with your hand<\/p><p>D．cover the one with another one and press it<\/p><p><span>(3)&nbsp;&nbsp;<\/span>The underlined word “apply” in the first paragraph means________.<\/p><p>A．申请&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．应用<\/p><p>C．实施&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．生效<\/p><p><span>(4)&nbsp;&nbsp;<\/span>In this passage________ ways are mentioned to stop blood.<\/p><p>A．four&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．three<\/p><p>C．two&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．one<\/p><p><span>(5)&nbsp;&nbsp;<\/span>According to the passage，we know that________.<\/p><p>A．it is better to put the injured part above the head to stop bleeding<\/p><p>B．large arteries deep in the muscle supply blood to the head and to each arm and leg<\/p><p>C．we should use a tourniquet first to stop bleeding<\/p><p>D．the most common pressure points lie in the upper arms and in the creases above the upper legs<\/p>",
-        "answer": "A,D,B,A,D,"
-    }, {
-        "questionTypeName": "书面表达题",
-        "questionChoiceList": "Office",
-        "questionId": "PRQUI9000461689",
-        "questionName": "10.书面表达题",
+    "message": "错误试题获取成功！",
+    "data": {
+        "sourceType": "2",
+        "control": "2",
+        "questionId": "PRQUI9001144353",
+        "answerNum": "",
         "baseTypeId": "106",
-        "questionContent": "<p><\/p><p>根据下列短文，用英语写一篇100词左右的关于急救的小文章。<\/p><p>在日常生活中，学习一些急救知识，对一个人来说很重要。假如一个人发生车祸，在医生到来之前，需要对他/她进行医疗护理，做急救时，应注意以下三点：首先，如果他/她停止了呼吸，掰开他/她的嘴巴看看喉咙口有无食物。其次，假如他/她不能呼吸，就采取人工呼吸的方法，尽快使他/她开始呼吸。再次，如果他/她伤得很重，应立即止血，然后送往医院。如果他/她失血过多，达三分之一，那么他/她有可能会死。人人都应学习急救知识，这样才能挽救其他人的性命。<\/p>",
-        "answer": "PRQUI9000461689"
-    }, {
-        "questionTypeName": "完形填空题",
-        "questionChoiceList": "20",
-        "questionId": "PRQUI9000461864",
-        "questionName": "11.完形填空题",
-        "baseTypeId": "108",
-        "questionContent": "<p class=\"\">If you see someone drowning，speed is very important.Once you get him out of the __<u>（1）<\/u>__，if he isn’t __<u>（2）<\/u>__，you have four minutes before his brain is completely __<u>（3）<\/u>__.Support his neck，tilt(使翘起)his head back and press his chin(下巴)upwards.This __<u>（4）<\/u>__ the tongue blocking the airway in the throat and is sometimes enough to get him breathing again.If that doesn’t __<u>（5）<\/u>__，start mouth-to-mouth breathing.Press his nostrils (鼻孔) together with your __<u>（6）<\/u>__.Open your __<u>（7）<\/u>__ wide and take a deep breath.Blow into his lungs until his chest __<u>（8）<\/u>__. Then remove your mouth and watch his chest fall.Repeat twelve times a minute.Keep doing __<u>（9）<\/u>__ help arrives.<\/p><p>To bring a child back to __<u>（10）<\/u>__，keep your lips around his mouth and nose and gently __<u>（11）<\/u>__ his mouth.Give the first four breaths as quickly as possible to __<u>（12）<\/u>__ the blood with oxygen.If，__<u>（13）<\/u>__ your efforts，he starts turning a blue grey color，you can __<u>（14）<\/u>__ no pulse，then pressing is the __<u>（15）<\/u>__ chance of saving his life.<\/p><p>With arms straight，rock(摆动)forwards pressing down on the lower half of the breastbones.Don’t be too hard __<u>（16）<\/u>__ you may break a rib(肋骨)．Check how effective you are seeing if his color __<u>（17）<\/u>__ or his pulse becomes independent to your chest __<u>（18）<\/u>__ .If this __<u>（19）<\/u>__，stop the pressing.Otherwise __<u>（20）<\/u>__ until the rescue arrives.<\/p><p><span>(1)&nbsp;&nbsp;<\/span><\/p><p>A.ground&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．room<\/p><p>C．water&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．forest<\/p><p><span>(2)&nbsp;&nbsp;<\/span><\/p><p>A.dying&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．breathing<\/p><p>C．swimming&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．crying<\/p><p><span>(3)&nbsp;&nbsp;<\/span><\/p><p>A.destroyed&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．covered<\/p><p>C．thinking&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．moved<\/p><p><span>(4)&nbsp;&nbsp;<\/span><\/p><p>A.keeps&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．makes<\/p><p>C．does&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．stops<\/p><p><span>(5)&nbsp;&nbsp;<\/span><\/p><p>A.work&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．matter<\/p><p>C．breathe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．start<\/p><p><span>(6)&nbsp;&nbsp;<\/span><\/p><p>A.feet&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．arm<\/p><p>C．fingers&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．face<\/p><p><span>(7)&nbsp;&nbsp;<\/span><\/p><p>A.eyes&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．hand<\/p><p>C．mouth&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．tongue<\/p><p><span>(8)&nbsp;&nbsp;<\/span><\/p><p>A.falls&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．moves<\/p><p>C．becomes warm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．rises<\/p><p><span>(9)&nbsp;&nbsp;<\/span><\/p><p>A.when&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．after<\/p><p>C．as&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．until<\/p><p><span>(10)&nbsp;&nbsp;<\/span><\/p><p>A.speak&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．life<\/p><p>C．safety&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．smile<\/p><p><span>(11)&nbsp;&nbsp;<\/span><\/p><p>A.touch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．press<\/p><p>C．open&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．blow into<\/p><p><span>(12)&nbsp;&nbsp;<\/span><\/p><p>A.make&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．fill<\/p><p>C．produce&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．watch<\/p><p><span>(13)&nbsp;&nbsp;<\/span><\/p><p>A.as a result of&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．because of<\/p><p>C．in spite of&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．thinking of<\/p><p><span>(14)&nbsp;&nbsp;<\/span><\/p><p>A.feel&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．get<\/p><p>C．watch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．see<\/p><p><span>(15)&nbsp;&nbsp;<\/span><\/p><p>A.best&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．first<\/p><p>C．latest&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．last<\/p><p><span>(16)&nbsp;&nbsp;<\/span><\/p><p>A.but&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．or<\/p><p>C．so&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．since<\/p><p><span>(17)&nbsp;&nbsp;<\/span><\/p><p>A.improves&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．changes<\/p><p>C．remains the same&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．is still good<\/p><p><span>(18)&nbsp;&nbsp;<\/span><\/p><p>A.hitting&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．touching<\/p><p>C．pressing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．moving<\/p><p><span>(19)&nbsp;&nbsp;<\/span><\/p><p>A.does&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．happens<\/p><p>C．works&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．disappears<\/p><p><span>(20)&nbsp;&nbsp;<\/span><\/p><p>A.pressing&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; B．keep<\/p><p>C．go&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; D．continue<\/p>",
-        "answer": "C,B,A,D,A,C,C,D,D,B,D,B,C,A,D,B,A,C,B,D,"
-    }, {
-        "questionTypeName": "信息匹配",
-        "questionChoiceList": "",
-        "questionId": "PRQUI9000461899",
-        "questionName": "12.信息匹配",
-        "baseTypeId": "104",
-        "questionContent": "<p><\/p><p>Who dares to stage a concert without even releasing an album of her own？It’s Li Yuchun，the once Super Girl competition winner.__<u>71<\/u>__Though she may not have the best voice，her popularity would make almost any star jealous.<\/p><p>Her first ever concert held recently at the Shanghai Grand Stage has attracted fans from all across the country and even some from abroad.“We came from Beijing to support you.And wherever you go，we’ll follow you and keep supporting you.”<\/p><p>In the shows first surprise，Li Yuchun performed <i>One<\/i> <i>Night<\/i> <i>in<\/i> <i>Beijing<\/i>.__<u>72<\/u>__To Li Yuchun who has often appeared on stage dancing and singing foreign tunes，a song with strong Beijing flavor is a breath of fresh air.<\/p><p>__<u>73<\/u>__The fruit of her efforts was evident in her final song <i>If<\/i> <i>There<\/i> <i>Is<\/i> <i>Tomorrow<\/i>—a song in which Li Yuchun can be heard rapping for the first time.Li Yuchun sang more than 40 songs and didn’t perform an encore(加演的节目)．__<u>74<\/u>__“I didn’t prepare any encore songs.I think a concert should be a coherent process.I don’t like it to be too showy.”<\/p><p>__<u>75<\/u>__<\/p><p>A．Her first concert in Shanghai is the further proof.<\/p><p>B．She is gifted in singing from an early age.<\/p><p>C．It’s a song that combines pop music with traditional Peking Opera.<\/p><p>D．These are the reasons that fans like her：talent，sincere and charming.<\/p><p>E．The star trained very hard for the live performance.<\/p><p>F．She explains the reason for her decision.<\/p><p>G．It was a complete success.<\/p>",
-        "answer": "PRQUI9000461899及nbsp;及nbsp;及nbsp;及nbsp;"
-    }],
+        "score": "10.0",
+        "shitiAnalysis": "",
+        "shitiShow": "<p>在△<i>ABC<\/i>中，<i>BC<\/i>边上的高所在直线的方程为<i>x<\/i>－2<i>y<\/i>＋1＝0，∠<i>A<\/i>的平分线所在直线的方程为<i>y<\/i>＝0.若点<i>B<\/i>的坐标为（1，2），求：<\/p><p>（1）点<i>A<\/i>和点<i>C<\/i>的坐标；<\/p><p>（2）△<i>ABC<\/i>的面积．<\/p>",
+        "list": [],
+        "sourceId": "96218151-c43a-4336-80dd-e5b07b45fd4d",
+        "shitiAnswer": "<p>解：（1）由方程组<img style=\"max-width:100%\" src=\"http://www.cn901.com/html1/2020/05/06/10017/20003/AF078F8EA7/E9CFF155E2/69653DB464/PRQUI9001144353/PRQUI9001144353Answer.files/image047.jpg\"  style=\"vertical-align: middle;\" width=\"127\" height=\"58\"><\/p><p>解得点<i>A<\/i>（－1，0）．<\/p><p>又直线<i>AB<\/i>的斜率为<i>k<sub>AB<\/sub><\/i>＝1，且<i>x<\/i>轴是∠<i>A<\/i>的平分线，<\/p><p>故直线<i>AC<\/i>的斜率为－1，所以<i>AC<\/i>所在的直线方程为<i>y<\/i>＝－（<i>x<\/i>＋1）．<\/p><p>已知<i>BC<\/i>边上的高所在的直线方程为<i>x<\/i>－2<i>y<\/i>＋1＝0，<\/p><p>故直线<i>BC<\/i>的斜率为－2，故<i>BC<\/i>所在的直线方程为<i>y<\/i>－2＝－2（<i>x<\/i>－1）．<\/p><p>解方程组<img style=\"max-width:100%\" src=\"http://www.cn901.com/html1/2020/05/06/10017/20003/AF078F8EA7/E9CFF155E2/69653DB464/PRQUI9001144353/PRQUI9001144353Answer.files/image048.jpg\"  style=\"vertical-align: middle;\" width=\"187\" height=\"58\">得点<i>C<\/i>的坐标为（5，－6）．（2）因为<i>B<\/i>（1，2），<i>C<\/i>（5，－6），所以|<i>BC<\/i>|＝<img style=\"max-width:100%\" src=\"http://www.cn901.com/html1/2020/05/06/10017/20003/AF078F8EA7/E9CFF155E2/69653DB464/PRQUI9001144353/PRQUI9001144353Answer.files/image049.jpg\"  style=\"vertical-align: middle;\" width=\"213\" height=\"31\">＝4<img style=\"max-width:100%\" src=\"http://www.cn901.com/html1/2020/05/06/10017/20003/AF078F8EA7/E9CFF155E2/69653DB464/PRQUI9001144353/PRQUI9001144353Answer.files/image033.jpg\"  style=\"vertical-align: middle;\" width=\"27\" height=\"29\">，点<i>A<\/i>（－1，0）到直线<i>BC<\/i>：<i>y<\/i>－2＝－2（<i>x<\/i>－1）的距离为<i>d<\/i>＝<img style=\"max-width:100%\" src=\"http://www.cn901.com/html1/2020/05/06/10017/20003/AF078F8EA7/E9CFF155E2/69653DB464/PRQUI9001144353/PRQUI9001144353Answer.files/image050.jpg\"  style=\"vertical-align: middle;\" width=\"142\" height=\"52\">＝<img style=\"max-width:100%\" src=\"http://www.cn901.com/html1/2020/05/06/10017/20003/AF078F8EA7/E9CFF155E2/69653DB464/PRQUI9001144353/PRQUI9001144353Answer.files/image051.jpg\"  style=\"vertical-align: middle;\" width=\"29\" height=\"51\">，所以△<i>ABC<\/i>的面积为<img style=\"max-width:100%\" src=\"http://www.cn901.com/html1/2020/05/06/10017/20003/AF078F8EA7/E9CFF155E2/69653DB464/PRQUI9001144353/PRQUI9001144353Answer.files/image046.jpg\"  style=\"vertical-align: middle;\" width=\"14\" height=\"42\">×4<img style=\"max-width:100%\" src=\"http://www.cn901.com/html1/2020/05/06/10017/20003/AF078F8EA7/E9CFF155E2/69653DB464/PRQUI9001144353/PRQUI9001144353Answer.files/image033.jpg\"  style=\"vertical-align: middle;\" width=\"27\" height=\"29\">×<img style=\"max-width:100%\" src=\"http://www.cn901.com/html1/2020/05/06/10017/20003/AF078F8EA7/E9CFF155E2/69653DB464/PRQUI9001144353/PRQUI9001144353Answer.files/image051.jpg\"  style=\"vertical-align: middle;\" width=\"29\" height=\"51\">＝12.<\/p>",
+        "typeName": "解答题",
+        "stuScore": "5.0",
+        "num": "三、11",
+        "sourceName": "直线与直线的方程单元测试(2021-10-22)",
+        "avgScore": "4.0/10.0",
+        "errorQueNum": "",
+        "currentPage": "8",
+        "typeId": "60000056",
+        "stuAnswer": "A（-1,0）",
+        "smallQuestionNum": "",
+        "allPage": "28"
+    },
     "success": true
 })

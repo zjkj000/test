@@ -16,6 +16,8 @@ target 'NavigationDemo' do
 
   pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
 
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+
   target 'NavigationDemoTests' do
     inherit! :complete
     # Pods for testing

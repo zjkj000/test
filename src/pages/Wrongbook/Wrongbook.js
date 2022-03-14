@@ -63,7 +63,7 @@ export default Wrongbook = () => {
         
         // 页面跳转，传递参数subjectId
         navigation.navigate({
-            name:'错题本',
+            name:'WrongSee',
             params:{
                 subjectId:subjectId,
                 subjectName:subjectName
@@ -148,7 +148,6 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         display: 'flex',
         borderRadius: 10,
-        //elevation:1,
         backgroundColor: 'white'
 
     },
@@ -178,7 +177,6 @@ const styles = StyleSheet.create({
         width: '60%',
         margin: 0,
         padding: 0,
-
         borderTopLeftRadius: 10,
         borderBottomLeftRadius: 10,
         //backgroundColor:'green'
