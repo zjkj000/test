@@ -20,8 +20,6 @@ class WrongSubmitButton extends Component {
             subjectId: this.props.subjectId,
             basetypeId: this.props.basetypeId,
             value:''
-            
-        
         }
     }
     componentWillReceiveProps(nextProps) {
@@ -56,6 +54,7 @@ class WrongSubmitButton extends Component {
             Alert.alert('请输入答案')
         }
         else{
+            console.log('----------------')
             console.log(this.state.value)
             this.postData()
             this.props.setStuAnswer(this.state.value)

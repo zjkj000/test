@@ -35,6 +35,7 @@ export default class Answer_single extends Component {
  } 
    
  //用于将作答结果传给TODO界面
+    //答案处理
     stuAnswer(TimuIndex,str){
       console.log(this.state.numid+1,'题，第',TimuIndex+1,'小题选了什么',str)
       var newAnswer =  new Array();

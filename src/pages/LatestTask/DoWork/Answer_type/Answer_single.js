@@ -33,7 +33,7 @@ export default class Answer_single extends Component {
      //用于将本道题写的答案  传给 Todo页面，用于提交
      stuAnswer(str){
          this.setState({stu_answer:str})
-         this.props.getStu_answer(str)
+         this.props.getStu_answer(str)//改父组件回显
          this.props.getischange(true);
      }
 

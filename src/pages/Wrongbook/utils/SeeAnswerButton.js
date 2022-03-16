@@ -27,8 +27,6 @@ class SeeAnswerButton extends Component {
     }
     handleSubmit() {
         console.log('查看参考答案按钮')
-       
-
         this.props.setShow(false)
     }
 

@@ -15,12 +15,9 @@ import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
 import WrongSee from "../../pages/Wrongbook/WrongSee";
 import Wrongbook from "../../pages/Wrongbook/Wrongbook";
-<<<<<<< HEAD
 import WrongDetails from'../../pages/Wrongbook/WrongDetails';
-import WrongRecycleButton from "../../pages/Wrongbook/WrongRecycleButton";
-=======
-import WrongDetails from "../../pages/Wrongbook/wrongDetails";
->>>>>>> ebb1b4518b982a00b1a68be0fd2620c21a5379a9
+import WrongRecycleButtoContainer from "../../pages/Wrongbook/WrongRecycleButton";
+import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 
 const Stack = createStackNavigator();
 
@@ -91,7 +88,6 @@ export default class MainNavigation extends Component {
                         component={QRCodeScanner}
                     />
                 </Stack.Group>
-<<<<<<< HEAD
 
 
                 {/* 错题本模块的导航 */}
@@ -100,8 +96,17 @@ export default class MainNavigation extends Component {
                         component={WrongSee}
                         options={{
                             headerRight:() => (
-                                <WrongRecycleButton/>),
+                                <WrongRecycleButtoContainer />),
                             title: '错题本'
+                        }}
+                    />
+                    
+                    <Stack.Screen
+                        name="WrongRecycle"
+                        component={WrongRecycle}
+                        options={{
+                            
+                            title: '错题回收站'
                         }}
                     />
                     <Stack.Screen
@@ -116,16 +121,6 @@ export default class MainNavigation extends Component {
                         name="Wrongbook"
                         component={Wrongbook}
                     />
-=======
-                <Stack.Group>
-                    <Stack.Screen name="错题本" component={WrongSee} />
-                    <Stack.Screen name="Wrongbook" component={Wrongbook} />
-                    <Stack.Screen
-                        name="WrongDetails"
-                        component={WrongDetails}
-                    />
-                </Stack.Group>
->>>>>>> ebb1b4518b982a00b1a68be0fd2620c21a5379a9
             </Stack.Navigator>
         );
     }
