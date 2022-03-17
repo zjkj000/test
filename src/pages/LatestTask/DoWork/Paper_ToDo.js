@@ -30,7 +30,7 @@ export default function Paper_ToDo(props) {
   const [startdate,setstartdate]=useState('');   //记录总用时
   const [start_date,setstart_date]=useState(''); //记录每道题目用时
   const [date_arr,setdate_arr]=useState([]);
-  const [end_date,setend_date]=useState();
+  const [isallObj,setisallObj]= useState([])
 
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
@@ -67,11 +67,19 @@ export default function Paper_ToDo(props) {
       if(!success){
         http.get(data_url,data_params).then((resStr)=>{
             let data_resJson = JSON.parse(resStr);
+                let isallObjective =[];
+                data_resJson.data.map(
+                  function(item){
+                    isallObjective.push(item.baseTypeId)
+                  }
+                )
+                setisallObj(isallObjective)
                 setData(data_resJson.data);
                 setDataNum(data_resJson.data.length);
                 setSuccess(data_resJson.success)
           })
       }
+      
       //获取历史答案记录
       const oldAnswer_url = 
         "http://"+
@@ -86,7 +94,6 @@ export default function Paper_ToDo(props) {
       if(!oldStuAnswer_success){
           http.get(oldAnswer_url,oldAnswer_params).then((resStr)=>{
                 let oldAnswer_resJson = JSON.parse(resStr);
-                
                 if(oldAnswer_resJson.success)
                 {   //如果获取到数据！设置历史作答记录
                   var oldAnswerList=[];
@@ -108,12 +115,12 @@ export default function Paper_ToDo(props) {
       switch(Item.baseTypeId){
         //在调用题目  模板时，需要传入  sum代表总题数，   num代表当前题目索引，  datasource 代表该题数据
         //                            sum  选择传不传     num 选择传不传     datasource  必须传
-        case'101': return <Answer_singleContainer             submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]}  />;
-        case'102': return <Answer_multipleContainer           submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
-        case'103': return <Answer_judgementContainer          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
-        case'104': return <Answer_subjectiveContainer         submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
-        case'106': return <Answer_subjectiveContainer         submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
-        case'108': return <Answer_readContainer               submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
+        case'101': return <Answer_singleContainer       isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]}  />;
+        case'102': return <Answer_multipleContainer     isallObj={isallObj}       submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
+        case'103': return <Answer_judgementContainer    isallObj={isallObj}        submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
+        case'104': return <Answer_subjectiveContainer   isallObj={isallObj}       submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
+        case'106': return <Answer_subjectiveContainer   isallObj={isallObj}       submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
+        case'108': return <Answer_readContainer         isallObj={isallObj}         submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getischange={setischange}   getStu_answer={setStu_answer_i}  sum={dataNum} num={index} datasource={Item} oldAnswer_data={oldAnswerdata[index]} />;
         default  : return '';}
     }
     
@@ -131,7 +138,6 @@ export default function Paper_ToDo(props) {
 
     // 这个函数是为了提交学生的答案，  会先判断答案是否改变了  
     function Submit_Stu_answer(newindex,selectedIndex){
-
       var answerdate = 0;
       var nowdate = getDate();
       var startdatearr = start_date.split(':')
@@ -164,7 +170,7 @@ export default function Paper_ToDo(props) {
           "http://"+
           "www.cn901.net" +
           ":8111" +
-          "/AppServer/ajax/studentApp_getJobDetails.do"
+          "/AppServer/ajax/studentApp_saveAnswer.do"
         const submit_params ={
           learnPlanId :learnPlanId,
           stuId : 'ming6051',
@@ -172,11 +178,12 @@ export default function Paper_ToDo(props) {
           answer:Stu_answer[selectedIndex],
           answerTime: answerdate,
         }
-
-        //提交答案
-        // http.get(submit_url,submit_params).then((resStr)=>{
-        //   let submit_resJson = JSON.parse(resStr);
-        // })
+        // 提交答案
+        console.log(submit_url,submit_params)
+        http.get(submit_url,submit_params).then((resStr)=>{
+          let submit_resJson = JSON.parse(resStr);
+          console.log('我是TODO页面的提交函数，提交结果之后，接收到的服务器返回的是：',submit_resJson)
+        })
 
         //提交完之后把历史答案改了
         var newoldAnswerdata = oldAnswerdata;
@@ -197,7 +204,7 @@ export default function Paper_ToDo(props) {
 
   return (
     // shouldLoadComponent={shouldLoadComponent}
-    <ViewPager shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
+    <ViewPager style={{color:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
                   onSelect={index => Submit_Stu_answer(index,selectedIndex)}>  
   
           {/* 根据这套题的data使用map遍历加载 */}
@@ -227,10 +234,18 @@ export default function Paper_ToDo(props) {
                       if(newindex==dataNum){
                         //Toast.showInfoToast('已经是最后一题') 需要跳转到答题页面
                         Submit_Stu_answer(selectedIndex,selectedIndex);
-                        navigation.navigate('SubmitPaper',
-                        {paperId:learnPlanId,submit_status:status,
-                          startdate:startdate,papername:props.route.params.papername})
-                        //setselectedIndex(newindex)
+                        navigation.navigate(
+                          {
+                            name:"SubmitPaper", 
+                            params: {
+                                      paperId:learnPlanId,
+                                      submit_status:status,
+                                      startdate:startdate,
+                                      papername:props.route.params.papername,
+                                      isallObj:isallObj
+                                    },
+                            megre:true
+                          });
                       }else{
                         Submit_Stu_answer(newindex,selectedIndex);
                        

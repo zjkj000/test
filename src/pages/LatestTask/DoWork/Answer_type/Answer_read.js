@@ -28,6 +28,7 @@ export default function Answer_readContainer(props) {
                   getStu_answer={setStu_answer}  
                   sum={sum} 
                   num={num} 
+                  isallObj={props.isallObj}
                   datasource={datasource} 
                   oldAnswer_data={oldAnswer_data}   />
 )
@@ -57,7 +58,8 @@ class Answer_read extends Component {
             questionContent:'',   //题目内容
             answer:'',
             stu_answer:'',
-            oldStuAnswer:''
+            oldStuAnswer:'',
+            questionList:'A,B,C,D',
     }
  } 
    
@@ -80,6 +82,9 @@ class Answer_read extends Component {
      }
 
     UNSAFE_componentWillMount(){
+      if(this.props.datasource.baseTypeId=='七选五'){
+        this.setState({questionList:'A,B,C,D,E,F'})
+      }
       this.setState({
         stu_answer:this.props.oldAnswer_data?this.props.oldAnswer_data:'',
         oldStuAnswer:this.props.oldAnswer_data,
@@ -97,18 +102,20 @@ class Answer_read extends Component {
     var stu_answer_array = stu_answer.split(',');
     
     var items = [];
+
     for (var read_num_i = 0; read_num_i < questionChoiceList; read_num_i++) {
       items.push(
           <View key={read_num_i} style={styles.answer_result}>
             <Text style={{fontSize:20,width:25}}>{read_num_i+1}</Text>
-            <RadioList TimuIndex={read_num_i} checkedindexID={stu_answer_array[read_num_i]} ChoiceList={"A,B,C,D"} getstuanswer={this.stuAnswer} type='read'/>
+            <RadioList TimuIndex={read_num_i} checkedindexID={stu_answer_array[read_num_i]} ChoiceList={this.state.questionList} getstuanswer={this.stuAnswer} type='read'/>
           </View>);
     }
     return (
       <View>
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
-                <Text>{(this.state.numid?this.state.numid:0)+1}/{this.props.sum?this.props.sum:1}题 </Text>
+                <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
+                <Text>/{this.props.sum?this.props.sum:1}题 </Text>
                 <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
                 <TouchableOpacity  style={{position:'absolute',right:20}}
                                     onPress={
@@ -118,7 +125,8 @@ class Answer_read extends Component {
                                           {   paperId:this.props.paperId,
                                               submit_status:this.props.submit_status,
                                               startdate:this.props.startdate,
-                                              papername:this.props.papername})
+                                              papername:this.props.papername,
+                                              isallObj:this.props.isallObj})
                                       }
                                   }
                 >
@@ -141,7 +149,7 @@ class Answer_read extends Component {
                     </TouchableOpacity>
                     
                     {/* 答案滑动选择部分 */}
-                    <ScrollView style={{borderTopWidth:1,borderTopColor:'#000000',}}>
+                    <ScrollView style={{borderTopWidth:0.5,borderTopColor:'#000000',}}>
                         {/* item是根据题目中小题个数，动态加载的 */}
                         {items}
                         {/* 下面这个view是为了解决选项在最低端加载显示不全的问题，写个空白的区域，将最下面的顶上来 */}

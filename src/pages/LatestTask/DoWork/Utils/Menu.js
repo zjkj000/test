@@ -48,31 +48,17 @@ export default class Menu extends Component {
 
   render() {
 
-    //  forwardRef((props, ref) => {
-    //     const [form] = Form.useForm();
-    //     useImperativeHandle(ref, () => ({
-    //         myForm: form,
-    //     }));
-
       //根据试题个数动态的加载MenuItem的个数
       var MenuItem_number = [];
       for(let item_num=0;item_num<this.state.datanum;item_num++){
         MenuItem_number.push(
-            // <TouchableOpacity onPress={()=>{
-            //     alert('需要跳转',item_num)
-            //     console.log('点了题目导航的：',item_num)
-            // }}>
                             <MenuItem
                                 title={this.state.data[item_num].questionName}
                                 key={item_num}
                                 onPress={() => {
-                                    //需要用到导航，进行跳转
-                                    //nagevation.nagevite()
                                     this.props.getselectedindex(item_num)
                                     this.setState({ moduleVisible: false });
-                                    console.log('点了题目导航的：',this.props,item_num)
                                 }}/>
-            // </TouchableOpacity>
                                 )
       }
     return (

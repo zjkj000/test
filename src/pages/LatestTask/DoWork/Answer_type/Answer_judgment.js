@@ -28,6 +28,7 @@ export default function Answer_judgmentContainer(props) {
                     getStu_answer={setStu_answer}  
                     sum={sum} 
                     num={num} 
+                    isallObj={props.isallObj}
                     datasource={datasource} 
                     oldAnswer_data={oldAnswer_data}   />
   )
@@ -82,7 +83,9 @@ class Answer_judgment extends Component {
     <View>
         {/* 第一行显示 第几题  题目类型 */}
           <View  style={styles.answer_title}>
-              <Text>{(this.state.numid?this.state.numid:0)+1}/{this.props.sum?this.props.sum:1}题 </Text>
+              
+              <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
+              <Text>/{this.props.sum?this.props.sum:1}题 </Text>
               <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
               <TouchableOpacity style={{position:'absolute',right:20}}
                     // 小眼睛 先提交本题目，在跳转到提交页面
@@ -93,7 +96,8 @@ class Answer_judgment extends Component {
                           {   paperId:this.props.paperId,
                               submit_status:this.props.submit_status,
                               startdate:this.props.startdate,
-                              papername:this.props.papername})
+                              papername:this.props.papername,
+                              isallObj:this.props.isallObj})
                       }
                   }
                 >
@@ -119,5 +123,5 @@ class Answer_judgment extends Component {
 const styles = StyleSheet.create({
     answer_title:{padding:10,paddingLeft:30,flexDirection:'row'},
     answer_area:{height:"85%",padding:20},
-    answer_result:{borderTopWidth:1,borderTopColor:'#000000',paddingLeft:30,paddingTop:5,paddingBottom:5,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
+    answer_result:{borderTopWidth:0.5,borderTopColor:'#000000',paddingLeft:30,paddingTop:5,paddingBottom:5,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
 })

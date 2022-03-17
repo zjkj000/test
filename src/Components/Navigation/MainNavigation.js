@@ -4,12 +4,18 @@ import MyTabBar from "./TabBar";
 import Login from "../../pages/Login/Login";
 import PackagesPage from "../../pages/LatestTask/PackagesPage";
 import Todo from "../../pages/LatestTask/Todo";
-import InformOrNotice from "../../pages/LatestTask/InformOrNotice";
+import Inform from "../../pages/LatestTask/Inform";
+import Notice from "../../pages/LatestTask/Notice";
 
 import Menu from "../../pages/LatestTask/DoWork/Utils/Menu";
 import Paper_ToDo from "../../pages/LatestTask/DoWork/Paper_ToDo";
 import Paper_ShowCorrected from "../../pages/LatestTask/DoWork/Paper_ShowCorrected";
 import Paper_SubmitContainer from "../../pages/LatestTask/DoWork/Paper_Submit";
+import Learningguide_ToDo from "../../pages/LatestTask/LearningGuide/Learningguide_ToDo";
+import Learningguide_ShowCorrected from "../../pages/LatestTask/LearningGuide/Learningguide_ShowCorrected";
+import Learningguide_SubmitContainer from "../../pages/LatestTask/LearningGuide/Learningguide_Submit";
+
+
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
@@ -50,15 +56,13 @@ export default class MainNavigation extends Component {
                     }}
                 />
                 <Stack.Group>
-                    <Stack.Screen
-                        name="PackagesPage"
+                <Stack.Screen
+                        name="资料夹"
                         component={PackagesPage}
                     />
                     <Stack.Screen name="Todo" component={Todo} />
-                    <Stack.Screen
-                        name="InformOrNotice"
-                        component={InformOrNotice}
-                    />
+                    <Stack.Screen name="通知" component={Inform} />
+                    <Stack.Screen name="公告" component={Notice} />
                     <Stack.Screen
                         name="DoPaper"
                         component={Paper_ToDo}
@@ -71,6 +75,19 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="ShowCorrected"
                         component={Paper_ShowCorrected}
+                    />
+                    <Stack.Screen
+                        name="DoLearningGuide"
+                        component={Learningguide_ToDo}
+                       
+                    />
+                    <Stack.Screen
+                        name="SubmitLearningGuide"
+                        component={Learningguide_SubmitContainer}
+                    />
+                    <Stack.Screen
+                        name="ShowCorrected_LearningGuide"
+                        component={Learningguide_ShowCorrected}
                     />
                     
                 </Stack.Group>
