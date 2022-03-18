@@ -52,6 +52,9 @@ export default class http {
             if (params) {
                 url = url + "?" + query;
             }
+            // console.log("====================================");
+            // console.log(url);
+            // console.log("====================================");
             url = encodeURI(url);
             res = await axios.get(url);
             return res;

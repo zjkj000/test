@@ -14,13 +14,12 @@ import Learningguide_ToDo from "../../pages/LatestTask/LearningGuide/Learninggui
 import Learningguide_ShowCorrected from "../../pages/LatestTask/LearningGuide/Learningguide_ShowCorrected";
 import Learningguide_SubmitContainer from "../../pages/LatestTask/LearningGuide/Learningguide_Submit";
 
-
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
 import WrongSee from "../../pages/Wrongbook/WrongSee";
 import Wrongbook from "../../pages/Wrongbook/Wrongbook";
-import WrongDetails from '../../pages/Wrongbook/wrongDetails';
+import WrongDetails from "../../pages/Wrongbook/wrongDetails";
 import WrongRecycleButtoContainer from "../../pages/Wrongbook/WrongRecycleButton";
 import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 
@@ -57,18 +56,11 @@ export default class MainNavigation extends Component {
                     }}
                 />
                 <Stack.Group>
-                <Stack.Screen
-                        name="资料夹"
-                        component={PackagesPage}
-                    />
+                    <Stack.Screen name="资料夹" component={PackagesPage} />
                     <Stack.Screen name="Todo" component={Todo} />
                     <Stack.Screen name="通知" component={Inform} />
                     <Stack.Screen name="公告" component={Notice} />
-                    <Stack.Screen
-                        name="DoPaper"
-                        component={Paper_ToDo}
-                       
-                    />
+                    <Stack.Screen name="DoPaper" component={Paper_ToDo} />
                     <Stack.Screen
                         name="SubmitPaper"
                         component={Paper_SubmitContainer}
@@ -80,7 +72,6 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="DoLearningGuide"
                         component={Learningguide_ToDo}
-                       
                     />
                     <Stack.Screen
                         name="SubmitLearningGuide"
@@ -90,7 +81,6 @@ export default class MainNavigation extends Component {
                         name="ShowCorrected_LearningGuide"
                         component={Learningguide_ShowCorrected}
                     />
-                    
                 </Stack.Group>
 
                 {/* 在线课堂 */}
@@ -112,38 +102,31 @@ export default class MainNavigation extends Component {
                     />
                 </Stack.Group>
 
-
                 {/* 错题本模块的导航 */}
-                    <Stack.Screen
-                        name="WrongSee"
-                        component={WrongSee}
-                        options={{
-                            headerRight:() => (
-                                <WrongRecycleButtoContainer />),
-                            title: '错题本'
-                        }}
-                    />
-                    
-                    <Stack.Screen
-                        name="WrongRecycle"
-                        component={WrongRecycle}
-                        options={{
-                            
-                            title: '错题回收站'
-                        }}
-                    />
-                    <Stack.Screen
-                        name="WrongDetails"
-                        component={WrongDetails}
-                        options={{
-                            
-                            title: '错题详情'
-                        }}
-                    />
-                    <Stack.Screen
-                        name="Wrongbook"
-                        component={Wrongbook}
-                    />
+                <Stack.Screen
+                    name="WrongSee"
+                    component={WrongSee}
+                    options={{
+                        headerRight: () => <WrongRecycleButtoContainer />,
+                        title: "错题本",
+                    }}
+                />
+
+                <Stack.Screen
+                    name="WrongRecycle"
+                    component={WrongRecycle}
+                    options={{
+                        title: "错题回收站",
+                    }}
+                />
+                <Stack.Screen
+                    name="WrongDetails"
+                    component={WrongDetails}
+                    options={{
+                        title: "错题详情",
+                    }}
+                />
+                <Stack.Screen name="Wrongbook" component={Wrongbook} />
             </Stack.Navigator>
         );
     }

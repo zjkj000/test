@@ -130,7 +130,6 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         backgroundColor: "#E6DDD6",
-        padding: 10,
         alignItems: "center",
     },
 });

@@ -10,8 +10,8 @@ import {
 import http from "../../../utils/http/request";
 import RenderHTML from "react-native-render-html";
 import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
-import Answer_single from "./Answer_type/Answer_single";
-import RadioList from "./Utils/RadioList";
+import RadioList from "../../LatestTask/DoWork/Utils/RadioList";
+import Checkbox from "../../LatestTask/DoWork/Utils/Checkbox";
 import {
     Button,
     Layout,
@@ -22,7 +22,6 @@ import {
 } from "@ui-kitten/components";
 import { styles } from "../styles";
 import Toast from "../../../utils/Toast/Toast";
-import Checkbox from "./Utils/Checkbox";
 import HTMLView from "react-native-htmlview";
 import { Icon } from "react-native-elements";
 import ImageHandler from "../../../utils/Camera/Camera";
@@ -40,11 +39,75 @@ export default class LockedPage extends Component {
             visible: false,
             msg: "",
             moduleVisible: false,
+            answer: "",
+            showSideBox: false,
         };
     }
     componentDidMount() {
         this.getHTML();
     }
+    setAnswer = (str) => {
+        this.setState({ answer: str });
+    };
+    handleSubmit = () => {
+        const { messageList, ipAddress, userName, introduction } = this.props;
+        const event = messageList[0];
+        const { period } = event;
+        let myDate = new Date();
+        let dateString =
+            myDate.getFullYear() +
+            "-" +
+            myDate.getMonth() +
+            "-" +
+            myDate.getDate() +
+            " " +
+            myDate.getHours() +
+            ":" +
+            myDate.getMinutes() +
+            ":" +
+            myDate.getSeconds();
+        console.log(event);
+        let url =
+            "http://" +
+            ipAddress +
+            ":8901" +
+            "/KeTangServer/ajax/ketang_saveStuAnswerFromApp.do";
+        console.log(event.learnPlanId);
+        let params = {
+            userName: userName,
+            realName: introduction,
+            learnPlanId: event.learnPlanId,
+            interactionType: period.questionType,
+            questionScore: period.questionScore,
+            resourceID: period.resourceId,
+            questionAnswer: period.questionAnswerStr
+                ? period.questionAnswerStr
+                : "",
+            content: this.state.answer,
+            learnPlanName: "",
+            answerTime: event.desc,
+        };
+        http.get(url, params)
+            .then((resStr) => {
+                console.log(params);
+                // console.log("====================================");
+                // console.log(resStr);
+                // console.log("====================================");
+                resJson = JSON.parse(resStr);
+                if (resJson.status === "success") {
+                    Toast.showSuccessToast("提交成功");
+                } else {
+                    Toast.showDangerToast(resJson.message);
+                }
+            })
+            .catch((error) => {
+                console.log("====================================");
+                console.log(error);
+                console.log("====================================");
+                Toast.showDangerToast("提交失败");
+            });
+        // Toast.showInfoToast(this.state.answer);
+    };
     getHTML = () => {
         const { messageList, ipAddress } = this.props;
         const event = messageList[0];
@@ -136,10 +199,20 @@ export default class LockedPage extends Component {
                         />
                     </OverflowMenu>
                     <Button
-                        title="保存"
-                        onPress={() => alert("点了保存")}
-                        style={{ width: 100, height: 35 }}
-                    ></Button>
+                        onPress={() => {
+                            let newanswer = this.state.msg;
+                            newanswer += this.state.msg;
+                            this.setState({ textinputAnswer: "" });
+                            this.setAnswer(newanswer);
+                        }}
+                        style={{
+                            width: 100,
+                            height: "35%",
+                            backgroundColor: "#59B9E0",
+                        }}
+                    >
+                        保存
+                    </Button>
                 </View>
             </View>
         );
@@ -149,10 +222,22 @@ export default class LockedPage extends Component {
         const { messageList } = this.props;
         const event = messageList[0];
         const { period } = event;
-        let optionBar = <RadioList ChoiceList={period.questionValueList} />;
-        if (period.questionTypeName === "多项选择题") {
-            optionBar = <Checkbox ChoiceList={period.questionValueList} />;
-        } else if (period.questionTypeName === "填空题") {
+        let optionBar = (
+            <RadioList
+                checkedindexID={this.state.answer}
+                getstuanswer={this.setAnswer}
+                ChoiceList={period.questionValueList}
+            />
+        );
+        if (period.questionType === 2) {
+            optionBar = (
+                <Checkbox
+                    checkedlist={this.state.answer}
+                    getstuanswer={this.setAnswer}
+                    ChoiceList={period.questionValueList}
+                />
+            );
+        } else if (period.questionType === 3 || period.questionType === 5) {
             optionBar = this.renderInputArea();
         }
         return optionBar;
@@ -188,7 +273,7 @@ export default class LockedPage extends Component {
                         <Text>{introduction + "(" + userName + ")"}</Text>
                     </Layout>
                     <Layout style={styles.header_right}>
-                        <Button>提交</Button>
+                        <Button onPress={this.handleSubmit}>提交</Button>
                     </Layout>
                 </Layout>
                 <Layout style={styles.body}>
@@ -196,12 +281,13 @@ export default class LockedPage extends Component {
                         <HTMLView value={this.state.html.html} />
                     </ScrollView>
                 </Layout>
+
                 <Layout style={styles.bottom}>{this.renderOption()}</Layout>
 
                 <Modal
                     visible={this.state.visible}
                     backdropStyle={styles.backdrop}
-                    onBackdropPress={() => this.setVisible(false)}
+                    onBackdropPress={() => this.setState({ visible: false })}
                 >
                     <Card disabled={true}>
                         <Image
