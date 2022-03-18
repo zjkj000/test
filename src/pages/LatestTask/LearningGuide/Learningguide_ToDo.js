@@ -222,10 +222,10 @@ export default function Paper_ToDo(props) {
         }
         // 提交答案
         console.log(submit_url,submit_params)
-        http.get(submit_url,submit_params).then((resStr)=>{
-          let submit_resJson = JSON.parse(resStr);
-          console.log('我是导学案TODO页面的提交函数，提交结果之后，接收到的服务器返回的是：',submit_resJson)
-        })
+        // http.get(submit_url,submit_params).then((resStr)=>{
+        //   let submit_resJson = JSON.parse(resStr);
+        //   console.log('我是导学案TODO页面的提交函数，提交结果之后，接收到的服务器返回的是：',submit_resJson)
+        // })
 
         //提交完之后把历史答案改了
         var newoldAnswerdata = oldAnswerdata;
