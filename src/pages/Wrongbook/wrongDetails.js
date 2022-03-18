@@ -17,7 +17,8 @@ import { useNavigation } from "@react-navigation/native";
 import WrongSubmitButton from "./utils/WrongSubmitButton";
 import SeeAnswerButton from "./utils/SeeAnswerButton";
 import ShowAnswerContainer from "./utils/ShowAnswer";
-
+import RadioList from "../LatestTask/DoWork/Utils/RadioList";
+import Checkbox from "../LatestTask/DoWork/Utils/Checkbox";
 
 
 export default WrongDetails = () => {
@@ -31,6 +32,7 @@ export default WrongDetails = () => {
     const subjectId = route.params.subjectId
     const sourceId = route.params.sourceId
     const questionId = route.params.questionId
+    
 
     //初始化props
     const [data, setData] = useState([])
@@ -38,8 +40,12 @@ export default WrongDetails = () => {
     const [currentPage, setCurrentpage] = useState(route.params.currentPage)
     const [show, setShow] = useState(true)
     const [basetypeId, setBasetypeId] = useState(0)
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState('')
+    const [index, setIndex] = useState('')
+    const [newAnswer,setNewAnswer] =  useState([])
     const [stuAnswer, setStuAnswer] = useState('')
+    
+
 
 
     //设置导航
@@ -51,6 +57,7 @@ export default WrongDetails = () => {
         navigation.setOptions({ title: subjectName + '错题详情' })
         getData()
     }, [currentPage])
+
     //请求数据
     const getData = () => {
         setValue('')
@@ -81,6 +88,7 @@ export default WrongDetails = () => {
             .catch(err => console.log('Request Failed', err))
 
     }
+
     //匹配错题类型加载图片
     const handleImg = (sourceType) => {
         switch (sourceType) {
@@ -88,31 +96,129 @@ export default WrongDetails = () => {
             case '2': return <Image source={require('../../assets/LatestTaskImages/homework.png')} style={styles.Img} />
         }
     }
+    
     //根据题目类型匹配答题区域组件
     const handleAnswerClass = (basetypeId) => {
+        
+        //单多选判断个数
+        if (data.baseTypeId == '101' || data.baseTypeId == '102') {
+            switch (data.answerNum) {
+                case '3': var questionChoiceList = 'A,B,C'
+                    break;
+                case '4': var questionChoiceList = 'A,B,C,D'
+                    break;
+                case '5': var questionChoiceList = 'A,B,C,D,E'
+                    break;
+                case '6': var questionChoiceList = 'A,B,C,D,E,F'
+                    break;
+                case '7': var questionChoiceList = 'A,B,C,D,E,F,G'
+                    break;
+                case '8': var questionChoiceList = 'A,B,C,D,E,F,G,H'
+                    break;
+            }
+        }
+
+        //阅读题根据题数渲染出多少个单选列表
+        if (basetypeId == '108') {
+            
+            //处理返回的单个答案组整一个数组
+            const Answer = (index , value) => {
+                setIndex(index)
+                setValue(value)
+                const clone = newAnswer
+                clone[index] = value
+                setNewAnswer(clone)
+                
+                console.log(newAnswer)
+            }
+            var items = [];
+            for (var read_num_i = 0; read_num_i < data.smallQuestionNum; read_num_i++) {
+                items.push(
+                    <View key={read_num_i} style={styles.answer_result}>
+                        <Text style={{ fontSize: 20, width: 25 }}>{read_num_i + 1}</Text>
+                        <RadioList 
+                            TimuIndex={read_num_i} 
+                            checkedindexID={''} 
+                            ChoiceList={"A,B,C,D"} 
+                            getstuanswer={Answer} type='read' />
+                    </View>);
+            }
+        }
+
+        //根据题目类型匹配答题区域组件
         switch (basetypeId) {
-            case '104': return (<View style={styles.answerIput}>
-                                    <TextInput
-                                            style={styles.TextInput}
-                                            placeholder='请输入答案'
-                                            value={value}
-                                            onChangeText={text => setValue(text)}
-                                    />
-                                </View>)
+            //单选题答题组件
+            case '101': return (
+                <View style={styles.answerIput}>
+                    <View>
+                        <Text>请选择答案：</Text>
+                    </View>
+                    <RadioList
+                        checkedindexID={''}
+                        ChoiceList={questionChoiceList}
+                        getstuanswer={setValue}
+                    />
+                </View>)
+            case '102': return (
+                <View style={styles.answerIput}>
+                    <View>
+                        <Text>请选择答案：</Text>
+                    </View>
+                    <Checkbox
+                        checkedlist={''}
+                        ChoiceList={questionChoiceList}
+                        getstuanswer={setValue}
+                    />
+                </View>)
+
+            //判断题答题组件
+            case '103': return (
+                <View style={styles.answerIput}>
+                    <View>
+                        <Text>请选择答案：</Text>
+                    </View>
+                    <RadioList
+                        checkedindexID={''}
+                        ChoiceList={'对,错'}
+                        getstuanswer={setValue}
+                    />
+                </View>
+
+            )
+            //填空题答题组件
+            case '104': return (
+                <View style={styles.answerIput}>
+                    <TextInput
+                        style={styles.TextInput}
+                        placeholder='请输入答案'
+                        value={value}
+                        onChangeText={text => setValue(text)}
+                    />
+                </View>)
+
+            case '108': return (
+                <View style={styles.answerIput}>
+                    <View>
+                        <Text>请选择答案：</Text>
+                    </View>
+                    {items}
+                </View>)
+
 
 
         }
     }
+
     //匹配底部按钮类型
     const handleClass = (basetypeId) => {
         switch (basetypeId) {
-            case '101': return <WrongSubmitButton questionId={questionId} sourceId={sourceId} subjectId={subjectId} basetypeId={basetypeId} setShow={setShow} />
-            case '102': return <WrongSubmitButton questionId={questionId} sourceId={sourceId} subjectId={subjectId} basetypeId={basetypeId} setShow={setShow} />
-            case '103': return <WrongSubmitButton questionId={questionId} sourceId={sourceId} subjectId={subjectId} basetypeId={basetypeId} setShow={setShow} />
+            case '101': return <WrongSubmitButton questionId={questionId} sourceId={sourceId} subjectId={subjectId} basetypeId={basetypeId} setShow={setShow} setStuAnswer={setStuAnswer} value={value} />
+            case '102': return <WrongSubmitButton questionId={questionId} sourceId={sourceId} subjectId={subjectId} basetypeId={basetypeId} setShow={setShow} setStuAnswer={setStuAnswer} value={value} />
+            case '103': return <WrongSubmitButton questionId={questionId} sourceId={sourceId} subjectId={subjectId} basetypeId={basetypeId} setShow={setShow} setStuAnswer={setStuAnswer} value={value} />
             case '104': return <WrongSubmitButton questionId={questionId} sourceId={sourceId} subjectId={subjectId} basetypeId={basetypeId} setShow={setShow} setStuAnswer={setStuAnswer} value={value} />
-
+            //主观题仅查看答案
             case '106': return <SeeAnswerButton questionId={questionId} sourceId={sourceId} subjectId={subjectId} basetypeId={basetypeId} setShow={setShow} />
-            case '108': return <SeeAnswerButton questionId={questionId} sourceId={sourceId} subjectId={subjectId} basetypeId={basetypeId} setShow={setShow} />
+            case '108': return <WrongSubmitButton questionId={questionId} sourceId={sourceId} subjectId={subjectId} basetypeId={basetypeId} setShow={setShow} setStuAnswer={setStuAnswer} value={JSON.stringify(newAnswer)} />
 
         }
     }
@@ -120,7 +226,7 @@ export default WrongDetails = () => {
     //设置图片加载宽度
     const { width } = useWindowDimensions();
 
-    //点击左右箭头重新提交请求
+    //点击左箭头重新提交请求
     const handleLeft = (currentPage) => {
         let temp = parseInt(currentPage)
         if (temp != 1) {
@@ -132,6 +238,8 @@ export default WrongDetails = () => {
             Alert.alert('已经是第一道题了')
         }
     }
+
+    //点击右箭头重新提交请求
     const handleRight = (currentPage) => {
         let temp = parseInt(currentPage)
         if (temp != data.allPage) {
@@ -144,6 +252,7 @@ export default WrongDetails = () => {
         }
     }
 
+    
 
     return (
         <>
@@ -184,10 +293,10 @@ export default WrongDetails = () => {
                 {show
                     ? handleClass(basetypeId)
                     : <ShowAnswerContainer
-                            shitiAnswer={data.shitiAnswer}
-                            shitiAnalysis={data.shitiAnalysis}
-                            stuAnswer={stuAnswer}
-                            basetypeId={basetypeId} />
+                        shitiAnswer={data.shitiAnswer}
+                        shitiAnalysis={data.shitiAnalysis}
+                        stuAnswer={stuAnswer}
+                        basetypeId={basetypeId} />
                 }
 
             </ScrollView>
@@ -222,7 +331,7 @@ export default WrongDetails = () => {
 }
 
 
-//css
+//css样式
 const styles = StyleSheet.create({
     Loading: {
         flex: 1,
@@ -312,6 +421,12 @@ const styles = StyleSheet.create({
     },
     TextInput: {
         borderBottomWidth: 0.5,
+    },
+    answer_result:{
+        flexDirection:'row',
+        justifyContent:'center',
+        paddingLeft:20,
+        alignItems:'center'
     },
 
     //字体

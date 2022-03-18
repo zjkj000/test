@@ -7,7 +7,6 @@ import Todo from "../../pages/LatestTask/Todo";
 import Inform from "../../pages/LatestTask/Inform";
 import Notice from "../../pages/LatestTask/Notice";
 
-import Menu from "../../pages/LatestTask/DoWork/Utils/Menu";
 import Paper_ToDo from "../../pages/LatestTask/DoWork/Paper_ToDo";
 import Paper_ShowCorrected from "../../pages/LatestTask/DoWork/Paper_ShowCorrected";
 import Paper_SubmitContainer from "../../pages/LatestTask/DoWork/Paper_Submit";
@@ -21,7 +20,9 @@ import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
 import WrongSee from "../../pages/Wrongbook/WrongSee";
 import Wrongbook from "../../pages/Wrongbook/Wrongbook";
-import WrongDetails from "../../pages/Wrongbook/wrongDetails";
+import WrongDetails from '../../pages/Wrongbook/wrongDetails';
+import WrongRecycleButtoContainer from "../../pages/Wrongbook/WrongRecycleButton";
+import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 
 const Stack = createStackNavigator();
 
@@ -110,14 +111,39 @@ export default class MainNavigation extends Component {
                         component={QRCodeScanner}
                     />
                 </Stack.Group>
-                <Stack.Group>
-                    <Stack.Screen name="错题本" component={WrongSee} />
-                    <Stack.Screen name="Wrongbook" component={Wrongbook} />
+
+
+                {/* 错题本模块的导航 */}
+                    <Stack.Screen
+                        name="WrongSee"
+                        component={WrongSee}
+                        options={{
+                            headerRight:() => (
+                                <WrongRecycleButtoContainer />),
+                            title: '错题本'
+                        }}
+                    />
+                    
+                    <Stack.Screen
+                        name="WrongRecycle"
+                        component={WrongRecycle}
+                        options={{
+                            
+                            title: '错题回收站'
+                        }}
+                    />
                     <Stack.Screen
                         name="WrongDetails"
                         component={WrongDetails}
+                        options={{
+                            
+                            title: '错题详情'
+                        }}
                     />
-                </Stack.Group>
+                    <Stack.Screen
+                        name="Wrongbook"
+                        component={Wrongbook}
+                    />
             </Stack.Navigator>
         );
     }

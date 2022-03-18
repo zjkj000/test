@@ -8,15 +8,34 @@ import {
     Alert,
     Text
 } from "react-native";
+import { useNavigation } from "@react-navigation/native";
+import '../../utils/global/wrongBook'
+import CustomModal from '../../utils/Alert_yesno/CustomModal'
 
+export default function WrongRecycleButtoContainer() {
+    const navigation = useNavigation()
+    return (
+       <WrongRecycleButton navigation={navigation}/>
+    )
+}
 class WrongRecycleButton extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            modalVisibility : false,
+        }
     }
-    handleRecycle = () => {
-        Alert.alert('错题回收站还未开放')
+  
+    
+    handleRecycle(){
+        
+        this.props.navigation.navigate({
+            name:'WrongRecycle',
+        })
     }
+    
     render() {
+        
         return (
             
                 <TouchableOpacity onPress={() => this.handleRecycle()}>
@@ -30,7 +49,7 @@ class WrongRecycleButton extends Component {
         )
     }
 }
-export default WrongRecycleButton;
+
 
 const styles = StyleSheet.create({
     Image: {

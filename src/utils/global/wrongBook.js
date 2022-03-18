@@ -1,0 +1,5 @@
+global.wrongBook = {
+    
+    subjsubjectName:'',
+    subjectId:'',
+}

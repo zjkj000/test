@@ -2,13 +2,11 @@ import { convertStringArrayToDate } from "antd-mobile/es/components/date-picker/
 import React, { Component, useState, useEffect, useRef } from "react";
 import {
     View,
-    Button,
     StyleSheet,
-    TouchableOpacity,
     Image,
     useWindowDimensions,
     Alert,
-    Text
+    Text,
 } from "react-native";
 import RenderHtml from 'react-native-render-html';
 
@@ -32,32 +30,99 @@ class ShowAnswer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            token: global.constants.token,
-            userName: global.constants.userName,
-            ip: global.constants.baseUrl,
             basetypeId: this.props.basetypeId,
             shitiAnswer: this.props.shitiAnswer,
             stuAnswer: this.props.stuAnswer,
             width: this.props.width,
-            basetypeId: this.props.basetypeId,
             shitiAnalysis: this.props.shitiAnalysis
         }
 
     }
+    //随时更新键盘输入值
     componentWillReceiveProps(nextProps) {
         this.setState({
             stuAnswer: nextProps.stuAnswer
         });
     }
-  
-    render() {
-        if (this.state.shitiAnswer == "") {
-            this.setState({
-                shitiAnswer: '无'
-            })
-        }
+    //解析的显隐控制
+    handleAnalysis() {
+        return (
+            <View style={styles.class_content}>
+                <View style={styles.class_content_title}>
+                    <Text>【解析】</Text>
+                </View>
 
+                <View style={styles.class_content_con}>
+                    <RenderHtml
+                        contentWidth={this.props.width - 6}
+                        source={{ html: this.state.shitiAnalysis }}
+                    />
+                </View>
+            </View>
+        )
+    }
+    render() {
         switch (this.state.basetypeId) {
+            case '101': return (
+                <View style={styles.container}>
+                    <View style={styles.class_content}>
+                        {/* 参考答案及你的答案 */}
+                        <View style={styles.class_chiose}>
+                            <View style={styles.class_chiose}>
+                                <Text>【参考答案】</Text>
+                                <View><Text>{this.state.shitiAnswer}</Text></View>
+                            </View>
+                            <View style={styles.class_chiose}>
+                                <Text>【你的作答】</Text>
+                                <View><Text>{this.state.stuAnswer}</Text></View>
+                            </View>
+                        </View>
+                        {/* 解析 */}
+                        {this.state.shitiAnalysis == "" ? null : this.handleAnalysis()}
+
+                    </View>
+                </View>)
+
+            case '102': return (
+                <View style={styles.container}>
+                    <View style={styles.class_content}>
+                        {/* 参考答案及你的答案 */}
+                        <View style={styles.class_chiose}>
+                            <View style={styles.class_chiose}>
+                                <Text>【参考答案】</Text>
+                                <View><Text>{this.state.shitiAnswer}</Text></View>
+                            </View>
+                            <View style={styles.class_chiose}>
+                                <Text>【你的作答】</Text>
+                                <View><Text>{this.state.stuAnswer}</Text></View>
+                            </View>
+                        </View>
+                        {/* 解析 */}
+                        {this.state.shitiAnalysis == "" ? null : this.handleAnalysis()}
+
+                    </View>
+                </View>)
+                
+            case '103': return (
+                <View style={styles.container}>
+                    <View style={styles.class_content}>
+                        {/* 参考答案及你的答案 */}
+                        <View style={styles.class_chiose}>
+                            <View style={styles.class_chiose}>
+                                <Text>【参考答案】</Text>
+                                <View><Text>{this.state.shitiAnswer}</Text></View>
+                            </View>
+                            <View style={styles.class_chiose}>
+                                <Text>【你的作答】</Text>
+                                <View><Text>{this.state.stuAnswer}</Text></View>
+                            </View>
+                        </View>
+                        {/* 解析 */}
+                        {this.state.shitiAnalysis == "" ? null : this.handleAnalysis()}
+
+                    </View>
+                </View>)
+
             case '104': return (
                 <View style={styles.container}>
                     {/* 参考答案部分 */}
@@ -87,6 +152,7 @@ class ShowAnswer extends Component {
                         </View>
                     </View>
                 </View>)
+
             case '106': return (
                 <View style={styles.container}>
                     {/* 参考答案部分 */}
@@ -116,6 +182,7 @@ class ShowAnswer extends Component {
                         </View>
                     </View>
                 </View>)
+
             case '108': return (
                 <View style={styles.container}>
                     {/* 参考答案部分 */}
@@ -147,36 +214,6 @@ class ShowAnswer extends Component {
                 </View>)
 
         }
-        // return (
-        //     <View style={styles.container}>
-        //         {/* 参考答案部分 */}
-        //         <View style={styles.class_content}>
-        //             <View style={styles.class_content_title}>
-        //                 <Text>【参考答案】</Text>
-        //             </View>
-
-        //             <View style={styles.class_content_con}>
-        //                 <RenderHtml
-        //                     contentWidth={this.props.width - 6}
-        //                     source={{ html: this.state.shitiAnswer }}
-        //                 />
-        //             </View>
-        //         </View>
-        //         {/* 你的作业作答部分 */}
-        //         <View style={styles.class_content}>
-        //             <View style={styles.class_content_title}>
-        //                 <Text>【你的作业作答】</Text>
-        //             </View>
-
-        //             <View style={styles.class_content_con}>
-        //                 <RenderHtml
-        //                     contentWidth={this.props.width - 6}
-        //                     source={{ html: this.state.stuAnswer }}
-        //                 />
-        //             </View>
-        //         </View>
-        //     </View>
-        // )
     }
 }
 
@@ -189,6 +226,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         backgroundColor: 'white',
     },
+
     class_content_title: {
         flex: 1,
         flexDirection: 'row',
@@ -201,6 +239,11 @@ const styles = StyleSheet.create({
         borderColor: '#696969',
         borderWidth: 1,
         margin: 3,
+    },
+    class_chiose: {
+        flex: 1,
+        flexDirection: 'row',
+
     },
     //字体
 
