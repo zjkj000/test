@@ -100,7 +100,7 @@ export default class LockedPage extends Component {
                 <View style={styles.inputArea}>
                     <Text
                         onPress={() => this.setState({ msg: "" })}
-                        style={{ color: "#B68459", flex: 1 }}
+                        style={{ color: "#B68459" }}
                     >
                         删除
                     </Text>
@@ -108,7 +108,7 @@ export default class LockedPage extends Component {
                         placeholder="请输入答案！"
                         multiline
                         style={{
-                            flex: 5,
+                            width: 500,
                             backgroundColor: "#FFFFFF",
                             height: 40,
                         }}
@@ -138,7 +138,7 @@ export default class LockedPage extends Component {
                     <Button
                         title="保存"
                         onPress={() => alert("点了保存")}
-                        style={{ height: 35, flex: 1 }}
+                        style={{ width: 100, height: 35 }}
                     ></Button>
                 </View>
             </View>
