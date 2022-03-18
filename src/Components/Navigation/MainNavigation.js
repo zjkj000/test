@@ -6,6 +6,9 @@ import PackagesPage from "../../pages/LatestTask/PackagesPage";
 import Todo from "../../pages/LatestTask/Todo";
 import Inform from "../../pages/LatestTask/Inform";
 import Notice from "../../pages/LatestTask/Notice";
+import Videos from "../../pages/LatestTask/Resource/Videos";
+import Voice from "../../pages/LatestTask/Resource/Voice";
+import PptRescouce from "../../pages/LatestTask/Resource/PptResource"
 
 import Menu from "../../pages/LatestTask/DoWork/Utils/Menu";
 import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
@@ -57,6 +60,9 @@ export default class MainNavigation extends Component {
                     <Stack.Screen name="Todo" component={Todo} />
                     <Stack.Screen name="通知" component={Inform} />
                     <Stack.Screen name="公告" component={Notice} />
+                    <Stack.Screen name="视频" component={Videos} />
+                    <Stack.Screen name="音频" component={Voice} />
+                    <Stack.Screen name="PPT" component={PptRescouce} />
                     <Stack.Screen
                         name="DoPaper"
                         component={ViewPager_ToDo}

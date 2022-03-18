@@ -98,16 +98,49 @@ class TodoList extends React.Component {
                                                 style={styles.imgStatus}
                                             />
                 );
-        }else{
+        }else if(todo.type == '作业'){
             /*todo.type == '作业'或导学案时，从路由导航中接收参数，参数应该包括作业ID（learnId）以及状态（是否提交？）
              * 若todo.learnId == learnId && 状态为已提交，则状态图标需要修改为“绿色”
                 如何触发该组件重新渲染页面数据呢？
                     做完作业点提交时将路由切换到当前组件会使得该组件重新渲染？
             */
-            return (<Image
-                source={statusImg}
-                style={styles.imgStatus}
-            />);
+           //console.log(this.props.navigation.getState().routes[2].params);
+           //做完作业提交this.props.navigation.navigate("Home" , {learnId: , status: })
+            // const paramsData =  this.props.navigation.getState().routes[2].params;
+            // const changeLearnId = paramsData.learnId ? paramsData.learnId : '';
+            // const changeStatus = paramsData.status ? paramsData : '';
+            // return (
+            //         (todo.learnId == changeLearnId && changeStatus == 3) ? //status==3未批改
+            //                 <Image
+            //                     source={"../../assets/LatestTaskImages/noCheck.png"}  
+            //                     style={styles.imgStatus}
+            //                 />
+            //                 : (todo.learnId == changeLearnId && changeStatus == 2) ? //status==2已批改
+            //                 <Image
+            //                     source={"../../assets/LatestTaskImages/hasCheck.png"}  
+            //                     style={styles.imgStatus}
+            //                 />
+            //                 : 
+            //                 <Image
+            //                     source={statusImg}  //初始的状态图标(未提交时，点导航返回按钮)
+            //                     style={styles.imgStatus}
+            //                 />
+            //     );
+
+           
+            return (
+                <Image
+                    source={statusImg}
+                    style={styles.imgStatus}
+                />
+            );
+        }else{
+            return (
+                <Image
+                    source={statusImg}
+                    style={styles.imgStatus}
+                />
+            );
         }
     };
 
@@ -184,7 +217,8 @@ class TodoList extends React.Component {
         const { errorInfo } = this.state.errorInfo;
         return (
             <View style={styles.container}>
-                <Text>{this.state.message}</Text>
+                <Text>Fail</Text>
+                {/* <Text>{this.state.message}</Text> */}
                 <Text>{ errorInfo }</Text>
             </View>
         );
@@ -193,6 +227,8 @@ class TodoList extends React.Component {
     //返回itemView(单个todo)
     _renderItemView = ( todoItem ) => {
         const navigation = this.props.navigation;
+        
+        
 
         //console.log('tododo' , todoItem);  //index、item（key、value）、separators
         //console.log('tododo' , todoItem.item);
