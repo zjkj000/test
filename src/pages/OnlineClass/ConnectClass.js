@@ -14,9 +14,8 @@ import Loading from "../../utils/loading/Loading";
 import StorageUtil from "../../utils/Storage/Storage";
 
 export default ConnectClass = () => {
-    let historyListRemote = StorageUtil.get("historyListRemote");
-    // let historyListRemote = [];
-    console.log(historyListRemote);
+    // StorageUtil.clear();
+
     const navigation = useNavigation();
     const route = useRoute();
 
@@ -27,7 +26,7 @@ export default ConnectClass = () => {
     const [Name, setName] = React.useState("ming6002");
     const [Password, setPassword] = React.useState("2020");
     const [scanIpAddress, setScanIpAddress] = React.useState("");
-    const [historyList, setHistoryList] = React.useState(historyListRemote);
+    const [historyList, setHistoryList] = React.useState([]);
 
     const handleLogin = () => {
         const url =
@@ -43,19 +42,41 @@ export default ConnectClass = () => {
         http.get(url, params)
             .then((resStr) => {
                 setShowLoading(false);
-                console.log(typeof resStr);
+                console.log(resStr);
                 if (typeof resStr === "undefined") {
                     Toast.showWarningToast("暂无课程开始");
                 } else {
                     // Toast.showDangerToast(resStr);
                     let resJson = JSON.parse(resStr);
-                    historyListRemote.push(ipAddress);
-                    StorageUtil.save("historyList", historyList);
-                    navigation.navigate("OnlineClassTemp", {
-                        ...resJson,
-                        ipAddress: ipAddress,
-                        userName: Name,
-                    });
+                    historyList.push({ title: ipAddress });
+                    StorageUtil.save("historyListRemote", historyList);
+                    let imgURL =
+                        "http://" +
+                        ipAddress +
+                        ":8901" +
+                        "/KeTangServer/ajax/ketang_ getQRcodeUrl.do";
+                    http.get(imgURL)
+                        .then((resStr) => {
+                            let imgResJson = JSON.parse(resStr);
+                            console.log(imgResJson.url);
+                            navigation.navigate("OnlineClassTemp", {
+                                ...resJson,
+                                ipAddress: ipAddress,
+                                userName: Name,
+                                imgURL: imgResJson.url,
+                            });
+                        })
+                        .catch((error) => {
+                            Toast.showWarningToast(
+                                "IP二维码请求失败:",
+                                error.toString
+                            );
+                        });
+                    // navigation.navigate("OnlineClassTemp", {
+                    //     ...resJson,
+                    //     ipAddress: ipAddress,
+                    //     userName: Name,
+                    // });
                 }
             })
             .catch((error) => {
@@ -63,7 +84,20 @@ export default ConnectClass = () => {
                 Toast.showDangerToast(error.toString());
             });
     };
-
+    const initData = async () => {
+        try {
+            let res = await StorageUtil.get("historyListRemote");
+            if (res) {
+                setHistoryList(res);
+            }
+            return res;
+        } catch (e) {
+            Toast.showDangerToast(e.toString());
+        }
+    };
+    React.useEffect(() => {
+        initData();
+    }, []);
     React.useEffect(() => {
         if (route.params?.ipAddress) {
             if (typeof route.params.ipAddress == "string") {
@@ -98,7 +132,6 @@ export default ConnectClass = () => {
             <HistoryInput
                 icon={<Icon name="globe-outline" />}
                 style={styles.Input}
-                historyList={historyListRemote}
                 value={ipAddress}
                 setValue={setIpAddress}
             ></HistoryInput>

@@ -1,28 +1,34 @@
 import React from "react";
 import { Autocomplete, AutocompleteItem, Icon } from "@ui-kitten/components";
+import Toast from "../../utils/Toast/Toast";
+import StorageUtil from "../../utils/Storage/Storage";
 
 export default function HistoryInput(props) {
-    let historyList = [
-        { title: "Star Wars" },
-        { title: "Back to the Future" },
-        { title: "The Matrix" },
-        { title: "Inception" },
-        { title: "Interstellar" },
-    ];
-    historyList = props.historyList ? props.historyList : historyList;
     const [value, setValue] = [props.value, props.setValue];
-    const [data, setData] = React.useState(historyList);
+    const [data, setData] = React.useState([]);
 
     const filter = (item, query) =>
         item.title.toLowerCase().includes(query.toLowerCase());
 
     const onSelect = (index) => {
-        setValue(historyList[index].title);
+        setValue(data[index].title);
     };
-
+    React.useEffect(() => {
+        initData();
+    }, []);
     const onChangeText = (query) => {
         setValue(query);
-        setData(historyList.filter((item) => filter(item, query)));
+        setData(data.filter((item) => filter(item, query)));
+    };
+    const initData = async () => {
+        try {
+            let res = await StorageUtil.get("historyListRemote");
+            res = res ? res : [];
+            setData(res);
+            return res;
+        } catch (e) {
+            Toast.showDangerToast(e.toString());
+        }
     };
 
     const renderOption = (item, index) => (

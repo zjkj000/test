@@ -72,7 +72,7 @@ export default class Answer_single extends Component {
 }
 
 const styles = StyleSheet.create({
-    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "colum" },
+    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row" },
     answer_area: { height: "85%", padding: 20 },
     answer_result: {
         paddingLeft: 30,

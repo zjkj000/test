@@ -61,19 +61,21 @@ export default class Answer_single extends Component {
                 path: "images",
             },
         };
-        launchCamera(option, (response) => {
-            // console.log(response);
-            if (response.didCancel) {
-                return;
-            }
-            response = response.assets[0];
-            // console.log(response.base64);
-            this.setState({
-                imgURL: response.uri,
-                hasImage: true,
-                moduleVisible: false,
-            });
-        });
+
+        option,
+            (response) => {
+                // console.log(response);
+                if (response.didCancel) {
+                    return;
+                }
+                response = response.assets[0];
+                // console.log(response.base64);
+                this.setState({
+                    imgURL: response.uri,
+                    hasImage: true,
+                    moduleVisible: false,
+                });
+            };
     };
 
     //从本地选择照片需要的函数

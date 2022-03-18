@@ -1,25 +1,17 @@
-import {
-    Text,
-    StyleSheet,
-    View,
-    ScrollView,
-    Image,
-    TouchableOpacity,
-    Alert,
-} from "react-native";
+import { Text, StyleSheet, View, ScrollView } from "react-native";
 import React, { Component } from "react";
-import RadioList from "../Utils/RadioList";
+import Checkbox from "../Utils/Checkbox";
 import HTMLView from "react-native-htmlview";
 
-//  单选题 模板页面
-//  使用时 需要传入三个参数：  sum   num  datasource
+// 多选题 模板页面
+// 使用时 需要传入三个参数：  sum   num  datasource
 // 需要传的参数有三个，第一个是共多少题，第二个是当前是第index题 这里用了的（index+1）显示第几题。 第三个是试题数据。
 export default class Answer_single extends Component {
     constructor(props) {
         super(props);
         this.state = {
             numid: "",
-            questionTypeName: "单选题",
+            questionTypeName: "多选题",
             questionId: "",
             baseTypeId: "",
             questionName: "", //题目名称
@@ -31,7 +23,6 @@ export default class Answer_single extends Component {
     UNSAFE_componentWillMount() {
         this.setState({ numid: this.props.num, ...this.props.datasource });
     }
-
     render() {
         const HTML = this.state.questionContent;
         const questionChoiceList = this.state.questionChoiceList;
@@ -50,7 +41,6 @@ export default class Answer_single extends Component {
                 {/* 题目展示区域 */}
                 <ScrollView style={styles.answer_area}>
                     <HTMLView value={HTML} />
-                    <Text style={{ height: 50 }}></Text>
                 </ScrollView>
 
                 {/* 分割线 */}
@@ -64,7 +54,8 @@ export default class Answer_single extends Component {
 
                 {/* 答案区域 */}
                 <View style={styles.answer_result}>
-                    <RadioList ChoiceList={questionChoiceList} />
+                    {/* 调用了复选框组件，使用的时候需要传进去选项列表 */}
+                    <Checkbox ChoiceList={questionChoiceList} />
                 </View>
             </View>
         );
@@ -72,7 +63,7 @@ export default class Answer_single extends Component {
 }
 
 const styles = StyleSheet.create({
-    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "colum" },
+    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row" },
     answer_area: { height: "85%", padding: 20 },
     answer_result: {
         paddingLeft: 30,
