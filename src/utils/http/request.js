@@ -60,9 +60,21 @@ export default class http {
         }
     }
 
+    // static async post(url, params) {
+    //     try {
+    //         let res = await axios.post(url, params);
+    //         return res;
+    //     } catch (error) {
+    //         return error;
+    //     }
+    // }
     static async post(url, params) {
         try {
-            let res = await axios.post(url, params);
+            let res = await axios.post({
+                url: url,
+                method: "post",
+                data: params,
+            });
             return res;
         } catch (error) {
             return error;

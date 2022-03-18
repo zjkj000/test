@@ -1,11 +1,43 @@
 import { Text, StyleSheet, View, ScrollView, Image, TextInput, Button, Alert, TouchableOpacity, Modal, Dimensions } from 'react-native'
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import RenderHtml from 'react-native-render-html';
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import {OverflowMenu,MenuItem} from "@ui-kitten/components";
 import ImageViewer from 'react-native-image-zoom-viewer';
 import ImageHandler from '../../../../utils/Camera/Camera';
 import http from '../../../../utils/http/request';
+import { useNavigation } from "@react-navigation/native";
+
+export default function Answer_subjectiveContainer(props) {
+    const navigation = useNavigation();
+    const paperId= props.paperId
+    const submit_status=props.submit_status
+    const startdate=props.startdate         
+    const papername = props.papername
+    const sum=props.sum
+    const num=props.num 
+    const datasource=props.datasource
+    const oldAnswer_data=props.oldAnswer_data
+    const[ischange,setischange] = useState()
+    props.getischange(ischange)
+    const[Stu_answer,setStu_answer] = useState()
+    props.getStu_answer(Stu_answer)
+    return (
+    <Answer_subjective  navigation={navigation}  
+                    papername = {papername}
+                    submit_status={submit_status}  
+                    startdate={startdate}
+                    paperId={paperId} 
+                    getischange={setischange}   
+                    getStu_answer={setStu_answer}  
+                    sum={sum} 
+                    num={num} 
+                    isallObj={props.isallObj}
+                    datasource={datasource} 
+                    oldAnswer_data={oldAnswer_data}   />
+  )
+}
+
 // 主观题 模板页面
 //  使用时 需要传入参数：   sum   总题目数量：                 选传 不传默认总数题   会显示1/1题
 //                         num   这是第几个题目               选传 不传默认num  0   会显示1/1题 
@@ -14,13 +46,14 @@ import http from '../../../../utils/http/request';
 //                         oldAnswer_data                    选择传递   是否有历史作答记录  一般是通过api获取的历史答案。否则不建议传
 //                         getischange={setischange}         传递一个函数  用于向做作业的页面传递 是否改变了答案，便于判断是否要提交  setischange函数要自己写在做作业页面
 //                         getStu_answer={setStu_answer_i}   传递一个函数  用于获得阅读题得到的作答结果  setStu_answer_i函数要自己写在做作业页面 代表设置第几道题的答案。
-export default class Answer_single extends Component {  
+class Answer_subjective extends Component {  
     constructor(props) {
         super(props)
         //传给每道题目，用于让题目告诉这个页面 他们的答案是什么，会在这个页面记录他们的答案。
         this.stuAnswer = this.stuAnswer.bind(this);
         //这个页面用到的状态
         this.state = {
+            
             paperId:'',
             textinputAnswer:'',       //输入文本框输入的内容
             isLongarea: false, 
@@ -54,15 +87,13 @@ export default class Answer_single extends Component {
 
 
     UNSAFE_componentWillMount() {
-        //解析旧的答案里面的图片的url  设置到state里面的imgURLArray
+        //解析旧的答案html里面的图片的url  设置到state里面的imgURLArray
         const imgurlarr = this.AnalysisAnswerImgUrl(this.props.oldAnswer_data ? this.props.oldAnswer_data : '').urlarr;
         var newimgurlarr = [];
         if(imgurlarr!=null){
             for(var i =0;i<imgurlarr.length;i++){
                 newimgurlarr.push(
-                    {
-                        url:imgurlarr[i]
-                    }
+                    {url:imgurlarr[i]}
                 )
             }
         }
@@ -121,7 +152,7 @@ export default class Answer_single extends Component {
         return(showhtmlarr) 
     }
 
-    //将html代码里面的 url 提取出来，存在一个数组里,返回一个对象，包含两个数组 imgarr（图片数组）   urlarr（图片的url数组）
+    //将html代码里面的 url 提取出来，存在一个数组里,返回一个对象，对象包含两个数组 imgarr（图片数组）   urlarr（图片的url数组）
     AnalysisAnswerImgUrl(str){
                 // 先把返回的＂转义 \"
                 var str = str.replace('"', '\"')
@@ -163,17 +194,16 @@ export default class Answer_single extends Component {
                     var newstuanswer = this.state.stuAnswer;
                     //拼接之后便于之前的APP能用
                     newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`
-                }
                 this.setState({
                     stuAnswer:newstuanswer,
                     imgURLArray:newimageArray,
-                });
-                //提交照片 获取到url  并且把url添加到本地urlarr中
-            } else {
-                // TODO: 获取图像失败
-            }
-        });
+                })}
+                this.stuAnswer(newstuanswer);
+                //获取到url  并且把url添加到本地urlarr中
+            } 
+        })
     };
+    
 
 
     //用于提交  baseCode  提交主观题答题照片
@@ -181,33 +211,38 @@ export default class Answer_single extends Component {
         // 只要有了照片就提交
         const url = 
             "http://"+
-            "www.cn901.net" +
-            ":8080" +
+            "192.168.1.81" +
+            ":8222" +
             "/AppServer/ajax/studentApp_saveBase64Image.do"
         const params ={
-            baseCode :  'baseCode',
+            // baseCode :  '111',
+            // learnPlanId :  '111',
+            // userName    : 'ming6051'
+            baseCode :  baseCode,
             learnPlanId :  this.state.paperId,
             userName    : 'ming6051'
             }
-        console.log('请求提交照片了')
+        console.log('---------照片  请求提交照片了----------')
         return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-        // http.get(url,params).then((resStr)=>{
-        //         let resJson = JSON.parse(resStr);
-        //         console.log('提交结果',resJson)
-        //         if(resJson.success){
-        //             // 返回URL地址
-                    //this.setState({hasImage:true})
-        //             return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-        //             //return(resJson.data)
-        //         }else{
-        //             return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-        //             //return '';
-        //         } 
-        //     })
+            // http.post(url,params).then((resStr)=>{
+            // console.log('???',resStr)
+            //     let resJson = JSON.parse(resStr);
+            //     console.log('+++提交结果++++',resJson)
+            //     if(resJson.success){
+            //         // 返回URL地址
+            //         console.log('请求提交成功！返回了！！！')
+            //         this.setState({hasImage:true})
+            //         // return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
+            //         //return(resJson.data)
+            //     }else{
+            //         console.log('请求提交失败！！')
+            //         // return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
+            //         //return '';
+            //     } 
+            // })
         //提交过程设置loading效果
-
+        // return resJson.data?resJson.data:'http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png'
         //返回的数据是"data": urlPath  图片回显路径   "success":true,    "message":"保存成功！"
-
         // 根据返回的url  将图片拼接到 预览区域，并且刷新预览区域
     }
 
@@ -223,36 +258,40 @@ export default class Answer_single extends Component {
                 newimageArray.push({ url: newurl })
                 var newstuanswer = this.state.stuAnswer;
                 newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`
-            }
                 this.setState({
                     stuAnswer:newstuanswer,
                     imgURLArray:newimageArray,
                 });
-            } else {
-                // TODO: 获取图像失败
-            }
-        });
+            } 
+            this.stuAnswer(newstuanswer)
+        }});
     };
-
-
-
 
 
     render() {
         const HTML = this.state.questionContent;
         const width = Dimensions.get('window').width;
-        var questionHTML = []
+        var questionHTML = []   //用于接收  html解析之后添加到数组中
         questionHTML = this.showStuAnswer()
         return (
             <View>
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.answer_title}>
-                    <Text>{(this.state.numid ? this.state.numid : 0) + 1}/{this.props.sum ? this.props.sum : 1}题 </Text>
+                    <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
+                    <Text>/{this.props.sum?this.props.sum:1}题 </Text>
                     <Text style={{ marginLeft: 20 }}>{this.state.questionTypeName}</Text>
                     <TouchableOpacity style={{ position: 'absolute', right: 20, top: 10 }}
-                    //    onPress={
-                    //    }
-                    // 先提交本题目，在跳转到提交页面
+                                        onPress={
+                                            ()=>{
+                                                //导航跳转
+                                                this.props.navigation.navigate('SubmitPaper',
+                                                {   paperId:this.props.paperId,
+                                                    submit_status:this.props.submit_status,
+                                                    startdate:this.props.startdate,
+                                                    papername:this.props.papername,
+                                                    isallObj:this.props.isallObj})
+                                            }
+                                        }
                     >
                         <Image source={require('../../../../assets/image3/look.png')}></Image>
                     </TouchableOpacity>
@@ -353,5 +392,5 @@ const styles = StyleSheet.create({
     backdrop: {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
-    content: {borderTopWidth:1,borderTopColor:'#000000', width: "100%", flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#E6DDD6', padding: 10, alignItems: 'center' }
+    content: {borderTopWidth:0.5,borderTopColor:'#000000', width: "100%", flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#E6DDD6', padding: 10, alignItems: 'center' }
 })

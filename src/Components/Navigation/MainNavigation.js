@@ -10,15 +10,22 @@ import Videos from "../../pages/LatestTask/Resource/Videos";
 import Voice from "../../pages/LatestTask/Resource/Voice";
 import PptRescouce from "../../pages/LatestTask/Resource/PptResource"
 
-import Menu from "../../pages/LatestTask/DoWork/Utils/Menu";
-import ViewPager_ToDo from "../../pages/LatestTask/DoWork/ViewPager_ToDo";
-import ViewPager_SubmitContainer from "../../pages/LatestTask/DoWork/ViewPager_Submit";
+import Paper_ToDo from "../../pages/LatestTask/DoWork/Paper_ToDo";
+import Paper_ShowCorrected from "../../pages/LatestTask/DoWork/Paper_ShowCorrected";
+import Paper_SubmitContainer from "../../pages/LatestTask/DoWork/Paper_Submit";
+import Learningguide_ToDo from "../../pages/LatestTask/LearningGuide/Learningguide_ToDo";
+import Learningguide_ShowCorrected from "../../pages/LatestTask/LearningGuide/Learningguide_ShowCorrected";
+import Learningguide_SubmitContainer from "../../pages/LatestTask/LearningGuide/Learningguide_Submit";
+
+
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
 import WrongSee from "../../pages/Wrongbook/WrongSee";
 import Wrongbook from "../../pages/Wrongbook/Wrongbook";
-import WrongDetails from "../../pages/Wrongbook/wrongDetails";
+import WrongDetails from '../../pages/Wrongbook/wrongDetails';
+import WrongRecycleButtoContainer from "../../pages/Wrongbook/WrongRecycleButton";
+import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 
 const Stack = createStackNavigator();
 
@@ -65,13 +72,31 @@ export default class MainNavigation extends Component {
                     <Stack.Screen name="PPT" component={PptRescouce} />
                     <Stack.Screen
                         name="DoPaper"
-                        component={ViewPager_ToDo}
+                        component={Paper_ToDo}
                        
                     />
                     <Stack.Screen
                         name="SubmitPaper"
-                        component={ViewPager_SubmitContainer}
+                        component={Paper_SubmitContainer}
                     />
+                    <Stack.Screen
+                        name="ShowCorrected"
+                        component={Paper_ShowCorrected}
+                    />
+                    <Stack.Screen
+                        name="DoLearningGuide"
+                        component={Learningguide_ToDo}
+                       
+                    />
+                    <Stack.Screen
+                        name="SubmitLearningGuide"
+                        component={Learningguide_SubmitContainer}
+                    />
+                    <Stack.Screen
+                        name="ShowCorrected_LearningGuide"
+                        component={Learningguide_ShowCorrected}
+                    />
+                    
                 </Stack.Group>
 
                 {/* 在线课堂 */}
@@ -92,14 +117,39 @@ export default class MainNavigation extends Component {
                         component={QRCodeScanner}
                     />
                 </Stack.Group>
-                <Stack.Group>
-                    <Stack.Screen name="错题本" component={WrongSee} />
-                    <Stack.Screen name="Wrongbook" component={Wrongbook} />
+
+
+                {/* 错题本模块的导航 */}
+                    <Stack.Screen
+                        name="WrongSee"
+                        component={WrongSee}
+                        options={{
+                            headerRight:() => (
+                                <WrongRecycleButtoContainer />),
+                            title: '错题本'
+                        }}
+                    />
+                    
+                    <Stack.Screen
+                        name="WrongRecycle"
+                        component={WrongRecycle}
+                        options={{
+                            
+                            title: '错题回收站'
+                        }}
+                    />
                     <Stack.Screen
                         name="WrongDetails"
                         component={WrongDetails}
+                        options={{
+                            
+                            title: '错题详情'
+                        }}
                     />
-                </Stack.Group>
+                    <Stack.Screen
+                        name="Wrongbook"
+                        component={Wrongbook}
+                    />
             </Stack.Navigator>
         );
     }

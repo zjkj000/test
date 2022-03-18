@@ -1,8 +1,38 @@
 import { Text, StyleSheet, View, ScrollView,Image,TouchableOpacity,Alert,Dimensions } from 'react-native'
-import React, { Component } from 'react'
+import React, { Component, useState } from 'react'
 import RadioList from '../Utils/RadioList';
 import RenderHtml from 'react-native-render-html';
+import { useNavigation } from "@react-navigation/native";
 
+export default function Answer_singleContainer(props) {
+    const navigation = useNavigation();
+    const paperId= props.paperId
+    const submit_status=props.submit_status
+    const startdate=props.startdate
+    const papername = props.papername
+    const sum=props.sum
+    const num=props.num 
+    const datasource=props.datasource
+    const oldAnswer_data=props.oldAnswer_data
+    const[ischange,setischange] = useState()
+    props.getischange(ischange)
+    const[Stu_answer,setStu_answer] = useState()
+    props.getStu_answer(Stu_answer)
+    return (
+    <Answer_single  navigation={navigation}  
+                    papername = {papername}
+                    submit_status={submit_status}  
+                    startdate={startdate}
+                    paperId={paperId} 
+                    getischange={setischange}   
+                    getStu_answer={setStu_answer}  
+                    sum={sum} 
+                    num={num} 
+                    isallObj={props.isallObj}
+                    datasource={datasource} 
+                    oldAnswer_data={oldAnswer_data}   />
+  )
+}
 //  单选题 模板页面
 //  使用时 需要传入参数：   sum   总题目数量：                 选传 不传默认总数题   会显示1/1题
 //                         num   这是第几个题目               选传 不传默认num  0   会显示1/1题 
@@ -12,7 +42,7 @@ import RenderHtml from 'react-native-render-html';
 //                         getischange={setischange}         传递一个函数  用于向做作业的页面传递 是否改变了答案，便于判断是否要提交  setischange函数要自己写在做作业页面
 //                         getStu_answer={setStu_answer_i}   传递一个函数  用于获得阅读题得到的作答结果  setStu_answer_i函数要自己写在做作业页面 代表设置第几道题的答案。
 
-export default class Answer_single extends Component {
+ class Answer_single extends Component {
      constructor(props) {
         super(props)
         this.stuAnswer=this.stuAnswer.bind(this);
@@ -33,7 +63,7 @@ export default class Answer_single extends Component {
      //用于将本道题写的答案  传给 Todo页面，用于提交
      stuAnswer(str){
          this.setState({stu_answer:str})
-         this.props.getStu_answer(str)
+         this.props.getStu_answer(str)//改父组件回显
          this.props.getischange(true);
      }
 
@@ -58,11 +88,20 @@ export default class Answer_single extends Component {
       <View>
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
-                <Text  >{(this.state.numid?this.state.numid:0)+1}/{this.props.sum?this.props.sum:1}题 </Text>
+                
+                <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
+                <Text>/{this.props.sum?this.props.sum:1}题 </Text>
+                
                 <Text  style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
                 <TouchableOpacity onPress={
                     ()=>{
                         //导航跳转
+                        this.props.navigation.navigate('SubmitPaper',
+                        {   paperId:this.props.paperId,
+                            submit_status:this.props.submit_status,
+                            startdate:this.props.startdate,
+                            papername:this.props.papername,
+                            isallObj:this.props.isallObj})
                     }
                 } style={{position:'absolute',right:20,top:10}}
                     
@@ -95,5 +134,5 @@ export default class Answer_single extends Component {
 const styles = StyleSheet.create({
     answer_title:{padding:10,paddingLeft:30,flexDirection:'row'},
     answer_area:{height:"85%",padding:20},
-    answer_result:{borderTopWidth:1,borderTopColor:'#000000',paddingLeft:30,paddingTop:5,paddingBottom:5,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
+    answer_result:{borderTopWidth:0.5,borderTopColor:'#000000',paddingLeft:30,paddingTop:5,paddingBottom:5,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
 })

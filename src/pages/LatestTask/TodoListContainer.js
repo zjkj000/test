@@ -315,20 +315,55 @@ class TodoList extends React.Component {
                     <TouchableOpacity
                         onPress={() => {
                             if(todoType == "作业"){
-                                navigation.navigate("DoPaper", 
-                                {
-                                    learnId: learnId, 
-                                    status: statusUrl, //作业状态
-                                    selectedindex:0,
-                                    bpapername: bottomTitle,
-                                });
+                                // 查看已经批改的作业
+                                    if(statusUrl==2){
+                                        navigation.navigate(
+                                            {
+                                                name:"ShowCorrected", 
+                                                params: {
+                                                            learnId: learnId, 
+                                                            selectedindex:0,
+                                                            papername:bottomTitle,
+                                                        },
+                                                megre:true
+                                            }
+                                        );
+                                    }
+                                // 做作业
+                                    else{
+                                        navigation.navigate("DoPaper", 
+                                        {
+                                            learnId: learnId, 
+                                            status: statusUrl, //作业状态
+                                            selectedindex:0,
+                                            papername:bottomTitle,
+                                        });
+                                    }
                             }else if(todoType == "导学案"){
-                                navigation.navigate("Todo" , 
-                                {
-                                    learnId: learnId, 
-                                    status: statusUrl, //作业状态
-                                    bottomTitle: bottomTitle,
-                                });
+                                //学导学案
+                                if(statusUrl==2){
+                                    navigation.navigate(
+                                        {
+                                            name:"ShowCorrected_LearningGuide", 
+                                            params: {
+                                                        learnId: learnId, 
+                                                        selectedindex:0,
+                                                        papername:bottomTitle,
+                                                    },
+                                            megre:true
+                                        }
+                                    );
+                                }
+                            // 做导学案
+                                else{
+                                    navigation.navigate("DoLearningGuide", 
+                                    {
+                                        learnId: learnId, 
+                                        status: statusUrl, //导学案状态
+                                        selectedindex:0,
+                                        papername:bottomTitle,
+                                    });
+                                }
                             }else if(todoType == "通知" || todoType == "公告"){
                                 navigation.navigate(todoType == "通知" ? "通知" : "公告" , 
                                 {
