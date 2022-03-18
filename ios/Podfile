@@ -16,7 +16,11 @@ target 'NavigationDemo' do
 
   pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
 
+<<<<<<< HEAD
+  pod 'react-native-webview', :path => '../node_modules/react-native-webview'
+=======
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
+>>>>>>> ebb1b4518b982a00b1a68be0fd2620c21a5379a9
 
   target 'NavigationDemoTests' do
     inherit! :complete

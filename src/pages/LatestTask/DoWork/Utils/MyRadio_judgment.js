@@ -13,9 +13,7 @@ export default class CircleList extends PureComponent {
     constructor(props) {
         super(props)
         this.state = {
-            sexArray: [
-                
-            ],
+            sexArray: [],
         };
     }
 

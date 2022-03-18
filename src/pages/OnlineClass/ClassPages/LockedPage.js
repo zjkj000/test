@@ -170,7 +170,7 @@ export default class LockedPage extends Component {
             questionName: "", //题目名称
             questionChoiceList: period.questionValueList, //题目选项
             questionContent: "", //题目内容
-            answer: "B",
+            answer: "",
         };
         return (
             <Layout style={styles.mainContainer}>
