@@ -399,7 +399,7 @@ class Video_LG extends Component {
 
      render() {
                 return (  
-                <View>
+                <View style={{color:'#FFFFFF'}}>
                         {/* 第一行显示 第几题  题目类型 */}
                         <View  style={styles.title}>  
                             <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}} >{this.state.resourceName}</Text>
@@ -436,7 +436,7 @@ class Video_LG extends Component {
 
 const styles = StyleSheet.create({
     title:{padding:10,paddingLeft:30,flexDirection:'row',},
-    area:{height:"85%",padding:20},
+    area:{height:"95%",paddingTop:'50%'},
     
     imageNull: {
       justifyContent: "center",
@@ -446,7 +446,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        backgroundColor: '#FFFFFF'
+        color: '#FFFFFF'
     },
     playButton: {
         width: 50,

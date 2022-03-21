@@ -72,7 +72,7 @@ export default function Paper_ToDo(props) {
         // learnPlanId:'cfc84392-8223-42a4-9126-77557be8e12b',
         // learnPlanId : props.route.params.learnId,
         // userName : 'ming6051', 不需要username
-        deviceType:'PHONE'
+        deviceType:'PAD'
       }
       if(!success){
         http.get(data_url,data_params).then((resStr)=>{
@@ -246,7 +246,9 @@ export default function Paper_ToDo(props) {
     //  console.log('正在测试',data)
   return (
     // 
-    <ViewPager shouldLoadComponent={shouldLoadComponent} style={{color:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
+    <ViewPager 
+                  swipeEnabled ={false}
+                  shouldLoadComponent={shouldLoadComponent} style={{color:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
                   onSelect={index => Submit_Stu_answer(index,selectedIndex)}>  
 
           {/* 根据这套题的data使用map遍历加载 */}

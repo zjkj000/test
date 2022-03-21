@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import RenderHTML from 'react-native-render-html';
 import Toast from '../../../utils/Toast/Toast'
 
-export default function learningguide_ShowCorrected(props) {
+export default function Learningguide_ShowCorrected(props) {
     const navigation = useNavigation();
     const [selectedIndex, setSelectedIndex] = useState(0);
     const shouldLoadComponent = (index) => index === selectedIndex;

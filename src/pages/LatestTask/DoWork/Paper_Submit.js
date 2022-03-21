@@ -29,7 +29,7 @@ class Paper_Submit extends Component {
             paperId:'',
             success:false,
             data:[],
-            submit_status:'',
+            submit_status:'',    //记录当前的提交状态
             startdate:'', 
          }
     }
@@ -83,20 +83,34 @@ class Paper_Submit extends Component {
                   ":8111" +
                   "/AppServer/ajax/studentApp_saveStudentHomeWork.do"
 
-            //判断一下未做作业的题目ID
-            let change_status= 0;
-            //判断一下作业提交状态  ‘1’.第一次提交  ‘3’修改提交
-            if(this.state.submit_status='0'){
-              change_status=1;
-            }else if(this.state.isallObjective){
-              //全是客观题   就直接批阅
-              change_status=2;
+            let change_status= 0;    //记录返回的状态
+            let newsub_status = 0;   // 记录提交的状态
+            //接收到的是状态是：1  新作业
+            if(this.state.submit_status='1'){
+                //收到的状态是1     提交的状态就是1 
+                newsub_status = 1;
+                        //再去判断返回的状态
+                            if(this.state.isallObjective){
+                              //全是客观题   就直接批阅
+                              //返回的状态是2
+                              change_status=2;
+                            }else{
+                              change_status=3;
+                            }
             }else{
-              change_status=3;
+                //收到的状态是3   提交的状态就是 3 
+                newsub_status = 3;
+                        //在判断返回的状态
+                              if(this.state.isallObjective){
+                                //全是客观题   就直接批阅
+                                //返回的状态是2
+                                change_status=2;
+                              }else{
+                                change_status=3;
+                              }
             }
-            console.log('提交作业之后的状态',change_status)
-            
-            
+            console.log('这次修改之后返回给wly的状态',change_status)
+         
             let noSubmitID ='';
             this.state.data.map(function(item){
               if(item.stuAnswer=='未答'||item.stuAnswer==''){
@@ -120,38 +134,8 @@ class Paper_Submit extends Component {
             const params ={
               answerTime:answerdate,
               paperId : this.state.paperId,
-<<<<<<< HEAD
-              userName :  global.constants.userName,
-              status:change_status,
-              noAnswerQueId:noSubmitID
-            }
-            if(noSubmitID!='-1'){
-                //弹框提醒  是否要继续提交
-                alert('还有未作答题目,是否提交？')
-                //确定就提交，取消就不提交
-            }else{
-                alert('提交作业了！')
-            }
-            //提交作业代码
-            http.get(url,params).then((resStr)=>{
-                    let resJson = JSON.parse(resStr); 
-                   
-            })
-            console.log('提交页面返回id',this.state.paperId);
-            this.props.navigation.navigate(
-              {
-                name:"Home", 
-                params: {
-                  learnId: this.state.paperId,
-                  status:change_status
-                        },
-               
-            }
-            ) 
-            
-=======
               userName : global.constants.userName,
-              status:change_status,
+              status:newsub_status,
               noAnswerQueId:noSubmitID
             }
             var subsuccess = false;
@@ -183,7 +167,6 @@ class Paper_Submit extends Component {
               }
               )   
             // }
->>>>>>> 78dac72f13bf59d479c82a48b225b0b756e68877
             
             // 提交作业代码
              

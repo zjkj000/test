@@ -348,7 +348,7 @@ class Music extends Component {
 
      render() {   
         return (  
-        <View>
+        <View style={{color:'#FFFFFF'}}>
                 {/* 第一行显示 第几题  题目类型 */}
                 <View  style={styles.title}>  
                     <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
@@ -384,7 +384,7 @@ class Music extends Component {
 
 const styles = StyleSheet.create({
     title:{padding:10,paddingLeft:30,flexDirection:'row',},
-    area:{height:"85%",padding:20,color:'#FFFFFF'},
+    area:{height:'95%'},
   imageNull: {
       justifyContent: "center",
       alignItems: "center",
@@ -392,8 +392,7 @@ const styles = StyleSheet.create({
       paddingBottom: screenHeight*0.2,
   },
   container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF'
+    color:'#FFFFFF',
   },
   playButton: {
     width: 50,

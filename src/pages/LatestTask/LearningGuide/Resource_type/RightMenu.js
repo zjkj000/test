@@ -65,14 +65,14 @@ export default class RightMenu extends Component {
             MenuItem_number.push(
                 <MenuItem
                             title={this.state.data[i].link}
-                           
+                            key={item_num}
                             />
                 )
             for(var j =0;j < this.state.data[i].activityList.length;j++){
                     MenuItem_number.push(
-                        <MenuItem
+                        <MenuItem  
                                     title={'    '+this.state.data[i].activityList[j].activityName}
-                                  
+                                    key={item_num}
                                     />
                         )
                     for(var k =0;k<this.state.data[i].activityList[j].resourceList.length;k++){
