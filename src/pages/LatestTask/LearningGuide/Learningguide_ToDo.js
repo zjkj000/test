@@ -34,9 +34,9 @@ export default function Paper_ToDo(props) {
   const [dataNum,setDataNum] = useState(0);
   const [learnPlanId,setlearnPlanId] = useState(props.route.params.learnId);
   const [status,setstatus] = useState(props.route.params.status);
-  const [startdate,setstartdate]=useState('');   //记录总用时
-  const [start_date,setstart_date]=useState(''); //记录每道题目用时
-  const [date_arr,setdate_arr]=useState([]);
+  const [startdate,setstartdate]=useState('');   //记录总用时  总用时的开始时间
+  const [start_date,setstart_date]=useState(''); //记录每道题目用时   每道题的开始时间
+  const [date_arr,setdate_arr]=useState([]);     //记录每道题目 用时    时间数组
   const [isallObj,setisallObj]= useState([])
 
     //当learnPlanId改变时候，就要重新加载getData

@@ -38,7 +38,6 @@ class Paper_Submit extends Component {
     UNSAFE_componentWillMount(){
       
       let bool = (this.props.isallObj.indexOf('104')>-1)||(this.props.isallObj.indexOf('106')>-1)?false:true
-     
       this.setState({
         start_date: this.props.startdate?this.props.startdate:this.getDate(),
             paperId:this.props.paperId,
@@ -110,7 +109,7 @@ class Paper_Submit extends Component {
                                 change_status=3;
                               }
             }
-            
+           
          
             let noSubmitID ='';
             this.state.data.map(function(item){
@@ -142,7 +141,6 @@ class Paper_Submit extends Component {
             var subsuccess = false;
             http.get(url,params).then((resStr)=>{
               let resJson = JSON.parse(resStr);
-              
               subsuccess = resJson.success;
             })
 
@@ -152,7 +150,7 @@ class Paper_Submit extends Component {
             //     //确定就提交，取消就不提交
             // }else{
             if(subsuccess){
-                Toast.showSuccessToast('提交成功了!')
+                Toast.showSuccessToast('提交成功了!',1000)
               }
 
             this.props.navigation.navigate(

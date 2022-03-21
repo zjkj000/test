@@ -16,6 +16,8 @@ import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
 import http from "../../../utils/http/request";
 import Loading from "../../../utils/loading/Loading";
 
+import { WebView } from 'react-native-webview';
+
 
 
 export default class Videos extends Component {
@@ -23,10 +25,6 @@ export default class Videos extends Component {
     super(props);
     this.state = {
       resource: '', //api请求的数据data
-
-      uri:'',
-      pptList:[],
-      selectedindex:0    //记录当前选中的是哪张ppt
     };
   }
 
@@ -55,8 +53,6 @@ export default class Videos extends Component {
             let url = resJson.data.url;
             this.setState({ 
               resource: resJson.data , 
-              pptList: resJson.data.pptList ,
-              uri: resJson.data.pptList[0]
             });
         })
   }
@@ -79,36 +75,15 @@ export default class Videos extends Component {
           </View>
       );
     }else{
-        //const pptList = this.state.resource.pptList;
+        
         return(
-            <View>
-                <View style={styles.area}>
-                    <Text style={{fontSize:18,marginBottom:10}}>{this.state.resourceName}</Text>
-                    <Image style={{width:'90%',height:250}} source={{uri: this.state.uri}}></Image>
-                    <ScrollView horizontal={true} style={{marginTop:80}}>
-                        {this.getPPT(this.state.pptList)}
-                    </ScrollView>
-                </View>
-            </View> 
+            <View style={styles.area}>
+                <WebView  source={{ uri: this.state.resource.url}} />
+            </View>
         );
     }
   }
 
-  //底部水平显示PPT内容
-  getPPT(pptList){
-      var pptItems=[];
-      for(let ppt_i=0;ppt_i<pptList.length;ppt_i++){
-          pptItems.push(
-              <TouchableOpacity 
-                onPress={() => this.setState({selectedindex: ppt_i, uri: pptList[ppt_i]})}>
-                      <Image source={{uri:pptList[ppt_i]}} 
-                        style={this.state.selectedindex == ppt_i ? styles.checked : styles.little_image} />
-              </TouchableOpacity>
-              
-          )
-      }
-      return pptItems;
-  }
   
   render() {
     return (
@@ -133,20 +108,6 @@ const styles = StyleSheet.create({
     height: 300,
   },
   area:{
-    alignItems:'center',
-    height:'100%',
-    paddingTop:'35%'
-  },
-  little_image:{
-    height:50,
-    width:80,
-    marginLeft:5
-  },
-  checked:{
-    height:50,
-    width:80,
-    marginLeft:5,
-    borderColor:'#FFA500',
-    borderWidth:2
+      height:'100%'
   }
 });

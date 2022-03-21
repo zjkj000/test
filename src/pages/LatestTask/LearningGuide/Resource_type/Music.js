@@ -47,12 +47,12 @@ class Music extends Component {
         this.state = {
 
                 numid:'',
-                resourceName:'单选题',
+                resourceName:'',
                 resourceId:'',
                 baseTypeId:'',
                 questionName:'',        //题目名称
                 questionChoiceList:'',  //题目选项
-                question:'',   //题目内容
+                question:'',   
                 answer:'',
                 stu_answer:'',
                 oldStuAnswer:'',
@@ -62,15 +62,14 @@ class Music extends Component {
                 videoCover: '',
                 videoWidth: screenWidth,
                 videoHeight: screenWidth * 9/16, // 默认16：9的宽高比
-                showVideoCover: true,    // 是否显示视频封面
-                showVideoControl: false, // 是否显示视频控制组件
-                isPlaying: false,        // 视频是否正在播放
-                currentTime: 0,        // 视频当前播放的时间
-                duration: 0,           // 视频的总时长
-                isFullScreen: false,     // 当前是否全屏显示
-                playFromBeginning: false, // 是否从头开始播放
-
-                resource: '', //api请求的数据data
+                showVideoCover: true,            // 是否显示视频封面
+                showVideoControl: false,         // 是否显示视频控制组件
+                isPlaying: false,                // 视频是否正在播放
+                currentTime: 0,                  // 视频当前播放的时间
+                duration: 0,                     // 视频的总时长
+                isFullScreen: false,             // 当前是否全屏显示
+                playFromBeginning: false,        // 是否从头开始播放
+                resource: '',                    //api请求的数据data
         }
      }  
    
