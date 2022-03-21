@@ -27,6 +27,8 @@ let itemNo = 0; //item的个数
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
 
 var oldtype = '';  //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
+let searchStr = ''; //保存上一次搜索框内容
+
 
 let todosList = []; //复制一份api请求得到的数据
 
@@ -34,9 +36,11 @@ let todosList = []; //复制一份api请求得到的数据
 export default function TodoListContainer(props) {
     //console.log(props.resourceType);
     const rsType = props.resourceType;
+    const searchStr = props.searchStr;
+    const status = props.status;
     const navigation = useNavigation();
     //将navigation传给TodoList组件，防止路由出错
-    return <TodoList navigation={navigation} resourceType={rsType}></TodoList>;
+    return <TodoList navigation={navigation} resourceType={rsType} searchStr={searchStr} status={status}></TodoList>;
 }
 
 
@@ -54,6 +58,7 @@ class TodoList extends React.Component {
             errorInfo: "",
             showFoot: 0, //控制foot， 0：隐藏footer 1：已加载完成，没有更多数据 2：正在加载中
             //isRefreshing: false, //下拉控制
+            status: '3',
         };
         this.fetchData = this.fetchData.bind(this); //fetchData函数中this指向问题
     }
@@ -61,11 +66,15 @@ class TodoList extends React.Component {
     
     UNSAFE_componentWillMount(){  //初始挂载执行一遍
         oldtype = this.props.resourceType;
+        searchStr = this.props.searchStr;
+        
+        console.log('*************************');
         this.fetchData(pageNo);
-    }
+     }
 
     componentDidMount(){   //初始挂载执行一遍
         //this.fetchData(pageNo);
+
     }
 
     
@@ -73,22 +82,47 @@ class TodoList extends React.Component {
         //fetchData执行会触发setState函数，又会重新执行componentWillUpdate函数，
         //需要将oldtype设置为此次请求的数据类型，否则oldtype != this.props.resourceType一直满足，将会一直发送请求
         oldtype = this.props.resourceType; 
+        searchStr = this.props.searchStr;
         
-        // if(this.props.navigation.getState().routes[1].params != null){
-        //     this.fetchData(pageNo);
-        // }
+        console.log('willUpdate' , Date.parse(new Date()));
+        //console.log('willUpdate' , this.props.navigation.getState().routes[1].params);
+
+        if(this.props.navigation.getState().routes[1].params != null){
+            const todoId = this.props.navigation.getState().routes[1].params.learnId;
+            const status = this.props.navigation.getState().routes[1].params.status;
+
+            this.props.navigation.getState().routes[1].params = null ;
+
+                if(status == 3){ //未批改的作业，不请求数据
+                    //console.log('获取到的status' , status);
+                    for(var i = 0 ; i < todosList.length ; i++){
+                        if(todosList[i].value.learnId == todoId){
+                            //console.log('当前todo' , todosList[i]);
+                            //console.log('之前的状态' , todosList[i].value.status);
+                            todosList[i].value.status = status;
+                            //console.log('修改后的状态' , todosList[i].value.status);
+                            this.setState({ todos: todosList , status: '3' });
+                            return;
+                        }
+                    }
+                }
+                else{ //status == 2，已批改作业，需请求数据
+                    this.setState({ status: '2' }); 
+                }
+        }
     }
 
     componentDidUpdate(){
-        console.log('oldtype' , oldtype);
-        console.log('resourceType' , this.props.resourceType);
-        if(oldtype != this.props.resourceType){
+        //console.log('oldtype' , oldtype);
+        //console.log('resourceType' , this.props.resourceType);
+        if((oldtype != this.props.resourceType || searchStr != this.props.searchStr) || this.state.status == '2'){
             //当此次请求与上次请求的数据类型不一致时，先清空上一次的数据再请求
             this.setState({ todos: [] , isLoading: true , error: false });
             pageNo = 1; //当前第几页
             itemNo = 0; //item的个数
             dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
             this.fetchData(pageNo);
+            this.setState({ status: '3' });
         }
     }
 
@@ -107,56 +141,6 @@ class TodoList extends React.Component {
                                             />
                 );
         }else if(todo.type == '作业'){
-            //console.log('提交作业', this.props.navigation.getState().routes);
-            // const noCheckImg = require('../../assets/LatestTaskImages/noCheck.png');
-            // const hasCheckImg = require('../../assets/LatestTaskImages/hasCheck.png');
-            // //从提交作业页面跳转到首页
-            // if(this.props.navigation.getState().routes[1].params != null){
-            //     const changeLearnId = this.props.navigation.getState().routes[1].params.learnId ? 
-            //                             this.props.navigation.getState().routes[1].params.learnId : '';
-
-            //     const changeStatus = this.props.navigation.getState().routes[1].params.status ? 
-            //                             this.props.navigation.getState().routes[1].params.status : '';
-            //     console.log('路由返回作业id', changeLearnId);
-            //     //清空路由参数
-            //     //this.props.navigation.getState().routes[1].params = null;
-            //     if(todo.learnId == changeLearnId && changeStatus == 3){
-            //         //console.log('未批改');
-            //         console.log('原作业状态' , todosList[todoIndex].value);
-            //         todosList[todoIndex].value.status = 3;  //修改本地缓存数据
-            //         return(
-            //             <Image
-            //                 source={noCheckImg}  
-            //                 style={styles.imgStatus}
-            //             />
-            //         );
-            //     }else if(todo.learnId == changeLearnId && changeStatus == 2){
-            //         //console.log('已批改');
-            //         console.log('原作业状态' , todosList[todoIndex].value);
-            //         todosList[todoIndex].value.status = 2;  //修改本地缓存数据
-            //         return(
-            //             <Image
-            //                 source={hasCheckImg}  
-            //                 style={styles.imgStatus}
-            //             />
-            //         );
-            //     }else{
-            //         return(
-            //                 <Image
-            //                     source={statusImg}
-            //                     style={styles.imgStatus}
-            //                 />
-            //         );
-            //     }
-
-            // }else{ //初始加载首页时
-            //     return (
-            //                 <Image
-            //                     source={statusImg}
-            //                     style={styles.imgStatus}
-            //                 />
-            //     );
-            // }
             return (
                                 <Image
                                     source={statusImg}
@@ -176,7 +160,9 @@ class TodoList extends React.Component {
 
     //通过fetch请求数据
     fetchData(pageNo , onRefresh = false){  
-       const rsType = this.props.resourceType;    
+       console.log('请求数据！！！！', Date.parse(new Date()));
+       const rsType = this.props.resourceType; 
+       const searchStr = this.props.searchStr;   
        const token = global.constants.token;
        const userId = global.constants.userName;
        const ip = global.constants.baseUrl;  
@@ -185,6 +171,7 @@ class TodoList extends React.Component {
             currentPage: pageNo,
             userId: userId,
             resourceType: rsType,
+            searchStr: searchStr,
             //callback:'ha',
             token: token,
         }
@@ -502,6 +489,7 @@ class TodoList extends React.Component {
     }
 
     render() {
+        console.log('render' , Date.parse(new Date()));
         //第一次加载等待的view
         if (this.state.isLoading && !this.state.error) {
             return this.renderLoadingView();

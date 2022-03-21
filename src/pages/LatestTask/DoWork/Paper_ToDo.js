@@ -63,11 +63,7 @@ export default function Paper_ToDo(props) {
         "/AppServer/ajax/studentApp_getJobDetails.do"
       const data_params ={
         learnPlanId : props.route.params.learnId,
-<<<<<<< HEAD
-        userName :  global.constants.userName
-=======
         userName : global.constants.userName
->>>>>>> 78dac72f13bf59d479c82a48b225b0b756e68877
       }
       if(!success){
         http.get(data_url,data_params).then((resStr)=>{
@@ -94,11 +90,7 @@ export default function Paper_ToDo(props) {
       const oldAnswer_params ={
           
           paperId : props.route.params.learnId,
-<<<<<<< HEAD
-          userName :  global.constants.userName
-=======
           userName : global.constants.userName
->>>>>>> 78dac72f13bf59d479c82a48b225b0b756e68877
         }
       if(!oldStuAnswer_success){
           http.get(oldAnswer_url,oldAnswer_params).then((resStr)=>{
@@ -182,11 +174,7 @@ export default function Paper_ToDo(props) {
           "/AppServer/ajax/studentApp_saveAnswer.do"
         const submit_params ={
           learnPlanId :learnPlanId,
-<<<<<<< HEAD
-          stuId :  global.constants.userName,
-=======
           stuId : global.constants.userName,
->>>>>>> 78dac72f13bf59d479c82a48b225b0b756e68877
           questionId:data[selectedIndex].questionId ,
           answer:Stu_answer[selectedIndex],
           answerTime: answerdate,
