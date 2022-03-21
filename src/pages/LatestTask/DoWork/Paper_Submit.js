@@ -53,7 +53,7 @@ class Paper_Submit extends Component {
                   "/AppServer/ajax/studentApp_getStudentAnswerList.do"
         const params ={
                     paperId : this.props.paperId,
-                    userName : 'ming6051'
+                    userName : global.constants.userName
                   }
         //用于获取
         if(!this.state.success){
@@ -119,7 +119,7 @@ class Paper_Submit extends Component {
             const params ={
               answerTime:answerdate,
               paperId : this.state.paperId,
-              userName : 'ming6051',
+              userName :  global.constants.userName,
               status:change_status,
               noAnswerQueId:noSubmitID
             }
@@ -130,19 +130,23 @@ class Paper_Submit extends Component {
             }else{
                 alert('提交作业了！')
             }
-            // this.props.navigation.navigate(
-            //   {
-            //     name:"Home", 
-            //     params: {
-            //       learnId: this.state.paperId,
-            //       status:change_status
-            //             },
-            //     megre:true
-            // }
-            // ) 
             //提交作业代码
-            // http.get(url,params).then((resStr)=>{
-            //         let resJson = JSON.parse(resStr); 
+            http.get(url,params).then((resStr)=>{
+                    let resJson = JSON.parse(resStr); 
+                   
+            })
+            console.log('提交页面返回id',this.state.paperId);
+            this.props.navigation.navigate(
+              {
+                name:"Home", 
+                params: {
+                  learnId: this.state.paperId,
+                  status:change_status
+                        },
+               
+            }
+            ) 
+            
             
             //根据返回结果的success确定 是否提交成功，  结果数据：{"message":"作业提交成功！","data":null,"success":"true"}
             //提交过程设置loading效果

@@ -21,11 +21,14 @@ import Loading from "../../utils/loading/Loading"; //Loading组件使用export {
 import '../../utils/global/constants';
 
 
+
 let pageNo = 1; //当前第几页
 let itemNo = 0; //item的个数
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
 
 var oldtype = '';  //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
+
+let todosList = []; //复制一份api请求得到的数据
 
 
 export default function TodoListContainer(props) {
@@ -69,7 +72,11 @@ class TodoList extends React.Component {
     UNSAFE_componentWillUpdate(){
         //fetchData执行会触发setState函数，又会重新执行componentWillUpdate函数，
         //需要将oldtype设置为此次请求的数据类型，否则oldtype != this.props.resourceType一直满足，将会一直发送请求
-        oldtype = this.props.resourceType;   
+        oldtype = this.props.resourceType; 
+        
+        // if(this.props.navigation.getState().routes[1].params != null){
+        //     this.fetchData(pageNo);
+        // }
     }
 
     componentDidUpdate(){
@@ -85,8 +92,9 @@ class TodoList extends React.Component {
         }
     }
 
+
     //显示任务状态的图标
-    showStatusUrl = (todo , statusImg) => {
+    showStatusUrl = (todo , todoIndex ,  statusImg) => {
         //console.log('showTodo' , todo);
 
         if(todo.type == '通知' || todo.type == '公告'){
@@ -99,41 +107,62 @@ class TodoList extends React.Component {
                                             />
                 );
         }else if(todo.type == '作业'){
-            /*todo.type == '作业'或导学案时，从路由导航中接收参数，参数应该包括作业ID（learnId）以及状态（是否提交？）
-             * 若todo.learnId == learnId && 状态为已提交，则状态图标需要修改为“绿色”
-                如何触发该组件重新渲染页面数据呢？
-                    做完作业点提交时将路由切换到当前组件会使得该组件重新渲染？
-            */
-           //console.log(this.props.navigation.getState().routes[2].params);
-           //做完作业提交this.props.navigation.navigate("Home" , {learnId: , status: })
-            // const paramsData =  this.props.navigation.getState().routes[2].params;
-            // const changeLearnId = paramsData.learnId ? paramsData.learnId : '';
-            // const changeStatus = paramsData.status ? paramsData : '';
-            // return (
-            //         (todo.learnId == changeLearnId && changeStatus == 3) ? //status==3未批改
+            //console.log('提交作业', this.props.navigation.getState().routes);
+            // const noCheckImg = require('../../assets/LatestTaskImages/noCheck.png');
+            // const hasCheckImg = require('../../assets/LatestTaskImages/hasCheck.png');
+            // //从提交作业页面跳转到首页
+            // if(this.props.navigation.getState().routes[1].params != null){
+            //     const changeLearnId = this.props.navigation.getState().routes[1].params.learnId ? 
+            //                             this.props.navigation.getState().routes[1].params.learnId : '';
+
+            //     const changeStatus = this.props.navigation.getState().routes[1].params.status ? 
+            //                             this.props.navigation.getState().routes[1].params.status : '';
+            //     console.log('路由返回作业id', changeLearnId);
+            //     //清空路由参数
+            //     //this.props.navigation.getState().routes[1].params = null;
+            //     if(todo.learnId == changeLearnId && changeStatus == 3){
+            //         //console.log('未批改');
+            //         console.log('原作业状态' , todosList[todoIndex].value);
+            //         todosList[todoIndex].value.status = 3;  //修改本地缓存数据
+            //         return(
+            //             <Image
+            //                 source={noCheckImg}  
+            //                 style={styles.imgStatus}
+            //             />
+            //         );
+            //     }else if(todo.learnId == changeLearnId && changeStatus == 2){
+            //         //console.log('已批改');
+            //         console.log('原作业状态' , todosList[todoIndex].value);
+            //         todosList[todoIndex].value.status = 2;  //修改本地缓存数据
+            //         return(
+            //             <Image
+            //                 source={hasCheckImg}  
+            //                 style={styles.imgStatus}
+            //             />
+            //         );
+            //     }else{
+            //         return(
             //                 <Image
-            //                     source={"../../assets/LatestTaskImages/noCheck.png"}  
+            //                     source={statusImg}
             //                     style={styles.imgStatus}
             //                 />
-            //                 : (todo.learnId == changeLearnId && changeStatus == 2) ? //status==2已批改
+            //         );
+            //     }
+
+            // }else{ //初始加载首页时
+            //     return (
             //                 <Image
-            //                     source={"../../assets/LatestTaskImages/hasCheck.png"}  
-            //                     style={styles.imgStatus}
-            //                 />
-            //                 : 
-            //                 <Image
-            //                     source={statusImg}  //初始的状态图标(未提交时，点导航返回按钮)
+            //                     source={statusImg}
             //                     style={styles.imgStatus}
             //                 />
             //     );
-
-           
+            // }
             return (
-                <Image
-                    source={statusImg}
-                    style={styles.imgStatus}
-                />
-            );
+                                <Image
+                                    source={statusImg}
+                                    style={styles.imgStatus}
+                                />
+                    );
         }else{
             return (
                 <Image
@@ -218,6 +247,7 @@ class TodoList extends React.Component {
         return (
             <View style={styles.container}>
                 <Text>Fail</Text>
+                {this.setState({ error: false })}
                 {/* <Text>{this.state.message}</Text> */}
                 <Text>{ errorInfo }</Text>
             </View>
@@ -226,17 +256,15 @@ class TodoList extends React.Component {
 
     //返回itemView(单个todo)
     _renderItemView = ( todoItem ) => {
-        const navigation = this.props.navigation;
-        
-        
+        const navigation = this.props.navigation;       
 
         //console.log('tododo' , todoItem);  //index、item（key、value）、separators
         //console.log('tododo' , todoItem.item);
         //console.log('todolength' , Object.keys(todoItem).length);
 
         //复制一份请求的数据
-        let todosList = this.state.todos;
-        //console.log('todosList',todosList);
+        todosList = this.state.todos;
+        //console.log('todosList数据',todosList);
         //console.log('todosList[1]',todosList[1]);
 
         //当前渲染的数据项的内容
@@ -338,6 +366,7 @@ class TodoList extends React.Component {
                                             selectedindex:0,
                                             papername:bottomTitle,
                                         });
+                                        //this.setState({ todos: todosList });
                                     }
                             }else if(todoType == "导学案"){
                                 //学导学案
@@ -398,7 +427,7 @@ class TodoList extends React.Component {
                             {/*作业/导学案等图标iconUrl 作业/导学案等type 图标状态statusUrl 小标题bottomTitle 创建者createrName*/}
                             <Image source={todoImg} style={styles.imgType} />
                             <Text style={styles.title}>{todoType}</Text>
-                            {this.showStatusUrl(todo ,  statusImg)}                                      
+                            {this.showStatusUrl(todo , todoIndex , statusImg)}                                      
                             <View style={{ width: screenWidth * 0.05 }}></View>
                             <View style={styles.titlePosition}>
                                 <Text style={styles.title} 
@@ -581,6 +610,8 @@ const styles = StyleSheet.create({
     imgStatus: {
         height: "80%",
         width: "5%",
+        // height: 40,
+        // width: 40,
         resizeMode: "contain",
     },
     title: {

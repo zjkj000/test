@@ -34,6 +34,7 @@ export default function Paper_ToDo(props) {
 
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
+      console.log(props.route.params.papername,props.route.params.learnId);
       navigation.setOptions({title:props.route.params.papername,
       headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)})
       setSelectedIndex(props.route.params.selectedindex)
@@ -62,7 +63,7 @@ export default function Paper_ToDo(props) {
         "/AppServer/ajax/studentApp_getJobDetails.do"
       const data_params ={
         learnPlanId : props.route.params.learnId,
-        userName : 'ming6051'
+        userName :  global.constants.userName
       }
       if(!success){
         http.get(data_url,data_params).then((resStr)=>{
@@ -89,7 +90,7 @@ export default function Paper_ToDo(props) {
       const oldAnswer_params ={
           
           paperId : props.route.params.learnId,
-          userName : 'ming6051'
+          userName :  global.constants.userName
         }
       if(!oldStuAnswer_success){
           http.get(oldAnswer_url,oldAnswer_params).then((resStr)=>{
@@ -173,7 +174,7 @@ export default function Paper_ToDo(props) {
           "/AppServer/ajax/studentApp_saveAnswer.do"
         const submit_params ={
           learnPlanId :learnPlanId,
-          stuId : 'ming6051',
+          stuId :  global.constants.userName,
           questionId:data[selectedIndex].questionId ,
           answer:Stu_answer[selectedIndex],
           answerTime: answerdate,
