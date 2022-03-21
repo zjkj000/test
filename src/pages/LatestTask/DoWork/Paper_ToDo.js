@@ -63,7 +63,11 @@ export default function Paper_ToDo(props) {
         "/AppServer/ajax/studentApp_getJobDetails.do"
       const data_params ={
         learnPlanId : props.route.params.learnId,
+<<<<<<< HEAD
         userName :  global.constants.userName
+=======
+        userName : global.constants.userName
+>>>>>>> 78dac72f13bf59d479c82a48b225b0b756e68877
       }
       if(!success){
         http.get(data_url,data_params).then((resStr)=>{
@@ -90,7 +94,11 @@ export default function Paper_ToDo(props) {
       const oldAnswer_params ={
           
           paperId : props.route.params.learnId,
+<<<<<<< HEAD
           userName :  global.constants.userName
+=======
+          userName : global.constants.userName
+>>>>>>> 78dac72f13bf59d479c82a48b225b0b756e68877
         }
       if(!oldStuAnswer_success){
           http.get(oldAnswer_url,oldAnswer_params).then((resStr)=>{
@@ -174,7 +182,11 @@ export default function Paper_ToDo(props) {
           "/AppServer/ajax/studentApp_saveAnswer.do"
         const submit_params ={
           learnPlanId :learnPlanId,
+<<<<<<< HEAD
           stuId :  global.constants.userName,
+=======
+          stuId : global.constants.userName,
+>>>>>>> 78dac72f13bf59d479c82a48b225b0b756e68877
           questionId:data[selectedIndex].questionId ,
           answer:Stu_answer[selectedIndex],
           answerTime: answerdate,
@@ -183,7 +195,7 @@ export default function Paper_ToDo(props) {
         console.log(submit_url,submit_params)
         http.get(submit_url,submit_params).then((resStr)=>{
           let submit_resJson = JSON.parse(resStr);
-          console.log('我是TODO页面的提交函数，提交结果之后，接收到的服务器返回的是：',submit_resJson)
+          //console.log('我是TODO页面的提交函数，提交结果之后，接收到的服务器返回的是：',submit_resJson)
         })
 
         //提交完之后把历史答案改了

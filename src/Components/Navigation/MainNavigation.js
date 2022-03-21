@@ -70,6 +70,8 @@ export default class MainNavigation extends Component {
                     <Stack.Screen name="视频" component={Videos} />
                     <Stack.Screen name="音频" component={Voice} />
                     <Stack.Screen name="PPT" component={PptRescouce} />
+                   
+                    {/* 做作业部分 */}
                     <Stack.Screen
                         name="DoPaper"
                         component={Paper_ToDo}
@@ -83,6 +85,7 @@ export default class MainNavigation extends Component {
                         name="ShowCorrected"
                         component={Paper_ShowCorrected}
                     />
+                    {/* 做导学案部分 */}
                     <Stack.Screen
                         name="DoLearningGuide"
                         component={Learningguide_ToDo}
@@ -96,7 +99,6 @@ export default class MainNavigation extends Component {
                         name="ShowCorrected_LearningGuide"
                         component={Learningguide_ShowCorrected}
                     />
-                    
                 </Stack.Group>
 
                 {/* 在线课堂 */}

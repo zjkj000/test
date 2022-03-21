@@ -4,6 +4,7 @@ import http from '../../../utils/http/request'
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
 import Loading from '../../../utils/loading/Loading'
+import Toast from '../../../utils/Toast/Toast'
 // 提交作业页面
 export default function Paper_SubmitContainer(props) {
   const start_date = props.route.params.startdate;
@@ -85,7 +86,7 @@ class Paper_Submit extends Component {
             //判断一下未做作业的题目ID
             let change_status= 0;
             //判断一下作业提交状态  ‘1’.第一次提交  ‘3’修改提交
-            if(this.state.submit_status=0){
+            if(this.state.submit_status='0'){
               change_status=1;
             }else if(this.state.isallObjective){
               //全是客观题   就直接批阅
@@ -96,13 +97,13 @@ class Paper_Submit extends Component {
             console.log('提交作业之后的状态',change_status)
             
             
-            var noSubmitID ='';
-            this.state.data.map(function(index,item){
-              if(item.stuAnswer==''){
+            let noSubmitID ='';
+            this.state.data.map(function(item){
+              if(item.stuAnswer=='未答'||item.stuAnswer==''){
                 noSubmitID+=noSubmitID+item.questionId+',';
               }
             })
-            if(noSubmitID==''){noSubmitID='-1'}
+            if(noSubmitID=='未答'||noSubmitID==''){noSubmitID='-1'}
             
             var answerdate = 0;
             var nowdate = this.getDate();
@@ -119,6 +120,7 @@ class Paper_Submit extends Component {
             const params ={
               answerTime:answerdate,
               paperId : this.state.paperId,
+<<<<<<< HEAD
               userName :  global.constants.userName,
               status:change_status,
               noAnswerQueId:noSubmitID
@@ -147,7 +149,44 @@ class Paper_Submit extends Component {
             }
             ) 
             
+=======
+              userName : global.constants.userName,
+              status:change_status,
+              noAnswerQueId:noSubmitID
+            }
+            var subsuccess = false;
+            http.get(url,params).then((resStr)=>{
+              let resJson = JSON.parse(resStr);
+              console.log(resStr)
+              subsuccess = resJson.success;
+              
+               
+             
+            })
+
+            // if(noSubmitID!='-1'){
+            //     //弹框提醒  是否要继续提交
+            //     alert('还有未作答题目,提交了!')
+            //     //确定就提交，取消就不提交
+            // }else{
+            if(subsuccess){
+                Toast.showSuccessToast('提交成功了!')
+              }
+
+            this.props.navigation.navigate(
+                {
+                  name:"Home", 
+                  params: {
+                    learnId: this.state.paperId,
+                    status:change_status
+                          },  
+              }
+              )   
+            // }
+>>>>>>> 78dac72f13bf59d479c82a48b225b0b756e68877
             
+            // 提交作业代码
+             
             //根据返回结果的success确定 是否提交成功，  结果数据：{"message":"作业提交成功！","data":null,"success":"true"}
             //提交过程设置loading效果
                   
