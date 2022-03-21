@@ -3,7 +3,7 @@ import React, { Component, useState } from 'react'
 import RadioList from '../../DoWork/Utils/RadioList';
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
-
+import { WebView } from 'react-native-webview';
 export default function PaperContainer(props) {
     const navigation = useNavigation();
     const paperId= props.paperId
@@ -49,7 +49,8 @@ export default function PaperContainer(props) {
                 question:'',   //题目内容
                 answer:'',
                 stu_answer:'',
-                oldStuAnswer:''
+                oldStuAnswer:'',
+                uri:''
         }
      }  
    
@@ -66,6 +67,7 @@ export default function PaperContainer(props) {
          //id有了 props.paperId   用户id有  
          //请求到之后  就要把答案 设置到oldstuanswer
          this.setState({
+             uri:this.props.datasource.url,
              stu_answer:this.props.oldAnswer_data?this.props.oldAnswer_data:'',
              oldStuAnswer:this.props.oldAnswer_data,
              numid:this.props.num?this.props.num:0,
@@ -77,7 +79,7 @@ export default function PaperContainer(props) {
         
         const  width = Dimensions.get('window').width;
     return (  
-      <View>
+      <View style={{color:'#FFFFFF'}}>
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.title}>  
                 <Text style={{fontWeight:'600',color:'#000000',fontSize:17,width:'65%'}} >{this.state.resourceName}</Text>
@@ -105,7 +107,8 @@ export default function PaperContainer(props) {
             {/* 展示Paper就行 */}
             
             <View style={styles.area}>
-                <Text>这里是Paper区域</Text>
+                <WebView 
+                    source={{ uri:this.state.uri}} />
             </View>
       </View>
     )
@@ -114,5 +117,5 @@ export default function PaperContainer(props) {
 
 const styles = StyleSheet.create({
     title:{padding:10,paddingLeft:30,flexDirection:'row',},
-    area:{height:"85%",padding:20}
+    area:{height:'100%'}
 })

@@ -22,6 +22,7 @@ export default function Paper_SubmitContainer(props) {
 
 
 class Paper_Submit extends Component {
+<<<<<<< HEAD
   constructor(props) {
     super(props)
     this.state = {
@@ -31,6 +32,18 @@ class Paper_Submit extends Component {
       data: [],
       submit_status: '',
       startdate: '',
+=======
+    constructor(props) {
+        super(props)
+        this.state = {
+            isallObjective:true , //用于记录是否全是客观题
+            paperId:'',
+            success:false,
+            data:[],
+            submit_status:'',    //记录当前的提交状态
+            startdate:'', 
+         }
+>>>>>>> f71ac5865593ad00aff64dc3c130dcd274cc7523
     }
   }
 
@@ -86,6 +99,7 @@ class Paper_Submit extends Component {
       ":8111" +
       "/AppServer/ajax/studentApp_saveStudentHomeWork.do"
 
+<<<<<<< HEAD
           let change_status = 0;  //记录返回的状态
           let newsub_status = 0;   // 记录提交的状态
           //接收到的是状态是：1  新作业
@@ -112,9 +126,76 @@ class Paper_Submit extends Component {
                         change_status = 3;
                       }
           }
+=======
+            let change_status= 0;    //记录返回的状态
+            let newsub_status = 0;   // 记录提交的状态
+            //接收到的是状态是：1  新作业
+            if(this.state.submit_status='1'){
+                //收到的状态是1     提交的状态就是1 
+                newsub_status = 1;
+                        //再去判断返回的状态
+                            if(this.state.isallObjective){
+                              //全是客观题   就直接批阅
+                              //返回的状态是2
+                              change_status=2;
+                            }else{
+                              change_status=3;
+                            }
+            }else{
+                //收到的状态是3   提交的状态就是 3 
+                newsub_status = 3;
+                        //在判断返回的状态
+                              if(this.state.isallObjective){
+                                //全是客观题   就直接批阅
+                                //返回的状态是2
+                                change_status=2;
+                              }else{
+                                change_status=3;
+                              }
+            }
+            console.log('这次修改之后返回给wly的状态',change_status)
+         
+            let noSubmitID ='';
+            this.state.data.map(function(item){
+              if(item.stuAnswer=='未答'||item.stuAnswer==''){
+                noSubmitID+=noSubmitID+item.questionId+',';
+              }
+            })
+            if(noSubmitID=='未答'||noSubmitID==''){noSubmitID='-1'}
+            
+            var answerdate = 0;
+            var nowdate = this.getDate();
+            var startdatearr = this.props.startdate.split(':')
+            var nowdatearr = nowdate.split(':')
+            if(nowdatearr[0]<startdatearr[0])nowdatearr[0]+=24
+            var answerdate_minute =  ((nowdatearr[0]-startdatearr[0]))*60 + (nowdatearr[1]-startdatearr[1]) ; 
+            if(nowdatearr[2]<startdatearr[2])answerdate_minute -=1
+            if(nowdatearr[2]<startdatearr[2]) nowdatearr[2]+=60
+            var answerdate_seconds = nowdatearr[2]-startdatearr[2] ;
+            answerdate  = answerdate_minute+':'+ answerdate_seconds
+           
+            // console.log('我是提交作业页面的答题时间',answerdate)
+            const params ={
+              answerTime:answerdate,
+              paperId : this.state.paperId,
+              userName : global.constants.userName,
+              status:newsub_status,
+              noAnswerQueId:noSubmitID
+            }
+            var subsuccess = false;
+            http.get(url,params).then((resStr)=>{
+              let resJson = JSON.parse(resStr);
+              console.log(resStr)
+              subsuccess = resJson.success;
+              
+               
+             
+            })
+>>>>>>> f71ac5865593ad00aff64dc3c130dcd274cc7523
 
     console.log('提交作业之后返回给wly的状态', change_status)
 
+<<<<<<< HEAD
 
     let noSubmitID = '';
     this.state.data.map(function (item) {
@@ -142,6 +223,24 @@ class Paper_Submit extends Component {
       userName: global.constants.userName,
       status: change_status,
       noAnswerQueId: noSubmitID
+=======
+            this.props.navigation.navigate(
+                {
+                  name:"Home", 
+                  params: {
+                    learnId: this.state.paperId,
+                    status:change_status
+                          },  
+              }
+              )   
+            // }
+            
+            // 提交作业代码
+             
+            //根据返回结果的success确定 是否提交成功，  结果数据：{"message":"作业提交成功！","data":null,"success":"true"}
+            //提交过程设置loading效果
+                  
+>>>>>>> f71ac5865593ad00aff64dc3c130dcd274cc7523
     }
     var subsuccess = false;
     http.get(url, params).then((resStr) => {

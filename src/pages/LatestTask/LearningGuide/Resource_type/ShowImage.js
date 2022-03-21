@@ -40,15 +40,16 @@ export default function ShowImageContainer(props) {
         this.stuAnswer=this.stuAnswer.bind(this);
         this.state = {
                 numid:'',
-                resourceName:'单选题',
+                resourceName:'',
                 resourceId:'',
                 baseTypeId:'',
                 questionName:'',        //题目名称
                 questionChoiceList:'',  //题目选项
-                question:'',   //题目内容
+                question:'',            //题目内容
                 answer:'',
                 stu_answer:'',
-                oldStuAnswer:''
+                oldStuAnswer:'',
+                uri:''
         }
      }  
    
@@ -65,6 +66,7 @@ export default function ShowImageContainer(props) {
          //id有了 props.paperId   用户id有  
          //请求到之后  就要把答案 设置到oldstuanswer
          this.setState({
+             uri:this.props.datasource.url,
              stu_answer:this.props.oldAnswer_data?this.props.oldAnswer_data:'',
              oldStuAnswer:this.props.oldAnswer_data,
              numid:this.props.num?this.props.num:0,
@@ -73,7 +75,6 @@ export default function ShowImageContainer(props) {
 
 
      render() {
-        
         const  width = Dimensions.get('window').width;
     return (  
       <View>
@@ -104,7 +105,8 @@ export default function ShowImageContainer(props) {
             {/* 展示ShowImage就行 */}
             
             <View style={styles.area}>
-                <Text>这里是ShowImage区域</Text>
+                <Text style={{fontSize:18,marginBottom:10}}>{this.state.resourceName}</Text>
+                <Image style={{width:'90%',height:250}} source={{uri:this.state.uri}}></Image>
             </View>
       </View>
     )
@@ -113,5 +115,5 @@ export default function ShowImageContainer(props) {
 
 const styles = StyleSheet.create({
     title:{padding:10,paddingLeft:30,flexDirection:'row',},
-    area:{height:"85%",padding:20}
+    area:{alignItems:'center',height:'100%',paddingTop:'35%'}
 })

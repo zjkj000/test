@@ -3,7 +3,7 @@ import React, { Component, useState } from 'react'
 import RadioList from '../../DoWork/Utils/RadioList';
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
-
+import { WebView } from 'react-native-webview';
 export default function WordContainer(props) {
     const navigation = useNavigation();
     const paperId= props.paperId
@@ -48,7 +48,8 @@ export default function WordContainer(props) {
                 question:'',   //题目内容
                 answer:'',
                 stu_answer:'',
-                oldStuAnswer:''
+                oldStuAnswer:'',
+                uri:''
         }
      }  
    
@@ -65,6 +66,7 @@ export default function WordContainer(props) {
          //id有了 props.paperId   用户id有  
          //请求到之后  就要把答案 设置到oldstuanswer
          this.setState({
+             uri:this.props.datasource.url,
              stu_answer:this.props.oldAnswer_data?this.props.oldAnswer_data:'',
              oldStuAnswer:this.props.oldAnswer_data,
              numid:this.props.num?this.props.num:0,
@@ -104,7 +106,10 @@ export default function WordContainer(props) {
             {/* 展示Word就行 */}
             
             <View style={styles.area}>
-                <Text>这里是Word区域</Text>
+                <WebView
+                   
+                    startInLoadingState={true}
+                    source={{ uri:this.state.uri}} />
             </View>
       </View>
     )
@@ -113,5 +118,5 @@ export default function WordContainer(props) {
 
 const styles = StyleSheet.create({
     title:{padding:10,paddingLeft:30,flexDirection:'row',},
-    area:{height:"85%",padding:20}
+    area:{height:'100%'}
 })
