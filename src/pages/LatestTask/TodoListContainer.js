@@ -107,7 +107,18 @@ class TodoList extends React.Component {
                     }
                 }
                 else{ //status == 2，已批改作业，需请求数据
-                    this.setState({ status: '2' }); 
+                    //this.setState({ status: '2' }); 
+                    // this.setState({ 
+                    //     todos: [] , 
+                    //     isLoading: true , 
+                    //     error: false ,
+                    //     isRefresh: true ,
+                    //     showFoot: 0 ,
+                    // });
+                    pageNo = 1; //当前第几页
+                    itemNo = 0; //item的个数
+                    dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
+                    this.fetchData(pageNo , (onRefresh = true));
                 }
         }
     }
@@ -115,14 +126,21 @@ class TodoList extends React.Component {
     componentDidUpdate(){
         //console.log('oldtype' , oldtype);
         //console.log('resourceType' , this.props.resourceType);
-        if((oldtype != this.props.resourceType || searchStr != this.props.searchStr) || this.state.status == '2'){
+        console.log('DidUpdate' ,  Date.parse(new Date()))
+        if((oldtype != this.props.resourceType || searchStr != this.props.searchStr)){
             //当此次请求与上次请求的数据类型不一致时，先清空上一次的数据再请求
-            this.setState({ todos: [] , isLoading: true , error: false });
+            this.setState({ 
+                todos: [] , 
+                isLoading: true , 
+                error: false ,
+                isRefresh: true ,
+                showFoot: 0 ,
+            });
             pageNo = 1; //当前第几页
             itemNo = 0; //item的个数
             dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
-            this.fetchData(pageNo);
-            this.setState({ status: '3' });
+            this.fetchData(pageNo , (onRefresh = true));
+            //this.setState({ status: '3' });
         }
     }
 
@@ -289,16 +307,7 @@ class TodoList extends React.Component {
             //创建者
             const createrName = todo.createrName;
             //课程名称（通过判断学习状态修改课程名称）
-            const courseName =
-                todo.status == 1 || todo.status == 3
-                    ? todo.courseName
-                    : todo.status == 2
-                    ? "得分:" +
-                        todo.teaScore +
-                        "分 平均分:" +
-                        todo.averageScore +
-                        "分"
-                    : todo.courseName;
+            const courseName = todo.courseName;
             //截止时间(当作业或导学案已批改,通知或公告时，截止时间不显示，可将截止时间修改为空字符串)
             const timeStop =
                 todo.status == 2 || todo.status == 4 || todo.status == 5

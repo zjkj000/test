@@ -107,8 +107,7 @@ export default function PaperContainer(props) {
             {/* 展示Paper就行 */}
             
             <View style={styles.area}>
-                <WebView 
-                    source={{ uri:this.state.uri}} />
+                <WebView  source={{ uri:this.state.uri}} />
             </View>
       </View>
     )

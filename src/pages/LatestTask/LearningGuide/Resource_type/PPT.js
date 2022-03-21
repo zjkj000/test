@@ -51,7 +51,7 @@ export default function PPTContainer(props) {
                 stu_answer:'',
                 oldStuAnswer:'',
                 uri:'',
-                pptList:'',
+                pptList:[],
                 selectedindex:0    //记录当前选中的是哪张ppt
         }
      }  
