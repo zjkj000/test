@@ -37,7 +37,6 @@ class Paper_Submit extends Component {
     //页面加载在render之前 
     UNSAFE_componentWillMount(){
       let bool = (this.props.isallObj.indexOf('104')>-1)||(this.props.isallObj.indexOf('106')>-1)?false:true
-     
       this.setState({
         start_date: this.props.startdate?this.props.startdate:this.getDate(),
             paperId:this.props.paperId,
@@ -109,7 +108,7 @@ class Paper_Submit extends Component {
                                 change_status=3;
                               }
             }
-            console.log('这次修改之后返回给wly的状态',change_status)
+           
          
             let noSubmitID ='';
             this.state.data.map(function(item){
@@ -141,11 +140,7 @@ class Paper_Submit extends Component {
             var subsuccess = false;
             http.get(url,params).then((resStr)=>{
               let resJson = JSON.parse(resStr);
-              console.log(resStr)
               subsuccess = resJson.success;
-              
-               
-             
             })
 
             // if(noSubmitID!='-1'){
@@ -154,7 +149,7 @@ class Paper_Submit extends Component {
             //     //确定就提交，取消就不提交
             // }else{
             if(subsuccess){
-                Toast.showSuccessToast('提交成功了!')
+                Toast.showSuccessToast('提交成功了!',1000)
               }
 
             this.props.navigation.navigate(

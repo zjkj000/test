@@ -220,14 +220,13 @@ class Answer_subjective extends Component {
             // userName    : 'ming6051'
             baseCode :  baseCode,
             learnPlanId :  this.state.paperId,
-            userName    : 'ming6051'
+            userName    : global.constants.userName
             }
         console.log('---------照片  请求提交照片了----------')
         return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
             // http.post(url,params).then((resStr)=>{
-            // console.log('???',resStr)
             //     let resJson = JSON.parse(resStr);
-            //     console.log('+++提交结果++++',resJson)
+            //     // console.log('+++提交结果++++',resJson)
             //     if(resJson.success){
             //         // 返回URL地址
             //         console.log('请求提交成功！返回了！！！')
