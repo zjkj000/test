@@ -1,3 +1,8 @@
+if (__DEV__) {
+    import("./ReactotronConfig").then(() =>
+        console.log("Reactotron Configured")
+    );
+}
 import React, { Component } from "react";
 import { SafeAreaView, View } from "react-native";
 import MainNavigation from "./src/Components/Navigation/MainNavigation";
@@ -16,7 +21,6 @@ export default class App extends Component {
     render() {
         return (
             <>
-            
                 <IconRegistry icons={EvaIconsPack} />
                 <ApplicationProvider
                     {...eva}

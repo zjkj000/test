@@ -24,8 +24,14 @@ import ImageHandler from "../../utils/Camera/Camera";
 import { styles } from "./styles";
 
 const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
+import { useNavigation } from "@react-navigation/native";
 
-export default class MyPage extends Component {
+export default function MyPage() {
+    const navigation = useNavigation();
+    return <MyPageComponent navigation={navigation} />;
+}
+
+class MyPageComponent extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -95,8 +101,11 @@ export default class MyPage extends Component {
             </View>
         );
     };
-    logout = () => {};
-    
+    logout = () => {
+        const { navigation } = this.props;
+        navigation.navigate("Home");
+    };
+
     handleCamera = () => {
         ImageHandler.handleCamera().then((res) => {
             if (res) {

@@ -1,11 +1,14 @@
 import axios from "axios";
 import baseConfig from "./httpBaseConfig";
+import Qs from "qs";
 
 // 默认域名
 axios.defaults.baseURL =
     baseConfig.baseUrl + ":" + baseConfig.port + baseConfig.prefix;
 // 默认请求头
-axios.defaults.headers["Content-Type"] = "application/json";
+// axios.defaults.headers["Content-Type"] = "application/json";
+// post请求头默认参数格式
+axios.defaults.headers["Content-Type"] = "application/x-www-form-urlencoded";
 
 // 响应时间
 axios.defaults.timeout = 10000;
@@ -47,11 +50,22 @@ export default class http {
     // ES7异步get函数
     static async get(url, params) {
         try {
-            let query = await new URLSearchParams(params).toString();
-            let res = null;
-            if (params) {
-                url = url + "?" + query;
+            let ret = "";
+            for (let it in params) {
+                ret +=
+                    encodeURIComponent(it) +
+                    "=" +
+                    encodeURIComponent(params[it]) +
+                    "&";
             }
+            // let query = await new URLSearchParams(params).toString();
+            // let res = null;
+            if (ret != "") {
+                url = url + "?" + ret;
+            }
+            // console.log("====================================");
+            // console.log(url);
+            // console.log("====================================");
             url = encodeURI(url);
             res = await axios.get(url);
             return res;
@@ -70,11 +84,23 @@ export default class http {
     // }
     static async post(url, params) {
         try {
-            let res = await axios.post({
+            // let myTypeParams = new URLSearchParams();
+            // for (let it in params) {
+            //     myTypeParams.append(it, params[it]);
+            // }
+            // console.log(Qs.stringify(params));
+            // let res = await axios.post(url, Qs.stringify(params));
+            let res = await axios({
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded",
+                },
                 url: url,
                 method: "post",
-                data: params,
+                data: Qs.stringify(params),
             });
+            // console.log("====================================");
+            // console.log(url);
+            // console.log("====================================");
             return res;
         } catch (error) {
             return error;

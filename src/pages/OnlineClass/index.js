@@ -13,6 +13,7 @@ import {
 import TempPage from "./ClassPages/TempPage";
 import FreePage from "./ClassPages/FreePage";
 import LockedPage from "./ClassPages/LockedPage";
+import HTML from "react-native-render-html";
 
 export default function OnlineClassTempPage() {
     const navigation = useNavigation();
@@ -55,13 +56,13 @@ class OnlineClassTemp extends Component {
 
     handleMessageQueue() {
         this.getInfo();
+        const { ipAddress, userName } = this.props.route.params;
         const { resJson } = this.state;
         if (resJson.hasOwnProperty("messageList")) {
             messageList = resJson.messageList;
             if (messageList.length !== 0) {
                 let events = messageList[0];
-                const { action } = events;
-                console.log(action);
+                const { action, period } = events;
                 switch (action) {
                     case "toScan":
                         this.props.navigation.goBack();
@@ -71,17 +72,14 @@ class OnlineClassTemp extends Component {
                         this.setState({ pageRender: 1 });
                         // TODO: 渲染单题组件
                         break;
-
                     case "no-lock":
                         console.log("多题模式");
                         this.setState({ pageRender: 2 });
-
                         // TODO: 渲染多题组件
                         break;
                     case "lock":
                         console.log("结束答题");
                         this.setState({ pageRender: 3 });
-
                         break;
                     default:
                         break;
@@ -121,8 +119,6 @@ class OnlineClassTemp extends Component {
 
     shouldComponentUpdate(nextProps, nextState) {
         if (shallowEqual(this.state.resJson, nextState.resJson)) {
-            console.log(this.state.resJson !== nextState.resJson);
-            console.log(this.state.resJson);
             console.log(nextState.resJson);
             return true;
         }
@@ -134,13 +130,20 @@ class OnlineClassTemp extends Component {
     }
 
     pageRender = () => {
-        const { pageRender } = this.state;
-        console.log(pageRender);
+        const { pageRender, resJson } = this.state;
+        const { ipAddress, userName, imgURL } = this.props.route.params;
+        const { introduction } = this.props.route.params.learnPlan;
         switch (pageRender) {
             case 0:
                 return this._renderIndex();
             case 1:
-                return this._renderLockedPage();
+                return this._renderLockedPage({
+                    ...resJson,
+                    ipAddress,
+                    introduction,
+                    userName,
+                    imgURL,
+                });
             case 2:
                 return this._renderFreePage();
             case 3:
@@ -163,8 +166,8 @@ class OnlineClassTemp extends Component {
         );
     }
 
-    _renderLockedPage() {
-        return <LockedPage />;
+    _renderLockedPage(props) {
+        return <LockedPage {...props} />;
     }
 
     _renderFreePage() {
