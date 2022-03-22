@@ -23,6 +23,10 @@ export default class Videos extends Component {
     super(props);
     this.state = {
       resource: '', //api请求的数据data
+
+      uri:'',
+      pptList:[],
+      selectedindex:0    //记录当前选中的是哪张ppt
     };
   }
 
@@ -49,7 +53,11 @@ export default class Videos extends Component {
             let resJson = JSON.parse(resStr);
             //console.log('resJson' , resJson.data);
             let url = resJson.data.url;
-            this.setState({ resource: resJson.data });
+            this.setState({ 
+              resource: resJson.data , 
+              pptList: resJson.data.pptList ,
+              uri: resJson.data.pptList[0]
+            });
         })
   }
 
@@ -71,22 +79,35 @@ export default class Videos extends Component {
           </View>
       );
     }else{
-        const pptList = this.state.resource.pptList;
+        //const pptList = this.state.resource.pptList;
         return(
             <View>
-                {/* <Text>下载地址：{this.state.resource.path}</Text>
-                <Text>URL地址：{this.state.resource.url}</Text> */}
-                {console.log(this.state.resource.url)}
-                <ScrollView>
-                    {
-                        pptList.map((ppt,index)=>{
-                            return <Image source={{uri: pptList[index]}} style={styles.pptImage} />
-                        })
-                    }
-                </ScrollView>
+                <View style={styles.area}>
+                    <Text style={{fontSize:18,marginBottom:10}}>{this.state.resourceName}</Text>
+                    <Image style={{width:'90%',height:250}} source={{uri: this.state.uri}}></Image>
+                    <ScrollView horizontal={true} style={{marginTop:80}}>
+                        {this.getPPT(this.state.pptList)}
+                    </ScrollView>
+                </View>
             </View> 
         );
     }
+  }
+
+  //底部水平显示PPT内容
+  getPPT(pptList){
+      var pptItems=[];
+      for(let ppt_i=0;ppt_i<pptList.length;ppt_i++){
+          pptItems.push(
+              <TouchableOpacity 
+                onPress={() => this.setState({selectedindex: ppt_i, uri: pptList[ppt_i]})}>
+                      <Image source={{uri:pptList[ppt_i]}} 
+                        style={this.state.selectedindex == ppt_i ? styles.checked : styles.little_image} />
+              </TouchableOpacity>
+              
+          )
+      }
+      return pptItems;
   }
   
   render() {
@@ -111,4 +132,21 @@ const styles = StyleSheet.create({
     width: screenWidth,
     height: 300,
   },
+  area:{
+    alignItems:'center',
+    height:'100%',
+    paddingTop:'35%'
+  },
+  little_image:{
+    height:50,
+    width:80,
+    marginLeft:5
+  },
+  checked:{
+    height:50,
+    width:80,
+    marginLeft:5,
+    borderColor:'#FFA500',
+    borderWidth:2
+  }
 });

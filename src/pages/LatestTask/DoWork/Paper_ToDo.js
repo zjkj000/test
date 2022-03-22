@@ -34,6 +34,7 @@ export default function Paper_ToDo(props) {
 
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
+      console.log(props.route.params.papername,props.route.params.learnId);
       navigation.setOptions({title:props.route.params.papername,
       headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)})
       setSelectedIndex(props.route.params.selectedindex)

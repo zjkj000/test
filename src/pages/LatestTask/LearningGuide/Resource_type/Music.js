@@ -47,12 +47,12 @@ class Music extends Component {
         this.state = {
 
                 numid:'',
-                resourceName:'单选题',
+                resourceName:'',
                 resourceId:'',
                 baseTypeId:'',
                 questionName:'',        //题目名称
                 questionChoiceList:'',  //题目选项
-                question:'',   //题目内容
+                question:'',   
                 answer:'',
                 stu_answer:'',
                 oldStuAnswer:'',
@@ -62,15 +62,14 @@ class Music extends Component {
                 videoCover: '',
                 videoWidth: screenWidth,
                 videoHeight: screenWidth * 9/16, // 默认16：9的宽高比
-                showVideoCover: true,    // 是否显示视频封面
-                showVideoControl: false, // 是否显示视频控制组件
-                isPlaying: false,        // 视频是否正在播放
-                currentTime: 0,        // 视频当前播放的时间
-                duration: 0,           // 视频的总时长
-                isFullScreen: false,     // 当前是否全屏显示
-                playFromBeginning: false, // 是否从头开始播放
-
-                resource: '', //api请求的数据data
+                showVideoCover: true,            // 是否显示视频封面
+                showVideoControl: false,         // 是否显示视频控制组件
+                isPlaying: false,                // 视频是否正在播放
+                currentTime: 0,                  // 视频当前播放的时间
+                duration: 0,                     // 视频的总时长
+                isFullScreen: false,             // 当前是否全屏显示
+                playFromBeginning: false,        // 是否从头开始播放
+                resource: '',                    //api请求的数据data
         }
      }  
    
@@ -348,7 +347,7 @@ class Music extends Component {
 
      render() {   
         return (  
-        <View>
+        <View style={{color:'#FFFFFF'}}>
                 {/* 第一行显示 第几题  题目类型 */}
                 <View  style={styles.title}>  
                     <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
@@ -384,7 +383,7 @@ class Music extends Component {
 
 const styles = StyleSheet.create({
     title:{padding:10,paddingLeft:30,flexDirection:'row',},
-    area:{height:"85%",padding:20,color:'#FFFFFF'},
+    area:{height:'95%'},
   imageNull: {
       justifyContent: "center",
       alignItems: "center",
@@ -392,8 +391,7 @@ const styles = StyleSheet.create({
       paddingBottom: screenHeight*0.2,
   },
   container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF'
+    color:'#FFFFFF',
   },
   playButton: {
     width: 50,

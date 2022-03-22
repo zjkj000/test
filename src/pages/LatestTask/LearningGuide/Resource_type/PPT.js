@@ -19,7 +19,7 @@ export default function PPTContainer(props) {
     const[Stu_answer,setStu_answer] = useState()
     props.getStu_answer(Stu_answer)
     return (
-    <PPT  navigation={navigation}  
+    <PPT            navigation={navigation}  
                     papername = {papername}
                     submit_status={submit_status}  
                     startdate={startdate}
@@ -41,15 +41,18 @@ export default function PPTContainer(props) {
         this.stuAnswer=this.stuAnswer.bind(this);
         this.state = {
                 numid:'',
-                resourceName:'单选题',
+                resourceName:'',
                 resourceId:'',
                 baseTypeId:'',
                 questionName:'',        //题目名称
                 questionChoiceList:'',  //题目选项
-                question:'',   //题目内容
+                question:'',            //题目内容
                 answer:'',
                 stu_answer:'',
-                oldStuAnswer:''
+                oldStuAnswer:'',
+                uri:'',
+                pptList:[],
+                selectedindex:0    //记录当前选中的是哪张ppt
         }
      }  
    
@@ -66,15 +69,27 @@ export default function PPTContainer(props) {
          //id有了 props.paperId   用户id有  
          //请求到之后  就要把答案 设置到oldstuanswer
          this.setState({
+             uri:this.props.datasource.pptList[0],
+             pptList: this.props.datasource.pptList,
              stu_answer:this.props.oldAnswer_data?this.props.oldAnswer_data:'',
              oldStuAnswer:this.props.oldAnswer_data,
              numid:this.props.num?this.props.num:0,
              ...this.props.datasource});
         }   
 
-
+    getPPT(pptList){
+        var pptItems=[];
+        for(let ppt_i=0;ppt_i<pptList.length;ppt_i++){
+            pptItems.push(
+                <TouchableOpacity onPress={()=>this.setState({selectedindex:ppt_i,uri:pptList[ppt_i]})}>
+                        <Image source={{uri:pptList[ppt_i]}} style={this.state.selectedindex==ppt_i?styles.checked:styles.little_image} />
+                </TouchableOpacity>
+                
+            )
+        }
+        return pptItems;
+    }
      render() {
-        
         const  width = Dimensions.get('window').width;
     return (  
       <View>
@@ -105,7 +120,11 @@ export default function PPTContainer(props) {
             {/* 展示PPT就行 */}
             
             <View style={styles.area}>
-                <Text>这里是PPT区域</Text>
+                <Text style={{fontSize:18,marginBottom:10}}>{this.state.resourceName}</Text>
+                <Image style={{width:'90%',height:250}} source={{uri:this.state.uri}}></Image>
+                <ScrollView horizontal={true} style={{marginTop:80}}>
+                    {this.getPPT(this.state.pptList)}
+                </ScrollView>
             </View>
       </View>
     )
@@ -114,5 +133,7 @@ export default function PPTContainer(props) {
 
 const styles = StyleSheet.create({
     title:{padding:10,paddingLeft:30,flexDirection:'row',},
-    area:{height:"85%",padding:20}
+    area:{alignItems:'center',height:'100%',paddingTop:'35%'},
+    little_image:{height:50,width:80,marginLeft:5},
+    checked:{height:50,width:80,marginLeft:5,borderColor:'#FFA500',borderWidth:2}
 })

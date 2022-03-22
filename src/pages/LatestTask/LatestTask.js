@@ -35,6 +35,7 @@ class LatestTask extends React.Component {
             value: '',  //搜索栏中的内容
             resourceType: 'all', //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
                                 //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
+            
 
             resourceRead: '', //资料夹是否已读接口返回的数据
         };
@@ -43,7 +44,7 @@ class LatestTask extends React.Component {
     //第一次加载页面请求资料夹是否已读api
     UNSAFE_componentWillMount(){
         const userId = global.constants.userName;
-        const ip = global.constants.baseUrl
+        const ip = global.constants.baseUrl;
         const url = ip + "studentApp_checkMineFloder.do";
         const params ={
             userId: userId,
@@ -77,39 +78,19 @@ class LatestTask extends React.Component {
         this.onSubmit(searchText.state.value);
     };
     //点击"搜索"按钮时触发
-    onSubmit = (value) => {
+    onSubmit = (searchValue) => {
         console.log('点击了搜索');
         //this.setState({ value: '' });
 
-        if(value == '作业'){
-            this.setState({ resourceType: '2' });
-        }else if(value == '导学案'){
-            this.setState({ resourceType: '1' });
-        }else if(value == '通知'){
-            this.setState({ resourceType: '3' });
-        }else if(value == '公告'){
-            this.setState({ resourceType: '4' });
-        }else{
-            this.setState({ resourceType: 'all' });
-        }
+        this.setState({ value: searchValue });
     };
     //点击键盘中的提交按钮，光标移出搜索框，“搜索“二字消失
     onBlur = () => {
         console.log('点击了键盘中的提交按钮');
         //this.setState({ value: '' });
         const {searchText} = this;
-        const value = searchText.state.value;
-        if(value == '作业'){
-            this.setState({ resourceType: '2' });
-        }else if(value == '导学案'){
-            this.setState({ resourceType: '1' });
-        }else if(value == '通知'){
-            this.setState({ resourceType: '3' });
-        }else if(value == '公告'){
-            this.setState({ resourceType: '4' });
-        }else{
-            this.setState({ resourceType: 'all' });
-        }
+        const searchValue = searchText.state.value;
+        this.setState({ value: searchValue });
     };
 
     //显示filter图标
@@ -287,7 +268,7 @@ class LatestTask extends React.Component {
                 </View>
                 <View style={styles.todoList}>
                     {console.log('最新内容类型' , this.state.resourceType)}
-                    <TodoListContainer resourceType={this.state.resourceType} />
+                    <TodoListContainer resourceType={this.state.resourceType} searchStr={this.state.value}  status={'2'} />
                 </View>
             </View>
         );
