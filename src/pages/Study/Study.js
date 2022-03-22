@@ -1,9 +1,12 @@
 import React from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { SearchBar } from "@ant-design/react-native";
+//import { SearchBar } from 'react-native-elements';
 import { Flex } from "@ant-design/react-native";
 import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
 import { useNavigation } from "@react-navigation/native";
+//import { Container , Header , Item , Input , Icon , Button } from 'native-base';
+import http from "../../utils/http/request";
 import {
     Avatar,
     Layout,
@@ -32,11 +35,32 @@ class Study extends React.Component {
             value: '',  //搜索栏中的内容
             resourceType: '9', //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
                                 //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
+            
+
+            resourceRead: '', //资料夹是否已读接口返回的数据
         };
+    }
+
+    //第一次加载页面请求资料夹是否已读api
+    UNSAFE_componentWillMount(){
+        const userId = global.constants.userName;
+        const ip = global.constants.baseUrl;
+        const url = ip + "studentApp_checkMineFloder.do";
+        const params ={
+            userId: userId,
+        }
+        http.get(url,params).then((resStr)=>{
+            let resJson = JSON.parse(resStr);
+            console.log('resStr' , resJson);
+            this.setState({ resourceRead: resJson.data });
+            console.log('data' , this.state.resourceRead);
+            return ;
+        })
     }
 
     //点击文件夹图标跳转
     packagesPage = () => {
+        this.setState({ resourceRead: 1 }); //资料夹状态改为已读
         console.log("文件夹页面跳转");
         this.props.navigation.navigate("资料夹", {});
     };
@@ -54,31 +78,19 @@ class Study extends React.Component {
         this.onSubmit(searchText.state.value);
     };
     //点击"搜索"按钮时触发
-    onSubmit = (value) => {
+    onSubmit = (searchValue) => {
         console.log('点击了搜索');
         //this.setState({ value: '' });
 
-        if(value == '作业'){
-            this.setState({ resourceType: '2' });
-        }else if(value == '导学案'){
-            this.setState({ resourceType: '1' });
-        }else{
-            this.setState({ resourceType: '9' });
-        }
+        this.setState({ value: searchValue });
     };
     //点击键盘中的提交按钮，光标移出搜索框，“搜索“二字消失
     onBlur = () => {
         console.log('点击了键盘中的提交按钮');
         //this.setState({ value: '' });
         const {searchText} = this;
-        const value = searchText.state.value;
-        if(value == '作业'){
-            this.setState({ resourceType: '2' });
-        }else if(value == '导学案'){
-            this.setState({ resourceType: '1' });
-        }else{
-            this.setState({ resourceType: '9' });
-        }
+        const searchValue = searchText.state.value;
+        this.setState({ value: searchValue });
     };
 
     //显示filter图标
@@ -112,17 +124,33 @@ class Study extends React.Component {
         console.log('获取导学案内容');
         this.setState({ resourceType: '1'});
     };
-    //授课包
-    handleTeachingPackages = () => {
-        console.log('获取授课包内容');
-        this.setState({ resourceType: '6'});
-    };
-    //微课
-    handleMicroClass = () => {
-        console.log('获取微课内容');
-        this.setState({ resourceType: '7'});
-    };
     
+
+    //资料夹是否已读图标
+    showPackagesStatus = () => {
+        //componentwillMount第一次加载页面需要请求http://www.cn901.net:8111/AppServer/ajax/studentApp_checkMineFloder.do?&userId=ming6059&callback=ha
+        //若返回数据的data值为0则不显示红点，否则存在未读则显示
+        //资料夹图标只要被点击，就默认资料均被读，从资料夹页面返回时就不再显示红点标志
+
+        return ( this.state.resourceRead == 0 ?  //测试==0，之后需要改为！=0
+                        (<View
+                            style={styles.rightNumView}
+                        >     
+                            <Image
+                                source={require("../../assets/LatestTaskImages/rightNum.png")}
+                                style={styles.rightNumImg}
+                            />
+                        </View>)
+                        : (<View
+                            style={styles.rightNumView}
+                        >     
+                            <Image
+                                source={require("../../assets/LatestTaskImages/packageRead.png")}
+                                style={styles.rightNumImg}
+                            />
+                        </View>)
+        );
+    };
 
     //显示筛选filter
     showFilter = () => {
@@ -130,17 +158,20 @@ class Study extends React.Component {
             <View>
                 <OverflowMenu
                     anchor={this.renderAvatar}
+                    //弹出项外部背景样式
                     backdropStyle={styles.backdrop}
+                    //backdropStyle={{backgroundColor:'white'}}
                     visible={this.state.moduleVisible}
                     onBackdropPress={() => {
                         this.setState({ moduleVisible: false});
                     }}
                     style={{width: screenWidth*0.22,}}
+                    //fullWidth={false}
                 >
                     <MenuItem 
                         title = "全部"
                         onPress={this.handleAll}
-                        //style={styles.menuItem}
+                        style={{fontSize:40}}
                     />
                     <MenuItem 
                         title = "作业"
@@ -152,16 +183,6 @@ class Study extends React.Component {
                         onPress={this.handleGuidance}
                         style={styles.menuItem}
                     />
-                    {/*<MenuItem 
-                        title = "授课包"
-                        onPress={this.handleTeachingPackages}
-                        style={styles.menuItem}
-                    />
-                    <MenuItem 
-                        title = "微课"
-                        onPress={this.handleMicroClass}
-                        style={styles.menuItem}
-                    />*/}
                 </OverflowMenu>
             </View>
         );
@@ -180,19 +201,18 @@ class Study extends React.Component {
                                 source={require("../../assets/LatestTaskImages/packages.png")}
                                 style={styles.packagesImg}
                             />
-                        </TouchableOpacity>                       
+                        </TouchableOpacity>    
+                        {this.showPackagesStatus()}         
                         <View style={styles.searchView}>
                             <SearchBar 
                                 style={styles.searchBar}
                                 value={this.state.value}
                                 placeholder="学案/作业"
                                 ref={ref => this.searchText = ref}
-                                //onFocus={() => this.showSearch(true)}
+
                                 onCancel={this.onSearch}
                                 onChange={this.onChange}
-                                //onSubmit={this.onBlur}
                                 onBlur={this.onBlur}
-                                //onSubmit={() => this.showSearch(false)}
                                 cancelText='搜索'
                                 showCancelButton
                             />
@@ -202,19 +222,14 @@ class Study extends React.Component {
                             <TouchableOpacity
                                 style={styles.filterView}
                             >
-                                {/*<Image
-                                    source={require("../../assets/LatestTaskImages/filter.png")}
-                                    style={styles.filterImg}
-                                />*/}
-                                {/*this.showSerachOrFilter()*/}
                                 {this.showFilter()}
                             </TouchableOpacity>
                         </Flex>
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('最新内容类型' , this.state.resourceType)}
-                    <StudyListContainer resourceType={this.state.resourceType} />
+                    {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()))}
+                    <StudyListContainer resourceType={this.state.resourceType} searchStr={this.state.value}  status={'2'} />
                 </View>
             </View>
         );
@@ -231,15 +246,28 @@ const styles = StyleSheet.create({
     },
     flexNew: {
         paddingTop: 0,
-        paddingLeft: screenWidth*0.03,
+        paddingLeft: screenWidth*0.01,
+    },
+    packagesView: {
+        width: screenWidth * 0.1,
     },
     packagesImg: {
         height: "100%",
         width: "50%",
         resizeMode: "contain",
+        top: 2,
+        left:18,
     },
-    packagesView: {
-        width: screenWidth * 0.1,
+    rightNumView: {
+        width: screenWidth * 0.05,
+    },
+    rightNumImg: {
+        height: "100%",
+        width: "40%",
+        resizeMode: "contain", 
+        //top:0,
+        //left:0,
+        //marginLeft:0,
     },
     filterImg: {
         height: "100%",
@@ -250,7 +278,7 @@ const styles = StyleSheet.create({
         width: screenWidth * 0.08,
     },
     searchView: {
-        width: screenWidth * 0.75,
+        width: screenWidth * 0.7,
         //backgroundColor:'red',
         //borderWidth: 0,
         //borderColor: 'red',
@@ -268,5 +296,8 @@ const styles = StyleSheet.create({
         //paddingTop: 0,
         fontSize: 15,
         paddingLeft: 30,
+    },
+    backdrop: {
+        //backgroundColor: "purple",
     },
 });

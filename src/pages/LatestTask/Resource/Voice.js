@@ -105,8 +105,20 @@ export default class Videos extends Component {
       );
     }else{
         return( //"http://www.cn901.com/res/91Content/resource/2021/01/22/video/46c31428-3fa2-47d2-ae51-be58a3f8aba0_mp4.mp4"
-              <View style={styles.container} onLayout={this._onLayout}>
-                  <View style={{top: screenHeight*0.4 ,width: this.state.videoWidth, height: 50, backgroundColor:'#000000' }}>
+              <View style={styles.container}>
+                  <View style={{alignItems: "center"}}>
+                    <Text style={{
+                        top: screenHeight*0.3,
+                        fontSize: 20,
+                        fontWeight:'600',
+                      }}
+                      numberOfLines={1}
+                      ellipsizeMode={"tail"}
+                    >
+                        {resourceName}
+                    </Text>
+                  </View>
+                  <View style={{top: screenHeight*0.3 ,width: this.state.videoWidth, height: 50, backgroundColor:'#000000' }}>
                     <Video
                       ref={(ref) => this.videoPlayer = ref}
                       source={{uri: this.state.videoUrl}}
@@ -204,30 +216,6 @@ export default class Videos extends Component {
   
   ///-------控件点击事件-------
   
-  /// 控制播放器工具栏的显示和隐藏
-  hideControl() {
-    if (this.state.showVideoControl) {
-      this.setState({
-        showVideoControl: false,
-      })
-    } else {
-      this.setState(
-        {
-          showVideoControl: true,
-        },
-        // 5秒后自动隐藏工具栏
-        () => {
-          setTimeout(
-            () => {
-              this.setState({
-                showVideoControl: false
-              })
-            }, 5000
-          )
-        }
-      )
-    }
-  }
   
   /// 点击了播放器正中间的播放按钮
   onPressPlayButton() {
@@ -249,14 +237,6 @@ export default class Videos extends Component {
     this.onPressPlayButton();
   }
   
-  /// 点击了工具栏上的全屏按钮
-  onControlShrinkPress() {
-    if (this.state.isFullScreen) {
-      Orientation.lockToPortrait();
-    } else {
-      Orientation.lockToLandscape();
-    }
-  }
   
   /// 进度条值改变
   onSliderValueChanged(currentTime) {
@@ -274,30 +254,6 @@ export default class Videos extends Component {
     }
   }
   
-  /// 屏幕旋转时宽高会发生变化，可以在onLayout的方法中做处理，比监听屏幕旋转更加及时获取宽高变化
-  _onLayout = (event) => {
-    //获取根View的宽高
-    let {width, height} = event.nativeEvent.layout;
-    console.log('通过onLayout得到的宽度：' + width);
-    console.log('通过onLayout得到的高度：' + height);
-    
-    // 一般设备横屏下都是宽大于高，这里可以用这个来判断横竖屏
-    let isLandscape = (width > height);
-    if (isLandscape){
-      this.setState({
-        videoWidth: width,
-        videoHeight: height,
-        isFullScreen: true,
-      })
-    } else {
-      this.setState({
-        videoWidth: width,
-        videoHeight: width * 9/16,
-        isFullScreen: false,
-      })
-    }
-    Orientation.unlockAllOrientations();
-  };
   
   /// -------外部调用事件方法-------
   
@@ -316,16 +272,7 @@ export default class Videos extends Component {
     })
   }
   
-  /// 切换视频并可以指定视频开始播放的时间，提供给外部调用
-  switchVideo(videoURL, seekTime) {
-    this.setState({
-      videoUrl: videoURL,
-      currentTime: seekTime,
-      isPlaying: true,
-      showVideoCover: false
-    });
-    this.videoPlayer.seek(seekTime);
-  }
+  
 }
 
 const styles = StyleSheet.create({

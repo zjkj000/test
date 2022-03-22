@@ -149,6 +149,7 @@ class PackagesPage extends React.Component {
         return (
             <View style={styles.container}>
                 <Text>Fail</Text>
+                {this.setState({ error: false })}
                 <Text>{ errorInfo }</Text>
             </View>
         );
@@ -209,13 +210,13 @@ class PackagesPage extends React.Component {
                                     deviceType: 'PHONE',
                                 });
                             }else if(imgUrl == "doc.png" || imgUrl == "pdf.png"){
-                                // navigation.navigate("文档" , 
-                                // {
-                                //     id: id,
-                                //     type: type,
-                                //     deviceType: 'PHONE',
-                                // });
-                                Alert.alert('文档类型的组件还未实现');
+                                navigation.navigate("文档" , 
+                                {
+                                    id: id,
+                                    type: type,
+                                    deviceType: 'PHONE',
+                                });
+                                //Alert.alert('文档类型的组件还未实现');
                             }else if(imgUrl == "ppt.png"){    
                                 navigation.navigate("PPT" , 
                                 {
@@ -240,7 +241,15 @@ class PackagesPage extends React.Component {
                             </View>
                             <View style={styles.ViewRight}>
                                 <View style={styles.titleView}>
-                                    <Text style={styles.title}>{title}</Text>
+                                    <Text style={styles.title}
+                                          numberOfLines={1}
+                                          ellipsizeMode={"tail"}
+                                    >
+                                        {title}
+                                    </Text>
+                                </View>            
+                                <View style={{ flexDirection: 'row', }}>
+                                    <Text style={{height: 10}}></Text>
                                 </View>
                                 <View style={styles.textView}>
                                         <Text style={styles.names}
@@ -398,11 +407,11 @@ const styles = StyleSheet.create({
     img: {
         height: "90%",
         width: "90%",
-        resizeMode: "stretch",
+        resizeMode: "contain",
     },
     ViewCard: {
         flexDirection: 'row',
-        height: screenHeight*0.1,
+        //height: screenHeight*0.1,
     },
     ViewLeft: {
         flexDirection: 'row',
@@ -416,22 +425,27 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         height: '100%',
         width: '80%',
+        padding: 10,
     },
     titleView: {
         flexDirection: 'row',
         //height:screenHeight*0.05,
         // height: '50%',
         // width: '100%',
+        
     },
     title: {
         //color: 'black',
         fontSize: 20,
         fontWeight: "900",
+        width: screenWidth*0.8,
+        paddingEnd: 10,
     },
     textView: {
         flexDirection: 'row',
         // height: '50%',
         // width: '100%',
+        //paddingTop: 10,
     },
     names: {
         //color: 'black',

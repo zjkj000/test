@@ -84,16 +84,20 @@ class TodoList extends React.Component {
         oldtype = this.props.resourceType; 
         searchStr = this.props.searchStr;
         
-        console.log('willUpdate' , Date.parse(new Date()));
+        console.log('componentWillUpdate输出测试11111**********' , Date.parse(new Date()));
         //console.log('willUpdate' , this.props.navigation.getState().routes[1].params);
 
         if(this.props.navigation.getState().routes[1].params != null){
+            console.log('componentWillUpdate输出测试11111--00**********' , Date.parse(new Date()));
+
             const todoId = this.props.navigation.getState().routes[1].params.learnId;
             const status = this.props.navigation.getState().routes[1].params.status;
 
             this.props.navigation.getState().routes[1].params = null ;
 
                 if(status == 3){ //未批改的作业，不请求数据
+                    console.log('componentWillUpdate输出测试11111--11**********' , Date.parse(new Date()));
+
                     //console.log('获取到的status' , status);
                     for(var i = 0 ; i < todosList.length ; i++){
                         if(todosList[i].value.learnId == todoId){
@@ -115,6 +119,8 @@ class TodoList extends React.Component {
                     //     isRefresh: true ,
                     //     showFoot: 0 ,
                     // });
+                    console.log('componentWillUpdate输出测试11111--22**********' , Date.parse(new Date()));
+
                     pageNo = 1; //当前第几页
                     itemNo = 0; //item的个数
                     dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
@@ -126,8 +132,12 @@ class TodoList extends React.Component {
     componentDidUpdate(){
         //console.log('oldtype' , oldtype);
         //console.log('resourceType' , this.props.resourceType);
-        console.log('DidUpdate' ,  Date.parse(new Date()))
+        console.log('componentDidUpdate输出测试3333**********' , Date.parse(new Date()));
+
+       // console.log('DidUpdate' ,  Date.parse(new Date()))
         if((oldtype != this.props.resourceType || searchStr != this.props.searchStr)){
+            console.log('componentDidUpdate输出测试3333--0000**********' , Date.parse(new Date()));
+
             //当此次请求与上次请求的数据类型不一致时，先清空上一次的数据再请求
             this.setState({ 
                 todos: [] , 
@@ -178,7 +188,7 @@ class TodoList extends React.Component {
 
     //通过fetch请求数据
     fetchData(pageNo , onRefresh = false){  
-       console.log('请求数据！！！！', Date.parse(new Date()));
+       console.log('fetchData输出22222*******请求数据！！！！', Date.parse(new Date()));
        const rsType = this.props.resourceType; 
        const searchStr = this.props.searchStr;   
        const token = global.constants.token;
@@ -199,7 +209,7 @@ class TodoList extends React.Component {
 
             let dataBlob = []; 
             let i = itemNo;
-
+            console.log('fetchData输出44444*******请求数据success！！！！', Date.parse(new Date()));
             todosList.map(function (item) {
                 dataBlob.push({
                     key: i,
@@ -208,7 +218,7 @@ class TodoList extends React.Component {
                 i++;
             });
             itemNo = i;
-            console.log('itemNo' , itemNo);
+           // console.log('itemNo' , itemNo);
             let foot = 0;
             if(todosList.length < 12){
                 foot = 1; //未请求到数据，数据加载完了

@@ -106,7 +106,24 @@ export default class Videos extends Component {
     }else{
         return( //"http://www.cn901.com/res/91Content/resource/2021/01/22/video/46c31428-3fa2-47d2-ae51-be58a3f8aba0_mp4.mp4"
               <View style={styles.container} onLayout={this._onLayout}>
-                  <View style={{width: this.state.videoWidth, height: this.state.videoHeight, backgroundColor:'#000000' }}>
+                  <View style={{alignItems: "center"}}>
+                    <Text style={{
+                        top: screenHeight*0.2,
+                        fontSize: 20,
+                        fontWeight:'600',
+                        
+                      }}
+                    >
+                        {resourceName}
+                    </Text>
+                  </View>
+                  <View style={{
+                      top: screenHeight*0.2,
+                      width: this.state.videoWidth, 
+                      height: this.state.videoHeight, 
+                      backgroundColor:'#000000' 
+                      }}
+                  >
                     <Video
                       ref={(ref) => this.videoPlayer = ref}
                       source={{uri: this.state.videoUrl}}
