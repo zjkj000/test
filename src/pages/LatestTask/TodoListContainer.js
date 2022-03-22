@@ -77,6 +77,10 @@ class TodoList extends React.Component {
 
     }
 
+    // shouldComponentUpdate(){
+
+    // }
+
     
     UNSAFE_componentWillUpdate(){
         //fetchData执行会触发setState函数，又会重新执行componentWillUpdate函数，
