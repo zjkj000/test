@@ -7,17 +7,17 @@ import { useNavigation } from "@react-navigation/native";
 export default function LG_readContainer(props) {
   const navigation = useNavigation();
   const paperId= props.paperId
-  const submit_status=props.submit_status
+  const submit_status=props.LG_submit_status
   const startdate=props.startdate
   const papername = props.papername
   const sum=props.sum
   const num=props.num 
   const datasource=props.datasource
-  const oldAnswer_data=props.oldAnswer_data
-  const[ischange,setischange] = useState()
-  props.getischange(ischange)
-  const[Stu_answer,setStu_answer] = useState()
-  props.getStu_answer(Stu_answer)
+  const oldLG_Answer_data=props.oldLG_Answer_data
+  const[ischange,setLG_ischange] = useState()
+  props.getLG_ischange(ischange)
+  const[Stu_answer,setStu_LG_answer] = useState()
+  props.getStu_LG_answer(Stu_answer)
   
   
   if(datasource.resourceName=='七选五'){
@@ -27,13 +27,13 @@ export default function LG_readContainer(props) {
                       submit_status={submit_status}  
                       startdate={startdate}
                       paperId={paperId} 
-                      getischange={setischange}   
-                      getStu_answer={setStu_answer}  
+                      getLG_ischange={setLG_ischange}   
+                      getStu_LG_answer={setStu_LG_answer}  
                       sum={sum} 
                       num={num} 
                       isallObj={props.isallObj}
                       datasource={datasource} 
-                      oldAnswer_data={oldAnswer_data}   />
+                      oldAnswer_data={oldLG_Answer_data}   />
     )
   }else{
     return (
@@ -42,13 +42,13 @@ export default function LG_readContainer(props) {
                       submit_status={submit_status}  
                       startdate={startdate}
                       paperId={paperId} 
-                      getischange={setischange}   
-                      getStu_answer={setStu_answer}  
+                      getLG_ischange={setLG_ischange}   
+                      getStu_LG_answer={setStu_LG_answer}  
                       sum={sum} 
                       num={num} 
                       isallObj={props.isallObj}
                       datasource={datasource} 
-                      oldAnswer_data={oldAnswer_data}   />
+                      oldAnswer_data={oldLG_Answer_data}   />
     )
   }
 }
@@ -94,9 +94,9 @@ class LG_read extends Component {
       }
       newAnswer[TimuIndex]=str;
       this.setState({stu_answer:newAnswer.toString()});
-      this.props.getStu_answer(newAnswer.toString());
+      this.props.getStu_LG_answer(newAnswer.toString());
       
-      this.props.getischange(true);
+      this.props.getLG_ischange(true);
       console.log('导学案阅读题的最终答案是：',newAnswer.toString())
      }
 
@@ -210,9 +210,9 @@ class LG_7S5 extends Component {
       }
       newAnswer[TimuIndex]=str;
       this.setState({stu_answer:newAnswer.toString()});
-      this.props.getStu_answer(newAnswer.toString());
+      this.props.getStu_LG_answer(newAnswer.toString());
       
-      this.props.getischange(true);
+      this.props.getLG_ischange(true);
       console.log('导学案七选五的最终答案是：',newAnswer.toString())
      }
 

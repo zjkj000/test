@@ -53,7 +53,7 @@ class Learningguide_Submit extends Component {
                   "/AppServer/ajax/studentApp_getstuAnswerLearnPlanList.do"
         const params ={
                     learnPlanId : this.props.paperId,
-                    userName : 'ming6051'
+                    userName : global.constants.userName,
                   }
         //用于获取
         if(!this.state.success){
@@ -161,7 +161,7 @@ class Learningguide_Submit extends Component {
                  //onPress={this.props.navigation.getState().routes[2].getSelectIndex()}
                  onPress={()=>
                   { 
-                    console.log('你好啊',result_Item)
+                    
                     this.props.navigation.navigate(
                       {
                         name:"DoLearningGuide", 

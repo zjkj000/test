@@ -11,30 +11,30 @@ import { useNavigation } from "@react-navigation/native";
 export default function LG_subjectiveContainer(props) {
     const navigation = useNavigation();
     const paperId= props.paperId
-    const submit_status=props.submit_status
+    const submit_status=props.LG_submit_status
     const startdate=props.startdate         
     const papername = props.papername
     const sum=props.sum
     const num=props.num 
     const datasource=props.datasource
-    const oldAnswer_data=props.oldAnswer_data
-    const[ischange,setischange] = useState()
-    props.getischange(ischange)
-    const[Stu_answer,setStu_answer] = useState()
-    props.getStu_answer(Stu_answer)
+    const oldLG_Answer_data=props.oldLG_Answer_data
+    const[ischange,setLG_ischange] = useState()
+    props.getLG_ischange(ischange)
+    const[Stu_answer,setStu_LG_answer] = useState()
+    props.getStu_LG_answer(Stu_answer)
     return (
     <LG_subjective  navigation={navigation}  
                     papername = {papername}
                     submit_status={submit_status}  
                     startdate={startdate}
                     paperId={paperId} 
-                    getischange={setischange}   
-                    getStu_answer={setStu_answer}  
+                    getLG_ischange={setLG_ischange}   
+                    getStu_LG_answer={setStu_LG_answer}  
                     sum={sum} 
                     num={num} 
                     isallObj={props.isallObj}
                     datasource={datasource} 
-                    oldAnswer_data={oldAnswer_data}   />
+                    oldAnswer_data={oldLG_Answer_data}   />
   )
 }
 
@@ -81,8 +81,8 @@ class LG_subjective extends Component {
         console.log('主观题写了答案', str)
         this.setState({ stuAnswer: str })
         // 把结果传给ToDO，并且告诉有改变  只要作答就有改变
-        this.props.getStu_answer(str)
-        this.props.getischange(true)
+        this.props.getStu_LG_answer(str)
+        this.props.getLG_ischange(true)
     }
 
 

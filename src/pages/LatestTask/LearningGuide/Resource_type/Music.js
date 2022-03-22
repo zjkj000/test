@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, ScrollView,Image,TouchableOpacity,Alert,Dimensions,Slider, TouchableWithoutFeedback, Button,  } from 'react-native'
+import { Text, StyleSheet, View, ScrollView,Image,TouchableOpacity,Alert,Dimensions, Slider,TouchableWithoutFeedback, Button,  } from 'react-native'
 import React, { Component, useState } from 'react'
 import RadioList from '../../DoWork/Utils/RadioList';
 import RenderHtml from 'react-native-render-html';
@@ -19,31 +19,24 @@ export default function MusicContainer(props) {
     const sum=props.sum
     const num=props.num 
     const datasource=props.datasource
-    const oldAnswer_data=props.oldAnswer_data
-    const[ischange,setischange] = useState()
-    props.getischange(ischange)
-    const[Stu_answer,setStu_answer] = useState()
-    props.getStu_answer(Stu_answer)
+  
     return (
     <Music  navigation={navigation}  
                     papername = {papername}
                     submit_status={submit_status}  
                     startdate={startdate}
                     paperId={paperId} 
-                    getischange={setischange}   
-                    getStu_answer={setStu_answer}  
                     sum={sum} 
                     num={num} 
                     isallObj={props.isallObj}
-                    datasource={datasource} 
-                    oldAnswer_data={oldAnswer_data}   />
+                    datasource={datasource}  />
   )
 }
 //  Music展示 模板页面
 class Music extends Component {
      constructor(props) {
         super(props)
-        this.stuAnswer=this.stuAnswer.bind(this);
+       
         this.state = {
 
                 numid:'',
@@ -53,11 +46,9 @@ class Music extends Component {
                 questionName:'',        //题目名称
                 questionChoiceList:'',  //题目选项
                 question:'',   
-                answer:'',
-                stu_answer:'',
-                oldStuAnswer:'',
+          
 
-                videoUrl: "http://124.129.157.208:8810/SD/2017qingdao/xiaoxueEnglish/grade3/b/1.mp4",
+                videoUrl: '',
                 //videoCover: "http://124.129.157.208:8889/data/uploads/kecheng/2018/01/18/5a600b2c99836.png@0o_0l_220w.png",
                 videoCover: '',
                 videoWidth: screenWidth,
@@ -73,12 +64,7 @@ class Music extends Component {
         }
      }  
    
-     //用于将本道题写的答案  传给 Todo页面，用于提交
-     stuAnswer(str){
-         this.setState({stu_answer:str})
-         this.props.getStu_answer(str)
-         this.props.getischange(true);
-     }
+   
 
 
      UNSAFE_componentWillMount(){
@@ -88,8 +74,6 @@ class Music extends Component {
          this.setState({
              resource:this.props.datasource,
              videoUrl:this.props.datasource.url,
-             stu_answer:this.props.oldAnswer_data?this.props.oldAnswer_data:'',
-             oldStuAnswer:this.props.oldAnswer_data,
              numid:this.props.num?this.props.num:0,
              ...this.props.datasource});
         }   
@@ -373,9 +357,9 @@ class Music extends Component {
                 </View>
                 
                 {/* 展示music就行 */}
-                <View style={styles.area}>
+                
                     { this.showContent()}
-                </View>
+               
         </View>
         )
     }
@@ -383,7 +367,6 @@ class Music extends Component {
 
 const styles = StyleSheet.create({
     title:{padding:10,paddingLeft:30,flexDirection:'row',},
-    area:{height:'95%'},
   imageNull: {
       justifyContent: "center",
       alignItems: "center",

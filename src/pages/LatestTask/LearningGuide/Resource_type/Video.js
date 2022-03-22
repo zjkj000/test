@@ -18,11 +18,7 @@ export default function VideoContainer(props) {
     const sum=props.sum
     const num=props.num 
     const datasource=props.datasource
-    const oldAnswer_data=props.oldAnswer_data
-    const[ischange,setischange] = useState()
-    props.getischange(ischange)
-    const[Stu_answer,setStu_answer] = useState()
-    props.getStu_answer(Stu_answer)
+   
     return (
     <Video_LG  
                     navigation={navigation} 
@@ -31,20 +27,18 @@ export default function VideoContainer(props) {
                     submit_status={submit_status}  
                     startdate={startdate}
                     paperId={paperId} 
-                    getischange={setischange}   
-                    getStu_answer={setStu_answer}  
+                 
                     sum={sum} 
                     num={num} 
                     isallObj={props.isallObj}
-                    datasource={datasource} 
-                    oldAnswer_data={oldAnswer_data}   />
+                    datasource={datasource}   />
   )
 }
     //  Video 模板页面
 class Video_LG extends Component {
      constructor(props) {
         super(props)
-        this.stuAnswer=this.stuAnswer.bind(this);
+        
         this.state = {
                 numid:'',
                 resourceName:'',
@@ -52,12 +46,8 @@ class Video_LG extends Component {
                 baseTypeId:'',
                 questionName:'',        //题目名称
                 question:'',   //题目内容
-                
-                answer:'',
-                stu_answer:'',
-                oldStuAnswer:'',
-
-                videoUrl: "http://124.129.157.208:8810/SD/2017qingdao/xiaoxueEnglish/grade3/b/1.mp4",
+              
+                videoUrl: '',
                 //videoCover: "http://124.129.157.208:8889/data/uploads/kecheng/2018/01/18/5a600b2c99836.png@0o_0l_220w.png",
                 videoCover: '',
                 videoWidth: screenWidth,
@@ -73,15 +63,7 @@ class Video_LG extends Component {
                 resource: '', //api请求的数据data
         }
      }  
-   
-     //用于将本道题写的答案  传给 Todo页面，用于提交
-     stuAnswer(str){
-         this.setState({stu_answer:str})
-         this.props.getStu_answer(str)
-         this.props.getischange(true);
-     }
-
-
+  
      UNSAFE_componentWillMount(){
         //resource: resJson.data , 
          //请求数据  需要  作业id  用户id   这道题的 numid
@@ -90,8 +72,7 @@ class Video_LG extends Component {
          this.setState({
              resource:this.props.datasource,
              videoUrl:this.props.datasource.url,
-             stu_answer:this.props.oldAnswer_data?this.props.oldAnswer_data:'',
-             oldStuAnswer:this.props.oldAnswer_data,
+            
              numid:this.props.num?this.props.num:0,
              ...this.props.datasource});
         } 

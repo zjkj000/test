@@ -13,31 +13,23 @@ export default function WordContainer(props) {
     const sum=props.sum
     const num=props.num 
     const datasource=props.datasource
-    const oldAnswer_data=props.oldAnswer_data
-    const[ischange,setischange] = useState()
-    props.getischange(ischange)
-    const[Stu_answer,setStu_answer] = useState()
-    props.getStu_answer(Stu_answer)
     return (
     <Word  navigation={navigation}  
                     papername = {papername}
                     submit_status={submit_status}  
                     startdate={startdate}
                     paperId={paperId} 
-                    getischange={setischange}   
-                    getStu_answer={setStu_answer}  
                     sum={sum} 
                     num={num} 
                     isallObj={props.isallObj}
-                    datasource={datasource} 
-                    oldAnswer_data={oldAnswer_data}   />
+                    datasource={datasource}  />
   )
 }
 //  Word展示 模板页面
  class Word extends Component {
      constructor(props) {
         super(props)
-        this.stuAnswer=this.stuAnswer.bind(this);
+        
         this.state = {
                 numid:'',
                 resourceName:'单选题',
@@ -45,21 +37,12 @@ export default function WordContainer(props) {
                 baseTypeId:'',
                 questionName:'',        //题目名称
                 questionChoiceList:'',  //题目选项
-                question:'',   //题目内容
-                answer:'',
-                stu_answer:'',
-                oldStuAnswer:'',
+                question:'',      //题目内容
                 uri:''
         }
      }  
    
-     //用于将本道题写的答案  传给 Todo页面，用于提交
-     stuAnswer(str){
-         this.setState({stu_answer:str})
-         this.props.getStu_answer(str)
-         this.props.getischange(true);
-     }
-
+ 
 
      UNSAFE_componentWillMount(){
          //请求数据  需要  作业id  用户id   这道题的 numid
@@ -67,8 +50,6 @@ export default function WordContainer(props) {
          //请求到之后  就要把答案 设置到oldstuanswer
          this.setState({
              uri:this.props.datasource.url,
-             stu_answer:this.props.oldAnswer_data?this.props.oldAnswer_data:'',
-             oldStuAnswer:this.props.oldAnswer_data,
              numid:this.props.num?this.props.num:0,
              ...this.props.datasource});
         }   

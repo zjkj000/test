@@ -7,30 +7,30 @@ import { useNavigation } from "@react-navigation/native";
 export default function LG_multipleContainer(props) {
     const navigation = useNavigation();
     const paperId= props.paperId
-    const submit_status=props.submit_status
+    const submit_status=props.LG_submit_status
     const startdate=props.startdate
     const papername = props.papername
     const sum=props.sum
     const num=props.num 
     const datasource=props.datasource
-    const oldAnswer_data=props.oldAnswer_data
-    const[ischange,setischange] = useState()
-    props.getischange(ischange)
-    const[Stu_answer,setStu_answer] = useState()
-    props.getStu_answer(Stu_answer)
+    const oldLG_Answer_data=props.oldLG_Answer_data
+    const[ischange,setLG_ischange] = useState()
+    props.getLG_ischange(ischange)
+    const[Stu_answer,setStu_LG_answer] = useState()
+    props.getStu_LG_answer(Stu_answer)
 
     return (<LG_multiple  navigation={navigation}  
                               papername = {papername}
                               submit_status={submit_status}  
                               startdate={startdate}
                               paperId={paperId} 
-                              getischange={setischange}   
-                              getStu_answer={setStu_answer}  
+                              getLG_ischange={setLG_ischange}   
+                              getStu_LG_answer={setStu_LG_answer}  
                               sum={sum} 
                               num={num} 
                               isallObj={props.isallObj}
                               datasource={datasource} 
-                              oldAnswer_data={oldAnswer_data}   />)
+                              oldAnswer_data={oldLG_Answer_data}   />)
 }
 
 
@@ -63,8 +63,8 @@ class LG_multiple extends Component {
   //用于将本道题写的答案  传给 Todo页面，用于提交
   stuAnswer(str){
      this.setState({stu_answer:str})
-     this.props.getStu_answer(str)
-     this.props.getischange(true);
+     this.props.getStu_LG_answer(str)
+     this.props.getLG_ischange(true);
   }
 
 
