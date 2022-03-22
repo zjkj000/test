@@ -31,7 +31,7 @@ export default class Videos extends Component {
   UNSAFE_componentWillMount(){  //初始挂载执行一遍
       //oldtype = this.props.resourceType;
       const paramsData = this.props.navigation.getState().routes[3].params;
-      console.log(this.props.navigation.getState().routes);
+      //console.log(this.props.navigation.getState().routes);
       const id = paramsData.id;
       const type = paramsData.type;
       const deviceType = paramsData.deviceType;
@@ -74,8 +74,7 @@ export default class Videos extends Component {
             />
           </View>
       );
-    }else{
-        
+    }else{     
         return(
             <View style={styles.area}>
                 <WebView  source={{ uri: this.state.resource.url}} />
@@ -108,6 +107,6 @@ const styles = StyleSheet.create({
     height: 300,
   },
   area:{
-      height:'100%'
+      height: screenHeight,
   }
 });

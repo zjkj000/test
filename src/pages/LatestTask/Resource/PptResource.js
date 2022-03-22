@@ -33,7 +33,7 @@ export default class Videos extends Component {
   UNSAFE_componentWillMount(){  //初始挂载执行一遍
       //oldtype = this.props.resourceType;
       const paramsData = this.props.navigation.getState().routes[3].params;
-      console.log(this.props.navigation.getState().routes);
+      //console.log(this.props.navigation.getState().routes);
       const id = paramsData.id;
       const type = paramsData.type;
       const deviceType = paramsData.deviceType;
@@ -80,8 +80,21 @@ export default class Videos extends Component {
       );
     }else{
         //const pptList = this.state.resource.pptList;
+        const resourceName = this.state.resource.resourceName;
         return(
             <View>
+                <View style={{alignItems: "center"}}>
+                  <Text style={{
+                      top: screenHeight*0.25,
+                      fontSize: 20,
+                      fontWeight:'600',
+                    }}
+                    numberOfLines={1}
+                    ellipsizeMode={"tail"}
+                  >
+                      {resourceName}
+                  </Text>
+                </View>
                 <View style={styles.area}>
                     <Text style={{fontSize:18,marginBottom:10}}>{this.state.resourceName}</Text>
                     <Image style={{width:'90%',height:250}} source={{uri: this.state.uri}}></Image>
