@@ -6,6 +6,9 @@ import PackagesPage from "../../pages/LatestTask/PackagesPage";
 import Todo from "../../pages/LatestTask/Todo";
 import Inform from "../../pages/LatestTask/Inform";
 import Notice from "../../pages/LatestTask/Notice";
+import Videos from "../../pages/LatestTask/Resource/Videos";
+import Voice from "../../pages/LatestTask/Resource/Voice";
+import PptRescouce from "../../pages/LatestTask/Resource/PptResource"
 
 import Paper_ToDo from "../../pages/LatestTask/DoWork/Paper_ToDo";
 import Paper_ShowCorrected from "../../pages/LatestTask/DoWork/Paper_ShowCorrected";
@@ -60,7 +63,14 @@ export default class MainNavigation extends Component {
                     <Stack.Screen name="Todo" component={Todo} />
                     <Stack.Screen name="通知" component={Inform} />
                     <Stack.Screen name="公告" component={Notice} />
-                    <Stack.Screen name="DoPaper" component={Paper_ToDo} />
+                    <Stack.Screen name="视频" component={Videos} />
+                    <Stack.Screen name="音频" component={Voice} />
+                    <Stack.Screen name="PPT" component={PptRescouce} />
+                    {/* 做作业部分 */}
+                    <Stack.Screen
+                        name="DoPaper"
+                        component={Paper_ToDo}
+                    />
                     <Stack.Screen
                         name="SubmitPaper"
                         component={Paper_SubmitContainer}
@@ -69,6 +79,7 @@ export default class MainNavigation extends Component {
                         name="ShowCorrected"
                         component={Paper_ShowCorrected}
                     />
+                    {/* 做导学案部分 */}
                     <Stack.Screen
                         name="DoLearningGuide"
                         component={Learningguide_ToDo}

@@ -111,6 +111,17 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
+    body_webview: {
+        flex: 2,
+        height: "100%",
+    },
+    body_answerBox: {
+        flex: 1,
+        borderLeftColor: "black",
+        borderLeftWidth: 1,
+        height: "100%",
+        marginLeft: 2,
+    },
     bottom: {
         width: screenHeight,
         flex: 1,

@@ -9,6 +9,7 @@ import {
     Dimensions,
     ActivityIndicator,
     FlatList,
+    Alert,
 } from "react-native";
 import { SearchBar, TabBar } from "@ant-design/react-native";
 import { Icon, Flex } from "@ant-design/react-native";
@@ -193,20 +194,28 @@ class PackagesPage extends React.Component {
                 <View>
                     <TouchableOpacity
                         onPress={() => {
-                            if(imgUrl == "mp3.png" || imgUrl == "mp4.png"){
-                                navigation.navigate("视频音频", 
+                            if(imgUrl == "mp3.png"){
+                                navigation.navigate("音频", 
+                                {
+                                    id: id,
+                                    type: type,
+                                    deviceType: 'PHONE',
+                                });
+                            }else if(imgUrl == "mp4.png"){
+                                navigation.navigate("视频", 
                                 {
                                     id: id,
                                     type: type,
                                     deviceType: 'PHONE',
                                 });
                             }else if(imgUrl == "doc.png" || imgUrl == "pdf.png"){
-                                navigation.navigate("文档" , 
-                                {
-                                    id: id,
-                                    type: type,
-                                    deviceType: 'PHONE',
-                                });
+                                // navigation.navigate("文档" , 
+                                // {
+                                //     id: id,
+                                //     type: type,
+                                //     deviceType: 'PHONE',
+                                // });
+                                Alert.alert('文档类型的组件还未实现');
                             }else if(imgUrl == "ppt.png"){    
                                 navigation.navigate("PPT" , 
                                 {
@@ -275,8 +284,6 @@ class PackagesPage extends React.Component {
                     onEndReached={this._onEndReached.bind(this)}
                     onEndReachedThreshold={0.5}
                 />
-                <Text>sds</Text>
-                <View style={{ height: 10, backgroundColor: "#999999" }} />
             </View>
         );
     }

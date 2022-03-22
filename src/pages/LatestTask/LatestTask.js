@@ -6,6 +6,7 @@ import { Flex } from "@ant-design/react-native";
 import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
 import { useNavigation } from "@react-navigation/native";
 //import { Container , Header , Item , Input , Icon , Button } from 'native-base';
+import http from "../../utils/http/request";
 import {
     Avatar,
     Layout,
@@ -34,11 +35,31 @@ class LatestTask extends React.Component {
             value: '',  //搜索栏中的内容
             resourceType: 'all', //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
                                 //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
+
+            resourceRead: '', //资料夹是否已读接口返回的数据
         };
+    }
+
+    //第一次加载页面请求资料夹是否已读api
+    UNSAFE_componentWillMount(){
+        const userId = global.constants.userName;
+        const ip = global.constants.baseUrl
+        const url = ip + "studentApp_checkMineFloder.do";
+        const params ={
+            userId: userId,
+        }
+        http.get(url,params).then((resStr)=>{
+            let resJson = JSON.parse(resStr);
+            console.log('resStr' , resJson);
+            this.setState({ resourceRead: resJson.data });
+            console.log('data' , this.state.resourceRead);
+            return ;
+        })
     }
 
     //点击文件夹图标跳转
     packagesPage = () => {
+        this.setState({ resourceRead: 1 }); //资料夹状态改为已读
         console.log("文件夹页面跳转");
         this.props.navigation.navigate("资料夹", {});
     };
@@ -145,21 +166,27 @@ class LatestTask extends React.Component {
 
     //资料夹是否已读图标
     showPackagesStatus = () => {
-        //第一次加载页面需要请求http://www.cn901.net:8111/AppServer/ajax/studentApp_checkMineFloder.do?&userId=ming6059&callback=ha
+        //componentwillMount第一次加载页面需要请求http://www.cn901.net:8111/AppServer/ajax/studentApp_checkMineFloder.do?&userId=ming6059&callback=ha
         //若返回数据的data值为0则不显示红点，否则存在未读则显示
-        //state中是否需要保存data？？？还是只需要判断是否第一次加载
+        //资料夹图标只要被点击，就默认资料均被读，从资料夹页面返回时就不再显示红点标志
 
-        //设置一个变量标识是否第一次加载，fetch请求之后将变量改为已加载
-
-        return (
-            <View
-                style={styles.rightNumView}
-            >     
-                <Image
-                    source={require("../../assets/LatestTaskImages/rightNum.png")}
-                    style={styles.rightNumImg}
-                />
-            </View>
+        return ( this.state.resourceRead == 0 ?  //测试==0，之后需要改为！=0
+                        (<View
+                            style={styles.rightNumView}
+                        >     
+                            <Image
+                                source={require("../../assets/LatestTaskImages/rightNum.png")}
+                                style={styles.rightNumImg}
+                            />
+                        </View>)
+                        : (<View
+                            style={styles.rightNumView}
+                        >     
+                            <Image
+                                source={require("../../assets/LatestTaskImages/packageRead.png")}
+                                style={styles.rightNumImg}
+                            />
+                        </View>)
         );
     };
 
@@ -277,7 +304,7 @@ const styles = StyleSheet.create({
     },
     flexNew: {
         paddingTop: 0,
-        paddingLeft: screenWidth*0.02,
+        paddingLeft: screenWidth*0.01,
     },
     packagesView: {
         width: screenWidth * 0.1,
@@ -286,14 +313,18 @@ const styles = StyleSheet.create({
         height: "100%",
         width: "50%",
         resizeMode: "contain",
+        top: 2,
+        left:18,
     },
     rightNumView: {
         width: screenWidth * 0.05,
     },
     rightNumImg: {
         height: "100%",
-        width: "50%",
-        resizeMode: "contain",
+        width: "40%",
+        resizeMode: "contain", 
+        //top:0,
+        //left:0,
         //marginLeft:0,
     },
     filterImg: {

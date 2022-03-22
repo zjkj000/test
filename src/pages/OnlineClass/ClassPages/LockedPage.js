@@ -8,8 +8,6 @@ import {
     TextInput,
 } from "react-native";
 import http from "../../../utils/http/request";
-import RenderHTML from "react-native-render-html";
-import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
 import RadioList from "../../LatestTask/DoWork/Utils/RadioList";
 import Checkbox from "../../LatestTask/DoWork/Utils/Checkbox";
 import {
@@ -25,53 +23,116 @@ import Toast from "../../../utils/Toast/Toast";
 import HTMLView from "react-native-htmlview";
 import { Icon } from "react-native-elements";
 import ImageHandler from "../../../utils/Camera/Camera";
+import WebView from "react-native-webview";
 
 export default class LockedPage extends Component {
     constructor(props) {
+        const { messageList } = props;
+        const event = messageList[0];
+        const { period } = event;
+        const subjective =
+            period.questionType == "3" || period.questionType == "5";
         super(props);
         this.state = {
             html: {
-                html: `
-            <p style='text-align:center;'>
-                Hello World!
-            </p>`,
+                html: "",
             },
             visible: false,
             msg: "",
             moduleVisible: false,
             answer: "",
             showSideBox: false,
+            questionType: period.questionType ? period.questionType : "1",
+            subjective: subjective,
+            imgURL: [],
+            htmlURL: "",
         };
     }
     componentDidMount() {
         this.getHTML();
     }
     setAnswer = (str) => {
-        this.setState({ answer: str });
+        let { html } = this.state;
+        let newHTML = { html: html.html + str };
+        this.setState({ html: newHTML, answer: str });
+    };
+    imageUpload = (base64) => {
+        const { messageList, ipAddress, userName, introduction } = this.props;
+        const event = messageList[0];
+        const url =
+            "http://" +
+            ipAddress +
+            ":8901" +
+            "/KeTangServer/ajax/ketang_saveBase64Image.do";
+        // const url =
+        //     "http://192.168.1.81:8222/AppServer/ajax/studentApp_saveBase64Image.do";
+        console.log(userName);
+        const params = {
+            baseCode: base64,
+            learnPlanId: event.learnPlanId,
+            userId: userName,
+        };
+        http.post(url, params)
+            .then((resStr) => {
+                const resJson = JSON.parse(resStr);
+                console.log(resJson);
+                if (resJson.status === "success") {
+                    let { imgURL, html } = this.state;
+                    let newHTML = {
+                        html: html.html + `<img src= "${resJson.url}" \/>`,
+                    };
+                    this.setState({
+                        imgURL: [...imgURL, resJson.url],
+                        html: newHTML,
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    };
+    handleCamera = () => {
+        ImageHandler.handleCamera()
+            .then((res) => {
+                if (res) {
+                    this.setState({
+                        imgURL: [...this.state.imgURL, res.uri],
+                        moduleVisible: false,
+                    });
+                    this.imageUpload(res.base64);
+                }
+            })
+            .catch((error) => {
+                Toast.showDangerToast("获取图片失败:" + error.toString());
+            });
+    };
+    handleLibrary = () => {
+        ImageHandler.handleLibrary()
+            .then((res) => {
+                if (res) {
+                    this.setState({
+                        imgURL: [...this.state.imgURL, res.uri],
+                        moduleVisible: false,
+                    });
+                    this.imageUpload(res.base64);
+                }
+            })
+            .catch((error) => {
+                Toast.showDangerToast("获取图片失败:" + error.toString());
+            });
     };
     handleSubmit = () => {
         const { messageList, ipAddress, userName, introduction } = this.props;
         const event = messageList[0];
         const { period } = event;
-        let myDate = new Date();
-        let dateString =
-            myDate.getFullYear() +
-            "-" +
-            myDate.getMonth() +
-            "-" +
-            myDate.getDate() +
-            " " +
-            myDate.getHours() +
-            ":" +
-            myDate.getMinutes() +
-            ":" +
-            myDate.getSeconds();
-        console.log(event);
+        const { subjective } = this.state;
         let url =
             "http://" +
             ipAddress +
             ":8901" +
-            "/KeTangServer/ajax/ketang_saveStuAnswerFromApp.do";
+            (subjective
+                ? "/KeTangServer/ajax/ketang_saveStuSubjectiveAnswerFromApp.do"
+                : "/KeTangServer/ajax/ketang_saveStuAnswerFromApp.do");
         console.log(event.learnPlanId);
         let params = {
             userName: userName,
@@ -83,7 +144,7 @@ export default class LockedPage extends Component {
             questionAnswer: period.questionAnswerStr
                 ? period.questionAnswerStr
                 : "",
-            content: this.state.answer,
+            content: subjective ? this.state.html.html : this.state.answer,
             learnPlanName: "",
             answerTime: event.desc,
         };
@@ -93,7 +154,7 @@ export default class LockedPage extends Component {
                 // console.log("====================================");
                 // console.log(resStr);
                 // console.log("====================================");
-                resJson = JSON.parse(resStr);
+                const resJson = JSON.parse(resStr);
                 if (resJson.status === "success") {
                     Toast.showSuccessToast("提交成功");
                 } else {
@@ -122,16 +183,7 @@ export default class LockedPage extends Component {
             period.resourceId +
             "Show.html";
         console.log(resURL);
-        console.log(period);
-        http.get(resURL)
-            .then((resStr) => {
-                // Toast.showDangerToast(resStr);
-                this.setState({ html: { html: resStr } });
-                // console.log(resJson);
-            })
-            .catch((error) => {
-                Toast.showDangerToast(error.toString());
-            });
+        this.setState({ htmlURL: resURL });
     };
 
     //默认弹框不显示，以及需要把弹窗效果加在的地方的  相机图片  显示
@@ -150,6 +202,17 @@ export default class LockedPage extends Component {
         );
     };
 
+    renderAnswerBox = () => {
+        const { subjective, answer } = this.state;
+        if (subjective && answer !== "") {
+            return (
+                <Layout style={styles.body_answerBox}>
+                    <WebView source={this.state.html} />
+                </Layout>
+            );
+        }
+    };
+
     renderInputArea = () => {
         return (
             <View>
@@ -162,7 +225,9 @@ export default class LockedPage extends Component {
                 ></View>
                 <View style={styles.inputArea}>
                     <Text
-                        onPress={() => this.setState({ msg: "" })}
+                        onPress={() =>
+                            this.setState({ answer: "", imgURL: [] })
+                        }
                         style={{ color: "#B68459" }}
                     >
                         删除
@@ -200,10 +265,10 @@ export default class LockedPage extends Component {
                     </OverflowMenu>
                     <Button
                         onPress={() => {
-                            let newanswer = this.state.msg;
-                            newanswer += this.state.msg;
-                            this.setState({ textinputAnswer: "" });
-                            this.setAnswer(newanswer);
+                            let newAnswer = this.state.answer;
+                            newAnswer += this.state.msg;
+                            this.setState({ msg: "" });
+                            this.setAnswer(newAnswer);
                         }}
                         style={{
                             width: 100,
@@ -222,6 +287,7 @@ export default class LockedPage extends Component {
         const { messageList } = this.props;
         const event = messageList[0];
         const { period } = event;
+        const { questionType, subjective } = this.state;
         let optionBar = (
             <RadioList
                 checkedindexID={this.state.answer}
@@ -229,7 +295,9 @@ export default class LockedPage extends Component {
                 ChoiceList={period.questionValueList}
             />
         );
-        if (period.questionType === 2) {
+        if (subjective) {
+            optionBar = this.renderInputArea();
+        } else if (questionType === "2") {
             optionBar = (
                 <Checkbox
                     checkedlist={this.state.answer}
@@ -237,26 +305,12 @@ export default class LockedPage extends Component {
                     ChoiceList={period.questionValueList}
                 />
             );
-        } else if (period.questionType === 3 || period.questionType === 5) {
-            optionBar = this.renderInputArea();
         }
         return optionBar;
     };
 
     renderSAQ = () => {
-        const { messageList, userName, introduction, imgURL } = this.props;
-        const event = messageList[0];
-        const { period } = event;
-        const questionParams = {
-            numid: "",
-            questionTypeName: "单选题",
-            questionId: "PRQUI9001144045",
-            baseTypeId: "",
-            questionName: "", //题目名称
-            questionChoiceList: period.questionValueList, //题目选项
-            questionContent: "", //题目内容
-            answer: "",
-        };
+        const { userName, introduction, imgURL } = this.props;
         return (
             <Layout style={styles.mainContainer}>
                 <Layout style={styles.header}>
@@ -277,9 +331,10 @@ export default class LockedPage extends Component {
                     </Layout>
                 </Layout>
                 <Layout style={styles.body}>
-                    <ScrollView>
-                        <HTMLView value={this.state.html.html} />
-                    </ScrollView>
+                    <Layout style={styles.body_webview}>
+                        <WebView source={{ uri: this.state.htmlURL }} />
+                    </Layout>
+                    {this.renderAnswerBox()}
                 </Layout>
 
                 <Layout style={styles.bottom}>{this.renderOption()}</Layout>
@@ -301,15 +356,6 @@ export default class LockedPage extends Component {
     };
 
     render() {
-        return (
-            <View>{this.renderSAQ()}</View>
-            // <ScrollView>
-            //     <HTMLView value={this.state.html.html} />
-            //     {/* <RenderHTML
-            //         contentWidth={screenWidth}
-            //         source={this.state.html}
-            //     /> */}
-            // </ScrollView>
-        );
+        return <View>{this.renderSAQ()}</View>;
     }
 }

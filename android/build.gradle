@@ -38,5 +38,11 @@ allprojects {
         }
         google()
         maven { url 'https://www.jitpack.io' }
+        //react-native-video
+        jcenter() {
+            content {
+                includeModule("com.yqritc", "android-scalablevideoview")
+            }
+        }
     }
 }

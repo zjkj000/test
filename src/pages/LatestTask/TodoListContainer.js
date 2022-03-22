@@ -13,20 +13,23 @@ import {
 import { SearchBar, TabBar } from "@ant-design/react-native";
 import { Icon, Flex } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
-import { screenWidth, screenHeight , userId , token} from "../../utils/Screen/GetSize";
+import {
+    screenWidth,
+    screenHeight,
+    userId,
+    token,
+} from "../../utils/Screen/GetSize";
 import http from "../../utils/http/request";
 import Loading from "../../utils/loading/Loading"; //Loading组件使用export {Loading}或者export default Loading;
 //import {Loading} from "../../utils/loading/Loading"; //Loading组件使用export {Loading},此时import必须加{}导入
 
-import '../../utils/global/constants';
-
+import "../../utils/global/constants";
 
 let pageNo = 1; //当前第几页
 let itemNo = 0; //item的个数
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
 
-var oldtype = '';  //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
-
+var oldtype = ""; //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
 
 export default function TodoListContainer(props) {
     //console.log(props.resourceType);
@@ -36,13 +39,12 @@ export default function TodoListContainer(props) {
     return <TodoList navigation={navigation} resourceType={rsType}></TodoList>;
 }
 
-
 class TodoList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             //type为2是作业，为1是导学案，3通知，4公告
-            message: '',
+            message: "",
             todos: [],
             isLoading: true,
             isRefresh: false,
@@ -55,29 +57,29 @@ class TodoList extends React.Component {
         this.fetchData = this.fetchData.bind(this); //fetchData函数中this指向问题
     }
 
-    
-    UNSAFE_componentWillMount(){  //初始挂载执行一遍
+    UNSAFE_componentWillMount() {
+        //初始挂载执行一遍
         oldtype = this.props.resourceType;
         this.fetchData(pageNo);
     }
 
-    componentDidMount(){   //初始挂载执行一遍
+    componentDidMount() {
+        //初始挂载执行一遍
         //this.fetchData(pageNo);
     }
 
-    
-    UNSAFE_componentWillUpdate(){
+    UNSAFE_componentWillUpdate() {
         //fetchData执行会触发setState函数，又会重新执行componentWillUpdate函数，
         //需要将oldtype设置为此次请求的数据类型，否则oldtype != this.props.resourceType一直满足，将会一直发送请求
-        oldtype = this.props.resourceType;   
+        oldtype = this.props.resourceType;
     }
 
-    componentDidUpdate(){
-        console.log('oldtype' , oldtype);
-        console.log('resourceType' , this.props.resourceType);
-        if(oldtype != this.props.resourceType){
+    componentDidUpdate() {
+        console.log("oldtype", oldtype);
+        console.log("resourceType", this.props.resourceType);
+        if (oldtype != this.props.resourceType) {
             //当此次请求与上次请求的数据类型不一致时，先清空上一次的数据再请求
-            this.setState({ todos: [] , isLoading: true , error: false });
+            this.setState({ todos: [], isLoading: true, error: false });
             pageNo = 1; //当前第几页
             itemNo = 0; //item的个数
             dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
@@ -86,95 +88,116 @@ class TodoList extends React.Component {
     }
 
     //显示任务状态的图标
-    showStatusUrl = (todo , statusImg) => {
+    showStatusUrl = (todo, statusImg) => {
         //console.log('showTodo' , todo);
 
-        if(todo.type == '通知' || todo.type == '公告'){
-                return (
-                    //todo.status == 4表明已读,5未读
-                    todo.status == 4  ? null 
-                                        : <Image
-                                                source={statusImg}
-                                                style={styles.imgStatus}
-                                            />
-                );
-        }else{
+        if (todo.type == "通知" || todo.type == "公告") {
+            return (
+                //todo.status == 4表明已读,5未读
+                todo.status == 4 ? null : (
+                    <Image source={statusImg} style={styles.imgStatus} />
+                )
+            );
+        } else if (todo.type == "作业") {
             /*todo.type == '作业'或导学案时，从路由导航中接收参数，参数应该包括作业ID（learnId）以及状态（是否提交？）
              * 若todo.learnId == learnId && 状态为已提交，则状态图标需要修改为“绿色”
                 如何触发该组件重新渲染页面数据呢？
                     做完作业点提交时将路由切换到当前组件会使得该组件重新渲染？
             */
-            return (<Image
-                source={statusImg}
-                style={styles.imgStatus}
-            />);
+            //console.log(this.props.navigation.getState().routes[2].params);
+            //做完作业提交this.props.navigation.navigate("Home" , {learnId: , status: })
+            // const paramsData =  this.props.navigation.getState().routes[2].params;
+            // const changeLearnId = paramsData.learnId ? paramsData.learnId : '';
+            // const changeStatus = paramsData.status ? paramsData : '';
+            // return (
+            //         (todo.learnId == changeLearnId && changeStatus == 3) ? //status==3未批改
+            //                 <Image
+            //                     source={"../../assets/LatestTaskImages/noCheck.png"}
+            //                     style={styles.imgStatus}
+            //                 />
+            //                 : (todo.learnId == changeLearnId && changeStatus == 2) ? //status==2已批改
+            //                 <Image
+            //                     source={"../../assets/LatestTaskImages/hasCheck.png"}
+            //                     style={styles.imgStatus}
+            //                 />
+            //                 :
+            //                 <Image
+            //                     source={statusImg}  //初始的状态图标(未提交时，点导航返回按钮)
+            //                     style={styles.imgStatus}
+            //                 />
+            //     );
+
+            return <Image source={statusImg} style={styles.imgStatus} />;
+        } else {
+            return <Image source={statusImg} style={styles.imgStatus} />;
         }
     };
 
-
     //通过fetch请求数据
-    fetchData(pageNo , onRefresh = false){  
-       const rsType = this.props.resourceType;    
-       const token = global.constants.token;
-       const userId = global.constants.userName;
-       const ip = global.constants.baseUrl;  
-       const url = ip + "studentApp_getStudentPlan.do";
-       const params ={
+    fetchData(pageNo, onRefresh = false) {
+        const rsType = this.props.resourceType;
+        const token = global.constants.token;
+        const userId = global.constants.userName;
+        const ip = global.constants.baseUrl;
+        const url = ip + "studentApp_getStudentPlan.do";
+        const params = {
             currentPage: pageNo,
             userId: userId,
             resourceType: rsType,
             //callback:'ha',
             token: token,
-        }
-        http.get(url,params).then((resStr)=>{
-            let resJson = JSON.parse(resStr);
-            var todosList = resJson.data; //重要！！！
+        };
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                var todosList = resJson.data; //重要！！！
 
-            let dataBlob = []; 
-            let i = itemNo;
+                let dataBlob = [];
+                let i = itemNo;
 
-            todosList.map(function (item) {
-                dataBlob.push({
-                    key: i,
-                    value: item,
+                todosList.map(function (item) {
+                    dataBlob.push({
+                        key: i,
+                        value: item,
+                    });
+                    i++;
                 });
-                i++;
-            });
-            itemNo = i;
-            console.log('itemNo' , itemNo);
-            let foot = 0;
-            if(todosList.length < 12){
-                foot = 1; //未请求到数据，数据加载完了
-                dataFlag = false; //数据加载完了
-            }
+                itemNo = i;
+                console.log("itemNo", itemNo);
+                let foot = 0;
+                if (todosList.length < 12) {
+                    foot = 1; //未请求到数据，数据加载完了
+                    dataFlag = false; //数据加载完了
+                }
 
-            this.setState({
-                message:resJson.message, 
+                this.setState({
+                    message: resJson.message,
 
-                //下拉刷新时todos只保存第一页数据dataBlob
-                todos: onRefresh ? dataBlob
-                                : this.state.todos.concat(dataBlob),
-                isLoading: false,
-                isRefresh: false,
-                showFoot: foot,
-                //isRefreshing: false,
+                    //下拉刷新时todos只保存第一页数据dataBlob
+                    todos: onRefresh
+                        ? dataBlob
+                        : this.state.todos.concat(dataBlob),
+                    isLoading: false,
+                    isRefresh: false,
+                    showFoot: foot,
+                    //isRefreshing: false,
+                });
+                todosList = null;
+                dataBlob = null;
+            })
+            .catch((error) => {
+                this.setState({
+                    error: true,
+                    errorInfo: error,
+                });
             });
-            todosList = null;
-            dataBlob = null;
-        })
-        .catch((error) => {
-            this.setState({
-                error: true,
-                errorInfo: error,
-            });
-        });
     }
 
     //加载等待页
     renderLoadingView() {
-        return(
+        return (
             <View style={styles.container}>
-                <Loading show={true}/> 
+                <Loading show={true} />
             </View>
         );
     }
@@ -184,14 +207,16 @@ class TodoList extends React.Component {
         const { errorInfo } = this.state.errorInfo;
         return (
             <View style={styles.container}>
-                <Text>{this.state.message}</Text>
-                <Text>{ errorInfo }</Text>
+                <Text>Fail</Text>
+                {this.setState({ error: false })}
+                {/* <Text>{this.state.message}</Text> */}
+                <Text>{errorInfo}</Text>
             </View>
         );
     }
 
     //返回itemView(单个todo)
-    _renderItemView = ( todoItem ) => {
+    _renderItemView = (todoItem) => {
         const navigation = this.props.navigation;
 
         //console.log('tododo' , todoItem);  //index、item（key、value）、separators
@@ -210,7 +235,7 @@ class TodoList extends React.Component {
         let todoIndex = todoItem.item.key;
         //console.log('index',todoIndex);
         //Object.keys(todoItem).length != 0
-        if(todo != null){
+        if (todo != null) {
             //console.log('tododo' , todo);
             //根据type判断是作业还是导学案等
             const todoType = todo.type;
@@ -226,7 +251,7 @@ class TodoList extends React.Component {
             //根据图标状态指定图标的url(对于已读的通知，应该不显示任何图标，此处使用三目运算，且需要require请求资源，故设置请求资源为空白图片../Image/readInform.png)
             var statusUrl = todo.status;
             const statusImg =
-                statusUrl == '1' || statusUrl == '5'
+                statusUrl == "1" || statusUrl == "5"
                     ? require("../../assets/LatestTaskImages/new.png")
                     : statusUrl == "2"
                     ? require("../../assets/LatestTaskImages/hasCheck.png")
@@ -243,10 +268,10 @@ class TodoList extends React.Component {
                     ? todo.courseName
                     : todo.status == 2
                     ? "得分:" +
-                        todo.teaScore +
-                        "分 平均分:" +
-                        todo.averageScore +
-                        "分"
+                      todo.teaScore +
+                      "分 平均分:" +
+                      todo.averageScore +
+                      "分"
                     : todo.courseName;
             //截止时间(当作业或导学案已批改,通知或公告时，截止时间不显示，可将截止时间修改为空字符串)
             const timeStop =
@@ -272,82 +297,82 @@ class TodoList extends React.Component {
                     ? 2
                     : todoType == "通知"
                     ? 3
-                    : 4 ;
+                    : 4;
 
-            return(
+            return (
                 <View>
                     <TouchableOpacity
                         onPress={() => {
-                            if(todoType == "作业"){
+                            if (todoType == "作业") {
                                 // 查看已经批改的作业
-                                    if(statusUrl==2){
-                                        navigation.navigate(
-                                            {
-                                                name:"ShowCorrected", 
-                                                params: {
-                                                            learnId: learnId, 
-                                                            selectedindex:0,
-                                                            papername:bottomTitle,
-                                                        },
-                                                megre:true
-                                            }
-                                        );
-                                    }
-                                // 做作业
-                                    else{
-                                        navigation.navigate("DoPaper", 
-                                        {
-                                            learnId: learnId, 
-                                            status: statusUrl, //作业状态
-                                            selectedindex:0,
-                                            papername:bottomTitle,
-                                        });
-                                    }
-                            }else if(todoType == "导学案"){
-                                //学导学案
-                                if(statusUrl==2){
-                                    navigation.navigate(
-                                        {
-                                            name:"ShowCorrected_LearningGuide", 
-                                            params: {
-                                                        learnId: learnId, 
-                                                        selectedindex:0,
-                                                        papername:bottomTitle,
-                                                    },
-                                            megre:true
-                                        }
-                                    );
-                                }
-                            // 做导学案
-                                else{
-                                    navigation.navigate("DoLearningGuide", 
-                                    {
-                                        learnId: learnId, 
-                                        status: statusUrl, //导学案状态
-                                        selectedindex:0,
-                                        papername:bottomTitle,
+                                if (statusUrl == 2) {
+                                    navigation.navigate({
+                                        name: "ShowCorrected",
+                                        params: {
+                                            learnId: learnId,
+                                            selectedindex: 0,
+                                            papername: bottomTitle,
+                                        },
+                                        megre: true,
                                     });
                                 }
-                            }else if(todoType == "通知" || todoType == "公告"){
-                                navigation.navigate(todoType == "通知" ? "通知" : "公告" , 
-                                {
-                                    bottomTitle: bottomTitle,
-                                    createrName: createrName,
-                                    time: time,
-                                    courseName: courseName, //通知或公告内容
-                                    learnId: learnId,
-                                    status: statusUrl, //通知状态
-                                    type: type, //todo类型
-                                });
+                                // 做作业
+                                else {
+                                    navigation.navigate("DoPaper", {
+                                        learnId: learnId,
+                                        status: statusUrl, //作业状态
+                                        selectedindex: 0,
+                                        papername: bottomTitle,
+                                    });
+                                }
+                            } else if (todoType == "导学案") {
+                                //学导学案
+                                if (statusUrl == 2) {
+                                    navigation.navigate({
+                                        name: "ShowCorrected_LearningGuide",
+                                        params: {
+                                            learnId: learnId,
+                                            selectedindex: 0,
+                                            papername: bottomTitle,
+                                        },
+                                        megre: true,
+                                    });
+                                }
+                                // 做导学案
+                                else {
+                                    navigation.navigate("DoLearningGuide", {
+                                        learnId: learnId,
+                                        status: statusUrl, //导学案状态
+                                        selectedindex: 0,
+                                        papername: bottomTitle,
+                                    });
+                                }
+                            } else if (
+                                todoType == "通知" ||
+                                todoType == "公告"
+                            ) {
+                                navigation.navigate(
+                                    todoType == "通知" ? "通知" : "公告",
+                                    {
+                                        bottomTitle: bottomTitle,
+                                        createrName: createrName,
+                                        time: time,
+                                        courseName: courseName, //通知或公告内容
+                                        learnId: learnId,
+                                        status: statusUrl, //通知状态
+                                        type: type, //todo类型
+                                    }
+                                );
 
-                                if(statusUrl == 5){ //表示未读的通知公告
+                                if (statusUrl == 5) {
+                                    //表示未读的通知公告
                                     //console.log('todoIndexStatus1', todosList[todoIndex].value.status)
-                                    todosList[todoIndex].value.status = 4;  //修改本地缓存数据
+                                    todosList[todoIndex].value.status = 4; //修改本地缓存数据
                                     //console.log('todoIndexStatus2', todosList[todoIndex].value.status);
                                     //todos = todosList; //将本地缓存数据覆盖state中的todos
                                     this.setState({ todos: todosList });
                                 }
-                            }                                       
+                            }
                         }}
                         style={{
                             //borderWidth: 0.5,
@@ -355,17 +380,18 @@ class TodoList extends React.Component {
                             paddingLeft: 10,
                             paddingRight: 10,
                             paddingBottom: 10,
-                            borderBottomWidth:0.1, //下边框
+                            borderBottomWidth: 0.1, //下边框
                         }}
                     >
                         <Flex>
                             {/*作业/导学案等图标iconUrl 作业/导学案等type 图标状态statusUrl 小标题bottomTitle 创建者createrName*/}
                             <Image source={todoImg} style={styles.imgType} />
                             <Text style={styles.title}>{todoType}</Text>
-                            {this.showStatusUrl(todo ,  statusImg)}                                      
+                            {this.showStatusUrl(todo, statusImg)}
                             <View style={{ width: screenWidth * 0.05 }}></View>
                             <View style={styles.titlePosition}>
-                                <Text style={styles.title} 
+                                <Text
+                                    style={styles.title}
                                     numberOfLines={1}
                                     ellipsizeMode={"tail"}
                                 >
@@ -391,11 +417,10 @@ class TodoList extends React.Component {
                     </TouchableOpacity>
                 </View>
             );
-        }
-        else{
-            return(
-                <View style={styles.container}>                     
-                    <Loading show={true}/>         
+        } else {
+            return (
+                <View style={styles.container}>
+                    <Loading show={true} />
                 </View>
             );
         }
@@ -415,8 +440,8 @@ class TodoList extends React.Component {
         );
     };
 
-    renderData(){
-        return(
+    renderData() {
+        return (
             <View>
                 <FlatList
                     //定义数据显示效果
@@ -450,20 +475,20 @@ class TodoList extends React.Component {
 
     //下拉刷新
     _onRefresh = () => {
-        console.log('下拉刷新！！！');
+        console.log("下拉刷新！！！");
         pageNo = 1;
         itemNo = 0;
         this.setState({
-            isRefresh: true,  //下拉控制
+            isRefresh: true, //下拉控制
             showFoot: 0, // 控制foot， 0：隐藏footer  1：已加载完成,没有更多数据   2 ：显示加载中
             //isRefreshing: false, //下拉控制
         });
-        this.fetchData(pageNo , (onRefresh = true));
-    }
+        this.fetchData(pageNo, (onRefresh = true));
+    };
 
     //分割线
     _separator() {
-        return <View style={{ height: 1 , backgroundColor: "#999999" }} />;
+        return <View style={{ height: 1, backgroundColor: "#999999" }} />;
     }
 
     //底部信息提示
@@ -472,7 +497,7 @@ class TodoList extends React.Component {
             return (
                 <View>
                     {/**最后一项数据也加上分割线 */}
-                    <View style={{ height: 1.2 , backgroundColor: "#999999" }} />
+                    <View style={{ height: 1.2, backgroundColor: "#999999" }} />
                     <View
                         style={{
                             height: 30,
@@ -496,14 +521,14 @@ class TodoList extends React.Component {
         } else if (this.state.showFoot == 2) {
             return (
                 <View style={styles.footer}>
-                    <ActivityIndicator color='#59B9E0' />
+                    <ActivityIndicator color="#59B9E0" />
                     <Text>正在加载更多数据...</Text>
                 </View>
             );
         } else if (this.state.showFoot == 0) {
             return (
                 <View style={styles.footer}>
-                    <View style={{ height: 1 , backgroundColor: "#999999" }} />
+                    <View style={{ height: 1, backgroundColor: "#999999" }} />
                     <Text></Text>
                 </View>
             );
@@ -548,7 +573,7 @@ const styles = StyleSheet.create({
         resizeMode: "contain",
     },
     title: {
-        color: 'black',
+        color: "black",
         fontSize: 17,
         fontWeight: "900",
     },
@@ -556,7 +581,7 @@ const styles = StyleSheet.create({
         width: screenWidth * 0.4,
     },
     createrName: {
-        color: 'black',
+        color: "black",
         fontSize: 17,
         fontWeight: "bold",
         paddingLeft: screenWidth * 0.8,
