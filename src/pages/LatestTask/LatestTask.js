@@ -19,7 +19,6 @@ import {
 
 import TodoListContainer from "./TodoListContainer";
 
-
 export default function LatestTaskContainer() {
     const navigation = useNavigation();
     //将navigation传给LatestTask组件，防止路由出错
@@ -32,30 +31,29 @@ class LatestTask extends React.Component {
         this.state = {
             showSearch: false,
             showFilter: true,
-            value: '',  //搜索栏中的内容
-            resourceType: 'all', //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
-                                //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
-            
+            value: "", //搜索栏中的内容
+            resourceType: "all", //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
+            //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
 
-            resourceRead: '', //资料夹是否已读接口返回的数据
+            resourceRead: "", //资料夹是否已读接口返回的数据
         };
     }
 
     //第一次加载页面请求资料夹是否已读api
-    UNSAFE_componentWillMount(){
+    UNSAFE_componentWillMount() {
         const userId = global.constants.userName;
         const ip = global.constants.baseUrl;
         const url = ip + "studentApp_checkMineFloder.do";
-        const params ={
+        const params = {
             userId: userId,
-        }
-        http.get(url,params).then((resStr)=>{
+        };
+        http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
-            console.log('resStr' , resJson);
+            console.log("resStr", resJson);
             this.setState({ resourceRead: resJson.data });
-            console.log('data' , this.state.resourceRead);
-            return ;
-        })
+            console.log("data", this.state.resourceRead);
+            return;
+        });
     }
 
     //点击文件夹图标跳转
@@ -65,40 +63,39 @@ class LatestTask extends React.Component {
         this.props.navigation.navigate("资料夹", {});
     };
 
-
     //搜索框内容改变时触发，更新value
     onChange = (value) => {
         this.setState({ value });
     };
     //点击"搜索"按钮时触发
     onSearch = () => {
-        const {searchText} = this;
-        console.log('serachText' , searchText.state.value);
+        const { searchText } = this;
+        console.log("serachText", searchText.state.value);
         //this.setState({ value });
         this.onSubmit(searchText.state.value);
     };
     //点击"搜索"按钮时触发
     onSubmit = (searchValue) => {
-        console.log('点击了搜索');
+        console.log("点击了搜索");
         //this.setState({ value: '' });
 
         this.setState({ value: searchValue });
     };
     //点击键盘中的提交按钮，光标移出搜索框，“搜索“二字消失
     onBlur = () => {
-        console.log('点击了键盘中的提交按钮');
+        console.log("点击了键盘中的提交按钮");
         //this.setState({ value: '' });
-        const {searchText} = this;
+        const { searchText } = this;
         const searchValue = searchText.state.value;
         this.setState({ value: searchValue });
     };
 
     //显示filter图标
     renderAvatar = () => {
-        return(
+        return (
             <TouchableOpacity
                 onPress={() => {
-                    this.setState({ moduleVisible: true })
+                    this.setState({ moduleVisible: true });
                 }}
             >
                 <Avatar
@@ -111,38 +108,38 @@ class LatestTask extends React.Component {
     };
     //全部最新内容
     handleAll = () => {
-        console.log('获取全部最新内容');
-        this.setState({ resourceType: 'all'});
+        console.log("获取全部最新内容");
+        this.setState({ resourceType: "all" });
     };
     //作业
     handleHomework = () => {
-        console.log('获取作业内容');
-        this.setState({ resourceType: '2'});
+        console.log("获取作业内容");
+        this.setState({ resourceType: "2" });
     };
     //导学案
     handleGuidance = () => {
-        console.log('获取导学案内容');
-        this.setState({ resourceType: '1'});
+        console.log("获取导学案内容");
+        this.setState({ resourceType: "1" });
     };
     //授课包
     handleTeachingPackages = () => {
-        console.log('获取授课包内容');
-        this.setState({ resourceType: '6'});
+        console.log("获取授课包内容");
+        this.setState({ resourceType: "6" });
     };
     //微课
     handleMicroClass = () => {
-        console.log('获取微课内容');
-        this.setState({ resourceType: '7'});
+        console.log("获取微课内容");
+        this.setState({ resourceType: "7" });
     };
     //通知
     handleInform = () => {
-        console.log('获取通知内容');
-        this.setState({ resourceType: '3'});
+        console.log("获取通知内容");
+        this.setState({ resourceType: "3" });
     };
     //公告
     handleNotice = () => {
-        console.log('获取公告内容');
-        this.setState({ resourceType: '4'});
+        console.log("获取公告内容");
+        this.setState({ resourceType: "4" });
     };
 
     //资料夹是否已读图标
@@ -151,29 +148,26 @@ class LatestTask extends React.Component {
         //若返回数据的data值为0则不显示红点，否则存在未读则显示
         //资料夹图标只要被点击，就默认资料均被读，从资料夹页面返回时就不再显示红点标志
 
-        return ( this.state.resourceRead == 0 ?  //测试==0，之后需要改为！=0
-                        (<View
-                            style={styles.rightNumView}
-                        >     
-                            <Image
-                                source={require("../../assets/LatestTaskImages/rightNum.png")}
-                                style={styles.rightNumImg}
-                            />
-                        </View>)
-                        : (<View
-                            style={styles.rightNumView}
-                        >     
-                            <Image
-                                source={require("../../assets/LatestTaskImages/packageRead.png")}
-                                style={styles.rightNumImg}
-                            />
-                        </View>)
+        return this.state.resourceRead == 0 ? ( //测试==0，之后需要改为！=0
+            <View style={styles.rightNumView}>
+                <Image
+                    source={require("../../assets/LatestTaskImages/rightNum.png")}
+                    style={styles.rightNumImg}
+                />
+            </View>
+        ) : (
+            <View style={styles.rightNumView}>
+                <Image
+                    source={require("../../assets/LatestTaskImages/packageRead.png")}
+                    style={styles.rightNumImg}
+                />
+            </View>
         );
     };
 
     //显示筛选filter
     showFilter = () => {
-        return(
+        return (
             <View>
                 <OverflowMenu
                     anchor={this.renderAvatar}
@@ -182,23 +176,23 @@ class LatestTask extends React.Component {
                     //backdropStyle={{backgroundColor:'white'}}
                     visible={this.state.moduleVisible}
                     onBackdropPress={() => {
-                        this.setState({ moduleVisible: false});
+                        this.setState({ moduleVisible: false });
                     }}
-                    style={{width: screenWidth*0.22,}}
+                    style={{ width: screenWidth * 0.22 }}
                     //fullWidth={false}
                 >
-                    <MenuItem 
-                        title = "全部"
+                    <MenuItem
+                        title="全部"
                         onPress={this.handleAll}
-                        style={{fontSize:40}}
+                        style={{ fontSize: 40 }}
                     />
-                    <MenuItem 
-                        title = "作业"
+                    <MenuItem
+                        title="作业"
                         onPress={this.handleHomework}
                         //style={styles.menuItem}
                     />
-                    <MenuItem 
-                        title = "导学案"
+                    <MenuItem
+                        title="导学案"
                         onPress={this.handleGuidance}
                         style={styles.menuItem}
                     />
@@ -212,13 +206,13 @@ class LatestTask extends React.Component {
                         onPress={this.handleMicroClass}
                         style={styles.menuItem}
                     />*/}
-                    <MenuItem 
-                        title = "通知"
+                    <MenuItem
+                        title="通知"
                         onPress={this.handleInform}
                         style={styles.menuItem}
                     />
-                    <MenuItem 
-                        title = "公告"
+                    <MenuItem
+                        title="公告"
                         onPress={this.handleNotice}
                         style={styles.menuItem}
                     />
@@ -235,40 +229,41 @@ class LatestTask extends React.Component {
                         <TouchableOpacity
                             style={styles.packagesView}
                             onPress={this.packagesPage}
-                        >     
+                        >
                             <Image
                                 source={require("../../assets/LatestTaskImages/packages.png")}
                                 style={styles.packagesImg}
                             />
-                        </TouchableOpacity>    
-                        {this.showPackagesStatus()}         
+                        </TouchableOpacity>
+                        {this.showPackagesStatus()}
                         <View style={styles.searchView}>
-                            <SearchBar 
+                            <SearchBar
                                 style={styles.searchBar}
                                 value={this.state.value}
                                 placeholder="学案/作业"
-                                ref={ref => this.searchText = ref}
-
+                                ref={(ref) => (this.searchText = ref)}
                                 onCancel={this.onSearch}
                                 onChange={this.onChange}
                                 onBlur={this.onBlur}
-                                cancelText='搜索'
+                                cancelText="搜索"
                                 showCancelButton
                             />
                         </View>
-                        <Flex style={{width: screenWidth * 0.12}}>
-                            <View style={{width: screenWidth * 0.04}}></View>
-                            <TouchableOpacity
-                                style={styles.filterView}
-                            >
+                        <Flex style={{ width: screenWidth * 0.12 }}>
+                            <View style={{ width: screenWidth * 0.04 }}></View>
+                            <TouchableOpacity style={styles.filterView}>
                                 {this.showFilter()}
                             </TouchableOpacity>
                         </Flex>
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('最新内容类型' , this.state.resourceType)}
-                    <TodoListContainer resourceType={this.state.resourceType} searchStr={this.state.value}  status={'2'} />
+                    {console.log("最新内容类型", this.state.resourceType)}
+                    <TodoListContainer
+                        resourceType={this.state.resourceType}
+                        searchStr={this.state.value}
+                        status={"2"}
+                    />
                 </View>
             </View>
         );
@@ -285,7 +280,7 @@ const styles = StyleSheet.create({
     },
     flexNew: {
         paddingTop: 0,
-        paddingLeft: screenWidth*0.01,
+        paddingLeft: screenWidth * 0.01,
     },
     packagesView: {
         width: screenWidth * 0.1,
@@ -295,7 +290,7 @@ const styles = StyleSheet.create({
         width: "50%",
         resizeMode: "contain",
         top: 2,
-        left:18,
+        left: 18,
     },
     rightNumView: {
         width: screenWidth * 0.05,
@@ -303,7 +298,7 @@ const styles = StyleSheet.create({
     rightNumImg: {
         height: "100%",
         width: "40%",
-        resizeMode: "contain", 
+        resizeMode: "contain",
         //top:0,
         //left:0,
         //marginLeft:0,

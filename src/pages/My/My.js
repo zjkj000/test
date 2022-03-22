@@ -103,7 +103,7 @@ class MyPageComponent extends Component {
     };
     logout = () => {
         const { navigation } = this.props;
-        navigation.navigate("Home");
+        navigation.navigate("Login");
     };
 
     handleCamera = () => {

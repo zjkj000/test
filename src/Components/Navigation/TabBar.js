@@ -12,6 +12,9 @@ import {
     removeBackExitApp,
 } from "../../utils/TwiceTap/TwiceTap";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+
+const Tab = createBottomTabNavigator();
 
 export default class MyTabBar extends React.Component {
     constructor(props) {
@@ -81,6 +84,12 @@ export default class MyTabBar extends React.Component {
     };
     render() {
         return (
+            // <Tab.Navigator>
+            //     <Tab.Screen
+            //         name="Home_page"
+            //         component={this.renderHome}
+            //     ></Tab.Screen>
+            // </Tab.Navigator>
             <TabBar
                 unselectedTintColor="#949494"
                 tintColor="#33A3F4"
