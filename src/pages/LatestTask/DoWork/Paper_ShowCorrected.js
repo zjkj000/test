@@ -65,7 +65,7 @@ export default function Paper_ShowCorrected(props) {
          
 
     return (
-      <ViewPager  style={{color:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}
+      <ViewPager  style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}
        shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
               onSelect={index => setSelectedIndex(index)}>
             
@@ -81,7 +81,7 @@ export default function Paper_ShowCorrected(props) {
                     <TouchableOpacity   style={{position:'absolute',left:10,top:"45%",zIndex:99}}   onPress={()=>{
                         const newindex =selectedIndex-1;
                         if(newindex==-1){
-                          Toast.showInfoToast('已经是第一题')
+                          Toast.showInfoToast('已经是第一题',1000)
                           }
                           else{
                             setSelectedIndex(newindex)
@@ -94,7 +94,7 @@ export default function Paper_ShowCorrected(props) {
                     <TouchableOpacity  style={{position:'absolute',right:10,top:"45%",zIndex:99}} onPress={()=>{
                         const newindex =selectedIndex+1;
                         if(newindex==dataNum){
-                          Toast.showInfoToast('已经是最后一题');}
+                          Toast.showInfoToast('已经是最后一题',1000);}
                         else{
                           setSelectedIndex(newindex)
                         }
@@ -104,7 +104,7 @@ export default function Paper_ShowCorrected(props) {
                     {/* 题目内容 */}
                     <ScrollView  style={{paddingLeft:15}}>
                         {/* 题目名称 */}
-                        <View>
+                        <View style={{backgroundColor:'#FFFFFF'}}>
                             <Text style={styles.Titletext}>[{Item.typeName}]</Text>
                             <View style={{position:'absolute',right:20,top:10,flexDirection:'row'}}>
                               <Text style={{color:'#59B9E0',fontSize:15}}> {selectedIndex+1}</Text>  

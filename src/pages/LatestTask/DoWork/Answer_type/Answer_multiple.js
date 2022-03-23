@@ -94,7 +94,7 @@ class Answer_multiple extends Component {
         const questionChoiceList = this.state.questionChoiceList;
         const width = Dimensions.get("window").width;
         return (
-            <View>
+            <View style={{backgroundColor:'#FFFFFF'}}  >
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.answer_title}>
                     <Text style={{ color: "#59B9E0" }}>

@@ -80,6 +80,9 @@ export const styles = StyleSheet.create({
         borderBottomColor: "gray",
         borderBottomWidth: 1,
     },
+    header_button: {
+        height: "100%",
+    },
     header_left: {
         left: 0,
         top: 0,
@@ -105,7 +108,7 @@ export const styles = StyleSheet.create({
     },
     body: {
         width: screenHeight,
-        flex: 5,
+        flex: 10,
         flexDirection: "row",
         textAlign: "center",
         justifyContent: "center",
@@ -124,13 +127,11 @@ export const styles = StyleSheet.create({
     },
     bottom: {
         width: screenHeight,
-        flex: 1,
+        flex: 2,
         flexDirection: "row",
         textAlign: "center",
         justifyContent: "center",
         alignItems: "center",
-        borderTopColor: "gray",
-        borderTopWidth: 1,
     },
     QRCode: {
         width: screenWidth / 4,

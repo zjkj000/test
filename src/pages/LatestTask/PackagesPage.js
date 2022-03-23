@@ -279,7 +279,7 @@ class PackagesPage extends React.Component {
 
     renderData(){
         return(
-            <View>
+            <View style={{backgroundColor: '#fff'}}>
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
                 <FlatList
                     //定义数据显示效果

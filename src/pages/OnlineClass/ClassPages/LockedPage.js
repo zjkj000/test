@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-    View,
-    Text,
-    ScrollView,
-    TouchableOpacity,
-    Image,
-    TextInput,
-} from "react-native";
+import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
 import http from "../../../utils/http/request";
 import RadioList from "../../LatestTask/DoWork/Utils/RadioList";
 import Checkbox from "../../LatestTask/DoWork/Utils/Checkbox";
@@ -20,7 +13,6 @@ import {
 } from "@ui-kitten/components";
 import { styles } from "../styles";
 import Toast from "../../../utils/Toast/Toast";
-import HTMLView from "react-native-htmlview";
 import { Icon } from "react-native-elements";
 import ImageHandler from "../../../utils/Camera/Camera";
 import WebView from "react-native-webview";
@@ -57,7 +49,7 @@ export default class LockedPage extends Component {
         this.setState({ html: newHTML, answer: str });
     };
     imageUpload = (base64) => {
-        const { messageList, ipAddress, userName, introduction } = this.props;
+        const { messageList, ipAddress, userName } = this.props;
         const event = messageList[0];
         const url =
             "http://" +
@@ -272,7 +264,7 @@ export default class LockedPage extends Component {
                         }}
                         style={{
                             width: 100,
-                            height: "35%",
+                            height: "100%",
                             backgroundColor: "#59B9E0",
                         }}
                     >

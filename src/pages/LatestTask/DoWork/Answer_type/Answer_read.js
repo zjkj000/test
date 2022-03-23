@@ -88,7 +88,7 @@ class Answer_read extends Component {
  //用于将作答结果传给TODO界面
     //答案处理
     stuAnswer(TimuIndex,str){
-      console.log(this.state.numid+1,'题，第',TimuIndex+1,'小题选了什么',str)
+      // console.log(this.state.numid+1,'题，第',TimuIndex+1,'小题选了什么',str)
       var newAnswer =  new Array();
 
               //阅读是要拼接未答,未答
@@ -104,7 +104,7 @@ class Answer_read extends Component {
       this.props.getStu_answer(newAnswer.toString());
       
       this.props.getischange(true);
-      console.log('阅读题的最终答案是：',newAnswer.toString())
+      // console.log('阅读题的最终答案是：',newAnswer.toString())
      }
 
     UNSAFE_componentWillMount(){
@@ -134,7 +134,7 @@ class Answer_read extends Component {
           </View>);
     }
     return (
-      <View>
+      <View style={{backgroundColor:'#FFFFFF'}}  >
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
@@ -207,7 +207,7 @@ class Answer_7S5 extends Component {
  //用于将作答结果传给TODO界面
     //答案处理
     stuAnswer(TimuIndex,str){
-      console.log(this.state.numid+1,'题，第',TimuIndex+1,'小题选了什么',str)
+      // console.log(this.state.numid+1,'题，第',TimuIndex+1,'小题选了什么',str)
       var newAnswer =  new Array();
 
               //阅读是要拼接未答,未答
@@ -223,7 +223,7 @@ class Answer_7S5 extends Component {
       this.props.getStu_answer(newAnswer.toString());
       
       this.props.getischange(true);
-      console.log('7选5题的最终答案是：',newAnswer.toString())
+      // console.log('7选5题的最终答案是：',newAnswer.toString())
      }
 
     UNSAFE_componentWillMount(){

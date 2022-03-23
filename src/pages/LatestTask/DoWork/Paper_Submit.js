@@ -82,7 +82,6 @@ class Paper_Submit extends Component {
                   "www.cn901.net" +
                   ":8111" +
                   "/AppServer/ajax/studentApp_saveStudentHomeWork.do"
-
             let change_status= 0;    //记录返回的状态
             let newsub_status = 0;   // 记录提交的状态
             //接收到的是状态是：1  新作业
@@ -139,11 +138,11 @@ class Paper_Submit extends Component {
               noAnswerQueId:noSubmitID
             }
             var subsuccess = false;
-            console.log('qwe++++++',url,params)
+            // console.log('---',url,params)
             http.get(url,params).then((resStr)=>{
               console.log('----',resStr)
               let resJson = JSON.parse(resStr);
-              console.log('resJson' , resJson);
+              // console.log('---',resJson)
               subsuccess = resJson.success;
             })
 
@@ -212,7 +211,7 @@ class Paper_Submit extends Component {
       }
       if(this.state.success){
           return (
-            <View style={{color:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}>
+            <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}>
               {/* 答案预览区域 */}
               <ScrollView style={styles.preview_area}>
                       {/* 题目展示内容：序号 + 答案 */}
