@@ -222,7 +222,7 @@ export default function Paper_ToDo(props) {
                         contentId:data[selectedIndex].resourceId ,
                         useTime:newdate_arr[selectedIndex]}
             
-           console.log('导学案学习时长提交测试:',answerdate_minute,answerdate_seconds,'该资源名称',data[selectedIndex].resourceName,newdate_arr[selectedIndex])
+          //  console.log('导学案学习时长提交测试:',answerdate_minute,answerdate_seconds,'该资源名称',data[selectedIndex].resourceName,newdate_arr[selectedIndex])
             
           http.get(submitResource_url,submitResource_params).then((resStr)=>{
                   })
