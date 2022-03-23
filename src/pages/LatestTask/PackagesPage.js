@@ -233,6 +233,7 @@ class PackagesPage extends React.Component {
                             paddingRight: 10,
                             paddingBottom: 10,
                             borderBottomWidth:0.1, //下边框
+                            backgroundColor: '#fff',
                         }}
                     >
                         <View style={styles.ViewCard}>
@@ -279,6 +280,7 @@ class PackagesPage extends React.Component {
     renderData(){
         return(
             <View>
+                <View style={{ height: 1, backgroundColor: "#999999" }} />
                 <FlatList
                     //定义数据显示效果
                     data={this.state.todos}
@@ -411,6 +413,7 @@ const styles = StyleSheet.create({
     },
     ViewCard: {
         flexDirection: 'row',
+        backgroundColor: '#fff',
         //height: screenHeight*0.1,
     },
     ViewLeft: {

@@ -19,6 +19,7 @@ import {
 
 import StudyListContainer from "./StudyListContainer";
 
+let SearchText = '';
 
 export default function StudyContainer() {
     const navigation = useNavigation();
@@ -36,7 +37,7 @@ class Study extends React.Component {
             resourceType: '9', //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
                                 //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
             
-
+            
             resourceRead: '', //资料夹是否已读接口返回的数据
         };
     }
@@ -53,7 +54,7 @@ class Study extends React.Component {
             let resJson = JSON.parse(resStr);
             console.log('resStr' , resJson);
             this.setState({ resourceRead: resJson.data });
-            console.log('data' , this.state.resourceRead);
+            //console.log('data' , this.state.resourceRead);
             return ;
         })
     }
@@ -68,29 +69,34 @@ class Study extends React.Component {
 
     //搜索框内容改变时触发，更新value
     onChange = (value) => {
-        this.setState({ value });
+        //this.setState({ value });
+        SearchText = value;
     };
     //点击"搜索"按钮时触发
     onSearch = () => {
-        const {searchText} = this;
-        console.log('serachText' , searchText.state.value);
-        //this.setState({ value });
-        this.onSubmit(searchText.state.value);
+        // const {searchText} = this;
+        // console.log('serachText' , searchText.state.value);
+        // console.log('******' , searchText.state.value);
+        console.log('*******');
+        //this.setState({ value : SearchText });
+        //this.onSubmit(SearchText);
+        this.setState({});
     };
     //点击"搜索"按钮时触发
-    onSubmit = (searchValue) => {
-        console.log('点击了搜索');
-        //this.setState({ value: '' });
+    // onSubmit = (searchValue) => {
+    //     console.log('点击了搜索');
+    //     //this.setState({ value: '' });
 
-        this.setState({ value: searchValue });
-    };
+    //     this.setState({ value: searchValue });
+    // };
     //点击键盘中的提交按钮，光标移出搜索框，“搜索“二字消失
     onBlur = () => {
         console.log('点击了键盘中的提交按钮');
         //this.setState({ value: '' });
-        const {searchText} = this;
-        const searchValue = searchText.state.value;
-        this.setState({ value: searchValue });
+        // const {searchText} = this;
+        // const searchValue = searchText.state.value;
+        //this.setState({ value: SearchText });
+        this.setState({});
     };
 
     //显示filter图标
@@ -125,7 +131,6 @@ class Study extends React.Component {
         this.setState({ resourceType: '1'});
     };
     
-
     //资料夹是否已读图标
     showPackagesStatus = () => {
         //componentwillMount第一次加载页面需要请求http://www.cn901.net:8111/AppServer/ajax/studentApp_checkMineFloder.do?&userId=ming6059&callback=ha
@@ -183,6 +188,7 @@ class Study extends React.Component {
                         onPress={this.handleGuidance}
                         style={styles.menuItem}
                     />
+                    
                 </OverflowMenu>
             </View>
         );
@@ -206,7 +212,7 @@ class Study extends React.Component {
                         <View style={styles.searchView}>
                             <SearchBar 
                                 style={styles.searchBar}
-                                value={this.state.value}
+                                value={{SearchText}}
                                 placeholder="学案/作业"
                                 ref={ref => this.searchText = ref}
 
@@ -228,8 +234,8 @@ class Study extends React.Component {
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()))}
-                    <StudyListContainer resourceType={this.state.resourceType} searchStr={this.state.value}  status={'2'} />
+                    {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)}
+                    <StudyListContainer resourceType={this.state.resourceType} searchStr={SearchText}  status={'2'} />
                 </View>
             </View>
         );

@@ -139,8 +139,11 @@ class Paper_Submit extends Component {
               noAnswerQueId:noSubmitID
             }
             var subsuccess = false;
+            console.log('qwe++++++',url,params)
             http.get(url,params).then((resStr)=>{
+              console.log('----',resStr)
               let resJson = JSON.parse(resStr);
+              console.log('resJson' , resJson);
               subsuccess = resJson.success;
             })
 
