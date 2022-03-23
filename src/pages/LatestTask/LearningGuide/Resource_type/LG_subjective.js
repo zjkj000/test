@@ -10,7 +10,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function LG_subjectiveContainer(props) {
     const navigation = useNavigation();
-    const paperId= props.paperId
+    const learnPlanId= props.learnPlanId
     const submit_status=props.LG_submit_status
     const startdate=props.startdate         
     const papername = props.papername
@@ -27,7 +27,7 @@ export default function LG_subjectiveContainer(props) {
                     papername = {papername}
                     submit_status={submit_status}  
                     startdate={startdate}
-                    paperId={paperId} 
+                    learnPlanId={learnPlanId} 
                     getLG_ischange={setLG_ischange}   
                     getStu_LG_answer={setStu_LG_answer}  
                     sum={sum} 
@@ -42,7 +42,7 @@ export default function LG_subjectiveContainer(props) {
 //  使用时 需要传入参数：   sum   总题目数量：                 选传 不传默认总数题   会显示1/1题
 //                         num   这是第几个题目               选传 不传默认num  0   会显示1/1题 
 //                         datasource                        必须传  试题的内容
-//                         paperId                           必须传  用于提交作业时候用到
+//                         learnPlanId                           必须传  用于提交作业时候用到
 //                         oldAnswer_data                    选择传递   是否有历史作答记录  一般是通过api获取的历史答案。否则不建议传
 //                         getischange={setischange}         传递一个函数  用于向做作业的页面传递 是否改变了答案，便于判断是否要提交  setischange函数要自己写在做作业页面
 //                         getStu_answer={setStu_answer_i}   传递一个函数  用于获得阅读题得到的作答结果  setStu_answer_i函数要自己写在做作业页面 代表设置第几道题的答案。
@@ -54,7 +54,7 @@ class LG_subjective extends Component {
         //这个页面用到的状态
         this.state = {
             
-            paperId:'',
+            learnPlanId:'',
             textinputAnswer:'',       //输入文本框输入的内容
             isLongarea: false, 
             hasImage:false,           //控制下方题目是否有照片
@@ -78,7 +78,7 @@ class LG_subjective extends Component {
 
     //用于将本道题写的答案  传给 Todo页面，用于提交
     stuAnswer(str) {
-        console.log('主观题写了答案', str)
+        // console.log('主观题写了答案', str)
         this.setState({ stuAnswer: str })
         // 把结果传给ToDO，并且告诉有改变  只要作答就有改变
         this.props.getStu_LG_answer(str)
@@ -99,7 +99,7 @@ class LG_subjective extends Component {
         }
         //把接到的参数全部设置到state里
         this.setState({
-            paperId:this.props.paperId,
+            learnPlanId:this.props.learnPlanId,
             imgURLArray:newimgurlarr,
             stuAnswer: this.props.oldAnswer_data ? this.props.oldAnswer_data : '',
             oldStuAnswer: this.props.oldAnswer_data,
@@ -187,84 +187,79 @@ class LG_subjective extends Component {
     handleCamera = () => {
         ImageHandler.handleCamera().then((res) => {
             if (res) {
-                var newurl = this.submitBaseCode(res.base64)
-                var newimageArray = this.state.imgURLArray;
-                if(newurl!=''){
-                    newimageArray.push({ url: newurl })
-                    var newstuanswer = this.state.stuAnswer;
-                    //拼接之后便于之前的APP能用
-                    newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`
-                this.setState({
-                    stuAnswer:newstuanswer,
-                    imgURLArray:newimageArray,
-                })}
-                this.stuAnswer(newstuanswer);
-                //获取到url  并且把url添加到本地urlarr中
-            } 
+                const url ="http://" +"www.cn901.net" +":8111" +
+                            "/AppServer/ajax/studentApp_saveBase64Image.do";
+                const params = {
+                    baseCode: res.base64,
+                    learnPlanId: this.state.learnPlanId,
+                    userId: global.constants.userName};    
+                     
+                http.post(url,params).then((resStr)=>{
+                                let resJson = JSON.parse(resStr);
+                                if(resJson.success){
+                                    var newurl = resJson.data;
+                                    var newimageArray = this.state.imgURLArray;
+                                    if (newurl != "") {
+                                        newimageArray.push({ url: newurl });
+                                        var newstuanswer = this.state.stuAnswer;
+                                        //拼接之后便于之前的APP能用
+                                        newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`;
+                                        this.setState({
+                                            stuAnswer: newstuanswer,
+                                            imgURLArray: newimageArray,
+                                            
+                                        });
+                                    }
+                                    this.stuAnswer(newstuanswer);
+                                    this.setState({hasImage:true})
+                                }else{
+                                    Toast.showSuccessToast('照片提交失败！！',3000)
+                                }
+                            })
+        }
         })
     };
     
 
 
-    //用于提交  baseCode  提交主观题答题照片
-    submitBaseCode(baseCode) {
-        // 只要有了照片就提交
-        const url = 
-            "http://"+
-            "192.168.1.81" +
-            ":8222" +
-            "/AppServer/ajax/studentApp_saveBase64Image.do"
-        const params ={
-            // baseCode :  '111',
-            // learnPlanId :  '111',
-            // userName    : 'ming6051'
-            baseCode :  baseCode,
-            learnPlanId :  this.state.paperId,
-            userName    : 'ming6051'
-            }
-        console.log('---------照片  请求提交照片了----------')
-        return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-            // http.post(url,params).then((resStr)=>{
-            // console.log('???',resStr)
-            //     let resJson = JSON.parse(resStr);
-            //     console.log('+++提交结果++++',resJson)
-            //     if(resJson.success){
-            //         // 返回URL地址
-            //         console.log('请求提交成功！返回了！！！')
-            //         this.setState({hasImage:true})
-            //         // return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-            //         //return(resJson.data)
-            //     }else{
-            //         console.log('请求提交失败！！')
-            //         // return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-            //         //return '';
-            //     } 
-            // })
-        //提交过程设置loading效果
-        // return resJson.data?resJson.data:'http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png'
-        //返回的数据是"data": urlPath  图片回显路径   "success":true,    "message":"保存成功！"
-        // 根据返回的url  将图片拼接到 预览区域，并且刷新预览区域
-    }
+   
 
     
     //从本地选择照片需要的函数
     handleLibrary = () => {
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
-                //提交照片 获取到url
-            var newurl = this.submitBaseCode(res.base64)
-            var newimageArray = this.state.imgURLArray;
-            if(newurl!=''){
-                newimageArray.push({ url: newurl })
-                var newstuanswer = this.state.stuAnswer;
-                newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`
-                this.setState({
-                    stuAnswer:newstuanswer,
-                    imgURLArray:newimageArray,
-                });
-            } 
-            this.stuAnswer(newstuanswer)
-        }});
+                const url ="http://" +"www.cn901.net" +":8111" +
+                            "/AppServer/ajax/studentApp_saveBase64Image.do";
+                const params = {
+                    baseCode: res.base64,
+                    learnPlanId: this.state.learnPlanId,
+                    userId: global.constants.userName};    
+                     
+                http.post(url,params).then((resStr)=>{
+                                let resJson = JSON.parse(resStr);
+                                if(resJson.success){
+                                    var newurl = resJson.data;
+                                    var newimageArray = this.state.imgURLArray;
+                                    if (newurl != "") {
+                                        newimageArray.push({ url: newurl });
+                                        var newstuanswer = this.state.stuAnswer;
+                                        //拼接之后便于之前的APP能用
+                                        newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`;
+                                        this.setState({
+                                            stuAnswer: newstuanswer,
+                                            imgURLArray: newimageArray,
+                                            
+                                        });
+                                    }
+                                    this.stuAnswer(newstuanswer);
+                                    this.setState({hasImage:true})
+                                }else{
+                                    Toast.showSuccessToast('照片提交失败！！',3000)
+                                }
+                            })
+        }
+        });
     };
 
 
@@ -274,7 +269,7 @@ class LG_subjective extends Component {
         var questionHTML = []   //用于接收  html解析之后添加到数组中
         questionHTML = this.showStuAnswer()
         return (
-            <View>
+            <View style={{backgroundColor:'#FFFFFF'}}  >
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.answer_title}>
                     <Text  style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
@@ -287,7 +282,7 @@ class LG_subjective extends Component {
                                             ()=>{
                                                 //导航跳转
                                                 this.props.navigation.navigate('SubmitLearningGuide',
-                                                {   paperId:this.props.paperId,
+                                                {   learnPlanId:this.props.learnPlanId,
                                                     submit_status:this.props.submit_status,
                                                     startdate:this.props.startdate,
                                                     papername:this.props.papername,
@@ -365,7 +360,7 @@ class LG_subjective extends Component {
 
                     {/* 相机拍照 */}
                     <TouchableOpacity  onPress={()=> {
-                        console.log('点了图片')
+                        // console.log('点了图片')
                         this.handleCamera()
                         }} >
                             <Image style={{width:30,height:30}} source={require('../../../../assets/image3/camera.png')}></Image>
@@ -373,7 +368,7 @@ class LG_subjective extends Component {
 
                     {/* 从相册选择照片 */}
                     <TouchableOpacity onPress={() => {
-                        console.log('点了相册')
+                        // console.log('点了相册')
                         this.handleLibrary()
                         }}>
                         <Image style={{width:30,height:30}} source={require('../../../../assets/image3/photoalbum.png')}></Image>

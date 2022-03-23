@@ -11,7 +11,7 @@ import Loading from "../../../../utils/loading/Loading";
 
 export default function VideoContainer(props) {
     const navigation = useNavigation();
-    const paperId= props.paperId
+    const learnPlanId= props.learnPlanId
     const submit_status=props.submit_status
     const startdate=props.startdate
     const papername = props.papername
@@ -26,7 +26,7 @@ export default function VideoContainer(props) {
                     papername = {papername}
                     submit_status={submit_status}  
                     startdate={startdate}
-                    paperId={paperId} 
+                    learnPlanId={learnPlanId} 
                  
                     sum={sum} 
                     num={num} 
@@ -216,22 +216,22 @@ class Video_LG extends Component {
         /// -------Video组件回调事件-------
         
         _onLoadStart = () => {
-            console.log('视频开始加载');
+            // console.log('视频开始加载');
         };
         
         _onBuffering = () => {
-            console.log('视频缓冲中...')
+            // console.log('视频缓冲中...')
         };
         
         _onLoaded = (data) => {
-            console.log('视频加载完成');
+            // console.log('视频加载完成');
             this.setState({
             duration: data.duration,
             });
         };
         
         _onProgressChanged = (data) => {
-            console.log('视频进度更新');
+            // console.log('视频进度更新');
             if (this.state.isPlaying) {
             this.setState({
                 currentTime: data.currentTime,
@@ -240,7 +240,7 @@ class Video_LG extends Component {
         };
         
         _onPlayEnd = () => {
-            console.log('视频播放结束');
+            // console.log('视频播放结束');
             this.setState({
             currentTime: 0,
             isPlaying: false,
@@ -249,7 +249,7 @@ class Video_LG extends Component {
         };
         
         _onPlayError = () => {
-            console.log('视频播放失败');
+            // console.log('视频播放失败');
         };
         
         ///-------控件点击事件-------
@@ -328,8 +328,8 @@ class Video_LG extends Component {
         _onLayout = (event) => {
             //获取根View的宽高
             let {width, height} = event.nativeEvent.layout;
-            console.log('通过onLayout得到的宽度：' + width);
-            console.log('通过onLayout得到的高度：' + height);
+            // console.log('通过onLayout得到的宽度：' + width);
+            // console.log('通过onLayout得到的高度：' + height);
             
             // 一般设备横屏下都是宽大于高，这里可以用这个来判断横竖屏
             let isLandscape = (width > height);
@@ -380,7 +380,7 @@ class Video_LG extends Component {
 
      render() {
                 return (  
-                <View style={{color:'#FFFFFF'}}>
+                <View style={{backgroundColor:'#FFFFFF'}}  >
                         {/* 第一行显示 第几题  题目类型 */}
                         <View  style={styles.title}>  
                             <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}} >{this.state.resourceName}</Text>
@@ -392,7 +392,7 @@ class Video_LG extends Component {
                                 ()=>{
                                     //导航跳转
                                     this.props.navigation.navigate('SubmitLearningGuide',
-                                    {   paperId:this.props.paperId,
+                                    {   learnPlanId:this.props.learnPlanId,
                                         submit_status:this.props.submit_status,
                                         startdate:this.props.startdate,
                                         papername:this.props.papername,

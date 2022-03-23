@@ -4,23 +4,21 @@ class StorageUtil {
     /**
      * 获取
      * @param key
+     * @returns {Promise<T>|*|Promise.<TResult>}
      */
+
     static get(key) {
-        return AsyncStorage.getItem(key)
-            .then((value) => {
-                if (value && value != "") {
-                    const jsonValue = JSON.parse(value);
-                    return jsonValue;
-                }
-                return null;
-            })
-            .catch(() => null);
+        return AsyncStorage.getItem(key).then((value) => {
+            const jsonValue = JSON.parse(value);
+            return jsonValue;
+        });
     }
 
     /**
      * 保存
      * @param key
      * @param value
+     * @returns {*}
      */
     static save(key, value) {
         return AsyncStorage.setItem(key, JSON.stringify(value));
@@ -30,9 +28,10 @@ class StorageUtil {
      * 更新
      * @param key
      * @param value
+     * @returns {Promise<T>|Promise.<TResult>}
      */
     static update(key, value) {
-        return AsyncStorage.get(key).then((item) => {
+        return DeviceStorage.get(key).then((item) => {
             value =
                 typeof value === "string"
                     ? value
@@ -42,23 +41,12 @@ class StorageUtil {
     }
 
     /**
-     * 删除
+     * 更新
      * @param key
+     * @returns {*}
      */
     static delete(key) {
         return AsyncStorage.removeItem(key);
-    }
-
-    // 删除选择的json
-    static deleteOptional(array) {
-        array.map((item, index) => AsyncStorage.removeItem(item));
-    }
-
-    /**
-     * 删除所有配置数据
-     */
-    static clear() {
-        return AsyncStorage.clear();
     }
 }
 

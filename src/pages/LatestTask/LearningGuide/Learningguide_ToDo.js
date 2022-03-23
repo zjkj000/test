@@ -34,8 +34,8 @@ export default function Paper_ToDo(props) {
   const [dataNum,setDataNum] = useState(0);
   const [learnPlanId,setlearnPlanId] = useState(props.route.params.learnId);
   const [status,setstatus] = useState(props.route.params.status);
-  const [startdate,setstartdate]=useState('');   //记录总用时  总用时的开始时间
-  const [start_date,setstart_date]=useState(''); //记录每道题目用时   每道题的开始时间
+  const [startdate,setstartdate]=useState(getDate());   //记录总用时  总用时的开始时间
+  const [start_date,setstart_date]=useState(getDate()); //记录每道题目用时   每道题的开始时间
   const [date_arr,setdate_arr]=useState([]);     //记录每道题目 用时    时间数组
   const [isallObj,setisallObj]= useState([])
 
@@ -45,9 +45,9 @@ export default function Paper_ToDo(props) {
       headerRight:()=>(<RightMenu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)})
       setSelectedIndex(props.route.params.selectedindex)
       getData();
-      var date = getDate()
-      setstartdate(date)  // 记录总的开始时间
-      setstart_date(date) //记录每道题的开始时间
+      // var date = getDate()
+      // setstartdate(date)  // 记录总的开始时间
+      // setstart_date(date) //记录每道题的开始时间
     },[props.route.params.selectedindex]);
      
     // 获取时间返回 00::00:00
@@ -68,10 +68,7 @@ export default function Paper_ToDo(props) {
         ":8111" +
         "/AppServer/ajax/studentApp_getCatalog.do"
       const data_params ={
-        learnPlanId:'f930226b-1f96-4794-8a13-73f3cf641b6b',//各种题型
-        // learnPlanId:'cfc84392-8223-42a4-9126-77557be8e12b',
-        // learnPlanId : props.route.params.learnId,
-        // userName : 'ming6051', 不需要username
+        learnPlanId:learnPlanId,//各种题型
         deviceType:'PAD'
       }
       if(!success){
@@ -102,32 +99,33 @@ export default function Paper_ToDo(props) {
           })
       }
       
-      // //获取历史导学案作答记录
-      // const oldAnswer_url = 
-      //   "http://"+
-      //   "www.cn901.net" +
-      //   ":8111" +
-      //   "/AppServer/ajax/studentApp_getstuAnswerLearnPlanList.do"
-      // const oldAnswer_params ={
-      //     learnPlanId : props.route.params.learnId,
-      //     userName : 'ming6051'
-      //   }
-      // if(!oldStuAnswer_success){
-      //     http.get(oldAnswer_url,oldAnswer_params).then((resStr)=>{
-      //           let oldAnswer_resJson = JSON.parse(resStr);
-      //           if(oldAnswer_resJson.success)
-      //           {   //如果获取到数据！设置历史作答记录
-      //             var oldAnswerList=[];
-      //             oldAnswer_resJson.data.forEach(function(item){
-      //               oldAnswerList.push(
-      //                 item.stuAnswer
-      //               )
-      //             })
-      //             setoldAnswerdata(oldAnswerList);
-      //             setoldStuAnswer_success(true);
-      //           }
-      //       })
-      //     }
+      //获取历史导学案作答记录
+      const oldAnswer_url = 
+              "http://"+
+              "www.cn901.net" +
+              ":8111" +
+              "/AppServer/ajax/studentApp_getstuAnswerLearnPlanList.do"
+      const oldAnswer_params ={
+              learnPlanId : learnPlanId,
+              userName : global.constants.userName,
+        }
+
+       if(!oldStuAnswer_success){
+           http.get(oldAnswer_url,oldAnswer_params).then((resStr)=>{
+                let oldAnswer_resJson = JSON.parse(resStr);
+                if(oldAnswer_resJson.success)
+                {   //如果获取到数据！设置历史作答记录
+                  var oldAnswerList=[];
+                  oldAnswer_resJson.data.forEach(function(item){
+                    oldAnswerList.push(
+                      item.stuAnswer
+                    )
+                  })
+                  setoldAnswerdata(oldAnswerList);
+                  setoldStuAnswer_success(true);
+                }
+            })
+          }
     }
     
 
@@ -138,28 +136,30 @@ export default function Paper_ToDo(props) {
         switch(Item.baseTypeId){
           //在调用题目  模板时，需要传入  sum代表总题数，   num代表当前题目索引，  datasource 代表该题数据
           //                            sum  选择传不传     num 选择传不传     datasource  必须传
-          case'101': return <LG_singleContainer       isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]}  />;
-          case'102': return <LG_multipleContainer     isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]} />;
-          case'103': return <LG_judgementContainer    isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]} />;
-          case'104': return <LG_subjectiveContainer   isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]} />;
-          case'106': return <LG_subjectiveContainer   isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]} />;
-          case'108': return <LG_readContainer         isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]} />;
+          case'101': return <LG_singleContainer       isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]}  />;
+          case'102': return <LG_multipleContainer     isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]} />;
+          case'103': return <LG_judgementContainer    isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]} />;
+          case'104': return <LG_subjectiveContainer   isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]} />;
+          case'106': return <LG_subjectiveContainer   isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]} />;
+          case'108': return <LG_readContainer         isallObj={isallObj}        LG_submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId} getLG_ischange={setLG_ischange}   getStu_LG_answer={setStu_LG_answer_i}  sum={dataNum} num={index} datasource={Item} oldLG_Answer_data={oldAnswerdata[index]} />;
           default  : break ;}
       }else if(Item.resourceType=='02'){
             // return  <Text>这里是试卷类型{Item.resourceName}{Item.url}</Text>
-                     return(<PaperContainer           isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />)
+                     return(<PaperContainer           isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />)
       }else{
           if(Item.resourceType=='03'&&Item.format=='ppt'){
-                     return <PPTContainer             isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
+                     return <PPTContainer             isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
           }else if(Item.resourceType=='03'&&Item.format=='video'){
-                     return <VideoContainer           isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
+                     return <VideoContainer           isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
           }else if(Item.resourceType=='03'&&Item.format=='image'){
-                     return <ShowImageContainer       isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
+                     return <ShowImageContainer       isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
           }else if(Item.resourceType=='03'&&Item.format=='music'){
-                     return <MusicContainer           isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
+                     return <MusicContainer           isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
           }else if(Item.resourceType=='03'&&Item.format=='word'){
-                     return <WordContainer            isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    paperId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
-          }
+                     return <WordContainer            isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
+          }else if(Item.resourceType=='03'&&Item.format=='pdf'){
+            return <WordContainer                     isallObj={isallObj}          submit_status={status}  startdate={startdate} papername={props.route.params.papername}    learnPlanId={learnPlanId}  sum={dataNum} num={index} datasource={Item} />
+ }
       }
 
     }
@@ -188,18 +188,24 @@ export default function Paper_ToDo(props) {
       }
 
       //处理时间
-      var answerdate = 0;
-      var nowdate = getDate();
-      var startdatearr = start_date.split(':')
-      var nowdatearr = nowdate.split(':')
-      if(nowdatearr[0]<startdatearr[0])nowdatearr[0]+=24
-      var answerdate_minute =  ((nowdatearr[0]-startdatearr[0]))*60 + (nowdatearr[1]-startdatearr[1]) ; 
-      if(nowdatearr[2]<startdatearr[2])answerdate_minute -=1
-      answerdate_minute<0?0:answerdate_minute
-      if(nowdatearr[2]<startdatearr[2]) nowdatearr[2]+=60
-      var answerdate_seconds = (nowdatearr[2]-startdatearr[2]);
-      answerdate  = (answerdate_minute*60+answerdate_seconds)*1000
-      var newdate_arr = date_arr;
+      let answerdate = 0;
+      let nowdate = getDate();
+      let startdatearr = start_date.split(':')
+      let nowdatearr = nowdate.split(':')
+     
+      //判断小时  如果过了一天 就要提交的时候 + 24
+      if(parseInt(nowdatearr[0])<parseInt(startdatearr[0]))nowdatearr[0] = parseInt(nowdatearr[0])+24
+      //处理分钟
+      let answerdate_minute =  ((parseInt(nowdatearr[0])-parseInt(startdatearr[0])))*60 + (parseInt(nowdatearr[1])-parseInt(startdatearr[1])) ; 
+      // 结束的秒数 小于 开始的秒数，就处理秒的时候秒多加1 分钟减1 
+      if(parseInt(nowdatearr[2])<parseInt(startdatearr[2]))
+      {
+        answerdate_minute = (parseInt(answerdate_minute)-1);
+        nowdatearr[2]= parseInt(nowdatearr[2]) + 60;
+      }
+      let answerdate_seconds = (parseInt(nowdatearr[2])-parseInt(startdatearr[2]))
+      answerdate  = (parseInt(answerdate_minute)*60+parseInt(answerdate_seconds))*1000
+      let newdate_arr = date_arr;
       newdate_arr[selectedIndex] = answerdate;
       setdate_arr(newdate_arr)
       
@@ -209,16 +215,17 @@ export default function Paper_ToDo(props) {
                         "http://"+
                         "www.cn901.net" +
                         ":8111" +
-                        "/AppServer/ajax/studentApp_stuSaveLpAnswer.do?"
+                        "/AppServer/ajax/studentApp_stuSaveLearnResTime.do"
               const submitResource_params ={
                         learnPlanId :learnPlanId,
                         userName : global.constants.userName,
-                        contentId:data[selectedIndex].questionId ,
+                        contentId:data[selectedIndex].resourceId ,
                         useTime:newdate_arr[selectedIndex]}
-              console.log('导学案学习时长提交测试:',newdate_arr[selectedIndex],'该资源名称',data[selectedIndex].resourceName)
-              // http.get(submitResource_url,submitResource_params).then((resStr)=>{
-              //       let submit_resJson = JSON.parse(resStr);
-              //     })
+            
+           console.log('导学案学习时长提交测试:',answerdate_minute,answerdate_seconds,'该资源名称',data[selectedIndex].resourceName,newdate_arr[selectedIndex])
+            
+          http.get(submitResource_url,submitResource_params).then((resStr)=>{
+                  })
       }else{  //else  处理的是提交试题类型作答结果
 
               //判断oldAnswerdata[selectedIndex]  是否和 Stu_answer[selectedIndex] 一样，相等的话就不提交 不同的话在提交
@@ -230,40 +237,40 @@ export default function Paper_ToDo(props) {
               }
               
               if(answerlist[selectedIndex]!=oldAnswerdata[selectedIndex]&&ischange){
-                console.log('题目序号：',selectedIndex+1,'题目用时',answerdate,'提交的答案:',Stu_answer[selectedIndex])
+                // console.log('题目序号：',selectedIndex+1,'题目用时',answerdate,'提交的答案:',Stu_answer[selectedIndex])
                 const submit_url = 
                   "http://"+
                   "www.cn901.net" +
                   ":8111" +
-                  "/AppServer/ajax/studentApp_stuSaveLpAnswer.do?"
+                  "/AppServer/ajax/studentApp_stuSaveLpAnswer.do"
                 const submit_params ={
                   learnPlanId :learnPlanId,
                   userName : global.constants.userName,
                   learnPlanName:props.route.params.papername,
-                  questionId:data[selectedIndex].questionId ,
+                  questionId:data[selectedIndex].resourceId ,
                   answer:Stu_answer[selectedIndex],
                   status: change_status,
                 }
                 // 提交答案
 
-               console.log('导学案部分测试状态提交：',change_status,'作答答案：',Stu_answer[selectedIndex])
+                // console.log('导学案部分测试状态提交：',change_status,'作答答案：',Stu_answer[selectedIndex],'URL:',submit_url,submit_params)
 
                 // 现在导学案要做的是  提交答案（根据情况）  +  提交作答时间（必须交）
                 // console.log(submit_url,submit_params)
-                // http.get(submit_url,submit_params).then((resStr)=>{
-                //   let submit_resJson = JSON.parse(resStr);
-                //   console.log('我是导学案TODO页面的提交函数，提交结果之后，接收到的服务器返回的是：',submit_resJson)
-                // })
+                http.get(submit_url,submit_params).then((resStr)=>{
+                  let submit_resJson = JSON.parse(resStr);
+                  // console.log('我是导学案TODO页面的提交函数，提交结果之后，接收到的服务器返回的是：',submit_resJson)
+                })
 
                 //提交完之后把历史答案改了
                 var newoldAnswerdata = oldAnswerdata;
                 newoldAnswerdata[selectedIndex]=answerlist[selectedIndex];
                 setoldAnswerdata(newoldAnswerdata);
-                setischange(false);
+                setLG_ischange(false);
               }else{
-                setischange(false);
+                setLG_ischange(false);
                 setstart_date(getDate())
-                console.log('题目序号:',selectedIndex+1,'作答结果没有改变')
+                // console.log('题目序号:',selectedIndex+1,'作答结果没有改变')
               }
       }
       // 试题交答案，资源交时长  之后都要翻页
@@ -273,9 +280,9 @@ export default function Paper_ToDo(props) {
 
 
     return (
-      <ViewPager 
+      <ViewPager style={{backgroundColor:'#FFFFFF'}}
                     swipeEnabled ={false}
-                    shouldLoadComponent={shouldLoadComponent} style={{color:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
+                    shouldLoadComponent={shouldLoadComponent} style={{borderTopColor:'#000000',borderTopWidth:0.5}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
                     onSelect={index => Submit_Stu_answer(index,selectedIndex)}>  
             {/* 根据这套导学案的data使用map遍历加载 */}
             {
@@ -288,7 +295,7 @@ export default function Paper_ToDo(props) {
                     <TouchableOpacity   style={{position:'absolute',left:10,top:"45%",zIndex:99}}   onPress={()=>{
                         const newindex =selectedIndex-1;
                         if(newindex==-1){
-                          Toast.showInfoToast('已经是第一题')
+                          Toast.showInfoToast('已经是第一题',1000)
                             //提交一下答案
                             Submit_Stu_answer(selectedIndex,selectedIndex);
                           }else{ 
@@ -308,7 +315,7 @@ export default function Paper_ToDo(props) {
                             {
                               name:"SubmitLearningGuide", 
                               params: {
-                                        paperId:learnPlanId,
+                                        learnPlanId:learnPlanId,
                                         submit_status:status,
                                         startdate:startdate,
                                         papername:props.route.params.papername,

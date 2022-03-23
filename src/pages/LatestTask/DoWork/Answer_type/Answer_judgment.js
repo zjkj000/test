@@ -62,7 +62,7 @@ class Answer_judgment extends Component {
     }
  }  
  stuAnswer(str){
-   console.log('判断题',str)
+  //  console.log('判断题',str)
   this.setState({stu_answer:str})
   this.props.getStu_answer(str)
   this.props.getischange(true);
@@ -80,7 +80,7 @@ class Answer_judgment extends Component {
       const questionChoiceList = this.state.questionChoiceList;
       const  width = Dimensions.get('window').width;
   return (  
-    <View>
+    <View style={{backgroundColor:'#FFFFFF'}}  >
         {/* 第一行显示 第几题  题目类型 */}
           <View  style={styles.answer_title}>
               
@@ -91,6 +91,7 @@ class Answer_judgment extends Component {
                     // 小眼睛 先提交本题目，在跳转到提交页面
                     onPress={
                       ()=>{
+                        
                           //导航跳转
                           this.props.navigation.navigate('SubmitPaper',
                           {   paperId:this.props.paperId,

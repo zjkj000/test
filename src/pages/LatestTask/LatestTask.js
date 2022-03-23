@@ -267,7 +267,7 @@ class LatestTask extends React.Component {
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('最新内容类型' , this.state.resourceType)}
+                    {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()))}
                     <TodoListContainer resourceType={this.state.resourceType} searchStr={this.state.value}  status={'2'} />
                 </View>
             </View>

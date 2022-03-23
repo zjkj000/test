@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function LG_readContainer(props) {
   const navigation = useNavigation();
-  const paperId= props.paperId
+  const learnPlanId= props.learnPlanId
   const submit_status=props.LG_submit_status
   const startdate=props.startdate
   const papername = props.papername
@@ -23,10 +23,11 @@ export default function LG_readContainer(props) {
   if(datasource.resourceName=='七选五'){
     return (
       <LG_7S5  navigation={navigation}  
+       
                       papername = {papername}
                       submit_status={submit_status}  
                       startdate={startdate}
-                      paperId={paperId} 
+                      learnPlanId={learnPlanId} 
                       getLG_ischange={setLG_ischange}   
                       getStu_LG_answer={setStu_LG_answer}  
                       sum={sum} 
@@ -38,10 +39,11 @@ export default function LG_readContainer(props) {
   }else{
     return (
       <LG_read  navigation={navigation}  
+      style={{backgroundColor:'#FFFFFF'}}  
                       papername = {papername}
                       submit_status={submit_status}  
                       startdate={startdate}
-                      paperId={paperId} 
+                      learnPlanId={learnPlanId} 
                       getLG_ischange={setLG_ischange}   
                       getStu_LG_answer={setStu_LG_answer}  
                       sum={sum} 
@@ -56,7 +58,7 @@ export default function LG_readContainer(props) {
 //  使用时 需要传入参数：   sum   总题目数量：                 选传 不传默认总数题   会显示1/1题
 //                         num   这是第几个题目               选传 不传默认num  0   会显示1/1题 
 //                         datasource                        必须传  试题的内容
-//                         paperId                           必须传  用于提交作业时候用到
+//                         learnPlanId                           必须传  用于提交作业时候用到
 //                         oldAnswer_data                    选择传递   是否有历史作答记录  一般是通过api获取的历史答案。否则不建议传
 //                         getischange={setischange}         传递一个函数  用于向做作业的页面传递 是否改变了答案，便于判断是否要提交  setischange函数要自己写在做作业页面
 //                         getStu_answer={setStu_answer_i}   传递一个函数  用于获得阅读题得到的作答结果  setStu_answer_i函数要自己写在做作业页面 代表设置第几道题的答案。
@@ -65,7 +67,7 @@ export default function LG_readContainer(props) {
 class LG_read extends Component {
   constructor(props) {
     super(props)
-    this.stuAnswer=this.stuAnswer.bind(this);
+    this.LG_stuAnswer=this.LG_stuAnswer.bind(this);
     this.state = {
             closeopenstate:true,
             numid:'',
@@ -83,8 +85,8 @@ class LG_read extends Component {
  } 
    
  //用于将作答结果传给TODO界面
-    stuAnswer(TimuIndex,str){
-      console.log(this.state.numid+1,'题，第',TimuIndex+1,'小题选了什么',str)
+ LG_stuAnswer(TimuIndex,str){
+      // console.log(this.state.numid+1,'题，第',TimuIndex+1,'小题选了什么',str)
       var newAnswer =  new Array();
       if(this.state.stu_answer!=''){
         newAnswer=this.state.stu_answer.split(',');
@@ -97,7 +99,7 @@ class LG_read extends Component {
       this.props.getStu_LG_answer(newAnswer.toString());
       
       this.props.getLG_ischange(true);
-      console.log('导学案阅读题的最终答案是：',newAnswer.toString())
+      // console.log('导学案阅读题的最终答案是：',newAnswer.toString())
      }
 
     UNSAFE_componentWillMount(){
@@ -122,11 +124,11 @@ class LG_read extends Component {
       items.push(
           <View key={read_num_i} style={styles.answer_result}>
             <Text style={{fontSize:20,width:25}}>{read_num_i+1}</Text>
-            <RadioList TimuIndex={read_num_i} checkedindexID={stu_answer_array[read_num_i]} ChoiceList={this.state.questionList} getstuanswer={this.stuAnswer} type='read'/>
+            <RadioList TimuIndex={read_num_i} checkedindexID={stu_answer_array[read_num_i]} ChoiceList={this.state.questionList} getstuanswer={this.LG_stuAnswer} type='read'/>
           </View>);
     }
     return (
-      <View>
+      <View style={{backgroundColor:'#FFFFFF'}}  >
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
@@ -139,7 +141,7 @@ class LG_read extends Component {
                                       ()=>{
                                           //导航跳转
                                           this.props.navigation.navigate('SubmitLearningGuide',
-                                          {   paperId:this.props.paperId,
+                                          {   learnPlanId:this.props.learnPlanId,
                                               submit_status:this.props.submit_status,
                                               startdate:this.props.startdate,
                                               papername:this.props.papername,
@@ -181,7 +183,7 @@ class LG_read extends Component {
 class LG_7S5 extends Component {
   constructor(props) {
     super(props)
-    this.stuAnswer=this.stuAnswer.bind(this);
+    this.LG_stuAnswer=this.LG_stuAnswer.bind(this);
     this.state = {
             closeopenstate:true,
             numid:'',
@@ -199,8 +201,8 @@ class LG_7S5 extends Component {
  } 
    
  //用于将作答结果传给TODO界面
-    stuAnswer(TimuIndex,str){
-      console.log(this.state.numid+1,'题，第',TimuIndex+1,'小题选了什么',str)
+ LG_stuAnswer(TimuIndex,str){
+      // console.log(this.state.numid+1,'题，第',TimuIndex+1,'小题选了什么',str)
       var newAnswer =  new Array();
       if(this.state.stu_answer!=''){
         newAnswer=this.state.stu_answer.split(',');
@@ -213,7 +215,7 @@ class LG_7S5 extends Component {
       this.props.getStu_LG_answer(newAnswer.toString());
       
       this.props.getLG_ischange(true);
-      console.log('导学案七选五的最终答案是：',newAnswer.toString())
+      // console.log('导学案七选五的最终答案是：',newAnswer.toString())
      }
 
     UNSAFE_componentWillMount(){
@@ -238,11 +240,11 @@ class LG_7S5 extends Component {
       items.push(
           <View key={read_num_i} style={styles.answer_result}>
             <Text style={{fontSize:20,width:25}}>{read_num_i+1}</Text>
-            <RadioList TimuIndex={read_num_i} checkedindexID={stu_answer_array[read_num_i]} ChoiceList={this.state.questionList} getstuanswer={this.stuAnswer} type='read'/>
+            <RadioList TimuIndex={read_num_i} checkedindexID={stu_answer_array[read_num_i]} ChoiceList={this.state.questionList} getstuanswer={this.LG_stuAnswer} type='read'/>
           </View>);
     }
     return (
-      <View>
+      <View style={{backgroundColor:'#FFFFFF'}}  >
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
@@ -255,7 +257,7 @@ class LG_7S5 extends Component {
                                       ()=>{
                                           //导航跳转
                                           this.props.navigation.navigate('SubmitLearningGuide',
-                                          {   paperId:this.props.paperId,
+                                          {   learnPlanId:this.props.learnPlanId,
                                               submit_status:this.props.submit_status,
                                               startdate:this.props.startdate,
                                               papername:this.props.papername,

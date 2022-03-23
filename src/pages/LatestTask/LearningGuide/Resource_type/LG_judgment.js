@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function LG_judgmentContainer(props) {
     const navigation = useNavigation();
-    const paperId= props.paperId
+    const learnPlanId= props.learnPlanId
     const submit_status=props.LG_submit_status
     const startdate=props.startdate
     const papername = props.papername
@@ -23,7 +23,7 @@ export default function LG_judgmentContainer(props) {
                     papername = {papername}
                     submit_status={submit_status}  
                     startdate={startdate}
-                    paperId={paperId} 
+                    learnPlanId={learnPlanId} 
                     getLG_ischange={setLG_ischange}   
                     getStu_LG_answer={setStu_LG_answer}  
                     sum={sum} 
@@ -40,7 +40,7 @@ export default function LG_judgmentContainer(props) {
 //  使用时 需要传入参数：   sum   总题目数量：                 选传 不传默认总数题   会显示1/1题
 //                         num   这是第几个题目               选传 不传默认num  0   会显示1/1题 
 //                         datasource                        必须传  试题的内容
-//                         paperId                           必须传  用于提交作业时候用到
+//                         learnPlanId                           必须传  用于提交作业时候用到
 //                         oldAnswer_data                    选择传递   是否有历史作答记录  一般是通过api获取的历史答案。否则不建议传
 //                         getischange={setischange}         传递一个函数  用于向做作业的页面传递 是否改变了答案，便于判断是否要提交  setischange函数要自己写在做作业页面
 //                         getStu_answer={setStu_answer_i}   传递一个函数  用于获得阅读题得到的作答结果  setStu_answer_i函数要自己写在做作业页面 代表设置第几道题的答案。
@@ -62,7 +62,7 @@ class LG_judgment extends Component {
     }
  }  
  stuAnswer(str){
-   console.log('判断题',str)
+  //  console.log('判断题',str)
   this.setState({stu_answer:str})
   this.props.getStu_LG_answer(str)
   this.props.getLG_ischange(true);
@@ -80,7 +80,7 @@ class LG_judgment extends Component {
       const questionChoiceList = this.state.questionChoiceList;
       const  width = Dimensions.get('window').width;
   return (  
-    <View>
+    <View style={{backgroundColor:'#FFFFFF'}}  >
         {/* 第一行显示 第几题  题目类型 */}
           <View  style={styles.answer_title}>
               <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}} >{this.state.resourceName}</Text>
@@ -94,9 +94,10 @@ class LG_judgment extends Component {
                     // 小眼睛 先提交本题目，在跳转到提交页面
                     onPress={
                       ()=>{
+                          
                           //导航跳转
                           this.props.navigation.navigate('SubmitLearningGuide',
-                          {   paperId:this.props.paperId,
+                          {   learnPlanId:this.props.learnPlanId,
                               submit_status:this.props.submit_status,
                               startdate:this.props.startdate,
                               papername:this.props.papername,

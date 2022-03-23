@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 
 export default function PPTContainer(props) {
     const navigation = useNavigation();
-    const paperId= props.paperId
+    const learnPlanId= props.learnPlanId
     const submit_status=props.submit_status
     const startdate=props.startdate
     const papername = props.papername
@@ -19,7 +19,7 @@ export default function PPTContainer(props) {
                     papername = {papername}
                     submit_status={submit_status}  
                     startdate={startdate}
-                    paperId={paperId} 
+                    learnPlanId={learnPlanId} 
                     sum={sum} 
                     num={num} 
                     isallObj={props.isallObj}
@@ -50,8 +50,7 @@ export default function PPTContainer(props) {
 
 
      UNSAFE_componentWillMount(){
-         //请求数据  需要  作业id  用户id   这道题的 numid
-         //id有了 props.paperId   用户id有  
+    
          //请求到之后  就要把答案 设置到oldstuanswer
          this.setState({
              uri:this.props.datasource.pptList[0],
@@ -76,7 +75,7 @@ export default function PPTContainer(props) {
      render() {
         const  width = Dimensions.get('window').width;
     return (  
-      <View>
+      <View style={{backgroundColor:'#FFFFFF'}}  >
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.title}>  
                 <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
@@ -88,7 +87,7 @@ export default function PPTContainer(props) {
                     ()=>{
                         //导航跳转
                         this.props.navigation.navigate('SubmitLearningGuide',
-                        {   paperId:this.props.paperId,
+                        {   learnPlanId:this.props.learnPlanId,
                             submit_status:this.props.submit_status,
                             startdate:this.props.startdate,
                             papername:this.props.papername,

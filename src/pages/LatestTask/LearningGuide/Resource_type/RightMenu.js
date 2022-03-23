@@ -29,7 +29,6 @@ export default class RightMenu extends Component {
             deviceType:'PHONE'
         }
         http.get(url,params).then((resStr)=>{
-            console.log('+++++++')
             let resJson = JSON.parse(resStr);
             let getdatanum = 0;
             //i是最外层的   遍历环节
@@ -84,7 +83,7 @@ export default class RightMenu extends Component {
                                             onPress={() => {
                                                 this.props.getselectedindex(index)
                                                 this.setState({ moduleVisible: false });
-                                                console.log('点了题目导航的：',this.props,index)
+                                                // console.log('点了题目导航的：',this.props,index)
                                             }}/>
                                 )
                             item_num += 1;

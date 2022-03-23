@@ -12,7 +12,7 @@ import Loading from "../../../../utils/loading/Loading";
 
 export default function MusicContainer(props) {
     const navigation = useNavigation();
-    const paperId= props.paperId
+    const learnPlanId= props.learnPlanId
     const submit_status=props.submit_status
     const startdate=props.startdate
     const papername = props.papername
@@ -25,20 +25,19 @@ export default function MusicContainer(props) {
                     papername = {papername}
                     submit_status={submit_status}  
                     startdate={startdate}
-                    paperId={paperId} 
+                    learnPlanId={learnPlanId} 
                     sum={sum} 
                     num={num} 
                     isallObj={props.isallObj}
                     datasource={datasource}  />
   )
 }
+
 //  Music展示 模板页面
 class Music extends Component {
      constructor(props) {
-        super(props)
-       
+        super(props)  
         this.state = {
-
                 numid:'',
                 resourceName:'',
                 resourceId:'',
@@ -69,7 +68,7 @@ class Music extends Component {
 
      UNSAFE_componentWillMount(){
          //请求数据  需要  作业id  用户id   这道题的 numid
-         //id有了 props.paperId   用户id有  
+
          //请求到之后  就要把答案 设置到oldstuanswer
          this.setState({
              resource:this.props.datasource,
@@ -96,22 +95,22 @@ class Music extends Component {
         /// -------Video组件回调事件-------
   
         _onLoadStart = () => {
-            console.log('视频开始加载');
+            // console.log('视频开始加载');
         };
         
         _onBuffering = () => {
-            console.log('视频缓冲中...')
+            // console.log('视频缓冲中...')
         };
         
         _onLoaded = (data) => {
-            console.log('视频加载完成');
+            // console.log('视频加载完成');
             this.setState({
             duration: data.duration,
             });
         };
         
         _onProgressChanged = (data) => {
-            console.log('视频进度更新');
+            // console.log('视频进度更新');
             if (this.state.isPlaying) {
             this.setState({
                 currentTime: data.currentTime,
@@ -120,7 +119,7 @@ class Music extends Component {
         };
         
         _onPlayEnd = () => {
-            console.log('视频播放结束');
+            // console.log('视频播放结束');
             this.setState({
             currentTime: 0,
             isPlaying: false,
@@ -129,7 +128,7 @@ class Music extends Component {
         };
         
         _onPlayError = () => {
-            console.log('视频播放失败');
+            // console.log('视频播放失败');
         };
         
         ///-------控件点击事件-------
@@ -208,8 +207,8 @@ class Music extends Component {
         _onLayout = (event) => {
             //获取根View的宽高
             let {width, height} = event.nativeEvent.layout;
-            console.log('通过onLayout得到的宽度：' + width);
-            console.log('通过onLayout得到的高度：' + height);
+            // console.log('通过onLayout得到的宽度：' + width);
+            // console.log('通过onLayout得到的高度：' + height);
             
             // 一般设备横屏下都是宽大于高，这里可以用这个来判断横竖屏
             let isLandscape = (width > height);
@@ -276,9 +275,8 @@ class Music extends Component {
             </View>
         );
         }else{
-            return( //"http://www.cn901.com/res/91Content/resource/2021/01/22/video/46c31428-3fa2-47d2-ae51-be58a3f8aba0_mp4.mp4"
-                <View style={styles.container} onLayout={this._onLayout}>
-                    <View style={{top: screenHeight*0.4 ,width: this.state.videoWidth, height: 50, backgroundColor:'#000000' }}>
+            return( 
+                    <View style={{top: screenHeight*0.25 ,width: this.state.videoWidth, height: 50, backgroundColor:'#000000' }}>
                         <Video
                         ref={(ref) => this.videoPlayer = ref}
                         source={{uri: this.state.videoUrl}}
@@ -324,14 +322,13 @@ class Music extends Component {
                             </View>
                         }
                     </View>
-                </View>
             );
         }
     }
 
      render() {   
         return (  
-        <View style={{color:'#FFFFFF'}}>
+        <View style={{backgroundColor:'#FFFFFF'}}  >
                 {/* 第一行显示 第几题  题目类型 */}
                 <View  style={styles.title}>  
                     <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
@@ -343,7 +340,7 @@ class Music extends Component {
                         ()=>{
                             //导航跳转
                             this.props.navigation.navigate('SubmitLearningGuide',
-                            {   paperId:this.props.paperId,
+                            {   learnPlanId:this.props.learnPlanId,
                                 submit_status:this.props.submit_status,
                                 startdate:this.props.startdate,
                                 papername:this.props.papername,
@@ -357,8 +354,10 @@ class Music extends Component {
                 </View>
                 
                 {/* 展示music就行 */}
-                
+                <View style={{backgroundColor:'#FFFFFF',height:'100%'}}>
                     { this.showContent()}
+                </View>
+                    
                
         </View>
         )
@@ -372,9 +371,6 @@ const styles = StyleSheet.create({
       alignItems: "center",
       paddingTop: screenHeight*0.2,
       paddingBottom: screenHeight*0.2,
-  },
-  container: {
-    color:'#FFFFFF',
   },
   playButton: {
     width: 50,
