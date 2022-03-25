@@ -140,7 +140,7 @@ export default class LockedPage extends Component {
             learnPlanName: "",
             answerTime: event.desc,
         };
-        http.get(url, params)
+        http.get(url, params, true)
             .then((resStr) => {
                 console.log(params);
                 // console.log("====================================");
@@ -195,11 +195,14 @@ export default class LockedPage extends Component {
     };
 
     renderAnswerBox = () => {
-        const { subjective, answer } = this.state;
-        if (subjective && answer !== "") {
+        const { subjective, html } = this.state;
+        if (subjective && html.html !== "") {
             return (
                 <Layout style={styles.body_answerBox}>
-                    <WebView source={this.state.html} />
+                    <WebView
+                        scalesPageToFit={Platform.OS === "ios" ? true : false}
+                        source={this.state.html}
+                    />
                 </Layout>
             );
         }

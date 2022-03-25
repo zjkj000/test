@@ -48,24 +48,30 @@ axios.interceptors.response.use(
 // 请求类
 export default class http {
     // ES7异步get函数
-    static async get(url, params) {
+    static async get(url, params, encode = false) {
         try {
+            console.log("====================================");
+            console.log(encode);
+            console.log("====================================");
             let ret = "";
-            for (let it in params) {
-                ret +=
-                    encodeURIComponent(it) +
-                    "=" +
-                    encodeURIComponent(params[it]) +
-                    "&";
+            if (encode) {
+                for (let it in params) {
+                    ret +=
+                        encodeURIComponent(it) +
+                        "=" +
+                        encodeURIComponent(params[it]) +
+                        "&";
+                }
+            } else {
+                ret = await new URLSearchParams(params).toString();
             }
-            // let query = await new URLSearchParams(params).toString();
             // let res = null;
             if (ret != "") {
                 url = url + "?" + ret;
             }
-            // console.log("====================================");
-            // console.log(url);
-            // console.log("====================================");
+            console.log("====================================");
+            console.log(url);
+            console.log("====================================");
             url = encodeURI(url);
             res = await axios.get(url);
             return res;

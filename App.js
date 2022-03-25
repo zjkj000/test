@@ -1,13 +1,7 @@
-if (__DEV__) {
-    import("./ReactotronConfig").then(() =>
-        console.log("Reactotron Configured")
-    );
-}
 import React, { Component } from "react";
-import { SafeAreaView, View } from "react-native";
 import MainNavigation from "./src/Components/Navigation/MainNavigation";
 import "react-native-get-random-values";
-import { NavigationContainer, navigationRef } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { ApplicationProvider, IconRegistry } from "@ui-kitten/components";
 import * as eva from "@eva-design/eva";
 import { EvaIconsPack } from "@ui-kitten/eva-icons";
