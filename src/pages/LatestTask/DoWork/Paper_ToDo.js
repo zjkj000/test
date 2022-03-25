@@ -27,7 +27,7 @@ export default function Paper_ToDo(props) {
   const [dataNum,setDataNum] = useState(0);
   const [learnPlanId,setlearnPlanId] = useState(props.route.params.learnId);
   const [status,setstatus] = useState(props.route.params.status);
-  const [startdate,setstartdate]=useState(getDat);   //记录总用时
+  const [startdate,setstartdate]=useState(getDate());   //记录总用时
   const [start_date,setstart_date]=useState(getDate()); //记录每道题目用时
   const [date_arr,setdate_arr]=useState([]);
   const [isallObj,setisallObj]= useState([])

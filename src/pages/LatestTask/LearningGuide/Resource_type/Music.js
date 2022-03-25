@@ -276,7 +276,7 @@ class Music extends Component {
         );
         }else{
             return( 
-                    <View style={{top: screenHeight*0.25 ,width: this.state.videoWidth, height: 50, backgroundColor:'#000000' }}>
+                    <View style={{top: screenHeight*0.25 ,width: this.state.videoWidth, height: 50, backgroundColor:'#000000',borderTopColor:'#000000',borderTopWidth:0.5}}>
                         <Video
                         ref={(ref) => this.videoPlayer = ref}
                         source={{uri: this.state.videoUrl}}

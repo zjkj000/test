@@ -93,7 +93,7 @@ export default function Learningguide_ShowCorrected(props) {
                       <Image source={require('../../../assets/image3/you_03.png')}></Image>
                     </TouchableOpacity>
                     {/* 题目内容 */}
-                    <ScrollView  style={{paddingLeft:15}}>
+                    <ScrollView  style={{paddingLeft:15,backgroundColor:'#FFFFFF'}}>
                         {/* 题目名称 */}
                         <View style={{backgroundColor:'#FFFFFF'}}>
                             <Text style={styles.Titletext}>[{Item.typeName}]</Text>
