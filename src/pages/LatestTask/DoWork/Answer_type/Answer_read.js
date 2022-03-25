@@ -134,13 +134,13 @@ class Answer_read extends Component {
           </View>);
     }
     return (
-      <View style={{backgroundColor:'#FFFFFF'}}  >
+      <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}  >
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
                 <Text>/{this.props.sum?this.props.sum:1}题 </Text>
                 <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
-                <TouchableOpacity  style={{position:'absolute',right:20}}
+                <TouchableOpacity  style={{position:'absolute',right:20,top:10}}
                                     onPress={
                                       ()=>{
                                           //导航跳转
@@ -253,7 +253,7 @@ class Answer_7S5 extends Component {
           </View>);
     }
     return (
-      <View>
+      <View style={{borderTopColor:'#000000',borderTopWidth:0.5,backgroundColor:'#FFFFFF'}}>
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>

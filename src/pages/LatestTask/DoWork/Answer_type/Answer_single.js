@@ -8,6 +8,7 @@ import {
     Alert,
     Dimensions,
 } from "react-native";
+import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 import React, { Component, useState } from "react";
 import RadioList from "../Utils/RadioList";
 import RenderHtml from "react-native-render-html";
@@ -97,7 +98,7 @@ class Answer_single extends Component {
         const questionChoiceList = this.state.questionChoiceList;
         const width = Dimensions.get("window").width;
         return (
-            <View style={{backgroundColor:'#FFFFFF'}}  >
+            <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}  >
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.answer_title}>
                     <Text style={{ color: "#59B9E0" }}>
@@ -154,7 +155,7 @@ class Answer_single extends Component {
 
 const styles = StyleSheet.create({
     answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row" },
-    answer_area: { height: "85%", padding: 20 },
+    answer_area: { height:'85%', padding: 20 },
     answer_result: {
         borderTopWidth: 0.5,
         borderTopColor: "#000000",

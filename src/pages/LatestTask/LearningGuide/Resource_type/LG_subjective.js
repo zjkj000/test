@@ -269,7 +269,7 @@ class LG_subjective extends Component {
         var questionHTML = []   //用于接收  html解析之后添加到数组中
         questionHTML = this.showStuAnswer()
         return (
-            <View style={{backgroundColor:'#FFFFFF'}}  >
+            <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}  >
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.answer_title}>
                     <Text  style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>

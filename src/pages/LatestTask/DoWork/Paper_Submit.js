@@ -85,7 +85,7 @@ class Paper_Submit extends Component {
             let change_status= 0;    //记录返回的状态
             let newsub_status = 0;   // 记录提交的状态
             //接收到的是状态是：1  新作业
-            if(this.state.submit_status='1'){
+            if(this.state.submit_status=='1'){
                 //收到的状态是1     提交的状态就是1 
                 newsub_status = 1;
                         //再去判断返回的状态

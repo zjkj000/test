@@ -3,7 +3,7 @@ import React, { Component, useState } from 'react'
 import RadioList from '../../DoWork/Utils/RadioList';
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
-
+//这个是展示导学案里面资源为图片类型的数据
 export default function ShowImageContainer(props) {
     const navigation = useNavigation();
     const learnPlanId= props.learnPlanId
@@ -16,7 +16,6 @@ export default function ShowImageContainer(props) {
  
     return (
     <ShowImage     
-    style={{backgroundColor:'#FFFFFF'}}
     navigation={navigation}  
                     papername = {papername}
                     submit_status={submit_status}  
@@ -66,7 +65,7 @@ export default function ShowImageContainer(props) {
      render() {
         const  width = Dimensions.get('window').width;
     return (  
-      <View style={{backgroundColor:'#FFFFFF'  }}>
+      <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}>
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.title}>  
                 <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}} >{this.state.resourceName}</Text>
