@@ -9,6 +9,7 @@ import Notice from "../../pages/LatestTask/Notice";
 import Videos from "../../pages/LatestTask/Resource/Videos";
 import Voice from "../../pages/LatestTask/Resource/Voice";
 import PptRescouce from "../../pages/LatestTask/Resource/PptResource";
+import WordOrPdfRescouce from "../../pages/LatestTask/Resource/WordOrPdfRescouce";
 
 import Paper_ToDo from "../../pages/LatestTask/DoWork/Paper_ToDo";
 import Paper_ShowCorrected from "../../pages/LatestTask/DoWork/Paper_ShowCorrected";
@@ -66,7 +67,7 @@ export default class MainNavigation extends Component {
                     <Stack.Screen name="视频" component={Videos} />
                     <Stack.Screen name="音频" component={Voice} />
                     <Stack.Screen name="PPT" component={PptRescouce} />
-                    {/* <Stack.Screen name="文档" component={WordOrPdfRescouce} /> */}
+                    <Stack.Screen name="文档" component={WordOrPdfRescouce} />
 
                     {/* 做作业部分 */}
                     <Stack.Screen name="DoPaper" component={Paper_ToDo} />

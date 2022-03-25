@@ -140,6 +140,7 @@ class Paper_Submit extends Component {
             var subsuccess = false;
             // console.log('---',url,params)
             http.get(url,params).then((resStr)=>{
+              console.log('----',resStr)
               let resJson = JSON.parse(resStr);
               // console.log('---',resJson)
               subsuccess = resJson.success;
