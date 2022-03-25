@@ -341,7 +341,7 @@ class StudyList extends React.Component {
             const statusImg =
                 statusUrl == "1" || statusUrl == "5"
                     ? require("../../assets/LatestTaskImages/new.png")
-                    : statusUrl == "2"
+                    : statusUrl == "2" || (statusUrl == "4" && todoType == "导学案")
                     ? require("../../assets/LatestTaskImages/hasCheck.png")
                     : statusUrl == "3"
                     ? require("../../assets/LatestTaskImages/noCheck.png")

@@ -34,7 +34,7 @@ let searchStr = ""; //保存上一次搜索框内容
 
 let todosList = []; //复制一份api请求得到的数据
 
-let flag = 1;
+let flag = 1;   //提交作业页面返回，已批改作业的状态图标问题（两次主动请求数据）
 
 export default function TodoListContainer(props) {
     //console.log(props.resourceType);
@@ -368,10 +368,11 @@ class TodoList extends React.Component {
                     : require("../../assets/LatestTaskImages/public-notice.png");
             //根据图标状态指定图标的url(对于已读的通知，应该不显示任何图标，此处使用三目运算，且需要require请求资源，故设置请求资源为空白图片../Image/readInform.png)
             var statusUrl = todo.status;
+            console.log('*****任务状态图标****', todoType , statusUrl);
             const statusImg =
                 statusUrl == "1" || statusUrl == "5"
                     ? require("../../assets/LatestTaskImages/new.png")
-                    : statusUrl == "2"
+                    : statusUrl == "2" || (statusUrl == "4" && todoType == "导学案")
                     ? require("../../assets/LatestTaskImages/hasCheck.png")
                     : statusUrl == "3"
                     ? require("../../assets/LatestTaskImages/noCheck.png")
