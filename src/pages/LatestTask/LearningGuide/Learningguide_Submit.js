@@ -109,27 +109,26 @@ class Learningguide_Submit extends Component {
                                     }
                   }
             
-            var answerdate = 0;
-            var nowdate = this.getDate();
-            var startdatearr = this.props.startdate.split(':')
-            var nowdatearr = nowdate.split(':')
-            if(nowdatearr[0]<startdatearr[0])nowdatearr[0]+=24
-            var answerdate_minute =  ((nowdatearr[0]-startdatearr[0]))*60 + (nowdatearr[1]-startdatearr[1]) ; 
-            if(nowdatearr[2]<startdatearr[2])answerdate_minute -=1
-            if(nowdatearr[2]<startdatearr[2]) nowdatearr[2]+=60
-            var answerdate_seconds = nowdatearr[2]-startdatearr[2] ;
-            answerdate  = answerdate_minute+':'+ answerdate_seconds
+                  var answerdate = 0;
+                  var nowdate = this.getDate();
+                  var startdatearr = this.props.startdate.split(':')
+                  var nowdatearr = nowdate.split(':')
+                  if(parseInt(nowdatearr[0])<parseInt(startdatearr[0])) nowdatearr[0]=parseInt(nowdatearr[0])+24
+                  var answerdate_minute =  ((parseInt(nowdatearr[0])-parseInt(startdatearr[0])))*60 + (parseInt(nowdatearr[1])-parseInt(startdatearr[1])) ; 
+                  if(parseInt(nowdatearr[2])<parseInt(startdatearr[2]))answerdate_minute = parseInt(answerdate_minute)-1
+                  if(parseInt(nowdatearr[2])<parseInt(startdatearr[2])) nowdatearr[2]=parseInt(nowdatearr[2])+60
+                  var answerdate_seconds = parseInt(nowdatearr[2])-parseInt(startdatearr[2]);
+                  answerdate  = answerdate_minute+':'+ answerdate_seconds
            
             const params ={
               answerTime:answerdate,
               learnPlanId : this.state.learnPlanId,
               learnPlanName:this.props.papername,
               userName : global.constants.userName,
-              userCn:'测试统一',
+              userCn:'测试统一固定',
               status:newsub_status,
             }
             var subsuccess = false;
-            // console.log(url,params)
             http.get(url,params).then((resStr)=>{
             
               let resJson = JSON.parse(resStr);

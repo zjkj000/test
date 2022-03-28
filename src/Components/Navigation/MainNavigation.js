@@ -10,7 +10,8 @@ import Videos from "../../pages/LatestTask/Resource/Videos";
 import Voice from "../../pages/LatestTask/Resource/Voice";
 import PptRescouce from "../../pages/LatestTask/Resource/PptResource";
 import WordOrPdfRescouce from "../../pages/LatestTask/Resource/WordOrPdfRescouce";
-
+import Select_Subject from '../../pages/My/Select_Subject'
+import SelectSubject_InfoContainer from '../../pages/My/SelectSubject_Info'
 import Paper_ToDo from "../../pages/LatestTask/DoWork/Paper_ToDo";
 import Paper_ShowCorrected from "../../pages/LatestTask/DoWork/Paper_ShowCorrected";
 import Paper_SubmitContainer from "../../pages/LatestTask/DoWork/Paper_Submit";
@@ -138,6 +139,18 @@ export default class MainNavigation extends Component {
                     }}
                 />
                 <Stack.Screen name="Wrongbook" component={Wrongbook} />
+
+                <Stack.Group>
+                    <Stack.Screen name="Select_subject" component={Select_Subject}
+                    options={{
+                        title: '高考选科',
+                    }}/>
+                    <Stack.Screen name="Selectsubject_Info" component={SelectSubject_InfoContainer}
+                    options={{
+                        title: '高考选科',
+                    }}/>
+                </Stack.Group>
+
             </Stack.Navigator>
         );
     }

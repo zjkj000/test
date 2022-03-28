@@ -368,7 +368,6 @@ class TodoList extends React.Component {
                     : require("../../assets/LatestTaskImages/public-notice.png");
             //根据图标状态指定图标的url(对于已读的通知，应该不显示任何图标，此处使用三目运算，且需要require请求资源，故设置请求资源为空白图片../Image/readInform.png)
             var statusUrl = todo.status;
-            console.log('*****任务状态图标****', todoType , statusUrl);
             const statusImg =
                 statusUrl == "1" || statusUrl == "5"
                     ? require("../../assets/LatestTaskImages/new.png")
