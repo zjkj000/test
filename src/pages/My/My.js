@@ -213,6 +213,7 @@ class MyPageComponent extends Component {
                     </View>
                 </TouchableOpacity>
                 <Divider />
+                
                 <TouchableOpacity
                     onPress={() => {
                         this.setState({ fullModuleVisible: true });
@@ -232,7 +233,26 @@ class MyPageComponent extends Component {
                 </TouchableOpacity>
 
                 <Divider />
+                <TouchableOpacity
+                    onPress={() => {
+                                        this.props.navigation.navigate('Select_subject')
+                                    }
+                            }
+                >
+                    <View style={styles.alternativeContainer}>
+                        <Text style={styles.textLeft}>选科中心</Text>
+                        <Text style={styles.textRight}>
+                            {" "}
+                            <Icon
+                                style={styles.icon}
+                                fill="#8F9BB3"
+                                name="arrow-ios-forward-outline"
+                            />
+                        </Text>
+                    </View>
+                </TouchableOpacity>
 
+                <Divider />
                 <Button
                     style={styles.button}
                     status="danger"

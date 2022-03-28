@@ -140,16 +140,19 @@ class Paper_Submit extends Component {
         var nowdate = this.getDate();
         var startdatearr = this.props.startdate.split(":");
         var nowdatearr = nowdate.split(":");
-        if (nowdatearr[0] < startdatearr[0]) nowdatearr[0] += 24;
+        if (parseInt(nowdatearr[0]) < parseInt(startdatearr[0]))
+            nowdatearr[0] = parseInt(nowdatearr[0]) + 24;
         var answerdate_minute =
-            (nowdatearr[0] - startdatearr[0]) * 60 +
-            (nowdatearr[1] - startdatearr[1]);
-        if (nowdatearr[2] < startdatearr[2]) answerdate_minute -= 1;
-        if (nowdatearr[2] < startdatearr[2]) nowdatearr[2] += 60;
-        var answerdate_seconds = nowdatearr[2] - startdatearr[2];
+            (parseInt(nowdatearr[0]) - parseInt(startdatearr[0])) * 60 +
+            (parseInt(nowdatearr[1]) - parseInt(startdatearr[1]));
+        if (parseInt(nowdatearr[2]) < parseInt(startdatearr[2]))
+            answerdate_minute = parseInt(answerdate_minute) - 1;
+        if (parseInt(nowdatearr[2]) < parseInt(startdatearr[2]))
+            nowdatearr[2] = parseInt(nowdatearr[2]) + 60;
+        var answerdate_seconds =
+            parseInt(nowdatearr[2]) - parseInt(startdatearr[2]);
         answerdate = answerdate_minute + ":" + answerdate_seconds;
 
-        // console.log('我是提交作业页面的答题时间',answerdate)
         const params = {
             answerTime: answerdate,
             paperId: this.state.paperId,
@@ -158,11 +161,8 @@ class Paper_Submit extends Component {
             noAnswerQueId: noSubmitID,
         };
         var subsuccess = false;
-        // console.log('---',url,params)
         http.get(url, params).then((resStr) => {
-            // console.log('----',resStr)
             let resJson = JSON.parse(resStr);
-            // console.log('---',resJson)
             subsuccess = resJson.success;
         });
 
@@ -178,12 +178,8 @@ class Paper_Submit extends Component {
         this.props.navigation.navigate({
             name: "Home",
             params: {
-                screen: "首页",
-                params: {
-                    learnId: this.state.paperId,
-                    status: change_status,
-                },
-                merge: true,
+                learnId: this.state.paperId,
+                status: change_status,
             },
         });
         // }

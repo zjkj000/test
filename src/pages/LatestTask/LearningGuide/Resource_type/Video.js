@@ -88,8 +88,6 @@ class Video_LG extends Component {
         });
     }
 
-    componentWillUnmount() {}
-
     formatTime(second) {
         let h = 0,
             i = 0,
@@ -250,7 +248,7 @@ class Video_LG extends Component {
                                 <TouchableOpacity
                                     activeOpacity={0.3}
                                     onPress={() => {
-                                        // this.onControlShrinkPress();
+                                        this.onControlShrinkPress();
                                     }}
                                 >
                                     <Image
@@ -406,7 +404,7 @@ class Video_LG extends Component {
                 isFullScreen: false,
             });
         }
-        // Orientation.unlockAllOrientations();
+        Orientation.unlockAllOrientations();
     };
 
     /// -------外部调用事件方法-------
@@ -439,13 +437,7 @@ class Video_LG extends Component {
 
     render() {
         return (
-            <View
-                style={{
-                    backgroundColor: "#FFFFFF",
-                    borderTopColor: "#000000",
-                    borderTopWidth: 0.5,
-                }}
-            >
+            <View style={{ backgroundColor: "#FFFFFF" }}>
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.title}>
                     <Text
