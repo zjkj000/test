@@ -145,7 +145,13 @@ class OnlineClassTemp extends Component {
                     imgURL,
                 });
             case 2:
-                return this._renderFreePage();
+                return this._renderFreePage({
+                    ...resJson,
+                    ipAddress,
+                    introduction,
+                    userName,
+                    imgURL,
+                });
             case 3:
                 return this._renderTempPage();
             default:
@@ -170,8 +176,8 @@ class OnlineClassTemp extends Component {
         return <LockedPage {...props} />;
     }
 
-    _renderFreePage() {
-        return <FreePage />;
+    _renderFreePage(props) {
+        return <FreePage {...props} />;
     }
 
     _renderTempPage() {

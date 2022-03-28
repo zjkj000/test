@@ -14,18 +14,16 @@ import Loading from "../../utils/loading/Loading";
 import StorageUtil from "../../utils/Storage/Storage";
 
 export default ConnectClass = () => {
-    // StorageUtil.clear();
+    StorageUtil.clear();
 
     const navigation = useNavigation();
     const route = useRoute();
-
     const [ipAddress, setIpAddress] = useState(
         route.params?.ipAddress ? route.params.ipAddress : ""
     );
     const [showLoading, setShowLoading] = React.useState(false);
     const [Name, setName] = React.useState("ming6002");
     const [Password, setPassword] = React.useState("2020");
-    const [scanIpAddress, setScanIpAddress] = React.useState("");
     const [historyList, setHistoryList] = React.useState([]);
 
     const handleLogin = () => {
@@ -42,7 +40,6 @@ export default ConnectClass = () => {
         http.get(url, params)
             .then((resStr) => {
                 setShowLoading(false);
-                console.log(resStr);
                 if (typeof resStr === "undefined") {
                     Toast.showWarningToast("暂无课程开始");
                 } else {
@@ -54,11 +51,10 @@ export default ConnectClass = () => {
                         "http://" +
                         ipAddress +
                         ":8901" +
-                        "/KeTangServer/ajax/ketang_ getQRcodeUrl.do";
+                        "/KeTangServer/ajax/ketang_getQRcodeUrl.do";
                     http.get(imgURL)
                         .then((resStr) => {
                             let imgResJson = JSON.parse(resStr);
-                            console.log(imgResJson.url);
                             navigation.navigate("OnlineClassTemp", {
                                 ...resJson,
                                 ipAddress: ipAddress,
@@ -102,15 +98,17 @@ export default ConnectClass = () => {
         if (route.params?.ipAddress) {
             if (typeof route.params.ipAddress == "string") {
                 let ipAddress = route.params.ipAddress;
-                setScanIpAddress(ipAddress);
                 setIpAddress(ipAddress);
             }
         }
     }, [route]);
 
     const handleScan = () => {
-        navigation.navigate("QRCodeScanner");
-        // Toast.showSuccessToast(route.params);
+        navigation.navigate({
+            name: "QRCodeScanner",
+            params: { backPage: "线上课程" },
+            merge: true,
+        });
     };
 
     const handleLiveClass = () => {};

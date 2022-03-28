@@ -27,22 +27,22 @@ export default function Paper_ToDo(props) {
   const [dataNum,setDataNum] = useState(0);
   const [learnPlanId,setlearnPlanId] = useState(props.route.params.learnId);
   const [status,setstatus] = useState(props.route.params.status);
-  const [startdate,setstartdate]=useState('');   //记录总用时
-  const [start_date,setstart_date]=useState(''); //记录每道题目用时
+  const [startdate,setstartdate]=useState(getDate());   //记录总用时
+  const [start_date,setstart_date]=useState(getDate()); //记录每道题目用时
   const [date_arr,setdate_arr]=useState([]);
   const [isallObj,setisallObj]= useState([])
 
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
-      console.log(props.route.params.papername,props.route.params.learnId);
+      // console.log(props.route.params.papername,props.route.params.learnId);
       navigation.setOptions({title:props.route.params.papername,
       headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)})
       setSelectedIndex(props.route.params.selectedindex)
       getData();
-      var date = getDate()
-      setstartdate(date)  // 记录总的开始时间
-      setstart_date(date) //记录每道题的开始时间
-    },[props.route.params.selectedindex,]);
+      // var date = getDate()
+      // setstartdate(date)  // 记录总的开始时间
+      // setstart_date(date) //记录每道题的开始时间
+    },[props.route.params.selectedindex]);
      
     // 获取时间返回 00::00:00
     function getDate() {
@@ -139,20 +139,26 @@ export default function Paper_ToDo(props) {
 
     // 这个函数是为了提交学生的答案，  会先判断答案是否改变了  
     function Submit_Stu_answer(newindex,selectedIndex){
-      var answerdate = 0;
-      var nowdate = getDate();
-      var startdatearr = start_date.split(':')
-      var nowdatearr = nowdate.split(':')
+      let answerdate = 0;
+      let nowdate = getDate();
+      let startdatearr = start_date.split(':')
+      let nowdatearr = nowdate.split(':')
       if(nowdatearr[0]<startdatearr[0])nowdatearr[0]+=24
       
-      var answerdate_minute =  ((nowdatearr[0]-startdatearr[0]))*60 + (nowdatearr[1]-startdatearr[1]) ; 
-      if(nowdatearr[2]<startdatearr[2])answerdate_minute -=1
-      //有时候会是-1 解决一下bug   这个跟 导航返回 机制有关系
-      answerdate_minute<0?0:answerdate_minute
-      if(nowdatearr[2]<startdatearr[2]) nowdatearr[2]+=60
-      var answerdate_seconds = (nowdatearr[2]-startdatearr[2]);
+       //判断小时  如果过了一天 就要提交的时候 + 24
+       if(parseInt(nowdatearr[0])<parseInt(startdatearr[0]))nowdatearr[0] = parseInt(nowdatearr[0])+24
+       //处理分钟
+       let answerdate_minute =  ((parseInt(nowdatearr[0])-parseInt(startdatearr[0])))*60 + (parseInt(nowdatearr[1])-parseInt(startdatearr[1])) ; 
+       // 结束的秒数 小于 开始的秒数，就处理秒的时候秒多加1 分钟减1 
+       if(parseInt(nowdatearr[2])<parseInt(startdatearr[2]))
+       {
+         answerdate_minute = (parseInt(answerdate_minute)-1);
+         nowdatearr[2]= parseInt(nowdatearr[2]) + 60;
+       }
+       let answerdate_seconds = (parseInt(nowdatearr[2])-parseInt(startdatearr[2]))
+       
       answerdate  = answerdate_minute+':'+ answerdate_seconds 
-      var newdate_arr = date_arr;
+      let newdate_arr = date_arr;
       newdate_arr[selectedIndex] = answerdate;
       setdate_arr(newdate_arr)
       // 且重置下一道题目 start_date
@@ -166,7 +172,7 @@ export default function Paper_ToDo(props) {
       }
       
       if(answerlist[selectedIndex]!=oldAnswerdata[selectedIndex]&&ischange){
-        console.log('题目序号：',selectedIndex+1,'题目用时',answerdate,'提交的答案:',Stu_answer[selectedIndex])
+        // console.log('题目序号：',selectedIndex+1,'题目用时',answerdate,'提交的答案:',Stu_answer[selectedIndex])
         const submit_url = 
           "http://"+
           "www.cn901.net" +
@@ -180,10 +186,9 @@ export default function Paper_ToDo(props) {
           answerTime: answerdate,
         }
         // 提交答案
-        console.log(submit_url,submit_params)
+        // console.log(submit_url,submit_params)
         http.get(submit_url,submit_params).then((resStr)=>{
           let submit_resJson = JSON.parse(resStr);
-          //console.log('我是TODO页面的提交函数，提交结果之后，接收到的服务器返回的是：',submit_resJson)
         })
 
         //提交完之后把历史答案改了
@@ -194,7 +199,6 @@ export default function Paper_ToDo(props) {
       }else{
         setischange(false);
         setstart_date(getDate())
-        console.log('题目序号:',selectedIndex+1,'作答结果没有改变')
       }
 
       //都要翻页
@@ -205,7 +209,7 @@ export default function Paper_ToDo(props) {
 
   return (
     // shouldLoadComponent={shouldLoadComponent}
-    <ViewPager style={{color:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
+    <ViewPager style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
                   onSelect={index => Submit_Stu_answer(index,selectedIndex)}>  
   
           {/* 根据这套题的data使用map遍历加载 */}
@@ -219,7 +223,7 @@ export default function Paper_ToDo(props) {
               
                       const newindex =selectedIndex-1;
                       if(newindex==-1){
-                        Toast.showInfoToast('已经是第一题')
+                        Toast.showInfoToast('已经是第一题',1000)
                           //提交一下答案
                           Submit_Stu_answer(selectedIndex,selectedIndex);
                         }else{ 

@@ -48,14 +48,20 @@ class QRCodeScannerPage extends Component {
         if (route.params?.backPage) {
             let { backPage } = route.params;
             navigation.navigate({
-                name: backPage,
-                params: { ipAddress: data },
-                merge: true,
+                name: "Home",
+                params: {
+                    screen: "线上课程",
+                    params: { ipAddress: data },
+                    merge: true,
+                },
             });
         } else {
             navigation.navigate({
                 name: "Home",
-                params: { ipAddress: data },
+                params: {
+                    screen: "线上课程",
+                    params: { ipAddress: data },
+                },
                 merge: true,
             });
         }

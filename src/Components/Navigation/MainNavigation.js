@@ -27,6 +27,7 @@ import WrongDetails from "../../pages/Wrongbook/wrongDetails";
 import WrongRecycleButtoContainer from "../../pages/Wrongbook/WrongRecycleButton";
 import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 
+import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -123,21 +124,32 @@ export default class MainNavigation extends Component {
                     }}
                 />
 
-                <Stack.Screen
-                    name="WrongRecycle"
-                    component={WrongRecycle}
-                    options={{
-                        title: "错题回收站",
-                    }}
-                />
-                <Stack.Screen
-                    name="WrongDetails"
-                    component={WrongDetails}
-                    options={{
-                        title: "错题详情",
-                    }}
-                />
-                <Stack.Screen name="Wrongbook" component={Wrongbook} />
+                <Stack.Group>
+                    <Stack.Screen
+                        name="WrongRecycle"
+                        component={WrongRecycle}
+                        options={{
+                            title: "错题回收站",
+                        }}
+                    />
+                    <Stack.Screen
+                        name="WrongDetails"
+                        component={WrongDetails}
+                        options={{
+                            title: "错题详情",
+                        }}
+                    />
+                    <Stack.Screen name="Wrongbook" component={Wrongbook} />
+                </Stack.Group>
+                <Stack.Group>
+                    <Stack.Screen
+                        name="Teacher_Home"
+                        component={TeacherTabBar}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+                </Stack.Group>
             </Stack.Navigator>
         );
     }

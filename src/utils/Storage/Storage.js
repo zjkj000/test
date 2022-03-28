@@ -48,6 +48,10 @@ class StorageUtil {
     static delete(key) {
         return AsyncStorage.removeItem(key);
     }
+
+    static clear() {
+        return AsyncStorage.clear();
+    }
 }
 
 export default StorageUtil;

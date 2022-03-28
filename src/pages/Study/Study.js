@@ -19,7 +19,9 @@ import {
 
 import StudyListContainer from "./StudyListContainer";
 
-export default function Study() {
+let SearchText = "";
+
+export default function StudyContainer() {
     const navigation = useNavigation();
     //将navigation传给LatestTask组件，防止路由出错
     return <StudyComponent navigation={navigation}></StudyComponent>;
@@ -51,7 +53,7 @@ class StudyComponent extends React.Component {
             let resJson = JSON.parse(resStr);
             console.log("resStr", resJson);
             this.setState({ resourceRead: resJson.data });
-            console.log("data", this.state.resourceRead);
+            //console.log('data' , this.state.resourceRead);
             return;
         });
     }
@@ -65,29 +67,34 @@ class StudyComponent extends React.Component {
 
     //搜索框内容改变时触发，更新value
     onChange = (value) => {
-        this.setState({ value });
+        //this.setState({ value });
+        SearchText = value;
     };
     //点击"搜索"按钮时触发
     onSearch = () => {
-        const { searchText } = this;
-        console.log("serachText", searchText.state.value);
-        //this.setState({ value });
-        this.onSubmit(searchText.state.value);
+        // const {searchText} = this;
+        // console.log('serachText' , searchText.state.value);
+        // console.log('******' , searchText.state.value);
+        console.log("*******");
+        //this.setState({ value : SearchText });
+        //this.onSubmit(SearchText);
+        this.setState({});
     };
     //点击"搜索"按钮时触发
-    onSubmit = (searchValue) => {
-        console.log("点击了搜索");
-        //this.setState({ value: '' });
+    // onSubmit = (searchValue) => {
+    //     console.log('点击了搜索');
+    //     //this.setState({ value: '' });
 
-        this.setState({ value: searchValue });
-    };
+    //     this.setState({ value: searchValue });
+    // };
     //点击键盘中的提交按钮，光标移出搜索框，“搜索“二字消失
     onBlur = () => {
         console.log("点击了键盘中的提交按钮");
         //this.setState({ value: '' });
-        const { searchText } = this;
-        const searchValue = searchText.state.value;
-        this.setState({ value: searchValue });
+        // const {searchText} = this;
+        // const searchValue = searchText.state.value;
+        //this.setState({ value: SearchText });
+        this.setState({});
     };
 
     //显示filter图标
@@ -199,7 +206,7 @@ class StudyComponent extends React.Component {
                         <View style={styles.searchView}>
                             <SearchBar
                                 style={styles.searchBar}
-                                value={this.state.value}
+                                value={{ SearchText }}
                                 placeholder="学案/作业"
                                 ref={(ref) => (this.searchText = ref)}
                                 onCancel={this.onSearch}
@@ -221,11 +228,13 @@ class StudyComponent extends React.Component {
                     {console.log(
                         "最新内容类型",
                         this.state.resourceType,
-                        Date.parse(new Date())
+                        Date.parse(new Date()),
+                        "search:",
+                        SearchText
                     )}
                     <StudyListContainer
                         resourceType={this.state.resourceType}
-                        searchStr={this.state.value}
+                        searchStr={SearchText}
                         status={"2"}
                     />
                 </View>

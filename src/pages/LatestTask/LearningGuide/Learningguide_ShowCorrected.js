@@ -30,8 +30,8 @@ export default function Learningguide_ShowCorrected(props) {
           "/AppServer/ajax/studentApp_getMarkedJob.do"
         const data_params ={
           learnPlanId :props.route.params.learnId,
-          userName : 'ming6005',
-          learnPlanType :props.route.params.learnPlanType?props.route.params.learnPlanType:'paper',
+          userName : global.constants.userName,
+          learnPlanType :props.route.params.learnPlanType?props.route.params.learnPlanType:'learnPlan',
         }
         if(!success){
             http.get(data_url,data_params).then((resStr)=>{
@@ -72,7 +72,7 @@ export default function Learningguide_ShowCorrected(props) {
                     <TouchableOpacity   style={{position:'absolute',left:10,top:"45%",zIndex:99}}   onPress={()=>{
                         const newindex =selectedIndex-1;
                         if(newindex==-1){
-                          Toast.showInfoToast('已经是第一题')
+                          Toast.showInfoToast('已经是第一题',1000)
                           }
                           else{
                             setSelectedIndex(newindex)
@@ -85,7 +85,7 @@ export default function Learningguide_ShowCorrected(props) {
                     <TouchableOpacity  style={{position:'absolute',right:10,top:"45%",zIndex:99}} onPress={()=>{
                         const newindex =selectedIndex+1;
                         if(newindex==dataNum){
-                          Toast.showInfoToast('已经是最后一题');}
+                          Toast.showInfoToast('已经是最后一题',1000);}
                         else{
                           setSelectedIndex(newindex)
                         }
@@ -93,9 +93,9 @@ export default function Learningguide_ShowCorrected(props) {
                       <Image source={require('../../../assets/image3/you_03.png')}></Image>
                     </TouchableOpacity>
                     {/* 题目内容 */}
-                    <ScrollView  style={{paddingLeft:15}}>
+                    <ScrollView  style={{paddingLeft:15,backgroundColor:'#FFFFFF'}}>
                         {/* 题目名称 */}
-                        <View>
+                        <View style={{backgroundColor:'#FFFFFF'}}>
                             <Text style={styles.Titletext}>[{Item.typeName}]</Text>
                             <View style={{position:'absolute',right:20,top:10,flexDirection:'row'}}>
                               <Text style={{color:'#59B9E0',fontSize:15}}> {selectedIndex+1}</Text>  
@@ -106,7 +106,7 @@ export default function Learningguide_ShowCorrected(props) {
                         <Text style={styles.Titletext}>[参考答案]</Text>
                         <Text style={styles.text}>{Item.answer}</Text>
                         <Text style={styles.Titletext}>[解析]</Text>
-                        <Text style={styles.text}>{Item.standardAnswer}</Text>
+                        <RenderHTML source={{html:Item.standardAnswer}}></RenderHTML>
                         <Text style={styles.Titletext}>[你的答案]</Text>
                         <Text style={styles.text}>{Item.stuAnswer}</Text>
                     </ScrollView>

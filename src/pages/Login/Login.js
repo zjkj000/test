@@ -68,18 +68,26 @@ export default Login = () => {
             .then((response) => response.text())
             .then((text) => {
                 let res = eval("(" + text.substring(2) + ")");
-                //console.log(res)
-                //console.log(res.data.STUDENT.userId)
+                let homePage = "Home";
+                let property = "STUDENT";
+                if ("COMMON_TEACHER" in res.data) {
+                    homePage = "Teacher_Home";
+                    property = "COMMON_TEACHER";
+                } else if ("ADMIN_TEACHER" in res.data) {
+                    homePage = "Teacher_Home";
+                    property = "ADMIN_TEACHER";
+                }
                 if (res.success == true) {
+                    //console.log(res.data.STUDENT.userId)
                     //设置全局信息
-                    global.constants.userName = res.data.STUDENT.userName;
+                    global.constants.userName = res.data[property].userName;
                     global.constants.token = res.data.token;
-                    global.constants.userId = res.data.STUDENT.userId;
-                    global.constants.userPhoto = res.data.STUDENT.userPhoto;
+                    global.constants.userId = res.data[property].userId;
+                    global.constants.userPhoto = res.data[property].userPhoto;
                     setShowLoading(false);
                     Toast.showSuccessToast(res.message, 500);
                     // Alert.alert(res.message);
-                    navigation.navigate("Home");
+                    navigation.navigate(homePage);
                 } else if (res.success == false) {
                     setShowLoading(false);
                     Toast.showWarningToast(res.message, 2000);

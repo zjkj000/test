@@ -3,7 +3,7 @@ import React, { Component, useState } from 'react'
 import RadioList from '../Utils/RadioList'
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
-
+import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 export default function Answer_judgmentContainer(props) {
     const navigation = useNavigation();
     const paperId= props.paperId
@@ -62,7 +62,7 @@ class Answer_judgment extends Component {
     }
  }  
  stuAnswer(str){
-   console.log('判断题',str)
+  //  console.log('判断题',str)
   this.setState({stu_answer:str})
   this.props.getStu_answer(str)
   this.props.getischange(true);
@@ -80,7 +80,7 @@ class Answer_judgment extends Component {
       const questionChoiceList = this.state.questionChoiceList;
       const  width = Dimensions.get('window').width;
   return (  
-    <View>
+    <View style={{backgroundColor:'#FFFFFF'}}  >
         {/* 第一行显示 第几题  题目类型 */}
           <View  style={styles.answer_title}>
               
@@ -91,6 +91,7 @@ class Answer_judgment extends Component {
                     // 小眼睛 先提交本题目，在跳转到提交页面
                     onPress={
                       ()=>{
+                        
                           //导航跳转
                           this.props.navigation.navigate('SubmitPaper',
                           {   paperId:this.props.paperId,
@@ -122,6 +123,6 @@ class Answer_judgment extends Component {
 
 const styles = StyleSheet.create({
     answer_title:{padding:10,paddingLeft:30,flexDirection:'row'},
-    answer_area:{height:"85%",padding:20},
+    answer_area:{height:'85%',padding:20},
     answer_result:{borderTopWidth:0.5,borderTopColor:'#000000',paddingLeft:30,paddingTop:5,paddingBottom:5,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
 })

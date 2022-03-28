@@ -19,7 +19,7 @@ import ImageViewer from "react-native-image-zoom-viewer";
 import ImageHandler from "../../../../utils/Camera/Camera";
 import http from "../../../../utils/http/request";
 import { useNavigation } from "@react-navigation/native";
-
+import Toast from "../../../../utils/Toast/Toast";
 export default function Answer_subjectiveContainer(props) {
     const navigation = useNavigation();
     const paperId = props.paperId;
@@ -90,7 +90,7 @@ class Answer_subjective extends Component {
 
     //用于将本道题写的答案  传给 Todo页面，用于提交
     stuAnswer(str) {
-        console.log("主观题写了答案", str);
+        // console.log("主观题写了答案", str);
         this.setState({ stuAnswer: str });
         // 把结果传给ToDO，并且告诉有改变  只要作答就有改变
         this.props.getStu_answer(str);
@@ -210,80 +210,73 @@ class Answer_subjective extends Component {
     handleCamera = () => {
         ImageHandler.handleCamera().then((res) => {
             if (res) {
-                var newurl = this.submitBaseCode(res.base64);
-                var newimageArray = this.state.imgURLArray;
-                if (newurl != "") {
-                    newimageArray.push({ url: newurl });
-                    var newstuanswer = this.state.stuAnswer;
-                    //拼接之后便于之前的APP能用
-                    newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`;
-                    this.setState({
-                        stuAnswer: newstuanswer,
-                        imgURLArray: newimageArray,
-                    });
-                }
-                this.stuAnswer(newstuanswer);
-                //获取到url  并且把url添加到本地urlarr中
+                    const url ="http://" +"www.cn901.net" +":8111" +
+                                "/AppServer/ajax/studentApp_saveBase64Image.do";
+                    const params = {
+                        baseCode: res.base64,
+                        learnPlanId: this.state.paperId,
+                        userId: global.constants.userName};    
+                         
+                    http.post(url,params).then((resStr)=>{
+                                    let resJson = JSON.parse(resStr);
+                                    if(resJson.success){
+                                        var newurl = resJson.data;
+                                        var newimageArray = this.state.imgURLArray;
+                                        if (newurl != "") {
+                                            newimageArray.push({ url: newurl });
+                                            var newstuanswer = this.state.stuAnswer;
+                                            //拼接之后便于之前的APP能用
+                                            newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`;
+                                            this.setState({
+                                                stuAnswer: newstuanswer,
+                                                imgURLArray: newimageArray,
+                                                
+                                            });
+                                        }
+                                        this.stuAnswer(newstuanswer);
+                                        this.setState({hasImage:true})
+                                    }else{
+                                        Toast.showSuccessToast('照片提交失败！！',3000)
+                                    }
+                                })
             }
         });
     };
 
-    //用于提交  baseCode  提交主观题答题照片
-    submitBaseCode(baseCode) {
-        // 只要有了照片就提交
-        const url =
-            "http://" +
-            "192.168.1.81" +
-            ":8222" +
-            "/AppServer/ajax/studentApp_saveBase64Image.do";
-        const params = {
-            // baseCode :  '111',
-            // learnPlanId :  '111',
-            // userName    : 'ming6051'
-            baseCode: baseCode,
-            learnPlanId: this.state.paperId,
-            userName: global.constants.userName,
-        };
-        console.log("---------照片  请求提交照片了----------");
-        return "http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png";
-        // http.post(url,params).then((resStr)=>{
-        //     let resJson = JSON.parse(resStr);
-        //     // console.log('+++提交结果++++',resJson)
-        //     if(resJson.success){
-        //         // 返回URL地址
-        //         console.log('请求提交成功！返回了！！！')
-        //         this.setState({hasImage:true})
-        //         // return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-        //         //return(resJson.data)
-        //     }else{
-        //         console.log('请求提交失败！！')
-        //         // return('http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png')
-        //         //return '';
-        //     }
-        // })
-        //提交过程设置loading效果
-        // return resJson.data?resJson.data:'http://www.cn901.com/res/studentAnswerImg/AppImage/2022/03/09/ming6051_103316427.png'
-        //返回的数据是"data": urlPath  图片回显路径   "success":true,    "message":"保存成功！"
-        // 根据返回的url  将图片拼接到 预览区域，并且刷新预览区域
-    }
 
     //从本地选择照片需要的函数
     handleLibrary = () => {
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
-                //提交照片 获取到url
-                var newurl = this.submitBaseCode(res.base64);
-                var newimageArray = this.state.imgURLArray;
-                if (newurl != "") {
-                    newimageArray.push({ url: newurl });
-                    var newstuanswer = this.state.stuAnswer;
-                    newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`;
-                    this.setState({
-                        stuAnswer: newstuanswer,
-                        imgURLArray: newimageArray,
-                    });
-                }
-                this.stuAnswer(newstuanswer);
+                const url ="http://" +"www.cn901.net" +":8111" +
+                                "/AppServer/ajax/studentApp_saveBase64Image.do";
+                    const params = {
+                        baseCode: res.base64,
+                        learnPlanId: this.state.paperId,
+                        userId: global.constants.userName};    
+                         
+                    http.post(url,params).then((resStr)=>{
+                                    let resJson = JSON.parse(resStr);
+                                    if(resJson.success){
+                                        var newurl = resJson.data;
+                                        // console.log('获取到了',newurl)
+                                        var newimageArray = this.state.imgURLArray;
+                                        if (newurl != "") {
+                                            newimageArray.push({ url: newurl });
+                                            var newstuanswer = this.state.stuAnswer;
+                                            //拼接之后便于之前的APP能用
+                                            newstuanswer += `<img onclick='bigimage(this)' onclick='bigimage(this)' onclick='bigimage(this)' onclick=\"bigimage(this)\" src=\"${newurl}\" style=\"max-width:80px\">`;
+                                            this.setState({
+                                                stuAnswer: newstuanswer,
+                                                imgURLArray: newimageArray,
+                                                hasImage:true
+                                            });
+                                        }
+                                        this.stuAnswer(newstuanswer);
+                                    }else{
+                                        Toast.showSuccessToast('照片提交失败！！',3000)
+                                    }
+                                })
             }
         });
     };
@@ -294,7 +287,7 @@ class Answer_subjective extends Component {
         var questionHTML = []; //用于接收  html解析之后添加到数组中
         questionHTML = this.showStuAnswer();
         return (
-            <View>
+            <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}  >
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.answer_title}>
                     <Text style={{ color: "#59B9E0" }}>
@@ -463,7 +456,7 @@ class Answer_subjective extends Component {
                     {/* 相机拍照 */}
                     <TouchableOpacity
                         onPress={() => {
-                            console.log("点了图片");
+                            // console.log("点了图片");
                             this.handleCamera();
                         }}
                     >
@@ -476,7 +469,7 @@ class Answer_subjective extends Component {
                     {/* 从相册选择照片 */}
                     <TouchableOpacity
                         onPress={() => {
-                            console.log("点了相册");
+                            // console.log("点了相册");
                             this.handleLibrary();
                         }}
                     >
