@@ -1,26 +1,30 @@
 import React from "react";
 import { Text, View, ActivityIndicator } from "react-native";
+import { SearchBar, TabBar } from "@ant-design/react-native";
+import Loading from "../../utils/loading/Loading";
+// import Wrongbook from '../../pages/Wrongbook/Wrongbook'
+import MyPage from "../../pages/My/My";
+import Wrongbook from "../../pages/Wrongbook/Wrongbook";
+import LatestTask from "../../pages/LatestTask/LatestTask";
+import Study from "../../pages/Study/Study";
 import {
     bindBackExitApp,
     removeBackExitApp,
-} from "../../../utils/TwiceTap/TwiceTap";
+} from "../../utils/TwiceTap/TwiceTap";
+import ConnectClass from "../../pages/OnlineClass/ConnectClass";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { Icon } from "@ui-kitten/components";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import MyPage from "../../My/My";
-
-import LatestPage from "../../TeacherLatestPage/LatestPage";
-import TeachingContentPage from "../../TeacheringContent/TeachingContentPage";
 
 const Tab = createBottomTabNavigator();
 
-export default function TeacherTabBar() {
+export default function MyTabBar() {
     const navigation = useNavigation();
     const route = useRoute();
-    return <TeacherTabBarComponent navigation={navigation} route={route} />;
+    return <MyTabBarComponent navigation={navigation} route={route} />;
 }
 
-class TeacherTabBarComponent extends React.Component {
+class MyTabBarComponent extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -32,6 +36,7 @@ class TeacherTabBarComponent extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
+                //console.log('%%%%TabBar%%%' , navigation.getState().routes);
                 bindBackExitApp();
             }
         );
@@ -47,37 +52,34 @@ class TeacherTabBarComponent extends React.Component {
         this._unsubscribeNavigationFocusEvent();
     }
     renderHome = () => {
+        // const { navigation } = this.props;
+        // const paramsData = navigation.getState().routes[1].params;
+        // const learnId = paramsData != null ? paramsData.learnId : '' ;
+        // const status = paramsData != null ? paramsData.status : '';
         return (
+            /*
             <View>
-                {/* <Text>我是教师端首页</Text> */}
-                <LatestPage />
-            </View>
+                <Text>我是首页</Text>
+            </View>*/          
+            <LatestTask/>
         );
     };
-    renderStatistic = () => {
-        return (
-            <View>
-                <Text>我是教师端统计报告</Text>
-            </View>
-        );
-    };
-    renderStudyTask = () => {
-        return (
-            <View>
-                {/* <Text>我是教师端教学内容</Text> */}
-                <TeachingContentPage />
-            </View>
-        );
-    };
-    renderNotice = () => {
-        return (
-            <View>
-                <Text>我是教师端通知公共</Text>
-            </View>
-        );
+    renderStudy = () => {
+        return <Study />;
     };
     renderMy = () => {
         return <MyPage />;
+    };
+    renderOnlineClass = () => {
+        return <ConnectClass />;
+    };
+    renderWrongTopic = () => {
+        return (
+            <View>
+                <Wrongbook />
+                {/* <Wrongbook/>    */}
+            </View>
+        );
     };
     render() {
         return (
@@ -86,17 +88,17 @@ class TeacherTabBarComponent extends React.Component {
                     tabBarIcon: ({ focused, color, size }) => {
                         let iconName;
                         switch (route.name) {
-                            case "最新":
-                                iconName = "grid";
+                            case "首页":
+                                iconName = "home";
                                 break;
-                            case "统计报告":
-                                iconName = "bar-chart-2";
+                            case "学习":
+                                iconName = "book-open";
                                 break;
-                            case "教学内容":
-                                iconName = "file-text";
+                            case "线上课程":
+                                iconName = "book";
                                 break;
-                            case "通知公告":
-                                iconName = "bell";
+                            case "错题本":
+                                iconName = "bookmark";
                                 break;
                             case "我的":
                                 iconName = "person";
@@ -119,10 +121,16 @@ class TeacherTabBarComponent extends React.Component {
                     headerShown: false,
                 })}
             >
-                <Tab.Screen name="最新" component={this.renderHome} />
-                <Tab.Screen name="统计报告" component={this.renderStatistic} />
-                <Tab.Screen name="教学内容" component={this.renderStudyTask} />
-                <Tab.Screen name="通知公告" component={this.renderNotice} />
+                <Tab.Screen name="首页" component={this.renderHome} />
+                <Tab.Screen name="学习" component={this.renderStudy} />
+                <Tab.Screen
+                    name="线上课程"
+                    component={this.renderOnlineClass}
+                    option={{
+                        unmountOnBlur: true,
+                    }}
+                />
+                <Tab.Screen name="错题本" component={this.renderWrongTopic} />
                 <Tab.Screen name="我的" component={this.renderMy} />
             </Tab.Navigator>
         );

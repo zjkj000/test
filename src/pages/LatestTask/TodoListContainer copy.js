@@ -40,14 +40,10 @@ let focusFlag = false;
 export default function TodoListContainer(props) {
     //console.log(props.resourceType);
     const rsType = props.resourceType;
-    // console.log('**rsType', rsType);
+    console.log('**rsType', rsType);
     const searchStr1 = props.searchStr;
-    // console.log('**searchStr1', searchStr1);
-
-    const learnId = props.learnId;
+    console.log('**searchStr1', searchStr1);
     const status = props.status;
-    console.log('****learnId***status**',learnId , status);
-
     const navigation = useNavigation();
     //将navigation传给TodoList组件，防止路由出错
     return (
@@ -55,7 +51,6 @@ export default function TodoListContainer(props) {
             navigation={navigation}
             resourceType={rsType}
             searchStr={searchStr1}
-            learnId={learnId} 
             status={status}
         ></TodoList>
     );
@@ -75,7 +70,7 @@ class TodoList extends React.Component {
             errorInfo: "",
             showFoot: 0, //控制foot， 0：隐藏footer 1：已加载完成，没有更多数据 2：正在加载中
             //isRefreshing: false, //下拉控制
-
+            status: "3",
         };
         this.fetchData = this.fetchData.bind(this); //fetchData函数中this指向问题
     }
@@ -86,20 +81,19 @@ class TodoList extends React.Component {
         searchStr = this.props.searchStr;
 
 
-        // console.log("componentWillMount**************", 'oldtype', oldtype, 'rescouceType', this.props.resourceType, this.props.searchStr);
+        console.log("componentWillMount**************", 'oldtype', oldtype, 'rescouceType', this.props.resourceType, this.props.searchStr);
         this.fetchData(pageNo, oldtype, searchStr, true);
     }
 
     componentDidMount() {
-        
         const { navigation } = this.props;
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
                 console.log('#####unsubscribeNavigationFocusEvent###');
-                console.log('****learnId000***status000**', this.props , this.props.learnId , this.props.status);
+
                 if (focusFlag == true) {
-                    // console.log('###route params###', navigation.getState());
+                    console.log('###route params###', navigation.getState());
                     pageNo = 1;
                     itemNo = 0;
                     dataFlag = true;
@@ -123,8 +117,8 @@ class TodoList extends React.Component {
         //oldtype = this.props.resourceType;
         //searchStr = this.props.searchStr;
 
-        // console.log("componentWillUpdate*********", Date.parse(new Date()), 'type:', oldtype, 'nextProps.type:', nextProps.resourceType);
-        // console.log("componentWillUpdate*********", Date.parse(new Date()), 'searchStr:', searchStr, 'nextProps.searchStr:', nextProps.searchStr);
+        console.log("componentWillUpdate*********", Date.parse(new Date()), 'type:', oldtype, 'nextProps.type:', nextProps.resourceType);
+        console.log("componentWillUpdate*********", Date.parse(new Date()), 'searchStr:', searchStr, 'nextProps.searchStr:', nextProps.searchStr);
 
         if (
             oldtype != nextProps.resourceType ||
@@ -181,7 +175,7 @@ class TodoList extends React.Component {
     }
 
     componentDidUpdate() {
-        // console.log("componentDidUpdate*********", Date.parse(new Date()));
+        console.log("componentDidUpdate*********", Date.parse(new Date()));
     }
 
     //显示任务状态的图标
@@ -204,7 +198,7 @@ class TodoList extends React.Component {
 
     //通过fetch请求数据
     fetchData(pageNo, type, search, onRefresh = false) {
-        // console.log("fetchData*********", Date.parse(new Date()));
+        console.log("fetchData*********", Date.parse(new Date()));
         // const rsType = this.props.resourceType;
         // const searchStr = this.props.searchStr;
         const token = global.constants.token;
@@ -238,7 +232,7 @@ class TodoList extends React.Component {
 
                 let dataBlob = [];
                 let i = itemNo;
-                // console.log("fetchData*********success", Date.parse(new Date()));
+                console.log("fetchData*********success", Date.parse(new Date()));
                 todosList1.map(function (item) {
                     dataBlob.push({
                         key: i,
@@ -559,7 +553,7 @@ class TodoList extends React.Component {
     }
 
     render() {
-        // console.log("render", Date.parse(new Date()));
+        console.log("render", Date.parse(new Date()));
         //第一次加载等待的view
         if (this.state.isLoading && !this.state.error) {
             return this.renderLoadingView();
