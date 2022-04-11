@@ -36,6 +36,8 @@ class MyTabBarComponent extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
+                //console.log('%%%%TabBar%%%' , navigation.getState().routes);
+                this.renderHome();
                 bindBackExitApp();
             }
         );
@@ -51,12 +53,18 @@ class MyTabBarComponent extends React.Component {
         this._unsubscribeNavigationFocusEvent();
     }
     renderHome = () => {
+        const { navigation } = this.props;
+        console.log('----TabBar-renderHome----' , navigation.getState().routes);
+        const paramsData = navigation.getState().routes[1].params;
+        const learnId = paramsData != null ? paramsData.learnId : '' ;
+        const status = paramsData != null ? paramsData.status : '';
+        console.log('---learnId---status---',learnId , status);
         return (
             /*
             <View>
                 <Text>我是首页</Text>
-            </View>*/
-            <LatestTask />
+            </View>*/          
+            <LatestTask learnId={learnId} status={status}/>
         );
     };
     renderStudy = () => {

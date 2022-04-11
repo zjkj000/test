@@ -17,83 +17,41 @@ import {
     MenuItem,
 } from "@ui-kitten/components";
 
-import TodoListContainer from "./TodoListContainer";
+import CreateListContainer from "./CreateListContainer";
 
 let SearchText = '';
 
-export default function LatestTaskContainer(props) {
-    const learnId = props.learnId;
-    const status = props.status;
-    console.log('###learnId###status##',learnId , status);
+export default function LatestPageContainer() {
     const navigation = useNavigation();
     //将navigation传给LatestTask组件，防止路由出错
-    return <LatestTask navigation={navigation} learnId={learnId} status={status}></LatestTask>;
+    return <LatestPage navigation={navigation}></LatestPage>;
 }
 
-class LatestTask extends React.Component {
+class LatestPage extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showSearch: false,
-            showFilter: true,
-            value: '',  //搜索栏中的内容
-            resourceType: 'all', //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
+            resourceType: '', //CreateList组件所要渲染的页面内容类型 '':所有， 1：导学案,2：作业，3：通知4：公告
                                 //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
             
-            
-            resourceRead: '', //资料夹是否已读接口返回的数据
+            createmoduleVisible: false, //创建作业等弹出框是否显示
+            filtermoduleVisible: false, //筛选作业等弹出框是否显示
         };
     }
 
     //第一次加载页面请求资料夹是否已读api
-    UNSAFE_componentWillMount() {
-        const userId = global.constants.userName;
-        const ip = global.constants.baseUrl;
-        const url = ip + "studentApp_checkMineFloder.do";
-        const params = {
-            userId: userId,
-        };
-        http.get(url, params).then((resStr) => {
-            let resJson = JSON.parse(resStr);
-            console.log("resStr", resJson);
-            this.setState({ resourceRead: resJson.data });
-            //console.log('data' , this.state.resourceRead);
-            return ;
-        })
-    }
-
-    componentDidMount() {
+    // UNSAFE_componentWillMount() {
         
-        const { navigation } = this.props;
-        this._unsubscribeNavigationFocusEvent = navigation.addListener(
-            "focus",
-            () => {
-                console.log('###learnId000###status000##', this.props , this.props.learnId , this.props.status);
-            }
-        );
-    }
+    // }
 
-    componentWillUnmount() {
-        this._unsubscribeNavigationFocusEvent();
-    }
-
-    //点击文件夹图标跳转
-    packagesPage = () => {
-        this.setState({ resourceRead: 1 }); //资料夹状态改为已读
-        console.log("文件夹页面跳转");
-        this.props.navigation.navigate("资料夹", {});
-    };
+    
 
     //搜索框内容改变时触发，更新value
     onChange = (value) => {
-        //this.setState({ value });
         SearchText = value;
     };
     //点击"搜索"按钮时触发
     onSearch = () => {
-        // const {searchText} = this;
-        // console.log('serachText' , searchText.state.value);
-        // console.log('******' , searchText.state.value);
         console.log('*******');
         this.setState({});
     };
@@ -105,25 +63,43 @@ class LatestTask extends React.Component {
     };
 
     //显示filter图标
-    renderAvatar = () => {
+    renderAvatarFilter = () => {
         return (
             <TouchableOpacity
                 onPress={() => {
-                    this.setState({ moduleVisible: true });
+                    this.setState({ filtermoduleVisible: true });
                 }}
             >
                 <Avatar
                     size={"tiny"}
                     shape={"square"}
-                    source={require("../../assets/LatestTaskImages/filter.png")}
+                    source={require("../../assets/teacherLatestPage/filter2.png")}
                 />
             </TouchableOpacity>
         );
     };
+
+    //显示create图标
+    renderAvatarCreate = () => {
+        return (
+            <TouchableOpacity
+                onPress={() => {
+                    this.setState({ createmoduleVisible: true });
+                }}
+            >
+                <Avatar
+                    size={"tiny"}
+                    shape={"square"}
+                    source={require("../../assets/teacherLatestPage/create2.png")}
+                />
+            </TouchableOpacity>
+        );
+    };
+
     //全部最新内容
     handleAll = () => {
         console.log("获取全部最新内容");
-        this.setState({ resourceType: "all" });
+        this.setState({ resourceType: "" });
     };
     //作业
     handleHomework = () => {
@@ -156,44 +132,20 @@ class LatestTask extends React.Component {
         this.setState({ resourceType: "4" });
     };
 
-    //资料夹是否已读图标
-    showPackagesStatus = () => {
-        //componentwillMount第一次加载页面需要请求http://www.cn901.net:8111/AppServer/ajax/studentApp_checkMineFloder.do?&userId=ming6059&callback=ha
-        //若返回数据的data值为0则不显示红点，否则存在未读则显示
-        //资料夹图标只要被点击，就默认资料均被读，从资料夹页面返回时就不再显示红点标志
-
-        return this.state.resourceRead == 0 ? ( //测试==0，之后需要改为！=0
-            <View style={styles.rightNumView}>
-                <Image
-                    source={require("../../assets/LatestTaskImages/rightNum.png")}
-                    style={styles.rightNumImg}
-                />
-            </View>
-        ) : (
-            <View style={styles.rightNumView}>
-                <Image
-                    source={require("../../assets/LatestTaskImages/packageRead.png")}
-                    style={styles.rightNumImg}
-                />
-            </View>
-        );
-    };
 
     //显示筛选filter
     showFilter = () => {
         return (
             <View>
                 <OverflowMenu
-                    anchor={this.renderAvatar}
+                    anchor={this.renderAvatarFilter}
                     //弹出项外部背景样式
                     backdropStyle={styles.backdrop}
-                    //backdropStyle={{backgroundColor:'white'}}
-                    visible={this.state.moduleVisible}
+                    visible={this.state.filtermoduleVisible}
                     onBackdropPress={() => {
-                        this.setState({ moduleVisible: false });
+                        this.setState({ filtermoduleVisible: false });
                     }}
                     style={{ width: screenWidth * 0.22 }}
-                    //fullWidth={false}
                 >
                     <MenuItem
                         title="全部"
@@ -203,23 +155,17 @@ class LatestTask extends React.Component {
                     <MenuItem
                         title="作业"
                         onPress={this.handleHomework}
-                        //style={styles.menuItem}
                     />
                     <MenuItem
                         title="导学案"
                         onPress={this.handleGuidance}
                         style={styles.menuItem}
                     />
-                    {/*<MenuItem 
-                        title = "授课包"
-                        onPress={this.handleTeachingPackages}
-                        style={styles.menuItem}
-                    />
                     <MenuItem 
                         title = "微课"
                         onPress={this.handleMicroClass}
                         style={styles.menuItem}
-                    />*/}
+                    />
                     <MenuItem
                         title="通知"
                         onPress={this.handleInform}
@@ -235,26 +181,95 @@ class LatestTask extends React.Component {
         );
     };
 
+    //显示创建create
+    showCreate = () => {
+        return (
+            <View>
+                <OverflowMenu
+                    anchor={this.renderAvatarCreate}
+                    //弹出项外部背景样式
+                    backdropStyle={styles.backdrop}
+                    visible={this.state.createmoduleVisible}
+                    onBackdropPress={() => {
+                        this.setState({ createmoduleVisible: false });
+                    }}
+                    style={{ width: screenWidth * 0.34 }}
+                >
+                    <MenuItem
+                        title="创建授课包"
+                        // onPress={this.handleAll}
+                        style={{ fontSize: 40 }}
+                    />
+                    <MenuItem
+                        title="我的授课包"
+                        // onPress={this.handleHomework}
+                    />
+                    <MenuItem
+                        title="创建导学案+布置"
+                        // onPress={this.handleGuidance}
+                        style={styles.menuItem}
+                    />
+                    <MenuItem 
+                        title = "创建微课+布置"
+                        // onPress={this.handleTeachingPackages}
+                        style={styles.menuItem}
+                    />
+                    <MenuItem 
+                        title = "创建作业+布置"
+                        // onPress={this.handleMicroClass}
+                        style={styles.menuItem}
+                    />
+                    <MenuItem
+                        title="选导学案布置"
+                        // onPress={this.handleInform}
+                        style={styles.menuItem}
+                    />
+                    <MenuItem
+                        title="选微课布置"
+                        // onPress={this.handleNotice}
+                        style={styles.menuItem}
+                    />
+                    <MenuItem
+                        title="选卷布置作业"
+                        // onPress={this.handleNotice}
+                        style={styles.menuItem}
+                    />
+                    <MenuItem
+                        title="拍照布置作业"
+                        // onPress={this.handleNotice}
+                        style={styles.menuItem}
+                    />
+                    <MenuItem
+                        title="发布通知"
+                        // onPress={this.handleNotice}
+                        style={styles.menuItem}
+                    />
+                    <MenuItem
+                        title="发布公告"
+                        // onPress={this.handleNotice}
+                        style={styles.menuItem}
+                    />
+                </OverflowMenu>
+            </View>
+        );
+    };
+
     render() {
         return (
             <View>
                 <View style={styles.header}>
                     <Flex style={styles.flexNew}>
-                        <TouchableOpacity
-                            style={styles.packagesView}
-                            onPress={this.packagesPage}
-                        >
-                            <Image
-                                source={require("../../assets/LatestTaskImages/packages.png")}
-                                style={styles.packagesImg}
-                            />
-                        </TouchableOpacity>
-                        {this.showPackagesStatus()}
+                        <Flex style={{ width: screenWidth * 0.12 }}>
+                            {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
+                            <TouchableOpacity style={styles.filterView}>
+                                {this.showFilter()}
+                            </TouchableOpacity>
+                        </Flex>
                         <View style={styles.searchView}>
                             <SearchBar
                                 style={styles.searchBar}
                                 value={{SearchText}}
-                                placeholder="学案/作业"
+                                placeholder="请输入您想搜索的内容"
                                 ref={(ref) => (this.searchText = ref)}
                                 onCancel={this.onSearch}
                                 onChange={this.onChange}
@@ -264,16 +279,16 @@ class LatestTask extends React.Component {
                             />
                         </View>
                         <Flex style={{ width: screenWidth * 0.12 }}>
-                            <View style={{ width: screenWidth * 0.04 }}></View>
+                            {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
                             <TouchableOpacity style={styles.filterView}>
-                                {this.showFilter()}
+                                {this.showCreate()}
                             </TouchableOpacity>
                         </Flex>
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('###learnId000###status000##',this.props.learnId , this.props.status)}
-                    <TodoListContainer resourceType={this.state.resourceType} searchStr={SearchText}  learnId={this.props.learnId} status={this.props.status} />
+                    {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)}
+                    <CreateListContainer resourceType={this.state.resourceType} searchStr={SearchText} />                   
                 </View>
             </View>
         );
@@ -283,61 +298,26 @@ class LatestTask extends React.Component {
 const styles = StyleSheet.create({
     header: {
         height: screenHeight * 0.1,
-        backgroundColor: "#6CC5CB",
+        backgroundColor: "#fff",
     },
     todoList: {
         height: screenHeight * 0.8,
     },
     flexNew: {
-        paddingTop: 0,
-        paddingLeft: screenWidth * 0.01,
-    },
-    packagesView: {
-        width: screenWidth * 0.1,
-    },
-    packagesImg: {
-        height: "100%",
-        width: "50%",
-        resizeMode: "contain",
-        top: 2,
-        left: 18,
-    },
-    rightNumView: {
-        width: screenWidth * 0.05,
-    },
-    rightNumImg: {
-        height: "100%",
-        width: "40%",
-        resizeMode: "contain",
-        //top:0,
-        //left:0,
-        //marginLeft:0,
-    },
-    filterImg: {
-        height: "100%",
-        width: "90%",
-        resizeMode: "contain",
+        paddingTop: screenHeight * 0.02,
+        paddingLeft: screenWidth * 0.03,
     },
     filterView: {
-        width: screenWidth * 0.08,
+        paddingLeft: screenWidth * 0.03,
     },
     searchView: {
         width: screenWidth * 0.7,
-        //backgroundColor:'red',
-        //borderWidth: 0,
-        //borderColor: 'red',
         opacity: 1,
-    },
-    showSearch: {
-        fontSize: 15,
-        color: "white",
     },
     searchBar: {
         backgroundColor: "white",
         borderRadius: 40,
-        //height: screenHeight * 0.07,
         borderWidth: 0,
-        //paddingTop: 0,
         fontSize: 15,
         paddingLeft: 30,
     },

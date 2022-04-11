@@ -21,13 +21,10 @@ import TodoListContainer from "./TodoListContainer";
 
 let SearchText = '';
 
-export default function LatestTaskContainer(props) {
-    const learnId = props.learnId;
-    const status = props.status;
-    console.log('###learnId###status##',learnId , status);
+export default function LatestTaskContainer() {
     const navigation = useNavigation();
     //将navigation传给LatestTask组件，防止路由出错
-    return <LatestTask navigation={navigation} learnId={learnId} status={status}></LatestTask>;
+    return <LatestTask navigation={navigation}></LatestTask>;
 }
 
 class LatestTask extends React.Component {
@@ -60,21 +57,6 @@ class LatestTask extends React.Component {
             //console.log('data' , this.state.resourceRead);
             return ;
         })
-    }
-
-    componentDidMount() {
-        
-        const { navigation } = this.props;
-        this._unsubscribeNavigationFocusEvent = navigation.addListener(
-            "focus",
-            () => {
-                console.log('###learnId000###status000##', this.props , this.props.learnId , this.props.status);
-            }
-        );
-    }
-
-    componentWillUnmount() {
-        this._unsubscribeNavigationFocusEvent();
     }
 
     //点击文件夹图标跳转
@@ -272,8 +254,8 @@ class LatestTask extends React.Component {
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('###learnId000###status000##',this.props.learnId , this.props.status)}
-                    <TodoListContainer resourceType={this.state.resourceType} searchStr={SearchText}  learnId={this.props.learnId} status={this.props.status} />
+                    {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)}
+                    <TodoListContainer resourceType={this.state.resourceType} searchStr={SearchText}  status={'2'} />
                 </View>
             </View>
         );
