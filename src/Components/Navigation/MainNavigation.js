@@ -29,6 +29,7 @@ import WrongRecycleButtoContainer from "../../pages/Wrongbook/WrongRecycleButton
 import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 
 import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
+import { Icon } from "react-native-elements";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {

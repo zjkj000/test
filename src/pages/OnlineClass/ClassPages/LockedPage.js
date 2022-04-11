@@ -331,9 +331,7 @@ export default class LockedPage extends Component {
                     </Layout>
                     {this.renderAnswerBox()}
                 </Layout>
-
                 <Layout style={styles.bottom}>{this.renderOption()}</Layout>
-
                 <Modal
                     visible={this.state.visible}
                     backdropStyle={styles.backdrop}

@@ -14,7 +14,7 @@ import Loading from "../../utils/loading/Loading";
 import StorageUtil from "../../utils/Storage/Storage";
 
 export default ConnectClass = () => {
-    StorageUtil.clear();
+    // StorageUtil.clear();
 
     const navigation = useNavigation();
     const route = useRoute();
@@ -24,7 +24,7 @@ export default ConnectClass = () => {
     const [showLoading, setShowLoading] = React.useState(false);
     const [Name, setName] = React.useState("ming6002");
     const [Password, setPassword] = React.useState("2020");
-    const [historyList, setHistoryList] = React.useState([]);
+    // const [historyList, setHistoryList] = React.useState([]);
 
     const handleLogin = () => {
         const url =
@@ -45,8 +45,20 @@ export default ConnectClass = () => {
                 } else {
                     // Toast.showDangerToast(resStr);
                     let resJson = JSON.parse(resStr);
-                    historyList.push({ title: ipAddress });
-                    StorageUtil.save("historyListRemote", historyList);
+                    StorageUtil.get("historyListRemote").then((res) => {
+                        res = res ? res : [];
+                        let storageFlag = true;
+                        for (let item in res) {
+                            console.log(res[item]);
+                            if (res[item].title === ipAddress) {
+                                storageFlag = false;
+                            }
+                        }
+                        if (storageFlag) {
+                            res.push({ title: ipAddress });
+                            StorageUtil.save("historyListRemote", res);
+                        }
+                    });
                     let imgURL =
                         "http://" +
                         ipAddress +
@@ -68,11 +80,6 @@ export default ConnectClass = () => {
                                 error.toString
                             );
                         });
-                    // navigation.navigate("OnlineClassTemp", {
-                    //     ...resJson,
-                    //     ipAddress: ipAddress,
-                    //     userName: Name,
-                    // });
                 }
             })
             .catch((error) => {
@@ -80,20 +87,6 @@ export default ConnectClass = () => {
                 Toast.showDangerToast(error.toString());
             });
     };
-    const initData = async () => {
-        try {
-            let res = await StorageUtil.get("historyListRemote");
-            if (res) {
-                setHistoryList(res);
-            }
-            return res;
-        } catch (e) {
-            Toast.showDangerToast(e.toString());
-        }
-    };
-    React.useEffect(() => {
-        initData();
-    }, []);
     React.useEffect(() => {
         if (route.params?.ipAddress) {
             if (typeof route.params.ipAddress == "string") {
@@ -121,11 +114,15 @@ export default ConnectClass = () => {
                 />
             </Layout>
             <TouchableOpacity style={styles.iconContainer} onPress={handleScan}>
-                <Icon
+                <Image
+                    source={require("../../assets/classImg/barcode.png")}
+                    style={styles.bigImg}
+                />
+                {/* <Icon
                     style={styles.icon}
                     fill="#8F9BB3"
                     name="camera-outline"
-                />
+                /> */}
             </TouchableOpacity>
             <HistoryInput
                 icon={<Icon name="globe-outline" />}

@@ -163,8 +163,10 @@ class OnlineClassTemp extends Component {
         const routeParams = this.props.route.params;
         // const { courseName, introduction, teacherName } = routeParams.learnPlan;
         return (
-            <View>
-                <Image source={require("../../assets/image/music.png")}></Image>
+            <View style={{ backgroundColor: "#fff" }}>
+                <Image
+                    source={require("../../assets/classImg/ready.jpg")}
+                ></Image>
                 <Text>课堂:{routeParams.learnPlan.courseName}</Text>
                 <Text>教师:{routeParams.learnPlan.teacherName}</Text>
                 <Text>学生:{routeParams.learnPlan.introduction}</Text>

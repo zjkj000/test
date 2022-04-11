@@ -1,6 +1,8 @@
 import axios from "axios";
 import baseConfig from "./httpBaseConfig";
 import Qs from "qs";
+import RNFS from "react-native-fs";
+import Toast from "../Toast/Toast";
 
 // 默认域名
 axios.defaults.baseURL =
@@ -50,9 +52,9 @@ export default class http {
     // ES7异步get函数
     static async get(url, params, encode = false) {
         try {
-            console.log("====================================");
-            console.log(encode);
-            console.log("====================================");
+            // console.log("====================================");
+            // console.log(encode);
+            // console.log("====================================");
             let ret = "";
             if (encode) {
                 for (let it in params) {
@@ -141,4 +143,52 @@ export default class http {
             return error;
         }
     }
+
+    static download = (url) => {
+        let target = RNFS.DocumentDirectoryPath + "/download";
+        const options = {
+            fromUrl: url,
+            toFile: target,
+            background: true,
+            progressDivider: 5,
+            begin: (res) => {
+                //开始下载时回调
+                console.log("begin", res);
+            },
+            progress: (res) => {
+                //下载过程中回调，根据options中设置progressDivider:5，则在完成5%，10%，15%，...，100%时分别回调一次，共回调20次。
+                console.log("progress", res);
+            },
+        };
+        console.log(target);
+        RNFS.exists(target).then((existsRes) => {
+            console.log("exist: " + existsRes);
+            if (existsRes) {
+                const downloadRes = RNFS.downloadFile(options);
+                console.log(downloadRes.jobId); //打印一下看看jobId
+                downloadRes.promise
+                    .then((res) => {
+                        Toast.showSuccessToast("下载成功！", res);
+                    })
+                    .catch((err) => {
+                        Toast.showDangerToast("下载出错：" + err.toString());
+                    });
+            } else {
+                RNFS.mkdir(target).then((mkdirRes) => {
+                    console.log(mkdirRes);
+                    const downloadRes = RNFS.downloadFile(options);
+                    console.log(downloadRes.jobId); //打印一下看看jobId
+                    downloadRes.promise
+                        .then((res) => {
+                            Toast.showSuccessToast("下载成功！", res);
+                        })
+                        .catch((err) => {
+                            Toast.showDangerToast(
+                                "下载出错：" + err.toString()
+                            );
+                        });
+                });
+            }
+        });
+    };
 }
