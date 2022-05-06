@@ -22,7 +22,7 @@ export default ConnectClass = () => {
         route.params?.ipAddress ? route.params.ipAddress : ""
     );
     const [showLoading, setShowLoading] = React.useState(false);
-    const [Name, setName] = React.useState("ming6002");
+    const [Name, setName] = React.useState("ming6003");
     const [Password, setPassword] = React.useState("2020");
     // const [historyList, setHistoryList] = React.useState([]);
 
@@ -40,6 +40,9 @@ export default ConnectClass = () => {
         http.get(url, params)
             .then((resStr) => {
                 setShowLoading(false);
+                // console.log("ConnectClass====================================");
+                // console.log(resStr);
+                // console.log("====================================");
                 if (typeof resStr === "undefined") {
                     Toast.showWarningToast("暂无课程开始");
                 } else {
@@ -58,6 +61,7 @@ export default ConnectClass = () => {
                             res.push({ title: ipAddress });
                             StorageUtil.save("historyListRemote", res);
                         }
+                        1;
                     });
                     let imgURL =
                         "http://" +

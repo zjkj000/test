@@ -14,6 +14,8 @@ import TempPage from "./ClassPages/TempPage";
 import FreePage from "./ClassPages/FreePage";
 import LockedPage from "./ClassPages/LockedPage";
 import HTML from "react-native-render-html";
+import ShareStuAnswer from "./ClassPages/ShareStuAnswer";
+import AnonymousCorrecting from "./ClassPages/AnonymousCorrecting";
 
 export default function OnlineClassTempPage() {
     const navigation = useNavigation();
@@ -56,12 +58,14 @@ class OnlineClassTemp extends Component {
 
     handleMessageQueue() {
         this.getInfo();
-        const { ipAddress, userName } = this.props.route.params;
         const { resJson } = this.state;
         if (resJson.hasOwnProperty("messageList")) {
             messageList = resJson.messageList;
             if (messageList.length !== 0) {
                 let events = messageList[0];
+                // console.log("====================================");
+                // console.log(events);
+                // console.log("====================================");
                 const { action, period } = events;
                 switch (action) {
                     case "toScan":
@@ -69,7 +73,7 @@ class OnlineClassTemp extends Component {
                         break;
                     case "read-lock":
                         console.log("单题模式");
-                        this.setState({ pageRender: 1 });
+                        this.setState({ pageRender: 4 });
                         // TODO: 渲染单题组件
                         break;
                     case "no-lock":
@@ -79,9 +83,20 @@ class OnlineClassTemp extends Component {
                         break;
                     case "lock":
                         console.log("结束答题");
+                        this.setState({ pageRender: 5 });
+                        break;
+                    case "ShareStuAnswer":
+                        console.log("分享答案");
                         this.setState({ pageRender: 3 });
                         break;
+                    case "AnonymousCorrecting":
+                        console.log("匿名评分");
+                        this.setState({ pageRender: 4 });
+                        break;
+                    case "QuitTask":
                     default:
+                        console.log("结束答题");
+                        this.setState({ pageRender: 5 });
                         break;
                 }
             }
@@ -153,6 +168,22 @@ class OnlineClassTemp extends Component {
                     imgURL,
                 });
             case 3:
+                return this._renderShareStuAnswer({
+                    ...resJson,
+                    ipAddress,
+                    introduction,
+                    userName,
+                    imgURL,
+                });
+            case 4:
+                return this._renderAnonymousCorrecting({
+                    ...resJson,
+                    ipAddress,
+                    introduction,
+                    userName,
+                    imgURL,
+                });
+            case 5:
                 return this._renderTempPage();
             default:
                 break;
@@ -180,6 +211,14 @@ class OnlineClassTemp extends Component {
 
     _renderFreePage(props) {
         return <FreePage {...props} />;
+    }
+
+    _renderShareStuAnswer(props) {
+        return <ShareStuAnswer {...props} />;
+    }
+
+    _renderAnonymousCorrecting(props) {
+        return <AnonymousCorrecting {...props} />;
     }
 
     _renderTempPage() {

@@ -61,7 +61,7 @@ export default class PPT extends Component {
                     <WebView
                         source={{
                             uri: this.getHTML(
-                                this.props.period,
+                                this.props.periodNow,
                                 this.props.ipAddress
                             ),
                         }}
@@ -94,7 +94,7 @@ export default class PPT extends Component {
                         <TouchableOpacity
                             onPress={() => {
                                 this.handleDownload(
-                                    this.props.period,
+                                    this.props.periodNow,
                                     this.props.ipAddress
                                 );
                             }}
@@ -107,7 +107,7 @@ export default class PPT extends Component {
                     </Layout>
 
                     <Layout style={styles.bottomRight}>
-                        <AskAndMark />
+                        <AskAndMark {...this.props} />
                     </Layout>
                 </Layout>
             </>

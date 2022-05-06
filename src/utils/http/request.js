@@ -67,6 +67,9 @@ export default class http {
             } else {
                 ret = await new URLSearchParams(params).toString();
             }
+            // console.log("====================================");
+            // console.log(ret);
+            // console.log("====================================");
             // let res = null;
             if (ret != "") {
                 url = url + "?" + ret;
@@ -89,7 +92,7 @@ export default class http {
     //         return error;
     //     }
     // }
-    static async post(url, params) {
+    static async post(url, params, encode = true, callback = false) {
         try {
             // let myTypeParams = new URLSearchParams();
             // for (let it in params) {
@@ -97,6 +100,14 @@ export default class http {
             // }
             // console.log(Qs.stringify(params));
             // let res = await axios.post(url, Qs.stringify(params));
+            if (callback) {
+                params = { ...params, callback: "hei" };
+            }
+            if (encode) {
+                for (let i in params) {
+                    params[i] = encodeURIComponent(params[i]);
+                }
+            }
             let res = await axios({
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -105,10 +116,14 @@ export default class http {
                 method: "post",
                 data: Qs.stringify(params),
             });
+            if (callback) {
+                let regex = /\((.+?)\)/g;
+                res = res.match(regex)[0].replace("(", "").replace(")", "");
+            }
+            // console.log("post====================================");
+            // console.log(res);
             // console.log("====================================");
-            // console.log(url);
-            // console.log("====================================");
-            return res;
+            return JSON.parse(res);
         } catch (error) {
             return error;
         }

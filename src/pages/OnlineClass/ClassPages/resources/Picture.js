@@ -46,7 +46,7 @@ export default class Picture extends Component {
                         <WebView
                             source={{
                                 uri: this.getHTML(
-                                    this.props.period,
+                                    this.props.periodNow,
                                     this.props.ipAddress
                                 ),
                             }}
@@ -78,7 +78,7 @@ export default class Picture extends Component {
                     </Layout>
                     <Layout style={styles.inputArea}></Layout>
                     <Layout style={styles.bottomRight}>
-                        <AskAndMark />
+                        <AskAndMark {...this.props} />
                     </Layout>
                 </Layout>
             </>

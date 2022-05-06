@@ -2,6 +2,18 @@ import { StyleSheet } from "react-native";
 import { screenHeight, screenWidth } from "../../utils/Screen/GetSize";
 
 export const styles = StyleSheet.create({
+    default: {
+        width: "100%",
+        height: "100%",
+        alignItems: "center",
+        justifyContent: "center",
+        margin: 0,
+        padding: 0,
+        top: 0,
+        left: 0,
+        bottom: 0,
+        right: 0,
+    },
     View: {
         flex: 1,
         backgroundColor: "#fff",
@@ -134,9 +146,30 @@ export const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
     },
+    body_side: {
+        padding: 10,
+        height: "100%",
+        flex: 1,
+        borderColor: "gray",
+        borderWidth: 1,
+    },
+    answer_title: {
+        color: "#225481",
+        fontSize: 20,
+    },
     body_webview: {
+        flexDirection: "column",
         flex: 2,
         height: "100%",
+    },
+    body_webview_row: {
+        flexDirection: "row",
+        flex: 1,
+        justifyContent: "space-evenly",
+    },
+    body_webview_col: {
+        flex: 1,
+        justifyContent: "space-evenly",
     },
     body_answerBox: {
         flex: 1,
@@ -183,6 +216,10 @@ export const styles = StyleSheet.create({
     },
     PPT_area: { alignItems: "center", height: "100%", paddingTop: "35%" },
     little_image: { height: 50, width: 80, marginLeft: 5 },
+    menu_image: {
+        height: 20,
+        width: 20,
+    },
     checked: {
         height: 50,
         width: 80,
@@ -217,5 +254,12 @@ export const styles = StyleSheet.create({
     cardHistoryList: {
         height: 70,
         width: "100%",
+    },
+    myBadge: {
+        position: "absolute",
+        top: -10,
+        right: -6,
+        zIndex: 2,
+        color: "#DB4E30",
     },
 });

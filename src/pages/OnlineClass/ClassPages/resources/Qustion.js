@@ -12,30 +12,90 @@ import {
     MenuItem,
 } from "@ui-kitten/components";
 import Toast from "../../../../utils/Toast/Toast";
-import { Icon } from "react-native-elements";
 import ImageHandler from "../../../../utils/Camera/Camera";
 import WebView from "react-native-webview";
 import { styles } from "../../styles";
+import { deepEqual } from "../../../../utils/Compare/Compare";
+import StorageUtil from "../../../../utils/Storage/Storage";
 
 export default class Question extends Component {
     constructor(props) {
-        const { period } = props;
+        const { periodNow } = props;
         const subjective =
-            period.questionType == "3" || period.questionType == "5";
+            periodNow.questionType == "3" || periodNow.questionType == "5";
         super(props);
         this.state = {
             html: {
                 html: "",
             },
-            questionType: period.questionType ? period.questionType : "1",
+            questionType: periodNow.questionType ? periodNow.questionType : "1",
+            questionValueList: periodNow.questionValueList,
             subjective: subjective,
             msg: "",
             moduleVisible: false,
             answer: "",
             showSideBox: false,
             imgURL: [],
-            htmlURL: "",
         };
+        this.initAnswerState();
+    }
+    initAnswerState = () => {
+        let { periodNow } = this.props;
+        const subjective =
+            periodNow.questionType == "3" || periodNow.questionType == "5";
+        this.setState({ subjective });
+        StorageUtil.get("tjAnswer").then((res) => {
+            console.log("initAnswerState====================================");
+            console.log(res);
+            console.log("====================================");
+            if (res) {
+                let tjAnswer = res[periodNow.id];
+                if (tjAnswer) {
+                    this.setState({
+                        html: tjAnswer.html ? tjAnswer.html : { html: "" },
+                        answer: tjAnswer.answer ? tjAnswer.answer : "",
+                        imgURL: tjAnswer.imgURL ? tjAnswer.imgURL : [],
+                    });
+                } else {
+                    this.setState({
+                        html: { html: "" },
+                        answer: "",
+                        imgURL: [],
+                    });
+                }
+            } else {
+                this.setState({
+                    html: { html: "" },
+                    answer: "",
+                    imgURL: [],
+                });
+            }
+        });
+    };
+    componentDidUpdate(prevProps, prevState) {
+        if (!deepEqual(prevProps.periodNow, this.props.periodNow)) {
+            this.initAnswerState();
+            this.setState({
+                questionType: this.props.periodNow.questionType,
+                questionValueList: this.props.periodNow.questionValueList,
+            });
+        }
+        if (
+            prevState.answer !== this.state.answer ||
+            !deepEqual(prevState.html, this.state.html) ||
+            !deepEqual(prevState.imgURL, this.state.imgURL)
+        ) {
+            const { periodNow } = this.props;
+            StorageUtil.get("tjAnswer").then((res) => {
+                if (res) {
+                    let tjAnswer = res;
+                    tjAnswer[periodNow.id].answer = this.state.answer;
+                    tjAnswer[periodNow.id].html = this.state.html;
+                    tjAnswer[periodNow.id].imgURL = this.state.imgURL;
+                    StorageUtil.save("tjAnswer", tjAnswer);
+                }
+            });
+        }
     }
     renderInputArea = () => {
         return (
@@ -79,10 +139,8 @@ export default class Question extends Component {
                 </OverflowMenu>
                 <Button
                     onPress={() => {
-                        let newAnswer = this.state.answer;
-                        newAnswer += this.state.msg;
+                        this.setAnswer(this.state.msg);
                         this.setState({ msg: "" });
-                        this.setAnswer(newAnswer);
                     }}
                     style={{
                         width: 80,
@@ -96,7 +154,7 @@ export default class Question extends Component {
         );
     };
     imageUpload = (base64) => {
-        const { messageList, ipAddress, userName } = this.props;
+        const { messageList, ipAddress, userName, periodNow } = this.props;
         const event = messageList[0];
         const url =
             "http://" +
@@ -111,17 +169,15 @@ export default class Question extends Component {
             learnPlanId: event.learnPlanId,
             userId: userName,
         };
-        http.post(url, params)
-            .then((resStr) => {
-                const resJson = JSON.parse(resStr);
-                console.log(resJson);
-                if (resJson.status === "success") {
+        http.post(url, params, false)
+            .then((res) => {
+                if (res.status === "success") {
                     let { imgURL, html } = this.state;
                     let newHTML = {
-                        html: html.html + `<img src= "${resJson.url}" \/>`,
+                        html: html.html + `<img src="${res.url}" \/>`,
                     };
                     this.setState({
-                        imgURL: [...imgURL, resJson.url],
+                        imgURL: [...imgURL, res.url],
                         html: newHTML,
                     });
                 }
@@ -135,7 +191,6 @@ export default class Question extends Component {
             .then((res) => {
                 if (res) {
                     this.setState({
-                        imgURL: [...this.state.imgURL, res.uri],
                         moduleVisible: false,
                     });
                     this.imageUpload(res.base64);
@@ -150,7 +205,6 @@ export default class Question extends Component {
             .then((res) => {
                 if (res) {
                     this.setState({
-                        imgURL: [...this.state.imgURL, res.uri],
                         moduleVisible: false,
                     });
                     this.imageUpload(res.base64);
@@ -160,7 +214,49 @@ export default class Question extends Component {
                 Toast.showDangerToast("获取图片失败:" + error.toString());
             });
     };
-    handleSubmit = () => {};
+    handleSubmit = () => {
+        const { ipAddress, messageList, introduction, userName, periodNow } =
+            this.props;
+        const event = messageList[0];
+        const { period } = event;
+        const { subjective } = this.state;
+        const url =
+            "http://" +
+            ipAddress +
+            ":8901" +
+            "/KeTangServer/ajax/ketang_saveExploreStuAnswerByRN.do";
+        // const url =
+        //     "http://" +
+        //     "192.168.1.81" +
+        //     ":8222" +
+        //     "/KeTangServer/ajax/ketang_saveExploreStuAnswerByRN.do";
+        let params = {
+            stuId: userName,
+            stuName: introduction,
+            taskId: period.id,
+            taskName: period.name,
+            questionId: periodNow.questionId,
+            questionType: periodNow.questionType,
+            questionTypeName: periodNow.questionTypeName,
+            questionAnswer: periodNow.questionAnswerStr,
+            questionScore: periodNow.questionScore,
+            stuAnswer: subjective ? this.state.html.html : this.state.answer,
+            version: 3, //防止接口空指针
+        };
+        http.post(url, params)
+            .then((res) => {
+                if (res.success) {
+                    Toast.showSuccessToast("保存成功", 500);
+                    this.props.handleChangeState(this.props.indexNow);
+                    this.props.nextPage(1);
+                } else {
+                    Toast.showWarningToast(res.message, 1000);
+                }
+            })
+            .catch((error) => {
+                Toast.showDangerToast("请求失败: " + error.toString());
+            });
+    };
 
     //默认弹框不显示，以及需要把弹窗效果加在的地方的  相机图片  显示
     renderAvatar = () => {
@@ -178,33 +274,39 @@ export default class Question extends Component {
         );
     };
 
-    renderOption = (period) => {
-        let questionType = period.questionType;
+    renderOption = () => {
+        const { questionType } = this.state;
         let subjective = questionType === "3" || questionType === "5";
-        let optionBar = (
-            <RadioList
-                checkedindexID={this.state.answer}
-                getstuanswer={this.setAnswer}
-                ChoiceList={period.questionValueList}
-            />
-        );
+
         if (subjective) {
-            optionBar = this.renderInputArea();
+            return this.renderInputArea();
         } else if (questionType === "2") {
-            optionBar = (
+            return (
                 <Checkbox
                     checkedlist={this.state.answer}
                     getstuanswer={this.setAnswer}
-                    ChoiceList={period.questionValueList}
+                    ChoiceList={this.state.questionValueList}
                 />
             );
         }
-        return optionBar;
+        // console.log("renderOption====================================");
+        // console.log(this.state.answer);
+        // console.log("====================================");
+        return (
+            <RadioList
+                checkedindexID={this.state.answer}
+                getstuanswer={this.setSingleSelect}
+                ChoiceList={this.state.questionValueList}
+            />
+        );
+    };
+    setSingleSelect = (str) => {
+        this.setState({ answer: str });
     };
     setAnswer = (str) => {
-        let { html } = this.state;
+        let { html, answer } = this.state;
         let newHTML = { html: html.html + str };
-        this.setState({ html: newHTML, answer: str });
+        this.setState({ html: newHTML, answer: answer + str });
     };
     getHTML = (period, ipAddress) => {
         let resURL =
@@ -221,7 +323,9 @@ export default class Question extends Component {
     renderAnswerBox = (questionType) => {
         let subjective = questionType === "3" || questionType === "5";
         const { html } = this.state;
-        if (subjective && html.html !== "") {
+        const { periodNow } = this.props;
+        let htmlNow = html.html;
+        if (subjective && htmlNow !== "") {
             return (
                 <Layout style={styles.body_answerBox}>
                     <WebView
@@ -241,13 +345,13 @@ export default class Question extends Component {
                         <WebView
                             source={{
                                 uri: this.getHTML(
-                                    this.props.period,
+                                    this.props.periodNow,
                                     this.props.ipAddress
                                 ),
                             }}
                         />
                     </Layout>
-                    {this.renderAnswerBox(this.props.period.questionType)}
+                    {this.renderAnswerBox(this.props.periodNow.questionType)}
                 </Layout>
                 <Layout style={styles.bottom}>
                     <Layout style={styles.bottomLeft}>
@@ -272,9 +376,12 @@ export default class Question extends Component {
                             ></Image>
                         </TouchableOpacity>
                     </Layout>
-                    {this.renderOption(this.props.period)}
+                    {this.renderOption()}
                     <Layout style={styles.bottomRight}>
-                        <Button style={{ width: 80, height: "100%" }}>
+                        <Button
+                            style={{ width: 80, height: "100%" }}
+                            onPress={this.handleSubmit}
+                        >
                             提交
                         </Button>
                     </Layout>

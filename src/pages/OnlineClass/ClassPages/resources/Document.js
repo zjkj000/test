@@ -58,7 +58,7 @@ export default class Document extends Component {
                     <WebView
                         source={{
                             uri: this.getHTML(
-                                this.props.period,
+                                this.props.periodNow,
                                 this.props.ipAddress
                             ),
                         }}
@@ -91,7 +91,7 @@ export default class Document extends Component {
                         <TouchableOpacity
                             onPress={() => {
                                 this.handleDownload(
-                                    this.props.period,
+                                    this.props.periodNow,
                                     this.props.ipAddress
                                 );
                             }}
@@ -104,7 +104,7 @@ export default class Document extends Component {
                     </View>
 
                     <Layout style={styles.bottomRight}>
-                        <AskAndMark />
+                        <AskAndMark {...this.props} />
                     </Layout>
                 </Layout>
             </>
