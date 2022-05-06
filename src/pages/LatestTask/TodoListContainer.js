@@ -97,7 +97,7 @@ class TodoList extends React.Component {
             "focus",
             () => {
                 console.log('#####unsubscribeNavigationFocusEvent###');
-                console.log('****learnId000***status000**', this.props , this.props.learnId , this.props.status);
+                console.log('****learnId000***status000**', this.props.learnId , this.props.status);
                 if (focusFlag == true) {
                     // console.log('###route params###', navigation.getState());
                     pageNo = 1;

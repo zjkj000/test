@@ -29,6 +29,8 @@ import WrongRecycleButtoContainer from "../../pages/Wrongbook/WrongRecycleButton
 import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 
 import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
+import HomeworkPropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/HomeworkProperty";
+import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomework";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -146,6 +148,23 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="Teacher_Home"
                         component={TeacherTabBar}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+                </Stack.Group>
+                {/**教师端首页 */}
+                <Stack.Group>
+                    <Stack.Screen
+                        name="设置作业属性"
+                        component={HomeworkPropertyContainer}
+                        options={{
+                            headerShown: true,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="创建作业"
+                        component={CreateHomework}
                         options={{
                             headerShown: false,
                         }}
