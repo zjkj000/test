@@ -154,9 +154,9 @@ export default class LockedPage extends Component {
                 }
             })
             .catch((error) => {
-                console.log("====================================");
-                console.log(error);
-                console.log("====================================");
+                // console.log("====================================");
+                // console.log(error);
+                // console.log("====================================");
                 Toast.showDangerToast("提交失败");
             });
         // Toast.showInfoToast(this.state.answer);

@@ -11,7 +11,7 @@ import Voice from "../../pages/LatestTask/Resource/Voice";
 import PptRescouce from "../../pages/LatestTask/Resource/PptResource";
 import WordOrPdfRescouce from "../../pages/LatestTask/Resource/WordOrPdfRescouce";
 import Select_Subject from "../../pages/My/Select_Subject";
-import SelectSubject_InfoContainer from "../../pages/My/SelectSubject_Info";
+import Select_Subject_SubmitContainer from "../../pages/My/Select_Subject_Submit";
 import Paper_ToDo from "../../pages/LatestTask/DoWork/Paper_ToDo";
 import Paper_ShowCorrected from "../../pages/LatestTask/DoWork/Paper_ShowCorrected";
 import Paper_SubmitContainer from "../../pages/LatestTask/DoWork/Paper_Submit";
@@ -29,6 +29,15 @@ import WrongRecycleButtoContainer from "../../pages/Wrongbook/WrongRecycleButton
 import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 
 import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
+
+import PaperListContainer from '../../pages/Teacher/CorrectPaper/PaperList';
+import CorrectingPaper from '../../pages/Teacher/CorrectPaper/CorrectingPaper';
+import CorrectSubmit from '../../pages/Teacher/CorrectPaper/CorrectSubmit';
+import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDetails';
+
+import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
+import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
+import AssignPicturesWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/AssignPicturesWork";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -160,12 +169,60 @@ export default class MainNavigation extends Component {
                         }}
                     />
                     <Stack.Screen
-                        name="Selectsubject_Info"
-                        component={SelectSubject_InfoContainer}
+                        name="Selectsubject_Submit"
+                        component={Select_Subject_SubmitContainer}
                         options={{
                             title: "高考选科",
                         }}
                     />
+                </Stack.Group>
+
+                 {/* 老师批改作业/导学案 */}
+                 <Stack.Group>
+                    <Stack.Screen
+                        name="CorrectPaperList"
+                        component={PaperListContainer}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="Correcting_Paper"
+                        component={CorrectingPaper}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="LookCorrectDetails"
+                        component={LookCorrectDetails}
+                        options={{
+                            title: "查看报告",
+                        }}
+                    />
+                </Stack.Group>
+                    
+                {/* 拍照布置作业 */}
+                <Stack.Group>
+                    <Stack.Screen
+                        name="CreatePicturePaperWork"
+                        component={CreateWorkContainer}
+                    />
+                    <Stack.Screen
+                        name="EditPicturePaperWork"
+                        component={EditWorkContioner}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="AssignPicturePaperWork"
+                        component={AssignPicturesWorkContainer}
+                        options={{
+                            title: "布置作业",
+                        }}
+                    />
+                    
                 </Stack.Group>
             </Stack.Navigator>
         );

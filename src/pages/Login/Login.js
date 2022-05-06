@@ -17,7 +17,7 @@ const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 
 export default Login = () => {
     const navigation = useNavigation();
-    const [Name, setName] = React.useState("ming6002");
+    const [Name, setName] = React.useState("mingming");
     const [Password, setPassword] = React.useState("2020");
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
     const [showLoading, setShowLoading] = React.useState(false);

@@ -55,18 +55,22 @@ class Select_Subject_Details extends Component{
             
           {this.state.status=='2'&&this.state.subjectComposeName=='未选科'?(
             //状态为2  未选择的时候  只让去选科
-            <TouchableOpacity style={{position:'absolute',right:5}}
-                onPress={()=>{this.props.navigation.navigate(
-                                {
-                                  name:"Selectsubject_Info",
-                                  params:{
-                                        taskId:this.state.taskId
-                                          }
-                                })
-                              }
-                        }>
-              <Text style={{fontSize:18,color:'#E97252'}}>去选科》</Text>
-            </TouchableOpacity>
+            <View style={{flexDirection:'row',marginTop:50,alignItems:'flex-end'}}>
+                <TouchableOpacity style={{position:'absolute',right:5}}
+                    onPress={()=>{this.props.navigation.navigate(
+                                    {
+                                      name:"Selectsubject_Submit",
+                                      params:{
+                                            taskId:this.state.taskId
+                                              }
+                                    })
+                                  }
+                            }>
+                  <Text style={{fontSize:18,color:'#E97252'}}>去选科》</Text>
+                </TouchableOpacity>
+            </View>
+
+            
           ):this.state.status=='2'&&this.state.subjectComposeName!='未选科'?(
             //状态为2  且已经有了选择  展示选择  +  去选科
             <View style={{flexDirection:'row',marginTop:10,alignItems:'flex-end'}}>
@@ -79,7 +83,7 @@ class Select_Subject_Details extends Component{
               <TouchableOpacity style={{position:'absolute',right:5}}
                    onPress={()=>{this.props.navigation.navigate(
                                   {
-                                    name:"Selectsubject_Info",
+                                    name:"Selectsubject_Submit",
                                     params:{
                                           taskId:this.state.taskId
                                             }

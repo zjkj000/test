@@ -50,9 +50,9 @@ export default class http {
     // ES7异步get函数
     static async get(url, params, encode = false) {
         try {
-            console.log("====================================");
-            console.log(encode);
-            console.log("====================================");
+            // console.log("====================================");
+            // console.log(encode);
+            // console.log("====================================");
             let ret = "";
             if (encode) {
                 for (let it in params) {
@@ -69,9 +69,9 @@ export default class http {
             if (ret != "") {
                 url = url + "?" + ret;
             }
-            // console.log("====================================");
-            // console.log(url);
-            // console.log("====================================");
+            console.log("====================================");
+            console.log(url);
+            console.log("====================================");
             res = await axios.get(url);
             return res;
         } catch (error) {

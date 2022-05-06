@@ -1,16 +1,4 @@
-import {
-    Text,
-    StyleSheet,
-    View,
-    ScrollView,
-    Image,
-    TextInput,
-    Button,
-    Alert,
-    TouchableOpacity,
-    Modal,
-    Dimensions,
-} from "react-native";
+import {Text,StyleSheet,View,ScrollView,Image,TextInput,Button,Alert,TouchableOpacity,Modal,Dimensions,} from "react-native";
 import React, { Component, useState } from "react";
 import RenderHtml from "react-native-render-html";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
@@ -28,6 +16,7 @@ export default function Answer_subjectiveContainer(props) {
     const papername = props.papername;
     const sum = props.sum;
     const num = props.num;
+
     const datasource = props.datasource;
     const oldAnswer_data = props.oldAnswer_data;
     const [ischange, setischange] = useState();
@@ -187,7 +176,6 @@ class Answer_subjective extends Component {
         var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
         var arr = [];
         arr = str.match(imgReg);
-        //console.log('所有已成功匹配图片的数组：'+arr);
         if (arr != null) {
             var newsrcarr = [];
             for (var i = 0; i < arr.length; i++) {

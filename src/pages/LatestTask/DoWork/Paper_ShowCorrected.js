@@ -133,7 +133,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   Titletext:{
-    fontWeight:'600',
+    fontWeight:'bold',
     color:	'#000000',
     fontSize: 20,
     marginTop:10,
