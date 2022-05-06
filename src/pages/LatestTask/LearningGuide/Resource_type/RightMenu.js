@@ -1,5 +1,5 @@
 import { Text, View,TouchableOpacity,Alert} from 'react-native'
-import React, { Component,forwardRef } from 'react'
+import React, { Component } from 'react'
 import {OverflowMenu,MenuItem} from "@ui-kitten/components";
 import http from '../../../../utils/http/request'
 import { useNavigation } from "@react-navigation/native";

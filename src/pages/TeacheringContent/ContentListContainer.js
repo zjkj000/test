@@ -1,30 +1,11 @@
 import React from "react";
-import {
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity,
-    Image,
-    View,
-    Text,
-    Dimensions,
-    ActivityIndicator,
-    FlatList,
-    Alert,
-    ImageBackground,
-} from "react-native";
+import {ScrollView,StyleSheet,TouchableOpacity,Image, View,Text,Dimensions,ActivityIndicator,FlatList,Alert,ImageBackground,} from "react-native";
 import { SearchBar, TabBar } from "@ant-design/react-native";
 import { Icon, Flex } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
-import {
-    screenWidth,
-    screenHeight,
-    userId,
-    token,
-} from "../../utils/Screen/GetSize";
+import {screenWidth,screenHeight,userId,token,} from "../../utils/Screen/GetSize";
 import http from "../../utils/http/request";
 import Loading from "../../utils/loading/Loading"; //Loading组件使用export {Loading}或者export default Loading;
-//import {Loading} from "../../utils/loading/Loading"; //Loading组件使用export {Loading},此时import必须加{}导入
-
 import "../../utils/global/constants";
 
 let pageNo = 1; //当前第几页
@@ -41,18 +22,10 @@ export default function ContentListContainer(props) {
     const navigation = useNavigation();
 
     const rsType = props.resourceType;
-    console.log("**rsType", rsType);
     const searchStr1 = props.searchStr;
-    console.log("**searchStr1", searchStr1);
 
     //将navigation传给TodoList组件，防止路由出错
-    return (
-        <ContentList
-            navigation={navigation}
-            resourceType={rsType}
-            searchStr={searchStr1}
-        ></ContentList>
-    );
+    return ( <ContentList navigation={navigation} resourceType={rsType} searchStr={searchStr1}></ContentList>);
 }
 
 class ContentList extends React.Component {
@@ -145,23 +118,12 @@ class ContentList extends React.Component {
             //callback:'ha',
             token: token,
         }; 
-        // console.log('*******请求的url' , url);
-        // console.group('*********参数' , params);     
-
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                // console.log('--------resJson-----' , resJson);
-                let todosList1 =  resJson.data; //重要！！！
-                // console.log('********请求数据返回的message', resJson.message);
-                // console.log('********请求数据返回的success', resJson.success);
-                // console.log('******请求的数据******', todosList1[0]);
-
+                let todosList1 =  resJson.data; 
                 let dataBlob = [];
                 let i = itemNo;
-
-                //console.log("fetchData*********success", Date.parse(new Date()));
-                
                 todosList1.map(function (item) {
                     dataBlob.push({
                         key: i,
@@ -171,7 +133,6 @@ class ContentList extends React.Component {
                 });
                 itemNo = i;
                 
-                //console.log("itemNo", itemNo);
                 let foot = 0;
                 if (todosList1.length < 12) {
                     foot = 1; //未请求到数据，数据加载完了
@@ -180,15 +141,12 @@ class ContentList extends React.Component {
                 
                 this.setState({
                     message: resJson.message,
-
-                    //下拉刷新时todos只保存第一页数据dataBlob
                     todos: onRefresh
                         ? dataBlob
                         : this.state.todos.concat(dataBlob),
                     isLoading: false,
                     isRefresh: false,
                     showFoot: foot, 
-                    //isRefreshing: false,
                 });
                 
                 todosList1 = null;
@@ -228,7 +186,6 @@ class ContentList extends React.Component {
     //返回itemView(单个todo)
     _renderItemView = (todoItem) => {
         const navigation = this.props.navigation;
-
         //复制一份请求的数据
         todosList = this.state.todos;
 
@@ -284,7 +241,7 @@ class ContentList extends React.Component {
                             </View>
                         </View>
                         <View style={{backgroundColor:'#fff'}}><Text style={{width:20}}></Text></View>
-                        {this.showTodo(todoImg)}
+                        {this.showTodo(todoImg,todo.id,todo.name)}
                 </ScrollView>
 
             );
@@ -352,7 +309,7 @@ class ContentList extends React.Component {
     }
 
     //显示作业、导学案等可选操作
-    showTodo(todoImg){
+    showTodo(todoImg,id,name){
         if(todoImg == 'paper.png'){
             return(
                 <View 
@@ -363,7 +320,14 @@ class ContentList extends React.Component {
                     }}
                 >
                     <View style={styles.select}>
-                        <Text style={styles.selectContent} onPress={() => {Alert.alert('该功能还未写！！！')}}>
+                        <Text style={styles.selectContent} onPress={() => {this.props.navigation.navigate({
+                                                name:'AssignPicturePaperWork',
+                                                params:{
+                                                paperName:name,
+                                                paperId:id
+                                                }
+                                }
+                        )}}>
                             布置
                         </Text>
                     </View>
@@ -375,7 +339,12 @@ class ContentList extends React.Component {
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
-                        <Text style={styles.selectContent} onPress={() => {Alert.alert('该功能还未写！！！')}}>
+                        <Text style={styles.selectContent} onPress={() => {
+                            // this.props.navigation.navigate({
+                                                // name:'EditPicturePaperWork',
+                                                // params:{paperId:id,type:edit}
+                                // })
+                    }}>
                             删除
                         </Text>
                     </View>

@@ -52,7 +52,7 @@ class LatestPage extends React.Component {
     };
     //点击"搜索"按钮时触发
     onSearch = () => {
-        console.log('*******');
+        // console.log('*******');
         this.setState({});
     };
     
@@ -199,7 +199,7 @@ class LatestPage extends React.Component {
                     onBackdropPress={() => {
                         this.setState({ createmoduleVisible: false });
                     }}
-                    style={{ width: screenWidth * 0.34 }}
+                    style={{ width: screenWidth * 0.4}}
                 >
                     <MenuItem
                         title="创建授课包"
@@ -283,7 +283,7 @@ class LatestPage extends React.Component {
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)}
+                    {/* {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)} */}
                     <CreateListContainer resourceType={this.state.resourceType} searchStr={SearchText} />                   
                 </View>
             </View>

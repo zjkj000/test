@@ -417,9 +417,7 @@ Execution failed for task ‘:react-native-orientation:verifyReleaseResources’
 apply plugin: 'com.android.library'
 
 android {
-    // compileSdkVersion 23
     compileSdkVersion = 30
-    // buildToolsVersion "23.0.1"
     buildToolsVersion = "30.0.2"
 
     defaultConfig {

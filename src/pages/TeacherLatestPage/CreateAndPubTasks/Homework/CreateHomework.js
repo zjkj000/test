@@ -1836,7 +1836,7 @@ class CreateHomework extends React.Component {
                             this.props.navigation.goBack();
                         }}
                     >
-                        <Image style={{width: 30, height: 30}} source={require('../../../../assets/teacherLatestPage/goBack.png')}></Image>
+                        <Image style={{width: 30, height: 30}} source={require('../../../../assets/teacherLatestPage/goback.png')}></Image>
                     </TouchableOpacity>
                     {/**三个可选项 */}
                     <View
