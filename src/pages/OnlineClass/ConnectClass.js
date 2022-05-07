@@ -22,8 +22,8 @@ export default ConnectClass = () => {
         route.params?.ipAddress ? route.params.ipAddress : ""
     );
     const [showLoading, setShowLoading] = React.useState(false);
-    const [Name, setName] = React.useState("ming6003");
-    const [Password, setPassword] = React.useState("2020");
+    const [Name, setName] = React.useState(global.constants.userName);
+    const [Password, setPassword] = React.useState(global.constants.passWord);
     // const [historyList, setHistoryList] = React.useState([]);
 
     const handleLogin = () => {

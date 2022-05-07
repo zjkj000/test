@@ -30,7 +30,7 @@
 		DD993BCA424244CA998114A4 /* Octicons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = A0D1A706750645B7972A203E /* Octicons.ttf */; };
 		68B1F5F472164F72A530AE2E /* SimpleLineIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = BC0B4D0941DC4352ABBBF2D0 /* SimpleLineIcons.ttf */; };
 		A95F4B665C7B4B4A927E6B3B /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5BDC460D93384557A73A111F /* Zocial.ttf */; };
-		9C91466C5ECE40F4AE3ACDC4 /* libRNFS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = D43A78B163524675804B8B04 /* libRNFS.a */; };
+		2459D12C08C24C1482BE3332 /* libRCTBEEPickerManager.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 237CAF7B067347EBA77CDE0E /* libRCTBEEPickerManager.a */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -73,8 +73,8 @@
 		A0D1A706750645B7972A203E /* Octicons.ttf */ = {isa = PBXFileReference; name = "Octicons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Octicons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		BC0B4D0941DC4352ABBBF2D0 /* SimpleLineIcons.ttf */ = {isa = PBXFileReference; name = "SimpleLineIcons.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/SimpleLineIcons.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
 		5BDC460D93384557A73A111F /* Zocial.ttf */ = {isa = PBXFileReference; name = "Zocial.ttf"; path = "../node_modules/react-native-vector-icons/Fonts/Zocial.ttf"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = unknown; explicitFileType = undefined; includeInIndex = 0; };
-		6599A69D7E20499AB55EF2B2 /* RNFS.xcodeproj */ = {isa = PBXFileReference; name = "RNFS.xcodeproj"; path = "../node_modules/react-native-fs/RNFS.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
-		D43A78B163524675804B8B04 /* libRNFS.a */ = {isa = PBXFileReference; name = "libRNFS.a"; path = "libRNFS.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
+		7C9EA0A0E1014F6890CF93BC /* RCTBEEPickerManager.xcodeproj */ = {isa = PBXFileReference; name = "RCTBEEPickerManager.xcodeproj"; path = "../node_modules/react-native-picker/ios/RCTBEEPickerManager.xcodeproj"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = wrapper.pb-project; explicitFileType = undefined; includeInIndex = 0; };
+		237CAF7B067347EBA77CDE0E /* libRCTBEEPickerManager.a */ = {isa = PBXFileReference; name = "libRCTBEEPickerManager.a"; path = "libRCTBEEPickerManager.a"; sourceTree = "<group>"; fileEncoding = undefined; lastKnownFileType = archive.ar; explicitFileType = undefined; includeInIndex = 0; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -89,7 +89,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9C91466C5ECE40F4AE3ACDC4 /* libRNFS.a in Frameworks */,
+				2459D12C08C24C1482BE3332 /* libRCTBEEPickerManager.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -137,7 +137,7 @@
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
 			isa = PBXGroup;
 			children = (
-				6599A69D7E20499AB55EF2B2 /* RNFS.xcodeproj */,
+				7C9EA0A0E1014F6890CF93BC /* RCTBEEPickerManager.xcodeproj */,
 			);
 			name = Libraries;
 			sourceTree = "<group>";

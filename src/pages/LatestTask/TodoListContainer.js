@@ -97,7 +97,7 @@ class TodoList extends React.Component {
             "focus",
             () => {
                 console.log('#####unsubscribeNavigationFocusEvent###');
-                console.log('****learnId000***status000**', this.props , this.props.learnId , this.props.status);
+                console.log('****learnId000***status000**', this.props.learnId , this.props.status);
                 if (focusFlag == true) {
                     // console.log('###route params###', navigation.getState());
                     pageNo = 1;
@@ -132,7 +132,7 @@ class TodoList extends React.Component {
         ) {
             oldtype = nextProps.resourceType;
             searchStr = nextProps.searchStr;
-            console.log("componentWillUpdate*********0000", Date.parse(new Date()));
+            // console.log("componentWillUpdate*********0000", Date.parse(new Date()));
             //当此次请求与上次请求的数据类型不一致时，先清空上一次的数据再请求
             this.setState({
                 todos: [],
@@ -157,7 +157,7 @@ class TodoList extends React.Component {
             this.props.navigation.getState().routes[1].params = null;
 
             if (status == 3) {
-                console.log("componentWillUpdate*********0000", Date.parse(new Date()));
+                // console.log("componentWillUpdate*********0000", Date.parse(new Date()));
                 //未批改的作业，不请求数据
                 //console.log('获取到的status' , status);
                 for (var i = 0; i < todosList.length; i++) {
@@ -171,7 +171,7 @@ class TodoList extends React.Component {
                     }
                 }
             } else {
-                console.log("componentWillUpdate*********1111", Date.parse(new Date()));
+                // console.log("componentWillUpdate*********1111", Date.parse(new Date()));
 
                 console.log('______________');
                 flag = 2;

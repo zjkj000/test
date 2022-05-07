@@ -41,9 +41,9 @@ export default function CreateListContainer(props) {
     const navigation = useNavigation();
 
     const rsType = props.resourceType;
-    console.log("**rsType", rsType);
+    // console.log("**rsType", rsType);
     const searchStr1 = props.searchStr;
-    console.log("**searchStr1", searchStr1);
+    // console.log("**searchStr1", searchStr1);
 
     //将navigation传给TodoList组件，防止路由出错
     return (
@@ -78,7 +78,7 @@ class CreateList extends React.Component {
         oldsearchStr = this.props.searchStr;
 
 
-        console.log("componentWillMount**************" , 'oldtype' , oldtype , 'rescouceType' , this.props.resourceType , this.props.searchStr);
+        // console.log("componentWillMount**************" , 'oldtype' , oldtype , 'rescouceType' , this.props.resourceType , this.props.searchStr);
         this.fetchData(pageNo , oldtype , oldsearchStr , true);
     }
 
@@ -89,8 +89,8 @@ class CreateList extends React.Component {
     
 
     UNSAFE_componentWillUpdate(nextProps) {
-        console.log("componentWillUpdate*********", Date.parse(new Date()) , 'type:' , oldtype, 'nextProps.type:' , nextProps.resourceType);
-        console.log("componentWillUpdate*********", Date.parse(new Date()) , 'searchStr:' , oldsearchStr , 'nextProps.searchStr:' , nextProps.searchStr);
+        // console.log("componentWillUpdate*********", Date.parse(new Date()) , 'type:' , oldtype, 'nextProps.type:' , nextProps.resourceType);
+        // console.log("componentWillUpdate*********", Date.parse(new Date()) , 'searchStr:' , oldsearchStr , 'nextProps.searchStr:' , nextProps.searchStr);
 
         
         if (
@@ -127,7 +127,7 @@ class CreateList extends React.Component {
 
     //通过fetch请求数据
     fetchData(pageNo , type , search , onRefresh = false) {
-        console.log("fetchData*********", Date.parse(new Date()));
+        // console.log("fetchData*********", Date.parse(new Date()));
         
         const token = global.constants.token;
         const userId = global.constants.userName;
@@ -152,7 +152,7 @@ class CreateList extends React.Component {
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log('--------resJson-----' , resJson);
+                // console.log('--------resJson-----' , resJson);
                 let todosList1 =  resJson.data.list; //重要！！！
                 // console.log('********请求数据返回的message', resJson.message);
                 // console.log('********请求数据返回的success', resJson.success);
@@ -245,12 +245,24 @@ class CreateList extends React.Component {
             return (
                 <TouchableOpacity
                     onPress = {() => {
-                        if(todo.fNumber > 0){  //还有待批改的作业
-                            todosList[todoIndex].value.fNumber = 0;
-                            this.setState({ todos: todosList });
-                        }else{
-                            Alert.alert('该功能尚未开发！！！');
-                        }
+                        //把未读消息清掉   跳转作业批改页面
+                        todosList[todoIndex].value.fNumber = 0;
+                        this.setState({ todos: todosList });
+                        this.props.navigation.navigate({
+                            name: 'CorrectPaperList',
+                            params:{ 
+                                taskId:todo.fId, 
+                                type:todo.fType==1?'learnPlan':'paper'
+                                   },
+                        })
+
+                        // if(todo.fNumber > 0){  //还有待批改的作业
+                        //     todosList[todoIndex].value.fNumber = 0;
+                        //     this.setState({ todos: todosList });
+                        // }else{
+                        //     Alert.alert('该功能尚未开发！！！');
+                        // }
+
                     }}
                 >
                     <View style={{flexDirection: 'row' , backgroundColor: '#fff' , padding: 10}}>
@@ -424,7 +436,7 @@ class CreateList extends React.Component {
         // console.log("render", Date.parse(new Date()));
         //第一次加载等待的view
         if (this.state.isLoading && !this.state.error) {
-            console.log('正在加载！！！！！！！');
+            // console.log('正在加载！！！！！！！');
             return this.renderLoadingView();
         } else if (this.state.error) {
             //请求失败view
@@ -432,7 +444,7 @@ class CreateList extends React.Component {
             return this.renderErrorView();
         }
         //加载数据
-        console.log('渲染数据！！！！！！！')
+        // console.log('渲染数据！！！！！！！')
         return this.renderData();
     }
 

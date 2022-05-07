@@ -17,7 +17,7 @@ const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 
 export default Login = () => {
     const navigation = useNavigation();
-    const [Name, setName] = React.useState("ming6002");
+    const [Name, setName] = React.useState("mingming");
     const [Password, setPassword] = React.useState("2020");
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
     const [showLoading, setShowLoading] = React.useState(false);
@@ -83,6 +83,7 @@ export default Login = () => {
                     global.constants.userName = res.data[property].userName;
                     global.constants.token = res.data.token;
                     global.constants.userId = res.data[property].userId;
+                    global.constants.passWord = param.passWord;
                     global.constants.userPhoto = res.data[property].userPhoto;
                     setShowLoading(false);
                     Toast.showSuccessToast(res.message, 500);

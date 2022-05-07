@@ -11,7 +11,11 @@ import ZoomPictureModel from "../../../utils/ZoomPictureModel/ZoomPictureModel";
 export default class ShareStuAnswer extends Component {
     constructor(props) {
         console.log("ShareConstructor====================================");
-
+        console.log(props);
+        const { messageList } = props;
+        const event = messageList[0];
+        const periodList = event.periodList;
+        console.log(periodList);
         // const periodList = [
         //     {
         //         anchor: null,

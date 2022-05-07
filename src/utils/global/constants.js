@@ -6,4 +6,5 @@ global.constants = {
     userPhoto: "", //res.data.STUDENT.userPhoto
     userType: "", //res.data.STUDENT.userType
     passWord: "",
+    userCn: "固定姓名", // 用户的真实姓名
 };

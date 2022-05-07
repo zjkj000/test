@@ -73,7 +73,7 @@ class OnlineClassTemp extends Component {
                         break;
                     case "read-lock":
                         console.log("单题模式");
-                        this.setState({ pageRender: 4 });
+                        this.setState({ pageRender: 1 });
                         // TODO: 渲染单题组件
                         break;
                     case "no-lock":

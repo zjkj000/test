@@ -208,7 +208,6 @@ export default function Paper_ToDo(props) {
 
 
   return (
-    // shouldLoadComponent={shouldLoadComponent}
     <ViewPager style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
                   onSelect={index => Submit_Stu_answer(index,selectedIndex)}>  
   

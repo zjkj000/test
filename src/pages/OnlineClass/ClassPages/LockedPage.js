@@ -144,23 +144,20 @@ export default class LockedPage extends Component {
             answerTime: event.desc,
         };
         http.post(url, params)
-            .then((resStr) => {
+            .then((res) => {
                 console.log(params);
-                // console.log("====================================");
-                // console.log(resStr);
-                // console.log("====================================");
-                const resJson = JSON.parse(resStr);
-                if (resJson.status === "success") {
-                    Toast.showSuccessToast("提交成功");
+                // const resJson = JSON.parse(res);
+                if (res.status === "success") {
+                    Toast.showSuccessToast(res.message);
                 } else {
-                    Toast.showDangerToast(resJson.message);
+                    Toast.showDangerToast(res.message);
                 }
             })
             .catch((error) => {
-                console.log("====================================");
-                console.log(error);
-                console.log("====================================");
-                Toast.showDangerToast("提交失败");
+                // console.log("====================================");
+                // console.log(error);
+                // console.log("====================================");
+                Toast.showDangerToast("提交失败: ", error.toString());
             });
         // Toast.showInfoToast(this.state.answer);
     };

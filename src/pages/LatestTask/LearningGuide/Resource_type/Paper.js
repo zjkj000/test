@@ -60,7 +60,6 @@ export default function PaperContainer(props) {
 
 
      render() {
-        
         const  width = Dimensions.get('window').width;
     return (  
       <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}  >
@@ -73,7 +72,6 @@ export default function PaperContainer(props) {
                 </View>
                 <TouchableOpacity onPress={
                     ()=>{
-                        //导航跳转
                         this.props.navigation.navigate('SubmitLearningGuide',
                         {   learnPlanId:this.props.learnPlanId,
                             submit_status:this.props.submit_status,

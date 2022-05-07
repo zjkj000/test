@@ -46,5 +46,6 @@ export default class Toast {
             position: toast.Position.Top,
             animateEasing: Easing.in(Easing.bounce),
         });
+        console.log('------showInfoToast------', message);
     }
 }
