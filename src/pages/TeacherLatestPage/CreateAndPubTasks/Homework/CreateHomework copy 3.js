@@ -1,3 +1,4 @@
+/**按钮控制分页请求 */
 import React from "react";
 import {
     Text,
@@ -52,7 +53,6 @@ let currentBottomPage =  0; //添加试题页面 当前底部显示试题对应�
 let currentBeginPaperIndex = 0; //当前底部显示第一个试题对应的index
 let currentLastPaperIndex = 0; //当前底部显示最后一个试题对应的index
 let clickBefore = false;
-let clickNext = false;
 
 export default function CreateHomeworkContainer(props) {
     // console.log('------函数式props----',props.route.params);
@@ -130,12 +130,10 @@ class CreateHomework extends React.Component {
     }
 
     UNSAFE_componentWillUpdate(nextProps , nextState){
-        // if(nextState.paperList !== this.state.paperList){
-        //     if(nextState.selectPaperIndex != (Math.floor(nextState.paperList.length / 5) - 1) * 5){
-        //         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
-        //         this.setState({ selectPaperIndex:  (Math.floor(nextState.paperList.length / 5) - 1) * 5 })
-        //     }
-        // }
+        if(nextState.paperList !== this.state.paperList){
+            console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
+            this.setState({ selectPaperIndex:  (Math.floor(nextState.paperList.length / 5) - 1) * 5 })
+        }
     }
 
 
@@ -178,9 +176,7 @@ class CreateHomework extends React.Component {
         pageNo = 1; //当前第几页
         dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
 
-        currentBottomPage =  0; //添加试题页面 当前底部显示试题对应类型页数
-        currentBeginPaperIndex = 0; //当前底部显示第一个试题对应的index
-        currentLastPaperIndex = 0; //当前底部显示最后一个试题对应的index
+        currentBottomPage = 0;
         fetchNum = 0;
     }
 
@@ -257,7 +253,7 @@ class CreateHomework extends React.Component {
                     pushPaperFlag: false,
                 })
             }else{
-                if(this.state.selectPaperList.length > 0){
+                // if(this.state.selectPaperList.length > 0){
                     this.setState({ 
                         addPaperFlag: false,
                         updatePaperFlag: true,
@@ -265,9 +261,12 @@ class CreateHomework extends React.Component {
     
                         updatePaperIndex: 0, //添加到试卷中的试题当前显示的试题索引
                     })
-                }else{
-                    Toast.showInfoToast('暂无选中试题',1000);
-                }
+                // }else{
+                //     console.log('暂无选中试题');
+                //     Toast.showInfoToast('暂无选中试题');
+                //     Toast.showSuccessToast('-------');
+                //     console.log('暂无选中试题1111');
+                // }
             }
         }else if(type == 3){ //布置作业
             // const { paperObject } = this.state;
@@ -280,16 +279,12 @@ class CreateHomework extends React.Component {
                     updatePaperFlag: false,
                 })
             }else{
-                if(this.state.selectPaperList.length > 0){
-                    this.createPaperObject(); //生成试卷对象
-                    this.setState({ 
-                        addPaperFlag: false,
-                        updatePaperFlag: false,
-                        pushPaperFlag: true,
-                    })
-                }else{
-                    Toast.showInfoToast('暂无选中试题',1000);
-                }
+                this.createPaperObject(); //生成试卷对象
+                this.setState({ 
+                    addPaperFlag: false,
+                    updatePaperFlag: false,
+                    pushPaperFlag: true,
+                })
             }
         }
     }
@@ -647,7 +642,7 @@ class CreateHomework extends React.Component {
                 if(resJson.data.length > 0){    
                     this.setState({ paperTypeList: resJson.data });
                 }else{
-                    Toast.showInfoToast('该知识点没有对应的试题',1000);
+                    Toast.showInfoToast('该知识点没有对应的试题',2000);
                     return;
                 }
             })
@@ -772,91 +767,70 @@ class CreateHomework extends React.Component {
 
     //展示添加试题页面
     showAddPaper = () => {
-        this.state.paperTypeList.length <= 0 ? this.fetchPaperType() : null;
-        if(this.state.paperTypeList.length <= 0){
-            return(
-                <View style={{...styles.bodyView,height:screenHeight}}>
+        return(
+                <View style={styles.bodyView}>
+                    {/**选中题目数 添加此试题或删除此试题 */}
                     <View style={styles.paperSelectNumView}>
                         <Text style={styles.selectPaperNum}>(已选中{this.state.selectPaperNum})</Text>
-                    </View>
-                    <View>
-                        <Text
-                            style={{
-                                fontSize: 18,
-                                color: 'black',
-                                paddingTop: 40,
-                                textAlign: 'center'
-                            }}
-                        >请点击右上角图标修改筛选条件查找试题</Text>
-                    </View>
-                </View>
-            );
-        }else{
-            return(
-                    <View style={styles.bodyView}>
-                        {/**选中题目数 添加此试题或删除此试题 */}
-                        <View style={styles.paperSelectNumView}>
-                            <Text style={styles.selectPaperNum}>(已选中{this.state.selectPaperNum})</Text>
-                            {
-                                this.ifSelected() ?
-                                            <TouchableOpacity onPress={()=>{this.updateSlectNum(true)}}>
-                                                <Image
+                        {
+                            this.ifSelected() ?
+                                        <TouchableOpacity onPress={()=>{this.updateSlectNum(true)}}>
+                                            <Image
+                                                style={{
+                                                    width: 26, 
+                                                    height: 26,
+                                                    top: 7,
+                                                    left: screenWidth*0.652,
+                                                    position: 'absolute',
+                                                }} 
+                                                source={require('../../../../assets/teacherLatestPage/shanchu.png')}
+                                            />
+                                        </TouchableOpacity>
+                                        : 
+                                        <TouchableOpacity onPress={()=>{this.updateSlectNum(false)}}>
+                                            <Image
                                                     style={{
-                                                        width: 26, 
-                                                        height: 26,
-                                                        top: 7,
-                                                        left: screenWidth*0.652,
+                                                        width: 30, 
+                                                        height: 30,
+                                                        top: 5,
+                                                        left: screenWidth*0.65,
                                                         position: 'absolute',
                                                     }} 
-                                                    source={require('../../../../assets/teacherLatestPage/shanchu.png')}
-                                                />
-                                            </TouchableOpacity>
-                                            : 
-                                            <TouchableOpacity onPress={()=>{this.updateSlectNum(false)}}>
-                                                <Image
-                                                        style={{
-                                                            width: 30, 
-                                                            height: 30,
-                                                            top: 5,
-                                                            left: screenWidth*0.65,
-                                                            position: 'absolute',
-                                                        }} 
-                                                        source={require('../../../../assets/teacherLatestPage/tianjia.png')}
-                                                />
-                                            </TouchableOpacity>
-                            }
-                        </View>
-
-                        {/**题目展示 */}
-                        <View style={styles.showPaper}>
-                            {/**请求试题库试题类型 */}
-                            {/* {console.log('***试题类型数***', this.state.paperTypeList.length)} */}
-                            {/* {
-                                this.state.paperTypeList.length <= 0 ? this.fetchPaperType() : null
-                            } */}
-                            {/**依据试题类型请求试题 */}
-                            {/* {console.log('***试题总数***', this.state.paperList.length)} */}
-                            {/* {
-                                this.state.paperTypeList.length > 0
-                                && this.state.paperList.length <= 0
-                                    ? this.fetchPaperList()
-                                    : null
-                            } */}
-                            {/* {console.log('******showAddPaper**总试题数*******', this.state.paperList.length , Date.parse(new Date()))} */}
-                            {
-                                this.state.paperTypeList.length > 0
-                                && this.state.paperList.length <= 0
-                                ? this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false)
-                                : null
-                            }
-                            {/**题目 答案 解析*/}
-                            {
-                                this.state.paperList.length > 0 ? this.showAllPaperTitle() : null
-                            }
-                        </View>
+                                                    source={require('../../../../assets/teacherLatestPage/tianjia.png')}
+                                            />
+                                        </TouchableOpacity>
+                        }
                     </View>
-            );
-        }
+
+                    {/**题目展示 */}
+                    <View style={styles.showPaper}>
+                        {/**请求试题库试题类型 */}
+                        {/* {console.log('***试题类型数***', this.state.paperTypeList.length)} */}
+                        {
+                            this.state.paperTypeList.length <= 0 ? this.fetchPaperType() : null
+                        }
+                        {/**依据试题类型请求试题 */}
+                        {/* {console.log('***试题总数***', this.state.paperList.length)} */}
+                        {/* {
+                            this.state.paperTypeList.length > 0
+                            && this.state.paperList.length <= 0
+                                ? this.fetchPaperList()
+                                : null
+                        } */}
+                        {/* {console.log('******showAddPaper**总试题数*******', this.state.paperList.length , Date.parse(new Date()))} */}
+                        {
+                            this.state.paperTypeList.length > 0
+                            && this.state.paperList.length <= 0
+                            ? this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false)
+                            : null
+                        }
+                        {/**题目 答案 解析*/}
+                        {
+                            this.state.paperList.length > 0 ? this.showAllPaperTitle() : null
+                        }
+                    </View>
+                </View>
+        );
     }
 
     //显示添加试题页面所有试题
@@ -891,89 +865,58 @@ class CreateHomework extends React.Component {
         );
     }
 
-
     //展示添加试题页面底部
     showAddPaperBottom = () => {
         const {  allPage , paperList } = this.state;
-        if(this.state.paperList.length > 0){
-            return (
-                <View style={{ flexDirection:'row', alignItems: 'center' , ...styles.bottomView ,}}>
-                    <TouchableOpacity
-                        style={{ width: screenWidth*0.1, paddingLeft: 5}}
-                        onPress={()=>{
-                            clickNext = false;
-                            if(currentBeginPaperIndex == 0 || currentBottomPage == 0){
-                                Alert.alert('已经是第一页了');
-                            }else{
-                                currentBottomPage--;
-                                this.setState({ selectPaperIndex: currentBeginPaperIndex - 5 });
-                            }
-                        }}
-                    >
-                        <Image
-                            style={{ width: 25, height: 25 ,}}
-                            source={require('../../../../assets/teacherLatestPage/back.png')}
-                        ></Image>
-                    </TouchableOpacity>
-                    {/**显示底部试题类型图标 */}
-                    <View style={{ width: screenWidth*0.8, flexDirection:'row', alignItems: 'center' }}>
-                        {this.showPaperTypeImg()}
-                    </View>
-                    <TouchableOpacity
-                        style={{  width: screenWidth*0.1, paddingLeft: 11}}
-                        onPress={()=>{
-                            clickNext = true;
-                            if(currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == false){
-                                Alert.alert('已经是最后一页了');
-                            }else if(dataFlag == true){ //试题还未请求完
-                                // currentBottomPage++;
-                                pageNo++;
-                                this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
-                                // while((currentBottomPage + 1) * 5 != this.state.paperList.length && dataFlag == true){
-                                //     pageNo++;
-                                //     this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
-                                // }
-                            }else{ //试题请求完之，但当前展示的试题并不是最后一页数据
-                                currentBottomPage++;
-                                this.setState({ selectPaperIndex: currentBeginPaperIndex + 5 });
-                            }
-                        }}
-                    >
-                        <Image
-                            style={{ width: 25, height: 25, }}   
-                            source={require('../../../../assets/teacherLatestPage/next.png')}
-                        ></Image>
-                    </TouchableOpacity>
+        return (
+            <View style={{ flexDirection:'row', alignItems: 'center' , ...styles.bottomView ,}}>
+                <TouchableOpacity
+                    style={{ width: screenWidth*0.1, paddingLeft: 5}}
+                    onPress={()=>{
+                        if(currentBeginPaperIndex == 0 || currentBottomPage == 0){
+                            Alert.alert('已经是第一页了');
+                        }else{
+                            currentBottomPage--;
+                            this.setState({ selectPaperIndex: currentBeginPaperIndex - 5 });
+                        }
+                    }}
+                >
+                    <Image
+                        style={{ width: 25, height: 25 ,}}
+                        source={require('../../../../assets/teacherLatestPage/back.png')}
+                    ></Image>
+                </TouchableOpacity>
+                <View style={{ width: screenWidth*0.8, flexDirection:'row', alignItems: 'center' }}>
+                    {this.showPaperTypeImg()}
                 </View>
-            );
-        }
-    }
-
-    //更新selectPaperIndex
-    updateSelectPaperIndex = () => {
-        const { paperList , selectPaperIndex  } = this.state;
-        // let tempIndex = 0;
-        // if(paperList.length % 5 == 0){
-        //     tempIndex = (Math.floor(this.state.paperList.length / 5) - 1) * 5;
-        // }else{
-        //     tempIndex = Math.floor(this.state.paperList.length / 5) * 5;
-        // }
-        // console.log('######Math########Select##################',tempIndex , selectPaperIndex);
-        // if(tempIndex < paperList.length
-        //     &&  selectPaperIndex != tempIndex
-        //     &&  paperList.length != 0
-        // )
-        // {
-        //     this.setState({ selectPaperIndex: tempIndex });
-        // }
+                <TouchableOpacity
+                    style={{  width: screenWidth*0.1, paddingLeft: 11}}
+                    onPress={()=>{
+                        if(currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == false){
+                            Alert.alert('已经是最后一页了');
+                        }else if(dataFlag == true){
+                            pageNo++;
+                            this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
+                        }else{
+                            currentBottomPage++;
+                            this.setState({ selectPaperIndex: currentBeginPaperIndex + 5 });
+                        }
+                    }}
+                >
+                    <Image
+                        style={{ width: 25, height: 25, }}   
+                        source={require('../../../../assets/teacherLatestPage/next.png')}
+                    ></Image>
+                </TouchableOpacity>
+            </View>
+        );
     }
 
     //显示底部试题类型图标
     showPaperTypeImg = () => {
-        //clickNext ? this.updateSelectPaperIndex() : null;
         const { paperList , selectPaperIndex  } = this.state;
         // console.log('&&&&&&&&&&selectPaperIndex&&Math&&&', selectPaperIndex , (Math.floor(paperList.length / 5) - 1) * 5);
-        console.log('&&&&&&&&&&currentBottomPage&&alllength&&&', currentBottomPage , paperList.length);
+        // console.log('&&&&&&&&&&currentBottomPage&&alllength&&&', currentBottomPage , paperList.length);
         let content = [];
         let index = (currentBottomPage - 1) * 5 >= paperList.length  && paperList.length != 0
                                 ? currentLastPaperIndex + 1
@@ -1070,7 +1013,6 @@ class CreateHomework extends React.Component {
 
                 if(fetchNum != 2){
                     currentBottomPage = paperLength != 0 ? currentBottomPage + 1 : currentBottomPage;
-
                     let foot = 0;
                     // console.log('---paperListOne-Length---', index , paperType , paperListTwo[index].length);
                     //试题请求接口每次最多返回5个数据
@@ -1084,8 +1026,6 @@ class CreateHomework extends React.Component {
                             // Alert.alert('总试题数'+this.state.paperList.length);
                         }else{
                             console.log('------试题类型已取完-count---typeAll-' , this.state.paperTypeList[count-1] ,  count, typeAll);
-                            // pageNo = 1;
-                            // this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
                         }
                     }
                     allPaperNumBeforeFetch = this.state.paperList.length;  
@@ -1172,14 +1112,12 @@ class CreateHomework extends React.Component {
     moveUpPaper = () => {
         const { updatePaperIndex , selectPaperList } = this.state;
         if(updatePaperIndex == 0){
-            // Alert.alert('已经是第一道题了');
-            Toast.showInfoToast('已经是第一道题了',1000);
+            Alert.alert('已经是第一道题了');
         }else{
             const baseTypeId1 = selectPaperList[updatePaperIndex].baseTypeId;
             const baseTypeId2 = selectPaperList[updatePaperIndex - 1].baseTypeId;
             if(baseTypeId1 != baseTypeId2){
-                // Alert.alert('类型不一致，不能移动');
-                Toast.showInfoToast('类型不一致，不能移动',1000);
+                Alert.alert('类型不一致，不能移动');
             }else{
                 const tempPaperList = selectPaperList;
                 const tempPaperItem = selectPaperList[updatePaperIndex]; //移动项
@@ -1197,14 +1135,12 @@ class CreateHomework extends React.Component {
     moveDownPaper = () => {
         const { updatePaperIndex , selectPaperList } = this.state;
         if(updatePaperIndex == (selectPaperList.length - 1)){
-            //Alert.alert('已经是最后一道题了');
-            Toast.showInfoToast('已经是最后一道题了',1000);
+            Alert.alert('已经是最后一道题了');
         }else{
             const baseTypeId1 = selectPaperList[updatePaperIndex].baseTypeId;
             const baseTypeId2 = selectPaperList[updatePaperIndex + 1].baseTypeId;
             if(baseTypeId1 != baseTypeId2){
-                // Alert.alert('类型不一致，不能移动');
-                Toast.showInfoToast('类型不一致，不能移动',1000);
+                Alert.alert('类型不一致，不能移动');
             }else{
                 const tempPaperList = selectPaperList;
                 const tempPaperItem = selectPaperList[updatePaperIndex]; //移动项

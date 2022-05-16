@@ -559,6 +559,7 @@ class HomeworkPropertyModel extends React.Component {
 
     //关闭知识点覆盖框
     onCloseClick = () => {
+        // this.OverlayRef.onClose();
         console.log('------------知识点关闭-------');
         this.setState({
             knowledgeModelVisibility: false,
@@ -570,12 +571,13 @@ class HomeworkPropertyModel extends React.Component {
     //显示知识点覆盖框
     showKnowledgeModal = () => {
         const { knowledgeModelVisibility } = this.state;
-        console.log('*******knowledgeModelVisibility*******',knowledgeModelVisibility)
+        console.log('----------knowledgeModelVisibility-----------',knowledgeModelVisibility)
 
         return(
             <Overlay   visible={knowledgeModelVisibility}
                 onShow={()=>{console.log('-----Overlay启动了-------')}}
                 onClose={()=>{console.log('-----Overlay关闭了-------')}}
+                ref={(ref)=>{this.OverlayRef = ref}}
             >
                     <View style={styles.modalView}>
                         <TouchableOpacity
@@ -616,6 +618,9 @@ class HomeworkPropertyModel extends React.Component {
                                 ?
                                     <WebView
                                         onMessage={(event) => {
+                                            console.log('---------------------------------');
+                                            console.log(JSON.parse(event.nativeEvent.data).name , JSON.parse(event.nativeEvent.data).id);
+                                            console.log('---------------------------------');
                                             this.setState({ 
                                                 knowledgeModelVisibility: false, 
                                                 knowledge: JSON.parse(event.nativeEvent.data).name ,
@@ -873,11 +878,12 @@ class HomeworkPropertyModel extends React.Component {
                             <Text style={styles.knowledgeText}>
                                 点击这里选择知识点
                             </Text>
-                            {console.log('********this.state.knowledgeModelVisibility******',this.state.knowledgeModelVisibility)}
+                            {/* {console.log('********this.state.knowledgeModelVisibility******',this.state.knowledgeModelVisibility)} */}
                             {this.state.knowledgeModelVisibility ?
                                 this.showKnowledgeModal()
                                 : null
                             }
+                            {/* {this.showKnowledgeModal()} */}
                         </TouchableOpacity>
                         : null
                     }

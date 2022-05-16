@@ -1,3 +1,4 @@
+/**分页请求FlatList */
 import React from "react";
 import {
     Text,
@@ -156,6 +157,9 @@ class CreateHomework extends React.Component {
         typeAll = 0;
         count = 0;
         fetchNum = 0;
+
+        pageNo = 1; //当前第几页
+        dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
     }
 
     setModalVisible = (visible) => {
@@ -617,8 +621,12 @@ class CreateHomework extends React.Component {
                 }
                 typeAll = paperListTwo.length; //总类型数
                 // console.log('****paperListCopyLength****' , paperListTwo.length);
-
-                this.setState({ paperTypeList: resJson.data });
+                if(resJson.data.length > 0){    
+                    this.setState({ paperTypeList: resJson.data });
+                }else{
+                    Toast.showInfoToast('该知识点没有对应的试题',2000);
+                    return;
+                }
             })
             .catch((error) => {
                 console.log('******catch***error**', error);
@@ -791,13 +799,15 @@ class CreateHomework extends React.Component {
                                 ? this.fetchPaperList()
                                 : null
                         } */}
-                        {console.log('******showAddPaper**总试题数*******', this.state.paperList.length , Date.parse(new Date()))}
+                        {/* {console.log('******showAddPaper**总试题数*******', this.state.paperList.length , Date.parse(new Date()))} */}
                         {
                             this.state.paperTypeList.length > 0
                             && this.state.paperList.length <= 0
-                            ? this.fetchData(pageNo , this.state.paperTypeList[1] , 99 , false)
+                            ? this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false)
                             : null
                         }
+                        {/**当pageNo=0时，表示当前请求的试题类型请求完，需要请求下一个类型的试题 */}
+                        {   pageNo == 0 ? this.updatePageNo() : null }
                         {/**题目 答案 解析*/}
                         {
                             this.state.paperList.length > 0 ? this.showAllPaperTitle() : null
@@ -810,11 +820,12 @@ class CreateHomework extends React.Component {
     //显示添加试题页面所有试题
     showAllPaperTitle = () => {
         const { selectPaperIndex , paperList } = this.state;
+        console.log('&&&&&&&&&&&&&总数&&&&&&selectindex******', paperList.length , selectPaperIndex);
         return(
             <ScrollView  showsVerticalScrollIndicator={false}>
                 {/**题面 */}
                 {/* {console.log('---题目-----' ,paperList[selectPaperIndex].tiMian)} */}
-                <Text style={styles.paperContent}>[题面] {paperList[selectPaperIndex].typeName}{paperList[selectPaperIndex].baseTypeId}</Text>
+                <Text style={styles.paperContent}>[题面]{selectPaperIndex + 1}. {paperList[selectPaperIndex].typeName}{paperList[selectPaperIndex].baseTypeId}</Text>
                 <View style={{padding: 10}}>
                     <RenderHtml contentWidth={screenWidth} source={{html: paperList[selectPaperIndex].tiMian}}></RenderHtml>
                 </View>
@@ -843,8 +854,11 @@ class CreateHomework extends React.Component {
         return (
             <View>
                 <FlatList
+                    ref={(ref) => (this._flatlist = ref)}
+                    getItemLayout={(param, index) => ({ length: screenWidth*0.20, offset: screenWidth* 0.20 * index, index })}
                     //水平布局
                     horizontal={true}
+                    //showsHorizontalScrollIndicator={false}
                     //定义数据显示效果
                     data={this.state.paperList}
                     renderItem={this._renderItemView.bind(this)}
@@ -854,12 +868,20 @@ class CreateHomework extends React.Component {
                     onRefresh={() => this._onRefresh()}
                     refreshing={this.state.isRefresh}
                     //上拉加载相关
-                    ListFooterComponent={this._renderFooter.bind(this)}
+                    // ListFooterComponent={this._renderFooter.bind(this)}
                     onEndReached={this._onEndReached.bind(this)}
-                    onEndReachedThreshold={0.01}
+                    onEndReachedThreshold={0.5}
                 />
             </View>
         );
+    }
+
+    /**当pageNo=0时，表示当前请求的试题类型请求完，需要请求下一个类型的试题 */
+    updatePageNo = () => {
+        pageNo = 1;
+        if(count < typeAll){
+            this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
+        }
     }
 
     //请求试题
@@ -881,11 +903,11 @@ class CreateHomework extends React.Component {
             //callback:'ha',
         };
 
-        console.log('-----fetchData-----', Date.parse(new Date()))
+        console.log('-----fetchData---pageNo---试题类型---', pageNo , this.state.paperTypeList[count] , Date.parse(new Date()))
         http.get(url, params)
             .then((resStr) => {
                 fetchNum++; //请求次数增加
-
+                console.log('---------fetchNum--------',fetchNum);
                 let resJson = JSON.parse(resStr);
 
                 paperListOne = resJson.data;
@@ -901,22 +923,51 @@ class CreateHomework extends React.Component {
                 }
                 console.log('*****currentFecthLength***' , paperLength , Date.parse(new Date()));
 
-                let foot = 0;
-
-                // console.log('---paperListOne-Length---', index , paperType , paperListTwo[index].length);
-                //试题请求接口每次最多返回5个数据
-                if(paperLength < 5){
-                    foot = 1; //未请求到数据，数据加载完了
-                    dataFlag = false; //数据加载完了
-                    console.log('********总试题数*******', this.state.paperList.length);
+                if(fetchNum != 2){
+                    let foot = 0;
+                    // console.log('---paperListOne-Length---', index , paperType , paperListTwo[index].length);
+                    //试题请求接口每次最多返回5个数据
+                    if(paperLength < 5){ //当前类型试题请求完
+                        pageNo = 0; //_onEndReached() 已增
+                        count++;
+                        if(count >= typeAll){
+                            foot = 1; //未请求到数据，数据加载完了
+                            dataFlag = false; //数据加载完了
+                            console.log('********总试题数*******', this.state.paperList.length + paperLength , Date.parse(new Date()));
+                            // Alert.alert('总试题数'+this.state.paperList.length);
+                        }else{
+                            console.log('------试题类型已取完-count---typeAll-' , this.state.paperTypeList[count-1] ,  count, typeAll);
+                        }
+                    }
+                    
+                    let allpaperlength = this.state.paperList.length;
+                    let selectindex = allpaperlength % 5 == 0 && allpaperlength != 0 
+                                            ? (Math.floor(allpaperlength / 5) - 1) * 5 
+                                            : Math.floor(allpaperlength / 5) * 5;
+                    console.log('---alllength---selectindex----', allpaperlength , Math.floor(allpaperlength / 5), selectindex);
+                    //paperList: isRefresh || fetchNum == 1 || fetchNum == 2 ? paperListOne : this.state.paperList.concat(paperListOne),
+                    this.setState({
+                        paperList: isRefresh ? paperListOne : this.state.paperList.concat(paperListOne),
+                        showFoot: foot, 
+                        selectPaperIndex: selectindex >= allpaperlength ? (allpaperlength - allpaperlength % 5 + 1) : selectindex,
+                    },()=>{
+                        /**
+                         * 将位于指定位置的元素滚动到可视区的指定位置，
+                         * 当viewPosition 为 0 时将它滚动到屏幕顶部，为 1 时将它滚动到屏幕底部，为 0.5 时将它滚动到屏幕中央。
+                         * 注意：如果不设置getItemLayout属性的话，无法跳转到当前渲染区域以外的位置。
+                         * 
+                         */
+                        this._flatlist.scrollToIndex({ 
+                            viewPosition: 0, 
+                            index: selectindex >= allpaperlength ? (allpaperlength - allpaperlength % 5 + 1) : selectindex 
+                        });
+                    });
+                    
+                    console.log('*******allLength**' , this.state.paperList.length , Date.parse(new Date()));
+                }else{
+                    pageNo++;
+                    this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
                 }
-                console.log('---------fetchNum--------',fetchNum);
-                this.setState({
-                    paperList: isRefresh || fetchNum == 1 || fetchNum == 2 ? paperListOne : this.state.paperList.concat(paperListOne),
-                    showFoot: foot, 
-                });
-                console.log('*******allLength**' , this.state.paperList.length , Date.parse(new Date()));
-                
                 paperListOne = [];
             })
             .catch((error) => {
@@ -943,21 +994,25 @@ class CreateHomework extends React.Component {
     //上拉加载
     _onEndReached() {
         //如果当前页大于或等于总页数，那就是到最后一页了，返回
-        if (pageNo != 1 && dataFlag == false) {
+        if (dataFlag == false) {
             return;
         } else {
             pageNo++;
         }
         console.log('*************pageNo*******',pageNo);
-        //底部显示正在加载更多数据
+        // let paperlength = this.state.paperList.length;
+        // let selectindex = paperlength % 5 == 0 ? (paperlength / 5 - 1) * 5 : paperlength / 5 * 5;
+        // this._flatlist.scrollToIndex({ viewPosition: 0, index: selectindex });
+        //底部显示正在加载更多数据 
         this.setState({ showFoot: 2 });
         //获取数据
-        this.fetchData(pageNo , this.state.paperTypeList[1] , 99 , false);
+        this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
     }
 
     //底部信息提示
     _renderFooter() {
         if (this.state.showFoot == 1) {
+            Toast.showInfoToast('试题已请求完',2000);
             return (
                 <View>
                     <View
@@ -1000,7 +1055,7 @@ class CreateHomework extends React.Component {
     //返回itemView(单个试题)
     _renderItemView = (paperItem) => {
         const { paperList } = this.state;
-        console.log('***_renderItemView***paperLength***index**试题id*', paperList.length , paperItem.index , paperItem.item.questionId);
+        // console.log('***_renderItemView***paperLength***index**试题id*', paperList.length , paperItem.index , paperItem.item.questionId);
         let paper_i = paperItem.index;
         // console.log('*******[paper_i]*****[length]**********', paper_i , paperList.length , paperItem.item.baseTypeId);
         let paperTypeImg;
@@ -1836,7 +1891,7 @@ class CreateHomework extends React.Component {
                             this.props.navigation.goBack();
                         }}
                     >
-                        <Image style={{width: 30, height: 30}} source={require('../../../../assets/teacherLatestPage/goBack.png')}></Image>
+                        <Image style={{width: 30, height: 30}} source={require('../../../../assets/teacherLatestPage/goback.png')}></Image>
                     </TouchableOpacity>
                     {/**三个可选项 */}
                     <View
@@ -2003,14 +2058,14 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
     little_image:{
-        height:60,
-        width:screenWidth*0.15,
+        height:75,
+        width:screenWidth*0.18,
         marginTop: 5,
-        marginLeft:5
+        marginLeft:7
     },
     checked:{
-        height:70,
-        width:screenWidth*0.16,
+        height:80,
+        width:screenWidth*0.20,
         marginLeft:5,
         borderColor:'#FFA500',
         borderRadius: 5,
