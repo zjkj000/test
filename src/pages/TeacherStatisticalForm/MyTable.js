@@ -13,11 +13,9 @@ export default class MyTable extends Component {
     }
   }
   UNSAFE_componentWillMount(){
-    // console.log('will mount',this.props)
     this.setState({tableHead:this.props.tablehead,tableData:this.props.data,id:new Date().toISOString()})
   }
   UNSAFE_componentWillReceiveProps(nextprops){
-    // console.log('nextprops',nextprops)
     this.setState({tableHead:nextprops.tablehead,tableData:nextprops.data})
   }
     

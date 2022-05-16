@@ -3,14 +3,17 @@ import React, { Component } from 'react'
 import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
 import { Button } from '@ui-kitten/components';
 
+import { useNavigation } from "@react-navigation/native";
 import BasePicker from '../../../utils/datetimePickerUtils/BasePicker';
 import DateTime from '../../../utils/datetimePickerUtils/DateTime';
 import http from '../../../utils/http/request'
 import Toast from '../../../utils/Toast/Toast';
 export default function AssignPicturesWorkContainer(props) {
     const navigation = useNavigation();
+    const paperName=props.route.params.paperName
+    const paperId = props.route.params.paperId
     navigation.setOptions({title:'布置作业'});
-    return <AssignPicturesWork navigation={navigation} />;
+    return <AssignPicturesWork navigation={navigation} paperName={paperName} paperId={paperId} />;
 }
 
 class AssignPicturesWork extends Component {
@@ -43,9 +46,8 @@ class AssignPicturesWork extends Component {
     }
 
     UNSAFE_componentWillMount(){
-        console.log(this.props.route.params)
-        this.setState({paperName:this.props.route.params.paperName,
-                       paperId:this.props.route.params.paperId})
+        this.setState({paperName:this.props.paperName,
+                       paperId:this.props.paperId})
         }
 
     updateAssignToWho(who){

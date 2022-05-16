@@ -14,18 +14,12 @@ let dataFlag = true; //此次是否请求到了数据，若请求的数据为空
 
 var oldtype = ""; //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
 let oldsearchStr = ""; //保存上一次搜索框内容
-
 let todosList = []; //复制一份api请求得到的数据
-
-
 export default function ContentListContainer(props) {
-    const navigation = useNavigation();
-
+    const navigation =useNavigation()
     const rsType = props.resourceType;
     const searchStr1 = props.searchStr;
-
-    //将navigation传给TodoList组件，防止路由出错
-    return ( <ContentList navigation={navigation} resourceType={rsType} searchStr={searchStr1}></ContentList>);
+    return <ContentList navigation={navigation} resourceType={rsType} searchStr={searchStr1} />;
 }
 
 class ContentList extends React.Component {
@@ -51,19 +45,16 @@ class ContentList extends React.Component {
         oldsearchStr = this.props.searchStr;
 
 
-        console.log("componentWillMount**************" , 'oldtype' , oldtype , 'rescouceType' , this.props.resourceType , this.props.searchStr);
+        //console.log("componentWillMount**************" , 'oldtype' , oldtype , 'rescouceType' , this.props.resourceType , this.props.searchStr);
         this.fetchData(pageNo , oldtype , oldsearchStr , true);
     }
 
     componentDidMount() {
-        //初始挂载执行一遍
-        //this.fetchData(pageNo);
     }
     
-
     UNSAFE_componentWillUpdate(nextProps) {
-        console.log("componentWillUpdate*********", Date.parse(new Date()) , 'type:' , oldtype, 'nextProps.type:' , nextProps.resourceType);
-        console.log("componentWillUpdate*********", Date.parse(new Date()) , 'searchStr:' , oldsearchStr , 'nextProps.searchStr:' , nextProps.searchStr);
+        //console.log("componentWillUpdate*********", Date.parse(new Date()) , 'type:' , oldtype, 'nextProps.type:' , nextProps.resourceType);
+        //console.log("componentWillUpdate*********", Date.parse(new Date()) , 'searchStr:' , oldsearchStr , 'nextProps.searchStr:' , nextProps.searchStr);
 
         
         if (
@@ -320,30 +311,36 @@ class ContentList extends React.Component {
                     }}
                 >
                     <View style={styles.select}>
-                        <Text style={styles.selectContent} onPress={() => {this.props.navigation.navigate({
+                        <Text style={styles.selectContent} onPress={() => {
+                            this.props.navigation.navigate({
                                                 name:'AssignPicturePaperWork',
                                                 params:{
                                                 paperName:name,
                                                 paperId:id
                                                 }
-                                }
-                        )}}>
+                                })
+                                }}>
                             布置
                         </Text>
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
-                        <Text style={styles.selectContent}  onPress={() => {Alert.alert('该功能还未写！！！')}}>
+                        <Text style={styles.selectContent}  onPress={() => {this.props.navigation.navigate({
+                                                name:'EditPicturePaperWork',
+                                                params:{
+                                                paperName:name,
+                                                paperId:id,
+                                                type:'update'
+                                                }
+                                }
+                        )}}>
                             编辑
                         </Text>
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
-                            // this.props.navigation.navigate({
-                                                // name:'EditPicturePaperWork',
-                                                // params:{paperId:id,type:edit}
-                                // })
+                            this.deletepaper(id)
                     }}>
                             删除
                         </Text>
@@ -372,7 +369,7 @@ class ContentList extends React.Component {
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
-                        <Text style={styles.selectContent} onPress={() => {Alert.alert('该功能还未写！！！')}}>
+                        <Text style={styles.selectContent} onPress={() => {this.deletepaper(id)}}>
                             删除
                         </Text>
                     </View>
@@ -435,6 +432,21 @@ class ContentList extends React.Component {
                 />
             </View>
         );
+    }
+
+    deletepaper(paperId){
+        const url =
+            "http://" +
+            "www.cn901.net" +
+            ":8111" +
+            "/AppServer/ajax/teacherApp_deletePaper.do";
+      const params = {
+            token:global.constants.token,
+            paperId:paperId 
+          };
+        http.get(url, params).then((resStr) => {
+            this.fetchData(pageNo , oldtype , oldsearchStr , true);
+        })
     }
 
     render() {

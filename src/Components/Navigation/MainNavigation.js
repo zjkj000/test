@@ -32,7 +32,6 @@ import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
 
 import PaperListContainer from '../../pages/Teacher/CorrectPaper/PaperList';
 import CorrectingPaper from '../../pages/Teacher/CorrectPaper/CorrectingPaper';
-import CorrectSubmit from '../../pages/Teacher/CorrectPaper/CorrectSubmit';
 import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDetails';
 
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
@@ -70,6 +69,7 @@ export default class MainNavigation extends Component {
                         header: () => {},
                     }}
                 />
+
                 <Stack.Group>
                     <Stack.Screen name="资料夹" component={PackagesPage} />
                     <Stack.Screen name="Todo" component={Todo} />
@@ -222,8 +222,10 @@ export default class MainNavigation extends Component {
                             title: "布置作业",
                         }}
                     />
-                    
                 </Stack.Group>
+
+                
+                
             </Stack.Navigator>
         );
     }

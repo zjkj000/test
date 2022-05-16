@@ -5,10 +5,17 @@ import MyTable from './MyTable'
 import Echarts from 'native-echarts';
 
 import http from '../../utils/http/request'
-export default class Piyueshiti extends Component {
+import { useNavigation } from '@react-navigation/native';
+export default function Piyueshiti() {
+  const navigation = useNavigation()
+  return (
+    <PiyueshitiContent navigation={navigation}/>
+  )
+}class PiyueshitiContent extends Component {
   constructor(props){
     super(props)
     this.state={
+      PiuyueshitiTableNum:3,
       startTime:'',
       piyuzongshu:699,
       status: 'yes',//先看该字段，no，表示没有数据；yes表示有数据
@@ -16,15 +23,13 @@ export default class Piyueshiti extends Component {
       tkNum: 0,
       qtNum: 848,
       tableData: [
-                    ["1","高二(1)班物理","2021-12-21 16:44","2021-12-22 23:59","0","8","8"],
-                    ["2","高二(1)班物理","2021-12-20 14:32","2021-12-21 23:59","0","209","209"],
-                    ["3","高二(1)班物理","2021-12-16 16:42","2021-12-17 23:59","0","204","204"],
-                    ["4","高二(1)班物理","2021-12-16 16:30","2021-12-18 23:59","0","425","425"],
-                    ["5","高一(1)班物理","2020-11-02 22:36","2020-11-03 23:59","0","2","2"]
+                    ["1","高二(1)班物理","2021-12-21 16:44","2021-12-22 23:59","4","8","8"],
+                    ["2","高二(1)班物理","2021-12-20 14:32","2021-12-21 23:59","5","209","209"],
+                    ["3","高二(1)班物理","2021-12-16 16:42","2021-12-17 23:59","6","204","204"]
                   ],
       Xlist: ["高二(1)班物理","高二(1)班物理","高二(1)班物理","高二(1)班物理","高一(1)班物理"],
       tableHead: ["序号","班级","开始时间","结束时间","填空题","其它题","批阅总数"],
-      Ylist: [{ "data": [0,0,0,0,0],
+      Ylist: [{ "data": [5,6,6,6,5],
                 "name": "填空题"},
               { "data": [8,209,204,425,2],
                 "name": "其他题"}
@@ -80,7 +85,9 @@ export default class Piyueshiti extends Component {
           type: 'shadow' // 'shadow' as default; can also be 'line' or 'shadow'
         }
       },
-      legend: {},
+      legend: {
+        data: ["其它题", "填空题"],
+        right:'5%'},
       grid: {
         left: '3%',
         right: '4%',
@@ -148,11 +155,19 @@ export default class Piyueshiti extends Component {
           <Echarts option={option} height={250} width={width-20} />
         </View>
         <View>
-          <MyTable tablehead={this.state.tableHead} data={this.state.tableData}/>
+            <MyTable data={this.state.tableData.length>this.state.PiuyueshitiTableNum?this.state.tableData.slice(0,this.state.PiuyueshitiTableNum):this.state.tableData} 
+                             tablehead={this.state.tableHead}/>
         </View>
-        <View style={{justifyContent:'center',flexDirection:'row'}}>
-            <Text style={{color:'#87CEFA'}} >查看全部{' >>'}</Text>
-        </View>
+        {this.state.tableData.length>this.state.PiuyueshitiTableNum?(
+                  <View style={{justifyContent:'center',flexDirection:'row'}}>
+                    <Text  onPress={()=>this.setState({PiuyueshitiTableNum:this.state.tableData.length})
+                      }  style={{color:'#87CEFA'}} >查看全部{' >>'}</Text>
+                  </View>
+                ):this.state.tableData.length>3?(<View style={{justifyContent:'center',flexDirection:'row'}}>
+                <Text  onPress={()=>this.setState({PiuyueshitiTableNum:3})
+                  }  style={{color:'#87CEFA'}} >收起{' >>'}</Text>
+              </View>):
+                (<View></View>)}
   </View>
     )
   }

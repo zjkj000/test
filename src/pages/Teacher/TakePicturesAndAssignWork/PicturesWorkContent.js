@@ -95,6 +95,7 @@ export default class PicturesWorkContent extends Component {
         AnswerContentList:this.props.AnswerContentList,
         AnalysisContentList:this.props.AnalysisContentList,
         })
+        
       if(this.props.subjectName=='英语'&&this.props.questionName=='阅读理解题'){
         var list=[]
         for(let i=0;i<this.props.EnglishReadTimuNum;i++){
@@ -220,7 +221,10 @@ export default class PicturesWorkContent extends Component {
     // 根据List加载文本或者图片
     getContent(list){
       var HTML = ''
+      //把传递过来的内容list拼接成HTML格式
       list.map(item=>HTML+=item)
+
+      //使用RenderHTML组件展示内容
       return(
         <View style={{paddingLeft:15}}>
             <RenderHTML contentWidth={screenWidth} source={{html:HTML}}/>
@@ -228,6 +232,7 @@ export default class PicturesWorkContent extends Component {
       ) ;
     }
 
+    //通过编辑页面传递过来的函数
     addTextContent(order,type){
       var newList = this.state.TimuContentList
       if(this.state.TimuContentTextInput==''){

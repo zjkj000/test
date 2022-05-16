@@ -245,7 +245,7 @@ class TeachingContentPage extends React.Component {
                 </View>
                 <View style={styles.todoList}>
                     {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)}
-                    <ContentListContainer resourceType={this.state.resourceType} searchStr={SearchText} />                   
+                    <ContentListContainer navigation={this.props.navigation}  resourceType={this.state.resourceType} searchStr={SearchText} />                   
                 </View>
             </View>
         );

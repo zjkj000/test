@@ -11,19 +11,22 @@ import res from 'antd-mobile-icons/es/AaOutline';
 var TiMuTypeList = []
 export default function EditWorkContioner(props) {
   const navigation=useNavigation()
-  const channelCode      =props.route.params.channelCode
-  const subjectCode      =props.route.params.subjectCode
-  const textBookCode     =props.route.params.textBookCode
-  const gradeLevelCode   =props.route.params.gradeLevelCode
-  const pointCode        =props.route.params.pointCode
-  const channelName      =props.route.params.channelName
-  const subjectName      =props.route.params.subjectName
-  const textBookName     =props.route.params.textBookName
-  const gradeLevelName   =props.route.params.gradeLevelName
-  const pointName        =props.route.params.pointName
-  const paperName        =props.route.params.paperName
+  const channelCode      =props.route.params.channelCode?props.route.params.channelCode:''
+  const subjectCode      =props.route.params.subjectCode?props.route.params.subjectCode:''
+  const textBookCode     =props.route.params.textBookCode?props.route.params.textBookCode:''
+  const gradeLevelCode   =props.route.params.gradeLevelCode?props.route.params.gradeLevelCode:''
+  const pointCode        =props.route.params.pointCode?props.route.params.pointCode:''
+  const channelName      =props.route.params.channelName?props.route.params.channelName:''
+  const subjectName      =props.route.params.subjectName?props.route.params.subjectName:''
+  const textBookName     =props.route.params.textBookName?props.route.params.textBookName:''
+  const gradeLevelName   =props.route.params.gradeLevelName?props.route.params.gradeLevelName:''
+  const pointName        =props.route.params.paperName?props.route.params.paperName:''
+  const paperName        =props.route.params.paperName?props.route.params.paperName:''
+  const type             =props.route.params.type?props.route.params.type:''
+  const paperId          =props.route.params.paperId?props.route.params.paperId:''
+
   useEffect(()=>{
-       getTimuType()
+    getTimuType()
       }
     ,[]) 
   
@@ -55,7 +58,9 @@ export default function EditWorkContioner(props) {
                     textBookName={textBookName}     //版本name
                     gradeLevelName={gradeLevelName} //教材name
                     pointName={pointName}           //知识点name
-                    paperName={paperName}
+                    paperName={paperName} 
+                    type={type}                     //新建还是修改
+                    paperId={paperId}
                     />)
 }
 
@@ -98,15 +103,15 @@ class EditWork extends Component{
     }
   }
   //走的是编辑试卷的接口  只有编辑的时候才走这个接口
-  EditData(){
+  EditData(paperId){
     const url =
         "http://" +
         "www.cn901.net" +
         ":8111" +
         "/AppServer/ajax/teacherApp_phoneEditZY.do";
     const params = {
-            userName:     global.constants.userName,
-            paperId: subjectCode,                      // 传过来的paperID
+            userName:global.constants.userName,
+            paperId: paperId,                      // 传过来的paperID
           };
         http.get(url, params).then((resStr) => {
           let resJson = JSON.parse(resStr);
@@ -120,7 +125,6 @@ class EditWork extends Component{
                 baseTypeId:item.baseTypeId,
                 questionName:item.typeName,
                 questionId:item.questionId,
-
                 subjectName:this.props.subjectName,
                 TimuContentList:new Array(item.shitiShow),
                 AnswerContentList:new Array(item.shitiAnswer),
@@ -138,14 +142,22 @@ class EditWork extends Component{
   }
 
   UNSAFE_componentWillMount(){
-     this.setState({paperName:this.props.paperName,subjectName:this.props.subjectName})
+    //根据 type参数判断，如果是编辑进来的 进入EditData函数
+    if(this.props.type=='update'){
+      console.log('測試',this.props.paperId)
+      this.EditData(this.props.paperId)
+    }else{
+    //否则将上个页面传过来的参数保存
+      this.setState({paperName:this.props.paperName,subjectName:this.props.subjectName})
+    }
+     
   }
 
   updateupdateFlag(){
     this.setState({updateFlag:1})
   }
   //添加试题，（包括传参数--修改题目的情况）
-   addTimu(typeId,typeName,baseTypeId,score){
+  addTimu(typeId,typeName,baseTypeId,score){
     if(this.state.typeId==''){
       Toast.showInfoToast('请选择题目类型',1000)
     }else if(this.state.questionScore==''){
