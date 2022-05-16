@@ -83,6 +83,7 @@ export default Login = () => {
                     global.constants.userName = res.data[property].userName;
                     global.constants.token = res.data.token;
                     global.constants.userId = res.data[property].userId;
+                    global.constants.passWord = param.passWord;
                     global.constants.userPhoto = res.data[property].userPhoto;
                     setShowLoading(false);
                     Toast.showSuccessToast(res.message, 500);

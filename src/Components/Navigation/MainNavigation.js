@@ -29,13 +29,14 @@ import WrongRecycleButtoContainer from "../../pages/Wrongbook/WrongRecycleButton
 import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 
 import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
+import { Icon } from "react-native-elements";
 import HomeworkPropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/HomeworkProperty";
 import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomework";
 
-import PaperListContainer from '../../pages/Teacher/CorrectPaper/PaperList';
-import CorrectingPaper from '../../pages/Teacher/CorrectPaper/CorrectingPaper';
-import CorrectSubmit from '../../pages/Teacher/CorrectPaper/CorrectSubmit';
-import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDetails';
+import PaperListContainer from "../../pages/Teacher/CorrectPaper/PaperList";
+import CorrectingPaper from "../../pages/Teacher/CorrectPaper/CorrectingPaper";
+import CorrectSubmit from "../../pages/Teacher/CorrectPaper/CorrectSubmit";
+import LookCorrectDetails from "../../pages/Teacher/CorrectPaper/LookCorrectDetails";
 
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
 import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
@@ -196,8 +197,8 @@ export default class MainNavigation extends Component {
                     />
                 </Stack.Group>
 
-                 {/* 老师批改作业/导学案 */}
-                 <Stack.Group>
+                {/* 老师批改作业/导学案 */}
+                <Stack.Group>
                     <Stack.Screen
                         name="CorrectPaperList"
                         component={PaperListContainer}
@@ -220,7 +221,7 @@ export default class MainNavigation extends Component {
                         }}
                     />
                 </Stack.Group>
-                    
+
                 {/* 拍照布置作业 */}
                 <Stack.Group>
                     <Stack.Screen
@@ -241,7 +242,6 @@ export default class MainNavigation extends Component {
                             title: "布置作业",
                         }}
                     />
-                    
                 </Stack.Group>
             </Stack.Navigator>
         );
