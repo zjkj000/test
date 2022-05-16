@@ -132,6 +132,12 @@ class LatestPage extends React.Component {
         this.setState({ resourceType: "4" });
     };
 
+    //创建+布置作业
+    createHomework = () => {
+        this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate("设置作业属性", {});
+    }
+
 
     //显示筛选filter
     showFilter = () => {
@@ -154,7 +160,7 @@ class LatestPage extends React.Component {
                     />
                     <MenuItem
                         title="作业"
-                        onPress={this.handleHomework}
+                        onPress={this.createHomework}
                     />
                     <MenuItem
                         title="导学案"
@@ -198,7 +204,6 @@ class LatestPage extends React.Component {
                     <MenuItem
                         title="创建授课包"
                         // onPress={this.handleAll}
-                        style={{ fontSize: 40 }}
                     />
                     <MenuItem
                         title="我的授课包"
@@ -207,54 +212,38 @@ class LatestPage extends React.Component {
                     <MenuItem
                         title="创建导学案+布置"
                         // onPress={this.handleGuidance}
-                        style={styles.menuItem}
                     />
                     <MenuItem 
                         title = "创建微课+布置"
                         // onPress={this.handleTeachingPackages}
-                        style={styles.menuItem}
                     />
                     <MenuItem 
                         title = "创建作业+布置"
-                        // onPress={this.handleMicroClass}
-                        style={styles.menuItem}
+                        onPress={this.createHomework}
                     />
                     <MenuItem
                         title="选导学案布置"
                         // onPress={this.handleInform}
-                        style={styles.menuItem}
                     />
                     <MenuItem
                         title="选微课布置"
                         // onPress={this.handleNotice}
-                        style={styles.menuItem}
                     />
                     <MenuItem
                         title="选卷布置作业"
                         // onPress={this.handleNotice}
-                        style={styles.menuItem}
                     />
                     <MenuItem
                         title="拍照布置作业"
-                         onPress={()=>{
-                             this.setState({ createmoduleVisible: false });
-                             this.props.navigation.navigate(
-                                {
-                                    name: 'CreatePicturePaperWork'
-                                }
-                             )
-                         }}
-                        style={styles.menuItem}
+                        // onPress={this.handleNotice}
                     />
                     <MenuItem
                         title="发布通知"
                         // onPress={this.handleNotice}
-                        style={styles.menuItem}
                     />
                     <MenuItem
                         title="发布公告"
                         // onPress={this.handleNotice}
-                        style={styles.menuItem}
                     />
                 </OverflowMenu>
             </View>

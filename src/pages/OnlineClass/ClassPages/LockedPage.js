@@ -44,9 +44,9 @@ export default class LockedPage extends Component {
         this.getHTML();
     }
     setAnswer = (str) => {
-        let { html } = this.state;
+        let { html, answer } = this.state;
         let newHTML = { html: html.html + str };
-        this.setState({ html: newHTML, answer: str });
+        this.setState({ html: newHTML, answer: answer + str });
     };
     imageUpload = (base64) => {
         const { messageList, ipAddress, userName } = this.props;
@@ -64,17 +64,15 @@ export default class LockedPage extends Component {
             learnPlanId: event.learnPlanId,
             userId: userName,
         };
-        http.post(url, params)
-            .then((resStr) => {
-                const resJson = JSON.parse(resStr);
-                console.log(resJson);
-                if (resJson.status === "success") {
+        http.post(url, params, false)
+            .then((res) => {
+                if (res.status === "success") {
                     let { imgURL, html } = this.state;
                     let newHTML = {
-                        html: html.html + `<img src= "${resJson.url}" \/>`,
+                        html: html.html + `<img src= "${res.url}" \/>`,
                     };
                     this.setState({
-                        imgURL: [...imgURL, resJson.url],
+                        imgURL: [...imgURL, res.url],
                         html: newHTML,
                     });
                 }
@@ -88,7 +86,6 @@ export default class LockedPage extends Component {
             .then((res) => {
                 if (res) {
                     this.setState({
-                        imgURL: [...this.state.imgURL, res.uri],
                         moduleVisible: false,
                     });
                     this.imageUpload(res.base64);
@@ -103,7 +100,6 @@ export default class LockedPage extends Component {
             .then((res) => {
                 if (res) {
                     this.setState({
-                        imgURL: [...this.state.imgURL, res.uri],
                         moduleVisible: false,
                     });
                     this.imageUpload(res.base64);
@@ -125,6 +121,13 @@ export default class LockedPage extends Component {
             (subjective
                 ? "/KeTangServer/ajax/ketang_saveStuSubjectiveAnswerFromApp.do"
                 : "/KeTangServer/ajax/ketang_saveStuAnswerFromApp.do");
+        // let url =
+        //     "http://" +
+        //     "192.168.1.81" +
+        //     ":8222" +
+        //     (subjective
+        //         ? "/KeTangServer/ajax/ketang_saveStuSubjectiveAnswerFromApp.do"
+        //         : "/KeTangServer/ajax/ketang_saveStuAnswerFromApp.do");
         console.log(event.learnPlanId);
         let params = {
             userName: userName,
@@ -140,24 +143,21 @@ export default class LockedPage extends Component {
             learnPlanName: "",
             answerTime: event.desc,
         };
-        http.get(url, params, true)
-            .then((resStr) => {
+        http.post(url, params)
+            .then((res) => {
                 console.log(params);
-                // console.log("====================================");
-                // console.log(resStr);
-                // console.log("====================================");
-                const resJson = JSON.parse(resStr);
-                if (resJson.status === "success") {
-                    Toast.showSuccessToast("提交成功");
+                // const resJson = JSON.parse(res);
+                if (res.status === "success") {
+                    Toast.showSuccessToast(res.message);
                 } else {
-                    Toast.showDangerToast(resJson.message);
+                    Toast.showDangerToast(res.message);
                 }
             })
             .catch((error) => {
                 // console.log("====================================");
                 // console.log(error);
                 // console.log("====================================");
-                Toast.showDangerToast("提交失败");
+                Toast.showDangerToast("提交失败: ", error.toString());
             });
         // Toast.showInfoToast(this.state.answer);
     };
@@ -260,10 +260,8 @@ export default class LockedPage extends Component {
                     </OverflowMenu>
                     <Button
                         onPress={() => {
-                            let newAnswer = this.state.answer;
-                            newAnswer += this.state.msg;
+                            this.setAnswer(this.state.msg);
                             this.setState({ msg: "" });
-                            this.setAnswer(newAnswer);
                         }}
                         style={{
                             width: 100,
@@ -331,9 +329,7 @@ export default class LockedPage extends Component {
                     </Layout>
                     {this.renderAnswerBox()}
                 </Layout>
-
                 <Layout style={styles.bottom}>{this.renderOption()}</Layout>
-
                 <Modal
                     visible={this.state.visible}
                     backdropStyle={styles.backdrop}

@@ -1,12 +1,10 @@
 global.constants = {
-    baseUrl:'http://www.cn901.net:8111/AppServer/ajax/',
-    token:'',//res.data.token
-    userName:'',//res.data.STUDENT.userName
-    userId:'',//res.data.STUDENT.userId
-    userPhoto:'',//res.data.STUDENT.userPhoto
-    userType:'',//res.data.STUDENT.userType
-    passWord:'',
-    userCn:'固定姓名'// 用户的真实姓名
-
- };
- 
+    baseUrl: "http://www.cn901.net:8111/AppServer/ajax/",
+    token: "", //res.data.token
+    userName: "", //res.data.STUDENT.userName
+    userId: "", //res.data.STUDENT.userId
+    userPhoto: "", //res.data.STUDENT.userPhoto
+    userType: "", //res.data.STUDENT.userType
+    passWord: "",
+    userCn: "固定姓名", // 用户的真实姓名
+};

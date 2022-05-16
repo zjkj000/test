@@ -1,4 +1,4 @@
-import React from "react";
+import React , {useEffect,useState} from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
@@ -22,10 +22,16 @@ import TodoListContainer from "./TodoListContainer";
 let SearchText = '';
 
 export default function LatestTaskContainer(props) {
-    const learnId = props.learnId;
-    const status = props.status;
+    let learnId = props.learnId;
+    let status = props.status;
     console.log('###learnId###status##',learnId , status);
     const navigation = useNavigation();
+
+    useEffect(()=>{
+        console.log('#####useEffect####');
+        learnId = props.learnId;
+        status = props.status;
+    },[props.learnId , props.status])
     //将navigation传给LatestTask组件，防止路由出错
     return <LatestTask navigation={navigation} learnId={learnId} status={status}></LatestTask>;
 }
@@ -60,18 +66,31 @@ class LatestTask extends React.Component {
             //console.log('data' , this.state.resourceRead);
             return ;
         })
-    }
 
-    componentDidMount() {
-        
         const { navigation } = this.props;
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log('###learnId000###status000##', this.props , this.props.learnId , this.props.status);
+                console.log('###learnId000###status000##', this.props.learnId , this.props.status);
+                // this.setState({});
             }
         );
     }
+
+    componentDidMount() {
+        
+        // const { navigation } = this.props;
+        // this._unsubscribeNavigationFocusEvent = navigation.addListener(
+        //     "focus",
+        //     () => {
+        //         console.log('###learnId000###status000##', this.props , this.props.learnId , this.props.status);
+        //     }
+        // );
+    }
+
+    // UNSAFE_componentWillUpdate(nextProps){
+    //     console.log('###componentWillUpdate##nexProps##', nextProps);
+    // }
 
     componentWillUnmount() {
         this._unsubscribeNavigationFocusEvent();

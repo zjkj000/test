@@ -1,6 +1,8 @@
 import axios from "axios";
 import baseConfig from "./httpBaseConfig";
 import Qs from "qs";
+import RNFS from "react-native-fs";
+import Toast from "../Toast/Toast";
 
 // 默认域名
 axios.defaults.baseURL =
@@ -65,13 +67,16 @@ export default class http {
             } else {
                 ret = await new URLSearchParams(params).toString();
             }
+            // console.log("====================================");
+            // console.log(ret);
+            // console.log("====================================");
             // let res = null;
             if (ret != "") {
                 url = url + "?" + ret;
             }
-            console.log("====================================");
-            console.log(url);
-            console.log("====================================");
+            // console.log("====================================");
+            // console.log(url);
+            // console.log("====================================");
             res = await axios.get(url);
             return res;
         } catch (error) {
@@ -87,7 +92,7 @@ export default class http {
     //         return error;
     //     }
     // }
-    static async post(url, params) {
+    static async post(url, params, encode = true, callback = false) {
         try {
             // let myTypeParams = new URLSearchParams();
             // for (let it in params) {
@@ -95,6 +100,14 @@ export default class http {
             // }
             // console.log(Qs.stringify(params));
             // let res = await axios.post(url, Qs.stringify(params));
+            if (callback) {
+                params = { ...params, callback: "hei" };
+            }
+            if (encode) {
+                for (let i in params) {
+                    params[i] = encodeURIComponent(params[i]);
+                }
+            }
             let res = await axios({
                 headers: {
                     "Content-Type": "application/x-www-form-urlencoded",
@@ -103,10 +116,14 @@ export default class http {
                 method: "post",
                 data: Qs.stringify(params),
             });
+            if (callback) {
+                let regex = /\((.+?)\)/g;
+                res = res.match(regex)[0].replace("(", "").replace(")", "");
+            }
+            // console.log("post====================================");
+            // console.log(res);
             // console.log("====================================");
-            // console.log(url);
-            // console.log("====================================");
-            return res;
+            return JSON.parse(res);
         } catch (error) {
             return error;
         }
@@ -141,4 +158,52 @@ export default class http {
             return error;
         }
     }
+
+    static download = (url) => {
+        let target = RNFS.DocumentDirectoryPath + "/download";
+        const options = {
+            fromUrl: url,
+            toFile: target,
+            background: true,
+            progressDivider: 5,
+            begin: (res) => {
+                //开始下载时回调
+                console.log("begin", res);
+            },
+            progress: (res) => {
+                //下载过程中回调，根据options中设置progressDivider:5，则在完成5%，10%，15%，...，100%时分别回调一次，共回调20次。
+                console.log("progress", res);
+            },
+        };
+        console.log(target);
+        RNFS.exists(target).then((existsRes) => {
+            console.log("exist: " + existsRes);
+            if (existsRes) {
+                const downloadRes = RNFS.downloadFile(options);
+                console.log(downloadRes.jobId); //打印一下看看jobId
+                downloadRes.promise
+                    .then((res) => {
+                        Toast.showSuccessToast("下载成功！", res);
+                    })
+                    .catch((err) => {
+                        Toast.showDangerToast("下载出错：" + err.toString());
+                    });
+            } else {
+                RNFS.mkdir(target).then((mkdirRes) => {
+                    console.log(mkdirRes);
+                    const downloadRes = RNFS.downloadFile(options);
+                    console.log(downloadRes.jobId); //打印一下看看jobId
+                    downloadRes.promise
+                        .then((res) => {
+                            Toast.showSuccessToast("下载成功！", res);
+                        })
+                        .catch((err) => {
+                            Toast.showDangerToast(
+                                "下载出错：" + err.toString()
+                            );
+                        });
+                });
+            }
+        });
+    };
 }

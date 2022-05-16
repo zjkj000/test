@@ -58,6 +58,7 @@ class MyTabBarComponent extends React.Component {
         const paramsData = navigation.getState().routes[1].params;
         const learnId = paramsData != null ? paramsData.learnId : '' ;
         const status = paramsData != null ? paramsData.status : '';
+        //this.navigation.getState().routes[1].params = null;
         console.log('---learnId---status---',learnId , status);
         return (
             /*

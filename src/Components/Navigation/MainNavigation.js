@@ -29,10 +29,20 @@ import WrongRecycleButtoContainer from "../../pages/Wrongbook/WrongRecycleButton
 import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 
 import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
+import { Icon } from "react-native-elements";
+import HomeworkPropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/HomeworkProperty";
+import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomework";
 
+<<<<<<< HEAD
 import PaperListContainer from '../../pages/Teacher/CorrectPaper/PaperList';
 import CorrectingPaper from '../../pages/Teacher/CorrectPaper/CorrectingPaper';
 import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDetails';
+=======
+import PaperListContainer from "../../pages/Teacher/CorrectPaper/PaperList";
+import CorrectingPaper from "../../pages/Teacher/CorrectPaper/CorrectingPaper";
+import CorrectSubmit from "../../pages/Teacher/CorrectPaper/CorrectSubmit";
+import LookCorrectDetails from "../../pages/Teacher/CorrectPaper/LookCorrectDetails";
+>>>>>>> 98f02713dee214472d341216bb3cc75db6dcefc6
 
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
 import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
@@ -160,6 +170,23 @@ export default class MainNavigation extends Component {
                         }}
                     />
                 </Stack.Group>
+                {/**教师端首页 */}
+                <Stack.Group>
+                    <Stack.Screen
+                        name="设置作业属性"
+                        component={HomeworkPropertyContainer}
+                        options={{
+                            headerShown: true,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="创建作业"
+                        component={CreateHomework}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+                </Stack.Group>
                 <Stack.Group>
                     <Stack.Screen
                         name="Select_subject"
@@ -177,8 +204,8 @@ export default class MainNavigation extends Component {
                     />
                 </Stack.Group>
 
-                 {/* 老师批改作业/导学案 */}
-                 <Stack.Group>
+                {/* 老师批改作业/导学案 */}
+                <Stack.Group>
                     <Stack.Screen
                         name="CorrectPaperList"
                         component={PaperListContainer}
@@ -201,7 +228,7 @@ export default class MainNavigation extends Component {
                         }}
                     />
                 </Stack.Group>
-                    
+
                 {/* 拍照布置作业 */}
                 <Stack.Group>
                     <Stack.Screen
