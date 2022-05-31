@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
 import { Flex } from "@ant-design/react-native";
@@ -138,6 +138,17 @@ class LatestPage extends React.Component {
         this.props.navigation.navigate("设置作业属性", {});
     }
 
+    //创建+布置导学案
+    createLearnCase = () => {
+        this.setState({ createmoduleVisible: false });
+        Alert.alert('创建导学案正在开发！！')
+        // this.props.navigation.navigate("设置导学案属性", {});
+    }
+    creatPictureWork = () =>{
+        this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate("CreatePicturePaperWork", {});
+    }
+
 
     //显示筛选filter
     showFilter = () => {
@@ -211,7 +222,7 @@ class LatestPage extends React.Component {
                     />
                     <MenuItem
                         title="创建导学案+布置"
-                        // onPress={this.handleGuidance}
+                        onPress={this.createLearnCase}
                     />
                     <MenuItem 
                         title = "创建微课+布置"
@@ -223,27 +234,42 @@ class LatestPage extends React.Component {
                     />
                     <MenuItem
                         title="选导学案布置"
-                        // onPress={this.handleInform}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            Alert.alert('该部分暂时未开发！')
+                        }}
                     />
                     <MenuItem
                         title="选微课布置"
-                        // onPress={this.handleNotice}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            Alert.alert('该部分暂时未开发！')
+                        }}
                     />
                     <MenuItem
                         title="选卷布置作业"
-                        // onPress={this.handleNotice}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate('')
+                        }}
                     />
                     <MenuItem
                         title="拍照布置作业"
-                        // onPress={this.handleNotice}
+                         onPress={this.creatPictureWork}
                     />
                     <MenuItem
                         title="发布通知"
-                        // onPress={this.handleNotice}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            Alert.alert('该部分暂时未开发！')
+                        }}
                     />
                     <MenuItem
                         title="发布公告"
-                        // onPress={this.handleNotice}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            Alert.alert('该部分暂时未开发！')
+                        }}
                     />
                 </OverflowMenu>
             </View>

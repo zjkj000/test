@@ -82,8 +82,7 @@ export default class Leijishiyong extends Component {
 
   render() {
     var MenuItem_number = [];
-        for (let item_num = 0; item_num < this.state.SchoolYearTerm; item_num++) {
-          console.log(item_num,this.state.SchoolYearTerm[item_num].name)
+        for (let item_num = 0; item_num < this.state.SchoolYearTerm.length; item_num++) {
             MenuItem_number.push(
                 <MenuItem
                     title={this.state.SchoolYearTerm[item_num].name}
@@ -100,7 +99,7 @@ export default class Leijishiyong extends Component {
         }
     return (
       <View style={{backgroundColor:'#FFFFFF',padding:20,alignItems:'stretch'}}>
-          <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:20}}>
+          <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:20,flexWrap:'wrap'}}>
             <Text style={{fontSize:20}}>累计使用</Text>
             <OverflowMenu
                     anchor={this.renderAvatar}
@@ -112,7 +111,7 @@ export default class Leijishiyong extends Component {
                     {MenuItem_number}
             </OverflowMenu>
           </View>
-          <View style={{flexDirection:'row',alignContent:'space-around',marginBottom:20}}>
+          <View  style={{flexDirection:'row',alignContent:'space-around',marginBottom:20,zIndex:1}}>
             <View style={{backgroundColor:'#E0F3E0',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
               <View style={{flex:1,justifyContent:'center'}}><Image source={require('../../assets/StatisticalForm/Ima_1.png')}></Image></View>
               <View style={{flex:2,flexDirection:'column',padding:10}}>

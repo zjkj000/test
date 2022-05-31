@@ -71,6 +71,7 @@ export default function PaperList(props) {
           })
   }
 
+    //是否模式为  批阅全部试题
     function get_CorrectAllQuestion(){
       const url =
             "http://" +
@@ -82,7 +83,6 @@ export default function PaperList(props) {
           };
         http.get(url, params).then((resStr) => {
           let resJson = JSON.parse(resStr);
-          
           setCorrectAllQuestion(resJson.data=='1'?true:false)
           })
     }

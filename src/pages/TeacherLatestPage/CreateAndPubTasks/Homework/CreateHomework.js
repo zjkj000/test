@@ -35,9 +35,7 @@ import HomeworkPropertyModelContainer from "./HomeworkPropertyModel";
 //暂存请求到的试题(定义为二维数组，每一维存放相同类型的试题)
 //试题都请求完之后，依次将数据按维存放到state中试题list
 var paperListOne = [];  //一维
-var paperListTwo = [];  //存放多个paperListOne
 
-var paperListCopy = []; //将paperListTwo二维数组转化为一维数组
 //typeAll==count时，调用setState，将paperListCopy赋值给state中的paperList
 let typeAll = 0; //试题类型总数
 let count = 0; //目前已请求完成多少个类型的试题
@@ -46,12 +44,11 @@ let pageNo = 1; //当前第几页
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
 
 let fetchNum = 0; //请求试题次数
-let allPaperNumBeforeFetch = 0; //fetch请求设置state之前的总试题数
 
 let currentBottomPage =  0; //添加试题页面 当前底部显示试题对应类型页数
 let currentBeginPaperIndex = 0; //当前底部显示第一个试题对应的index
 let currentLastPaperIndex = 0; //当前底部显示最后一个试题对应的index
-let clickBefore = false;
+let clickBack = false;
 let clickNext = false;
 
 export default function CreateHomeworkContainer(props) {
@@ -68,15 +65,36 @@ class CreateHomework extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            paramsDataProps: this.props.paramsData,
+            
+            studyRankId: this.props.paramsData.studyRankId,
+            studyRank: this.props.paramsData.studyRank,
+            studyClassId: this.props.paramsData.studyClassId,
+            studyClass: this.props.paramsData.studyClass,
+            editionId: this.props.paramsData.editionId,
+            edition: this.props.paramsData.edition,
+            bookId: this.props.paramsData.bookId,
+            book: this.props.paramsData.book,
+            knowledgeCode: this.props.paramsData.knowledgeCode,
+            knowledge: this.props.paramsData.knowledge,
+
+            channelNameList: this.props.paramsData.channelNameList, //学段名列表（接口数据）
+            studyClassList: this.props.paramsData.studyClassList, //学科列表（接口数据）
+            editionList: this.props.paramsData.editionList, //版本列表（接口数据）
+            bookList: this.props.paramsData.bookList, //教材列表（接口数据）  
+
+            knowledgeList: [],
+
             paperId: '', //空试卷id
 
             addPaperFlag: true, //导航“添加试题”是否被选中
             updatePaperFlag: false, //导航“调整顺序”是否被选中
             pushPaperFlag: false, //导航“布置作业”是否被选中
 
-            allPage: 100000, //总页数
-
             filterModelVisiblity: false, //设置属性悬浮框是否显示
+            knowledgeModelVisibility: false, //知识点悬浮框是否显示
+
+            shareTag: '99', //‘共享内容’
 
             paperTypeList: [], //试题库试题类型
             paperList: [], //试题库试题
@@ -124,12 +142,16 @@ class CreateHomework extends React.Component {
     }
 
     UNSAFE_componentWillMount(){
+        // console.log('------componentWillMount--------');
+        // console.log(this.state.paramsDataProps);
+        // console.log('-------------------------------');
         if(this.state.paperId == ''){ //调接口，获取paperId
             this.fetchPaperId();
         }
     }
 
     UNSAFE_componentWillUpdate(nextProps , nextState){
+        console.log('----WillUpdate--------------------------');
         // if(nextState.paperList !== this.state.paperList){
         //     if(nextState.selectPaperIndex != (Math.floor(nextState.paperList.length / 5) - 1) * 5){
         //         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
@@ -170,8 +192,6 @@ class CreateHomework extends React.Component {
     componentWillUnmount(){
         console.log('---componentWillUnmount----');
         paperListOne = [];
-        paperListTwo = [];
-        paperListCopy = [];
         typeAll = 0;
         count = 0;
 
@@ -185,52 +205,240 @@ class CreateHomework extends React.Component {
     }
 
     setModalVisible = (visible) => {
-        this.setState({ filterModelVisiblity: visible });   
+        console.log('-----------setModalVisible---------------', visible);
+        this.setState({ filterModelVisiblity: visible ,  });   
     }
 
     //显示设置属性悬浮框
     showFilter = () => {
-        const { filterModelVisiblity } = this.state;
-        return (
+        const { filterModelVisiblity , knowledgeModelVisibility } = this.state;
+        if(filterModelVisiblity){ //显示设置属性覆盖框
+            return (
+                    <Modal
+                        animationType="none"
+                        transparent={true}
+                        visible={filterModelVisiblity}
+                        onRequestClose={() => {
+                            console.log('----------------Modal has been closed.---------------------');
+                            Alert.alert("Modal has been closed.");
+                            this.setModalVisible(!filterModelVisiblity);
+                        }}
+                    >
+                        <View>
+                            <Text
+                                style={{height: 70, width: 40, right: 0, position: 'absolute'}}
+                                onPress={()=>{
+                                    this.setModalVisible(!filterModelVisiblity);
+                            }}></Text>
+                        </View>
+                        {/**设置属性悬浮框组件   父子结点传参(传方法！！！！) */}
+                        <HomeworkPropertyModelContainer 
+                            paperTypeList={this.state.paperTypeList} 
+                            studyRank={this.state.studyRank}
+                            studyRankId={this.state.studyRankId}
+                            studyClass={this.state.studyClass}
+                            studyClassId={this.state.studyClassId}
+                            edition={this.state.edition}
+                            editionId={this.state.editionId}
+                            book={this.state.book}
+                            bookId={this.state.bookId}
+                            knowledge={this.state.knowledge}
+                            knowledgeCode={this.state.knowledgeCode}
+
+                            channelNameList={this.state.channelNameList} //学段名列表（接口数据）
+                            studyClassList={this.state.studyClassList} //学科列表（接口数据）
+                            editionList={this.state.editionList} //版本列表（接口数据）
+                            bookList={this.state.bookList} //教材列表（接口数据）  
+                            knowledgeList={this.state.knowledgeList} //从接口中返回的数据
+
+                            setAllProperty={this.setAllProperty}  
+                            setFetchAgainProperty={this.setFetchAgainProperty}
+                        />
+                    </Modal>
+            );
+        }else if(knowledgeModelVisibility){ //显示知识点覆盖框
+            return(
                 <Modal
                     animationType="none"
                     transparent={true}
-                    visible={filterModelVisiblity}
+                    visible={knowledgeModelVisibility}
                     onRequestClose={() => {
+                        console.log('----------------Modal has been closed.---------------------');
                         Alert.alert("Modal has been closed.");
-                        this.setModalVisible(!filterModelVisiblity);
+                        this.setState({knowledgeModelVisibility: !knowledgeModelVisibility});
                     }}
                 >
-                    <View>
-                        <Text
-                            style={{height: 70, width: 40, right: 0, position: 'absolute'}}
-                            onPress={()=>{
-                                this.setModalVisible(!filterModelVisiblity);
-                        }}></Text>
+                    <View style={styles.modalView}>
+                        <TouchableOpacity
+                            style={{
+                                height: 20,
+                                width: screenWidth,
+                                paddingRight: screenWidth * 0.9,
+                                position: 'absolute',
+                            }}
+                            onPress={() => {
+                                this.setState({
+                                    filterModelVisiblity: true,
+                                    knowledgeModelVisibility: false,
+                                });
+                            }}
+                        >
+                            <Image
+                                style={{
+                                    top: 0,
+                                    height: '80%',
+                                    width: '80%',
+                                    resizeMode: "center",
+                                }}
+                                source={require('../../../../assets/teacherLatestPage/close.png')}
+                            />
+                        </TouchableOpacity>
+                        {/* {console.log('-----knowledgeList---', this.state.knowledgeList , this.state.knowledgeList.length)} */}
+                        {/**知识点数据为空时请求数据 */}
+                        {
+                            this.state.knowledgeList.length <= 0
+                                && this.state.paramsDataProps.studyRank != ''
+                                && this.state.paramsDataProps.studyClass != ''
+                                && this.state.paramsDataProps.edition != ''
+                                && this.state.paramsDataProps.book != ''
+                                ? this.showKnowledgeList()
+                                : null
+                        }
+                        {
+                            this.state.knowledgeList.length > 0
+                                ?
+                                    <WebView
+                                        onMessage={(event) => {
+                                            console.log('---------------------------------');
+                                            console.log(JSON.parse(event.nativeEvent.data).name , JSON.parse(event.nativeEvent.data).id);
+                                            console.log('---------------------------------');
+                                            this.setState({ 
+                                                filterModelVisiblity: true,
+                                                knowledgeModelVisibility: false, 
+                                                knowledge: JSON.parse(event.nativeEvent.data).name ,
+                                                knowledgeCode: JSON.parse(event.nativeEvent.data).id,
+                                            });
+                                        }}
+                                        javaScriptEnabled={true}
+                                        scalesPageToFit={Platform.OS === 'ios' ? true : false}
+                                        source={{ html: this.state.knowledgeList }}
+                                    ></WebView>
+                                : <Text>知识点数据为请求到或没有数据</Text>
+                        }
                     </View>
-                    {/**设置属性悬浮框组件   父子结点传参(传方法！！！！) */}
-                    <HomeworkPropertyModelContainer 
-                        paperTypeList={this.state.paperTypeList} 
-                        studyRank={this.props.paramsData.studyRank}
-                        studyClass={this.props.paramsData.studyClass}
-                        edition={this.props.paramsData.edition}
-                        book={this.props.paramsData.book}
-                        knowledge={this.props.paramsData.knowledge}
-
-                        channelNameList={this.props.paramsData.channelNameList} //学段名列表（接口数据）
-                        studyClassList={this.props.paramsData.studyClassList} //学科列表（接口数据）
-                        editionList={this.props.paramsData.editionList} //版本列表（接口数据）
-                        bookList={this.props.paramsData.bookList} //教材列表（接口数据）  
-                        knowledgeList={this.props.paramsData.knowledgeList} //从接口中返回的数据
-
-                        setAllProperty={this.setAllProperty}
-                    />
                 </Modal>
-        );
+            );
+        }
     }
     //设置属性悬浮框组件 传递的props方法，用来修改
-    setAllProperty = (paramsObj) => {
+    setAllProperty = (
+        studyRank,
+        studyRankId,
+        studyClass,
+        studyClassId,              
+        edition,
+        editionId,
+        book,
+        bookId
+    ) => {
         //重新修改state有关试题请求的参数，重新请求试题
+        console.log('-------设置属性悬浮框返回参数-------');
+        console.log(studyRank, studyRankId, studyClass, studyClassId, edition, editionId, book, bookId);
+        console.log('-----------------------------------');
+        this.setState({ 
+            filterModelVisiblity: false , 
+            knowledgeModelVisibility: true ,
+            studyRank: studyRank,
+            studyRankId: studyRankId,
+            studyClass: studyClass,
+            studyClassId: studyClassId ,
+            editino: edition,
+            editionId: editionId,
+            book: book,
+            bookId: bookId,
+        });
+    }
+
+    //设置属性悬浮框点击“确定”按钮，需要重新请求试题
+    setFetchAgainProperty = (paramsObj) => {
+        paperListOne = [];  //一维
+        count = 0; //目前已请求完成多少个类型的试题
+        pageNo = 1; //当前第几页
+        dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
+        fetchNum = 0; //请求试题次数
+        currentBottomPage =  0; //添加试题页面 当前底部显示试题对应类型页数
+        currentBeginPaperIndex = 0; //当前底部显示第一个试题对应的index
+        currentLastPaperIndex = 0; //当前底部显示最后一个试题对应的index
+
+        console.log('---------setFetchAgainProperty---------');
+        console.log(paramsObj);
+        console.log('---------------------------------------');
+        let paramsDataPropsTemp = {
+            name: this.props.paramsData.name,
+            introduction: this.props.paramsData.introduction,
+            studyRank: paramsObj.studyRank,
+            studyRankId: paramsObj.studyRankId,
+            studyClass: paramsObj.studyClass,
+            studyClassId: paramsObj.studyClassId,
+            edition: paramsObj.edition,
+            editionId: paramsObj.editionId,
+            book: paramsObj.book,
+            bookId: paramsObj.bookId,
+            knowledge: paramsObj.knowledge,
+            knowledgeCode: paramsObj.knowledgeCode,
+        };
+        let paperTypeTtem = [];
+        if(paramsObj.paperType == '全部'){
+            paperTypeTtem = paramsObj.paperTypeListFetch;
+        }else{
+            paperTypeTtem.push(paramsObj.paperType);
+        }
+        console.log('-----试题类型----',paperTypeTtem);
+        typeAll = paperTypeTtem.length; //试题类型总数
+        this.setState({
+            filterModelVisiblity: false , 
+            knowledgeModelVisibility: false ,
+            shareTag: paramsObj.shareTag,
+            paramsDataProps: paramsDataPropsTemp,
+
+            paperTypeList: paperTypeTtem, //试题库试题类型
+            paperList: [], //试题库试题
+            // selectPaperNum: 0, //已选中试题数目
+            selectPaperIndex: 0, //选中的试题索引
+            // selectPaperList: [], //添加到试卷中的试题
+            // baseTypeIdLists: [], //添加到试卷中的试题baseTypeId
+            updatePaperIndex: 0, //添加到试卷中的试题当前显示的试题索引
+        });
+    }
+
+    //从接口中获取知识点内容
+    showKnowledgeList = () => {
+        const { studyClassId, editionId, bookId } = this.state;
+        const ip = global.constants.baseUrl;
+        const url = ip + "teacherApp_getKnowledgeAllTree.do";
+        const params = {
+            subjectCode: studyClassId,
+            textBookCode: editionId,
+            gradeLevelCode: bookId,
+            //callback:'ha',
+        };
+
+        console.log('-----showKnowledgeList-----', Date.parse(new Date()))
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                // console.log('--------知识点数据------');
+                // console.log(resJson.data);
+                // console.log('------------------------');
+                this.setState({ knowledgeList: resJson.data });
+            })
+            .catch((error) => {
+                console.log('******catch***error**', error);
+                this.setState({
+                    error: true,
+                    errorInfo: error,
+                });
+            });
     }
 
     //修改导航选中标志(添加试题、调整顺序、布置作业)
@@ -403,7 +611,7 @@ class CreateHomework extends React.Component {
 
     //保存试卷 设置接口参数
     setSavePapersParams = () => {
-        const paramsData = this.props.paramsData;
+        const paramsData = this.state.paramsDataProps;
         const { paperObject } = this.state;
         var papersJsonStr = JSON.stringify(paperObject); //js对象转化为json字符串
         console.log('*********papersJsonStr*********',typeof(papersJsonStr));
@@ -453,6 +661,12 @@ class CreateHomework extends React.Component {
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
                 console.log('****************resJson.success*********', resJson);
+                if(resJson.success){
+                    this.props.navigation.navigate({name: 'Teacher_Home'});
+                    Alert.alert('作业布置成功');
+                }else{
+                    Alert.alert(resJson.message);
+                }
             })
             .catch((error) => {
                 console.log('******catch***error**', error);
@@ -492,9 +706,12 @@ class CreateHomework extends React.Component {
                 console.log('*************************');
                 // console.log('****************resJson.success***Type******', resJson.success);
                 
-                // if(resJson.success){
-                //     this.props.navigation.navigate({name: 'Teacher_Home'});
-                // }
+                if(resJson.success){
+                    this.props.navigation.navigate({name: 'Teacher_Home'});
+                    Alert.alert('作业保存成功');
+                }else{
+                    Alert.alert(resJson.message);
+                }
             })
             .catch((error) => {
                 console.log('******catch***error**', error);
@@ -618,7 +835,7 @@ class CreateHomework extends React.Component {
 
     //获取试题库试题类型
     fetchPaperType = () => {
-        const paramsData = this.props.paramsData;
+        const paramsData = this.state.paramsDataProps;
         const ip = global.constants.baseUrl;
         const url = ip + "teacherApp_getQuestionTypeList.do";
         const params = {
@@ -630,7 +847,7 @@ class CreateHomework extends React.Component {
             //callback:'ha',
         };
 
-        console.log('-----fetchPaperType-----', Date.parse(new Date()))
+        console.log('-----fetchPaperType-----', Date.parse(new Date()),this.state.paperTypeList)
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
@@ -638,11 +855,7 @@ class CreateHomework extends React.Component {
                 console.log(resJson.data);
                 console.log('------------------------');
 
-                //定义临时存储接口请求试题数据的二维数组
-                for(let i = 0 ; i < resJson.data.length ; i++){
-                    paperListTwo[i] = [];
-                }
-                typeAll = paperListTwo.length; //总类型数
+                typeAll = resJson.data.length; //总类型数
                 // console.log('****paperListCopyLength****' , paperListTwo.length);
                 if(resJson.data.length > 0){    
                     this.setState({ paperTypeList: resJson.data });
@@ -650,115 +863,6 @@ class CreateHomework extends React.Component {
                     Toast.showInfoToast('该知识点没有对应的试题',1000);
                     return;
                 }
-            })
-            .catch((error) => {
-                console.log('******catch***error**', error);
-                this.setState({
-                    error: true,
-                    errorInfo: error,
-                });
-            });
-    }
-
-    //请求试题库试题
-    fetchPaperList = () => {
-        const { paperTypeList } = this.state;
-
-        //this.fetchPaperListItem(paperNo , '填空题' , 99);
-        for(let i = 0 ; i < paperTypeList.length ; i++){
-            this.fetchPaperListItem(i , 1 , paperTypeList[i] , 99); //fetch异步
-        }      
-    }
-
-    //依据试题类型请求试题
-    fetchPaperListItem = (index , paperNum , paperType , shareTag) => {
-        const paramsData = this.props.paramsData;
-        const token = global.constants.token;
-        const ip = global.constants.baseUrl;
-        const url = ip + "teacherApp_getAllQuestions.do";
-        const params = {
-            currentpage: paperNum,
-            channelCode: paramsData.studyRankId,
-            subjectCode: paramsData.studyClassId,
-            textBookCode: paramsData.editionId,
-            gradeLevelCode: paramsData.bookId,
-            pointCode: paramsData.knowledgeCode,
-            questionTypeName: paperType,
-            shareTag: shareTag,
-            token: token,
-            //callback:'ha',
-        };
-
-        // console.log('-----fetchPaperListItem-----', Date.parse(new Date()))
-        http.get(url, params)
-            .then((resStr) => {
-                let resJson = JSON.parse(resStr);
-
-                paperListOne = resJson.data;
-                // console.log('----paperListOne-----', paperListOne);
-                let paperLength; //当前请求页试题数目
-                if(paperListOne == null){
-                    //console.log('!!!!!params!!!!resJson!!!' , params , resJson);
-                    //参数存在问题token失效等
-                    Alert.alert(resJson);
-                    return;
-                }else{
-                    paperLength = paperListOne != '' ? paperListOne.length : 0;
-                }
-                // console.log('*****paperLength***' , paperLength);
-                if(paperLength > 0){
-                    paperListOne.map(function (Item) {
-                        paperListTwo[index].push(Item);
-                    });
-                    //paperListTwo[index].concat(paperListOne);
-
-                    paperListOne = [];
-
-                    // console.log('---paperListOne-Length---', index , paperType , paperListTwo[index].length);
-                    //试题请求接口每次最多返回5个数据
-                    if(paperLength == 5){
-                        //paperNo++;
-                        //接着请求下一页数据
-                        this.fetchPaperListItem(index , paperNum+1 , paperType , shareTag);
-                    }else{
-                        console.log('*****此类型请求完****', paperType);
-                        //此类型最后一页数据读取完，结束此类型请求
-                        count++; //目前已请求完成类型试题数
-                        // paperListTwo[index].map(function (Item) {
-                        //     paperListCopy.push(Item);
-                        // });
-                        //所有类型的试题都读取完
-                        if(count == typeAll){
-                            paperListCopy = [];
-                            for(let i = 0 ; i < paperListTwo.length ; i++){
-                                for(let j = 0 ; j < paperListTwo[i].length ; j++){
-                                    paperListCopy.push(paperListTwo[i][j]);
-                                }
-                            }
-                            // console.log('****paperListCopy试题总数***', paperListCopy.length);
-                            this.setState({ paperList: paperListCopy });
-                        }
-                        return;
-                    }
-                }else{
-                    //当前页已经没有试题，说明试题已经请求完
-                    console.log('-----此类型请求完---' , paperType);
-                    // console.log('****paperListOne****',resJson);
-                    count++; //目前已请求完成类型试题数
-                    //所有类型的试题都读取完
-                    if(count == typeAll){
-                        paperListCopy = [];
-                        for(let i = 0 ; i < paperListTwo.length ; i++){
-                            for(let j = 0 ; j < paperListTwo[i].length ; j++){
-                                paperListCopy.push(paperListTwo[i][j]);
-                            }
-                        }
-                        // console.log('****paperListCopy试题总数***', paperListCopy.length);
-                        this.setState({ paperList: paperListCopy });
-                    }
-                    return;
-                }
-
             })
             .catch((error) => {
                 console.log('******catch***error**', error);
@@ -798,7 +902,7 @@ class CreateHomework extends React.Component {
                         <View style={styles.paperSelectNumView}>
                             <Text style={styles.selectPaperNum}>(已选中{this.state.selectPaperNum})</Text>
                             {
-                                this.ifSelected() ?
+                                this.state.paperList.length > 0 && this.ifSelected() ?
                                             <TouchableOpacity onPress={()=>{this.updateSlectNum(true)}}>
                                                 <Image
                                                     style={{
@@ -829,24 +933,10 @@ class CreateHomework extends React.Component {
 
                         {/**题目展示 */}
                         <View style={styles.showPaper}>
-                            {/**请求试题库试题类型 */}
-                            {/* {console.log('***试题类型数***', this.state.paperTypeList.length)} */}
-                            {/* {
-                                this.state.paperTypeList.length <= 0 ? this.fetchPaperType() : null
-                            } */}
-                            {/**依据试题类型请求试题 */}
-                            {/* {console.log('***试题总数***', this.state.paperList.length)} */}
-                            {/* {
-                                this.state.paperTypeList.length > 0
-                                && this.state.paperList.length <= 0
-                                    ? this.fetchPaperList()
-                                    : null
-                            } */}
-                            {/* {console.log('******showAddPaper**总试题数*******', this.state.paperList.length , Date.parse(new Date()))} */}
                             {
                                 this.state.paperTypeList.length > 0
                                 && this.state.paperList.length <= 0
-                                ? this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false)
+                                ? this.fetchData(pageNo , this.state.paperTypeList[count] , this.state.shareTag , false)
                                 : null
                             }
                             {/**题目 答案 解析*/}
@@ -894,19 +984,20 @@ class CreateHomework extends React.Component {
 
     //展示添加试题页面底部
     showAddPaperBottom = () => {
-        const {  allPage , paperList } = this.state;
         if(this.state.paperList.length > 0){
             return (
                 <View style={{ flexDirection:'row', alignItems: 'center' , ...styles.bottomView ,}}>
                     <TouchableOpacity
                         style={{ width: screenWidth*0.1, paddingLeft: 5}}
                         onPress={()=>{
+                            clickBack = true;
                             clickNext = false;
                             if(currentBeginPaperIndex == 0 || currentBottomPage == 0){
-                                Alert.alert('已经是第一页了');
+                                Alert.alert('已经是第一页试题了');
                             }else{
                                 currentBottomPage--;
-                                this.setState({ selectPaperIndex: currentBeginPaperIndex - 5 });
+                                // this.setState({ selectPaperIndex: currentBeginPaperIndex - 5 });
+                                this.setState({ selectPaperIndex: currentBottomPage * 5 });
                             }
                         }}
                     >
@@ -915,6 +1006,7 @@ class CreateHomework extends React.Component {
                             source={require('../../../../assets/teacherLatestPage/back.png')}
                         ></Image>
                     </TouchableOpacity>
+                    {clickNext ? this.updateSelectPaperIndex() : null}
                     {/**显示底部试题类型图标 */}
                     <View style={{ width: screenWidth*0.8, flexDirection:'row', alignItems: 'center' }}>
                         {this.showPaperTypeImg()}
@@ -922,20 +1014,41 @@ class CreateHomework extends React.Component {
                     <TouchableOpacity
                         style={{  width: screenWidth*0.1, paddingLeft: 11}}
                         onPress={()=>{
+                            clickBack = false;
                             clickNext = true;
-                            if(currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == false){
-                                Alert.alert('已经是最后一页了');
-                            }else if(dataFlag == true){ //试题还未请求完
-                                // currentBottomPage++;
+                            currentBottomPage++;
+                            console.log('####################################',(currentBottomPage + 1) * 5,this.state.paperList.length);
+                            if(currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == false ){
+                                if(this.state.paperList.length % 5 == 0){
+                                    Alert.alert('没有更多试题了');
+                                }else{
+                                    Alert.alert('已经是最后一页试题了');
+                                }
+                            }else if(currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == true){ //试题还未请求完
+                                //currentBottomPage++;
+                                console.log('#################11111111###################');
                                 pageNo++;
-                                this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
-                                // while((currentBottomPage + 1) * 5 != this.state.paperList.length && dataFlag == true){
-                                //     pageNo++;
-                                //     this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
-                                // }
-                            }else{ //试题请求完之，但当前展示的试题并不是最后一页数据
-                                currentBottomPage++;
+                                this.fetchData(pageNo , this.state.paperTypeList[count] , this.state.shareTag , false);
+                            }
+                            if((currentBottomPage + 1) * 5 > this.state.paperList.length && dataFlag == true){
+                                //当前页展示的试题不足5个,且试题还未请求完
+                                console.log('#################22222222###################');
+                                pageNo++;
+                                this.fetchData(pageNo , this.state.paperTypeList[count] , this.state.shareTag , false);
+                            }
+                            //当前展示的试题并不是最后一页数据
+                            if(currentLastPaperIndex + 1 != this.state.paperList.length){ 
+                                console.log('#################33333333###################');
+                                //currentBottomPage++;
                                 this.setState({ selectPaperIndex: currentBeginPaperIndex + 5 });
+                            }
+                            //最后一页正好有5个试题，提前请求下一页
+                            if(this.state.paperList.length % 5 == 0 
+                                && currentLastPaperIndex + 1 == this.state.paperList.length
+                            ){
+                                console.log('#################44444444444###################');
+                                pageNo++;
+                                this.fetchData(pageNo , this.state.paperTypeList[count] , this.state.shareTag , false);
                             }
                         }}
                     >
@@ -952,20 +1065,27 @@ class CreateHomework extends React.Component {
     //更新selectPaperIndex
     updateSelectPaperIndex = () => {
         const { paperList , selectPaperIndex  } = this.state;
-        // let tempIndex = 0;
+        let tempIndex = currentBottomPage * 5;
         // if(paperList.length % 5 == 0){
         //     tempIndex = (Math.floor(this.state.paperList.length / 5) - 1) * 5;
         // }else{
         //     tempIndex = Math.floor(this.state.paperList.length / 5) * 5;
         // }
-        // console.log('######Math########Select##################',tempIndex , selectPaperIndex);
-        // if(tempIndex < paperList.length
-        //     &&  selectPaperIndex != tempIndex
-        //     &&  paperList.length != 0
-        // )
-        // {
-        //     this.setState({ selectPaperIndex: tempIndex });
-        // }
+        console.log('===========tempIndex========length===========',tempIndex , paperList.length);
+        if(tempIndex < paperList.length
+            &&  selectPaperIndex != tempIndex
+            &&  paperList.length != 0
+        )
+        {
+            console.log('===============需要更新selectPaperIndex======================');
+            this.setState({ selectPaperIndex: tempIndex },
+                ()=>{
+                    console.log('=================clickNext = false====================');
+                    // clickNext = false;
+                }
+            );
+        }
+        clickNext = false;
     }
 
     //显示底部试题类型图标
@@ -975,14 +1095,11 @@ class CreateHomework extends React.Component {
         // console.log('&&&&&&&&&&selectPaperIndex&&Math&&&', selectPaperIndex , (Math.floor(paperList.length / 5) - 1) * 5);
         console.log('&&&&&&&&&&currentBottomPage&&alllength&&&', currentBottomPage , paperList.length);
         let content = [];
-        let index = (currentBottomPage - 1) * 5 >= paperList.length  && paperList.length != 0
-                                ? currentLastPaperIndex + 1
-                                : (currentBottomPage - 1) * 5;
+        let index = currentBottomPage * 5 ;
         // let index = paperList.length % 5 != 0 
         //                 ? Math.floor(paperList.length / 5) * 5
         //                 : (paperList.length / 5 - 1) * 5 ;
-        console.log('&&&&&&&&&&index&&&', index);
-        currentBeginPaperIndex = index;
+        //console.log('&&&&&&&&&&index&&&', index);
         let iCopy = 0;
         for(let i = index ; i < index + 5 && i >= 0 && i < paperList.length ; i++){
             let paperTypeImg;
@@ -1025,7 +1142,15 @@ class CreateHomework extends React.Component {
             );
             iCopy = i;
         }
-        currentLastPaperIndex = iCopy;
+        if(iCopy != 0){
+            currentBeginPaperIndex = index;
+            currentLastPaperIndex = iCopy;
+        }else{
+            currentBottomPage--;
+            this.setState({});
+        }
+
+        console.log('&&&&&&&&&&currentBeginPaperIndex&&currentLastPaperIndex&&&', currentBeginPaperIndex , currentLastPaperIndex);
         //this.setState({ selectPaperIndex: currentBottomPage })
         return content; 
     }
@@ -1033,7 +1158,7 @@ class CreateHomework extends React.Component {
 
     //请求试题
     fetchData = (paperNum , paperType , shareTag , isRefresh) => {
-        const paramsData = this.props.paramsData;
+        const paramsData = this.state.paramsDataProps;
         const token = global.constants.token;
         const ip = global.constants.baseUrl;
         const url = ip + "teacherApp_getAllQuestions.do";
@@ -1069,35 +1194,43 @@ class CreateHomework extends React.Component {
                 console.log('*****currentFecthLength***' , paperLength , Date.parse(new Date()));
 
                 if(fetchNum != 2){
-                    currentBottomPage = paperLength != 0 ? currentBottomPage + 1 : currentBottomPage;
-
                     let foot = 0;
-                    // console.log('---paperListOne-Length---', index , paperType , paperListTwo[index].length);
                     //试题请求接口每次最多返回5个数据
                     if(paperLength < 5){ //当前类型试题请求完
-                        pageNo = 0; //_onEndReached() 已增
+                        pageNo = 0; //点击右箭头，若需要请求数据，pageNo会加1
                         count++;
                         if(count >= typeAll){
                             foot = 1; //未请求到数据，数据加载完了
                             dataFlag = false; //数据加载完了
-                            console.log('********总试题数*******', this.state.paperList.length + paperLength , Date.parse(new Date()));
+                            console.log('==================所有试题都加载完了===========================', this.state.paperList.length + paperLength , Date.parse(new Date()));
                             // Alert.alert('总试题数'+this.state.paperList.length);
                         }else{
                             console.log('------试题类型已取完-count---typeAll-' , this.state.paperTypeList[count-1] ,  count, typeAll);
-                            // pageNo = 1;
-                            // this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
+                            console.log('=======currentBottomPage===paperList.length==此次请求试题数===', currentBottomPage , this.state.paperList.length , paperLength);
+                            console.log('=================================', (currentBottomPage + 1) * 5 > this.state.paperList + paperLength)
+                            if((currentBottomPage + 1) * 5 > this.state.paperList.length + paperLength){
+                                //当前页底部显示的数据不足5个，需要重新请求新的类型
+                                console.log('===============当前页底部显示的数据不足5个，需要重新请求新的类型====================')
+                                pageNo = 1;
+                                this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
+                            }       
                         }
                     }
-                    allPaperNumBeforeFetch = this.state.paperList.length;  
                     //paperList: isRefresh || fetchNum == 1 || fetchNum == 2 ? paperListOne : this.state.paperList.concat(paperListOne),
                     this.setState({
                         paperList: isRefresh ? paperListOne : this.state.paperList.concat(paperListOne),
                         showFoot: foot, 
                     },()=>{
-                        //this.setState({ selectPaperIndex: this.state.currentBottomPage * 5 })
+                        console.log('++++++++++++setState试题已保存++++++++++++++++++');
                     });
-                    
+                    console.log('++++++++++++setState试题++++++++++++++++++');
                     console.log('*******allLength**' , this.state.paperList.length , Date.parse(new Date()));
+                    
+                    // if(paperLength == 5){
+                    //     console.log('++++++++++++此次请求了5个试题，继续请求当前类型的下一页++++++++++++++++++');
+                    //     pageNo++;
+                    //     this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
+                    // }
                 }
                 
                 paperListOne = [];
@@ -1111,74 +1244,17 @@ class CreateHomework extends React.Component {
             });
     }
 
-
-    //展示添加试题页面底部
-    // showAddPaperBottom = () => {
-    //     const { paperList } = this.state;
-    //     var paperItems = [];
-    //     for(let paper_i = 0 ; paper_i < paperList.length ; paper_i++){
-    //         let paperTypeImg;
-    //         if(paperList[paper_i].baseTypeId == '101'){
-    //             paperTypeImg = require('../../../../assets/teacherLatestPage/101.png');
-    //         }else if(paperList[paper_i].baseTypeId == '102'){
-    //             paperTypeImg = require('../../../../assets/teacherLatestPage/102.png');
-    //         }else if(paperList[paper_i].baseTypeId == '103'){
-    //             paperTypeImg = require('../../../../assets/teacherLatestPage/103.png');
-    //         }else if(paperList[paper_i].baseTypeId == '104'){
-    //             paperTypeImg = require('../../../../assets/teacherLatestPage/104.png');
-    //         }else if(paperList[paper_i].baseTypeId == '106'){
-    //             paperTypeImg = require('../../../../assets/teacherLatestPage/106.png');
-    //         }else if(paperList[paper_i].baseTypeId == '108'){
-    //             if(paperList[paper_i].typeName.indexOf('填空')){
-    //                 paperTypeImg = require('../../../../assets/teacherLatestPage/109.png');
-    //             }else{
-    //                 paperTypeImg = require('../../../../assets/teacherLatestPage/108.png');
-    //             }
-    //         }else{
-    //             paperTypeImg = require('../../../../assets/teacherLatestPage/107.png');
-    //         }
-    //         paperItems.push(
-    //             <TouchableOpacity 
-    //                 key={paper_i}
-    //                 onPress={() => {
-    //                     if(this.state.selectPaperIndex != paper_i){
-    //                         this.setState({ 
-    //                             selectPaperIndex: paper_i,
-    //                         })
-    //                     }
-    //                 }}
-    //             >
-    //                 <Image 
-    //                     source={paperTypeImg} 
-    //                     style={this.state.selectPaperIndex == paper_i ? styles.checked : styles.little_image} 
-    //                 />
-    //             </TouchableOpacity>   
-    //         );
-    //     }
-    //     return(
-    //             <ScrollView  
-    //                 horizontal={true} 
-    //                 showsHorizontalScrollIndicator={false}
-    //                 style={styles.bottomView}
-    //             >
-    //                 {/**scrollView item个数 */}
-    //                 {/* {console.log('***scrollView item个数**' , paperItems.length)} */}
-    //                 {paperItems}
-    //             </ScrollView>
-    //     );
-    // }
-
     //向上（前）移动试卷题目（同类型之间移动）
     moveUpPaper = () => {
         const { updatePaperIndex , selectPaperList } = this.state;
         if(updatePaperIndex == 0){
-            // Alert.alert('已经是第一道题了');
+            Alert.alert('已经是第一道题了');
             Toast.showInfoToast('已经是第一道题了',1000);
         }else{
             const baseTypeId1 = selectPaperList[updatePaperIndex].baseTypeId;
             const baseTypeId2 = selectPaperList[updatePaperIndex - 1].baseTypeId;
             if(baseTypeId1 != baseTypeId2){
-                // Alert.alert('类型不一致，不能移动');
+                Alert.alert('类型不一致，不能移动');
                 Toast.showInfoToast('类型不一致，不能移动',1000);
             }else{
                 const tempPaperList = selectPaperList;
@@ -1197,13 +1273,13 @@ class CreateHomework extends React.Component {
     moveDownPaper = () => {
         const { updatePaperIndex , selectPaperList } = this.state;
         if(updatePaperIndex == (selectPaperList.length - 1)){
-            //Alert.alert('已经是最后一道题了');
+            Alert.alert('已经是最后一道题了');
             Toast.showInfoToast('已经是最后一道题了',1000);
         }else{
             const baseTypeId1 = selectPaperList[updatePaperIndex].baseTypeId;
             const baseTypeId2 = selectPaperList[updatePaperIndex + 1].baseTypeId;
             if(baseTypeId1 != baseTypeId2){
-                // Alert.alert('类型不一致，不能移动');
+                Alert.alert('类型不一致，不能移动');
                 Toast.showInfoToast('类型不一致，不能移动',1000);
             }else{
                 const tempPaperList = selectPaperList;
@@ -1899,7 +1975,7 @@ class CreateHomework extends React.Component {
 
 
     render() {
-        // console.log('--------类式props-------', this.props.paramsData);
+        console.log('----render----类式props---试题类型----', this.state.paperTypeList, Date.parse(new Date()));
         return (
             <View style={{ flexDirection: 'column', backgroundColor: '#fff' }}>
                 {/**导航项 */}
@@ -1955,7 +2031,7 @@ class CreateHomework extends React.Component {
                                     : <View style={{width: 20, height: 20}}/>
                     }
                     {
-                        this.state.filterModelVisiblity ? this.showFilter() : null
+                        this.state.filterModelVisiblity || this.state.knowledgeModelVisibility ? this.showFilter() : null
                     }
                 </View>
             
@@ -2169,5 +2245,14 @@ const styles = StyleSheet.create({
         fontWeight: '300',
         paddingTop: 8,
         textAlign: 'center',
+    },
+    modalView: {
+        height: '95%',
+        marginTop: 60, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
+        backgroundColor: "white",
+        padding: 30,
+        paddingBottom: 80,
+        //justifyContent: "center",
+        //alignItems: "center",
     },
 })

@@ -7,7 +7,8 @@ import { useNavigation } from "@react-navigation/native";
 import http from "../../../utils/http/request";
 import {Avatar,Layout,Button,Divider,Input,OverflowMenu,MenuItem,} from "@ui-kitten/components";
 import { WebView } from 'react-native-webview';
-import Toast from '../../../utils/Toast/Toast'
+import Toast from "../../../utils/Toast/Toast";
+
 
 export default function CreateWorkContainer(props) {
     const navigation = useNavigation();
@@ -731,7 +732,7 @@ class CreateWork extends React.Component {
                     <Button style={styles.button}
                         onPress={()=>{
                             if(this.state.InputText==''){
-                                Toast.showDangerToast('请输入试卷名称',1000)
+                                Toast.showInfoToast('请输入试卷名称',1000)
                             }else if(this.state.knowledgeCode!=''){
                                 this.props.navigation.navigate({
                                     name:'EditPicturePaperWork',

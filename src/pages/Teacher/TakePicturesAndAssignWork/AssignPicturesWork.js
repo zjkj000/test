@@ -1,4 +1,4 @@
-import { Text, View,Image,ScrollView,TouchableOpacity,TextInput,StyleSheet} from 'react-native'
+import { Text, View,Image,ScrollView,TouchableOpacity,TextInput,StyleSheet, Alert} from 'react-native'
 import React, { Component } from 'react'
 import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
 import { Button } from '@ui-kitten/components';
@@ -6,12 +6,13 @@ import { Button } from '@ui-kitten/components';
 import { useNavigation } from "@react-navigation/native";
 import BasePicker from '../../../utils/datetimePickerUtils/BasePicker';
 import DateTime from '../../../utils/datetimePickerUtils/DateTime';
-import http from '../../../utils/http/request'
+import http from '../../../utils/http/request';
 import Toast from '../../../utils/Toast/Toast';
 export default function AssignPicturesWorkContainer(props) {
     const navigation = useNavigation();
     const paperName=props.route.params.paperName
     const paperId = props.route.params.paperId
+    console.log('布置作业页面接收的',props.route.params.paperId)
     navigation.setOptions({title:'布置作业'});
     return <AssignPicturesWork navigation={navigation} paperName={paperName} paperId={paperId} />;
 }
@@ -428,7 +429,13 @@ class AssignPicturesWork extends Component {
                 let resJson = JSON.parse(resStr);
                 console.log('布置页面保存：',resJson)
                 if(resJson.success){
-                    //跳转首页
+                    Alert.alert('','作业布置成功！',[{},
+                        {text:'ok',onPress:()=>this.props.navigation.navigate('Teacher_Home')}
+                      ])
+                    Toast.showSuccessToast('布置成功！',1000)
+                }else{
+                    Alert.alert('出错了！重新布置一下吧')
+                    Toast.showDangerToast('布置失败！',1000)
                 }
             })
         }
@@ -529,10 +536,7 @@ class AssignPicturesWork extends Component {
              style={{width:'40%'}} >重置</Button>
             <Button onPress={()=>{
                 this.SaveAssign()
-                this.props.navigation.navigate({
-                    name:'Teacher_Home'
-
-                })
+                
                 }} style={{width:'40%'}}>确定</Button>
       </View>
     </View>

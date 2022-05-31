@@ -74,9 +74,9 @@ export default class http {
             if (ret != "") {
                 url = url + "?" + ret;
             }
-            // console.log("====================================");
-            // console.log(url);
-            // console.log("====================================");
+            console.log("====================================");
+            console.log(url);
+            console.log("====================================");
             res = await axios.get(url);
             return res;
         } catch (error) {

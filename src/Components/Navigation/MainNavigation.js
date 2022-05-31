@@ -32,17 +32,11 @@ import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
 import { Icon } from "react-native-elements";
 import HomeworkPropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/HomeworkProperty";
 import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomework";
+import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
 
-<<<<<<< HEAD
 import PaperListContainer from '../../pages/Teacher/CorrectPaper/PaperList';
 import CorrectingPaper from '../../pages/Teacher/CorrectPaper/CorrectingPaper';
 import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDetails';
-=======
-import PaperListContainer from "../../pages/Teacher/CorrectPaper/PaperList";
-import CorrectingPaper from "../../pages/Teacher/CorrectPaper/CorrectingPaper";
-import CorrectSubmit from "../../pages/Teacher/CorrectPaper/CorrectSubmit";
-import LookCorrectDetails from "../../pages/Teacher/CorrectPaper/LookCorrectDetails";
->>>>>>> 98f02713dee214472d341216bb3cc75db6dcefc6
 
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
 import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
@@ -186,6 +180,13 @@ export default class MainNavigation extends Component {
                             headerShown: false,
                         }}
                     />
+                    <Stack.Screen
+                        name="设置导学案属性"
+                        component={LearnCasePropertyContainer}
+                        options={{
+                            headerShown: true,
+                        }}
+                    />
                 </Stack.Group>
                 <Stack.Group>
                     <Stack.Screen
@@ -250,9 +251,6 @@ export default class MainNavigation extends Component {
                         }}
                     />
                 </Stack.Group>
-
-                
-                
             </Stack.Navigator>
         );
     }

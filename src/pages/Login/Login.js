@@ -67,7 +67,9 @@ export default Login = () => {
         )
             .then((response) => response.text())
             .then((text) => {
+                
                 let res = eval("(" + text.substring(2) + ")");
+                // console.log('登录提示：',res.data)
                 let homePage = "Home";
                 let property = "STUDENT";
                 if ("COMMON_TEACHER" in res.data) {
@@ -85,6 +87,7 @@ export default Login = () => {
                     global.constants.userId = res.data[property].userId;
                     global.constants.passWord = param.passWord;
                     global.constants.userPhoto = res.data[property].userPhoto;
+                    global.constants.userCn = res.data[property].cn;
                     setShowLoading(false);
                     Toast.showSuccessToast(res.message, 500);
                     // Alert.alert(res.message);

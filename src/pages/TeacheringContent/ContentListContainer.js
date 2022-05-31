@@ -7,7 +7,7 @@ import {screenWidth,screenHeight,userId,token,} from "../../utils/Screen/GetSize
 import http from "../../utils/http/request";
 import Loading from "../../utils/loading/Loading"; //Loading组件使用export {Loading}或者export default Loading;
 import "../../utils/global/constants";
-
+import {WaitLoading,Waiting} from '../../utils/WaitLoading/WaitLoading' 
 let pageNo = 1; //当前第几页
 let itemNo = 0; //item的个数
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
@@ -43,8 +43,6 @@ class ContentList extends React.Component {
         //初始挂载执行一遍
         oldtype = this.props.resourceType;
         oldsearchStr = this.props.searchStr;
-
-
         //console.log("componentWillMount**************" , 'oldtype' , oldtype , 'rescouceType' , this.props.resourceType , this.props.searchStr);
         this.fetchData(pageNo , oldtype , oldsearchStr , true);
     }
@@ -92,7 +90,6 @@ class ContentList extends React.Component {
     //通过fetch请求数据
     fetchData(pageNo , type , search , onRefresh = false) {
         console.log("fetchData*********", Date.parse(new Date()));
-        
         const token = global.constants.token;
         const userId = global.constants.userName;
         // const ip = global.constants.baseUrl;
@@ -106,12 +103,14 @@ class ContentList extends React.Component {
             userId: userId,
             type: type,
             searchStr: search,
-            //callback:'ha',
+            // callback:'ha',
             token: token,
         }; 
         http.get(url, params)
             .then((resStr) => {
+                console.log('请求到了数据',resStr)
                 let resJson = JSON.parse(resStr);
+                console.log('请求到了，转换成了JSON',resJson.data.length)
                 let todosList1 =  resJson.data; 
                 let dataBlob = [];
                 let i = itemNo;
@@ -341,6 +340,7 @@ class ContentList extends React.Component {
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
                             this.deletepaper(id)
+                            WaitLoading.show('删除中',-1)
                     }}>
                             删除
                         </Text>
@@ -416,6 +416,7 @@ class ContentList extends React.Component {
         return (
             <View>
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
+                <Waiting/>
                 <FlatList
                     //定义数据显示效果
                     data={this.state.todos}
@@ -445,7 +446,13 @@ class ContentList extends React.Component {
             paperId:paperId 
           };
         http.get(url, params).then((resStr) => {
-            this.fetchData(pageNo , oldtype , oldsearchStr , true);
+            let resJson = JSON.parse(resStr);
+            if(resJson.success){
+                WaitLoading.show_success('删除成功！',1000)
+                this.setState({todos:[]})
+                this.fetchData(pageNo , oldtype , oldsearchStr , true);
+            }
+            
         })
     }
 

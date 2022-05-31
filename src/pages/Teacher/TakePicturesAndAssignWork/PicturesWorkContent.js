@@ -8,6 +8,7 @@ import Toast from '../../../utils/Toast/Toast';
 import RenderHTML from 'react-native-render-html';
 import screenWidth from '../../../utils/Screen/GetSize'
 import Read from './AnswerUtils/Read'
+import{WaitLoading,Waiting}from '../../../utils/WaitLoading/WaitLoading'
 export default class PicturesWorkContent extends Component {
     constructor(props){
       super(props)
@@ -140,6 +141,7 @@ export default class PicturesWorkContent extends Component {
     
     //拍照调用的函数
     handleCamera(type){
+      WaitLoading.show('提交中...',-1)
       ImageHandler.handleCamera().then((res) => {
           if (res) {
                   const url ="http://" +"www.cn901.net" +":8111" +
@@ -150,9 +152,10 @@ export default class PicturesWorkContent extends Component {
                       type:type,
                       userName: global.constants.userName}; 
                          
-                  http.post(url,params).then((resStr)=>{
-                      let resJson = JSON.parse(resStr);
+                  http.post(url,params,false).then((resStr)=>{
+                      let resJson = resStr;
                       if(resJson.success){
+                          WaitLoading.dismiss()
                           if(type=='Show'){
                             var newTimuContentList= this.state.TimuContentList
                             newTimuContentList.push('<p><img style=\"max-width:100px\" src="'+resJson.data+'"></p>')
@@ -180,6 +183,7 @@ export default class PicturesWorkContent extends Component {
 
   //从本地选择照片需要的函数
     handleLibrary(type){
+      WaitLoading.show('提交中...',-1)
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
               const url ="http://" +"www.cn901.net" +":8111" +
@@ -190,9 +194,10 @@ export default class PicturesWorkContent extends Component {
                   type:type,
                   userName: global.constants.userName};    
                   
-                http.post(url,params).then((resStr)=>{
-                    let resJson = JSON.parse(resStr);
+                http.post(url,params,false).then((resStr)=>{
+                    let resJson = resStr;
                     if(resJson.success){
+                      WaitLoading.dismiss()
                         if(type=='Show'){
                           var newTimuContentList= this.state.TimuContentList
                           newTimuContentList.push('<p><img style=\"max-width:100px\" src="'+resJson.data+'"></p>')
@@ -805,6 +810,7 @@ export default class PicturesWorkContent extends Component {
       return(
         <View style={{width:'100%',paddingBottom:20,borderTopWidth:0.5}}>
           {/* 题目名称 第一行 */}
+          <Waiting/>
           <View style={{flexDirection:'row',paddingLeft:20,height:50,alignItems:'center',backgroundColor:'#DCDCDC'}}>
             <Text style={{fontSize:15,color:'#59B9E0'}}>{this.state.order}</Text>
             <Text style={{fontSize:15}}>/</Text>

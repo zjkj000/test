@@ -8,9 +8,10 @@ import {
     TouchableHighlight,
     TextInput,
     Alert,
-    Modal,
     Platform,
     ScrollView,
+    Overlay,
+    Modal,
 } from "react-native";
 import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
@@ -33,6 +34,10 @@ import { WebView } from 'react-native-webview';
 import HTMLView from 'react-native-htmlview';
 import RenderHtml from 'react-native-render-html';
 
+import Toast from '../../../../utils/Toast/Toast';
+
+// import Modal from 'react-native-modal';
+
 
 let textInputName = ''; //设置属性---名称
 let textInputPaper = ''; //设置属性---试卷简介
@@ -51,15 +56,23 @@ export default function HomeworkPropertyModelContainer(props) {
     return <HomeworkPropertyModel navigation={navigation} 
         paperTypeList={paperTypeList}
         studyRank={props.studyRank}
+        studyRankId={props.studyRankId}
         studyClass={props.studyClass}
+        studyClassId={props.studyClassId}
         edition={props.edition}
+        editionId={props.editionId}
         book={props.book}
+        bookId={props.bookId}
         knowledge={props.knowledge}
+        knowledgeCode={props.knowledgeCode}
         channelNameList={props.channelNameList} //学段名列表（接口数据）
         studyClassList={props.studyClassList} //学科列表（接口数据）
         editionList={props.editionList} //版本列表（接口数据）
         bookList={props.bookList} //教材列表（接口数据）  
         knowledgeList={props.knowledgeList} //从接口中返回的数据
+
+        setAllProperty={props.setAllProperty}
+        setFetchAgainProperty={props.setFetchAgainProperty}
     />;
 }
 
@@ -72,38 +85,38 @@ class HomeworkPropertyModel extends React.Component {
             privateContent: false, //私有内容
 
             studyRank: this.props.studyRank, //学段
-            studyRankId: '', //学段编码
+            studyRankId: this.props.studyRankId, //学段编码
             studyRankVisibility: false, //学段选择列表是否显示
             channelNameList: this.props.channelNameList, //学段名列表（接口数据）
 
             studyClass: this.props.studyClass, //学科
-            studyClassId: '', //学科编码
+            studyClassId: this.props.studyClassId, //学科编码
             studyClassVisibility: false, //学段选择列表是否显示
             studyClassList: this.props.studyClassList, //学科列表（接口数据）
 
             edition: this.props.edition, //版本
-            editionId: '', //版本编码
+            editionId: this.props.editionId, //版本编码
             editionVisibility: false, //版本选择列表是否显示
             editionList: this.props.editionList, //版本列表（接口数据）
 
             book: this.props.book, //教材
-            bookId: '', //教材编码
+            bookId: this.props.bookId, //教材编码
             bookVisibility: false, //教材选择列表是否显示
             bookList: this.props.bookList, //教材列表（接口数据）
 
             knowledge: this.props.knowledge, //知识点(选中的)
-            knowledgeCode: '', //选中的知识点项的编码
+            knowledgeCode: this.props.knowledgeCode, //选中的知识点项的编码
             knowledgeVisibility: false, //知识点选择列表是否显示     
-            knowledgeModelVisibility: false, //知识点悬浮框model是否显示      
-            knowledgeList: this.props.knowledgeList, //从接口中返回的数据
+            // knowledgeModelVisibility: false, //知识点悬浮框model是否显示      
+            // knowledgeList: this.props.knowledgeList, //从接口中返回的数据
 
-            paperType: '全部', //试题类型(选中的)
+            paperType: '', //试题类型(选中的)
+            paperTypeList: [],
+            paperTypeListFetch: [], //比paperTypeList少一个‘全部’
             paperTypeVisibility: false, //试题类型列表是否显示
 
             resetButton: false, //重置
             sureButton: true, //确定
-
-
 
             //网络请求状态
             error: false,
@@ -112,10 +125,64 @@ class HomeworkPropertyModel extends React.Component {
     }
 
     UNSAFE_componentWillMount(){
-        const {paperTypeList} = this.props;
-        var paperTypeListTemp = paperTypeList;
-        paperTypeListTemp.splice(0 , 0 , "全部");
-        this.setState({ paperTypeList: paperTypeListTemp });
+        console.log('----------设置属性------WillMount------');
+        // const {paperTypeList} = this.props;
+        // var paperTypeListTemp = paperTypeList;
+        // paperTypeListTemp.splice(0 , 0 , "全部");
+        // this.setState({ paperTypeList: paperTypeListTemp });
+        this.fetchPaperType();
+    }
+
+    //请求试题类型
+    fetchPaperType = () => {
+        const ip = global.constants.baseUrl;
+        const url = ip + "teacherApp_getQuestionTypeList.do";
+        const params = {
+            channelCode: this.state.studyRankId,
+            subjectCode: this.state.studyClassId,
+            textBookCode: this.state.editionId,
+            gradeLevelCode: this.state.bookId,
+            pointCode: this.state.knowledgeCode,
+            //callback:'ha',
+        };
+
+        console.log('-----fetchPaperType-----', Date.parse(new Date()))
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                console.log('--------试题库试题类型数据------');
+                console.log(resJson.data);
+                console.log('------------------------');
+
+                if(resJson.data.length > 0){
+                    var resJsonData = [];
+                    for(let i = 0 ; i < resJson.data.length ; i++){
+                        resJsonData.push((resJson.data)[i]);
+                    }
+                    var paperTypeListTemp = resJson.data;
+                    paperTypeListTemp.splice(0 , 0 , "全部"); 
+                    // console.log('----resJsonData---',resJsonData);
+                    this.setState({ 
+                        paperTypeList: paperTypeListTemp,
+                        paperTypeListFetch: resJsonData,
+                    });
+                }else{
+                    Alert.alert('该知识点没有对应的试题');
+                    Toast.showInfoToast('该知识点没有对应的试题',1000);
+                    return;
+                }
+            })
+            .catch((error) => {
+                console.log('******catch***error**', error);
+                this.setState({
+                    error: true,
+                    errorInfo: error,
+                });
+            });
+    }
+
+    componentWillUnmount(){
+        console.log('----------设置属性------WillUnmount------');
     }
 
     //更新是否显示状态
@@ -280,6 +347,9 @@ class HomeworkPropertyModel extends React.Component {
                                     knowledgeList: [],
                                     knowledge: '',
                                     knowledgeCode: '',
+                                    //类型信息修改:
+                                    paperType: '',
+                                    paperTypeList: [],
                                 })
                             } else {
                                 this.setState({
@@ -358,6 +428,9 @@ class HomeworkPropertyModel extends React.Component {
                                     knowledgeList: [],
                                     knowledge: '',
                                     knowledgeCode: '',
+                                    //类型信息修改:
+                                    paperType: '',
+                                    paperTypeList: [],
                                 })
                             } else {
                                 this.setState({
@@ -433,6 +506,9 @@ class HomeworkPropertyModel extends React.Component {
                                     knowledgeList: [],
                                     knowledge: '',
                                     knowledgeCode: '',
+                                    //类型信息修改:
+                                    paperType: '',
+                                    paperTypeList: [],
                                 })
                             } else {
                                 this.setState({
@@ -505,6 +581,9 @@ class HomeworkPropertyModel extends React.Component {
                                     knowledgeList: [],
                                     knowledge: '',
                                     knowledgeCode: '',
+                                    //类型信息修改:
+                                    paperType: '',
+                                    paperTypeList: [],
                                 })
                             } else {
                                 this.setState({
@@ -525,7 +604,7 @@ class HomeworkPropertyModel extends React.Component {
 
     //显示试题类型列表数据
     showPaperType = () => {
-        const { paperTypeList } = this.props;
+        const { paperTypeList } = this.state;
         const content = paperTypeList.map((item, index) => {
             return (
                 <View key={index}>
@@ -556,120 +635,17 @@ class HomeworkPropertyModel extends React.Component {
         return content;        
     }
 
-    //显示知识点覆盖框
-    showKnowledgeModal = () => {
-        const { knowledgeModelVisibility } = this.state;
-       
-        return (
-            <Modal
-                animationType="none"
-                transparent={true}
-                visible={knowledgeModelVisibility}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    this.setState({ knowledgeModelVisibility: false });
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <TouchableOpacity
-                            style={{
-                                height: 20,
-                                width: screenWidth,
-                                paddingLeft: screenWidth * 0.9,
-                                position: 'absolute',
-                            }}
-                            onPress={() => {
-                                this.setState({ knowledgeModelVisibility: false });
-                            }}
-                        >
-                            <Image
-                                style={{
-                                    top: 0,
-                                    height: '80%',
-                                    width: '80%',
-                                    resizeMode: "center",
-                                }}
-                                source={require('../../../../assets/teacherLatestPage/close.png')}
-                            />
-                        </TouchableOpacity>
-                        {/* {console.log('-----knowledgeList---', this.state.knowledgeList , this.state.knowledgeList.length)} */}
-                        {/**知识点数据为空时请求数据 */}
-                        {
-                            this.state.knowledgeList.length <= 0
-                                && this.state.studyRank != ''
-                                && this.state.studyClass != ''
-                                && this.state.edition != ''
-                                && this.state.book != ''
-                                ? this.showKnowledgeList()
-                                : null
-                        }
-                        {
-                            this.state.knowledgeList.length > 0
-                                ?
-                                    <WebView
-                                        onMessage={(event) => {
-                                            this.setState({ 
-                                                knowledgeModelVisibility: false, 
-                                                knowledge: JSON.parse(event.nativeEvent.data).name ,
-                                                knowledgeCode: JSON.parse(event.nativeEvent.data).id,
-                                            });
-                                        }}
-                                        javaScriptEnabled={true}
-                                        scalesPageToFit={Platform.OS === 'ios' ? true : false}
-                                        // style={{height: screenHeight , width : screenWidth}}
-                                        source={{ html: this.state.knowledgeList }}
-                                    ></WebView>
-                                // <ScrollView  showsVerticalScrollIndicator={false}>
-                                //     <HTMLView 
-                                //         value={this.state.knowledgeList}
-                                //         renderNode={this.getKnowledgeList}
-                                //     />
-                                // </ScrollView>
-                                : <Text>知识点数据为请求到或没有数据</Text>
-                        }
-                    </View>
-                </View>
-            </Modal>
-        );
-    }
-
-
-    //从接口中获取知识点内容
-    showKnowledgeList = () => {
-        const { studyClassId, editionId, bookId } = this.state;
-        const ip = global.constants.baseUrl;
-        const url = ip + "teacherApp_getKnowledgeAllTree.do";
-        const params = {
-            subjectCode: studyClassId,
-            textBookCode: editionId,
-            gradeLevelCode: bookId,
-            //callback:'ha',
-        };
-
-        console.log('-----showKnowledgeList-----', Date.parse(new Date()))
-        http.get(url, params)
-            .then((resStr) => {
-                let resJson = JSON.parse(resStr);
-                // console.log('--------知识点数据------');
-                // console.log(resJson.data);
-                // console.log('------------------------');
-                this.setState({ knowledgeList: resJson.data });
-            })
-            .catch((error) => {
-                console.log('******catch***error**', error);
-                this.setState({
-                    error: true,
-                    errorInfo: error,
-                });
-            });
-    }
-
 
 
     render() {
+        console.log('----------render-----knowledgeModelVisibility----', this.state.knowledgeModelVisibility);
         return (
-            <View style={{...styles.model, borderWidth: 1, borderColor: '#DCDCDC'}}>
+            <View 
+                // style={this.state.knowledgeModelVisibility ? 
+                //     {...styles.model, borderWidth: 1, borderColor: '#DCDCDC' , opacity: 0}
+                //     : {...styles.model, borderWidth: 1, borderColor: '#DCDCDC' , opacity: 1}} 
+                style={{...styles.model, borderWidth: 1, borderColor: '#DCDCDC' , opacity: 1}}
+            >
                 <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
                     <View style={{...styles.itemView, marginBottom: 5}}>
                         <Text style={!this.state.shareContent ? styles.content : styles.contentSelected} 
@@ -864,24 +840,27 @@ class HomeworkPropertyModel extends React.Component {
                     {this.state.knowledgeVisibility ?
                         <TouchableOpacity
                             style={styles.knowledge}
-                            onPress={() => { this.setState({ knowledgeModelVisibility: !this.state.knowledgeModelVisibility }) }}
+                            onPress={() => {
+                                //this.setState({ knowledgeModelVisibility: true })
+                                this.props.setAllProperty(
+                                    this.state.studyRank,
+                                    this.state.studyRankId,
+                                    this.state.studyClass,
+                                    this.state.studyClassId,              
+                                    this.state.edition,
+                                    this.state.editionId,
+                                    this.state.book,
+                                    this.state.bookId
+                                );
+                            }}
                         >
                             <Text style={styles.knowledgeText}>
                                 点击这里选择知识点
                             </Text>
-                            {/* {this.state.knowledgeModelVisibility ?
-                                this.showKnowledgeModal()
-                                : null
-                            } */}
                         </TouchableOpacity>
                         : null
                     }
-                    {
-                        this.state.knowledgeVisibility  && this.state.knowledgeModelVisibility?
-                                    this.showKnowledgeModal()
-                                    : null
 
-                    }
                     {/**分割线 */}
                     <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
 
@@ -910,7 +889,7 @@ class HomeworkPropertyModel extends React.Component {
                     {this.state.paperTypeVisibility ?
                         <View style={styles.contentlistView}>
                             {
-                                this.props.paperTypeList.length > 0
+                                this.state.paperTypeList.length > 0
                                     ? this.showPaperType()
                                     : <Text>试题类型列表未获取到或者为空</Text>
                             }
@@ -936,14 +915,68 @@ class HomeworkPropertyModel extends React.Component {
                 >
                     <Text style={this.state.resetButton ? styles.buttonSelect : styles.button}
                         onPress={() => {
-                            Alert.alert('重置功能还未写！！！')
+                            // Alert.alert('重置功能还未写！！！')
+                            this.setState({
+                                shareContent: true, //共享内容
+                                schoolContent: false, //本校内容
+                                privateContent: false, //私有内容
+
+                                studyRank: '', //学段
+                                studyRankId: '', //学段编码
+                                studyRankVisibility: false, //学段选择列表是否显示
+
+                                studyClass: '', //学科
+                                studyClassId: '', //学科编码
+                                studyClassVisibility: false, //学段选择列表是否显示
+
+                                edition: '', //版本
+                                editionId: '', //版本编码
+                                editionVisibility: false, //版本选择列表是否显示
+
+                                book: '', //教材
+                                bookId: '', //教材编码
+                                bookVisibility: false, //教材选择列表是否显示
+
+                                knowledge: '', //知识点(选中的)
+                                knowledgeCode: '', //选中的知识点项的编码
+                                knowledgeVisibility: false, //知识点选择列表是否显示 
+
+                                paperType: '',
+                                paperTypeList: [],
+                                paperTypeVisibility: false, //试题类型列表是否显示
+                            });
                         }}
                     >
                        重置
                     </Text>
                     <Text style={this.state.sureButton ? styles.buttonSelect : styles.button}
                         onPress={() => { 
-                            Alert.alert('确定功能还未写！！！')
+                            // Alert.alert('确定功能还未写！！！')
+                            if(this.state.paperType == ''){
+                                Alert.alert('请选择属性');
+                            }else{
+                                let shareTagTepm = this.state.shareContent 
+                                                ? '99'
+                                                : this.state.schoolContent
+                                                ? '10'
+                                                : '50';
+                                let paramsObj = {
+                                    shareTag: shareTagTepm,
+                                    studyRank: this.state.studyRank,
+                                    studyRankId: this.state.studyRankId,
+                                    studyClass: this.state.studyClass,
+                                    studyClassId: this.state.studyClassId,
+                                    edition: this.state.edition,
+                                    editionId: this.state.editionId,
+                                    book: this.state.book,
+                                    bookId: this.state.bookId,
+                                    knowledge: this.state.knowledge,
+                                    knowledgeCode: this.state.knowledgeCode,
+                                    paperType: this.state.paperType,
+                                    paperTypeListFetch: this.state.paperTypeListFetch,
+                                };
+                                this.props.setFetchAgainProperty(paramsObj);
+                            }
                         }}
                     >
                         确定
@@ -963,7 +996,7 @@ const styles = StyleSheet.create({
         right: 0 , 
         height: screenHeight*0.6,
         width: screenWidth*0.7,
-        position: 'absolute'
+        position: 'absolute',
     },
     content: {
         width: screenWidth * 0.2,
@@ -1110,7 +1143,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         height: '95%',
-        marginTop: 55, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
+        marginTop: 120, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
         backgroundColor: "white",
         padding: 30,
         paddingBottom: 80,

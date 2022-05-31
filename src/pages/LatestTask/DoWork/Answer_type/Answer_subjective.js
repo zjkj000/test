@@ -8,6 +8,7 @@ import ImageHandler from "../../../../utils/Camera/Camera";
 import http from "../../../../utils/http/request";
 import { useNavigation } from "@react-navigation/native";
 import Toast from "../../../../utils/Toast/Toast";
+import { Waiting, WaitLoading } from "../../../../utils/WaitLoading/WaitLoading";
 export default function Answer_subjectiveContainer(props) {
     const navigation = useNavigation();
     const paperId = props.paperId;
@@ -129,10 +130,10 @@ class Answer_subjective extends Component {
         } else {
             // 存在照片，在数组中遍历  替换成RN表示的类型
             imgarr.map(function (item, index) {
-                var newstr = "hasimageistruehasimage";
+                var newstr = "has1imageistruehas1image";
                 str = str.replace(item, newstr);
             });
-            var htmlarr = str.split("hasimage");
+            var htmlarr = str.split("has1image");
             var imgnum = 0;
             htmlarr.forEach(function (item, index) {
                 if (item == "istrue") {
@@ -208,10 +209,12 @@ class Answer_subjective extends Component {
                     learnPlanId: this.state.paperId,
                     userId: global.constants.userName,
                 };
-
-                http.post(url, params).then((resStr) => {
-                    let resJson = JSON.parse(resStr);
+                WaitLoading.show('照片提交中...',-1)
+                http.post(url, params,false).then((resStr) => {
+                    console.log('结果：',resStr,typeof(resStr))
+                    let resJson = resStr;
                     if (resJson.success) {
+                        WaitLoading.dismiss()
                         var newurl = resJson.data;
                         var newimageArray = this.state.imgURLArray;
                         if (newurl != "") {
@@ -227,6 +230,7 @@ class Answer_subjective extends Component {
                         this.stuAnswer(newstuanswer);
                         this.setState({ hasImage: true });
                     } else {
+                        WaitLoading.dismiss()
                         Toast.showSuccessToast("照片提交失败！！", 3000);
                     }
                 });
@@ -238,6 +242,7 @@ class Answer_subjective extends Component {
     handleLibrary = () => {
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
+                WaitLoading.show('照片提交中...',-1)
                 const url =
                     "http://" +
                     "www.cn901.net" +
@@ -249,11 +254,13 @@ class Answer_subjective extends Component {
                     userId: global.constants.userName,
                 };
 
-                http.post(url, params).then((resStr) => {
-                    let resJson = JSON.parse(resStr);
+                http.post(url, params,false).then((resStr) => {
+                    let resJson = resStr
+                    // let resJson = JSON.parse(resStr);
+                    // console.log('照片提交结果',resStr)
                     if (resJson.success) {
                         var newurl = resJson.data;
-                        // console.log('获取到了',newurl)
+                        WaitLoading.dismiss()
                         var newimageArray = this.state.imgURLArray;
                         if (newurl != "") {
                             newimageArray.push({ url: newurl });
@@ -266,8 +273,10 @@ class Answer_subjective extends Component {
                                 hasImage: true,
                             });
                         }
+                        console.log('新答案',newstuanswer)
                         this.stuAnswer(newstuanswer);
                     } else {
+                        WaitLoading.dismiss()
                         Toast.showSuccessToast("照片提交失败！！", 3000);
                     }
                 });
@@ -280,6 +289,7 @@ class Answer_subjective extends Component {
         const width = Dimensions.get("window").width;
         var questionHTML = []; //用于接收  html解析之后添加到数组中
         questionHTML = this.showStuAnswer();
+        console.log('答案要显示的内容：',questionHTML)
         return (
             <View
                 style={{
@@ -336,6 +346,7 @@ class Answer_subjective extends Component {
                             : styles.answer_preview
                     }
                 >
+                    <Waiting/>
                     {/* 这个是控制主观题预览    改变上下部分区域高度的  +   删除文本的 */}
                     <TouchableOpacity
                         style={{ flexDirection: "row-reverse" }}

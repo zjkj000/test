@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
 import { Flex } from "@ant-design/react-native";
@@ -183,27 +183,42 @@ class TeachingContentPage extends React.Component {
                 >
                     <MenuItem
                         title="创建授课包"
-                        // onPress={this.handleAll}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            Alert.alert('该部分暂时未开发！')
+                        }}
                         style={{ fontSize: 40 }}
                     />
                     <MenuItem
                         title="创建导学案+布置"
-                        // onPress={this.handleGuidance}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            Alert.alert('该部分正在开发中！')
+                        }}
                         style={styles.menuItem}
                     />
                     <MenuItem 
                         title = "创建微课+布置"
-                        // onPress={this.handleTeachingPackages}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            Alert.alert('该部分暂时未开发！')
+                        }}
                         style={styles.menuItem}
                     />
                     <MenuItem 
                         title = "创建作业+布置"
-                        // onPress={this.handleMicroClass}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate("设置作业属性", {});
+                        }}
                         style={styles.menuItem}
                     />
                     <MenuItem
                         title="拍照布置作业"
-                        // onPress={this.handleNotice}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate("CreatePicturePaperWork", {});
+                        }}
                         style={styles.menuItem}
                     />
                 </OverflowMenu>

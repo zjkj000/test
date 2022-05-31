@@ -1,4 +1,4 @@
-import {Text, View,Image,ScrollView,TouchableOpacity,Modal } from 'react-native'
+import {Text, View,Image,ScrollView,TouchableOpacity,Modal, Alert } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { Button, List } from '@ui-kitten/components'
 import { useNavigation } from "@react-navigation/native";
@@ -6,8 +6,9 @@ import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
 import { TextInput } from 'react-native-gesture-handler';
 import PicturesWorkContent from './PicturesWorkContent'
 import http from '../../../utils/http/request';
-import Toast  from '../../../utils/Toast/Toast';
 import res from 'antd-mobile-icons/es/AaOutline';
+import Toast from '../../../utils/Toast/Toast';
+import { Waiting, WaitLoading } from "../../../utils/WaitLoading/WaitLoading";
 var TiMuTypeList = []
 export default function EditWorkContioner(props) {
   const navigation=useNavigation()
@@ -102,6 +103,9 @@ class EditWork extends Component{
         isupdateExistTimuOrder:'new'                     //记录是否是在修改题目的名称和分值  new代表是新创建  order代表是修改的第几题
     }
   }
+  componentWillUnmount(){
+    console.log('组件卸载了')
+  }
   //走的是编辑试卷的接口  只有编辑的时候才走这个接口
   EditData(paperId){
     const url =
@@ -115,6 +119,7 @@ class EditWork extends Component{
           };
         http.get(url, params).then((resStr) => {
           let resJson = JSON.parse(resStr);
+          console.log('接收到的数据',resJson)
           var newdata = []
           resJson.data.map((item=>{
             newdata.push(
@@ -135,7 +140,6 @@ class EditWork extends Component{
                 // "shitiAnalysisList": ["略<\\/p>"],
               }
             )
-
           }))
           this.setState({data:newdata})
         })
@@ -144,10 +148,8 @@ class EditWork extends Component{
   UNSAFE_componentWillMount(){
     //根据 type参数判断，如果是编辑进来的 进入EditData函数
     if(this.props.type=='update'){
-      console.log('測試',this.props.paperId)
       this.EditData(this.props.paperId)
     }else{
-    //否则将上个页面传过来的参数保存
       this.setState({paperName:this.props.paperName,subjectName:this.props.subjectName})
     }
      
@@ -470,17 +472,24 @@ class EditWork extends Component{
   savepaper(Assign){
     var isnull = true;
     this.state.data.map((item,index)=>{
+      console.log(index,this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList))
       isnull = isnull&&this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList)
       if(!this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList)){
         if(item.TimuContentList.length==0){
-          Toast.showDangerToast('请设置第',index+1,'题题面')
+          const str= '请设置第'+(index+1)+'题题面'
+          Alert.alert(str)
+          Toast.showWarningToast(str,1000)
         }else{
-          Toast.showDangerToast('请设置第',index+1,'题答案')
+          const str= '请设置第'+(index+1)+'题答案'
+          Alert.alert(str)
+          Toast.showWarningToast(str,1000)
         }
       }
     })
+    console.log('保存参数之前','paperId：',this.state.paperId,'isnull：',isnull,'Assign:',Assign)
     //如果都不为空  保存或者提交
-    if(isnull){
+    if(isnull&&this.state.paperId=='-1'){
+      WaitLoading.show('保存中...',-1)
           var SubAnswerStr = []
           this.state.data.map((item,index)=>{
             SubAnswerStr.push({
@@ -501,8 +510,6 @@ class EditWork extends Component{
               newjsonstr+=','+JSON.stringify(item)
             })
             newjsonstr =newjsonstr.substring(1)
-
-            
             console.log('提交要保存的数据是:',newjsonstr)
 
           //2.调用接口，同时页面进行loadding，并提示“试题正在保存中...”
@@ -528,12 +535,16 @@ class EditWork extends Component{
                   gradeLevelName:this.props.gradeLevelName,        //教材Name
                   pointName:this.props.pointName,                  //知识点Name
                 };
+            console.log('提交了.....')
               http.get(url, params).then((resStr) => {
                 let resJson = JSON.parse(resStr);
+                console.log('保存接口：',resJson)
                 //根据接口返回值，直接提示message
                 if(resJson.success){
+                  console.log('请求了试卷id',resJson)
                   this.setState({paperId:resJson.data,updateFlag:1,})
                   if(Assign){
+                    WaitLoading.dismiss()
                     this.props.navigation.navigate({
                       name:'AssignPicturePaperWork',
                       params:{
@@ -542,12 +553,28 @@ class EditWork extends Component{
                       }
                     })
                   }else{
-                    Toast.showSuccessToast('保存成功！',1000)
+                    WaitLoading.show_success('保存成功！',1000)
                   }
+                }else{
+                  WaitLoading.show_false()
+                  console.log('保存失败！')
+                  Toast.showDangerToast('保存失败！',1000)
                 }
               })
+    }else if(!Assign&&this.state.paperId!='-1'){
+      Alert.alert('试卷已经保存！')
+      Toast.showSuccessToast('试卷已经保存！',2000)
     }
-   
+    if(Assign){
+      this.props.navigation.navigate({
+        name:'AssignPicturePaperWork',
+        params:{
+            paperId:this.state.paperId,
+            paperName:this.state.paperName
+        }
+    })
+    }
+
   }
 
   render() {
@@ -636,7 +663,8 @@ class EditWork extends Component{
                 </Modal>
         
         <View style={{backgroundColor:'#FFFFFF',opacity:this.state.modalVisible?0.2:1,}}>
-          <View style={{height:60,flexDirection:'row',justifyContent:'space-between',alignItems:'center',paddingRight:10,paddingLeft:8,borderBottomWidth:0.5}}>
+          <View style={{height:60,flexDirection:'row',justifyContent:'space-between',zIndex:0,
+          alignItems:'center',paddingRight:10,paddingLeft:8,borderBottomWidth:0.5}}>
             <TouchableOpacity onPress={()=>{
                   navigation.goBack({
                     name: 'CreatePicturePaperWork',
@@ -658,6 +686,7 @@ class EditWork extends Component{
           <ScrollView style={{height:'85%',}}
               ref={ref => this._scrollView_paper = ref}
               >
+                <Waiting/>
 
             {/* 试题为空 显示图片 */}
             {this.getShiTi(data)}
@@ -665,20 +694,34 @@ class EditWork extends Component{
           </ScrollView>
 
           <View style={{flexDirection:'row',justifyContent:'space-around'}}>
-              <Button onPress={()=>this.savepaper(false)} style={{width:'40%',backgroundColor:'#1E90FF'}}>保存</Button>
               <Button onPress={()=>{
-                if(this.state.updateFlag=='1'){
-                  navigation.navigate({
-                    name:'AssignPicturePaperWork',
-                    params:{
-                      paperName:this.state.paperName,
-                      paperId:this.state.paperId
+                    if(this.state.data.length==0){
+                      Alert.alert('请先添加试题！')
+                      Toast.showWarningToast('请先添加试题！',1000)
+                    }else{
+                    
+                      this.savepaper(false)
                     }
-                  })
+                  }
+                } style={{width:'40%',backgroundColor:'#1E90FF'}}>保存</Button>
+              <Button onPress={()=>{
+                if(this.state.data.length==0){
+                  Alert.alert('请先添加试题！')
+                  Toast.showWarningToast('请先添加试题！',1000)
                 }else{
-                  this.savepaper(true)
-                  
+                  if(this.state.updateFlag=='0'){
+                    navigation.navigate({
+                      name:'AssignPicturePaperWork',
+                      params:{
+                        paperName:this.state.paperName,
+                        paperId:this.state.paperId
+                      }
+                    })
+                  }else{
+                    this.savepaper(true)
+                  }
                 }
+                
               }}
                   style={{width:'40%',backgroundColor:'#1E90FF'}}>布置</Button>
           </View>
