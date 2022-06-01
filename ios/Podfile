@@ -22,6 +22,8 @@ target 'NavigationDemo' do
   pod 'RNCAsyncStorage', :path => '../node_modules/@react-native-async-storage/async-storage'
 >>>>>>> ebb1b4518b982a00b1a68be0fd2620c21a5379a9
 
+  pod 'react-native-video', :path => '../node_modules/react-native-video'
+
   target 'NavigationDemoTests' do
     inherit! :complete
     # Pods for testing

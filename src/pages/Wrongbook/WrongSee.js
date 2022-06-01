@@ -33,14 +33,16 @@ export default WrongSee = () => {
     global.wrongBook.subjectName = subjectName
 
     //初始化props
-    const [data, setData] = useState([])
+    const [{data,ready},setState] = useState({data:[],ready:0})
+    
     //const [success, setSuccess] = useState(false)
-    const [show, setShow] = useState(false)
+    //const [show, setShow] = useState(false)
+
 
     //useEffect
     useEffect(() => {
         getData()
-    }, [show])
+    }, [])
 
     //设置导航
     const navigation = useNavigation()
@@ -62,18 +64,23 @@ export default WrongSee = () => {
                 const res = eval('(' + text.substring(2) + ')')
 
                 //数据与props绑定
-                setData(res.data)
+                setState({data:res.data,ready:1})
                 //setSuccess(res.success)
             })
             .catch(err => console.log('Request Failed', err))
-        setShow(false)
+        
         // 修改导航标题
         navigation.setOptions({ title: subjectName + '错题本' })
 
     }
+   
+   
+    //错题列表渲染
     const handleErrList = () => {
         if (data != '') {
             return (
+                <ScrollView style={styles.scrollView}>
+               {
                 data.map((item, index) => {
                     return (
                         <View style={styles.class}>
@@ -114,9 +121,14 @@ export default WrongSee = () => {
                                     })
                                 }
                             </View>
-                        </View>)
+                        </View>
+                        )
                 }
-                ))
+                )
+                }
+                 </ScrollView>
+                )
+                
         }
         else {
             return (
@@ -148,6 +160,14 @@ export default WrongSee = () => {
             }
         })
     }
+    //加载等待页
+    const renderLoadingView = () => {
+        console.log('正在加载')
+        return(
+                <Loading show={true}/> 
+        );
+    }
+    //处理视频小红点
     const handleMp4 = (mp4Flag) => {
         if (mp4Flag == '0') {
             return (<Text />)
@@ -157,11 +177,17 @@ export default WrongSee = () => {
             )
         }
     }
+    console.log(ready)
+    console.log('==============')
     //渲染
     return (
-        <ScrollView style={styles.scrollView}>
-            {handleErrList()}
-        </ScrollView>
+       
+            ready=='1'?
+
+                handleErrList()
+                :renderLoadingView()
+            
+       
     )
 
 }
@@ -169,12 +195,14 @@ export default WrongSee = () => {
 
 
 const styles = StyleSheet.create({
-    Loading: {
+    container: {
         flex: 1,
+        width: '100%',
+        height: '100%',
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#F5FCFF",
+        backgroundColor: "white",
     },
     scrollView: {
         width: '100%',

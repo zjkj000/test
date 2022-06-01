@@ -54,8 +54,7 @@ class WrongSubmitButton extends Component {
             Alert.alert('请输入答案')
         }
         else{
-            console.log('----------------')
-            console.log(this.state.value)
+           
             this.postData()
             this.props.setStuAnswer(this.state.value)
             this.props.setShow(false)
