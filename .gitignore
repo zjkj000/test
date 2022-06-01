@@ -2,7 +2,6 @@
 #
 .DS_Store
 yarn.lock
-
 # Xcode
 #
 build/

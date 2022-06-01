@@ -98,28 +98,23 @@ class TeachingContentPage extends React.Component {
 
     //全部最新内容
     handleAll = () => {
-        console.log("获取全部最新内容");
-        this.setState({ resourceType: "all" });
+        this.setState({ resourceType: "all",filtermoduleVisible: false});
     };
     //作业
     handleHomework = () => {
-        console.log("获取作业内容");
-        this.setState({ resourceType: "paper" });
+        this.setState({ resourceType: "paper",filtermoduleVisible: false});
     };
     //导学案
     handleGuidance = () => {
-        console.log("获取导学案内容");
-        this.setState({ resourceType: "learnPlan" });
+        this.setState({ resourceType: "learnPlan" ,filtermoduleVisible: false});
     };
     //授课包
     handleTeachingPackages = () => {
-        console.log("获取授课包内容");
-        this.setState({ resourceType: "package" });
+        this.setState({ resourceType: "package" ,filtermoduleVisible: false});
     };
     //微课
     handleMicroClass = () => {
-        console.log("获取微课内容");
-        this.setState({ resourceType: "weike" });
+        this.setState({ resourceType: "weike" ,filtermoduleVisible: false});
     };
     
 

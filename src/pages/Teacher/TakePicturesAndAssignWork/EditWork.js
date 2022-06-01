@@ -107,7 +107,7 @@ class EditWork extends Component{
     console.log('组件卸载了')
   }
   //走的是编辑试卷的接口  只有编辑的时候才走这个接口
-  EditData(paperId){
+  EditData(paperId,paperName){
     const url =
         "http://" +
         "www.cn901.net" +
@@ -141,14 +141,16 @@ class EditWork extends Component{
               }
             )
           }))
-          this.setState({data:newdata})
+          this.setState({data:newdata,
+                          paperId:paperId,
+                          paperName:paperName})
         })
   }
 
   UNSAFE_componentWillMount(){
     //根据 type参数判断，如果是编辑进来的 进入EditData函数
     if(this.props.type=='update'){
-      this.EditData(this.props.paperId)
+      this.EditData(this.props.paperId,this.props.paperName)
     }else{
       this.setState({paperName:this.props.paperName,subjectName:this.props.subjectName})
     }
@@ -535,13 +537,13 @@ class EditWork extends Component{
                   gradeLevelName:this.props.gradeLevelName,        //教材Name
                   pointName:this.props.pointName,                  //知识点Name
                 };
-            console.log('提交了.....')
+            // console.log('提交了.....')
               http.get(url, params).then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log('保存接口：',resJson)
+                // console.log('保存接口：',resJson)
                 //根据接口返回值，直接提示message
                 if(resJson.success){
-                  console.log('请求了试卷id',resJson)
+                  // console.log('请求了试卷id',resJson)
                   this.setState({paperId:resJson.data,updateFlag:1,})
                   if(Assign){
                     WaitLoading.dismiss()

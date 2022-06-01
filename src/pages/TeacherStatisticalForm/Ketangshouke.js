@@ -103,7 +103,9 @@ class KetangshoukeContent extends Component {
     return (
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:20}}>
         <View style={{flexDirection:'row',marginLeft:20,marginRight:10,marginBottom:10}}>
-          <View style={{flex:1,justifyContent:'center'}}  ><Image source={require('../../assets/StatisticalForm/Ima_ketang.png')}></Image></View>
+                <View style={{flex:1,justifyContent:'center'}}  >
+                      <Image source={require('../../assets/StatisticalForm/Ima_ketang.png')}></Image>
+                </View>
                 <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
                     <View>
                         <View style={{height:50}}>
@@ -115,7 +117,7 @@ class KetangshoukeContent extends Component {
                     </View>
                 
                     </View>
-                    <View style={{flexDirection:'column',padding:10}}>
+                    <View style={{flexDirection:'column',padding:10,paddingRight:0}}>
                         <View style={{flexDirection:'row',alignContent:'space-around'}}>
                             <View style={{margin:10}}><Text style={{fontSize:20}}>内容:{this.state.contentNum}</Text></View>
                             <View style={{margin:10}}><Text style={{fontSize:20}}>互动:{this.state.hdNum}</Text></View>

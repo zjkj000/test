@@ -82,7 +82,7 @@ class ContentList extends React.Component {
     }
 
     componentWillUnmount() {
-        oldsearchStr = '';
+        oldsearchStr='';
         oldtype = '';
     }
 
@@ -108,9 +108,7 @@ class ContentList extends React.Component {
         }; 
         http.get(url, params)
             .then((resStr) => {
-                console.log('请求到了数据',resStr)
                 let resJson = JSON.parse(resStr);
-                console.log('请求到了，转换成了JSON',resJson.data.length)
                 let todosList1 =  resJson.data; 
                 let dataBlob = [];
                 let i = itemNo;

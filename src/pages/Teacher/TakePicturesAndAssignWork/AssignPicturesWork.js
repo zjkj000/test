@@ -12,7 +12,7 @@ export default function AssignPicturesWorkContainer(props) {
     const navigation = useNavigation();
     const paperName=props.route.params.paperName
     const paperId = props.route.params.paperId
-    console.log('布置作业页面接收的',props.route.params.paperId)
+    // console.log('布置作业页面接收的',props.route.params.paperId)
     navigation.setOptions({title:'布置作业'});
     return <AssignPicturesWork navigation={navigation} paperName={paperName} paperId={paperId} />;
 }

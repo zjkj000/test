@@ -98,38 +98,31 @@ class LatestPage extends React.Component {
 
     //全部最新内容
     handleAll = () => {
-        console.log("获取全部最新内容");
-        this.setState({ resourceType: "" });
+        this.setState({ resourceType: "",filtermoduleVisible: false});
     };
     //作业
     handleHomework = () => {
-        console.log("获取作业内容");
-        this.setState({ resourceType: "2" });
+        this.setState({ resourceType: "2" ,filtermoduleVisible: false});
     };
     //导学案
     handleGuidance = () => {
-        console.log("获取导学案内容");
-        this.setState({ resourceType: "1" });
+        this.setState({ resourceType: "1",filtermoduleVisible: false });
     };
     //授课包
     handleTeachingPackages = () => {
-        console.log("获取授课包内容");
-        this.setState({ resourceType: "6" });
+        this.setState({ resourceType: "6" ,filtermoduleVisible: false});
     };
     //微课
     handleMicroClass = () => {
-        console.log("获取微课内容");
-        this.setState({ resourceType: "7" });
+        this.setState({ resourceType: "7" ,filtermoduleVisible: false});
     };
     //通知
     handleInform = () => {
-        console.log("获取通知内容");
-        this.setState({ resourceType: "3" });
+        this.setState({ resourceType: "3" ,filtermoduleVisible: false});
     };
     //公告
     handleNotice = () => {
-        console.log("获取公告内容");
-        this.setState({ resourceType: "4" });
+        this.setState({ resourceType: "4" ,filtermoduleVisible: false});
     };
 
     //创建+布置作业
@@ -171,7 +164,7 @@ class LatestPage extends React.Component {
                     />
                     <MenuItem
                         title="作业"
-                        onPress={this.createHomework}
+                        onPress={this.handleHomework}
                     />
                     <MenuItem
                         title="导学案"
@@ -214,11 +207,22 @@ class LatestPage extends React.Component {
                 >
                     <MenuItem
                         title="创建授课包"
-                        // onPress={this.handleAll}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            Alert.alert('该部分暂时未开发！')
+                        }}
                     />
                     <MenuItem
                         title="我的授课包"
-                        // onPress={this.handleHomework}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate({
+                                name:'教学内容',
+                                params:{
+                                    resourceType: "package"
+                                }
+                            })
+                        }}
                     />
                     <MenuItem
                         title="创建导学案+布置"
@@ -226,7 +230,10 @@ class LatestPage extends React.Component {
                     />
                     <MenuItem 
                         title = "创建微课+布置"
-                        // onPress={this.handleTeachingPackages}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            Alert.alert('该部分暂时未开发！')
+                        }}
                     />
                     <MenuItem 
                         title = "创建作业+布置"
@@ -236,21 +243,37 @@ class LatestPage extends React.Component {
                         title="选导学案布置"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            Alert.alert('该部分暂时未开发！')
+                            this.props.navigation.navigate({
+                                name:'教学内容',
+                                params:{
+                                    resourceType: "learnPlan"
+                                }
+                            })
                         }}
                     />
                     <MenuItem
                         title="选微课布置"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            Alert.alert('该部分暂时未开发！')
+                            this.props.navigation.navigate({
+                                name:'教学内容',
+                                params:{
+                                    resourceType: "weike" 
+                                }
+                            })
                         }}
                     />
                     <MenuItem
                         title="选卷布置作业"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            this.props.navigation.navigate('')
+                            this.props.navigation.navigate({
+                                name:'Teacher_Home',
+                                params:{
+                                    Screen:'教学内容',
+                                    resourceType: "paper" 
+                                }
+                            })
                         }}
                     />
                     <MenuItem

@@ -211,9 +211,11 @@ class BuzhizuoyeContent extends Component {
     return (
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:20}}>
         <View style={{flexDirection:'row',marginLeft:20,marginRight:20}}>
-          <View style={{flex:1,justifyContent:'center'}}  ><Image source={require('../../assets/StatisticalForm/Ima_book.png')}></Image></View>
+          <View style={{flex:1,justifyContent:'center'}}  >
+            <Image source={require('../../assets/StatisticalForm/Ima_book.png')}></Image>
+          </View>
           <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
-          <View>
+              <View>
                 <View style={{height:50}}>
                   <Text style={{fontSize:18}}>有效次数</Text>
                 </View>
