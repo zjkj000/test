@@ -41,7 +41,7 @@ class WrongRecycleButton extends Component {
                 <TouchableOpacity onPress={() => this.handleRecycle()}>
                     <View>
                         <Image 
-                            source={require('../../assets/photoImage/recycle.png')}
+                            source={require('../../assets/errorQue/recycle.png')}
                             style={styles.Image}/>
                     </View>
                     
