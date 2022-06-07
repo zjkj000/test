@@ -63,7 +63,7 @@ export default WrongDetails = () => {
         // 修改导航标题
         navigation.setOptions({ title: subjectName + '错题详情' })
         getData()
-    }, [currentPage,questionId])
+    }, [questionId])
 
     //请求数据
     const getData = () => {
@@ -253,6 +253,7 @@ export default WrongDetails = () => {
         if (temp != 1) {
             temp = (temp - 1).toString()
             setCurrentpage(temp)
+            setQuestionId(questionId)
             setShow(true)
         }
         else {
@@ -266,6 +267,7 @@ export default WrongDetails = () => {
         if (temp != allPage) {
             temp = (temp + 1).toString()
             setCurrentpage(temp)
+            setQuestionId(questionId)
             setShow(true)
         }
         else {
@@ -447,23 +449,23 @@ export default WrongDetails = () => {
                     <View style={styles.Bottom}>
                         <View style={styles.Bottom_con}>
                             <View style={styles.Left}>
-                                <TouchableOpacity onPress={() => handleLeft(currentPage)}>
+                                {/* <TouchableOpacity onPress={() => handleLeft(currentPage)}> */}
                                     <Image
                                         source={require('../../assets/stuImg/lastquestion.png')}
                                         style={styles.Arrow} />
 
-                                </TouchableOpacity>
+                                {/* </TouchableOpacity> */}
                             </View>
                             <View style={styles.Bottom_text}>
                                 <Text style={styles.index}>{currentPage}</Text><Text>/{allPage}</Text>
                             </View>
                             <View style={styles.Right}>
-                                <TouchableOpacity onPress={() => handleRight(currentPage)}>
+                                {/* <TouchableOpacity onPress={() => handleRight(currentPage)}> */}
                                     <Image
                                         source={require('../../assets/stuImg/nextquestion.png')}
                                         style={styles.Arrow} />
 
-                                </TouchableOpacity>
+                                {/* </TouchableOpacity> */}
                             </View>
                         </View>
                     </View>
