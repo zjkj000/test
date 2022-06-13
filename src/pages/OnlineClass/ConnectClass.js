@@ -11,7 +11,7 @@ import HistoryInput from "./HistoryInput";
 import { styles } from "./styles";
 import Toast from "../../utils/Toast/Toast";
 import Loading from "../../utils/loading/Loading";
-import StorageUtil from "../../utils/Storage/Storage";
+import StorageUtil from "../../utils/Storage/Storage";1
 
 export default ConnectClass = () => {
     // StorageUtil.clear();
