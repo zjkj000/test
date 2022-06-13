@@ -10,7 +10,7 @@ export class WaitLoading {
      */
     static show(text = '加载中...', timeout = defaultTimeOut) {
         // console.log('Waiting组件显示时间:',timeout);
-        lo.setState({"isShow": true, "text": text, "timeout": timeout});
+        lo.setState({"isShow": true, "text": text, "timeout": timeout,type:''});
     }
     //成功的时候
     static show_success(text = '加载中...', timeout = defaultTimeOut) {

@@ -103,9 +103,7 @@ class EditWork extends Component{
         isupdateExistTimuOrder:'new'                     //记录是否是在修改题目的名称和分值  new代表是新创建  order代表是修改的第几题
     }
   }
-  componentWillUnmount(){
-    console.log('组件卸载了')
-  }
+  
   //走的是编辑试卷的接口  只有编辑的时候才走这个接口
   EditData(paperId,paperName){
     const url =
@@ -119,7 +117,6 @@ class EditWork extends Component{
           };
         http.get(url, params).then((resStr) => {
           let resJson = JSON.parse(resStr);
-          console.log('接收到的数据',resJson)
           var newdata = []
           resJson.data.map((item=>{
             newdata.push(
@@ -413,7 +410,8 @@ class EditWork extends Component{
     if(data.length>0){
       var List= [];
       data.map((item,index)=>{
-        List.push(<PicturesWorkContent questionName={item.questionName} 
+        List.push(<PicturesWorkContent key={index}
+                                       questionName={item.questionName} 
                                        typeId={item.typeId}
                                        baseTypeId={item.baseTypeId}
                                        subjectName={this.state.subjectName}
@@ -488,9 +486,10 @@ class EditWork extends Component{
         }
       }
     })
-    console.log('保存参数之前','paperId：',this.state.paperId,'isnull：',isnull,'Assign:',Assign)
+    // console.log('保存参数之前','paperId：',this.state.paperId,'isnull：',isnull,'Assign:',Assign)
     //如果都不为空  保存或者提交
-    if(isnull&&this.state.paperId=='-1'){
+    if((isnull&&this.state.paperId=='-1')||this.state.updateFlag=='1'){
+      // console.log('保存之前：',this.state.data)
       WaitLoading.show('保存中...',-1)
           var SubAnswerStr = []
           this.state.data.map((item,index)=>{
@@ -512,7 +511,7 @@ class EditWork extends Component{
               newjsonstr+=','+JSON.stringify(item)
             })
             newjsonstr =newjsonstr.substring(1)
-            console.log('提交要保存的数据是:',newjsonstr)
+            // console.log('提交要保存的数据是:',newjsonstr)
 
           //2.调用接口，同时页面进行loadding，并提示“试题正在保存中...”
             const url =
@@ -563,8 +562,7 @@ class EditWork extends Component{
                   Toast.showDangerToast('保存失败！',1000)
                 }
               })
-    }else if(!Assign&&this.state.paperId!='-1'){
-      Alert.alert('试卷已经保存！')
+    }else if(!Assign&&this.state.paperId!='-1'&&this.updateFlag){
       Toast.showSuccessToast('试卷已经保存！',2000)
     }
     if(Assign){
@@ -636,6 +634,16 @@ class EditWork extends Component{
                           </View>
                           </>
                           
+                        ):this.state.typeId!=''&&this.state.baseTypeId=='108'?(
+                          <View style={{width:'60%',borderBottomWidth:1,paddingLeft:20,flexDirection:'row',marginBottom:10,alignItems:'center'}}>
+                              <Text style={{marginRight:30}}>分值</Text>
+                              <TextInput placeholder='请输入分数' 
+                                        value={this.state.questionScore}
+                                        onChangeText={(text)=>{
+                                          this.setState({questionScore:text.replace(/[^\d]+/, '')})
+                                          }}
+                              ></TextInput>
+                          </View>
                         ):(<View></View>)}
                         
 
@@ -665,8 +673,8 @@ class EditWork extends Component{
                 </Modal>
         
         <View style={{backgroundColor:'#FFFFFF',opacity:this.state.modalVisible?0.2:1,}}>
-          <View style={{height:60,flexDirection:'row',justifyContent:'space-between',zIndex:0,
-          alignItems:'center',paddingRight:10,paddingLeft:8,borderBottomWidth:0.5}}>
+          <View style={{height:50,flexDirection:'row',justifyContent:'space-between',zIndex:0,
+          alignItems:'center',paddingRight:10,paddingLeft:8,borderBottomWidth:0.8}}>
             <TouchableOpacity onPress={()=>{
                   navigation.goBack({
                     name: 'CreatePicturePaperWork',
@@ -679,17 +687,16 @@ class EditWork extends Component{
               this.showaddTimuSetModal()
 
             }}>
-                <Image  source={require('../../../assets/TakePicturesAndAssignWork/addtitle.png')}></Image>  
+                <Image style={{height:28,width:100}}  source={require('../../../assets/TakePicturesAndAssignWork/addtitle.png')}></Image>  
             </TouchableOpacity>
           </View>
 
 
 
-          <ScrollView style={{height:'85%',}}
+          <ScrollView style={{height:'87%',}}
               ref={ref => this._scrollView_paper = ref}
               >
                 <Waiting/>
-
             {/* 试题为空 显示图片 */}
             {this.getShiTi(data)}
 

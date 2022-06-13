@@ -151,7 +151,6 @@ class CreateHomework extends React.Component {
     }
 
     UNSAFE_componentWillUpdate(nextProps , nextState){
-        console.log('----WillUpdate--------------------------');
         // if(nextState.paperList !== this.state.paperList){
         //     if(nextState.selectPaperIndex != (Math.floor(nextState.paperList.length / 5) - 1) * 5){
         //         console.log('$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$');
@@ -190,7 +189,6 @@ class CreateHomework extends React.Component {
     }
 
     componentWillUnmount(){
-        console.log('---componentWillUnmount----');
         paperListOne = [];
         typeAll = 0;
         count = 0;
@@ -205,7 +203,6 @@ class CreateHomework extends React.Component {
     }
 
     setModalVisible = (visible) => {
-        console.log('-----------setModalVisible---------------', visible);
         this.setState({ filterModelVisiblity: visible ,  });   
     }
 
@@ -219,7 +216,6 @@ class CreateHomework extends React.Component {
                         transparent={true}
                         visible={filterModelVisiblity}
                         onRequestClose={() => {
-                            console.log('----------------Modal has been closed.---------------------');
                             Alert.alert("Modal has been closed.");
                             this.setModalVisible(!filterModelVisiblity);
                         }}
@@ -263,7 +259,6 @@ class CreateHomework extends React.Component {
                     transparent={true}
                     visible={knowledgeModelVisibility}
                     onRequestClose={() => {
-                        console.log('----------------Modal has been closed.---------------------');
                         Alert.alert("Modal has been closed.");
                         this.setState({knowledgeModelVisibility: !knowledgeModelVisibility});
                     }}
@@ -309,9 +304,6 @@ class CreateHomework extends React.Component {
                                 ?
                                     <WebView
                                         onMessage={(event) => {
-                                            console.log('---------------------------------');
-                                            console.log(JSON.parse(event.nativeEvent.data).name , JSON.parse(event.nativeEvent.data).id);
-                                            console.log('---------------------------------');
                                             this.setState({ 
                                                 filterModelVisiblity: true,
                                                 knowledgeModelVisibility: false, 
@@ -342,9 +334,6 @@ class CreateHomework extends React.Component {
         bookId
     ) => {
         //重新修改state有关试题请求的参数，重新请求试题
-        console.log('-------设置属性悬浮框返回参数-------');
-        console.log(studyRank, studyRankId, studyClass, studyClassId, edition, editionId, book, bookId);
-        console.log('-----------------------------------');
         this.setState({ 
             filterModelVisiblity: false , 
             knowledgeModelVisibility: true ,
@@ -370,9 +359,6 @@ class CreateHomework extends React.Component {
         currentBeginPaperIndex = 0; //当前底部显示第一个试题对应的index
         currentLastPaperIndex = 0; //当前底部显示最后一个试题对应的index
 
-        console.log('---------setFetchAgainProperty---------');
-        console.log(paramsObj);
-        console.log('---------------------------------------');
         let paramsDataPropsTemp = {
             name: this.props.paramsData.name,
             introduction: this.props.paramsData.introduction,
@@ -393,7 +379,6 @@ class CreateHomework extends React.Component {
         }else{
             paperTypeTtem.push(paramsObj.paperType);
         }
-        console.log('-----试题类型----',paperTypeTtem);
         typeAll = paperTypeTtem.length; //试题类型总数
         this.setState({
             filterModelVisiblity: false , 
@@ -423,7 +408,6 @@ class CreateHomework extends React.Component {
             //callback:'ha',
         };
 
-        console.log('-----showKnowledgeList-----', Date.parse(new Date()))
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);

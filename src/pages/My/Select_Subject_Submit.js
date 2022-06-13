@@ -27,11 +27,8 @@ class Select_Subject_Submit extends Component {
             taskId: '',
             success: false,
         }
-
     }
-
     UNSAFE_componentWillMount(){
-       
         const url = 
                     "http://"+
                     "www.cn901.net" +
@@ -46,29 +43,20 @@ class Select_Subject_Submit extends Component {
         if(!this.state.success){
             http.get(url,params).then((resStr)=>{
                 let resJson = JSON.parse(resStr);
-                let newindex = this.getequalId(resJson.data.list,resJson.data.composeId)
+                var newcomposeId = resJson.data.composeId
+                var newindex = -1
+                resJson.data.list.map(function(item,index){
+                    if(item.id==newcomposeId){
+                        newindex=index
+                    }
+                })
                 this.setState({
                     selectedIndex:newindex,
                     newcomposeId:resJson.data.composeId,
                     ...resJson.data})
             })
         }
-
-        
-
     }
-
-    //这个函数是为了 判断composeId  和 list 里面的Id一样返回索引，给下面单选按钮用的
-    getequalId(list,composeId){
-        list.map(function(item,index){
-            
-            if(item.id==composeId){
-                
-                return(index);
-            }
-        })
-    }
-
     sub_select(){
         const selectedIndex= parseInt(this.state.selectedIndex)
         const list = this.state.list
@@ -79,7 +67,7 @@ class Select_Subject_Submit extends Component {
                 "/AppServer/ajax/studentApp_saveSelectsubject.do"
         const params ={
                 userId:global.constants.userName,
-                userCn:'测试固定',
+                userCn:global.constants.userCn,
                 taskId:this.state.taskId,
                 taskName:this.state.taskName,
                 composeId:this.state.newcomposeId,
@@ -90,13 +78,20 @@ class Select_Subject_Submit extends Component {
         if(this.state.newcomposeId!=this.state.composeId){
                 http.get(url,params).then((resStr)=>{
                     let resJson = JSON.parse(resStr);
-                    console.log('选科提交结果：',resStr,params)
                     if(resJson.success){
-                        this.setState({composeId:list[selectedIndex].id})
+                        this.setState({composeId:list[selectedIndex].id,composeName:list[selectedIndex].name})
                         // Toast.showInfoToast('选科成功！',1000)
-                        Alert.alert('选科成功！',list[selectedIndex].name)
+                        Alert.alert('选科成功！','你选择的组合为：'+list[selectedIndex].name,
+                                [{text:'ok',onPress:()=>{
+                                    this.props.navigation.navigate({
+                                        name:'Select_subject',
+                                        params:{
+                                            type:this.state.composeName
+                                        }
+                                    })
+                                }}])
                     }
-                    this.props.navigation.navigate('Select_subject')
+                    
                 })
         }else{
             // Toast.showInfoToast('你的选科结果未改变',3000)
@@ -134,11 +129,11 @@ class Select_Subject_Submit extends Component {
                 <View style={{backgroundColor:'#FFFFFF',marginTop:20}}>
                 <React.Fragment>
                     <RadioGroup
-                        style={{padding:10,flexWrap:'wrap',flexDirection:'row',}}
+                        style={{padding:10,flexWrap:'wrap',flexDirection:'row',justifyContent:'space-between'}}
                         selectedIndex={this.state.selectedIndex}
                         onChange={index => this.setSelectedIndex(index)}>
                         {this.state.list.map(function(item,index){
-                                return(<Radio  style={{marginLeft:25}} key={index}>{item.name}</Radio>)
+                                return(<Radio  style={{marginLeft:10}} key={index}>{item.name}</Radio>)
                             })
                         }  
                     </RadioGroup>      
@@ -146,8 +141,14 @@ class Select_Subject_Submit extends Component {
                 </View>
                 
                 <View style={{alignItems:'center',marginTop:20}}>
-                    <Button style={{width:200}} onPress={() => 
-                    this.sub_select() 
+                    <Button style={{width:200}} onPress={() => {
+                        if(this.state.selectedIndex=='-1'){
+                            Alert.alert('请先选择科目')
+                        }else{ 
+                            this.sub_select() 
+                        }                       
+                    }
+                    
                     }>确认提交</Button>
                 </View>
 

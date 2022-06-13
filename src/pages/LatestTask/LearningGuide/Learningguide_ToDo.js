@@ -462,9 +462,7 @@ export default function Paper_ToDo(props) {
                     status: change_status,
                 };
                 // 提交答案
-
                 // console.log('导学案部分测试状态提交：',change_status,'作答答案：',Stu_answer[selectedIndex],'URL:',submit_url,submit_params)
-
                 // 现在导学案要做的是  提交答案（根据情况）  +  提交作答时间（必须交）
                 // console.log(submit_url,submit_params)
                 http.get(submit_url, submit_params).then((resStr) => {
@@ -490,10 +488,8 @@ export default function Paper_ToDo(props) {
 
     return (
         <ViewPager
-            style={{ backgroundColor: "#FFFFFF" }}
+            style={{ backgroundColor: "#FFFFFF", borderTopWidth: 0.5 }}
             swipeEnabled={false}
-            shouldLoadComponent={shouldLoadComponent}
-            style={{ borderTopColor: "#000000", borderTopWidth: 0.5 }}
             shouldLoadComponent={shouldLoadComponent}
             selectedIndex={selectedIndex}
             onSelect={(index) => Submit_Stu_answer(index, selectedIndex)}
@@ -546,18 +542,22 @@ export default function Paper_ToDo(props) {
                                         selectedIndex,
                                         selectedIndex
                                     );
-                                    navigation.navigate({
-                                        name: "SubmitLearningGuide",
-                                        params: {
-                                            learnPlanId: learnPlanId,
-                                            submit_status: status,
-                                            startdate: startdate,
-                                            papername:
-                                                props.route.params.papername,
-                                            isallObj: isallObj,
-                                        },
-                                        megre: true,
-                                    });
+                                    Alert.alert('','已经最后一题，确定提交导学案？',[{text:'取消',onPress:()=>{}},{},
+                                    {text:'确定',onPress:()=>{
+                                            navigation.navigate({
+                                                name: "SubmitLearningGuide",
+                                                params: {
+                                                    learnPlanId: learnPlanId,
+                                                    submit_status: status,
+                                                    startdate: startdate,
+                                                    papername:
+                                                        props.route.params.papername,
+                                                    isallObj: isallObj,
+                                                },
+                                                megre: true,
+                                            });
+                                        }}
+                                    ])
                                 } else {
                                     Submit_Stu_answer(newindex, selectedIndex);
                                 }

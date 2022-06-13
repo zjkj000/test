@@ -44,6 +44,15 @@ export default function VideoContainer(props) {
         />
     );
 }
+
+
+
+
+
+
+
+
+
 //  Video 模板页面
 class Video_LG extends Component {
     constructor(props) {
@@ -86,6 +95,9 @@ class Video_LG extends Component {
             numid: this.props.num ? this.props.num : 0,
             ...this.props.datasource,
         });
+    }
+    componentWillUnmount(){
+        Orientation.lockToPortrait();
     }
 
     formatTime(second) {
@@ -359,6 +371,7 @@ class Video_LG extends Component {
 
     /// 点击了工具栏上的全屏按钮
     onControlShrinkPress() {
+
         if (this.state.isFullScreen) {
             Orientation.lockToPortrait();
         } else {
@@ -495,7 +508,7 @@ class Video_LG extends Component {
 
 const styles = StyleSheet.create({
     title: { padding: 10, paddingLeft: 30, flexDirection: "row" },
-    area: { height: "95%", paddingTop: "40%" },
+    area: { height: "95%", paddingTop: "45%" },
 
     imageNull: {
         justifyContent: "center",

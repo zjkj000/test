@@ -37,7 +37,6 @@ import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndP
 import PaperListContainer from '../../pages/Teacher/CorrectPaper/PaperList';
 import CorrectingPaper from '../../pages/Teacher/CorrectPaper/CorrectingPaper';
 import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDetails';
-
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
 import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
 import AssignPicturesWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/AssignPicturesWork";

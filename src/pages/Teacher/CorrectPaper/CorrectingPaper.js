@@ -110,8 +110,8 @@ export default function CorrectingPaper(props) {
           setSelectedIndex(index)
         }else{
           setData(Allquestion)
-          Alert.alert('','所有题目已批改',[{},
-            {text:'ok',onPress:()=>setSelectedIndex(Allquestion.length)}
+          Alert.alert('','所有题目已批改',[{text:'取消',onPress:()=>{}},{},
+            {text:'确定',onPress:()=>setSelectedIndex(Allquestion.length)}
           ])
         }
       }else{
@@ -255,8 +255,8 @@ export default function CorrectingPaper(props) {
                               }else{
                                 setData(Allquestion)
                                 // setSelectedIndex(Allquestion.length)
-                                Alert.alert('','确定跳转保存结果页面？',[{},
-                                  {text:'ok',onPress:()=>{setSelectedIndex(Allquestion.length)}}
+                                Alert.alert('','确定跳转保存结果页面？',[{text:'取消',onPress:()=>{}},{},
+                                  {text:'确定',onPress:()=>{setSelectedIndex(Allquestion.length)}}
                                 ])
                               }
                               }}>

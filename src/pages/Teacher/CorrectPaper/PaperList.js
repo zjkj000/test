@@ -178,7 +178,7 @@ export default function PaperList(props) {
                                    }
                                   
                                    Toast.showSuccessToast('设置批改模式为:只显示需手工批阅试题',1000)
-                                   
+                                   Alert.alert('设置批改模式为:只显示需手工批阅试题')
                                   setAllmoduleVisible(false)
                                    }}/>                  
                         <MenuItem title={'显示全部试题'} key={2}
@@ -189,7 +189,7 @@ export default function PaperList(props) {
                                     }
                                     
                                     Toast.showSuccessToast('设置批改模式为:显示全部',1000)
-                                    
+                                    Alert.alert('设置批改模式为:显示全部')
                                     setAllmoduleVisible(false)
                                     ;}}/>
               </OverflowMenu>

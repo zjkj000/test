@@ -235,7 +235,13 @@ class MyPageComponent extends Component {
                 <Divider />
                 <TouchableOpacity
                     onPress={() => {
-                                        this.props.navigation.navigate('Select_subject')
+                                        // this.props.navigation.navigate({
+                                        //     name: 'Select_subject' ,
+                                        //     params:{
+                                        //         type:'new'   //区别是新进去的还是选完进去的
+                                        //     }
+                                        // })
+                                        this.props.navigation.navigate('vvnew')
                                     }
                             }
                 >

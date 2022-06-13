@@ -477,7 +477,7 @@ class CreateWork extends React.Component {
     render(){
 
         return(
-            <View style={{flexDirection: 'column' , backgroundColor: '#fff',borderTopWidth:0.8,}}>
+            <View style={{flexDirection: 'column' , backgroundColor: '#fff',borderTopWidth:0.8}}>
                 <ScrollView horizontal={false} showsVerticalScrollIndicator={false}
                     style={{height: '93%' , backgroundColor: '#fff'}}>
                         
@@ -714,13 +714,13 @@ class CreateWork extends React.Component {
                 <View 
                     style={{
                         flexDirection: 'row' , 
-                        backgroundColor: '#fff',
+                        backgroundColor:'#fff',
                         top: '100%',
                         //height: '8%',
                         position: 'absolute',
                     }}
                 >
-                    <Text style={{width: screenWidth*0.05}}></Text>
+                    <Text style={{width: screenWidth*0.05,backgroundColor:'#fff'}}></Text>
                     <Button style={styles.button}
                         onPress={()=>{
                             this.props.navigation.goBack();

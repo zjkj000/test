@@ -176,7 +176,6 @@ class ContentList extends React.Component {
         const navigation = this.props.navigation;
         //复制一份请求的数据
         todosList = this.state.todos;
-
         //当前渲染的数据项的内容
         let todo = todoItem.item.value;
         //console.log('todo', todo);
@@ -229,7 +228,7 @@ class ContentList extends React.Component {
                             </View>
                         </View>
                         <View style={{backgroundColor:'#fff'}}><Text style={{width:20}}></Text></View>
-                        {this.showTodo(todoImg,todo.id,todo.name)}
+                        {this.showTodo(todoImg,todo.id,todo.name,todo.paperType)}
                 </ScrollView>
 
             );
@@ -297,7 +296,7 @@ class ContentList extends React.Component {
     }
 
     //显示作业、导学案等可选操作
-    showTodo(todoImg,id,name){
+    showTodo(todoImg,id,name,paperType){
         if(todoImg == 'paper.png'){
             return(
                 <View 
@@ -322,15 +321,21 @@ class ContentList extends React.Component {
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
-                        <Text style={styles.selectContent}  onPress={() => {this.props.navigation.navigate({
-                                                name:'EditPicturePaperWork',
-                                                params:{
-                                                paperName:name,
-                                                paperId:id,
-                                                type:'update'
-                                                }
-                                }
-                        )}}>
+                        <Text style={styles.selectContent}  onPress={() => {
+                            if(paperType=='6'){
+                                this.props.navigation.navigate({
+                                    name:'EditPicturePaperWork',
+                                    params:{
+                                    paperName:name,
+                                    paperId:id,
+                                    type:'update'
+                                    }
+                                })
+                            }else{
+                                Alert.alert('普通试卷编辑暂未开发！')
+                            }
+                            
+                    }}>
                             编辑
                         </Text>
                     </View>

@@ -43,8 +43,8 @@ class Paper_Submit extends Component {
     //页面加载在render之前
     UNSAFE_componentWillMount() {
         let bool =
-            this.props.isallObj.indexOf("104") > -1 ||
-            this.props.isallObj.indexOf("106") > -1
+            this.props.isallObj.indexOf("104") > -1 ||     //判断是否存在104类型  若存在就有主观题
+            this.props.isallObj.indexOf("106") > -1        //判断是否存在106类型  若存在就有主观题  
                 ? false
                 : true;
         this.setState({
@@ -53,7 +53,7 @@ class Paper_Submit extends Component {
                 : this.getDate(),
             paperId: this.props.paperId,
             submit_status: this.props.submit_status,
-            isallObjective: bool,
+            isallObjective: bool,                      //设置是否全是客观题
         });
 
         //先将接收到的 paperId  submit_tatus参数接收赋值进去
@@ -67,7 +67,7 @@ class Paper_Submit extends Component {
             paperId: this.props.paperId,
             userName: global.constants.userName,
         };
-        //用于获取
+        //用于获取答案
         if (!this.state.success) {
             http.get(url, params).then((resStr) => {
                 let resJson = JSON.parse(resStr);
