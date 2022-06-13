@@ -11,6 +11,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        
     }
     dependencies {
         classpath("com.android.tools.build:gradle:4.2.2")
@@ -45,6 +46,12 @@ allprojects {
             // older versions over there.
             content {
                 excludeGroup "com.facebook.react"
+            }
+        }
+
+         jcenter() {
+            content {
+                includeModule("com.yqritc", "android-scalablevideoview")
             }
         }
         google()
