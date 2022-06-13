@@ -63,7 +63,7 @@ export default WrongDetails = () => {
         // 修改导航标题
         navigation.setOptions({ title: subjectName + '错题详情' })
         getData()
-    }, [questionId])
+    }, [currentPage])
 
     //请求数据
     const getData = () => {
@@ -253,7 +253,7 @@ export default WrongDetails = () => {
         if (temp != 1) {
             temp = (temp - 1).toString()
             setCurrentpage(temp)
-            setQuestionId(questionId)
+            //setQuestionId(questionId)
             setShow(true)
         }
         else {
@@ -267,7 +267,7 @@ export default WrongDetails = () => {
         if (temp != allPage) {
             temp = (temp + 1).toString()
             setCurrentpage(temp)
-            setQuestionId(questionId)
+           // setQuestionId(questionId)
             setShow(true)
         }
         else {
