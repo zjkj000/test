@@ -228,7 +228,7 @@ class ContentList extends React.Component {
                             </View>
                         </View>
                         <View style={{backgroundColor:'#fff'}}><Text style={{width:20}}></Text></View>
-                        {this.showTodo(todoImg,todo.id,todo.name,todo.paperType)}
+                        {this.showTodo(todoImg,todo.id,todo.name,todo.paperType,todo)}
                 </ScrollView>
 
             );
@@ -296,7 +296,7 @@ class ContentList extends React.Component {
     }
 
     //显示作业、导学案等可选操作
-    showTodo(todoImg,id,name,paperType){
+    showTodo(todoImg,id,name,paperType,todo){
         if(todoImg == 'paper.png'){
             return(
                 <View 
@@ -312,7 +312,7 @@ class ContentList extends React.Component {
                                                 name:'AssignPicturePaperWork',
                                                 params:{
                                                 paperName:name,
-                                                paperId:id
+                                                paperId:id,
                                                 }
                                 })
                                 }}>
@@ -328,7 +328,17 @@ class ContentList extends React.Component {
                                     params:{
                                     paperName:name,
                                     paperId:id,
-                                    type:'update'
+                                    type:'update',
+                                    channelName:todo.channel,
+                                    channelCode:todo.channelCode,
+                                    gradeLevelName:todo.gradeBook,
+                                    subjectCode:todo.subjectId,
+                                    textBookCode:todo.textBookId,
+                                    gradeLevelCode:todo.gradeBookCode,
+                                    pointCode:todo.knowledgeCode,
+                                    subjectName:todo.subject,
+                                    textBookName:todo.textBook,
+                                    pointName:todo.knowledge,
                                     }
                                 })
                             }else{

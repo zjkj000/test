@@ -21,7 +21,8 @@ import ContentListContainer from "./ContentListContainer";
 
 let SearchText = '';
 
-export default function LatestPageContainer() {
+export default function LatestPageContainer(props) {
+    console.log('教学内容页面：',props)
     const navigation = useNavigation();
     //将navigation传给LatestTask组件，防止路由出错
     return <TeachingContentPage navigation={navigation}></TeachingContentPage>;
@@ -188,7 +189,7 @@ class TeachingContentPage extends React.Component {
                         title="创建导学案+布置"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            Alert.alert('该部分正在开发中！')
+                            this.props.navigation.navigate("设置导学案属性", {});
                         }}
                         style={styles.menuItem}
                     />

@@ -21,11 +21,11 @@ export default function EditWorkContioner(props) {
   const subjectName      =props.route.params.subjectName?props.route.params.subjectName:''
   const textBookName     =props.route.params.textBookName?props.route.params.textBookName:''
   const gradeLevelName   =props.route.params.gradeLevelName?props.route.params.gradeLevelName:''
-  const pointName        =props.route.params.paperName?props.route.params.paperName:''
+  const pointName        =props.route.params.pointName?props.route.params.pointName:''
   const paperName        =props.route.params.paperName?props.route.params.paperName:''
   const type             =props.route.params.type?props.route.params.type:''
   const paperId          =props.route.params.paperId?props.route.params.paperId:''
-
+console.log('类型：',type,'channelName:',channelName,'subjectName:',subjectName,'textBookName:',textBookName)
   useEffect(()=>{
     getTimuType()
       }
@@ -79,7 +79,7 @@ class EditWork extends Component{
     this.updateupdateFlag =this.updateupdateFlag.bind(this)
     this.setanswerNum     = this.setanswerNum.bind(this)
     this.state={
-        updateFlag:0,   //记录保存后是否继续修改   0 代表未修改  1代表修改
+        updateFlag:'1',   //记录保存后是否继续修改   0 代表未修改    1代表修改过
         paperName:'',
         paperId:'-1',    //保存之后就会获取到这个paperID  
         subjectName:'',
@@ -155,7 +155,7 @@ class EditWork extends Component{
   }
 
   updateupdateFlag(){
-    this.setState({updateFlag:1})
+    this.setState({updateFlag:'1'})
   }
   //添加试题，（包括传参数--修改题目的情况）
   addTimu(typeId,typeName,baseTypeId,score){
@@ -172,7 +172,7 @@ class EditWork extends Component{
                 newdata[(this.state.isupdateExistTimuOrder-1)].questionName=this.state.questionName
                 newdata[(this.state.isupdateExistTimuOrder-1)].questionScore=this.state.questionScore
                 this.setState({modalVisible:false,
-                  updateFlag:0,
+                  updateFlag:'1',
                   data:newdata,
                   typeId:'',
                   questionName:'',
@@ -220,7 +220,7 @@ class EditWork extends Component{
                     AnswerContentList:[],
                     AnalysisContentList:[]})
                   this.setState({
-                    updateFlag:0,
+                    updateFlag:'1',
                     data:newdata,
                     typeId:'',
                     baseTypeId:'',
@@ -349,7 +349,6 @@ class EditWork extends Component{
   }
 
   deleteTimu(Timuindex,questionId){
-    this.updateupdateFlag()
     const url =
       "http://" +
       "www.cn901.net" +
@@ -368,7 +367,7 @@ class EditWork extends Component{
               newTimudata.push(item)
             }
           });
-          this.setState({data:newTimudata,updateFlag:0,})
+          this.setState({data:newTimudata,updateFlag:'1',})
         }else{
             Toast.showInfoToast('再试一下',500)
         }
@@ -472,7 +471,6 @@ class EditWork extends Component{
   savepaper(Assign){
     var isnull = true;
     this.state.data.map((item,index)=>{
-      console.log(index,this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList))
       isnull = isnull&&this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList)
       if(!this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList)){
         if(item.TimuContentList.length==0){
@@ -488,9 +486,9 @@ class EditWork extends Component{
     })
     // console.log('保存参数之前','paperId：',this.state.paperId,'isnull：',isnull,'Assign:',Assign)
     //如果都不为空  保存或者提交
+    //true代表不为空 && paperid没有           ||     修改过的情况 需要重新保存
     if((isnull&&this.state.paperId=='-1')||this.state.updateFlag=='1'){
       // console.log('保存之前：',this.state.data)
-      WaitLoading.show('保存中...',-1)
           var SubAnswerStr = []
           this.state.data.map((item,index)=>{
             SubAnswerStr.push({
@@ -537,13 +535,14 @@ class EditWork extends Component{
                   pointName:this.props.pointName,                  //知识点Name
                 };
             // console.log('提交了.....')
+              WaitLoading.show('保存中...',-1)
               http.get(url, params).then((resStr) => {
                 let resJson = JSON.parse(resStr);
                 // console.log('保存接口：',resJson)
                 //根据接口返回值，直接提示message
                 if(resJson.success){
                   // console.log('请求了试卷id',resJson)
-                  this.setState({paperId:resJson.data,updateFlag:1,})
+                  this.setState({paperId:resJson.data,updateFlag:'0',})
                   if(Assign){
                     WaitLoading.dismiss()
                     this.props.navigation.navigate({
@@ -562,9 +561,10 @@ class EditWork extends Component{
                   Toast.showDangerToast('保存失败！',1000)
                 }
               })
-    }else if(!Assign&&this.state.paperId!='-1'&&this.updateFlag){
+    }else if(!Assign&&this.state.paperId!='-1'&&this.updateFlag=='0'){//试卷已经点过了保存
       Toast.showSuccessToast('试卷已经保存！',2000)
     }
+
     if(Assign){
       this.props.navigation.navigate({
         name:'AssignPicturePaperWork',

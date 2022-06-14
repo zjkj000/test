@@ -134,8 +134,7 @@ class LatestPage extends React.Component {
     //创建+布置导学案
     createLearnCase = () => {
         this.setState({ createmoduleVisible: false });
-        Alert.alert('创建导学案正在开发！！')
-        // this.props.navigation.navigate("设置导学案属性", {});
+        this.props.navigation.navigate("设置导学案属性", {});
     }
     creatPictureWork = () =>{
         this.setState({ createmoduleVisible: false });

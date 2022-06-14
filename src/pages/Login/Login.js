@@ -91,7 +91,12 @@ export default Login = () => {
                     setShowLoading(false);
                     Toast.showSuccessToast(res.message, 500);
                     // Alert.alert(res.message);
-                    navigation.navigate(homePage);
+                    navigation.navigate({
+                        name:homePage,
+                        params:{
+                            type:'login'
+                        }
+                    });
                 } else if (res.success == false) {
                     setShowLoading(false);
                     Toast.showWarningToast(res.message, 2000);
