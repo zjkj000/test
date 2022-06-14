@@ -34,7 +34,7 @@ let searchStr = ""; //保存上一次搜索框内容
 
 let todosList = []; //复制一份api请求得到的数据
 
-let flag = 1;   //提交作业页面返回，已批改作业的状态图标问题（两次主动请求数据）
+let flag = 1; //提交作业页面返回，已批改作业的状态图标问题（两次主动请求数据）
 let focusFlag = false;
 
 export default function TodoListContainer(props) {
@@ -46,7 +46,7 @@ export default function TodoListContainer(props) {
 
     const learnId = props.learnId;
     const status = props.status;
-    console.log('****learnId***status**',learnId , status);
+    console.log("****learnId***status**", learnId, status);
 
     const navigation = useNavigation();
     //将navigation传给TodoList组件，防止路由出错
@@ -55,7 +55,7 @@ export default function TodoListContainer(props) {
             navigation={navigation}
             resourceType={rsType}
             searchStr={searchStr1}
-            learnId={learnId} 
+            learnId={learnId}
             status={status}
         ></TodoList>
     );
@@ -75,7 +75,6 @@ class TodoList extends React.Component {
             errorInfo: "",
             showFoot: 0, //控制foot， 0：隐藏footer 1：已加载完成，没有更多数据 2：正在加载中
             //isRefreshing: false, //下拉控制
-
         };
         this.fetchData = this.fetchData.bind(this); //fetchData函数中this指向问题
     }
@@ -85,19 +84,21 @@ class TodoList extends React.Component {
         oldtype = this.props.resourceType;
         searchStr = this.props.searchStr;
 
-
         // console.log("componentWillMount**************", 'oldtype', oldtype, 'rescouceType', this.props.resourceType, this.props.searchStr);
         this.fetchData(pageNo, oldtype, searchStr, true);
     }
 
     componentDidMount() {
-        
         const { navigation } = this.props;
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log('#####unsubscribeNavigationFocusEvent###');
-                console.log('****learnId000***status000**', this.props.learnId , this.props.status);
+                console.log("#####unsubscribeNavigationFocusEvent###");
+                console.log(
+                    "****learnId000***status000**",
+                    this.props.learnId,
+                    this.props.status
+                );
                 if (focusFlag == true) {
                     // console.log('###route params###', navigation.getState());
                     pageNo = 1;
@@ -114,7 +115,6 @@ class TodoList extends React.Component {
     componentWillUnmount() {
         this._unsubscribeNavigationFocusEvent();
     }
-
 
     UNSAFE_componentWillUpdate(nextProps) {
         //fetchData执行会触发setState函数，又会重新执行componentWillUpdate函数，
@@ -173,7 +173,7 @@ class TodoList extends React.Component {
             } else {
                 // console.log("componentWillUpdate*********1111", Date.parse(new Date()));
 
-                console.log('______________');
+                console.log("______________");
                 flag = 2;
                 this._onRefresh();
             }
@@ -220,7 +220,6 @@ class TodoList extends React.Component {
             token: token,
         };
 
-
         // if(flag == 3){
         //     console.log('&&&&&&&&&*******&&&&&&&&&');
         //     flag = 1;
@@ -233,6 +232,11 @@ class TodoList extends React.Component {
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
+                console.log(
+                    "fetchLatestData===================================="
+                );
+                console.log(resJson);
+                console.log("====================================");
                 let todosList1 = [];
                 todosList1 = resJson.data; //重要！！！
 
@@ -267,7 +271,6 @@ class TodoList extends React.Component {
                     //isRefreshing: false,
                 });
 
-
                 // if(flag == 2){
                 //     console.log('&&&&&&&&&&&&&&&&&&');
                 //     flag = 3;
@@ -281,9 +284,8 @@ class TodoList extends React.Component {
                 todosList1 = null;
                 dataBlob = null;
 
-
                 if (flag == 2) {
-                    console.log('&&&&&&&&&&&&&&&&&&');
+                    console.log("&&&&&&&&&&&&&&&&&&");
                     flag = 1;
                     this._onRefresh();
                     return;
@@ -348,21 +350,22 @@ class TodoList extends React.Component {
                 todoType == "导学案"
                     ? require("../../assets/LatestTaskImages/study.png")
                     : todoType == "作业"
-                        ? require("../../assets/LatestTaskImages/homework.png")
-                        : todoType == "通知"
-                            ? require("../../assets/LatestTaskImages/inform.png")
-                            : require("../../assets/LatestTaskImages/public-notice.png");
+                    ? require("../../assets/LatestTaskImages/homework.png")
+                    : todoType == "通知"
+                    ? require("../../assets/LatestTaskImages/inform.png")
+                    : require("../../assets/LatestTaskImages/public-notice.png");
             //根据图标状态指定图标的url(对于已读的通知，应该不显示任何图标，此处使用三目运算，且需要require请求资源，故设置请求资源为空白图片../Image/readInform.png)
             var statusUrl = todo.status;
             // console.log('*****任务状态图标****', todoType, statusUrl);
             const statusImg =
                 statusUrl == "1" || statusUrl == "5"
                     ? require("../../assets/LatestTaskImages/new.png")
-                    : statusUrl == "2" || (statusUrl == "4" && todoType == "导学案")
-                        ? require("../../assets/LatestTaskImages/hasCheck.png")
-                        : statusUrl == "3"
-                            ? require("../../assets/LatestTaskImages/noCheck.png")
-                            : require("../../assets/LatestTaskImages/readInform.png");
+                    : statusUrl == "2" ||
+                      (statusUrl == "4" && todoType == "导学案")
+                    ? require("../../assets/LatestTaskImages/hasCheck.png")
+                    : statusUrl == "3"
+                    ? require("../../assets/LatestTaskImages/noCheck.png")
+                    : require("../../assets/LatestTaskImages/readInform.png");
             //小标题
             const bottomTitle = todo.bottomTitle;
             //创建者
@@ -390,10 +393,10 @@ class TodoList extends React.Component {
                 todoType == "导学案"
                     ? 1
                     : todoType == "作业"
-                        ? 2
-                        : todoType == "通知"
-                            ? 3
-                            : 4;
+                    ? 2
+                    : todoType == "通知"
+                    ? 3
+                    : 4;
 
             return (
                 <View>
