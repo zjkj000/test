@@ -7,7 +7,14 @@ import Piyueshiti from './Piyueshiti';
 import BasePicker from '../../utils/datetimePickerUtils/BasePicker'
 import http from '../../utils/http/request'
 
-export default class StatisticalForm extends Component {
+import { useNavigation } from '@react-navigation/native';
+export default function StatisticalForm() {
+  const navigation = useNavigation()
+  return (
+    <StatisticalFormContoner navigation={navigation}/>
+  )
+}
+ class StatisticalFormContoner extends Component {
     constructor(props){
         super(props)
         this.setBuzhizuoyeDate=this.setBuzhizuoyeDate.bind(this)
@@ -62,7 +69,7 @@ export default class StatisticalForm extends Component {
               <BasePicker modle={'Date'} setDateOrTime={this.setKetangshoukeDate} selected={this.state.KetangshoukeDateStr}/>
             </View>
             {/* 课堂授课图表 */}
-            <Ketangshouke data={this.state.ketangshoukelist} date={this.state.KetangshoukeDateStr}/>
+            <Ketangshouke data={this.state.ketangshoukelist} date={this.state.KetangshoukeDateStr} navigation={this.props.navigation}/>
             {/* 布置作业标题+日历 */}
             <View style={{height:20,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
               <View style={{flexDirection:'row'}}>

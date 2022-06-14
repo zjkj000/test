@@ -4,10 +4,18 @@ let {width, height} = Dimensions.get('window');
 import Echarts from 'native-echarts';
 import MyTable from './MyTable'
 import http from '../../utils/http/request'
-export default class Buzhizuoye extends Component {
+import { useNavigation } from '@react-navigation/native';
+export default function Buzhizuoye() {
+  const navigation = useNavigation()
+  return (
+    <BuzhizuoyeContent navigation={navigation}/>
+  )
+}
+class BuzhizuoyeContent extends Component {
   constructor(props){
     super(props)
     this.state={
+      BuzhizuoyeTableNum:3,
       startTime:'',
       effectiveKeciNum: '2.10',   //有效次数
       queSumNum: 30,             //试题总数
@@ -38,7 +46,6 @@ export default class Buzhizuoye extends Component {
   }
   
   UNSAFE_componentWillMount(){
-    // this.setState({startTime:this.props.date})
     this.getanayGetBZZYNum()
   }
   //第三模块数据
@@ -89,7 +96,10 @@ export default class Buzhizuoye extends Component {
           type: 'shadow'
         }
       },
-      legend: {},
+      legend: {
+        data: ["提交率", "批改率"],
+        right:'3%'},
+        
       grid: {
         left: '3%',
         right: '4%',
@@ -124,6 +134,10 @@ export default class Buzhizuoye extends Component {
       title: {
           text: '得分率'
         },
+        
+      legend: {
+        data: ["总分", "平均分"],
+        right:'3%'},
       tooltip: {
         trigger: 'axis',
         axisPointer: {
@@ -136,9 +150,14 @@ export default class Buzhizuoye extends Component {
   
       xAxis: [
         { data: this.state.classNameList,
+          axisLabel : {
+            interval:0,
+            rotate:"30"
+          },
           axisPointer: {
             type: 'shadow',
-            color:'green'
+            color:'red',
+            
           }
         }
       ],
@@ -188,12 +207,15 @@ export default class Buzhizuoye extends Component {
         }
       ]
     };
+    
     return (
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:20}}>
         <View style={{flexDirection:'row',marginLeft:20,marginRight:20}}>
-          <View style={{flex:1,justifyContent:'center'}}  ><Image source={require('../../assets/StatisticalForm/Ima_book.png')}></Image></View>
+          <View style={{flex:1,justifyContent:'center'}}  >
+            <Image source={require('../../assets/StatisticalForm/Ima_book.png')}></Image>
+          </View>
           <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
-          <View>
+              <View>
                 <View style={{height:50}}>
                   <Text style={{fontSize:18}}>有效次数</Text>
                 </View>
@@ -215,12 +237,18 @@ export default class Buzhizuoye extends Component {
             <Echarts option={option1} height={250} width={width-40}/>
         </View>
         <View>
-          <MyTable data={this.state.tableData} tablehead={this.state.tableHead}/>
+          <MyTable data={this.state.tableData.length>this.state.BuzhizuoyeTableNum?this.state.tableData.slice(0,this.state.BuzhizuoyeTableNum):this.state.tableData} tablehead={this.state.tableHead}/>
         </View>
-        
-          <View style={{justifyContent:'center',flexDirection:'row'}}>
-            <Text style={{color:'#87CEFA'}} >查看全部{' >>'}</Text>
-          </View>
+        {this.state.tableData.length>this.state.BuzhizuoyeTableNum?(
+                  <View style={{justifyContent:'center',flexDirection:'row'}}>
+                    <Text  onPress={()=>this.setState({BuzhizuoyeTableNum:this.state.tableData.length})
+                      }  style={{color:'#87CEFA'}} >查看全部{' >>'}</Text>
+                  </View>
+                ):this.state.tableData.length<=3?(<View></View>):
+                (<View style={{justifyContent:'center',flexDirection:'row'}}>
+                <Text  onPress={()=>this.setState({BuzhizuoyeTableNum:3})
+                  }  style={{color:'#87CEFA'}} >收起{' >>'}</Text>
+              </View>)}
         
   </View>
     )

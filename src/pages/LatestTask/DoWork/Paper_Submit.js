@@ -1,19 +1,11 @@
-import {
-    Button,
-    ScrollView,
-    Text,
-    View,
-    StyleSheet,
-    Alert,
-    TouchableOpacity,
-    Dimensions,
-} from "react-native";
+import {Button,ScrollView,Text,View,StyleSheet,Alert,TouchableOpacity,Dimensions,} from "react-native";
 import React, { Component, useState } from "react";
 import http from "../../../utils/http/request";
 import RenderHtml from "react-native-render-html";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../../utils/loading/Loading";
 import Toast from "../../../utils/Toast/Toast";
+import { Waiting, WaitLoading } from '../../../utils/WaitLoading/WaitLoading'
 // 提交作业页面
 export default function Paper_SubmitContainer(props) {
     const start_date = props.route.params.startdate;
@@ -47,12 +39,12 @@ class Paper_Submit extends Component {
             startdate: "",
         };
     }
-
+    
     //页面加载在render之前
     UNSAFE_componentWillMount() {
         let bool =
-            this.props.isallObj.indexOf("104") > -1 ||
-            this.props.isallObj.indexOf("106") > -1
+            this.props.isallObj.indexOf("104") > -1 ||     //判断是否存在104类型  若存在就有主观题
+            this.props.isallObj.indexOf("106") > -1        //判断是否存在106类型  若存在就有主观题  
                 ? false
                 : true;
         this.setState({
@@ -61,7 +53,7 @@ class Paper_Submit extends Component {
                 : this.getDate(),
             paperId: this.props.paperId,
             submit_status: this.props.submit_status,
-            isallObjective: bool,
+            isallObjective: bool,                      //设置是否全是客观题
         });
 
         //先将接收到的 paperId  submit_tatus参数接收赋值进去
@@ -75,7 +67,7 @@ class Paper_Submit extends Component {
             paperId: this.props.paperId,
             userName: global.constants.userName,
         };
-        //用于获取
+        //用于获取答案
         if (!this.state.success) {
             http.get(url, params).then((resStr) => {
                 let resJson = JSON.parse(resStr);
@@ -94,6 +86,7 @@ class Paper_Submit extends Component {
     }
 
     submit_answer() {
+        WaitLoading.show('作业提交中...',-1)
         const url =
             "http://" +
             "www.cn901.net" +
@@ -160,34 +153,32 @@ class Paper_Submit extends Component {
             status: newsub_status,
             noAnswerQueId: noSubmitID,
         };
-        var subsuccess = false;
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
-            subsuccess = resJson.success;
-        });
-
-        // if(noSubmitID!='-1'){
-        //     //弹框提醒  是否要继续提交
-        //     alert('还有未作答题目,提交了!')
-        //     //确定就提交，取消就不提交
-        // }else{
-        if (subsuccess) {
-            Toast.showSuccessToast("提交成功了!", 1000);
-        }
-
-        this.props.navigation.navigate({
-            name: "Home",
-            params: {
-                learnId: this.state.paperId,
-                status: change_status,
-            },
-        });
-        // }
-
-        // 提交作业代码
-
-        //根据返回结果的success确定 是否提交成功，  结果数据：{"message":"作业提交成功！","data":null,"success":"true"}
-        //提交过程设置loading效果
+            if(resJson.success){
+                WaitLoading.dismiss()
+                Toast.showSuccessToast('作业提交成功！',1000)
+                // Alert.alert('','作业提交成功！',[{},
+                //     {text:'ok',onPress:()=>this.props.navigation.navigate({
+                //         name: "Home",
+                //         params: {
+                //             learnId: this.state.paperId,
+                //             status: change_status,
+                //         },
+                //     })}
+                //   ])
+                this.props.navigation.navigate({
+                    name: "Home",
+                    params: {
+                        learnId: this.state.paperId,
+                        status: change_status,
+                    },
+                })
+            }else{
+                WaitLoading.show_false()
+            }
+        });        
+        ;
     }
 
     render() {
@@ -244,6 +235,7 @@ class Paper_Submit extends Component {
                         borderTopWidth: 0.5,
                     }}
                 >
+                    <Waiting/>
                     {/* 答案预览区域 */}
                     <ScrollView style={styles.preview_area}>
                         {/* 题目展示内容：序号 + 答案 */}

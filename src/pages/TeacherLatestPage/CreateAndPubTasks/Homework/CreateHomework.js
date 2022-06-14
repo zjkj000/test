@@ -231,7 +231,6 @@ class CreateHomework extends React.Component {
     }
 
     componentWillUnmount(){
-        console.log('---componentWillUnmount----');
         paperListOne = [];
         typeAll = 0;
         count = 0;

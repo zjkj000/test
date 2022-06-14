@@ -238,18 +238,25 @@ export default function Paper_ToDo(props) {
                       if(newindex==dataNum){
                         //Toast.showInfoToast('已经是最后一题') 需要跳转到答题页面
                         Submit_Stu_answer(selectedIndex,selectedIndex);
-                        navigation.navigate(
-                          {
-                            name:"SubmitPaper", 
-                            params: {
-                                      paperId:learnPlanId,
-                                      submit_status:status,
-                                      startdate:startdate,
-                                      papername:props.route.params.papername,
-                                      isallObj:isallObj
-                                    },
-                            megre:true
-                          });
+                        Alert.alert('','已经最后一题，确定提交作业？',[{text:'取消',onPress:()=>{}},{},
+                            {text:'确定',onPress:()=>{
+                              navigation.navigate(
+                                {
+                                  name:"SubmitPaper", 
+                                  params: {
+                                            paperId:learnPlanId,
+                                            submit_status:status,
+                                            startdate:startdate,
+                                            papername:props.route.params.papername,
+                                            isallObj:isallObj
+                                          },
+                                  megre:true
+                                });
+                            }}
+                          ])
+                        
+
+                       
                       }else{
                         Submit_Stu_answer(newindex,selectedIndex);
                        

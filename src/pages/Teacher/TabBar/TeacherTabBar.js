@@ -63,7 +63,7 @@ class TeacherTabBarComponent extends React.Component {
         return (
             <View>
                 {/* <Text>我是教师端教学内容</Text> */}
-                <TeachingContentPage />
+                <TeachingContentPage/>
             </View>
         );
     };

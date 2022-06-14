@@ -7,7 +7,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import ImageHandler from '../../../../utils/Camera/Camera';
 import http from '../../../../utils/http/request';
 import { useNavigation } from "@react-navigation/native";
-
+import {Waiting,WaitLoading} from '../../../../utils/WaitLoading/WaitLoading'
 export default function LG_subjectiveContainer(props) {
     const navigation = useNavigation();
     const learnPlanId= props.learnPlanId
@@ -187,6 +187,7 @@ class LG_subjective extends Component {
     handleCamera = () => {
         ImageHandler.handleCamera().then((res) => {
             if (res) {
+                WaitLoading.show('照片提交中...',-1)
                 const url ="http://" +"www.cn901.net" +":8111" +
                             "/AppServer/ajax/studentApp_saveBase64Image.do";
                 const params = {
@@ -194,9 +195,10 @@ class LG_subjective extends Component {
                     learnPlanId: this.state.learnPlanId,
                     userId: global.constants.userName};    
                      
-                http.post(url,params).then((resStr)=>{
-                                let resJson = JSON.parse(resStr);
+                http.post(url,params,false).then((resStr)=>{
+                                let resJson = resStr;
                                 if(resJson.success){
+                                    WaitLoading.dismiss()
                                     var newurl = resJson.data;
                                     var newimageArray = this.state.imgURLArray;
                                     if (newurl != "") {
@@ -229,6 +231,7 @@ class LG_subjective extends Component {
     handleLibrary = () => {
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
+                WaitLoading.show('照片提交中...',-1)
                 const url ="http://" +"www.cn901.net" +":8111" +
                             "/AppServer/ajax/studentApp_saveBase64Image.do";
                 const params = {
@@ -236,9 +239,10 @@ class LG_subjective extends Component {
                     learnPlanId: this.state.learnPlanId,
                     userId: global.constants.userName};    
                      
-                http.post(url,params).then((resStr)=>{
-                                let resJson = JSON.parse(resStr);
+                http.post(url,params,false).then((resStr)=>{
+                                let resJson = resStr;
                                 if(resJson.success){
+                                    WaitLoading.dismiss()
                                     var newurl = resJson.data;
                                     var newimageArray = this.state.imgURLArray;
                                     if (newurl != "") {
@@ -296,6 +300,7 @@ class LG_subjective extends Component {
 
                 {/* 题目展示区域 */}
                 <ScrollView style={this.state.isLongarea ? styles.answer_area_Long : styles.answer_area}>
+                    <Waiting/>
                     <RenderHtml contentWidth={width} source={{ html: HTML }} />
                     <Text style={{ height: 50 }}></Text>
                 </ScrollView>

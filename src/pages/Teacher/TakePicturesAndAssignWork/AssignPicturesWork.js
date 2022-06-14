@@ -1,16 +1,20 @@
-import { Text, View,Image,ScrollView,TouchableOpacity,TextInput,StyleSheet} from 'react-native'
+import { Text, View,Image,ScrollView,TouchableOpacity,TextInput,StyleSheet, Alert} from 'react-native'
 import React, { Component } from 'react'
 import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
 import { Button } from '@ui-kitten/components';
 
+import { useNavigation } from "@react-navigation/native";
 import BasePicker from '../../../utils/datetimePickerUtils/BasePicker';
 import DateTime from '../../../utils/datetimePickerUtils/DateTime';
-import http from '../../../utils/http/request'
+import http from '../../../utils/http/request';
 import Toast from '../../../utils/Toast/Toast';
+import { WaitLoading,Waiting } from '../../../utils/WaitLoading/WaitLoading';
 export default function AssignPicturesWorkContainer(props) {
     const navigation = useNavigation();
+    const paperName=props.route.params.paperName
+    var paperId = props.route.params.paperId
     navigation.setOptions({title:'布置作业'});
-    return <AssignPicturesWork navigation={navigation} />;
+    return <AssignPicturesWork navigation={navigation} paperName={paperName} paperId={paperId} />;
 }
 
 class AssignPicturesWork extends Component {
@@ -32,7 +36,7 @@ class AssignPicturesWork extends Component {
             class: {}, //所选中的课堂对应的班级信息
             classFlag: false, //是否选中班级
             groupList: [], //小组列表
-            groupSelected: [], //被选中的小组
+            groupSelected: [], //被选中的小组  
             classOrGroupId:'',
 
             studentsList: [], //个人列表（接口返回的classList、学生信息由字符串拼接）
@@ -43,11 +47,11 @@ class AssignPicturesWork extends Component {
     }
 
     UNSAFE_componentWillMount(){
-        console.log(this.props.route.params)
-        this.setState({paperName:this.props.route.params.paperName,
-                       paperId:this.props.route.params.paperId})
+        this.setState({paperName:this.props.paperName,
+                       paperId:this.props.paperId})
         }
-
+    
+  
     updateAssignToWho(who){
         if(who!=this.state.assigntoWho){
             this.setState({assigntoWho:who})
@@ -363,9 +367,21 @@ class AssignPicturesWork extends Component {
     SaveAssign(){
         if(this.state.beginstr==''){
             Toast.showDangerToast('请设置开始时间')
+            Alert.alert('请设置开始时间')
         }else if(this.state.endstr==''){
             Toast.showDangerToast('请设置结束时间')
+            Alert.alert('请设置结束时间')
+        }else if(this.state.assigntoWho=='0'&&this.state.studentsList.length==0){
+            Toast.showDangerToast('请先选择布置对象')
+            Alert.alert('请先选择布置对象')
+        }else if(this.state.assigntoWho=='1'&&this.state.groupSelected.length==0){
+            Toast.showDangerToast('请先选择布置对象')
+            Alert.alert('请先选择布置对象')
+        }else if(this.state.assigntoWho=='2'&&this.state.studentSelected.length==0){
+            Toast.showDangerToast('请先选择布置对象')
+            Alert.alert('请先选择布置对象')
         }else{
+            WaitLoading.show('布置中...',-1)
             //拼接提交保存的参数
             var stuIds ='';
             var stuNames ='';
@@ -373,7 +389,6 @@ class AssignPicturesWork extends Component {
             var classIdOrGroupId = '';
             var classOrGroupName = '';
             if(this.state.assigntoWho=='0'){
-                console.log('assigntowho 0',this.state.studentsList)
                 learnType = '70'
                 stuIds = this.state.studentsList[0].ids
                 stuNames = this.state.studentsList[0].name
@@ -426,7 +441,16 @@ class AssignPicturesWork extends Component {
                 let resJson = JSON.parse(resStr);
                 console.log('布置页面保存：',resJson)
                 if(resJson.success){
-                    //跳转首页
+                    Alert.alert('','作业布置成功！',[{},
+                        {text:'ok',onPress:()=>{
+                            WaitLoading.dismiss()
+                            this.props.navigation.navigate('Teacher_Home')
+                        }}
+                      ])
+                    
+                }else{
+                    WaitLoading.show_false()
+                    Toast.showDangerToast('布置失败！',1000)
                 }
             })
         }
@@ -439,6 +463,7 @@ class AssignPicturesWork extends Component {
     <View style={{borderTopWidth:1,backgroundColor:'#FFFFFF'}}>
       
       <ScrollView style={{height:'93%',}}>
+          <Waiting/>
         <View style={{flexDirection:'row',paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
                 <Text style={{fontSize:15,marginRight:40}}>作业名称:</Text>
                 <TextInput value={this.state.paperName} placeholder='传过来的值'></TextInput>
@@ -527,10 +552,7 @@ class AssignPicturesWork extends Component {
              style={{width:'40%'}} >重置</Button>
             <Button onPress={()=>{
                 this.SaveAssign()
-                this.props.navigation.navigate({
-                    name:'Teacher_Home'
-
-                })
+                
                 }} style={{width:'40%'}}>确定</Button>
       </View>
     </View>

@@ -2,6 +2,7 @@ import React, { Component, useState , useEffect,useRef} from "react";
 import { View, Image, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import res from "antd-mobile-icons/es/AaOutline";
+import emitter from '../Wrongbook/utils/event.js';
 
 
 
@@ -11,13 +12,19 @@ export default Wrongbook = () => {
     const token = global.constants.token
     const userName = global.constants.userName
     //初始化参数
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([])
+    const [refreash , setRefreash] = useState(0)
     //设置导航
     const navigation = useNavigation()
     //获取学科数据
     useEffect(() => {
         getData();
-      },[]);
+        setRefreash(0)
+      },[refreash]);
+      //监听WrongDetail页面refreash是否变化，变化了需要相应刷新
+    emitter.addListener('wrongBook_refreash', () => {
+        setRefreash(1)
+      });
     const getData = () =>{
         fetch(ip
             + 'studentApp_ErrorQueGetSubject.do?'
@@ -41,7 +48,7 @@ export default Wrongbook = () => {
 
     //点击跳转到单科全部错题界面并将小红点状态置0
     const onPressButton = (subjectId , subjectName) => {
-        console.log('错题本页面测试')
+        
         //更改学科错题已读状态
         fetch(ip
             + 'studentApp_ErrorQueUpdateStatus.do?'
@@ -72,6 +79,22 @@ export default Wrongbook = () => {
         })
         
     }
+    //处理各科图标
+    const handleImage = (subName) => {
+        switch (subName) {
+            case'dili':return (<Image source={require('../../assets/errorQue/dili.png')} style={styles.Image} />)
+            case'huaxue':return (<Image source={require('../../assets/errorQue/huaxue.png')} style={styles.Image} />)
+            case'lishi':return (<Image source={require('../../assets/errorQue/lishi.png')} style={styles.Image} />)
+            case'other':return (<Image source={require('../../assets/errorQue/other.png')} style={styles.Image} />)
+            case'shengwu':return (<Image source={require('../../assets/errorQue/shengwu.png')} style={styles.Image} />)
+            case'shuxue':return (<Image source={require('../../assets/errorQue/shuxue.png')} style={styles.Image} />)
+            case'wuli':return (<Image source={require('../../assets/errorQue/wuli.png')} style={styles.Image} />)
+            case'yingyu':return (<Image source={require('../../assets/errorQue/yingyu.png')} style={styles.Image} />)
+            case'yuwen':return (<Image source={require('../../assets/errorQue/yuwen.png')} style={styles.Image} />)
+            case'zhengzhi':return (<Image source={require('../../assets/errorQue/zhengzhi.png')} style={styles.Image} />)
+        }
+        
+}
     //处理小红点的显隐
     const handleVisible = (imageStatu) => {
         if(imageStatu=='0'){
@@ -90,6 +113,7 @@ export default Wrongbook = () => {
                 {   
                 //循环渲染data中的数据
                     data.map((item, index) => {
+                        
                         return (
                             //Alert.alert(item.status),
                             //TouchableOpacity点击或长按均有半透明效果
@@ -97,10 +121,7 @@ export default Wrongbook = () => {
                                 <View style={styles.Card}>
                                     <View style={styles.ViewCard}>
                                         <View style={styles.ViewCardleft}>
-                                            <Image
-                                                source={require('../../assets/teaImg/paper.png')}
-                                                style={styles.Image}
-                                            />
+                                            {handleImage(item.image)}
                                         </View>
                                         <View style={styles.ViewCardright}>
                                             <View style={styles.textView}>

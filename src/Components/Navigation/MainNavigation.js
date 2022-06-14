@@ -35,11 +35,9 @@ import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Home
 import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
 import CreateLearnCaseFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/CreateLearnCaseFrame";
 
-import PaperListContainer from "../../pages/Teacher/CorrectPaper/PaperList";
-import CorrectingPaper from "../../pages/Teacher/CorrectPaper/CorrectingPaper";
-import CorrectSubmit from "../../pages/Teacher/CorrectPaper/CorrectSubmit";
-import LookCorrectDetails from "../../pages/Teacher/CorrectPaper/LookCorrectDetails";
-
+import PaperListContainer from '../../pages/Teacher/CorrectPaper/PaperList';
+import CorrectingPaper from '../../pages/Teacher/CorrectPaper/CorrectingPaper';
+import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDetails';
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
 import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
 import AssignPicturesWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/AssignPicturesWork";
@@ -75,6 +73,7 @@ export default class MainNavigation extends Component {
                         header: () => {},
                     }}
                 />
+
                 <Stack.Group>
                     <Stack.Screen name="资料夹" component={PackagesPage} />
                     <Stack.Screen name="Todo" component={Todo} />
@@ -181,7 +180,6 @@ export default class MainNavigation extends Component {
                             headerShown: false,
                         }}
                     />
-
                     <Stack.Screen
                         name="设置导学案属性"
                         component={LearnCasePropertyContainer}

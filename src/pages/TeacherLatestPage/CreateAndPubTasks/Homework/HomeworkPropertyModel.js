@@ -12,8 +12,8 @@ import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 import { useNavigation } from "@react-navigation/native";
 import http from "../../../../utils/http/request";
 
-
 import Toast from '../../../../utils/Toast/Toast';
+
 
 export default function HomeworkPropertyModelContainer(props) {
     const paperTypeList = props.paperTypeList; 
@@ -76,7 +76,6 @@ class HomeworkPropertyModel extends React.Component {
             knowledge: this.props.knowledge, //知识点(选中的)
             knowledgeCode: this.props.knowledgeCode, //选中的知识点项的编码
             knowledgeVisibility: false, //知识点选择列表是否显示     
-
             paperTypeVisibility: false, //试题类型列表是否显示
 
             //共享内容

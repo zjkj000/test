@@ -9,7 +9,8 @@ import {
     Alert,
     ScrollView,
     useWindowDimensions,
-    TextInput
+    TextInput,
+    ImageBackground
 } from "react-native";
 import Loading from "../../utils/loading/Loading";
 import RenderHtml from 'react-native-render-html';
@@ -19,7 +20,10 @@ import SeeAnswerButton from "./utils/SeeAnswerButton";
 import ShowAnswerContainer from "./utils/ShowAnswer";
 import RadioList from "../LatestTask/DoWork/Utils/RadioList";
 import Checkbox from "../LatestTask/DoWork/Utils/Checkbox";
-
+import Dialog from "react-native-dialog";
+import emitter from '../Wrongbook/utils/event.js';
+import VideoPlayerContainer from "./utils/VideoPlayer";
+import VideoPlayScreen from "./utils/VideoPlayScreen";
 
 export default WrongDetails = () => {
 
@@ -31,22 +35,25 @@ export default WrongDetails = () => {
     const subjectName = route.params.subjectName
     const subjectId = route.params.subjectId
     const sourceId = route.params.sourceId
-    const questionId = route.params.questionId
     
+    
+
 
     //初始化props
     const [data, setData] = useState([])
-    const [success, setSuccess] = useState(false)
     const [currentPage, setCurrentpage] = useState(route.params.currentPage)
     const [show, setShow] = useState(true)
     const [basetypeId, setBasetypeId] = useState(0)
     const [value, setValue] = useState('')
     const [index, setIndex] = useState('')
-    const [newAnswer,setNewAnswer] =  useState([])
+    const [newAnswer, setNewAnswer] = useState([])
     const [stuAnswer, setStuAnswer] = useState('')
-    
-
-
+    const [questionId, setQuestionId] = useState(route.params.questionId)
+    const [visible, setVisible] = useState(false)//控制Dialog显隐
+    const [allPage, setAllPage] = useState(0)
+    const [refreash, setRefreash] = useState(0)
+    const [mp4_data, setMp4_data] = useState([])
+    const [videoUrl,setvideoUrl] = useState('')
 
     //设置导航
     const navigation = useNavigation()
@@ -56,7 +63,7 @@ export default WrongDetails = () => {
         // 修改导航标题
         navigation.setOptions({ title: subjectName + '错题详情' })
         getData()
-    }, [currentPage])
+    }, [questionId])
 
     //请求数据
     const getData = () => {
@@ -76,17 +83,33 @@ export default WrongDetails = () => {
             .then(text => {
 
                 const res = eval('(' + text.substring(2) + ')')
-
                 //数据与props绑定
                 setData(res.data)
-                setSuccess(res.success)
                 setCurrentpage(res.data.currentPage)
                 setBasetypeId(res.data.baseTypeId)
                 setStuAnswer(res.data.stuAnswer)
-
+                setQuestionId(res.data.questionId)
+                setAllPage(res.data.allPage)
+               
+                handleVideoData()
             })
             .catch(err => console.log('Request Failed', err))
+    }
+    //请求视频数据，写在外面是因为视频请求应答回比getData快，导致questionId还没更新就用老的id请求到了数据
+    const handleVideoData = () => {
+        fetch(ip
+            + 'studentApp_ErrorGetMp4List.do?'
+            + '&questionId=' + questionId
+            + '&callback=ha'
+        )
 
+            .then(response => response.text())
+            .then(text => {
+                const res = eval('(' + text.substring(2) + ')')
+                setMp4_data(res.data)
+            })
+            .catch(err => console.log('Request Failed', err))
+            
     }
 
     //匹配错题类型加载图片
@@ -96,10 +119,10 @@ export default WrongDetails = () => {
             case '2': return <Image source={require('../../assets/LatestTaskImages/homework.png')} style={styles.Img} />
         }
     }
-    
+
     //根据题目类型匹配答题区域组件
     const handleAnswerClass = (basetypeId) => {
-        
+
         //单多选判断个数
         if (data.baseTypeId == '101' || data.baseTypeId == '102') {
             switch (data.answerNum) {
@@ -120,26 +143,24 @@ export default WrongDetails = () => {
 
         //阅读题根据题数渲染出多少个单选列表
         if (basetypeId == '108') {
-            
+
             //处理返回的单个答案组整一个数组
-            const Answer = (index , value) => {
+            const Answer = (index, value) => {
                 setIndex(index)
                 setValue(value)
                 const clone = newAnswer
                 clone[index] = value
                 setNewAnswer(clone)
-                
-                console.log(newAnswer)
             }
             var items = [];
             for (var read_num_i = 0; read_num_i < data.smallQuestionNum; read_num_i++) {
                 items.push(
                     <View key={read_num_i} style={styles.answer_result}>
                         <Text style={{ fontSize: 20, width: 25 }}>{read_num_i + 1}</Text>
-                        <RadioList 
-                            TimuIndex={read_num_i} 
-                            checkedindexID={''} 
-                            ChoiceList={"A,B,C,D"} 
+                        <RadioList
+                            TimuIndex={read_num_i}
+                            checkedindexID={''}
+                            ChoiceList={"A,B,C,D"}
                             getstuanswer={Answer} type='read' />
                     </View>);
             }
@@ -232,6 +253,7 @@ export default WrongDetails = () => {
         if (temp != 1) {
             temp = (temp - 1).toString()
             setCurrentpage(temp)
+            setQuestionId(questionId)
             setShow(true)
         }
         else {
@@ -242,9 +264,10 @@ export default WrongDetails = () => {
     //点击右箭头重新提交请求
     const handleRight = (currentPage) => {
         let temp = parseInt(currentPage)
-        if (temp != data.allPage) {
+        if (temp != allPage) {
             temp = (temp + 1).toString()
             setCurrentpage(temp)
+            setQuestionId(questionId)
             setShow(true)
         }
         else {
@@ -252,12 +275,213 @@ export default WrongDetails = () => {
         }
     }
 
+    //点击‘标记掌握’弹出对话框
+    //Dialog对话框的显隐控制及功能函数
+    //Dialog显示
+    const handleToRecycle = () => {
+        setVisible(true);
+    };
+    //取消键设置隐藏
+    const handleCancel = () => {
+        setVisible(false);
+    };
+    //确认键设置隐藏并且发送请求
+    const handleConform = () => {
+        //确认后将题目移出回收站
+        fetch(ip
+            + 'studentApp_ErrorQueBiaoji.do?'
+            + 'subjectId=' + subjectId//
+            + '&userName=' + userName//
+            + '&questionId=' + questionId//
+            + '&sourceId=' + sourceId//
+            + '&token=' + token//
+            + '&callback=ha'
+        )
+
+            .then(response => response.text())
+            .then(text => {
+
+            })
+            .catch(err => console.log('Request Failed', err));
+
+        //对话框设为不可见
+        setVisible(false)
+        setRefreash(1)
+        emitter.emit('wrongBook_refreash', refreash);
+        setRefreash(0)
+        let temp = parseInt(currentPage)
+        if (temp == '1') {
+            setCurrentpage(temp)
+        }
+        else {
+            temp = (temp - 1).toString()
+            setCurrentpage(temp)
+        }
+    };
+
+    //点击播放视频
+    const handleVideo = (videoUrl) => {
+        setvideoUrl(videoUrl)
+    }
+    //考点讲解视频
+    const handleMp4 = () => {
+        if(typeof(mp4_data[0])=='undefined'){
+                return(null)  
+        }
+        else{   
+            return (
+                showVideo()     
+            )}
+    }
+    const showVideo = () => {
+        return (
+            <View>
+                <View style={styles.videoTotle}><Text>  考点讲解</Text><Image source={require('../../assets/errorQue/play.png')} style={styles.mp4Img} /></View>
+                <View style={styles.mp4}>
+                {
+                    mp4_data.map((item, indexnull) => {
+                        // 
+                        const title = JSON.stringify(item)
+                        let index = title.indexOf("@");
+                        let mp4_title = title.substring(index + 3, title.length - 1);
+                        let mp4_url = title.substring(1, index);
+                        if(mp4_title.length>11){
+                            mp4_title = mp4_title.substring(0, 11)+'...'
+                        }
+    
+                        return (
+                            <View style={styles.video}>
+                                <TouchableOpacity onPress={() => handleVideo(mp4_url)}>
+                                    <ImageBackground
+                                        source={require('../../assets/errorQue/previewImg.jpg')}
+                                        style={styles.mp4_show}
+                                        resizeMode={'contain'}
+                                    >
+                                        <Text style={styles.mp4_tiele}>{mp4_title}</Text>
+                                    </ImageBackground>
+                                </TouchableOpacity>
+                            </View>
+                        )
+                    })
+    
+                }
+                </View>
+            </View>
+        )
+    }
     
 
-    return (
-        <>
-            {/* 试题回显 */}
-            <ScrollView style={styles.scrollView}>
+    //渲染具体错题
+    const handleWrongList = () => {
+        if (data != null) {
+            return (
+                <>
+                    {/* Dialog对话框 */}
+                    <View style={styles.container}>
+                        <Dialog.Container visible={visible}>
+                            <Dialog.Title>是否标记本题？</Dialog.Title>
+                            <Dialog.Description>
+                                标记掌握的试题将被移出错题本，可以在“错题回收站”中查看和恢复
+                            </Dialog.Description>
+                            <Dialog.Button label="取消" onPress={handleCancel} />
+                            <Dialog.Button label="确认" onPress={handleConform} />
+                        </Dialog.Container>
+                    </View>
+
+                    {/* 试题回显 */}
+                    <ScrollView style={styles.scrollView}>
+                        {currentPage == '0' ?
+                            handleErrorListNull()
+                            : handleErrorList()
+                        }
+                        {/* 视频区域 */}
+                        {
+                            handleMp4()
+                        }
+                    </ScrollView>
+
+                    {/* 标记错题 进入回收站按钮 */}
+                    <View style={styles.Mark}>
+                        <TouchableOpacity onPress={() => handleToRecycle()}>
+                            <Image
+                                source={require('../../assets/errorQue/markIcon.png')}
+                                style={styles.Image} />
+                        </TouchableOpacity>
+                    </View>
+
+                    {/* 底部导航 */}
+                    <View style={styles.Bottom}>
+                        <View style={styles.Bottom_con}>
+                            <View style={styles.Left}>
+                                <TouchableOpacity onPress={() => handleLeft(currentPage)}>
+                                    <Image
+                                        source={require('../../assets/stuImg/lastquestion.png')}
+                                        style={styles.Arrow} />
+
+                                </TouchableOpacity>
+                            </View>
+                            <View style={styles.Bottom_text}>
+                                <Text style={styles.index}>{currentPage}</Text><Text>/{allPage}</Text>
+                            </View>
+                            <View style={styles.Right}>
+                                <TouchableOpacity onPress={() => handleRight(currentPage)}>
+                                    <Image
+                                        source={require('../../assets/stuImg/nextquestion.png')}
+                                        style={styles.Arrow} />
+
+                                </TouchableOpacity>
+                            </View>
+                        </View>
+                    </View>
+
+                   
+                </>
+            )
+        }
+        else {
+            return (
+                <>
+                    <ScrollView style={styles.scrollView}>
+                        <View style={styles.null}>
+                            <Image source={require('../../assets/errorQue/null.png')} />
+                        </View>
+                    </ScrollView>
+                    <View style={styles.Bottom}>
+                        <View style={styles.Bottom_con}>
+                            <View style={styles.Left}>
+                                {/* <TouchableOpacity onPress={() => handleLeft(currentPage)}> */}
+                                    <Image
+                                        source={require('../../assets/stuImg/lastquestion.png')}
+                                        style={styles.Arrow} />
+
+                                {/* </TouchableOpacity> */}
+                            </View>
+                            <View style={styles.Bottom_text}>
+                                <Text style={styles.index}>{currentPage}</Text><Text>/{allPage}</Text>
+                            </View>
+                            <View style={styles.Right}>
+                                {/* <TouchableOpacity onPress={() => handleRight(currentPage)}> */}
+                                    <Image
+                                        source={require('../../assets/stuImg/nextquestion.png')}
+                                        style={styles.Arrow} />
+
+                                {/* </TouchableOpacity> */}
+                            </View>
+                        </View>
+                    </View>
+                </>
+
+
+            )
+        }
+
+    }
+
+
+    //题目区域回显
+    const handleErrorList = () => {
+        return (
+            <>
                 <View style={styles.class}>
                     <View style={styles.class_type}>
                         <View style={styles.textAndimg}>
@@ -284,7 +508,6 @@ export default WrongDetails = () => {
                         </View>
                     </View>
                 </View>
-                {/* 根据题型选择答题组件 */}
                 {show
                     ? handleAnswerClass(basetypeId)
                     : null
@@ -298,35 +521,27 @@ export default WrongDetails = () => {
                         stuAnswer={stuAnswer}
                         basetypeId={basetypeId} />
                 }
+                
+            </>
 
-            </ScrollView>
+        )
+    }
+    //空题目回显
+    const handleErrorListNull = () => {
+        return (
 
-
-            {/* 底部导航 */}
-            <View style={styles.Bottom}>
-                <View style={styles.Bottom_con}>
-                    <View style={styles.Left}>
-                        <TouchableOpacity onPress={() => handleLeft(data.currentPage)}>
-                            <Image
-                                source={require('../../assets/stuImg/lastquestion.png')}
-                                style={styles.Arrow} />
-
-                        </TouchableOpacity>
-                    </View>
-                    <View style={styles.Bottom_text}>
-                        <Text style={styles.index}>{data.currentPage}</Text><Text>/{data.allPage}</Text>
-                    </View>
-                    <View style={styles.Right}>
-                        <TouchableOpacity onPress={() => handleRight(data.currentPage)}>
-                            <Image
-                                source={require('../../assets/stuImg/nextquestion.png')}
-                                style={styles.Arrow} />
-
-                        </TouchableOpacity>
-                    </View>
-                </View>
+            <View style={styles.null}>
+                <Image source={require('../../assets/errorQue/null.png')} />
             </View>
-        </>
+
+        )
+    }
+    
+
+    return (
+        videoUrl!=''
+        ?<VideoPlayerContainer url={videoUrl} setvideoUrl={setvideoUrl} setOptions={navigation.setOptions}/>
+        :handleWrongList()
     )
 }
 
@@ -422,12 +637,43 @@ const styles = StyleSheet.create({
     TextInput: {
         borderBottomWidth: 0.5,
     },
-    answer_result:{
-        flexDirection:'row',
-        justifyContent:'center',
-        paddingLeft:20,
-        alignItems:'center'
+    answer_result: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        paddingLeft: 20,
+        alignItems: 'center'
     },
+    Mark: {
+        position: 'absolute',
+        bottom: '8%',
+        right: '3%',
+    },
+    null: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: '20%'
+    },
+    mp4Img: {
+        height: 15,
+        width: 20,
+        marginLeft: 5
+    },
+    
+    videoTotle:{
+        flexDirection: 'row',
+        height: 25,
+        flexDirection: 'row',
+        marginTop:'5%'
+    },
+    mp4: {
+        flex: 1,
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+    },
+    
+
 
     //字体
 
@@ -441,6 +687,13 @@ const styles = StyleSheet.create({
         color: 'black'
 
     },
+    mp4_tiele:{
+        fontSize: 14,
+        color: 'white',
+        position:'absolute',
+        bottom:4,
+        left:2,
+    },
     //图标
     Img: {
         marginLeft: 5,
@@ -449,5 +702,17 @@ const styles = StyleSheet.create({
     },
     Arrow: {
         margin: 8
-    }
+    },
+    mp4_show: {
+        height:120,
+        width:170,
+        margin:5,
+        marginTop:0
+    },
+    
+    //标记错题
+    Image: {
+        resizeMode: "contain",
+        width: 110,
+    },
 });

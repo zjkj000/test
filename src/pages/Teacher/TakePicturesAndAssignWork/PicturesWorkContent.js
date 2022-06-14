@@ -8,6 +8,7 @@ import Toast from '../../../utils/Toast/Toast';
 import RenderHTML from 'react-native-render-html';
 import screenWidth from '../../../utils/Screen/GetSize'
 import Read from './AnswerUtils/Read'
+import{WaitLoading,Waiting}from '../../../utils/WaitLoading/WaitLoading'
 export default class PicturesWorkContent extends Component {
     constructor(props){
       super(props)
@@ -82,7 +83,108 @@ export default class PicturesWorkContent extends Component {
         newLookAnswerAndAnalysisStatus=true
       }
       const count = this.props.orderCount
-      this.setState({
+      // console.log('答案',this.props.AnswerContentList,'题目',this.props.TimuContentList)
+      //如果有题目 和 答案，说明是要回显 
+      if(this.props.AnswerContentList!=''&&this.props.TimuContentList!=''){
+        var newSingleSelectedIndex = -1
+        var newmultipleSelectedIndex =[false,false,false,false,false,false,false]
+        var newjudgementSelectedIndex = -1
+        var newReadSelectedList=['*','*','*','*','*']
+        var newReadTimuNumber = 5
+        var newWanxingSelectedList=['*','*','*','*','*','*','*','*','*','*']
+        var newWanxingTimuNumber=10
+        var newRead7_5_SelectedList=['*','*','*','*','*']
+        var newRead7_5_TimuNumber=5
+        if(this.props.baseTypeId=='101'){
+          if(this.props.AnswerContentList[0].replace('<p>','').replace('</p>','')=='A'){
+            newSingleSelectedIndex=0
+          }else if(this.props.AnswerContentList[0].replace('<p>','').replace('</p>','')=='B'){
+            newSingleSelectedIndex=1
+          }else if(this.props.AnswerContentList[0].replace('<p>','').replace('</p>','')=='C'){
+            newSingleSelectedIndex=2
+          }else if(this.props.AnswerContentList[0].replace('<p>','').replace('</p>','')=='D'){
+            newSingleSelectedIndex=3
+          }else if(this.props.AnswerContentList[0].replace('<p>','').replace('</p>','')=='E'){
+            newSingleSelectedIndex=4
+          }else if(this.props.AnswerContentList[0].replace('<p>','').replace('</p>','')=='F'){
+            newSingleSelectedIndex=5
+          }else if(this.props.AnswerContentList[0].replace('<p>','').replace('</p>','')=='G'){
+            newSingleSelectedIndex=6
+          }else{
+            newSingleSelectedIndex = -1
+          }
+          // console.log('-----101',this.props.AnswerContentList[0].replace('<p>','').replace('</p>',''),'newSingleSelectedIndex',newSingleSelectedIndex)
+        }else if(this.props.baseTypeId=='102'){
+          this.props.AnswerContentList[0].replace('<p>','').replace('</p>','').split('').map((item,index)=>{
+            if(item=='A'){
+              newmultipleSelectedIndex[index]=true
+            }else if(item=='B'){
+              newmultipleSelectedIndex[index]=true
+            }else if(item=='C'){
+              newmultipleSelectedIndex[index]=true
+            }else if(item=='D'){
+              newmultipleSelectedIndex[index]=true
+            }else if(item=='E'){
+              newmultipleSelectedIndex[index]=true
+            }else if(item=='F'){
+              newmultipleSelectedIndex[index]=true
+            }else if(item=='G'){
+              newmultipleSelectedIndex[index]=true
+            }
+          })
+          // console.log('----102',newmultipleSelectedIndex)
+        }else if(this.props.baseTypeId=='103'){
+          if(this.props.AnswerContentList[0].replace('<p>','').replace('</p>','')=='对'){
+            newjudgementSelectedIndex=0
+          }else if(this.props.AnswerContentList[0].replace('<p>','').replace('</p>','')=='错'){
+            newjudgementSelectedIndex=1
+          }else{
+            newjudgementSelectedIndex=-1
+          }
+          // console.log('----103',newjudgementSelectedIndex)
+        }else if(this.props.baseTypeId=='108'){
+          if(this.props.questionName=='七选五'){
+            newRead7_5_TimuNumber=this.props.AnswerContentList[0].replace('<p>','').replace('</p>','').split(',').length
+            this.props.AnswerContentList[0].replace('<p>','').replace('</p>','').split(',').map((item,index)=>{
+              newRead7_5_SelectedList[index]=item
+            })
+          }else if(this.props.questionName=='完形填空题'){
+            newWanxingTimuNumber=this.props.AnswerContentList[0].replace('<p>','').replace('</p>','').split(',').length
+            this.props.AnswerContentList[0].replace('<p>','').replace('</p>','').split(',').map((item,index)=>{
+              newWanxingSelectedList[index]=item
+            })
+          }else{
+            newReadTimuNumber=this.props.AnswerContentList[0].replace('<p>','').replace('</p>','').split(',').length
+            this.props.AnswerContentList[0].replace('<p>','').replace('</p>','').split(',').map((item,index)=>{
+              newReadSelectedList[index]=item
+            })
+          }
+        }
+        this.setState({
+          LookAnswerAndAnalysisStatus:newLookAnswerAndAnalysisStatus,
+          orderCount:count,
+          questionId:this.props.questionId,
+          order:this.props.order,
+          typeId:this.props.typeId,
+          baseTypeId:this.props.baseTypeId,
+          questionName:this.props.questionName,
+          questionScore:this.props.questionScore,
+          TimuContentList:this.props.TimuContentList,
+          AnswerContentList:this.props.AnswerContentList,
+          AnalysisContentList:this.props.AnalysisContentList,
+          judgementSelectedIndex:newjudgementSelectedIndex,
+          SingleSelectedIndex:newSingleSelectedIndex,
+          multipleSelectedIndex:newmultipleSelectedIndex,
+          ReadSelectedList:newReadSelectedList,
+          ReadTimuNumber :newReadTimuNumber,
+          WanxingSelectedList:newWanxingSelectedList,
+          WanxingTimuNumber:newWanxingTimuNumber,
+          Read7_5_SelectedList:newRead7_5_SelectedList,
+          Read7_5_TimuNumber:newRead7_5_TimuNumber
+          })
+      }
+      //没题目和答案 就是  初始化
+      else{this.setState({
         LookAnswerAndAnalysisStatus:newLookAnswerAndAnalysisStatus,
         orderCount:count,
         questionId:this.props.questionId,
@@ -95,25 +197,28 @@ export default class PicturesWorkContent extends Component {
         AnswerContentList:this.props.AnswerContentList,
         AnalysisContentList:this.props.AnalysisContentList,
         })
-      if(this.props.subjectName=='英语'&&this.props.questionName=='阅读理解题'){
-        var list=[]
-        for(let i=0;i<this.props.EnglishReadTimuNum;i++){
-          list.push('*')
+        if((this.props.questionName=='阅读理解题'||this.props.questionName=='阅读题(选择形式)')){
+          var list=[]
+          for(let i=0;i<this.props.EnglishReadTimuNum;i++){
+            list.push('*')
+          }
+          this.setState({ReadTimuNumber:this.props.EnglishReadTimuNum,ReadSelectedList:list})
+        }else if(this.props.questionName=='七选五'){
+          var list=[]
+          for(let i=0;i<this.props.EnglishReadTimuNum;i++){
+            list.push('*')
+          }
+          this.setState({Read7_5_TimuNumber:this.props.EnglishReadTimuNum,Read7_5_SelectedList:list})
         }
-        this.setState({ReadTimuNumber:this.props.EnglishReadTimuNum,ReadSelectedList:list})
-      }else if(this.props.subjectName=='英语'&&this.props.questionName=='七选五'){
-        var list=[]
-        for(let i=0;i<this.props.EnglishReadTimuNum;i++){
-          list.push('*')
+        else if(this.props.questionName=='完形填空题'){
+          var list=[]
+          for(let i=0;i<this.props.EnglishReadTimuNum;i++){
+            list.push('*')
+          }
+          this.setState({WanxingTimuNumber:this.props.EnglishReadTimuNum,WanxingSelectedList:list})
         }
-        this.setState({Read7_5_TimuNumber:this.props.EnglishReadTimuNum,Read7_5_SelectedList:list})
-      }
-      else if(this.props.subjectName=='英语'&&this.props.questionName=='完形填空题'){
-        var list=[]
-        for(let i=0;i<this.props.EnglishReadTimuNum;i++){
-          list.push('*')
-        }
-        this.setState({WanxingTimuNumber:this.props.EnglishReadTimuNum,WanxingSelectedList:list})
+
+
       }
     }
 
@@ -139,6 +244,7 @@ export default class PicturesWorkContent extends Component {
     
     //拍照调用的函数
     handleCamera(type){
+      WaitLoading.show('提交中...',-1)
       ImageHandler.handleCamera().then((res) => {
           if (res) {
                   const url ="http://" +"www.cn901.net" +":8111" +
@@ -149,9 +255,10 @@ export default class PicturesWorkContent extends Component {
                       type:type,
                       userName: global.constants.userName}; 
                          
-                  http.post(url,params).then((resStr)=>{
-                      let resJson = JSON.parse(resStr);
+                  http.post(url,params,false).then((resStr)=>{
+                      let resJson = resStr;
                       if(resJson.success){
+                          WaitLoading.dismiss()
                           if(type=='Show'){
                             var newTimuContentList= this.state.TimuContentList
                             newTimuContentList.push('<p><img style=\"max-width:100px\" src="'+resJson.data+'"></p>')
@@ -179,6 +286,7 @@ export default class PicturesWorkContent extends Component {
 
   //从本地选择照片需要的函数
     handleLibrary(type){
+      WaitLoading.show('提交中...',-1)
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
               const url ="http://" +"www.cn901.net" +":8111" +
@@ -189,9 +297,10 @@ export default class PicturesWorkContent extends Component {
                   type:type,
                   userName: global.constants.userName};    
                   
-                http.post(url,params).then((resStr)=>{
-                    let resJson = JSON.parse(resStr);
+                http.post(url,params,false).then((resStr)=>{
+                    let resJson = resStr;
                     if(resJson.success){
+                      WaitLoading.dismiss()
                         if(type=='Show'){
                           var newTimuContentList= this.state.TimuContentList
                           newTimuContentList.push('<p><img style=\"max-width:100px\" src="'+resJson.data+'"></p>')
@@ -220,7 +329,10 @@ export default class PicturesWorkContent extends Component {
     // 根据List加载文本或者图片
     getContent(list){
       var HTML = ''
+      //把传递过来的内容list拼接成HTML格式
       list.map(item=>HTML+=item)
+
+      //使用RenderHTML组件展示内容
       return(
         <View style={{paddingLeft:15}}>
             <RenderHTML contentWidth={screenWidth} source={{html:HTML}}/>
@@ -228,6 +340,7 @@ export default class PicturesWorkContent extends Component {
       ) ;
     }
 
+    //通过编辑页面传递过来的函数
     addTextContent(order,type){
       var newList = this.state.TimuContentList
       if(this.state.TimuContentTextInput==''){
@@ -497,8 +610,8 @@ export default class PicturesWorkContent extends Component {
                     </View>
               </View>
           </>)
-      }else if(baseTypeId=='108'&&this.props.subjectName=='英语'){
-        if(this.state.questionName=='阅读理解题'){
+      }else if(baseTypeId=='108'){
+        if(this.state.questionName=='阅读理解题'||this.state.questionName=='阅读题(选择形式)'){
           return(
             <>
             <View style={{padding:10,paddingBottom:0}}>
@@ -800,6 +913,7 @@ export default class PicturesWorkContent extends Component {
       return(
         <View style={{width:'100%',paddingBottom:20,borderTopWidth:0.5}}>
           {/* 题目名称 第一行 */}
+          <Waiting/>
           <View style={{flexDirection:'row',paddingLeft:20,height:50,alignItems:'center',backgroundColor:'#DCDCDC'}}>
             <Text style={{fontSize:15,color:'#59B9E0'}}>{this.state.order}</Text>
             <Text style={{fontSize:15}}>/</Text>

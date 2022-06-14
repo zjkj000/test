@@ -7,6 +7,7 @@ import PaperContent from './PaperContent'
 import  Toast  from '../../../utils/Toast/Toast';
 import Loading  from '../../../utils/loading/Loading';
 import CorrectSubmitContainer from './CorrectSubmit';
+import {WaitLoading,Waiting} from '../../../utils/WaitLoading/WaitLoading'
 var Allquestion = [];
 export default function CorrectingPaper(props) {
     const navigation = useNavigation();
@@ -62,6 +63,7 @@ export default function CorrectingPaper(props) {
                 hand:0}
               )
             })
+            Allquestion=List
             setCorrectResultList(List)
           }
 
@@ -104,13 +106,12 @@ export default function CorrectingPaper(props) {
     //下一题
     function Nextquestion(index){
       if(index>(data.length-1)){
-        
         if(data.length==Allquestion.length){
           setSelectedIndex(index)
         }else{
           setData(Allquestion)
-          Alert.alert('','所有题目已批改',[{},
-            {text:'ok',onPress:()=>setSelectedIndex(Allquestion.length)}
+          Alert.alert('','所有题目已批改',[{text:'取消',onPress:()=>{}},{},
+            {text:'确定',onPress:()=>setSelectedIndex(Allquestion.length)}
           ])
         }
       }else{
@@ -179,6 +180,7 @@ export default function CorrectingPaper(props) {
 
 
     function submit_correctResult(){
+      WaitLoading.show('保存结果中...',-1)
       let newsonStr =[];
       let newscoreCount=0
       let newstuScoreCount=0
@@ -209,6 +211,7 @@ export default function CorrectingPaper(props) {
           let resJson = JSON.parse(resStr);
           console.log(resJson)
           if(resJson.success){
+            WaitLoading.dismiss()
               //提交完之后 跳转 PaperList  刷新页面
               navigation.navigate({
                   name:'CorrectPaperList',
@@ -229,7 +232,7 @@ export default function CorrectingPaper(props) {
       <View>
         {/* 自定义导航栏 */}
         <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF'}}>
-          <TouchableOpacity style={{marginLeft:10,marginRight:10}} 
+         <TouchableOpacity style={{marginLeft:10,marginRight:10}} 
                                   onPress={()=>{navigation.goBack({
                                               name: 'CorrectPaperList',
                                               params:{ 
@@ -240,25 +243,29 @@ export default function CorrectingPaper(props) {
               }}>
                   <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goback.png')} ></Image>
           </TouchableOpacity>
+          
+
           <View style={{flexDirection:'row',marginLeft:90}}>
               <Text style={{color:'#59B9E0',fontSize:20}}>{userCn}</Text>
           </View>
-          
-          <TouchableOpacity style={{position:'absolute',right:16,top:13}}
+          {(selectedIndex!=Allquestion.length)?(<TouchableOpacity style={{position:'absolute',right:16,top:13}}
                             onPress={()=>{
                               if(data.length==CorrectResultList.length){
                                 setSelectedIndex(data.length)
                               }else{
                                 setData(Allquestion)
-                                Alert.alert('','确定跳转保存结果页面？',[{},
-                                  {text:'ok',onPress:()=>setSelectedIndex(Allquestion.length)}
+                                // setSelectedIndex(Allquestion.length)
+                                Alert.alert('','确定跳转保存结果页面？',[{text:'取消',onPress:()=>{}},{},
+                                  {text:'确定',onPress:()=>{setSelectedIndex(Allquestion.length)}}
                                 ])
                               }
                               }}>
             <Image source={require('../../../assets/image3/look.png')}></Image>
-          </TouchableOpacity>
+          </TouchableOpacity>):(<></>)}
+          
           
         </View>
+        <Waiting/>
         <ViewPager 
             style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'85%'}} 
             shouldLoadComponent={shouldLoadComponent}

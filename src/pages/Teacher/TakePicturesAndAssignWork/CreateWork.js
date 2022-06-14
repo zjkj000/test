@@ -7,7 +7,8 @@ import { useNavigation } from "@react-navigation/native";
 import http from "../../../utils/http/request";
 import {Avatar,Layout,Button,Divider,Input,OverflowMenu,MenuItem,} from "@ui-kitten/components";
 import { WebView } from 'react-native-webview';
-import Toast from '../../../utils/Toast/Toast'
+import Toast from "../../../utils/Toast/Toast";
+
 
 export default function CreateWorkContainer(props) {
     const navigation = useNavigation();
@@ -476,7 +477,7 @@ class CreateWork extends React.Component {
     render(){
 
         return(
-            <View style={{flexDirection: 'column' , backgroundColor: '#fff',borderTopWidth:0.8,}}>
+            <View style={{flexDirection: 'column' , backgroundColor: '#fff',borderTopWidth:0.8}}>
                 <ScrollView horizontal={false} showsVerticalScrollIndicator={false}
                     style={{height: '93%' , backgroundColor: '#fff'}}>
                         
@@ -713,13 +714,13 @@ class CreateWork extends React.Component {
                 <View 
                     style={{
                         flexDirection: 'row' , 
-                        backgroundColor: '#fff',
+                        backgroundColor:'#fff',
                         top: '100%',
                         //height: '8%',
                         position: 'absolute',
                     }}
                 >
-                    <Text style={{width: screenWidth*0.05}}></Text>
+                    <Text style={{width: screenWidth*0.05,backgroundColor:'#fff'}}></Text>
                     <Button style={styles.button}
                         onPress={()=>{
                             this.props.navigation.goBack();
@@ -731,7 +732,7 @@ class CreateWork extends React.Component {
                     <Button style={styles.button}
                         onPress={()=>{
                             if(this.state.InputText==''){
-                                Toast.showDangerToast('请输入试卷名称',1000)
+                                Toast.showInfoToast('请输入试卷名称',1000)
                             }else if(this.state.knowledgeCode!=''){
                                 this.props.navigation.navigate({
                                     name:'EditPicturePaperWork',

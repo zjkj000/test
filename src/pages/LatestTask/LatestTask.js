@@ -78,7 +78,6 @@ class LatestTask extends React.Component {
     }
 
     componentDidMount() {
-        
         // const { navigation } = this.props;
         // this._unsubscribeNavigationFocusEvent = navigation.addListener(
         //     "focus",
@@ -142,37 +141,37 @@ class LatestTask extends React.Component {
     //全部最新内容
     handleAll = () => {
         console.log("获取全部最新内容");
-        this.setState({ resourceType: "all" });
+        this.setState({ resourceType: "all",moduleVisible:false });
     };
     //作业
     handleHomework = () => {
         console.log("获取作业内容");
-        this.setState({ resourceType: "2" });
+        this.setState({ resourceType: "2" ,moduleVisible:false});
     };
     //导学案
     handleGuidance = () => {
         console.log("获取导学案内容");
-        this.setState({ resourceType: "1" });
+        this.setState({ resourceType: "1",moduleVisible:false });
     };
     //授课包
     handleTeachingPackages = () => {
         console.log("获取授课包内容");
-        this.setState({ resourceType: "6" });
+        this.setState({ resourceType: "6" ,moduleVisible:false});
     };
     //微课
     handleMicroClass = () => {
         console.log("获取微课内容");
-        this.setState({ resourceType: "7" });
+        this.setState({ resourceType: "7" ,moduleVisible:false});
     };
     //通知
     handleInform = () => {
         console.log("获取通知内容");
-        this.setState({ resourceType: "3" });
+        this.setState({ resourceType: "3" ,moduleVisible:false});
     };
     //公告
     handleNotice = () => {
         console.log("获取公告内容");
-        this.setState({ resourceType: "4" });
+        this.setState({ resourceType: "4" ,moduleVisible:false});
     };
 
     //资料夹是否已读图标

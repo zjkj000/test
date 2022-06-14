@@ -1,14 +1,22 @@
-import { Text, View,Image,StyleSheet, Dimensions } from 'react-native'
+import { Text, View,Image,StyleSheet, Dimensions, TouchableOpacity, Alert} from 'react-native'
 import React, { Component } from 'react'
 let {width, height} = Dimensions.get('window');
 import Echarts from 'native-echarts';
 import MyTable from './MyTable'
-
 import http from '../../utils/http/request'
-export default class Ketangshouke extends Component {
+import { useNavigation } from '@react-navigation/native';
+export default function Ketangshouke(props) {
+  const navigation = useNavigation()
+  return (
+    <KetangshoukeContent navigation={navigation}/>
+  )
+} 
+
+class KetangshoukeContent extends Component {
     constructor(props){
         super(props)
         this.state={
+            KetangTableNum:3,
             status: 'yes' ,               //先看该字段，no，表示没有数据；yes表示有数据
             hdNum:  9,                //互动数量
             xList: ["提问","抢答","随机","连答"],
@@ -26,7 +34,6 @@ export default class Ketangshouke extends Component {
       }
 
       UNSAFE_componentWillMount(){
-        // this.setState({startTime:this.props.date})
         this.getanayGetKTNum()
       }
 
@@ -67,8 +74,11 @@ export default class Ketangshouke extends Component {
             }
         })
     }
+    showAllDetailes(){
+      this.props.navigation.navigate({name:'CreatePicturePaperWork'})
+    }
       
-
+   
   render() {
     let option = {
         xAxis: {
@@ -90,11 +100,12 @@ export default class Ketangshouke extends Component {
           }
         ]
       };
-
     return (
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:20}}>
         <View style={{flexDirection:'row',marginLeft:20,marginRight:10,marginBottom:10}}>
-          <View style={{flex:1,justifyContent:'center'}}  ><Image source={require('../../assets/StatisticalForm/Ima_ketang.png')}></Image></View>
+                <View style={{flex:1,justifyContent:'center'}}  >
+                      <Image source={require('../../assets/StatisticalForm/Ima_ketang.png')}></Image>
+                </View>
                 <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
                     <View>
                         <View style={{height:50}}>
@@ -106,7 +117,7 @@ export default class Ketangshouke extends Component {
                     </View>
                 
                     </View>
-                    <View style={{flexDirection:'column',padding:10}}>
+                    <View style={{flexDirection:'column',padding:10,paddingRight:0}}>
                         <View style={{flexDirection:'row',alignContent:'space-around'}}>
                             <View style={{margin:10}}><Text style={{fontSize:20}}>内容:{this.state.contentNum}</Text></View>
                             <View style={{margin:10}}><Text style={{fontSize:20}}>互动:{this.state.hdNum}</Text></View>
@@ -124,12 +135,21 @@ export default class Ketangshouke extends Component {
                     </View>
                 </View>
                 <View>
-                    <MyTable data={this.state.tableData} tablehead={this.state.tableHead}/>
+                    <MyTable data={this.state.tableData.length>this.state.KetangTableNum?this.state.tableData.slice(0,this.state.KetangTableNum):this.state.tableData} 
+                             tablehead={this.state.tableHead}/>
                 </View>
+                {this.state.tableData.length>this.state.KetangTableNum?(
+                  <View style={{justifyContent:'center',flexDirection:'row'}}>
+                    <Text  onPress={()=>this.setState({KetangTableNum:this.state.tableData.length})
+                      }  style={{color:'#87CEFA'}} >查看全部{' >>'}</Text>
+                  </View>
+                ):this.state.tableData.length<=3?(<View></View>):
+                (<View style={{justifyContent:'center',flexDirection:'row'}}>
+                <Text  onPress={()=>this.setState({KetangTableNum:3})
+                  }  style={{color:'#87CEFA'}} >收起{' >>'}</Text>
+              </View>)}
             
-                <View style={{justifyContent:'center',flexDirection:'row'}}>
-                    <Text onPress={{}} style={{color:'#87CEFA'}} >查看全部{' >>'}</Text>
-                </View>
+                
         </View>
     )
   }

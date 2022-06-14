@@ -12,7 +12,6 @@ export default class SelectScore extends Component {
     }
   }
   UNSAFE_componentWillMount(){
-    console.log('你好',this.props.selectedScore,typeof(this.props.selectedScore))
     this.setState({
       scoreList:this.props.scoreList?this.props.scoreList:[0,1,2,3,4,5,6,7,8,9,10],
       selectedScore:this.props.selectedScore?this.props.selectedScore:''
@@ -33,6 +32,7 @@ export default class SelectScore extends Component {
   }
 
   CorrretScore(value){
+    console.log('zuixin',value)
       this.setState({selectedScore:value})
   }
   
@@ -43,9 +43,9 @@ export default class SelectScore extends Component {
       Scorelist.push(
         <View style={{margin:5}}>
               <Button style={styles.Button_style}
-                      appearance={this.state.selectedScore!=''&&this.state.selectedScore==item?'filled':'outline'}
+                      appearance={((this.state.selectedScore!=''||this.state.selectedScore=='0')&&this.state.selectedScore==item)?'filled':'outline'}
                               onPress={()=>{
-                                console.log(value)
+                                console.log('最新的',this.state.selectedScore,this.state.selectedScore==item)
                                 this.setState({selectedScore:value})
                                 this.props.getscore(value)
                               }}>{item=='0'?'0':item}</Button>
