@@ -32,6 +32,8 @@ import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
 import { Icon } from "react-native-elements";
 import HomeworkPropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/HomeworkProperty";
 import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomework";
+import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
+import CreateLearnCaseFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/CreateLearnCaseFrame";
 
 import PaperListContainer from "../../pages/Teacher/CorrectPaper/PaperList";
 import CorrectingPaper from "../../pages/Teacher/CorrectPaper/CorrectingPaper";
@@ -175,6 +177,21 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="创建作业"
                         component={CreateHomework}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+
+                    <Stack.Screen
+                        name="设置导学案属性"
+                        component={LearnCasePropertyContainer}
+                        options={{
+                            headerShown: true,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="创建导学案"
+                        component={CreateLearnCaseFrame}
                         options={{
                             headerShown: false,
                         }}

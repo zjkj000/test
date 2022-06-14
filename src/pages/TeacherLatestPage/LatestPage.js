@@ -138,6 +138,12 @@ class LatestPage extends React.Component {
         this.props.navigation.navigate("设置作业属性", {});
     }
 
+    //创建+布置导学案
+    createLearnCase = () => {
+        this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate("设置导学案属性", {});
+    }
+
 
     //显示筛选filter
     showFilter = () => {
@@ -160,7 +166,7 @@ class LatestPage extends React.Component {
                     />
                     <MenuItem
                         title="作业"
-                        onPress={this.createHomework}
+                        onPress={this.handleHomework}
                     />
                     <MenuItem
                         title="导学案"
@@ -211,7 +217,7 @@ class LatestPage extends React.Component {
                     />
                     <MenuItem
                         title="创建导学案+布置"
-                        // onPress={this.handleGuidance}
+                        onPress={this.createLearnCase}
                     />
                     <MenuItem 
                         title = "创建微课+布置"

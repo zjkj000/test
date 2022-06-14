@@ -5,117 +5,72 @@ import {
     StyleSheet,
     Image,
     TouchableOpacity,
-    TouchableHighlight,
     TextInput,
     Alert,
     Modal,
     Platform,
     ScrollView,
 } from "react-native";
-import { SearchBar } from "@ant-design/react-native";
-//import { SearchBar } from 'react-native-elements';
-import { Flex } from "@ant-design/react-native";
 import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 import { useNavigation } from "@react-navigation/native";
-//import { Container , Header , Item , Input , Icon , Button } from 'native-base';
 import http from "../../../../utils/http/request";
 import {
-    Avatar,
-    Layout,
     Button,
-    Divider,
-    Input,
-    OverflowMenu,
-    MenuItem,
 } from "@ui-kitten/components";
-//import { ScrollView } from "react-native-gesture-handler";
 import { WebView } from 'react-native-webview';
-import HTMLView from 'react-native-htmlview';
-import RenderHtml from 'react-native-render-html';
-
 
 let textInputName = ''; //设置属性---名称
 let textInputPaper = ''; //设置属性---试卷简介
+let textLearnSumTime = ''; //设置属性---学时总数
+let textStudyTime = ''; //设置属性---研读学时
+let textLearnAim = ''; //设置属性---学习目标
+let textLearnPoint = ''; //设置属性---学习重点
+let textLearnDiff = ''; //设置属性---学习难点
+let textCourseSummary = ''; //设置属性---课堂总结
+let textCourseExpansion = ''; //设置属性---课外扩展
 
-let floor = 0; //记录知识点解析树的层数
-let floorFlag = false; //层数增加减少逻辑
-let knowledgeNodeList = []; //存放解析后的知识点(对象数组):对象属性：type：1、2、3一二三级标题 ； code：编码 ； name：名称
-
-export default function HomeworkPropertyModelContainer(props) {
-    const paperTypeList = props.paperTypeList;  
-
+export default function LearnCasePropertyContainer(props) {
     const navigation = useNavigation();
-    //路由标题
-    navigation.setOptions({ title: '设置属性' });
-    //将navigation传给HomeworkProperty组件，防止路由出错
-    return <HomeworkPropertyModel navigation={navigation} 
-        paperTypeList={paperTypeList}
-        studyRank={props.studyRank}
-        studyClass={props.studyClass}
-        edition={props.edition}
-        book={props.book}
-        knowledge={props.knowledge}
-        channelNameList={props.channelNameList} //学段名列表（接口数据）
-        studyClassList={props.studyClassList} //学科列表（接口数据）
-        editionList={props.editionList} //版本列表（接口数据）
-        bookList={props.bookList} //教材列表（接口数据）  
-        knowledgeList={props.knowledgeList} //从接口中返回的数据
-    />;
+    //将navigation传给LearnCaseProperty组件，防止路由出错
+    return <LearnCaseProperty navigation={navigation} />;
 }
 
-class HomeworkPropertyModel extends React.Component {
+class LearnCaseProperty extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            shareContent: true, //共享内容
-            schoolContent: false, //本校内容
-            privateContent: false, //私有内容
-
-            studyRank: this.props.studyRank, //学段
+            studyRank: '', //学段
             studyRankId: '', //学段编码
             studyRankVisibility: false, //学段选择列表是否显示
-            channelNameList: this.props.channelNameList, //学段名列表（接口数据）
+            channelNameList: [], //学段名列表（接口数据）
 
-            studyClass: this.props.studyClass, //学科
+            studyClass: '', //学科
             studyClassId: '', //学科编码
             studyClassVisibility: false, //学段选择列表是否显示
-            studyClassList: this.props.studyClassList, //学科列表（接口数据）
+            studyClassList: [], //学科列表（接口数据）
 
-            edition: this.props.edition, //版本
+            edition: '', //版本
             editionId: '', //版本编码
             editionVisibility: false, //版本选择列表是否显示
-            editionList: this.props.editionList, //版本列表（接口数据）
+            editionList: [], //版本列表（接口数据）
 
-            book: this.props.book, //教材
+            book: '', //教材
             bookId: '', //教材编码
             bookVisibility: false, //教材选择列表是否显示
-            bookList: this.props.bookList, //教材列表（接口数据）
+            bookList: [], //教材列表（接口数据）
 
-            knowledge: this.props.knowledge, //知识点(选中的)
+            knowledge: '', //知识点(选中的)
             knowledgeCode: '', //选中的知识点项的编码
             knowledgeVisibility: false, //知识点选择列表是否显示     
             knowledgeModelVisibility: false, //知识点悬浮框model是否显示      
-            knowledgeList: this.props.knowledgeList, //从接口中返回的数据
+            knowledgeList: [], //从接口中返回的数据
 
-            paperType: '全部', //试题类型(选中的)
-            paperTypeVisibility: false, //试题类型列表是否显示
-
-            resetButton: false, //重置
-            sureButton: true, //确定
-
-
+            useAim: 'all', //使用目的：all:全部 before:课前 mid:课中 after:课后
 
             //网络请求状态
             error: false,
             errorInfo: "",
         };
-    }
-
-    UNSAFE_componentWillMount(){
-        const {paperTypeList} = this.props;
-        var paperTypeListTemp = paperTypeList;
-        paperTypeListTemp.splice(0 , 0 , "全部");
-        this.setState({ paperTypeList: paperTypeListTemp });
     }
 
     //更新是否显示状态
@@ -128,7 +83,6 @@ class HomeworkPropertyModel extends React.Component {
                 editionVisibility: false,
                 bookVisibility: false,
                 knowledgeVisibility: false,
-                paperTypeVisibility: false,
             })
         } else {
             if (flag == 1) { //学段
@@ -138,7 +92,6 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: false,
                     bookVisibility: false,
                     knowledgeVisibility: false,
-                    paperTypeVisibility: false,
                 })
             } else if (flag == 2) { //学科
                 this.setState({
@@ -147,7 +100,6 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: false,
                     bookVisibility: false,
                     knowledgeVisibility: false,
-                    paperTypeVisibility: false,
                 })
             } else if (flag == 3) { //版本
                 this.setState({
@@ -156,7 +108,6 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: true,
                     bookVisibility: false,
                     knowledgeVisibility: false,
-                    paperTypeVisibility: false,
                 })
             } else if (flag == 4) { //教材
                 this.setState({
@@ -165,7 +116,6 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: false,
                     bookVisibility: true,
                     knowledgeVisibility: false,
-                    paperTypeVisibility: false,
                 })
             } else if (flag == 5) { //知识点
                 this.setState({
@@ -174,51 +124,115 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: false,
                     bookVisibility: false,
                     knowledgeVisibility: true,
-                    paperTypeVisibility: false,
-                })
-            }else if (flag == 6) { //类型
-                this.setState({
-                    studyRankVisibility: false,
-                    studyClassVisibility: false,
-                    editionVisibility: false,
-                    bookVisibility: false,
-                    knowledgeVisibility: false,
-                    paperTypeVisibility: true,
                 })
             }
         }
 
     }
 
-    //更新“共享内容 本校内容 私有内容”
-    updateContent = (type, state) => {
-        if(type == 1){
-            if(!state){
+    //显示知识点覆盖框
+    showKnowledgeModal = () => {
+        const { knowledgeModelVisibility } = this.state;
+       
+        return (
+            <Modal
+                animationType="none"
+                transparent={true}
+                visible={knowledgeModelVisibility}
+                onRequestClose={() => {
+                    Alert.alert("Modal has been closed.");
+                    this.setState({ knowledgeModelVisibility: false });
+                }}
+            >
+                <View style={styles.centeredView}>
+                    <View style={styles.modalView}>
+                        <TouchableOpacity
+                            style={{
+                                height: 20,
+                                width: screenWidth,
+                                paddingLeft: screenWidth * 0.9,
+                                position: 'absolute',
+                            }}
+                            onPress={() => {
+                                this.setState({ knowledgeModelVisibility: false });
+                            }}
+                        >
+                            <Image
+                                style={{
+                                    top: 0,
+                                    height: '80%',
+                                    width: '80%',
+                                    resizeMode: "center",
+                                }}
+                                source={require('../../../../assets/teacherLatestPage/close.png')}
+                            />
+                        </TouchableOpacity>
+                        {/* {console.log('-----knowledgeList---', this.state.knowledgeList , this.state.knowledgeList.length)} */}
+                        {/**知识点数据为空时请求数据 */}
+                        {
+                            this.state.knowledgeList.length <= 0
+                                && this.state.studyRank != ''
+                                && this.state.studyClass != ''
+                                && this.state.edition != ''
+                                && this.state.book != ''
+                                ? this.showKnowledgeList()
+                                : null
+                        }
+                        {
+                            this.state.knowledgeList.length > 0
+                                ?
+                                    <WebView
+                                        onMessage={(event) => {
+                                            this.setState({ 
+                                                knowledgeModelVisibility: false, 
+                                                knowledge: JSON.parse(event.nativeEvent.data).name ,
+                                                knowledgeCode: JSON.parse(event.nativeEvent.data).id,
+                                            });
+                                        }}
+                                        javaScriptEnabled={true}
+                                        scalesPageToFit={Platform.OS === 'ios' ? true : false}
+                                        // style={{height: screenHeight , width : screenWidth}}
+                                        source={{ html: this.state.knowledgeList }}
+                                    ></WebView>
+                                : <Text>知识点数据为请求到或没有数据</Text>
+                        }
+                    </View>
+                </View>
+            </Modal>
+        );
+    }
+
+
+    //从接口中获取知识点内容
+    showKnowledgeList = () => {
+        const { studyClassId, editionId, bookId } = this.state;
+        const ip = global.constants.baseUrl;
+        const url = ip + "teacherApp_getKnowledgeAllTree.do";
+        const params = {
+            subjectCode: studyClassId,
+            textBookCode: editionId,
+            gradeLevelCode: bookId,
+            //callback:'ha',
+        };
+
+        console.log('-----showKnowledgeList-----', Date.parse(new Date()))
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                // console.log('--------知识点数据------');
+                // console.log(resJson.data);
+                // console.log('------------------------');
+                this.setState({ knowledgeList: resJson.data });
+            })
+            .catch((error) => {
+                console.log('******catch***error**', error);
                 this.setState({
-                    shareContent: true,
-                    schoolContent: false,
-                    privateContent: false,
-                })
-            }
-        }else if(type == 2){
-            if(!state){
-                this.setState({
-                    shareContent: false,
-                    schoolContent: true,
-                    privateContent: false,
-                })
-            }
-        }else{
-            if(!state){
-                this.setState({
-                    shareContent: false,
-                    schoolContent: false,
-                    privateContent: true,
-                })
-            }
-        }
-    }  
-    
+                    error: true,
+                    errorInfo: error,
+                });
+            });
+    }
+
     //获取学段列表数据
     fetchChannelName = () => {
         const userId = global.constants.userName;
@@ -253,7 +267,7 @@ class HomeworkPropertyModel extends React.Component {
         const { channelNameList } = this.state;
         const content = channelNameList.map((item, index) => {
             return (
-                <View key={index}>
+                <View key={index} style={{ width: screenWidth * 0.325 }}>
                     <Text
                         style={this.state.studyRank == item.channelName ?
                             styles.studyRankItemSelected :
@@ -296,6 +310,25 @@ class HomeworkPropertyModel extends React.Component {
             );
         });
         return content;
+        // var allcomeData = [];
+        // for(let i = 0 ; i < channelNameList.length ; i++){
+        //     allcomeData.push(
+        //         <View key={i}>
+        //             <Text 
+        //                 style={this.state.studyRank == channelNameList[i].channelName ?
+        //                                 styles.studyRankItemSelected : 
+        //                                 styles.studyRankItem
+        //                     }
+        //                 onPress={()=>{this.setState({ studyRank: channelNameList[i].channelName})}}
+        //             >
+        //                 {console.log('-----学段名称-----' , channelNameList[i].channelName)}
+        //                 {channelNameList[i].channelName}
+        //             </Text>
+        //             <Text style={{width: screenWidth*0.025}}></Text>
+        //         </View>
+        //     );
+        // }
+        // return allcomeData;
     }
 
     //获取学科列表数据
@@ -333,7 +366,7 @@ class HomeworkPropertyModel extends React.Component {
         const { studyClassList } = this.state;
         const content = studyClassList.map((item, index) => {
             return (
-                <View key={index}>
+                <View key={index} style={{ width: screenWidth * 0.325 }}>
                     <Text
                         numberOfLines={1}
                         ellipsizeMode={"tail"}
@@ -412,7 +445,7 @@ class HomeworkPropertyModel extends React.Component {
         const { editionList } = this.state;
         const content = editionList.map((item, index) => {
             return (
-                <View key={index}>
+                <View key={index} style={{ width: screenWidth * 0.325 }}>
                     <Text
                         numberOfLines={1}
                         ellipsizeMode={"tail"}
@@ -488,7 +521,7 @@ class HomeworkPropertyModel extends React.Component {
         const { bookList } = this.state;
         const content = bookList.map((item, index) => {
             return (
-                <View key={index}>
+                <View key={index} style={{ width: screenWidth * 0.325 }}>
                     <Text
                         numberOfLines={1}
                         ellipsizeMode={"tail"}
@@ -523,162 +556,32 @@ class HomeworkPropertyModel extends React.Component {
         return content;
     }
 
-    //显示试题类型列表数据
-    showPaperType = () => {
-        const { paperTypeList } = this.props;
-        const content = paperTypeList.map((item, index) => {
-            return (
-                <View key={index}>
-                    <Text
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
-                        style={this.state.paperType == item ?
-                            styles.studyRankItemSelected :
-                            styles.studyRankItem
-                        }
-                        onPress={() => {
-                            if (this.state.paperType != item) {
-                                this.setState({
-                                    paperType: item
-                                })
-                            } else {
-                                this.setState({
-                                    paperType: ''
-                                })
-                            }
-                        }}
-                    >
-                        {item}
-                    </Text>
-                </View>
-            );
-        });
-        return content;        
-    }
-
-    //显示知识点覆盖框
-    showKnowledgeModal = () => {
-        const { knowledgeModelVisibility } = this.state;
-       
-        return (
-            <Modal
-                animationType="none"
-                transparent={true}
-                visible={knowledgeModelVisibility}
-                onRequestClose={() => {
-                    Alert.alert("Modal has been closed.");
-                    this.setState({ knowledgeModelVisibility: false });
-                }}
-            >
-                <View style={styles.centeredView}>
-                    <View style={styles.modalView}>
-                        <TouchableOpacity
-                            style={{
-                                height: 20,
-                                width: screenWidth,
-                                paddingLeft: screenWidth * 0.9,
-                                position: 'absolute',
-                            }}
-                            onPress={() => {
-                                this.setState({ knowledgeModelVisibility: false });
-                            }}
-                        >
-                            <Image
-                                style={{
-                                    top: 0,
-                                    height: '80%',
-                                    width: '80%',
-                                    resizeMode: "center",
-                                }}
-                                source={require('../../../../assets/teacherLatestPage/close.png')}
-                            />
-                        </TouchableOpacity>
-                        {/* {console.log('-----knowledgeList---', this.state.knowledgeList , this.state.knowledgeList.length)} */}
-                        {/**知识点数据为空时请求数据 */}
-                        {
-                            this.state.knowledgeList.length <= 0
-                                && this.state.studyRank != ''
-                                && this.state.studyClass != ''
-                                && this.state.edition != ''
-                                && this.state.book != ''
-                                ? this.showKnowledgeList()
-                                : null
-                        }
-                        {
-                            this.state.knowledgeList.length > 0
-                                ?
-                                    <WebView
-                                        onMessage={(event) => {
-                                            this.setState({ 
-                                                knowledgeModelVisibility: false, 
-                                                knowledge: JSON.parse(event.nativeEvent.data).name ,
-                                                knowledgeCode: JSON.parse(event.nativeEvent.data).id,
-                                            });
-                                        }}
-                                        javaScriptEnabled={true}
-                                        scalesPageToFit={Platform.OS === 'ios' ? true : false}
-                                        // style={{height: screenHeight , width : screenWidth}}
-                                        source={{ html: this.state.knowledgeList }}
-                                    ></WebView>
-                                // <ScrollView  showsVerticalScrollIndicator={false}>
-                                //     <HTMLView 
-                                //         value={this.state.knowledgeList}
-                                //         renderNode={this.getKnowledgeList}
-                                //     />
-                                // </ScrollView>
-                                : <Text>知识点数据为请求到或没有数据</Text>
-                        }
-                    </View>
-                </View>
-            </Modal>
-        );
-    }
-
-
-    //从接口中获取知识点内容
-    showKnowledgeList = () => {
-        const { studyClassId, editionId, bookId } = this.state;
-        const ip = global.constants.baseUrl;
-        const url = ip + "teacherApp_getKnowledgeAllTree.do";
-        const params = {
-            subjectCode: studyClassId,
-            textBookCode: editionId,
-            gradeLevelCode: bookId,
-            //callback:'ha',
-        };
-
-        console.log('-----showKnowledgeList-----', Date.parse(new Date()))
-        http.get(url, params)
-            .then((resStr) => {
-                let resJson = JSON.parse(resStr);
-                // console.log('--------知识点数据------');
-                // console.log(resJson.data);
-                // console.log('------------------------');
-                this.setState({ knowledgeList: resJson.data });
-            })
-            .catch((error) => {
-                console.log('******catch***error**', error);
-                this.setState({
-                    error: true,
-                    errorInfo: error,
-                });
-            });
-    }
-
 
 
     render() {
         return (
-            <View style={{...styles.model, borderWidth: 1, borderColor: '#DCDCDC'}}>
-                <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
-                    <View style={{...styles.itemView, marginBottom: 5}}>
-                        <Text style={!this.state.shareContent ? styles.content : styles.contentSelected} 
-                            onPress={()=>{this.updateContent(1 , this.state.shareContent)}}>共享内容</Text>
-                        <Text style={!this.state.schoolContent ? styles.content : styles.contentSelected} 
-                            onPress={()=>{this.updateContent(2 , this.state.schoolContent)}}>本校内容</Text>
-                        <Text style={!this.state.privateContent ? styles.content : styles.contentSelected} 
-                            onPress={()=>{this.updateContent(3 , this.state.privateContent)}}>私有内容</Text>
+            <View style={{ flexDirection: 'column', backgroundColor: '#fff' }}>
+                <ScrollView horizontal={false} showsVerticalScrollIndicator={false}
+                    style={{ height: '90%', backgroundColor: '#fff' }}
+                >
+                    {/**名称 */}
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                        <Text style={styles.necessary}>*</Text>
+                        <Text style={styles.title}>名称:</Text>
+                        <TextInput
+                            style={{
+                                width: screenWidth * 0.8,
+                                backgroundColor: '#fff',
+                                borderColor: '#DCDCDC',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                paddingLeft: 20,
+                            }}
+                            onChangeText={(text)=>{ textInputName = text }}
+                        ></TextInput>
                     </View>
+                    {/**分割线 */}
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
 
                     {/**学段 */}
                     <TouchableOpacity
@@ -686,7 +589,8 @@ class HomeworkPropertyModel extends React.Component {
                             this.updateVisibility(1, this.state.studyRankVisibility);
                         }}
                     >
-                        <View style={styles.itemView}>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                            <Text style={styles.necessary}>*</Text>
                             <Text style={styles.title}>学段:</Text>
                             <Text style={styles.studyRank}>{this.state.studyRank}</Text>
                             {this.state.studyRankVisibility ?
@@ -718,7 +622,7 @@ class HomeworkPropertyModel extends React.Component {
                         : null
                     }
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
 
                     {/**学科 */}
                     <TouchableOpacity
@@ -726,7 +630,8 @@ class HomeworkPropertyModel extends React.Component {
                             this.updateVisibility(2, this.state.studyClassVisibility);
                         }}
                     >
-                        <View style={styles.itemView}>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                            <Text style={styles.necessary}>*</Text>
                             <Text style={styles.title}>学科:</Text>
                             <Text style={styles.studyRank}>{this.state.studyClass}</Text>
                             {this.state.studyClassVisibility ?
@@ -759,15 +664,16 @@ class HomeworkPropertyModel extends React.Component {
                         : null
                     }
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
-                
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                    
                     {/**版本 */}
                     <TouchableOpacity
                         onPress={() => {
                             this.updateVisibility(3, this.state.editionVisibility);
                         }}
                     >
-                        <View style={styles.itemView}>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                            <Text style={styles.necessary}>*</Text>
                             <Text style={styles.title}>版本:</Text>
                             <Text style={styles.studyRank}>{this.state.edition}</Text>
                             {this.state.editionVisibility ?
@@ -801,7 +707,7 @@ class HomeworkPropertyModel extends React.Component {
                         : null
                     }
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
                     
                     {/**教材 */}
                     <TouchableOpacity
@@ -809,7 +715,8 @@ class HomeworkPropertyModel extends React.Component {
                             this.updateVisibility(4, this.state.bookVisibility);
                         }}
                     >
-                        <View style={styles.itemView}>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                            <Text style={styles.necessary}>*</Text>
                             <Text style={styles.title}>教材:</Text>
                             <Text style={styles.studyRank}>{this.state.book}</Text>
                             {this.state.bookVisibility ?
@@ -844,110 +751,287 @@ class HomeworkPropertyModel extends React.Component {
                         : null
                     }
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
-                
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                    
                     {/**知识点 */}
                     <TouchableOpacity
                         onPress={() => {
                             this.updateVisibility(5, this.state.knowledgeVisibility);
                         }}
                     >
-                        <View style={styles.itemView}>
+                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                            <Text style={styles.necessary}>*</Text>
                             <Text style={styles.longTitle}>知识点:</Text>
-                            <Text style={styles.studyRank}
-                                numberOfLines={1}
-                                ellipsizeMode={"tail"}
-                            >{this.state.knowledge}</Text>
+                            <Text style={styles.studyRank}>{this.state.knowledge}</Text>
                         </View>
                     </TouchableOpacity>
                     {/**知识点选择悬浮页面!!! */}
                     {this.state.knowledgeVisibility ?
                         <TouchableOpacity
                             style={styles.knowledge}
-                            onPress={() => { this.setState({ knowledgeModelVisibility: !this.state.knowledgeModelVisibility }) }}
+                            onPress={() => { this.setState({ knowledgeModelVisibility: true }) }}
                         >
                             <Text style={styles.knowledgeText}>
                                 点击这里选择知识点
                             </Text>
-                            {/* {this.state.knowledgeModelVisibility ?
+                            {this.state.knowledgeModelVisibility ?
                                 this.showKnowledgeModal()
                                 : null
-                            } */}
+                            }
                         </TouchableOpacity>
                         : null
                     }
-                    {
-                        this.state.knowledgeVisibility  && this.state.knowledgeModelVisibility?
-                                    this.showKnowledgeModal()
-                                    : null
-
-                    }
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
 
-                    {/**类型 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(6, this.state.paperTypeVisibility);
-                        }}
-                    >
-                        <View style={styles.itemView}>
-                            <Text style={styles.title}>类型:</Text>
-                            <Text style={styles.studyRank}>{this.state.paperType}</Text>
-                            {this.state.paperTypeVisibility ?
-                                <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/top.png')}
-                                />
-                                : <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/bot.png')}
-                                />
-                            }
-                        </View>
-                    </TouchableOpacity>
-                    {/**类型列表!!! */}
-                    {this.state.paperTypeVisibility ?
-                        <View style={styles.contentlistView}>
-                            {
-                                this.props.paperTypeList.length > 0
-                                    ? this.showPaperType()
-                                    : <Text>试题类型列表未获取到或者为空</Text>
-                            }
-                        </View>
-                        : null
-                    }
+                    {/**使用目的 */}
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                        <Text style={styles.necessary}>*</Text>
+                        <Text style={styles.longTitle}>使用目的:</Text>
+                        <Text style={this.state.useAim != 'all' ? styles.content : styles.contentSelected} 
+                            onPress={()=>{
+                                            if(this.state.useAim != 'all'){
+                                                this.setState({useAim: 'all'})
+                                            }
+                                    }}>全部</Text>
+                        <Text style={this.state.useAim != 'before' ? styles.content : styles.contentSelected} 
+                            onPress={()=>{
+                                            if(this.state.useAim != 'before'){
+                                                this.setState({useAim: 'before'})
+                                            }
+                                    }}>课前</Text>
+                        <Text style={this.state.useAim != 'mid' ? styles.content : styles.contentSelected} 
+                            onPress={()=>{
+                                            if(this.state.useAim != 'mid'){
+                                                this.setState({useAim: 'mid'})
+                                            }
+                                    }}>课中</Text>
+                        <Text style={this.state.useAim != 'after' ? styles.content : styles.contentSelected} 
+                            onPress={()=>{
+                                            if(this.state.useAim != 'after'){
+                                                this.setState({useAim: 'after'})
+                                            }
+                                    }}>课后</Text>
+                    </View>
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                    
+                    {/**学时总数 研读学时 */}
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                        <Text style={styles.necessary}>*</Text>
+                        <Text style={styles.longTitle}>学时总数:</Text>
+                        <TextInput
+                            style={{
+                                width: screenWidth * 0.2,
+                                backgroundColor: '#fff',
+                                borderColor: '#DCDCDC',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                paddingLeft: 20,
+                            }}
+                            onChangeText={(text)=>{ textLearnSumTime = text }}
+                        ></TextInput>
+                        <View style={{width: 50}}></View>
+                        <Text style={styles.necessary}>*</Text>
+                        <Text style={styles.longTitle}>研读学时:</Text>
+                        <TextInput
+                            style={{
+                                width: screenWidth * 0.2,
+                                backgroundColor: '#fff',
+                                borderColor: '#DCDCDC',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                paddingLeft: 20,
+                            }}
+                            onChangeText={(text)=>{ textStudyTime = text }}
+                        ></TextInput>
+                    </View>
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                    
+                    {/**内容简介 */}
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                        <Text style={styles.longTitle}>内容简介:</Text>
+                        <TextInput
+                            style={{
+                                width: screenWidth * 0.75,
+                                backgroundColor: '#fff',
+                                borderColor: '#DCDCDC',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                paddingLeft: 20,
+                            }}
+                            onChangeText={(text)=>{ textInputPaper = text }}
+                        ></TextInput>
+                    </View>
+                    {/**分割线 */}
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+
+
+                    {/**学习目标 */}
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                        <Text style={styles.longTitle}>学习目标:</Text>
+                        <TextInput
+                            style={{
+                                width: screenWidth * 0.75,
+                                backgroundColor: '#fff',
+                                borderColor: '#DCDCDC',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                paddingLeft: 20,
+                            }}
+                            onChangeText={(text)=>{ textLearnAim = text }}
+                        ></TextInput>
+                    </View>
+                    {/**分割线 */}
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                
+                    {/**学习重点 */}
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                        <Text style={styles.longTitle}>学习重点:</Text>
+                        <TextInput
+                            style={{
+                                width: screenWidth * 0.75,
+                                backgroundColor: '#fff',
+                                borderColor: '#DCDCDC',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                paddingLeft: 20,
+                            }}
+                            onChangeText={(text)=>{ textLearnPoint = text }}
+                        ></TextInput>
+                    </View>
+                    {/**分割线 */}
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                
+                    {/**学习难点 */}
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                        <Text style={styles.longTitle}>学习难点:</Text>
+                        <TextInput
+                            style={{
+                                width: screenWidth * 0.75,
+                                backgroundColor: '#fff',
+                                borderColor: '#DCDCDC',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                paddingLeft: 20,
+                            }}
+                            onChangeText={(text)=>{ textLearnDiff = text }}
+                        ></TextInput>
+                    </View>
+                    {/**分割线 */}
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                
+                    {/**课堂总结 */}
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                        <Text style={styles.longTitle}>课堂总结:</Text>
+                        <TextInput
+                            style={{
+                                width: screenWidth * 0.75,
+                                backgroundColor: '#fff',
+                                borderColor: '#DCDCDC',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                paddingLeft: 20,
+                            }}
+                            onChangeText={(text)=>{ textCourseSummary = text }}
+                        ></TextInput>
+                    </View>
+                    {/**分割线 */}
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                
+                    {/**课外扩展 */}
+                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                        <Text style={styles.longTitle}>课外扩展:</Text>
+                        <TextInput
+                            style={{
+                                width: screenWidth * 0.75,
+                                backgroundColor: '#fff',
+                                borderColor: '#DCDCDC',
+                                borderWidth: 1,
+                                borderRadius: 5,
+                                paddingLeft: 20,
+                            }}
+                            onChangeText={(text)=>{ textCourseExpansion = text }}
+                        ></TextInput>
+                    </View>
+                    {/**分割线 */}
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
                 </ScrollView>
 
-                {/**重置 确定按钮 */}
+                {/**取消 确定按钮 */}
                 <View
                     style={{
                         flexDirection: 'row',
-                        borderWidth: 1,
-                        borderColor: '#DCDCDC',
                         backgroundColor: '#fff',
-                        width: screenWidth*0.6,
                         top: '100%',
+                        //height: '8%',
                         position: 'absolute',
-
                     }}
                 >
-                    <Text style={this.state.resetButton ? styles.buttonSelect : styles.button}
+                    <Text style={{ width: screenWidth * 0.05 }}></Text>
+                    <Button style={styles.button}
                         onPress={() => {
-                            Alert.alert('重置功能还未写！！！')
+                            //Alert.alert('取消功能还未写！！！')
+                            this.props.navigation.goBack();
                         }}
                     >
-                       重置
-                    </Text>
-                    <Text style={this.state.sureButton ? styles.buttonSelect : styles.button}
+                        取消
+                    </Button>
+                    <Text style={{ width: screenWidth * 0.1 }}></Text>
+                    <Button style={styles.button}
                         onPress={() => { 
-                            Alert.alert('确定功能还未写！！！')
+                            // Alert.alert('该功能还未开发');
+                            //console.log('----------',textInputName , textInputPaper); 
+                            // if(
+                            //     textInputName != ''
+                            //     && this.state.studyRank != ''
+                            //     && this.state.studyClass != ''
+                            //     && this.state.edition != ''
+                            //     && this.state.book != ''
+                            //     && this.state.knowledge != ''
+                            //     && textLearnSumTime != ''
+                            //     && textStudyTime != ''
+                            // )(
+                                    this.props.navigation.navigate({
+                                        name: '创建导学案',
+                                        params: {
+                                            name: textInputName,
+                                            introduction: textInputPaper,
+                                            useAim: this.state.useAim,
+                                            learnSumTime: textLearnSumTime,
+                                            studyTime: textStudyTime,
+                                            learnAim: textLearnAim,
+                                            learnPoint: textLearnAim,
+                                            learnDiff: textLearnDiff,
+                                            courseSummary: textCourseSummary,
+                                            courseExpansion: textCourseExpansion,
+                                            studyRankId: this.state.studyRankId,
+                                            studyRank: this.state.studyRank,
+                                            studyClassId: this.state.studyClassId,
+                                            studyClass: this.state.studyClass,
+                                            editionId: this.state.editionId,
+                                            edition: this.state.edition,
+                                            bookId: this.state.bookId,
+                                            book: this.state.book,
+                                            knowledgeCode: this.state.knowledgeCode,
+                                            knowledge: this.state.knowledge,
+
+                                            channelNameList: this.state.channelNameList, //学段名列表（接口数据）
+                                            studyClassList: this.state.studyClassList, //学科列表（接口数据）
+                                            editionList: this.state.editionList, //版本列表（接口数据）
+                                            bookList: this.state.bookList, //教材列表（接口数据）  
+                                            knowledgeList: this.state.knowledgeList, //从接口中返回的数据
+                                        }
+                                    })
+                            // )
+                            // else{
+                            //     Alert.alert('必填项不完整');
+                            // }
                         }}
                     >
                         确定
-                    </Text>
+                    </Button>
+                    <Text style={{ width: screenWidth * 0.05 }}></Text>
                 </View>
             </View>
         );
@@ -956,66 +1040,26 @@ class HomeworkPropertyModel extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    model: {
-        flexDirection: 'column', 
-        backgroundColor: '#fff' , 
-        top: 70 , 
-        right: 0 , 
-        height: screenHeight*0.6,
-        width: screenWidth*0.7,
-        position: 'absolute'
-    },
-    content: {
-        width: screenWidth * 0.2,
-        height: 30,
-        fontSize: 15,
-        fontWeight: '400',
-        paddingTop: 5,
-        textAlign: 'center',
-        color: '#4DC7F8',
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: '#4DC7F8',
-        backgroundColor: '#fff',
-        marginLeft: 10,
-    },
-    contentSelected: {
-        width: screenWidth * 0.2,
-        height: 30,
-        fontSize: 15,
-        fontWeight: '400',
-        paddingTop: 5,
-        textAlign: 'center',
-        color: 'white',
-        borderRadius: 5,
-        borderWidth: 2,
-        borderColor: '#4DC7F8',
-        backgroundColor: '#4DC7F8',
-        marginLeft: 10,
-    },
-    itemView: {
-        flexDirection: 'row', 
-        backgroundColor: '#fff', 
-        paddingTop: 5,
-        paddingLeft: 5,
-        paddingRight: 5,
+    necessary: {
+        color: 'red',
+        width: screenWidth * 0.03,
+        paddingTop: 12,
+        //height:'100%',
     },
     title: {
         fontSize: 15,
         color: 'black',
         fontWeight: '500',
-        width: screenWidth * 0.1,
-        paddingTop: 5,
-        paddingBottom: 5,
+        width: screenWidth * 0.12,
+        paddingTop: 12,
         //height:'100%',
     },
     longTitle: {
         fontSize: 15,
         color: 'black',
         fontWeight: '500',
-        width: screenWidth * 0.15,
-        paddingTop: 5,
-        paddingBottom: 5,
+        width: screenWidth * 0.18,
+        paddingTop: 12,
     },
     contentlistView: {
         flexDirection: 'row',
@@ -1028,13 +1072,12 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'black',
         fontWeight: '500',
-        width: screenWidth * 0.4,
-        height: 40,
+        top: 8,
+        width: screenWidth * 0.6,
         paddingTop: 5,
     },
     studyRankItem: {
-        width: screenWidth * 0.2,
-        height: 40,
+        width: screenWidth * 0.3,
         fontSize: 15,
         color: 'black',
         backgroundColor: '#DCDCDC',
@@ -1043,11 +1086,9 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: '#fff',
         textAlign: 'center',
-        marginLeft: 5,
     },
     studyRankItemSelected: {
-        width: screenWidth * 0.2,
-        height: 38,
+        width: screenWidth * 0.3,
         fontSize: 15,
         color: 'black',
         backgroundColor: '#DCDCDC',
@@ -1056,24 +1097,22 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'red',
         textAlign: 'center',
-        marginLeft: 5,
     },
     studyRankImg: {
-        height: 20,
-        width: 20,
-        top: 10,
-        //resizeMode: "contain",
-        right: 10,
+        height: '150%',
+        width: screenWidth * 0.1,
+        resizeMode: "contain",
+        left: screenWidth * 0.9,
         position: 'absolute',
     },
     knowledge: {
-        width: screenWidth * 0.6,
+        width: screenWidth * 0.9,
         height: 40,
         backgroundColor: '#DCDCDC',
-        left: 10,
+        left: 20,
         borderRadius: 5,
         //paddingBottom: 10,
-        marginTop: 5,
+        marginTop: 20,
         marginBottom: 15,
     },
     knowledgeText: {
@@ -1085,26 +1124,41 @@ const styles = StyleSheet.create({
         paddingTop: 10,
         paddingLeft: 10,
     },
-    button: {
-        width: screenWidth * 0.35,
-        height: 40,
+    content: {
+        width: screenWidth * 0.15,
+        height: 30,
         fontSize: 15,
         fontWeight: '400',
-        paddingTop: 8,
+        paddingTop: 5,
         textAlign: 'center',
+        color: '#4DC7F8',
+        marginLeft: 10,
+        marginTop: 5,
+        fontSize: 15,
         color: 'black',
-        backgroundColor: '#fff',
+        fontWeight: '500',
     },
-    buttonSelect:{
-        width: screenWidth * 0.35,
-        height: 40,
+    contentSelected: {
+        width: screenWidth * 0.15,
+        height: 30,
         fontSize: 15,
         fontWeight: '400',
-        paddingTop: 8,
+        paddingTop: 5,
+        marginTop: 5,
         textAlign: 'center',
         color: 'white',
-        backgroundColor: 'red',
+        borderRadius: 5,
+        borderWidth: 2,
+        borderColor: '#4DC7F8',
+        backgroundColor: '#4DC7F8',
+        marginLeft: 10,
     },
+    button: {
+        width: screenWidth * 0.4,
+        color: 'white',
+        backgroundColor: '#4DC7F8',
+    },
+
     centeredView: {
         //height: '100%',
     },
@@ -1114,7 +1168,5 @@ const styles = StyleSheet.create({
         backgroundColor: "white",
         padding: 30,
         paddingBottom: 80,
-        //justifyContent: "center",
-        //alignItems: "center",
     },
 })

@@ -15,37 +15,32 @@ import http from "../../../../utils/http/request";
 
 import Toast from '../../../../utils/Toast/Toast';
 
-export default function HomeworkPropertyModelContainer(props) {
-    const paperTypeList = props.paperTypeList; 
-
+export default function LearnCasePropertyModalContainer(props) {
     const navigation = useNavigation();
-    //路由标题
-    navigation.setOptions({ title: '设置属性' });
-    //将navigation传给HomeworkProperty组件，防止路由出错
-    return <HomeworkPropertyModel navigation={navigation} 
-        paperTypeList={paperTypeList}
-        studyRank={props.studyRank}
-        studyRankId={props.studyRankId}
-        studyClass={props.studyClass}
-        studyClassId={props.studyClassId}
-        edition={props.edition}
-        editionId={props.editionId}
-        book={props.book}
-        bookId={props.bookId}
-        knowledge={props.knowledge}
-        knowledgeCode={props.knowledgeCode}
-        channelNameList={props.channelNameList} //学段名列表（接口数据）
-        studyClassList={props.studyClassList} //学科列表（接口数据）
-        editionList={props.editionList} //版本列表（接口数据）
-        bookList={props.bookList} //教材列表（接口数据）  
-        knowledgeList={props.knowledgeList} //从接口中返回的数据
 
-        setAllProperty={props.setAllProperty}
-        setFetchAgainProperty={props.setFetchAgainProperty}
+    //将navigation传给HomeworkProperty组件，防止路由出错
+    return <LearnCasePropertyModal navigation={navigation}
+            studyRank={props.studyRank}
+            studyRankId={props.studyRankId}
+            studyClass={props.studyClass}
+            studyClassId={props.studyClassId}
+            edition={props.edition}
+            editionId={props.editionId}
+            book={props.book}
+            bookId={props.bookId}
+            knowledge={props.knowledge}
+            knowledgeCode={props.knowledgeCode}
+            channelNameList={props.channelNameList} //学段名列表（接口数据）
+            studyClassList={props.studyClassList} //学科列表（接口数据）
+            editionList={props.editionList} //版本列表（接口数据）
+            bookList={props.bookList} //教材列表（接口数据）  
+
+            setAllProperty={props.setAllProperty}
+            setFetchAgainProperty={props.setFetchAgainProperty}
     />;
 }
 
-class HomeworkPropertyModel extends React.Component {
+class LearnCasePropertyModal extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -77,27 +72,46 @@ class HomeworkPropertyModel extends React.Component {
             knowledgeCode: this.props.knowledgeCode, //选中的知识点项的编码
             knowledgeVisibility: false, //知识点选择列表是否显示     
 
-            paperTypeVisibility: false, //试题类型列表是否显示
+            learnPlanType1: '全部', //共享内容
+            learnPlanTypeList1: ['全部','试题','试卷','资源'],
+            learnPlanType2: '全部', //本校内容
+            learnPlanTypeList2: ['全部','试题','试卷','资源'],
+            learnPlanType3: '试题', //私有内容
+            learnPlanTypeList3: ['试题','试卷','资源'],
+            learnPlanTypeVisibility: false, //导学案类型列表是否显示
 
             //共享内容
+            paperType1: '', 
+            paperTypeId1: '',
+            paperTypeList1: [], //试卷类型列表
             questionType1: '',
             questionTypeId1: '',
             questionTypeList1: [], //试题类型列表
-            questionTypeListFetch1: [], 
-
+            resourceType1: '',
+            resourceTypeId1: '',
+            resourceTypeList1: [], //资源类型列表
 
             //本校内容
+            paperType2: '', 
+            paperTypeId2: '',
+            paperTypeList2: [], //试卷类型列表
             questionType2: '',
             questionTypeId2: '',
             questionTypeList2: [], //试题类型列表
-            questionTypeListFetch2: [],
-
-
+            resourceType2: '',
+            resourceTypeId2: '',
+            resourceTypeList2: [], //资源类型列表
+            
             //私有内容
+            paperType3: '', 
+            paperTypeId3: '',
+            paperTypeList3: [], //试卷类型列表
             questionType3: '',
             questionTypeId3: '',
             questionTypeList3: [], //试题类型列表
-            questionTypeListFetch3: [],
+            resourceType3: '',
+            resourceTypeId3: '',
+            resourceTypeList3: [], //资源类型列表
 
             resetButton: false, //重置
             sureButton: true, //确定
@@ -105,102 +119,15 @@ class HomeworkPropertyModel extends React.Component {
             //网络请求状态
             error: false,
             errorInfo: "",
-        };
+        }
     }
 
     UNSAFE_componentWillMount(){
         console.log('----------设置属性------WillMount------');
-        this.fetchPaperType();
     }
 
-    UNSAFE_componentWillUpdate(nextProps){
-        console.log('----------componentWillUpdate------');
-    }
-
-    //请求试题类型
-    fetchPaperType = () => {
-        const { shareContent, schoolContent, privateContent } = this.state;
-        const { studyRankId, studyClassId, editionId , bookId , knowledgeCode } = this.state;
-        var shareTag;
-        if(shareContent){
-            shareTag = '99';
-        }else if(schoolContent){
-            shareTag = '10';
-        }else if(privateContent){
-            shareTag = '50';
-        }
-        const userId = global.constants.userName;
-        const token = global.constants.token;
-        const ip = global.constants.baseUrl;
-        const url = ip + "teacherApp_getQuestionTypeList1.do";
-        const params = {
-            teacherId: userId,
-            channelCode: shareTag != '50' ? studyRankId : '',
-            subjectCode: shareTag != '50' ? studyClassId : '',
-            textBookCode: shareTag != '50' ? editionId : '',
-            gradeLevelCode: shareTag != '50' ? bookId : '',
-            pointCode: shareTag != '50' ? knowledgeCode : '',
-            token: token,
-            shareTag: shareTag
-            //callback:'ha',
-        };
-
-        console.log('-----fetchPaperType-----', Date.parse(new Date()))
-        http.get(url, params)
-            .then((resStr) => {
-                let resJson = JSON.parse(resStr);
-                console.log('--------试题库试题类型数据------');
-                console.log(resJson.data);
-                console.log('------------------------');
-
-                if(resJson.data.length > 0){
-                    var resJsonData = [];
-                    var paperTypeListTemp = [];
-                    if(!this.state.privateContent){  
-                        for(let i = 0 ; i < resJson.data.length ; i++){
-                            resJsonData.push(((resJson.data)[i])[1]);
-                            paperTypeListTemp.push(((resJson.data)[i])[1]);
-                            console.log('****',((resJson.data)[i])[1]);
-                        }
-                        paperTypeListTemp.splice(0 , 0 , "全部"); 
-                    }else{
-                        for(let i = 0 ; i < resJson.data.length ; i++){
-                            resJsonData.push(((resJson.data)[i]));
-                            paperTypeListTemp.push(((resJson.data)[i]));
-                            console.log('****',((resJson.data)[i]));
-                        }
-                        paperTypeListTemp.splice(0 , 0 , "全部"); 
-                    }
-                    // console.log('----resJsonData---',resJsonData);
-                    if(shareContent){
-                        this.setState({ 
-                            questionTypeList1: paperTypeListTemp,
-                            questionTypeListFetch1: resJsonData,
-                        });
-                    }else if(schoolContent){
-                        this.setState({ 
-                            questionTypeList2: paperTypeListTemp,
-                            questionTypeListFetch2: resJsonData,
-                        });
-                    }else{
-                        this.setState({ 
-                            questionTypeList3: paperTypeListTemp,
-                            questionTypeListFetch3: resJsonData,
-                        });
-                    }
-                }else{
-                    Alert.alert('该知识点没有对应的试题');
-                    Toast.showInfoToast('该知识点没有对应的试题',1000);
-                    return;
-                }
-            })
-            .catch((error) => {
-                console.log('******catch***error**', error);
-                this.setState({
-                    error: true,
-                    errorInfo: error,
-                });
-            });
+    UNSAFE_componentWillUpdate(){
+        console.log('------设置属性----componentWillUpdate------');
     }
 
     componentWillUnmount(){
@@ -217,7 +144,7 @@ class HomeworkPropertyModel extends React.Component {
                 editionVisibility: false,
                 bookVisibility: false,
                 knowledgeVisibility: false,
-                paperTypeVisibility: false,
+                learnPlanTypeVisibility: false,
             })
         } else {
             if (flag == 1) { //学段
@@ -227,7 +154,7 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: false,
                     bookVisibility: false,
                     knowledgeVisibility: false,
-                    paperTypeVisibility: false,
+                    learnPlanTypeVisibility: false,
                 })
             } else if (flag == 2) { //学科
                 this.setState({
@@ -236,7 +163,7 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: false,
                     bookVisibility: false,
                     knowledgeVisibility: false,
-                    paperTypeVisibility: false,
+                    learnPlanTypeVisibility: false,
                 })
             } else if (flag == 3) { //版本
                 this.setState({
@@ -245,7 +172,7 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: true,
                     bookVisibility: false,
                     knowledgeVisibility: false,
-                    paperTypeVisibility: false,
+                    learnPlanTypeVisibility: false,
                 })
             } else if (flag == 4) { //教材
                 this.setState({
@@ -254,7 +181,7 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: false,
                     bookVisibility: true,
                     knowledgeVisibility: false,
-                    paperTypeVisibility: false,
+                    learnPlanTypeVisibility: false,
                 })
             } else if (flag == 5) { //知识点
                 this.setState({
@@ -263,7 +190,7 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: false,
                     bookVisibility: false,
                     knowledgeVisibility: true,
-                    paperTypeVisibility: false,
+                    learnPlanTypeVisibility: false,
                 })
             }else if (flag == 6) { //类型
                 this.setState({
@@ -272,11 +199,10 @@ class HomeworkPropertyModel extends React.Component {
                     editionVisibility: false,
                     bookVisibility: false,
                     knowledgeVisibility: false,
-                    paperTypeVisibility: true,
+                    learnPlanTypeVisibility: true,
                 })
             }
         }
-
     }
 
     //更新“共享内容 本校内容 私有内容”
@@ -287,8 +213,8 @@ class HomeworkPropertyModel extends React.Component {
                     shareContent: true,
                     schoolContent: false,
                     privateContent: false,
-                    paperTypeVisibility: false,
-                    questionType1: '', 
+                    learnPlanTypeVisibility: false,
+                    learnPlanType1: '全部', 
                 })
             }
         }else if(type == 2){
@@ -297,8 +223,8 @@ class HomeworkPropertyModel extends React.Component {
                     shareContent: false,
                     schoolContent: true,
                     privateContent: false,
-                    paperTypeVisibility: false,
-                    questionType2: '', 
+                    learnPlanTypeVisibility: false,
+                    learnPlanType2: '全部', 
                 })
             }
         }else{
@@ -307,13 +233,13 @@ class HomeworkPropertyModel extends React.Component {
                     shareContent: false,
                     schoolContent: false,
                     privateContent: true,
-                    paperTypeVisibility: false,
-                    questionType3: '', 
+                    learnPlanTypeVisibility: true,
+                    learnPlanType3: '试题', 
                 })
             }
         }
     }  
-    
+
     //获取学段列表数据
     fetchChannelName = () => {
         const userId = global.constants.userName;
@@ -376,8 +302,7 @@ class HomeworkPropertyModel extends React.Component {
                                     knowledge: '',
                                     knowledgeCode: '',
                                     //类型信息修改:
-                                    paperType: '',
-                                    paperTypeList: [],
+                                    learnPlanType: '',
                                 })
                             } else {
                                 this.setState({
@@ -457,8 +382,7 @@ class HomeworkPropertyModel extends React.Component {
                                     knowledge: '',
                                     knowledgeCode: '',
                                     //类型信息修改:
-                                    paperType: '',
-                                    paperTypeList: [],
+                                    learnPlanType: '',
                                 })
                             } else {
                                 this.setState({
@@ -535,8 +459,7 @@ class HomeworkPropertyModel extends React.Component {
                                     knowledge: '',
                                     knowledgeCode: '',
                                     //类型信息修改:
-                                    paperType: '',
-                                    paperTypeList: [],
+                                    learnPlanType: '',
                                 })
                             } else {
                                 this.setState({
@@ -610,8 +533,7 @@ class HomeworkPropertyModel extends React.Component {
                                     knowledge: '',
                                     knowledgeCode: '',
                                     //类型信息修改:
-                                    paperType: '',
-                                    paperTypeList: [],
+                                    learnPlanType: '',
                                 })
                             } else {
                                 this.setState({
@@ -630,67 +552,97 @@ class HomeworkPropertyModel extends React.Component {
         return content;
     }
 
-    //显示试题类型列表数据
-    showPaperType = () => {
+    //显示导学案类型列表数据
+    showLearnPlanType = () => {
         const { shareContent , schoolContent , privateContent } = this.state;
-        const { questionType1 , questionTypeList1 } = this.state;
-        const { questionType2 , questionTypeList2} = this.state;
-        const { questionType3 , questionTypeList3 } = this.state;
-        var questionType = '';
-        var questionTypeList = [];
+        const { learnPlanType1 , learnPlanType2 , learnPlanType3 } = this.state;
+        const { learnPlanTypeList1 , learnPlanTypeList2 , learnPlanTypeList3 } = this.state;
+        var learnPlanTypeList = [];
+        var learnPlanType = '';
         if(shareContent){
-            questionType = questionType1;
-            questionTypeList = questionTypeList1;
+            learnPlanType = learnPlanType1;
+            learnPlanTypeList = learnPlanTypeList1;
         }else if(schoolContent){
-            questionType = questionType2;
-            questionTypeList = questionTypeList2;
-        }else{
-            questionType = questionType3;
-            questionTypeList = questionTypeList3;
+            learnPlanType = learnPlanType2;
+            learnPlanTypeList = learnPlanTypeList2;
+        }else if(privateContent){
+            learnPlanType = learnPlanType3;
+            learnPlanTypeList = learnPlanTypeList3;
         }
-        const content = questionTypeList.map((item, index) => {
+        const content = learnPlanTypeList.map((item, index) => {
             return (
                 <View key={index}>
                     <Text
                         numberOfLines={1}
                         ellipsizeMode={"tail"}
-                        style={questionType ==  item ?
-                            styles.studyRankItemSelected :
-                            styles.studyRankItem
+                        style={learnPlanType == item ?
+                            {...styles.studyRankItemSelected, width: 60, } :
+                            {...styles.studyRankItem, width: 60 }
                         }
                         onPress={() => {
-                            if (questionType !=  item) {
+                            console.log(learnPlanType , item)
+                            if (learnPlanType != item) {
                                 if(shareContent){
                                     this.setState({
-                                        questionType1: item,
-                                        questionType2: '',
-                                        questionType3: '',
+                                        learnPlanType1: item,
+                                        paperType1: '', 
+                                        paperTypeId1: '',
+                                        questionType1: '',
+                                        questionTypeId1: '',
+                                        resourceType1: '',
+                                        resourceTypeId1: '',
                                     })
                                 }else if(schoolContent){
                                     this.setState({
-                                        questionType1: '',
-                                        questionType2: item,
-                                        questionType3: '',
+                                        learnPlanType2: item,
+                                        paperType2: '', 
+                                        paperTypeId2: '',
+                                        questionType2: '',
+                                        questionTypeId2: '',
+                                        resourceType2: '',
+                                        resourceTypeId2: '',
                                     })
                                 }else if(privateContent){
                                     this.setState({
-                                        questionType1: '',
-                                        questionType2: '',
-                                        questionType3: item,
+                                        learnPlanType3: item,
+                                        paperType3: '', 
+                                        paperTypeId3: '',
+                                        questionType3: '',
+                                        questionTypeId3: '',
+                                        resourceType3: '',
+                                        resourceTypeId3: '',
                                     })
                                 }
                             } else {
                                 if(shareContent){
                                     this.setState({
+                                        learnPlanType1: '',
+                                        paperType1: '', 
+                                        paperTypeId1: '',
                                         questionType1: '',
+                                        questionTypeId1: '',
+                                        resourceType1: '',
+                                        resourceTypeId1: '',
                                     })
                                 }else if(schoolContent){
                                     this.setState({
+                                        learnPlanType2: '',
+                                        paperType2: '', 
+                                        paperTypeId2: '',
                                         questionType2: '',
+                                        questionTypeId2: '',
+                                        resourceType2: '',
+                                        resourceTypeId2: '',
                                     })
                                 }else if(privateContent){
                                     this.setState({
+                                        learnPlanType3: '',
+                                        paperType3: '', 
+                                        paperTypeId3: '',
                                         questionType3: '',
+                                        questionTypeId3: '',
+                                        resourceType3: '',
+                                        resourceTypeId3: '',
                                     })
                                 }
                             }
@@ -704,55 +656,526 @@ class HomeworkPropertyModel extends React.Component {
         return content;        
     }
 
-    //重新设置导学案属性
-    setFetchAgainPropertys = ()=> {
-        const { shareContent , schoolContent } = this.state;
-        const { questionType1 , questionType2 , questionType3 } = this.state;
-        const { questionTypeList1 , questionTypeList2 , questionTypeList3 } = this.state;
-        let shareTagTepm = shareContent 
-                                ? '99'
-                                : schoolContent
-                                ? '10'
-                                : '50';
-        var paperType = '';
-        var paperTypeListFetch = [];
+    //请求试题类型列表
+    fetchQuestionType = () => {
+        const { studyRankId, studyClassId, editionId , bookId , knowledgeCode } = this.state;
+        const { shareContent, schoolContent, privateContent } = this.state;
+        var shareTag;
         if(shareContent){
-            paperType = questionType1;
-            paperTypeListFetch = questionTypeList1;
+            shareTag = '99';
         }else if(schoolContent){
-            paperType = questionType2;
-            paperTypeListFetch = questionTypeList2;
+            shareTag = '10';
+        }else if(privateContent){
+            shareTag = '50';
+        }
+        const userId = global.constants.userName;
+        const token = global.constants.token;
+        const ip = global.constants.baseUrl;
+        const url = ip + "teacherApp_getQuestionTypeList1.do";
+        const params = {
+            teacherId: userId,
+            channelCode: shareTag != '50' ? studyRankId : '',
+            subjectCode: shareTag != '50' ? studyClassId : '',
+            textBookCode: shareTag != '50' ? editionId : '',
+            gradeLevelCode: shareTag != '50' ? bookId : '',
+            pointCode: shareTag != '50' ? knowledgeCode : '',
+            token: token,
+            shareTag: shareTag
+            //callback:'ha',
+        };
+
+        console.log('-----fetchQuestionType-----', Date.parse(new Date()))
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                console.log('--------试题数据------');
+                console.log(resJson.data);
+                console.log('------------------------');
+                if(resJson.data.length > 0){
+                    if(shareContent){
+                        this.setState({ questionTypeList1: resJson.data });
+                    }else if(schoolContent){
+                        this.setState({ questionTypeList2: resJson.data });
+                    }else if(privateContent){
+                        this.setState({ questionTypeList3: resJson.data });
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log('******catch***error**', error);
+                this.setState({
+                    error: true,
+                    errorInfo: error,
+                });
+            });
+    }
+
+    //请求试卷类型列表
+    fetchPaperType = () => {
+        const { studyRankId, studyClassId, editionId , bookId , knowledgeCode } = this.state;
+        const { shareContent, schoolContent, privateContent } = this.state;
+        var shareTag;
+        if(shareContent){
+            shareTag = '99';
+        }else if(schoolContent){
+            shareTag = '10';
+        }else if(privateContent){
+            shareTag = '50';
+        }
+        const userId = global.constants.userName;
+        const token = global.constants.token;
+        const ip = global.constants.baseUrl;
+        const url = ip + "teacherApp_getPaperTypeList.do";
+        const params = {
+            teacherId: userId,
+            channelCode: shareTag != '50' ? studyRankId : '',
+            subjectCode: shareTag != '50' ? studyClassId : '',
+            textBookCode: shareTag != '50' ? editionId : '',
+            gradeLevelCode: shareTag != '50' ? bookId : '',
+            pointCode: shareTag != '50' ? knowledgeCode : '',
+            token: token,
+            shareTag: shareTag
+            //callback:'ha',
+        };
+
+        console.log('-----fetchPaperType-----', Date.parse(new Date()))
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                console.log('--------试卷数据------');
+                console.log(resJson.data);
+                console.log('------------------------');
+                if(resJson.data.length > 0){
+                    if(shareContent){
+                        this.setState({ paperTypeList1: resJson.data });
+                    }else if(schoolContent){
+                        this.setState({ paperTypeList2: resJson.data });
+                    }else if(privateContent){
+                        this.setState({ paperTypeList3: resJson.data });
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log('******catch***error**', error);
+                this.setState({
+                    error: true,
+                    errorInfo: error,
+                });
+            });
+    }
+
+    //请求资源类型
+    fetchResourceType = () => {
+        const { studyRankId, studyClassId, editionId , bookId , knowledgeCode } = this.state;
+        const { shareContent, schoolContent, privateContent } = this.state;
+        var shareTag;
+        if(shareContent){
+            shareTag = '99';
+        }else if(schoolContent){
+            shareTag = '10';
+        }else if(privateContent){
+            shareTag = '50';
+        }
+        const userId = global.constants.userName;
+        const token = global.constants.token;
+        const ip = global.constants.baseUrl;
+        const url = ip + "teacherApp_getResourceTypeList.do";
+        const params = {
+            teacherId: userId,
+            channelCode: shareTag != '50' ? studyRankId : '',
+            subjectCode: shareTag != '50' ? studyClassId : '',
+            textBookCode: shareTag != '50' ? editionId : '',
+            gradeLevelCode: shareTag != '50' ? bookId : '',
+            pointCode: shareTag != '50' ? knowledgeCode : '',
+            token: token,
+            shareTag: shareTag
+            //callback:'ha',
+        };
+
+        console.log('-----fetchPaperType-----', Date.parse(new Date()))
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                console.log('--------资源数据------');
+                console.log(resJson.data);
+                console.log('------------------------');
+                if(resJson.data.length > 0){
+                    if(shareContent){
+                        this.setState({ resourceTypeList1: resJson.data });
+                    }else if(schoolContent){
+                        this.setState({ resourceTypeList2: resJson.data });
+                    }else if(privateContent){
+                        this.setState({ resourceTypeList3: resJson.data });
+                    }
+                }
+            })
+            .catch((error) => {
+                console.log('******catch***error**', error);
+                this.setState({
+                    error: true,
+                    errorInfo: error,
+                });
+            });
+    }
+
+    //显示试题类型列表
+    showQuestionType = () => {
+        const { shareContent , schoolContent , privateContent } = this.state;
+        const { questionTypeList1 , questionType1 ,  } = this.state;
+        const { questionTypeList2 , questionType2 ,  } = this.state;
+        const { questionTypeList3 , questionType3 ,  } = this.state;
+        var questionTypeList = [];
+        var questionType = '';
+        if(shareContent){
+            questionTypeList = questionTypeList1;
+            questionType = questionType1;
+        }else if(schoolContent){
+            questionTypeList = questionTypeList2;
+            questionType = questionType2;
+        }else if(privateContent){
+            questionTypeList = questionTypeList3;
+            questionType = questionType3;
+        }
+        const content = questionTypeList.map((item, index) => {
+            return (
+                <View key={index}>
+                    <Text
+                        numberOfLines={1}
+                        ellipsizeMode={"tail"}
+                        style={questionType == (privateContent ? item : item[1]) ?
+                            styles.studyRankItemSelected :
+                            styles.studyRankItem
+                        }
+                        onPress={() => {
+                            if (questionType != (privateContent ? item : item[1])) {
+                                if(shareContent){
+                                    this.setState({
+                                        questionType1: item[1],
+                                        questionTypeId1: item[0],
+                                    })
+                                }else if(schoolContent){
+                                    this.setState({
+                                        questionType2: item[1],
+                                        questionTypeId2: item[0],
+                                    })
+                                }else if(privateContent){
+                                    this.setState({
+                                        questionType3: item,
+                                        questionTypeId3: '',
+                                    })
+                                }
+                            } else {
+                                if(shareContent){
+                                    this.setState({
+                                        questionType1: '',
+                                        questionTypeId1: '',
+                                    })
+                                }else if(schoolContent){
+                                    this.setState({
+                                        questionType2: '',
+                                        questionTypeId2: '',
+                                    })
+                                }else if(privateContent){
+                                    this.setState({
+                                        questionType3: '',
+                                        questionTypeId3: '',
+                                    })
+                                }
+                            }
+                        }}
+                    >
+                        {privateContent ? item : item[1]}
+                    </Text>
+                </View>
+            );
+        });
+        return content;   
+    }
+
+    //显示试卷类型列表
+    showPaperType = () => {
+        const { shareContent , schoolContent , privateContent } = this.state;
+        const { paperTypeList1 , paperType1 ,  } = this.state;
+        const { paperTypeList2 , paperType2 ,  } = this.state;
+        const { paperTypeList3 , paperType3 ,  } = this.state;
+        var paperTypeList = [];
+        var paperType = '';
+        if(shareContent){
+            paperTypeList = paperTypeList1;
+            paperType = paperType1;
+        }else if(schoolContent){
+            paperTypeList = paperTypeList2;
+            paperType = paperType2;
+        }else if(privateContent){
+            paperTypeList = paperTypeList3;
+            paperType = paperType3;
+        }
+        const content = paperTypeList.map((item, index) => {
+            return (
+                <View key={index}>
+                    <Text
+                        numberOfLines={1}
+                        ellipsizeMode={"tail"}
+                        style={paperType == (privateContent ? item : item[1]) ?
+                            styles.studyRankItemSelected :
+                            styles.studyRankItem
+                        }
+                        onPress={() => {
+                            if (paperType != (privateContent ? item : item[1])) {
+                                if(shareContent){
+                                    this.setState({
+                                        paperType1: item[1],
+                                        paperTypeId1: item[0],
+                                    })
+                                }else if(schoolContent){
+                                    this.setState({
+                                        paperType2: item[1],
+                                        paperTypeId2: item[0],
+                                    })
+                                }else if(privateContent){
+                                    this.setState({
+                                        paperType3: item,
+                                        paperTypeId3: '',
+                                    })
+                                }
+                            } else {
+                                if(shareContent){
+                                    this.setState({
+                                        paperType1: '',
+                                        paperTypeId1: '',
+                                    })
+                                }else if(schoolContent){
+                                    this.setState({
+                                        paperType2: '',
+                                        paperTypeId2: '',
+                                    })
+                                }else if(privateContent){
+                                    this.setState({
+                                        paperType3: '',
+                                        paperTypeId3: '',
+                                    })
+                                }
+                            }
+                        }}
+                    >
+                        {privateContent ? item : item[1]}
+                    </Text>
+                </View>
+            );
+        });
+        return content;   
+    }
+
+    //显示资源类型列表
+    showResourceType = () => {
+        const { shareContent , schoolContent , privateContent } = this.state;
+        const { resourceTypeList1 , resourceType1 ,  } = this.state;
+        const { resourceTypeList2 , resourceType2 ,  } = this.state;
+        const { resourceTypeList3 , resourceType3 ,  } = this.state;
+        var resourceTypeList = [];
+        var resourceType = '';
+        if(shareContent){
+            resourceTypeList = resourceTypeList1;
+            resourceType = resourceType1;
+        }else if(schoolContent){
+            resourceTypeList = resourceTypeList2;
+            resourceType = resourceType2;
+        }else if(privateContent){
+            resourceTypeList = resourceTypeList3;
+            resourceType = resourceType3;
+        }
+        const content = resourceTypeList.map((item, index) => {
+            return (
+                <View key={index}>
+                    <Text
+                        numberOfLines={1}
+                        ellipsizeMode={"tail"}
+                        style={resourceType ==  item[1] ?
+                            styles.studyRankItemSelected :
+                            styles.studyRankItem
+                        }
+                        onPress={() => {
+                            if (resourceType != item[1]) {
+                                if(shareContent){
+                                    this.setState({
+                                        resourceType1: item[1],
+                                        resourceTypeId1: item[0],
+                                    })
+                                }else if(schoolContent){
+                                    this.setState({
+                                        resourceType2: item[1],
+                                        resourceTypeId2: item[0],
+                                    })
+                                }else if(privateContent){
+                                    this.setState({
+                                        resourceType3: item[1],
+                                        resourceTypeId3: item[0],
+                                    })
+                                }
+                            } else {
+                                if(shareContent){
+                                    this.setState({
+                                        resourceType1: '',
+                                        resourceTypeId1: '',
+                                    })
+                                }else if(schoolContent){
+                                    this.setState({
+                                        resourceType2: '',
+                                        resourceTypeId2: '',
+                                    })
+                                }else if(privateContent){
+                                    this.setState({
+                                        resourceType3: '',
+                                        resourceTypeId3: '',
+                                    })
+                                }
+                            }
+                        }}
+                    >
+                        {item[1]}
+                    </Text>
+                </View>
+            );
+        });
+        return content;  
+    }
+
+    //显示导学案精细类型列表
+    showSmallLearnPlanType = () => {
+        const { shareContent , schoolContent , privateContent } = this.state;
+        const { learnPlanType1 , questionTypeList1 , paperTypeList1 , resourceTypeList1 } = this.state;
+        const { learnPlanType2 , questionTypeList2 , paperTypeList2 , resourceTypeList2 } = this.state;
+        const { learnPlanType3 , questionTypeList3 , paperTypeList3 , resourceTypeList3 } = this.state;
+        var learnPlanType = '';
+        var questionTypeList = [];
+        var paperTypeList = [];
+        var resourceTypeList = [];
+        if(shareContent){
+            learnPlanType = learnPlanType1;
+            questionTypeList = questionTypeList1;
+            paperTypeList = paperTypeList1;
+            resourceTypeList = resourceTypeList1;
+        }else if(schoolContent){
+            learnPlanType = learnPlanType2;
+            questionTypeList = questionTypeList2;
+            paperTypeList = paperTypeList2;
+            resourceTypeList = resourceTypeList2;
+        }else if(privateContent){
+            learnPlanType = learnPlanType3;
+            questionTypeList = questionTypeList3;
+            paperTypeList = paperTypeList3;
+            resourceTypeList = resourceTypeList3;
+        }
+        if(learnPlanType == '试题'){
+            if(questionTypeList.length <= 0){
+                this.fetchQuestionType();
+            }else{
+                return(
+                    <View style={styles.contentlistView}>
+                        {this.showQuestionType()}
+                    </View>
+                );
+            }
+        }else if(learnPlanType == '试卷'){
+            if(paperTypeList.length <= 0){
+                this.fetchPaperType();
+            }else{
+                return(
+                    <View style={styles.contentlistView}>
+                        {this.showPaperType()}
+                    </View>
+                );
+            }
+        }else if(learnPlanType == '资源'){
+            if(resourceTypeList.length <= 0){
+                this.fetchResourceType();
+            }else{
+                return(
+                    <View style={styles.contentlistView}>
+                        {this.showResourceType()}
+                    </View>
+                );
+            }
+        }
+    }
+
+    //重新设置导学案属性
+    setFetchAgainPropertys = () => {
+        const { shareContent , schoolContent } = this.state;
+        const { learnPlanType1 , questionTypeId1 , paperTypeId1 , resourceTypeId1 } = this.state;
+        const { learnPlanType2 , questionTypeId2 , paperTypeId2 , resourceTypeId2 } = this.state;
+        const { learnPlanType3 , questionType3 , paperType3 , resourceTypeId3 } = this.state;
+        let shareTagTemp = shareContent 
+                            ? '99'
+                            : schoolContent
+                            ? '10'
+                            : '50';
+        let type = '';
+        let typeValue = '';
+        if(shareContent){
+            if(learnPlanType1 == '全部'){
+                type = '0';
+                typeValue = '';
+            }else if(learnPlanType1 == '试题'){
+                type = 'question';
+                typeValue = questionTypeId1;
+            }else if(learnPlanType1 == '试卷'){
+                type = 'paper';
+                typeValue = paperTypeId1;
+            }else{
+                type = 'resource';
+                typeValue = resourceTypeId1;
+            }
+        }else if(schoolContent){
+            if(learnPlanType2 == '全部'){
+                type = '0';
+                typeValue = '';
+            }else if(learnPlanType2 == '试题'){
+                type = 'question';
+                typeValue = questionTypeId2;
+            }else if(learnPlanType2 == '试卷'){
+                type = 'paper';
+                typeValue = paperTypeId2;
+            }else{
+                type = 'resource';
+                typeValue = resourceTypeId2;
+            }
         }else{
-            paperType = questionType3;
-            paperTypeListFetch = questionTypeList3;
-            console.log('*******questionType3**********', questionType3);
+            if(learnPlanType3 == '全部'){
+                type = '0';
+                typeValue = '';
+            }else if(learnPlanType3 == '试题'){
+                type = 'question';
+                typeValue = questionType3;
+            }else if(learnPlanType3 == '试卷'){
+                type = 'paper';
+                typeValue = paperType3;
+            }else{
+                type = 'resource';
+                typeValue = resourceTypeId3;
+            }
         }
         let paramsObj = {
-            shareTag: shareTagTepm,
-            studyRank: this.state.studyRank,
-            studyRankId: this.state.studyRankId,
-            studyClass: this.state.studyClass,
-            studyClassId: this.state.studyClassId,
-            edition: this.state.edition,
-            editionId: this.state.editionId,
-            book: this.state.book,
-            bookId: this.state.bookId,
-            knowledge: this.state.knowledge,
-            knowledgeCode: this.state.knowledgeCode,
-            paperType: paperType,
-            paperTypeListFetch: paperTypeListFetch,
+            shareTag: shareTagTemp,
+            channelName: this.state.studyRank,
+            channelCode: this.state.studyRankId,
+            subjectName: this.state.studyClass,
+            subjectCode: this.state.studyClassId,
+            textBookName: this.state.edition,
+            textBookCode: this.state.editionId,
+            gradeLevelName: this.state.book,
+            gradeLevelCode: this.state.bookId,
+            pointName: this.state.knowledge,
+            pointCode: this.state.knowledgeCode,
+            type: type,
+            typeValue: typeValue,
         };
         this.props.setFetchAgainProperty(paramsObj);
     }
 
-
-    render() {
-        console.log('----------render-----knowledgeModelVisibility----', this.state.knowledgeModelVisibility);
+    render(){
         return (
             <View 
-                // style={this.state.knowledgeModelVisibility ? 
-                //     {...styles.model, borderWidth: 1, borderColor: '#DCDCDC' , opacity: 0}
-                //     : {...styles.model, borderWidth: 1, borderColor: '#DCDCDC' , opacity: 1}} 
                 style={{...styles.model, borderWidth: 1, borderColor: '#DCDCDC' , opacity: 1}}
             >
                 <ScrollView horizontal={false} showsVerticalScrollIndicator={false}>
@@ -767,7 +1190,7 @@ class HomeworkPropertyModel extends React.Component {
 
                     {/**学段 */}
                     {
-                        !this.state.privateContent
+                        !this.state.privateContent 
                         ?   <TouchableOpacity
                                 onPress={() => {
                                     this.updateVisibility(1, this.state.studyRankVisibility);
@@ -789,6 +1212,7 @@ class HomeworkPropertyModel extends React.Component {
                                 </View>
                             </TouchableOpacity>
                         : null
+
                     }
                     {/**学段列表 */}
                     {this.state.studyRankVisibility ?
@@ -948,7 +1372,7 @@ class HomeworkPropertyModel extends React.Component {
                     <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
                 
                     {/**知识点 */}
-                    {
+                    {   
                         !this.state.privateContent
                         ?   <TouchableOpacity
                                 onPress={() => {
@@ -977,7 +1401,7 @@ class HomeworkPropertyModel extends React.Component {
                                     this.state.channelNameList,
                                     this.state.studyClass,
                                     this.state.studyClassId, 
-                                    this.state.studyClassList,            
+                                    this.state.studyClassList,             
                                     this.state.edition,
                                     this.state.editionId,
                                     this.state.editionList,
@@ -1000,7 +1424,7 @@ class HomeworkPropertyModel extends React.Component {
                     {/**类型 */}
                     <TouchableOpacity
                         onPress={() => {
-                            this.updateVisibility(6, this.state.paperTypeVisibility);
+                            this.updateVisibility(6, this.state.learnPlanTypeVisibility);
                         }}
                     >
                         <View style={styles.itemView}>
@@ -1008,13 +1432,13 @@ class HomeworkPropertyModel extends React.Component {
                             <Text style={styles.studyRank}>
                                 {
                                     this.state.shareContent 
-                                    ? this.state.questionType1
+                                    ? this.state.learnPlanType1
                                     : this.state.schoolContent
-                                    ? this.state.questionType2
-                                    : this.state.questionType3
+                                    ? this.state.learnPlanType2
+                                    : this.state.learnPlanType3
                                 }
                             </Text>
-                            {this.state.paperTypeVisibility ?
+                            {this.state.learnPlanTypeVisibility ?
                                 <Image
                                     style={styles.studyRankImg}
                                     source={require('../../../../assets/teacherLatestPage/top.png')}
@@ -1027,46 +1451,28 @@ class HomeworkPropertyModel extends React.Component {
                         </View>
                     </TouchableOpacity>
                     {/**类型列表!!! */}
-                    {this.state.paperTypeVisibility ?
+                    {this.state.learnPlanTypeVisibility ?
                         <View style={styles.contentlistView}>
-                            {
+                            {   
                                 this.state.shareContent 
-                                && this.state.questionTypeList1.length <= 0
-                                    ? this.fetchPaperType()
+                                    ? this.showLearnPlanType()
                                     : null
                             }
-                            {
+                            {   
                                 this.state.schoolContent 
-                                && this.state.questionTypeList2.length <= 0
-                                    ? this.fetchPaperType()
+                                    ? this.showLearnPlanType()
                                     : null
                             }
-                            {
-                                this.state.privateContent
-                                && this.state.questionTypeList3.length <= 0
-                                    ? this.fetchPaperType()
-                                    : null
-                            }
-                            {
-                                this.state.shareContent 
-                                && this.state.questionTypeList1.length > 0
-                                    ? this.showPaperType()
-                                    : null
-                            }
-                            {
-                                this.state.schoolContent 
-                                && this.state.questionTypeList2.length > 0
-                                    ? this.showPaperType()
-                                    : null
-                            }
-                            {
+                            {   
                                 this.state.privateContent 
-                                && this.state.questionTypeList3.length > 0
-                                    ? this.showPaperType()
+                                    ? this.showLearnPlanType()
                                     : null
                             }
                         </View>
                         : null
+                    }
+                    {
+                        this.showSmallLearnPlanType()
                     }
                     {/**分割线 */}
                     <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
@@ -1113,11 +1519,31 @@ class HomeworkPropertyModel extends React.Component {
                                 knowledgeCode: '', //选中的知识点项的编码
                                 knowledgeVisibility: false, //知识点选择列表是否显示 
 
-                                paperTypeVisibility: false, //试题类型列表是否显示
-                            
+                                learnPlanType1: '全部',
+                                learnPlanType2: '全部',
+                                learnPlanType3: '试题',
+                                learnPlanTypeVisibility: false, //试题类型列表是否显示
+                                
+                                paperType1: '', 
+                                paperTypeId1: '',
                                 questionType1: '',
+                                questionTypeId1: '',
+                                resourceType1: '',
+                                resourceTypeId1: '',
+
+                                paperType2: '', 
+                                paperTypeId2: '',
                                 questionType2: '',
-                                questionType3: ''
+                                questionTypeId2: '',
+                                resourceType2: '',
+                                resourceTypeId2: '',
+                                
+                                paperType3: '', 
+                                paperTypeId3: '',
+                                questionType3: '',
+                                questionTypeId3: '',
+                                resourceType3: '',
+                                resourceTypeId3: '',
                             });
                         }}
                     >
@@ -1127,19 +1553,19 @@ class HomeworkPropertyModel extends React.Component {
                         onPress={() => { 
                             // Alert.alert('确定功能还未写！！！')
                             if(this.state.shareContent){
-                                if(this.state.questionType1 == ''){
+                                if(this.state.learnPlanType1 == ''){
                                     Alert.alert('请选择属性');
                                 }else{
                                     this.setFetchAgainPropertys();
                                 }
                             }else if(this.state.schoolContent){
-                                if(this.state.questionType2 == ''){
+                                if(this.state.learnPlanType2 == ''){
                                     Alert.alert('请选择属性');
                                 }else{
                                     this.setFetchAgainPropertys();
                                 }
                             }else{
-                                if(this.state.questionType3 == ''){
+                                if(this.state.learnPlanType3 == ''){
                                     Alert.alert('请选择属性');
                                 }else{
                                     this.setFetchAgainPropertys();
@@ -1153,7 +1579,6 @@ class HomeworkPropertyModel extends React.Component {
             </View>
         );
     }
-
 }
 
 const styles = StyleSheet.create({
@@ -1319,3 +1744,4 @@ const styles = StyleSheet.create({
         //alignItems: "center",
     },
 })
+

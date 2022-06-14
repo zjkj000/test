@@ -241,7 +241,15 @@ class ContentList extends React.Component {
                             </View>
                         </View>
                         <View style={{backgroundColor:'#fff'}}><Text style={{width:20}}></Text></View>
-                        {this.showTodo(todoImg,todo.id,todo.name)}
+                        {console.log('!!!!!!!!!!!!!!!!!!',todo.knowledgeCode,todo.knowledge)}
+                        {
+                            this.showTodo(
+                                todoImg,
+                                todo.id,
+                                todo.name,
+                                todo
+                            )
+                        }
                 </ScrollView>
 
             );
@@ -309,7 +317,7 @@ class ContentList extends React.Component {
     }
 
     //显示作业、导学案等可选操作
-    showTodo(todoImg,id,name){
+    showTodo(todoImg, id, name, todo){
         if(todoImg == 'paper.png'){
             return(
                 <View 
@@ -333,7 +341,34 @@ class ContentList extends React.Component {
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
-                        <Text style={styles.selectContent}  onPress={() => {Alert.alert('该功能还未写！！！')}}>
+                        <Text style={styles.selectContent}  
+                            onPress={() => {
+                                if(todo.paperType == '6'){
+                                    Alert.alert('拍照布置作业编辑');
+                                }else{
+                                    console.log(todo); //选题布置作业
+                                    this.props.navigation.navigate({
+                                        name:'创建作业',
+                                        params:{
+                                            type: 'update',
+                                            name: name,
+                                            introduction: todo.description,
+                                            paperId: id,
+                                            studyRankId: todo.channelCode,
+                                            studyRank: todo.channel,
+                                            studyClassId: todo.subjectId,
+                                            studyClass: todo.subject,
+                                            editionId: todo.textBookId,
+                                            edition: todo.textBook,
+                                            bookId: todo.gradeBookCode,
+                                            book: todo.gradeBook,
+                                            knowledgeCode: todo.knowledgeCode,
+                                            knowledge: todo.knowledge
+                                        }
+                                    })
+                                }
+                            }}
+                        >
                             编辑
                         </Text>
                     </View>
