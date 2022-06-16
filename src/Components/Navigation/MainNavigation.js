@@ -35,12 +35,15 @@ import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Home
 import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
 import CreateLearnCaseFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/CreateLearnCaseFrame";
 
-import PaperListContainer from '../../pages/Teacher/CorrectPaper/PaperList';
-import CorrectingPaper from '../../pages/Teacher/CorrectPaper/CorrectingPaper';
-import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDetails';
+import PaperListContainer from "../../pages/Teacher/CorrectPaper/PaperList";
+import CorrectingPaper from "../../pages/Teacher/CorrectPaper/CorrectingPaper";
+import LookCorrectDetails from "../../pages/Teacher/CorrectPaper/LookCorrectDetails";
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
 import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
 import AssignPicturesWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/AssignPicturesWork";
+import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin";
+import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
+import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -256,6 +259,26 @@ export default class MainNavigation extends Component {
                         options={{
                             title: "布置作业",
                         }}
+                    />
+                </Stack.Group>
+
+                {/* 遥控器 */}
+                <Stack.Group>
+                    <Stack.Screen
+                        name="ControllerLogin"
+                        component={ControllerLogin}
+                        options={{ title: "遥控器登录" }}
+                    />
+                    <Stack.Screen
+                        name="ControllerHome"
+                        component={ControllerHome}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="ControllerSharePhoto"
+                        component={ControllerSharePhoto}
                     />
                 </Stack.Group>
             </Stack.Navigator>

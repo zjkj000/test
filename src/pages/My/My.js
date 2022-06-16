@@ -212,8 +212,24 @@ class MyPageComponent extends Component {
                         </Text>
                     </View>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={this.props.navigation.navigate("ControllerLogin")}
+                >
+                    <Divider />
+                    <View style={styles.alternativeContainer}>
+                        <Text style={styles.textLeft}>遥控器</Text>
+                        <Text style={styles.textRight}>
+                            {" "}
+                            <Icon
+                                style={styles.icon}
+                                fill="#8F9BB3"
+                                name="arrow-ios-forward-outline"
+                            />
+                        </Text>
+                    </View>
+                </TouchableOpacity>
                 <Divider />
-                
+
                 <TouchableOpacity
                     onPress={() => {
                         this.setState({ fullModuleVisible: true });
@@ -235,15 +251,14 @@ class MyPageComponent extends Component {
                 <Divider />
                 <TouchableOpacity
                     onPress={() => {
-                                        // this.props.navigation.navigate({
-                                        //     name: 'Select_subject' ,
-                                        //     params:{
-                                        //         type:'new'   //区别是新进去的还是选完进去的
-                                        //     }
-                                        // })
-                                        this.props.navigation.navigate('vvnew')
-                                    }
-                            }
+                        // this.props.navigation.navigate({
+                        //     name: 'Select_subject' ,
+                        //     params:{
+                        //         type:'new'   //区别是新进去的还是选完进去的
+                        //     }
+                        // })
+                        this.props.navigation.navigate("vvnew");
+                    }}
                 >
                     <View style={styles.alternativeContainer}>
                         <Text style={styles.textLeft}>选科中心</Text>
