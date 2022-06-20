@@ -151,7 +151,7 @@ export default class LookCorrectDetails extends Component {
                             <View style={{width:80}}>
                               <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
                                   <Text>{item}</Text>
-                              </View> 
+                              </View>
                             </View>
                           )
                 })}

@@ -35,15 +35,20 @@ import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Home
 import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
 import CreateLearnCaseFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/CreateLearnCaseFrame";
 
+import LiveingLessonInfo from "../../pages/LatestTask/LiveingLessonInfo";
+
 import PaperListContainer from "../../pages/Teacher/CorrectPaper/PaperList";
 import CorrectingPaper from "../../pages/Teacher/CorrectPaper/CorrectingPaper";
 import LookCorrectDetails from "../../pages/Teacher/CorrectPaper/LookCorrectDetails";
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
 import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
 import AssignPicturesWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/AssignPicturesWork";
-import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin";
-import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
-import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
+import Tea_CreateInform from "../../pages/Teacher/Tea_CreateInform";
+import Tea_CreateNotice from "../../pages/Teacher/Tea_CreateNotice";
+import Tea_Inform from "../../pages/Teacher/Tea_Inform";
+import Tea_Notice from "../../pages/Teacher/Tea_Notice";
+import AssignPaperContainer from "../../pages/TeacheringContent/AssignPaper";
+import AssignLearnPlanContainer from "../../pages/TeacheringContent/AssignLearnPlan";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -68,7 +73,11 @@ export default class MainNavigation extends Component {
                     headerLeft: React.ReactNode, //导航左侧区域按钮配置 不配置默认展示左箭头返回图标
                 }}
             >
-                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen
+                    name="Login"
+                    component={Login}
+                    options={{ headerShown: false }}
+                />
                 <Stack.Screen
                     name="Home"
                     component={MyTabBar}
@@ -111,6 +120,14 @@ export default class MainNavigation extends Component {
                         component={Learningguide_ShowCorrected}
                     />
                 </Stack.Group>
+
+                <Stack.Screen
+                    name="LiveingLession"
+                    component={LiveingLessonInfo}
+                    options={{
+                        title: "直播公开课",
+                    }}
+                />
 
                 {/* 在线课堂 */}
                 <Stack.Group>
@@ -184,6 +201,13 @@ export default class MainNavigation extends Component {
                         }}
                     />
                     <Stack.Screen
+                        name="AssignPaper"
+                        component={AssignPaperContainer}
+                        options={{
+                            title: "布置作业",
+                        }}
+                    />
+                    <Stack.Screen
                         name="设置导学案属性"
                         component={LearnCasePropertyContainer}
                         options={{
@@ -195,6 +219,41 @@ export default class MainNavigation extends Component {
                         component={CreateLearnCaseFrame}
                         options={{
                             headerShown: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="CreateInform"
+                        component={Tea_CreateInform}
+                        options={{
+                            title: "发布通知",
+                        }}
+                    />
+                    <Stack.Screen
+                        name="CreateNotice"
+                        component={Tea_CreateNotice}
+                        options={{
+                            title: "发布公告",
+                        }}
+                    />
+                    <Stack.Screen
+                        name="LookInform"
+                        component={Tea_Inform}
+                        options={{
+                            title: "通知",
+                        }}
+                    />
+                    <Stack.Screen
+                        name="LookNotice"
+                        component={Tea_Notice}
+                        options={{
+                            title: "公告",
+                        }}
+                    />
+                    <Stack.Screen
+                        name="AssignLearnPlan"
+                        component={AssignLearnPlanContainer}
+                        options={{
+                            title: "布置导学案",
                         }}
                     />
                 </Stack.Group>

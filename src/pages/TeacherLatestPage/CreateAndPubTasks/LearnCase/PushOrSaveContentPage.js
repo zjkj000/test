@@ -20,6 +20,10 @@ import { WebView } from "react-native-webview";
 import RenderHtml from "react-native-render-html";
 
 import Toast from "../../../../utils/Toast/Toast";
+import {
+    Waiting,
+    WaitLoading,
+} from "../../../../utils/WaitLoading/WaitLoading";
 
 export default function PushOrSaveContentPageContainer(props) {
     const navigation = useNavigation();
@@ -31,6 +35,8 @@ export default function PushOrSaveContentPageContainer(props) {
     return (
         <PushOrSaveContentPage
             navigation={navigation}
+            createType={props.createType}
+            actionType={props.actionType}
             learnPlanId={props.learnPlanId}
             selectContentList={props.selectContentList}
             paramsData={props.paramsData}
@@ -71,6 +77,10 @@ class PushOrSaveContentPage extends React.Component {
         console.log(
             "----------push----learnPlanId----------",
             this.props.learnPlanId
+        );
+        console.log(
+            "----------push----learnPlanId----------",
+            this.props.selectContentList.length
         );
         this.createContentObjList(); //生成试卷对象
     }
@@ -203,6 +213,14 @@ class PushOrSaveContentPage extends React.Component {
         } else if (paramsData.useAim == "after") {
             learnPlanType = 3;
         }
+        var createTypeTemp = 1;
+        if (this.props.createType == "learnCase") {
+            createTypeTemp = 1;
+        } else if (this.props.createType == "weiKe") {
+            createTypeTemp = 2;
+        } else {
+            createTypeTemp = 3;
+        }
         return {
             jsonStr: JsonStr,
             channelCode: paramsData.studyRankId,
@@ -215,7 +233,7 @@ class PushOrSaveContentPage extends React.Component {
             gradeLevelName: paramsData.book,
             pointCode: paramsData.knowledgeCode,
             pointName: paramsData.knowledge,
-            type: 1,
+            type: createTypeTemp,
             learnPlanType: learnPlanType,
             classHours: paramsData.learnSumTime,
             studyHours: paramsData.studyTime,
@@ -240,7 +258,7 @@ class PushOrSaveContentPage extends React.Component {
             userName: global.constants.userName,
             learnPlanName: this.props.paramsData.name,
             learnPlanId: this.props.learnPlanId,
-            flag: "save",
+            flag: this.props.actionType == "create" ? "save" : "edit",
         };
         const ip = global.constants.baseUrl;
         const url = ip + "teacherApp_releaseLearnPlan.do";
@@ -251,29 +269,32 @@ class PushOrSaveContentPage extends React.Component {
         // console.log('*****************http******************************')
         // console.log(url , params)
         // console.log('***********************************************')
-        console.log("-----pushAndSaveLearnPlan-----", Date.parse(new Date()));
+        // console.log('-----pushAndSaveLearnPlan-----', Date.parse(new Date()))
+        WaitLoading.show("保存中...", -1);
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log(
-                    "****************resJson.success*********",
-                    resJson
-                );
+                // console.log('****************resJson.success*********', resJson);
                 if (resJson.success) {
-                    // this.props.navigation.navigate({ name: "Teacher_Home" });
-                    this.props.navigation.navigate({
-                        name: "Teacher_Home",
-                        params: {
-                            screen: "最新",
-                            params: {
-                                isRefresh: true,
+                    // this.props.navigation.navigate({name: 'Teacher_Home'});
+                    Alert.alert(this.props.paramsData.name, "导学案布置成功", [
+                        {},
+                        {
+                            text: "ok",
+                            onPress: () => {
+                                WaitLoading.dismiss();
+                                this.props.navigation.navigate({
+                                    name: "Teacher_Home",
+                                    params: {
+                                        type: "fresh",
+                                    },
+                                });
                             },
                         },
-                        merge: true,
-                    });
-                    Alert.alert(this.props.paramsData.name, "导学案布置成功");
+                    ]);
                 } else {
-                    Alert.alert(resJson.message);
+                    WaitLoading.show_false();
+                    // Alert.alert(resJson.message);
                 }
             })
             .catch((error) => {
@@ -298,7 +319,7 @@ class PushOrSaveContentPage extends React.Component {
             userName: global.constants.userName,
             learnPlanName: this.props.paramsData.name,
             learnPlanId: this.props.learnPlanId,
-            flag: "save",
+            flag: this.props.actionType == "create" ? "save" : "edit",
         };
         const ip = global.constants.baseUrl;
         const url = ip + "teacherApp_releaseLearnPlan.do";
@@ -307,6 +328,7 @@ class PushOrSaveContentPage extends React.Component {
             //callback:'ha',
         };
         console.log("-----saveLearnPlan-----", Date.parse(new Date()));
+        WaitLoading.show("保存中...", -1);
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
@@ -319,20 +341,36 @@ class PushOrSaveContentPage extends React.Component {
                 // console.log('****************resJson.success***Type******', resJson.success);
 
                 if (resJson.success) {
-                    // this.props.navigation.navigate({name: 'Teacher_Home'});
-                    this.props.navigation.navigate({
-                        name: "Teacher_Home",
-                        params: {
-                            screen: "最新",
-                            params: {
-                                isRefresh: true,
+                    Alert.alert(
+                        this.props.paramsData.name,
+                        this.props.createType == "learnCase"
+                            ? "导学案保存成功"
+                            : this.props.createType == "weiKe"
+                            ? "微课保存成功"
+                            : "授课包保存成功",
+                        [
+                            {},
+                            {
+                                text: "ok",
+                                onPress: () => {
+                                    WaitLoading.dismiss();
+                                    this.props.navigation.navigate({
+                                        name: "Teacher_Home",
+                                        params: {
+                                            screen: "最新",
+                                            params: {
+                                                isRefresh: true,
+                                                type: "fresh",
+                                            },
+                                        },
+                                    });
+                                },
                             },
-                        },
-                        merge: true,
-                    });
-                    Alert.alert(this.props.paramsData.name, "导学案保存成功");
+                        ]
+                    );
                 } else {
-                    Alert.alert(resJson.message);
+                    WaitLoading.show_false();
+                    // Alert.alert(resJson.message);
                 }
             })
             .catch((error) => {
@@ -874,7 +912,7 @@ class PushOrSaveContentPage extends React.Component {
                             top: 10,
                         }}
                         onPress={() => {
-                            Alert.alert("布置");
+                            Alert.alert("点击下方确定按钮可布置");
                         }}
                     >
                         布置
@@ -1133,7 +1171,23 @@ class PushOrSaveContentPage extends React.Component {
                 <Button
                     style={{ width: "40%" }}
                     onPress={() => {
-                        this.pushAndSaveLearnPlan();
+                        const { startTime, endTime } = this.state;
+                        const { className } = this.state;
+                        const { assigntoWho } = this.state;
+                        const { classFlag } = this.state;
+                        const { groupSelected, studentSelected } = this.state;
+                        if (
+                            startTime == "" ||
+                            endTime == "" ||
+                            className == "" ||
+                            (assigntoWho == "0" && !classFlag) ||
+                            (assigntoWho == "1" && groupSelected.length == 0) ||
+                            (assigntoWho == "2" && studentSelected.length == 0)
+                        ) {
+                            Alert.alert("请选择以上属性");
+                        } else {
+                            this.pushAndSaveLearnPlan();
+                        }
                     }}
                 >
                     确定
@@ -1143,12 +1197,32 @@ class PushOrSaveContentPage extends React.Component {
     };
 
     render() {
-        return (
-            <View style={styles.bodyView}>
-                {this.showPushOrSaveContent()}
-                {this.showPushOrSaveContentBottom()}
-            </View>
-        );
+        if (this.props.createType == "TeachingPackages") {
+            this.saveLearnPlan();
+            return (
+                <View style={{ ...styles.bodyView, height: screenHeight }}>
+                    <View>
+                        <Text
+                            style={{
+                                fontSize: 18,
+                                color: "black",
+                                paddingTop: 40,
+                                textAlign: "center",
+                            }}
+                        >
+                            正在保存授课包，请耐心等待
+                        </Text>
+                    </View>
+                </View>
+            );
+        } else {
+            return (
+                <View style={styles.bodyView}>
+                    {this.showPushOrSaveContent()}
+                    {this.showPushOrSaveContentBottom()}
+                </View>
+            );
+        }
     }
 }
 

@@ -34,6 +34,8 @@ export default function UpdateContentPageContainer(props) {
 
     //将navigation传给HomeworkProperty组件，防止路由出错
     return <UpdateContentPage navigation={navigation}
+                actionType = {props.actionType}
+                learnPlanId = {props.learnPlanId}
                 selectContentNum = {props.selectContentNum}
                 setSelectContentNum = {props.setSelectContentNum}
 
@@ -76,8 +78,60 @@ class UpdateContentPage extends React.Component {
         }
     }
 
+    UNSAFE_componentWillMount(){
+        console.log('-------update-----------componentWillMount-----------------------------');
+        this.setState({
+            selectContentNum: this.props.selectContentNum,
+            selectContentList: this.props.selectContentList,
+        })
+        console.log(this.state.selectContentNum , this.state.selectContentList.length)
+        console.log('--------------------------------------------------------------------');
+        if(this.props.actionType == 'update' && this.state.selectContentList.length <= 0){
+            this.fetchLearnPlanEditContent();
+        }
+    }
+
+    fetchLearnPlanEditContent = () => {
+        const ip = global.constants.baseUrl;
+        const url = ip + "teacherApp_getLpEditContent.do";
+        const params = {
+            learnPlanId: this.props.learnPlanId,
+            deviceType: 'PHONE'
+            //callback:'ha',
+        };
+
+        console.log('-----==================fetchLearnPlanEditContent==================-----', Date.parse(new Date()))
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                console.log('--------导学案内容列表------',resJson.data.length);
+                // console.log(resJson.data);
+                // console.log('------------------------');
+                if(resJson.data.length > 0){
+                    this.setState({ 
+                        selectContentList: resJson.data,
+                        selectContentNum: resJson.data.length
+                    },()=>{
+                        this.props.setSelectContentNum(this.state.selectContentList.length);
+                        this.props.setSelectContentList(this.state.selectContentList);
+                        console.log('=========selectContentList=============',this.state.selectContentList.length)
+                    });
+                }
+            })
+            .catch((error) => {
+                console.log('******catch***error**', error);
+                this.setState({
+                    error: true,
+                    errorInfo: error,
+                });
+            });
+    }
+
     UNSAFE_componentWillUpdate(){
         console.log('-----------update-------componentWillUpdate-----------------------------');
+        console.log('================update============================',this.props.selectContentNum);
+        // console.log(this.props.selectContentList)
+        console.log('==================================================');
     }
 
     componentWillUnmount(){
@@ -99,6 +153,9 @@ class UpdateContentPage extends React.Component {
             updateContentIndex: updateContentIndex == selectContentList.length ? 
                                     selectContentList.length - 1 : updateContentIndex,
             selectContentList: selectContentListCopy
+        },()=>{
+            this.props.setSelectContentNum(this.state.selectContentList.length);
+            this.props.setSelectContentList(this.state.selectContentList);
         })
     }
 
@@ -575,7 +632,7 @@ class UpdateContentPage extends React.Component {
     }
 
     render(){
-        console.log('--------render--------',this.state.selectContentNum)
+        console.log('-----update---render--------',this.state.selectContentNum)
         return(
             <View style={styles.bodyView}>
                 <ScrollView   

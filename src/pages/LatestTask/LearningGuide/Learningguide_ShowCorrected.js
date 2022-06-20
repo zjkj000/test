@@ -104,11 +104,12 @@ export default function Learningguide_ShowCorrected(props) {
                         </View>
                         <RenderHTML source={{html:Item.tiMian}}></RenderHTML>
                         <Text style={styles.Titletext}>[参考答案]</Text>
-                        <Text style={styles.text}>{Item.answer}</Text>
+                        {Item.answer==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.answer}}></RenderHTML>)}
                         <Text style={styles.Titletext}>[解析]</Text>
-                        <RenderHTML source={{html:Item.standardAnswer}}></RenderHTML>
+                        {Item.standardAnswer==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.standardAnswer}}></RenderHTML>)}
                         <Text style={styles.Titletext}>[你的答案]</Text>
-                        <Text style={styles.text}>{Item.stuAnswer}</Text>
+                         {Item.stuAnswer==''?(<Text>未答</Text>):(<RenderHTML source={{html:Item.stuAnswer}}></RenderHTML>)}
+                        <View style={{height:50}}></View>
                     </ScrollView>
                   </Layout>
                 )

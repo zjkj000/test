@@ -14,10 +14,18 @@ import TeachingContentPage from "../../TeacheringContent/TeachingContentPage";
 import StatisticalForm from "../../TeacherStatisticalForm/StatisticalForm";
 const Tab = createBottomTabNavigator();
 
-export default function TeacherTabBar() {
+export default function TeacherTabBar(props) {
+    const type = props.route.params.type ? props.route.params.type : "";
+    console.log("整个页面是否刷新", type);
     const navigation = useNavigation();
     const route = useRoute();
-    return <TeacherTabBarComponent navigation={navigation} route={route} />;
+    return (
+        <TeacherTabBarComponent
+            navigation={navigation}
+            route={route}
+            type={type}
+        />
+    );
 }
 
 class TeacherTabBarComponent extends React.Component {
@@ -32,25 +40,35 @@ class TeacherTabBarComponent extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
+                // console.log('#############tabTeacher###############', this.props.route);
+                // this.renderHome();
                 bindBackExitApp();
             }
         );
         this._unsubscribeNavigationBlurEvent = navigation.addListener(
             "blur",
             () => {
+                // console.log('#############tabTeacher######blur#########', this.props.route);
                 removeBackExitApp();
             }
         );
     }
+
+    componentDidUpdate() {
+        // console.log('#############tabTeacher#######222########', this.props.route);
+    }
+
     componentWillUnmount() {
         this._unsubscribeNavigationBlurEvent();
         this._unsubscribeNavigationFocusEvent();
     }
     renderHome = () => {
+        // console.log('###########renderHome####################',this.props.route);
+        // console.log('---teacher-TabBar-renderHome----' , this.props.navigation.getState().routes);
         return (
             <View>
                 {/* <Text>我是教师端首页</Text> */}
-                <LatestPage />
+                <LatestPage fresh={this.props.type} />
             </View>
         );
     };
@@ -61,7 +79,7 @@ class TeacherTabBarComponent extends React.Component {
         return (
             <View>
                 {/* <Text>我是教师端教学内容</Text> */}
-                <TeachingContentPage />
+                <TeachingContentPage type={this.props.type} />
             </View>
         );
     };

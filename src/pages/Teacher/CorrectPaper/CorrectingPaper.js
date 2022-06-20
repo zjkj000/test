@@ -16,7 +16,7 @@ export default function CorrectingPaper(props) {
     const userName = props.route.params.userName
     const userCn = props.route.params.userCn
     const type = props.route.params.type
-
+    const correctingstatus =  props.route.params.correctingstatus    //4 已批改  2 未批改   5  代表 已批改 学生已查看
     const [data,setData] = useState([]);
     const [success,setSuccess]= useState(false);
     const [selectedIndex, setSelectedIndex] = useState();
@@ -25,7 +25,7 @@ export default function CorrectingPaper(props) {
     useEffect(()=>{
       props.route.params.CorrectResultList?setCorrectResultList(props.route.params.CorrectResultList):setCorrectResultList([])
       getData()
-      navigation.setOptions({title:props.route.params.userCn,
+      navigation.setOptions( {title:props.route.params.userCn,
         // headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)
       })
       setSelectedIndex(props.route.params.selectedindex)
@@ -133,7 +133,7 @@ export default function CorrectingPaper(props) {
       if(success){
         return(
           <Layout style={styles.tab} level='2'>
-            <CorrectSubmitContainer CorrectResultList={CorrectResultList} setSelectedIndex={setSelectedIndex}/>
+            <CorrectSubmitContainer CorrectResultList={CorrectResultList} setSelectedIndex={setSelectedIndex} />
           </Layout> )
       }else{ return '' }
     }
@@ -142,19 +142,45 @@ export default function CorrectingPaper(props) {
     function loadingButton(ststus){
       if(ststus){
               if(selectedIndex==data.length){
-                return(
-                  <View style={{flexDirection:'row',
-                              position:'relative',
-                              alignItems:'center',
-                              backgroundColor:'#FFFFFF',
-                              borderTopColor:'#000000',
-                              height:60,
-                              paddingTop:5,
-                              borderTopWidth:0.5,
-                              justifyContent:'space-around'}}>
-                      <Button style={{width:'80%'}} onPress={()=>{submit_correctResult()}}>保存批阅结果</Button>
-                  </View>
-            )}else{
+                if(correctingstatus!='5'){
+                  return(
+                    <View style={{flexDirection:'row',
+                                position:'relative',
+                                alignItems:'center',
+                                backgroundColor:'#FFFFFF',
+                                borderTopColor:'#000000',
+                                height:60,
+                                paddingTop:5,
+                                borderTopWidth:0.5,
+                                justifyContent:'space-around'}}>
+                        <Button style={{width:'80%'}} onPress={()=>{submit_correctResult()}}>保存批阅结果</Button>
+                    </View>
+                  )
+                }else{
+                  return(
+                    <View style={{flexDirection:'row',
+                                position:'relative',
+                                alignItems:'center',
+                                backgroundColor:'#FFFFFF',
+                                borderTopColor:'#000000',
+                                height:60,
+                                paddingTop:5,
+                                borderTopWidth:0.5,
+                                justifyContent:'space-around'}}>
+                        <Button style={{width:'80%'}} onPress={()=>{
+                              navigation.navigate({
+                                name: 'CorrectPaperList',
+                                params:{ 
+                                    taskId:props.route.params.taskId,
+                                    type:props.route.params.type
+                                      }
+                            })
+                        }}>结束预览</Button>
+                    </View>
+                  )
+                }
+                
+          }else{
                 return(
                   <View style={{flexDirection:'row',
                               position:'relative',
@@ -245,7 +271,7 @@ export default function CorrectingPaper(props) {
           </TouchableOpacity>
           
 
-          <View style={{flexDirection:'row',marginLeft:90}}>
+          <View style={{flexDirection:'row',marginLeft:'32%'}}>
               <Text style={{color:'#59B9E0',fontSize:20}}>{userCn}</Text>
           </View>
           {(selectedIndex!=Allquestion.length)?(<TouchableOpacity style={{position:'absolute',right:16,top:13}}
@@ -288,6 +314,7 @@ export default function CorrectingPaper(props) {
                                           taskId={taskId}
                                           CorrectAllQuestion={CorrectAllQuestion}
                                           data={item}
+                                          correctingstatus={correctingstatus}
                                           CorrectResultList={CorrectResultList}    //批改 结果 数据
                                           setCorrected={setCorrectResultList}      //修改  结果  函数
                                           navigation={navigation}/>

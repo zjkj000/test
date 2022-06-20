@@ -21,7 +21,8 @@ import ContentListContainer from "./ContentListContainer";
 
 let SearchText = '';
 
-export default function LatestPageContainer() {
+export default function LatestPageContainer(props) {
+    console.log('教学内容页面：',props)
     const navigation = useNavigation();
     //将navigation传给LatestTask组件，防止路由出错
     return <TeachingContentPage navigation={navigation}></TeachingContentPage>;
@@ -116,6 +117,45 @@ class TeachingContentPage extends React.Component {
     handleMicroClass = () => {
         this.setState({ resourceType: "weike" ,filtermoduleVisible: false});
     };
+
+    //创建+布置作业
+    createHomework = () => {
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate("设置作业属性", {});
+    }
+
+    //创建+布置导学案
+    createLearnCase = () => {
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate({
+            name: "设置导学案属性",
+            params: {
+                createType: 'learnCase',
+            }
+        });
+    }
+
+    //创建+布置微课
+    createWeiKe = () => {
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate({
+            name: "设置导学案属性",
+            params: {
+                createType: 'weiKe',
+            }
+        });
+    }
+
+    //创建授课包
+    createTeachingPackages = () => {
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate({
+            name: "设置导学案属性",
+            params: {
+                createType: 'TeachingPackages',
+            }
+        });
+    }
     
 
 
@@ -180,7 +220,7 @@ class TeachingContentPage extends React.Component {
                         title="创建授课包"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            Alert.alert('该部分暂时未开发！')
+                            this.createTeachingPackages();
                         }}
                         style={{ fontSize: 40 }}
                     />
@@ -188,7 +228,7 @@ class TeachingContentPage extends React.Component {
                         title="创建导学案+布置"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            Alert.alert('该部分正在开发中！')
+                            this.createLearnCase();
                         }}
                         style={styles.menuItem}
                     />
@@ -196,7 +236,7 @@ class TeachingContentPage extends React.Component {
                         title = "创建微课+布置"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            Alert.alert('该部分暂时未开发！')
+                            this.createWeiKe();
                         }}
                         style={styles.menuItem}
                     />
@@ -204,7 +244,7 @@ class TeachingContentPage extends React.Component {
                         title = "创建作业+布置"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            this.props.navigation.navigate("设置作业属性", {});
+                            this.createHomework();
                         }}
                         style={styles.menuItem}
                     />
@@ -223,7 +263,7 @@ class TeachingContentPage extends React.Component {
 
     render() {
         return (
-            <View>
+            <View >
                 <View style={styles.header}>
                     <Flex style={styles.flexNew}>
                         <Flex style={{ width: screenWidth * 0.12 }}>
@@ -254,7 +294,7 @@ class TeachingContentPage extends React.Component {
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)}
+                    {/* {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)} */}
                     <ContentListContainer navigation={this.props.navigation}  resourceType={this.state.resourceType} searchStr={SearchText} />                   
                 </View>
             </View>
@@ -268,7 +308,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#4DC7F8",
     },
     todoList: {
-        height: screenHeight * 0.8,
+        height: screenHeight * 1,
+        backgroundColor: '#fff'
     },
     flexNew: {
         paddingTop: screenHeight * 0.02,
