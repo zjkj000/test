@@ -1,10 +1,10 @@
 
-import React, { Component } from 'react'
+import React, { Component, useEffect } from 'react'
 import {StyleSheet,
     View,
     Text,
     Image,
-    ScrollView,TouchableOpacity
+    ScrollView,TouchableOpacity, Alert
 } from "react-native";
 
 import { Button } from '@ui-kitten/components';
@@ -19,6 +19,27 @@ export default function Tea_Inform(props) {
     const taskId = props.route.params.taskId
     const type = props.route.params.type
     const data = props.route.params.data
+    const fNumber = props.route.params.fNumber   //  0已读  1 未读
+    useEffect(()=>{
+      if(fNumber=='1'){
+        readInform()
+      }
+    },[])
+
+    function readInform(){
+          const url =
+              "http://" +
+              "www.cn901.net" +
+              ":8111" +
+              "/AppServer/ajax/studentApp_readNotice.do";
+          const params = {
+                  type:type,           //类型：3  通知  4  公告
+                  userName:global.constants.userName 
+              };
+          http.get(url, params).then((resStr) => {
+              let resJson = JSON.parse(resStr);
+            })
+    }
     return (
         <Tea_Informcontent navigation={navigation} type={type} taskId={taskId} data={data}/>
     )
@@ -30,6 +51,7 @@ class Tea_Informcontent extends Component {
     this.state = {
       classTimeId:'',
       type:'',
+      author:'',
       content:'',
       title:'',
       noticeId:'',
@@ -46,82 +68,29 @@ class Tea_Informcontent extends Component {
 
   //http://192.168.1.57:8080/AppServer/ajax/studentApp_readNotice.do?userName=UN97221&type=3&classTimeId=13033&callback=ha
 
-  //修改通知或公告的状态,暂时没有
-  updateStatus =  (status , todoType , learnId) => {
-        const token = global.constants.token;
-        const userId = global.constants.userName;
-        const ip = global.constants.baseUrl
-        const url = ip + "studentApp_readNotice.do";
-        const params ={
-            userName: userId,
-            type: todoType,    //type=3表示通知，4表示公告
-            classTimeId: learnId, 
-        }
-        http.get(url,params).then((resStr)=>{
-            let resJson = JSON.parse(resStr);
-            // console.log('resStr' , resStr);
-            // console.log('此通知或公告状态已修改为已读');
-            return ;
-        })
-  };
- 
-
-  updateInform(){
+  deleteInform(classTimeId){
     const url =
         "http://" +
         "www.cn901.net" +
         ":8111" +
-        "/AppServer/ajax/teacherApp_getNoticeInfo.do";
+        "/AppServer/ajax/teacherApp_deleteNotice.do";
     const params = {
-            noticeId:'',
-            type:'',           //类型：3  通知  4  公告
-            token:global.constants.token 
-        };
-    http.get(url, params).then((resStr) => {
-        let resJson = JSON.parse(resStr);
-        if(resJson.success){
-
-              //通知返回数据格式，用于回显
-              // {
-              //   "message": "获取成功！",
-              //   "data": {
-              //     "content": "中秋节到了，放假通知",//内容
-              //     "setDate":XXXXXX,//定时任务时间
-              //     "title": "中秋节快乐",//标题
-              //     "classId": "164",//班级id
-              //     "className": "一年级二班"//班级名称
-              //   },
-              //   "success": true
-              // }
-              // //公告返回数据格式，用于回显
-              // {
-              //   "message": "获取成功！",
-              //   "data": {
-              //     "content": "国庆节就要到了，按规定所有学生放假，高三学生1号到3号休息，4号返校进行上课，相关老师安排好时间，个部门安排好值班人员",
-              //     "setDate":XXXXXX,
-              //     "title": "国庆节放假公告",
-              //     "type": 0//0全部；1全部老师；2全部学生,3置空，都不选择
-              //   },
-              //   "success": true
-              // }
-
-        }
-      })
-  }
-  deleteInform(){
-    const url =
-        "http://" +
-        "www.cn901.net" +
-        ":8111" +
-        "/AppServer/ajax/teacherApp_ deleteNotice.do";
-    const params = {
-              noticeId:'',
+              noticeId:classTimeId,
               token:global.constants.token  
         };
     http.get(url, params).then((resStr) => {
         let resJson = JSON.parse(resStr);
         if(resJson.success){
-
+          Alert.alert('','撤回成功！',[{},
+          {text:'ok',onPress:()=>{
+            this.props.navigation.navigate({
+              name:'Teacher_Home',
+              params:{
+                type:'freshInform'
+              }
+            })
+          }}
+        ])
         }
       })
   }
@@ -149,21 +118,22 @@ class Tea_Informcontent extends Component {
               noReadNum:resJson.data.noReadNum,
               noreadList:resJson.data.noreadList,
               isAuthor:resJson.data.isAuthor,
-              isUpdate:resJson.data.isUpdate
+              isUpdate:resJson.data.isUpdate,
+              author:resJson.data.author
             })
         }
       })
   }
 
   UNSAFE_componentWillMount(){
-    this.setState({taskId:this.props.taskId,type:this.props.type})
+    this.setState({classTimeId:this.props.taskId,type:this.props.type})
     this.fetchData(this.props.taskId,this.props.type)
   }
   
   render() {
     return (
       <View style={{backgroundColor:'#fff'}}>
-            <ScrollView style={{width:screenWidth,height:screenHeight*0.92}}>
+            <ScrollView style={{width:screenWidth,borderTopWidth:0.5}}>
                 {/* *未读的通知或公告将调用Api修改状态 */}
                 {/* {(status == 5)? (this.updateStatus(status , type , learnId)) : null} */}
                 <View style={{paddingBottom:20,borderBottomWidth:0.5}}>
@@ -173,7 +143,7 @@ class Tea_Informcontent extends Component {
                             <Image source={require('../../assets/LatestTaskImages/teName.png')} />
                         </Flex.Item>
                         <Flex.Item style={styles.createrNameText}>
-                            <Text>名字</Text>
+                            <Text>{this.state.author}</Text>
                         </Flex.Item>
                         <Flex.Item style={styles.timeImg}>
                             <Image source={require('../../assets/LatestTaskImages/timeClock.png')} />
@@ -241,12 +211,18 @@ class Tea_Informcontent extends Component {
                 <Button accessible={this.state.isUpdate} onPress={()=>{
                   if(this.state.isUpdate){
                     //可以修改
-                    this.updateInform()
+                    this.props.navigation.navigate({
+                      name:'CreateInform',
+                      params:{
+                        noticeId:this.state.classTimeId,
+                        type:this.state.type,
+                      }
+                    })
                   }
                 }} style={{backgroundColor:this.state.isUpdate?'#62C3E4':'#A9A9A9',width:'40%'}}>修改</Button>
                 <Button style={{width:'40%'}} onPress={()=>{
                   //可以撤回
-                  this.deleteInform()
+                  this.deleteInform(this.state.classTimeId)
                 }}>撤回</Button>
               </View>
             ):(<View style={{backgroundColor:'#fff'}}></View>)}

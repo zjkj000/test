@@ -1,18 +1,43 @@
 import { ScrollView, Text, TextInput, View,Image, Alert,Keyboard  } from 'react-native'
-import React, { Component } from 'react'
+import React, { Component, useEffect, useState } from 'react'
 import { CheckBox,Layout,Radio,Button  } from '@ui-kitten/components'
 import http from '../../utils/http/request'
 import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
-import { Row } from 'native-base';
 import DateTime from './DateTime'
 //   教师端  管理员创建公告
 import { useNavigation } from '@react-navigation/native';
-
-export default function Tea_CreateNotice() {
+import {Waiting,WaitLoading} from '../../utils/WaitLoading/WaitLoading'
+export default function Tea_CreateNotice(props) {
     const navigation =useNavigation();
+    const noticeId = props.route.params.noticeId
+    const type = props.route.params.type
+    const [data,setdata] = useState([])
+    useEffect(()=>{
+        if(noticeId!=''&&type!=''){
+            updateInform()
+        }
+    },[])
+    function updateInform(){
+        const url =
+            "http://" +
+            "www.cn901.net" +
+            ":8111" +
+            "/AppServer/ajax/teacherApp_getNoticeInfo.do";
+        const params = {
+                noticeId:noticeId,
+                type:type,           //类型：3  通知  4  公告
+                token:global.constants.token 
+            };
+        http.get(url, params).then((resStr) => {
+            let resJson = JSON.parse(resStr);
+            if(resJson.success){
+                setdata(resJson.data)
+            }
+          })
+      }
 
     return (
-        <Tea_CreateNoticeContent navigation={navigation}/>
+        <Tea_CreateNoticeContent navigation={navigation} data={data} noticeId={noticeId}/>
     )
 }
 
@@ -34,12 +59,19 @@ class Tea_CreateNoticeContent extends Component {
         }
     }
 
-    componentWillMount(){
-        
-
+    UNSAFE_componentWillMount(){
+        this.setState({
+            noticeId:this.props.noticeId,
+            saveOrUpdate:this.props.data!=''?'update':'save',
+            content:this.props.data.content,
+            setDate:this.props.data.setDate,
+            title:this.props.data.title,
+            AllStu:(this.props.data.type=='2'||this.props.data.type=='0')?true:false,
+            AllTea:(this.props.data.type=='1'||this.props.data.type=='0')?true:false,
+        })
     }
     //type  是  save  或  update
-    saveOrUpdateInform(type){
+    saveOrUpdateNotice(){
         const url =
             "http://" +
             "www.cn901.net" +
@@ -47,24 +79,32 @@ class Tea_CreateNoticeContent extends Component {
             "/AppServer/ajax/teacherApp_saveManageNotice.do";
         const params = {
                 userName:global.constants.userName,
-                userCN:global.constants.userCN,
+                userCN:global.constants.userCn,
                 content:this.state.content,
                 title:this.state.title,
                 type:this.state.AllStu?'2':this.state.AllTea?'1':'0',  //类型：0全部；1全部老师；2全部学生
                 setDateFlag:this.state.setDateFlag,
                 setDate:this.state.setDate,
-                saveOrUpdate:type,  
+                saveOrUpdate:this.state.saveOrUpdate,  
                 noticeId:this.state.noticeId,  
             };
+        WaitLoading.show('发布中...',-1)
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
             if(resJson.success){
-                this.props.navigation.navigate({
-                    name:'Teacher_Home',
-                    params:{
-                        Screen:'通知公告'
-                    }
-                })
+            WaitLoading.dismiss()
+            Alert.alert('','发布成功',[{},
+                {text:'确定',onPress:()=>{
+                    this.props.navigation.navigate({
+                        name:'Teacher_Home',
+                        params:{
+                            Screen:'通知公告'
+                        }
+                    })
+                }}
+          ])
+
+               
             }
         })
     }
@@ -76,6 +116,7 @@ class Tea_CreateNoticeContent extends Component {
   render() {
     return (
       <View style={{backgroundColor:'#fff',height:'100%',borderTopWidth:0.5}}>
+        <Waiting/>
         <ScrollView style={{borderTopWidth:0.5}}>
             <View style={{flexDirection:'row',borderBottomWidth:0.5,padding:10}}>
                 <Text style={{marginTop:10}}>标题:</Text>
@@ -168,7 +209,9 @@ class Tea_CreateNoticeContent extends Component {
         </ScrollView>
         <View style={{width:'100%',position:'absolute',bottom:10,flexDirection:'row',justifyContent:'space-around'}}>
             <Button onPress={()=>{this.props.navigation.goback()}} style={{width:'40%'}}>取消</Button>
-            <Button style={{width:'40%'}}>确定</Button>
+            <Button onPress={()=>{
+                this.saveOrUpdateNotice()
+            }} style={{width:'40%'}}>确定</Button>
         </View>
       </View>
     )

@@ -40,12 +40,14 @@ let firstContentId = '';
 export default function AddContentPageContainer(props) {
     const navigation = useNavigation();
 
+
     // console.log('---------AddContentPageContainer----props--------');
     // console.log('----type---', props.type , '---typeValue----' ,  props.typeValue);
     // console.log('-------------------------------------------------');
 
     //将navigation传给HomeworkProperty组件，防止路由出错
-    return <AddContentPage navigation={navigation} 
+    return <AddContentPage navigation={navigation}
+                        actionType = {props.actionType} 
                         channelCode = {props.channelCode}
                         subjectCode = {props.subjectCode}
                         textBookCode = {props.textBookCode}
@@ -122,6 +124,20 @@ class AddContentPage extends React.Component {
     }
 
     UNSAFE_componentWillMount(){
+        console.log('-------add-----------componentWillMount-----------------------------');
+        this.setState({
+            channelCode: this.props.channelCode,
+            subjectCode: this.props.subjectCode,
+            textBookCode: this.props.textBookCode,
+            gradeLevelCode: this.props.gradeLevelCode,
+            pointCode: this.props.pointCode,
+            contentList: this.props.contentList,    //底部显示的导学案内容列表
+
+            selectContentNum: this.props.selectContentNum,
+            selectContentList: this.props.selectContentList,
+        })
+        console.log(this.state.selectContentNum , this.state.selectContentList.length)
+        console.log('--------------------------------------------------------------------');
         this.fetchData(this.state.type , this.state.typeValue , 'PHONE'); //type typeValue deviveType
     }
 
@@ -246,20 +262,35 @@ class AddContentPage extends React.Component {
                 console.log('---------isFirstPage----',isFirstPage);
                 
                 if(resJson.data.esmodelList.length > 0){
-                    this.setState({ 
-                        contentList: resJson.data.esmodelList,
-                        learnPlanId: resJson.data.learnPlanId, //shareTag=99或10才有
-                        selectContentIndex: 0,
-                        pptList: [],
-                        selectPptIndex: 0,
-                        showVideoControl: false, // 是否显示视频控制组件
-                        isPlaying: false,        // 视频是否正在播放
-                        currentTime: 0,        // 视频当前播放的时间
-                        duration: 0,           // 视频的总时长
-                        playFromBeginning: false, // 是否从头开始播放
-                    },()=>{
-                        
-                    });
+                    if(this.state.shareTag != '50'){
+                        this.setState({ 
+                            contentList: resJson.data.esmodelList,
+                            learnPlanId: this.props.learnPlanId != '' ? this.props.learnPlanId : resJson.data.learnPlanId, //shareTag=99或10才有
+                            selectContentIndex: 0,
+                            pptList: [],
+                            selectPptIndex: 0,
+                            showVideoControl: false, // 是否显示视频控制组件
+                            isPlaying: false,        // 视频是否正在播放
+                            currentTime: 0,        // 视频当前播放的时间
+                            duration: 0,           // 视频的总时长
+                            playFromBeginning: false, // 是否从头开始播放
+                        },()=>{
+                            console.log('=======add===props===learnPlanId=============', this.props.learnPlanId);
+                            console.log('=======add===state===learnPlanId=============', this.state.learnPlanId);
+                        });
+                    }else{
+                        this.setState({ 
+                            contentList: resJson.data.esmodelList,
+                            selectContentIndex: 0,
+                            pptList: [],
+                            selectPptIndex: 0,
+                            showVideoControl: false, // 是否显示视频控制组件
+                            isPlaying: false,        // 视频是否正在播放
+                            currentTime: 0,        // 视频当前播放的时间
+                            duration: 0,           // 视频的总时长
+                            playFromBeginning: false, // 是否从头开始播放
+                        });
+                    }
                 }else if(resJson.data.esmodelList.length == 0){
                     isLastPage = true;
                     Alert.alert('没有请求到导学案数据');
@@ -305,6 +336,10 @@ class AddContentPage extends React.Component {
                 this.setState({
                     selectContentNum: this.state.selectContentNum - 1,
                     selectContentList: selectContentListCopy
+                },()=>{
+                    this.props.setSelectContentNum(this.state.selectContentList.length);
+                    this.props.setSelectContentList(this.state.selectContentList);
+                    this.props.setLearnPlanId(this.state.learnPlanId);
                 })
             }
         }else{ //添加内容
@@ -313,6 +348,10 @@ class AddContentPage extends React.Component {
             this.setState({
                 selectContentNum: this.state.selectContentNum + 1,
                 selectContentList: selectContentListCopy
+            },()=>{
+                this.props.setSelectContentNum(this.state.selectContentList.length);
+                this.props.setSelectContentList(this.state.selectContentList);
+                this.props.setLearnPlanId(this.state.learnPlanId);
             })
         }
     }

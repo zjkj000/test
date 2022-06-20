@@ -1008,7 +1008,14 @@ class HomeworkProperty extends React.Component {
                                     })
                             )
                             else{
-                                Alert.alert('必填项不完整');
+                                Alert.alert(
+                                    '',
+                                    '必填项不完整',
+                                    [
+                                        {} ,
+                                        {text: '关闭',onPress: ()=>{}}
+                                    ]
+                                );
                             }
                         }}
                     >

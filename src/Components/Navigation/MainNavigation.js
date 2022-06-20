@@ -43,11 +43,12 @@ import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDeta
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
 import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
 import AssignPicturesWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/AssignPicturesWork";
-
 import Tea_CreateInform from "../../pages/Teacher/Tea_CreateInform";
 import Tea_CreateNotice from "../../pages/Teacher/Tea_CreateNotice";
 import Tea_Inform from "../../pages/Teacher/Tea_Inform";
 import Tea_Notice from "../../pages/Teacher/Tea_Notice";
+import AssignPaperContainer from "../../pages/TeacheringContent/AssignPaper";
+import AssignLearnPlanContainer from "../../pages/TeacheringContent/AssignLearnPlan";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -198,6 +199,13 @@ export default class MainNavigation extends Component {
                         }}
                     />
                     <Stack.Screen
+                        name="AssignPaper"
+                        component={AssignPaperContainer}
+                        options={{
+                            title: "布置作业",
+                        }}
+                    />
+                    <Stack.Screen
                         name="设置导学案属性"
                         component={LearnCasePropertyContainer}
                         options={{
@@ -236,7 +244,13 @@ export default class MainNavigation extends Component {
                         name="LookNotice"
                         component={Tea_Notice}
                         options={{
-                            title:'公告'
+                            title:'公告'}}
+                    />
+                    <Stack.Screen
+                        name="AssignLearnPlan"
+                        component={AssignLearnPlanContainer}
+                        options={{
+                            title: "布置导学案",
                         }}
                     />
                 </Stack.Group>

@@ -754,9 +754,6 @@ class CreateHomework extends React.Component {
     //点击“布置作业”页面的保存按钮，即保存但不布置试卷
     savePaper = () => {
         var saveParamsObj = this.setSavePapersParams();
-        console.log('---------saveParamsObj--------');
-        console.log(saveParamsObj);
-        console.log('------------------------------');
         var allParams = {
             ...saveParamsObj,
             token: global.constants.token,
@@ -1931,7 +1928,7 @@ class CreateHomework extends React.Component {
                             color: '#4DC7F8',
                             top: 10,
                         }}
-                        onPress={()=>{Alert.alert('布置')}}
+                        onPress={()=>{Alert.alert('点击下方确定按钮可布置')}}
                     >布置</Text>
                     <Text
                         style={{
@@ -2069,7 +2066,25 @@ class CreateHomework extends React.Component {
                         }}
                     >重置</Button>
                     <Button style={{width:'40%'}}
-                        onPress={()=>{this.pushAndSavePaper()}}
+                        onPress={()=>{
+                            const { startTime , endTime } = this.state;
+                            const { className } = this.state;
+                            const { assigntoWho } = this.state;
+                            const {  classFlag } = this.state;
+                            const { groupSelected , studentSelected } = this.state;
+                            if(
+                                startTime == ''
+                                || endTime == ''
+                                || className == ''
+                                || (assigntoWho == '0' && !classFlag)
+                                || (assigntoWho == '1' && groupSelected.length == 0)
+                                || (assigntoWho == '2' && studentSelected.length ==0)
+                            ){
+                                Alert.alert('请选择以上属性');
+                            }else{
+                                this.pushAndSavePaper();
+                            }
+                        }}
                     >确定</Button>
             </View>
         );

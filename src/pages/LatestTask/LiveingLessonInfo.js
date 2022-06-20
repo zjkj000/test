@@ -251,7 +251,7 @@ class LiveingLessonContent extends Component {
         <View style={{flexDirection:'column',width:'90%'}}>
             {/* 第一行  title + 图表 */}
             <View>
-                <Text style={{fontSize:23,fontWeight:'900'}}>{this.state.title}</Text>
+                <Text style={{fontSize:18,fontWeight:'600'}}>{this.state.title}</Text>
                 {this.state.status=='1'?(<View style={{position:'absolute',right:25,backgroundColor:'#FF897B',padding:5}}><Text style={{color:'#fff'}}>直播中</Text></View>):
                  this.state.status=='2'?(<View style={{position:'absolute',right:25,backgroundColor:'#7E9CFE',padding:5}}><Text style={{color:'#fff'}}>未开始</Text></View>):
                  this.state.status=='3'?(<View style={{position:'absolute',right:25,backgroundColor:'#949599',padding:5}}><Text style={{color:'#fff'}}>已结束</Text></View>):
@@ -261,18 +261,19 @@ class LiveingLessonContent extends Component {
 
             {/* 第二行 学科 + 教师 */}
             <View style={{flexDirection:'row',marginTop:10}}>
-                <Text>学科: </Text>
-                <Text>{this.state.subject}</Text>
-                <Text style={{marginLeft:50}}>教师: </Text>
-                <Text>{this.state.teacherName}</Text>
-            </View>
-
-            {/* 第三行  时间 +进入课堂 */}
-            <View style={{flexDirection:'row',marginTop:10}}>
                 <Image style={{width:17,height:17,marginRight:3}} source={require('../../assets/StatisticalForm/clander.png')}/>
                 <Text style={{marginRight:5}}>{this.state.time1}</Text>
                 <Image style={{width:17,height:17,marginRight:3}} source={require('../../assets/StatisticalForm/clock.png')}/>
                 <Text>{this.state.time2}</Text>
+                
+            </View>
+
+            {/* 第三行  时间 +进入课堂 */}
+            <View style={{flexDirection:'row',marginTop:10}}>
+                <Text>学科: </Text>
+                <Text>{this.state.subject}</Text>
+                <Text style={{marginLeft:10}}>教师: </Text>
+                <Text>{this.state.teacherName}</Text>
                 {this.state.status=='1'?(
                     <TouchableOpacity style={{position:"absolute",right:25}} onPress={()=>{Alert.alert('进入直播间')}}>
                          <Text style={{color:'#77A5BD'}}>进入课堂{'>>'}</Text>

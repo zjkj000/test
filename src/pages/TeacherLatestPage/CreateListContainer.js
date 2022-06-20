@@ -245,10 +245,13 @@ class CreateList extends React.Component {
             return (
                 <TouchableOpacity
                     onPress = {() => {
-                        //把未读消息清掉   跳转作业批改页面
+                        //把未读消息清掉   跳转页面
+                        
+                        if(todo.fNumber > 0){  //还有待批改的作业
+                            todosList[todoIndex].value.fNumber = 0;
+                            this.setState({ todos: todosList });
+                        }
 
-                        todosList[todoIndex].value.fNumber = 0;
-                        this.setState({ todos: todosList });
                         if(todo.fType=='3'){
                             //跳转  通知
                             this.props.navigation.navigate({
@@ -256,7 +259,8 @@ class CreateList extends React.Component {
                                 params:{ 
                                     taskId:todo.fId, 
                                     type:todo.fType,
-                                    data:todo
+                                    data:todo,
+                                    fNumber:todo.fNumber   // 0 已读   1  未读
                                        },
                             })
                         }else if(todo.fType=='4'){
@@ -266,7 +270,8 @@ class CreateList extends React.Component {
                                 params:{ 
                                     taskId:todo.fId, 
                                     type:todo.fType,
-                                    data:todo
+                                    data:todo,
+                                    fNumber:todo.fNumber   // 0 已读   1  未读
                                        },
                             })
                         }else{
@@ -279,13 +284,6 @@ class CreateList extends React.Component {
                             })
                         }
                         
-                        // if(todo.fNumber > 0){  //还有待批改的作业
-                        //     todosList[todoIndex].value.fNumber = 0;
-                        //     this.setState({ todos: todosList });
-                        // }else{
-                        //     Alert.alert('该功能尚未开发！！！');
-                        // }
-
                     }}
                 >
                     <View style={{flexDirection: 'row' , backgroundColor: '#fff' , padding: 10}}>
@@ -295,6 +293,8 @@ class CreateList extends React.Component {
                         </View>
                         <View style={{flexDirection: 'column',width: '80%',height:'100%'}}>
                             <Text
+                                numberOfLines={1}
+                                ellipsizeMode={"tail"}
                                 style={{
                                     color: "black",
                                     fontSize: 20,
@@ -323,9 +323,11 @@ class CreateList extends React.Component {
                                 </Text>
                             </View>
                             <View style={{flexDirection: 'row'}}>
-                                <Text style={{width: 60 , fontWeight: "400"}}>{todo.fNum1}</Text>
-                                <Text style={{width: 60 , fontWeight: "400"}}>{todo.fNum2}</Text>
-                                <Text style={{width: 60 , fontWeight: "400"}}>{todo.fNum3}</Text>
+                                <Text style={{fontWeight: "400"}}>{todo.fNum1}</Text>
+                                <Text style={{width: 5}}></Text>
+                                <Text style={{fontWeight: "400"}}>{todo.fNum2}</Text>
+                                <Text style={{width: 5}}></Text>
+                                <Text style={{fontWeight: "400"}}>{todo.fNum3}</Text>
                                 
                                 {this.showTaskProgress(todo.fType , todo.fNum4 , todo.fNum5)}
                             </View>
@@ -346,30 +348,30 @@ class CreateList extends React.Component {
     //显示任务图标
     showTaskImg(fType){
         if(fType == 1){//导学案
-            return <Image 
+            return <View style={{alignItems: 'center',paddingTop: 10}}><Image 
                         source = {require('../../assets/teacherLatestPage/learnPlan.png')}
                         style = {styles.typeImg}
-                   />
+                   /></View>
         } else if(fType == 2){//作业
-            return <Image 
+            return <View style={{alignItems: 'center',paddingTop: 10}}><Image 
                         source = {require('../../assets/teacherLatestPage/homework.png')}
                         style = {styles.typeImg}
-                   />
+                   /></View>
         }else if(fType == 3){//通知
-            return <Image 
+            return <View style={{alignItems: 'center',paddingTop: 10}}><Image 
                         source = {require('../../assets/teacherLatestPage/notice.png')}
                         style = {styles.typeImg}
-                   />
+                   /></View>
         }else if(fType == 4){//公告
-            return <Image 
+            return <View style={{alignItems: 'center',paddingTop: 10}}><Image 
                         source = {require('../../assets/teacherLatestPage/article.png')}
                         style = {styles.typeImg}
-                   />
+                   /></View>
         }else if(fType == 7){//微课
-            return <Image 
+            return <View style={{alignItems: 'center',paddingTop: 10}}><Image 
                         source = {require('../../assets/teacherLatestPage/weike.png')}
                         style = {styles.typeImg}
-                   />
+                   /></View>
         }  
     }
 
@@ -405,7 +407,7 @@ class CreateList extends React.Component {
 
     //显示任务进度
     showTaskProgress(fType , fNum4 , fNum5){
-        if(fType != 2){
+        if(fType == 1 || fType == 7){
             return(
                 <View  
                     style={{
@@ -414,15 +416,18 @@ class CreateList extends React.Component {
                         position: "absolute",
                     }}
                 >
+                    <Text style={{width: 20}}></Text>
                     <Image
                         source={require("../../assets/teacherLatestPage/progress.png")}
-                        style={{width: '85%', height: '85%' , resizeMode: "contain"}}
+                        // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
+                        style={{width: 20, height: 20 }}
                     />
                     <Text>{fNum4}</Text>
-                    <Text style={{width: 5}}></Text>
+                    <Text style={{width: 20}}></Text>
                     <Image
                         source={require("../../assets/teacherLatestPage/resourceSum.png")}
-                        style={{width: '85%', height: '85%' , resizeMode: "contain"}}
+                        // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
+                        style={{width: 20, height: 20 }}
                     />
                     <Text>{fNum5}</Text>
                 </View>
@@ -562,8 +567,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     typeImg: {
-        height: "100%",
-        width: "80%",
-        resizeMode: "stretch",
+        // height: "100%",
+        // width: "80%",
+        // resizeMode: "stretch",
+        height: 60,
+        width: 60,
+        alignContent: 'center'
     }
 });

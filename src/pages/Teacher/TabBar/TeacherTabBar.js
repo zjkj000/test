@@ -34,21 +34,31 @@ class TeacherTabBarComponent extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
+                // console.log('#############tabTeacher###############', this.props.route);
+                // this.renderHome();
                 bindBackExitApp();
             }
         );
         this._unsubscribeNavigationBlurEvent = navigation.addListener(
             "blur",
             () => {
+                // console.log('#############tabTeacher######blur#########', this.props.route);
                 removeBackExitApp();
             }
         );
     }
+
+    componentDidUpdate(){
+        // console.log('#############tabTeacher#######222########', this.props.route);
+    }
+
     componentWillUnmount() {
         this._unsubscribeNavigationBlurEvent();
         this._unsubscribeNavigationFocusEvent();
     }
     renderHome = () => {
+        // console.log('###########renderHome####################',this.props.route);
+        // console.log('---teacher-TabBar-renderHome----' , this.props.navigation.getState().routes);
         return (
             <View>
                 {/* <Text>我是教师端首页</Text> */}

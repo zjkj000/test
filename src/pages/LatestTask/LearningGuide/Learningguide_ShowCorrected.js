@@ -109,7 +109,6 @@ export default function Learningguide_ShowCorrected(props) {
                         {Item.standardAnswer==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.standardAnswer}}></RenderHTML>)}
                         <Text style={styles.Titletext}>[你的答案]</Text>
                          {Item.stuAnswer==''?(<Text>未答</Text>):(<RenderHTML source={{html:Item.stuAnswer}}></RenderHTML>)}
-                        <Text style={styles.text}>{Item.stuAnswer}</Text>
                         <View style={{height:50}}></View>
                     </ScrollView>
                   </Layout>

@@ -95,6 +95,7 @@ export default function PaperList(props) {
     }
 
     function _onRefresh(){
+      setdata([])
       setisRefresh(true)
       fetchData(isRefreshing=true);
     }
