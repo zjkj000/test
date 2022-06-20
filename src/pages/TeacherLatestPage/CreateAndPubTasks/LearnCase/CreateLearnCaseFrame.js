@@ -29,6 +29,9 @@ export default function CreateLearnCaseContainer(props) {
     // console.log('------函数式props----',props.route.params);
     const paramsData = props.route.params;
     console.log('---------------------------------');
+    console.log('createType', paramsData.createType);
+    console.log('actionType', paramsData.actionType);
+    console.log('learnPlanId', paramsData.learnPlanId);
     console.log('学段', paramsData.studyRank , paramsData.studyRankId);
     console.log('学科', paramsData.studyClass , paramsData.studyClassId);
     console.log('版本', paramsData.edition , paramsData.editionId);
@@ -59,20 +62,20 @@ class CreateLearnCase extends React.Component {
             knowledgeCode: this.props.paramsData.knowledgeCode,
             knowledge: this.props.paramsData.knowledge,
 
-            channelNameList: this.props.paramsData.channelNameList, //学段名列表（接口数据）
-            studyClassList: this.props.paramsData.studyClassList, //学科列表（接口数据）
-            editionList: this.props.paramsData.editionList, //版本列表（接口数据）
-            bookList: this.props.paramsData.bookList, //教材列表（接口数据）  
+            channelNameList: this.props.paramsData.actionType == 'create' ? this.props.paramsData.channelNameList : '', //学段名列表（接口数据）
+            studyClassList: this.props.paramsData.actionType == 'create' ? this.props.paramsData.studyClassList : '', //学科列表（接口数据）
+            editionList: this.props.paramsData.actionType == 'create' ? this.props.paramsData.editionList : '', //版本列表（接口数据）
+            bookList: this.props.paramsData.actionType == 'create' ? this.props.paramsData.bookList : '', //教材列表（接口数据）  
 
             knowledgeList: [],
 
-            learnPlanId: '', 
+            learnPlanId: this.props.paramsData.actionType == 'create' ? '' : this.props.paramsData.learnPlanId, 
 
             type: 0,
             typeValue: '',
 
-            addPaperFlag: true, //导航“添加试题”是否被选中
-            updatePaperFlag: false, //导航“调整顺序”是否被选中
+            addPaperFlag: this.props.paramsData.actionType == 'create' ? true : false, //导航“添加试题”是否被选中
+            updatePaperFlag: this.props.paramsData.actionType == 'create' ? false : true, //导航“调整顺序”是否被选中
             pushPaperFlag: false, //导航“布置作业”是否被选中
 
             filterModelVisiblity: false, //设置属性悬浮框是否显示
@@ -90,6 +93,14 @@ class CreateLearnCase extends React.Component {
             errorInfo: "",
         };
     }
+
+    UNSAFE_componentWillMount(){
+        // if(this.props.paramsData.actionType == 'update'){
+        //     this.fetchLearnPlanEditContent();
+        // }
+    }
+
+    
 
     //修改导航选中标志(添加试题、调整顺序、布置作业)
     updateFlag = (type , flag) => {
@@ -426,12 +437,22 @@ class CreateLearnCase extends React.Component {
                                 this.updateFlag(2 , this.state.updatePaperFlag);
                             }}
                         >调整顺序</Text>
-                        <Text 
-                            style={this.state.pushPaperFlag ? styles.addPaperSelect : styles.pushPaper}
-                            onPress={()=>{
-                                this.updateFlag(3 , this.state.pushPaperFlag);
-                            }}
-                        >保存或布置</Text>
+                        {}
+                        {
+                            this.props.paramsData.createType == 'TeachingPackages' 
+                            ?   <Text 
+                                    style={this.state.pushPaperFlag ? styles.addPaperSelect : styles.pushPaper}
+                                    onPress={()=>{
+                                        this.updateFlag(3 , this.state.pushPaperFlag);
+                                    }}
+                                >保存</Text>
+                            :   <Text 
+                                    style={this.state.pushPaperFlag ? styles.addPaperSelect : styles.pushPaper}
+                                    onPress={()=>{
+                                        this.updateFlag(3 , this.state.pushPaperFlag);
+                                    }}
+                                >保存或布置</Text>
+                        }
                     </View>
                     {/**筛选按钮 */}
                     {
@@ -455,6 +476,7 @@ class CreateLearnCase extends React.Component {
                 {
                      this.state.addPaperFlag 
                      ? <AddContentPageContainer
+                            actionType = {this.props.paramsData.actionType}
                             channelCode = {this.state.studyRankId}
                             subjectCode = {this.state.studyClassId}
                             textBookCode = {this.state.editionId}
@@ -478,6 +500,8 @@ class CreateLearnCase extends React.Component {
                         />
                      : this.state.updatePaperFlag
                      ? <UpdateContentPageContainer 
+                            actionType = {this.props.paramsData.actionType}
+                            learnPlanId = {this.state.learnPlanId}
                             selectContentNum = {this.state.selectContentNum}
                             setSelectContentNum = {this.setSelectContentNum}
 
@@ -485,6 +509,8 @@ class CreateLearnCase extends React.Component {
                             setSelectContentList = {this.setSelectContentList}
                      />
                      : <PushOrSaveContentPageContainer
+                            createType = {this.props.paramsData.createType}
+                            actionType = {this.props.paramsData.actionType}
                             learnPlanId = {this.state.learnPlanId}
                             selectContentList = {this.state.selectContentList}
                             paramsData = {this.state.paramsDataProps}

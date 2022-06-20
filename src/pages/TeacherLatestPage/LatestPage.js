@@ -127,14 +127,41 @@ class LatestPage extends React.Component {
 
     //创建+布置作业
     createHomework = () => {
-        this.setState({ createmoduleVisible: false });
+        // this.setState({ createmoduleVisible: false });
         this.props.navigation.navigate("设置作业属性", {});
     }
 
     //创建+布置导学案
     createLearnCase = () => {
-        this.setState({ createmoduleVisible: false });
-        this.props.navigation.navigate("设置导学案属性", {});
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate({
+            name: "设置导学案属性",
+            params: {
+                createType: 'learnCase',
+            }
+        });
+    }
+
+    //创建+布置微课
+    createWeiKe = () => {
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate({
+            name: "设置导学案属性",
+            params: {
+                createType: 'weiKe',
+            }
+        });
+    }
+
+    //创建授课包
+    createTeachingPackages = () => {
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate({
+            name: "设置导学案属性",
+            params: {
+                createType: 'TeachingPackages',
+            }
+        });
     }
 
 
@@ -204,7 +231,7 @@ class LatestPage extends React.Component {
                         title="创建授课包"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            Alert.alert('该部分暂时未开发！')
+                            this.createTeachingPackages();
                         }}
                     />
                     <MenuItem
@@ -221,18 +248,24 @@ class LatestPage extends React.Component {
                     />
                     <MenuItem
                         title="创建导学案+布置"
-                        onPress={this.createLearnCase}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.createLearnCase();
+                        }}
                     />
                     <MenuItem 
                         title = "创建微课+布置"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            Alert.alert('该部分暂时未开发！')
+                            this.createWeiKe();
                         }}
                     />
                     <MenuItem 
                         title = "创建作业+布置"
-                        onPress={this.createHomework}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.createHomework();
+                        }}
                     />
                     <MenuItem
                         title="选导学案布置"
@@ -341,7 +374,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     todoList: {
-        height: screenHeight * 0.8,
+        height: screenHeight * 1,
+        backgroundColor: '#fff'
     },
     flexNew: {
         paddingTop: screenHeight * 0.02,

@@ -31,8 +31,15 @@ let textCourseExpansion = ''; //设置属性---课外扩展
 
 export default function LearnCasePropertyContainer(props) {
     const navigation = useNavigation();
+    // console.log('=========================================================',props.route.params)
+    if(props.route.params.createType == 'weiKe'){
+        // console.log('=========================================================',props.route.params.createType == 'weiKe')
+        navigation.setOptions({title: '设置微课属性'});
+    }else if(props.route.params.createType == 'TeachingPackages'){
+        navigation.setOptions({title: '设置授课包属性'});
+    }
     //将navigation传给LearnCaseProperty组件，防止路由出错
-    return <LearnCaseProperty navigation={navigation} />;
+    return <LearnCaseProperty navigation={navigation} createType={props.route.params.createType}/>;
 }
 
 class LearnCaseProperty extends React.Component {
@@ -995,6 +1002,8 @@ class LearnCaseProperty extends React.Component {
                                     this.props.navigation.navigate({
                                         name: '创建导学案',
                                         params: {
+                                            createType: this.props.createType,
+                                            actionType: 'create',
                                             name: textInputName,
                                             introduction: textInputPaper,
                                             useAim: this.state.useAim,

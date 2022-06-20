@@ -97,7 +97,7 @@ class LatestTask extends React.Component {
 
     //点击文件夹图标跳转
     packagesPage = () => {
-        this.setState({ resourceRead: 1 }); //资料夹状态改为已读
+        this.setState({ resourceRead: 0 }); //资料夹状态改为已读
         console.log("文件夹页面跳转");
         this.props.navigation.navigate("资料夹", {});
     };
@@ -180,7 +180,7 @@ class LatestTask extends React.Component {
         //若返回数据的data值为0则不显示红点，否则存在未读则显示
         //资料夹图标只要被点击，就默认资料均被读，从资料夹页面返回时就不再显示红点标志
 
-        return this.state.resourceRead == 0 ? ( //测试==0，之后需要改为！=0
+        return this.state.resourceRead != 0 ? ( //测试==0，之后需要改为！=0
             <View style={styles.rightNumView}>
                 <Image
                     source={require("../../assets/LatestTaskImages/rightNum.png")}
@@ -228,16 +228,16 @@ class LatestTask extends React.Component {
                         onPress={this.handleGuidance}
                         style={styles.menuItem}
                     />
-                    {/*<MenuItem 
+                    {/* <MenuItem 
                         title = "授课包"
                         onPress={this.handleTeachingPackages}
                         style={styles.menuItem}
-                    />
+                    /> */}
                     <MenuItem 
                         title = "微课"
                         onPress={this.handleMicroClass}
                         style={styles.menuItem}
-                    />*/}
+                    />
                     <MenuItem
                         title="通知"
                         onPress={this.handleInform}
@@ -304,7 +304,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#6CC5CB",
     },
     todoList: {
-        height: screenHeight * 0.8,
+        height: screenHeight * 1,
+        backgroundColor: '#fff'
     },
     flexNew: {
         paddingTop: 0,

@@ -196,10 +196,13 @@ class ContentList extends React.Component {
                             <View style={{flexDirection: 'column',width: screenWidth*0.8,height:'100%'}}>
                                 <View style={{flexDirection: 'row'}}>
                                     <Text
+                                        numberOfLines={1}
+                                        ellipsizeMode={"tail"}
                                         style={{
                                             color: "black",
                                             fontSize: 20,
                                             fontWeight: "900",
+                                            width: screenWidth*0.6
                                         }}
                                     >
                                         {todo.name}
@@ -280,13 +283,15 @@ class ContentList extends React.Component {
                 >
                     <Image
                         source={require("../../assets/teacherLatestPage/progress.png")}
-                        style={{width: '85%', height: '85%' , resizeMode: "contain"}}
+                        // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
+                        style={{width: 20, height: 20 }}
                     />
                     <Text>{propertyCount}</Text>
-                    <Text style={{width: 5}}></Text>
+                    <Text style={{width: 20}}></Text>
                     <Image
                         source={require("../../assets/teacherLatestPage/resourceSum.png")}
-                        style={{width: '85%', height: '85%' , resizeMode: "contain"}}
+                        // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
+                        style={{width: 20, height: 20 }}
                     />
                     <Text>{resCount}</Text>
                 </View>
@@ -309,14 +314,26 @@ class ContentList extends React.Component {
                 >
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
-                            this.props.navigation.navigate({
-                                                name:'AssignPicturePaperWork',
-                                                params:{
-                                                paperName:name,
-                                                paperId:id
-                                                }
+                            if(todo.paperType == '6'){ //拍照布置作业布置
+                                this.props.navigation.navigate({
+                                    name:'AssignPicturePaperWork',
+                                    params:{
+                                        paperName:name,
+                                        paperId:id
+                                    }
                                 })
-                                }}>
+                            }else{
+                                console.log('============!!!!!!!!!!!!=============',todo)
+                                this.props.navigation.navigate({
+                                    name:'AssignPaper',
+                                    params:{
+                                        paperId: todo.id,
+                                        paperName: todo.name,
+                                    }
+                                })
+                                // Alert.alert('选题布置作业布置还未开发');
+                            }
+                        }}>
                             布置
                         </Text>
                     </View>
@@ -327,7 +344,7 @@ class ContentList extends React.Component {
                                 if(todo.paperType == '6'){
                                     Alert.alert('拍照布置作业编辑');
                                 }else{
-                                    console.log(todo); //选题布置作业
+                                    console.log(todo); //选题布置作业编辑
                                     this.props.navigation.navigate({
                                         name:'创建作业',
                                         params:{
@@ -374,13 +391,54 @@ class ContentList extends React.Component {
                     }}
                 >
                     <View style={styles.select}>
-                        <Text style={styles.selectContent} onPress={() => {Alert.alert('该功能还未写！！！')}}>
+                        <Text style={styles.selectContent} onPress={() => {
+                            // Alert.alert('该功能还未写！！！')
+                            this.props.navigation.navigate({
+                                name:'AssignLearnPlan',
+                                params:{
+                                    learnPlanId: todo.id,
+                                    learnPlanName: todo.name,
+                                    pushType: todoImg == 'learnPlan.png' ? 'learnPlan' : 'weike'
+                                }
+                            })
+                        }}>
                             布置
                         </Text>
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
-                        <Text style={styles.selectContent}  onPress={() => {Alert.alert('该功能还未写！！！')}}>
+                        <Text style={styles.selectContent}  onPress={() => {
+                            // Alert.alert('该功能还未写！！！')
+                            {console.log(todo)}
+                            {console.log('gradeBook' , todo.gradeBook)}
+                            {console.log('gradeBookCode' , todo.gradeBookCode)}
+                            var createTypeTemp = '';
+                            if(todoImg  == 'learnPlan.png'){
+                                createTypeTemp = 'learnCase';
+                            }else{
+                                createTypeTemp = 'weiKe';
+                            }
+                            this.props.navigation.navigate({
+                                name:'创建导学案',
+                                params:{
+                                    createType: createTypeTemp,
+                                    actionType: 'update',
+                                    name: name,
+                                    introduction: todo.description,
+                                    learnPlanId: id,
+                                    studyRankId: todo.channelCode,
+                                    studyRank: todo.channel,
+                                    studyClassId: todo.subjectId,
+                                    studyClass: todo.subject,
+                                    editionId: todo.textBookId,
+                                    edition: todo.textBook,
+                                    bookId: todo.gradeBook,
+                                    book: todo.gradeBookCode,
+                                    knowledgeCode: todo.knowledgeCode,
+                                    knowledge: todo.knowledge
+                                }
+                            })
+                        }}>
                             编辑
                         </Text>
                     </View>
@@ -408,7 +466,28 @@ class ContentList extends React.Component {
                     }}
                 >
                     <View style={styles.select}>
-                        <Text style={styles.selectContent} onPress={() => {Alert.alert('该功能还未写！！！')}}>
+                        <Text style={styles.selectContent} onPress={() => {
+                            this.props.navigation.navigate({
+                                name:'创建导学案',
+                                params:{
+                                    createType: 'TeachingPackages',
+                                    actionType: 'update',
+                                    name: name,
+                                    introduction: todo.description,
+                                    learnPlanId: id,
+                                    studyRankId: todo.channelCode,
+                                    studyRank: todo.channel,
+                                    studyClassId: todo.subjectId,
+                                    studyClass: todo.subject,
+                                    editionId: todo.textBookId,
+                                    edition: todo.textBook,
+                                    bookId: todo.gradeBook,
+                                    book: todo.gradeBookCode,
+                                    knowledgeCode: todo.knowledgeCode,
+                                    knowledge: todo.knowledge
+                                }
+                            })
+                        }}>
                             编辑
                         </Text>
                     </View>
@@ -435,6 +514,7 @@ class ContentList extends React.Component {
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
                 <Waiting/>
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     //定义数据显示效果
                     data={this.state.todos}
                     renderItem={this._renderItemView.bind(this)}
@@ -579,9 +659,11 @@ const styles = StyleSheet.create({
         marginBottom: 10,
     },
     typeImg: {
-        height: "100%",
-        width: "80%",
-        resizeMode: "stretch",
+        // height: "100%",
+        // width: "80%",
+        // resizeMode: "stretch",
+        height: 60,
+        width: 60
     },
     select: {
         width: screenWidth*0.15,

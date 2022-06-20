@@ -41,6 +41,8 @@ import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDeta
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
 import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
 import AssignPicturesWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/AssignPicturesWork";
+import AssignPaperContainer from "../../pages/TeacheringContent/AssignPaper";
+import AssignLearnPlanContainer from "../../pages/TeacheringContent/AssignLearnPlan";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -181,6 +183,13 @@ export default class MainNavigation extends Component {
                         }}
                     />
                     <Stack.Screen
+                        name="AssignPaper"
+                        component={AssignPaperContainer}
+                        options={{
+                            title: "布置作业",
+                        }}
+                    />
+                    <Stack.Screen
                         name="设置导学案属性"
                         component={LearnCasePropertyContainer}
                         options={{
@@ -192,6 +201,13 @@ export default class MainNavigation extends Component {
                         component={CreateLearnCaseFrame}
                         options={{
                             headerShown: false,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="AssignLearnPlan"
+                        component={AssignLearnPlanContainer}
+                        options={{
+                            title: "布置导学案",
                         }}
                     />
                 </Stack.Group>

@@ -1,30 +1,29 @@
 import { Text, View,Image,ScrollView,TouchableOpacity,TextInput,StyleSheet, Alert} from 'react-native'
 import React, { Component } from 'react'
-import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
+import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
 import { Button } from '@ui-kitten/components';
 
 import { useNavigation } from "@react-navigation/native";
-import BasePicker from '../../../utils/datetimePickerUtils/BasePicker';
-import DateTime from '../../../utils/datetimePickerUtils/DateTime';
-import http from '../../../utils/http/request';
-import Toast from '../../../utils/Toast/Toast';
-import { WaitLoading,Waiting } from '../../../utils/WaitLoading/WaitLoading';
-export default function AssignPicturesWorkContainer(props) {
+import BasePicker from '../../utils/datetimePickerUtils/BasePicker';
+import DateTime from '../../utils/datetimePickerUtils/DateTime';
+import http from '../../utils/http/request';
+import Toast from '../../utils/Toast/Toast';
+import { WaitLoading,Waiting } from '../../utils/WaitLoading/WaitLoading';
+export default function AssignLearnPlanContainer(props) {
     const navigation = useNavigation();
-    const paperName=props.route.params.paperName
-    var paperId = props.route.params.paperId
-    navigation.setOptions({title:'布置作业'});
-    return <AssignPicturesWork navigation={navigation} paperName={paperName} paperId={paperId} />;
+    // navigation.setOptions({title:'布置作业'});
+    console.log('================AssignPicturesWorkContainer=======================');
+    console.log(props.route.params);
+    console.log('==================================================================');
+    return <AssignLearnPlan navigation={navigation} paramsData={props.route.params} />;
 }
 
-class AssignPicturesWork extends Component {
+class AssignLearnPlan extends Component {
     constructor(props){
         super(props)
         this.setBeginDateTime=this.setBeginDateTime.bind(this)
         this.setEndDateTime=this.setEndDateTime.bind(this)
         this.state={
-            paperId:'',
-            paperName:'',
             assigntoWho:'0',   // 0:班级 1:小组   2:个人
             SelectKeTangStatus:false,
             beginstr:'',
@@ -42,15 +41,18 @@ class AssignPicturesWork extends Component {
             studentsList: [], //个人列表（接口返回的classList、学生信息由字符串拼接）
             studentsListTrans: [], //studentsList中拼接的学生信息挨个提取出
             studentSelected: [], //被选中的学生
-           
+
+            selectPaperNum: 0,
+            selectPaperList: [],
+            baseTypeIdLists: [],
+
         }
     }
 
     UNSAFE_componentWillMount(){
-        this.setState({paperName:this.props.paperName,
-                       paperId:this.props.paperId})
-        }
-    
+        
+    }
+
   
     updateAssignToWho(who){
         if(who!=this.state.assigntoWho){
@@ -363,6 +365,66 @@ class AssignPicturesWork extends Component {
         }
     }
 
+    //布置试卷 设置接口参数
+    setPushPapersParams = () => {
+        const { assigntoWho ,  groupSelected , studentSelected , studentsList } = this.state;
+        const classSecleted = this.state.class;
+        var keTangId = classSecleted.keTangId; //课堂id
+        var keTangName = classSecleted.keTangName; //课堂名
+        var classIdOrGroupId = classSecleted.classId;  //班级id
+        var classOrGroupName = classSecleted.className; //班级名(接口返回的班级名后面自带一个逗号,)
+        var learnType = ''; //作业布置方式 班级、个人50、小组70
+
+        var stuIds = '';
+        var stuNames = '';
+
+        var startTime = this.state.beginstr;
+        var endTime = this.state.endstr;
+
+        if(assigntoWho == '0'){ //布置给班级 （有对应的学生信息需要拼装吗，接口传空值？）
+            learnType = '50';
+            stuIds = studentsList[0].ids;
+            stuNames = studentsList[0].name;
+            // console.log('**********studentsList******',stuIds);
+            // console.log('**********studentsList.length******',studentsList.length);
+            // return;
+        }else if(assigntoWho == '1'){ //布置给小组 拼装小组id、小组名 学生id、学生姓名
+            learnType = '70';
+            classIdOrGroupId = '';
+            classOrGroupName = '';
+
+            for(let i = 0 ; i < groupSelected.length ; i++){
+                classIdOrGroupId = classIdOrGroupId + ';' + groupSelected[i].id;
+                classOrGroupName = classOrGroupName + ';' + groupSelected[i].value;
+                
+                stuIds = stuIds + ',' + groupSelected[i].ids;
+                stuNames = stuNames + ',' + groupSelected[i].name;
+            }
+        }else{ //布置给个人
+            learnType = '50';
+            
+            for(let i = 0 ; i < studentSelected.length ; i++){
+                stuIds = stuIds + ',' + studentSelected[i].id;
+                stuNames = stuNames + ',' + studentSelected[i].name;
+            }
+        }
+        return(
+            {
+                startTime: startTime,
+                endTime: endTime,
+                keTangId: keTangId,
+                classIds: classIdOrGroupId,
+                stuIds: stuIds,
+                stuNames: stuNames,
+                roomType: learnType,
+                keTangName: keTangName,
+                className: classOrGroupName,
+            }
+        );
+    }
+
+
+
     //布置页面点击布置
     SaveAssign(){
         if(this.state.beginstr==''){
@@ -382,181 +444,146 @@ class AssignPicturesWork extends Component {
             Alert.alert('请先选择布置对象')
         }else{
             WaitLoading.show('布置中...',-1)
-            //拼接提交保存的参数
-            var stuIds ='';
-            var stuNames ='';
-            var learnType ='';
-            var classIdOrGroupId = '';
-            var classOrGroupName = '';
-            if(this.state.assigntoWho=='0'){
-                learnType = '70'
-                stuIds = this.state.studentsList[0].ids
-                stuNames = this.state.studentsList[0].name
-            }else if(this.state.assigntoWho=='1'){
-                learnType = '50'
-                for(let i=0;i<this.state.groupSelected.length;i++){
-                    classIdOrGroupId = classIdOrGroupId+ ','+ this.state.groupSelected[i].id
-                    classOrGroupName = classOrGroupName+ ','+  this.state.groupSelected[i].value
-                    stuIds =stuIds +','+this.state.groupSelected[i].ids
-                    stuNames =stuNames +','+this.state.groupSelected[i].name
-                }
-                if(this.state.groupSelected.length>0){
-                    stuIds=  stuIds.substring(1)
-                    stuNames =stuNames.substring(1)
-                    classIdOrGroupId=classIdOrGroupId.substring(1)
-                    classOrGroupName = classOrGroupName.substring(1)
-                }
-            }else if(this.state.assigntoWho=='2'){
-                learnType = '70'
-                for(let i=0;i<this.state.studentSelected.length;i++){
-                    stuIds =stuIds +','+this.state.studentSelected[i].id
-                    stuNames =stuNames +','+this.state.studentSelected[i].name
-                }
-                if(this.state.studentSelected.length>0){
-                    stuIds=  stuIds.substring(1)
-                    stuNames =stuNames.substring(1)
-                }
-                
+            
+            var pushParamsObj = this.setPushPapersParams();    
+            var allParams = {
+                ...pushParamsObj,
+                token: global.constants.token,
+                assignType: 2, //只布置，不保存
+                jsonStr: '',
+                userName: global.constants.userName,
+                learnPlanName: this.props.paramsData.learnPlanName,
+                learnPlanId: this.props.paramsData.learnPlanId,
+                type: this.props.paramsData.pushType == 'learnPlan' ? 1 : 2,
+                flag: 'save',
             }
-            const url =
-                "http://" +
-                "www.cn901.net" +
-                ":8111" +
-                "/AppServer/ajax/teacherApp_phoneBuzhiZY.do";
+            const ip = global.constants.baseUrl;
+            const url = ip + "teacherApp_releaseLearnPlan.do";
             const params = {
-                paperId:this.state.paperId,		//试卷id
-                paperName:this.state.paperName,	        //含中文，前端加码	试卷name
-                userName:global.constants.userName,		//教师登录名
-                startTime:this.state.beginstr,		    //开始时间
-                endTime	:this.state.endstr,	            //结束时间
-                keTangId:this.state.keTangId,	        //课堂id
-                classOrGroupId:classIdOrGroupId,	    //班级或小组id
-                stuIds:stuIds,	                    //学生id串
-                stuNames:stuNames,               //含中文，前端加码	学生姓名串
-                learnType:learnType,		        //作业布置方式：班级70/小组50/个人70
-                keTangName:this.state.className,           //含中文，前端加码	课堂名
-                classOrGroupName:classOrGroupName,	    //含中文，前端加码	班级或小组名  
-                };
-            http.get(url, params).then((resStr) => {
-                let resJson = JSON.parse(resStr);
-                console.log('布置页面保存：',resJson)
-                if(resJson.success){
-                    Alert.alert('','作业布置成功！',[{},
-                        {text:'ok',onPress:()=>{
-                            WaitLoading.dismiss()
-                            this.props.navigation.navigate('Teacher_Home')
-                        }}
-                      ])
-                    
-                }else{
-                    WaitLoading.show_false()
-                    Toast.showDangerToast('布置失败！',1000)
-                }
-            })
-        }
+                ...allParams,
+                //callback:'ha',
+            };
+            console.log('-----pushAndSavePaper-----', Date.parse(new Date()))
+            http.get(url, params)
+                .then((resStr) => {
+                    let resJson = JSON.parse(resStr);
 
-    
+                    console.log('****************resJson.success*********', resJson);
+                    if(resJson.success){
+                        Alert.alert('','布置成功！',[{},
+                            {text:'ok',onPress:()=>{
+                                WaitLoading.dismiss()
+                                this.props.navigation.navigate('Teacher_Home')
+                            }}
+                        ])   
+                    }else{
+                        WaitLoading.show_false()
+                        Alert.alert(resJson.message);
+                        Toast.showDangerToast('布置失败！',1000)
+                    }
+                })
+        }
     }
 
-  render() {
-    return (
-    <View style={{borderTopWidth:1,backgroundColor:'#FFFFFF'}}>
-      
-      <ScrollView style={{height:'93%',}}>
-          <Waiting/>
-        <View style={{flexDirection:'row',paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
-                <Text style={{fontSize:15,marginRight:40}}>作业名称:</Text>
-                <TextInput value={this.state.paperName} placeholder='传过来的值'></TextInput>
-        </View>
+    render() {
+        return (
+        <View style={{borderTopWidth:1,backgroundColor:'#FFFFFF'}}>
         
-        <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
-            <Text style={{fontSize:15,marginRight:40}}>开始时间:</Text>
-            <Text style={{fontSize:15,}}>{this.state.beginstr}</Text>
-            <TouchableOpacity style={{position:'absolute',right:20,flexDirection:'row'}} >
-                <DateTime style={{position:'absolute',right:20,flexDirection:'row'}}  setDateTime={this.setBeginDateTime} selectedDateTime={this.state.beginstr}/>
-            </TouchableOpacity>
-        </View>
-
-        <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}> 
-            <Text style={{fontSize:15,marginRight:40}}>结束时间:</Text>
-            <Text style={{fontSize:15}}>{this.state.endstr}</Text>
-            <TouchableOpacity style={{position:'absolute',right:20,flexDirection:'row'}} >
-                <DateTime setDateTime={this.setEndDateTime} selectedDateTime={this.state.endstr}/>
-            </TouchableOpacity>
-            
-        </View>
-
-        <View style={{borderBottomWidth:1,padding:15,paddingLeft:20}}>
-                <View style={{flexDirection:'row',alignItems:'center'}}>
-                    <Text style={{fontSize:15,marginRight:40}}>选择课堂:</Text>
-                    <Text style={{fontSize:15,marginRight:20}}>{this.state.className}</Text>
-                    <TouchableOpacity onPress={()=>{this.setState({SelectKeTangStatus:!this.state.SelectKeTangStatus})}} style={{position:'absolute',right:10}}>
-                        <Image style={{width:20,height:20}} source={this.state.SelectKeTangStatus?require('../../../assets/image3/top.png'):require('../../../assets/image3/bot.png')}></Image>
-                    </TouchableOpacity>
-                </View>
-            
-            {this.state.SelectKeTangStatus?
-                        (<View style={{marginTop:20}}>
-                            {
-                                this.state.classNameList.length <= 0
-                                    ? this.fetchClassNameList()
-                                    : null
-                            }
-                            {
-                                this.state.classNameList.length > 0
-                                    ? this.showClassNameList()
-                                    : <Text>课堂列表未获取到或者为空</Text>
-                            }
-                        </View>
-                        ):(<View></View>)}
-        </View>
-
-        <View style={{flexDirection:'row',height:60,alignItems:'center'}}>
-            <Text style={{fontSize:15,marginRight:40,marginLeft:30}}>布置给</Text>
-            <Button onPress={()=>{this.updateAssignToWho('0');this.setState({SelectKeTangStatus:false})}} style={{marginRight:20}} appearance={this.state.assigntoWho=='0'?'filled':'ghost'}>班级</Button>
-            <Button onPress={()=>{this.updateAssignToWho('1');this.setState({SelectKeTangStatus:false})}} style={{marginRight:20}} appearance={this.state.assigntoWho=='1'?'filled':'ghost'}>小组</Button>
-            <Button onPress={()=>{this.updateAssignToWho('2');this.setState({SelectKeTangStatus:false})}} appearance={this.state.assigntoWho=='2'?'filled':'ghost'}>个人</Button>
-            
-        </View>
-
-        <ScrollView>
-            <View style={{alignItems:'center',marginTop:15}}>
-                {this.showAssignToWho()}
+        <ScrollView style={{height:'93%',}}>
+            <Waiting/>
+            <View style={{flexDirection:'row',paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
+                    <Text style={{fontSize:15,marginRight:40}}>作业名称:</Text>
+                    <TextInput value={this.props.paramsData.learnPlanName} placeholder='传过来的值'></TextInput>
             </View>
-                
-        </ScrollView>
-      </ScrollView>
+            
+            <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
+                <Text style={{fontSize:15,marginRight:40}}>开始时间:</Text>
+                <Text style={{fontSize:15,}}>{this.state.beginstr}</Text>
+                <TouchableOpacity style={{position:'absolute',right:20,flexDirection:'row'}} >
+                    <DateTime style={{position:'absolute',right:20,flexDirection:'row'}}  setDateTime={this.setBeginDateTime} selectedDateTime={this.state.beginstr}/>
+                </TouchableOpacity>
+            </View>
 
-      {/* 按钮区域 */}
-      <View style={{flexDirection:'row',justifyContent:'space-around'}}>
-            <Button onPress={()=>{
-                            this.setState({
-                                beginstr: '',
-                                endstr: '',
-                                className: '', //选择课堂
-                                SelectKeTangStatus: false, //是否显示课堂列表
-                                beginstr:'',
-                                endstr:'',
-                                assigntoWho: '0', //布置作业对象 0:班级 1：小组 2:个人
-                                class: {}, //所选中的课堂对应的班级信息
-                                classFlag: false, //是否选中班级
-                                groupSelected: [], //被选中的小组
-                                // studentsList: [], //个人列表（接口返回的classList、学生信息由字符串拼接）
-                                //studentsListTrans: [], //studentsList中拼接的学生信息挨个提取出
-                                studentSelected: [], //被选中的学生
-                                keTangId:'',
-                                classOrGroupId:'',
-                                // studentsListTrans: [], //studentsList中拼接的学生信息挨个提取出
-                            })
-                        }}
-             style={{width:'40%'}} >重置</Button>
-            <Button onPress={()=>{
-                this.SaveAssign()
-            }} style={{width:'40%'}}>确定</Button>
-      </View>
-    </View>
-    )
-  }
+            <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}> 
+                <Text style={{fontSize:15,marginRight:40}}>结束时间:</Text>
+                <Text style={{fontSize:15}}>{this.state.endstr}</Text>
+                <TouchableOpacity style={{position:'absolute',right:20,flexDirection:'row'}} >
+                    <DateTime setDateTime={this.setEndDateTime} selectedDateTime={this.state.endstr}/>
+                </TouchableOpacity>
+                
+            </View>
+
+            <View style={{borderBottomWidth:1,padding:15,paddingLeft:20}}>
+                    <View style={{flexDirection:'row',alignItems:'center'}}>
+                        <Text style={{fontSize:15,marginRight:40}}>选择课堂:</Text>
+                        <Text style={{fontSize:15,marginRight:20}}>{this.state.className}</Text>
+                        <TouchableOpacity onPress={()=>{this.setState({SelectKeTangStatus:!this.state.SelectKeTangStatus})}} style={{position:'absolute',right:10}}>
+                            <Image style={{width:20,height:20}} source={this.state.SelectKeTangStatus?require('../../assets/image3/top.png'):require('../../assets/image3/bot.png')}></Image>
+                        </TouchableOpacity>
+                    </View>
+                
+                {this.state.SelectKeTangStatus?
+                            (<View style={{marginTop:20}}>
+                                {
+                                    this.state.classNameList.length <= 0
+                                        ? this.fetchClassNameList()
+                                        : null
+                                }
+                                {
+                                    this.state.classNameList.length > 0
+                                        ? this.showClassNameList()
+                                        : <Text>课堂列表未获取到或者为空</Text>
+                                }
+                            </View>
+                            ):(<View></View>)}
+            </View>
+
+            <View style={{flexDirection:'row',height:60,alignItems:'center'}}>
+                <Text style={{fontSize:15,marginRight:40,marginLeft:30}}>布置给</Text>
+                <Button onPress={()=>{this.updateAssignToWho('0');this.setState({SelectKeTangStatus:false})}} style={{marginRight:20}} appearance={this.state.assigntoWho=='0'?'filled':'ghost'}>班级</Button>
+                <Button onPress={()=>{this.updateAssignToWho('1');this.setState({SelectKeTangStatus:false})}} style={{marginRight:20}} appearance={this.state.assigntoWho=='1'?'filled':'ghost'}>小组</Button>
+                <Button onPress={()=>{this.updateAssignToWho('2');this.setState({SelectKeTangStatus:false})}} appearance={this.state.assigntoWho=='2'?'filled':'ghost'}>个人</Button>
+                
+            </View>
+
+            <ScrollView>
+                <View style={{alignItems:'center',marginTop:15}}>
+                    {this.showAssignToWho()}
+                </View>
+                    
+            </ScrollView>
+        </ScrollView>
+
+        {/* 按钮区域 */}
+        <View style={{flexDirection:'row',justifyContent:'space-around'}}>
+                <Button onPress={()=>{
+                                this.setState({
+                                    beginstr: '',
+                                    endstr: '',
+                                    className: '', //选择课堂
+                                    SelectKeTangStatus: false, //是否显示课堂列表
+                                    beginstr:'',
+                                    endstr:'',
+                                    assigntoWho: '0', //布置作业对象 0:班级 1：小组 2:个人
+                                    class: {}, //所选中的课堂对应的班级信息
+                                    classFlag: false, //是否选中班级
+                                    groupSelected: [], //被选中的小组
+                                    // studentsList: [], //个人列表（接口返回的classList、学生信息由字符串拼接）
+                                    //studentsListTrans: [], //studentsList中拼接的学生信息挨个提取出
+                                    studentSelected: [], //被选中的学生
+                                    keTangId:'',
+                                    classOrGroupId:'',
+                                    // studentsListTrans: [], //studentsList中拼接的学生信息挨个提取出
+                                })
+                            }}
+                style={{width:'40%'}} >重置</Button>
+                <Button onPress={()=>{
+                    this.SaveAssign()
+                }} style={{width:'40%'}}>确定</Button>
+        </View>
+        </View>
+        )
+    }
 }
 
 const styles = StyleSheet.create({
