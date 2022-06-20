@@ -240,9 +240,9 @@ class HomeworkProperty extends React.Component {
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                // console.log('--------知识点数据------');
-                // console.log(resJson.data);
-                // console.log('------------------------');
+                console.log('--------知识点数据----property--',typeof(resJson.data));
+                console.log(resJson.data);
+                console.log('------------------------');
                 this.setState({ knowledgeList: resJson.data });
             })
             .catch((error) => {
@@ -955,7 +955,7 @@ class HomeworkProperty extends React.Component {
                 <View
                     style={{
                         flexDirection: 'row',
-                        backgroundColor: '#fff',
+                        bacgroundColor: '#fff',
                         top: '100%',
                         //height: '8%',
                         position: 'absolute',
@@ -974,17 +974,18 @@ class HomeworkProperty extends React.Component {
                     <Button style={styles.button}
                         onPress={() => { 
                             //console.log('----------',textInputName , textInputPaper); 
-                            // if(
-                            //     textInputName != ''
-                            //     && this.state.studyRank != ''
-                            //     && this.state.studyClass != ''
-                            //     && this.state.edition != ''
-                            //     && this.state.book != ''
-                            //     && this.state.knowledge != ''
-                            // )(
+                            if(
+                                textInputName != ''
+                                && this.state.studyRank != ''
+                                && this.state.studyClass != ''
+                                && this.state.edition != ''
+                                && this.state.book != ''
+                                && this.state.knowledge != ''
+                            )(
                                     this.props.navigation.navigate({
                                         name: '创建作业',
                                         params: {
+                                            type: 'create',
                                             name: textInputName,
                                             introduction: textInputPaper,
                                             studyRankId: this.state.studyRankId,
@@ -1005,10 +1006,10 @@ class HomeworkProperty extends React.Component {
                                             knowledgeList: this.state.knowledgeList, //从接口中返回的数据
                                         }
                                     })
-                            // )
-                            // else{
-                            //     Alert.alert('必填项不完整');
-                            // }
+                            )
+                            else{
+                                Alert.alert('必填项不完整');
+                            }
                         }}
                     >
                         确定

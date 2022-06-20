@@ -33,6 +33,9 @@ import { Icon } from "react-native-elements";
 import HomeworkPropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/HomeworkProperty";
 import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomework";
 import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
+import CreateLearnCaseFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/CreateLearnCaseFrame";
+
+import LiveingLessonInfo from "../../pages/LatestTask/LiveingLessonInfo";
 
 import PaperListContainer from '../../pages/Teacher/CorrectPaper/PaperList';
 import CorrectingPaper from '../../pages/Teacher/CorrectPaper/CorrectingPaper';
@@ -40,6 +43,11 @@ import LookCorrectDetails from '../../pages/Teacher/CorrectPaper/LookCorrectDeta
 import CreateWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/CreateWork";
 import EditWorkContioner from "../../pages/Teacher/TakePicturesAndAssignWork/EditWork";
 import AssignPicturesWorkContainer from "../../pages/Teacher/TakePicturesAndAssignWork/AssignPicturesWork";
+
+import Tea_CreateInform from "../../pages/Teacher/Tea_CreateInform";
+import Tea_CreateNotice from "../../pages/Teacher/Tea_CreateNotice";
+import Tea_Inform from "../../pages/Teacher/Tea_Inform";
+import Tea_Notice from "../../pages/Teacher/Tea_Notice";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -64,7 +72,7 @@ export default class MainNavigation extends Component {
                     headerLeft: React.ReactNode, //导航左侧区域按钮配置 不配置默认展示左箭头返回图标
                 }}
             >
-                <Stack.Screen name="Login" component={Login} />
+                <Stack.Screen name="Login" component={Login} options={{headerShown:false}} />
                 <Stack.Screen
                     name="Home"
                     component={MyTabBar}
@@ -107,6 +115,16 @@ export default class MainNavigation extends Component {
                         component={Learningguide_ShowCorrected}
                     />
                 </Stack.Group>
+
+
+                <Stack.Screen
+                        name="LiveingLession"
+                        component={LiveingLessonInfo}
+                        options={{
+                            title:'直播公开课'
+                        }}
+                    />
+
 
                 {/* 在线课堂 */}
                 <Stack.Group>
@@ -184,6 +202,41 @@ export default class MainNavigation extends Component {
                         component={LearnCasePropertyContainer}
                         options={{
                             headerShown: true,
+                        }}
+                    />
+                    <Stack.Screen
+                        name="创建导学案"
+                        component={CreateLearnCaseFrame}
+                        options={{
+                            headerShown: false,
+                        }}
+                    />
+                     <Stack.Screen
+                        name="CreateInform"
+                        component={Tea_CreateInform}
+                        options={{
+                            title:'发布通知'
+                        }}
+                    />
+                     <Stack.Screen
+                        name="CreateNotice"
+                        component={Tea_CreateNotice}
+                        options={{
+                            title:'发布公告'
+                        }}
+                    />
+                     <Stack.Screen
+                        name="LookInform"
+                        component={Tea_Inform}
+                        options={{
+                            title:'通知'
+                        }}
+                    />
+                     <Stack.Screen
+                        name="LookNotice"
+                        component={Tea_Notice}
+                        options={{
+                            title:'公告'
                         }}
                     />
                 </Stack.Group>

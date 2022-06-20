@@ -32,7 +32,6 @@ export default class SelectScore extends Component {
   }
 
   CorrretScore(value){
-    console.log('zuixin',value)
       this.setState({selectedScore:value})
   }
   
@@ -41,11 +40,11 @@ export default class SelectScore extends Component {
     list.map((item,index)=>{
       let value = item
       Scorelist.push(
-        <View style={{margin:5}}>
+        <View style={{margin:5}} key={index}>
               <Button style={styles.Button_style}
                       appearance={((this.state.selectedScore!=''||this.state.selectedScore=='0')&&this.state.selectedScore==item)?'filled':'outline'}
                               onPress={()=>{
-                                console.log('最新的',this.state.selectedScore,this.state.selectedScore==item)
+                                // console.log('最新的',this.state.selectedScore,this.state.selectedScore==item)
                                 this.setState({selectedScore:value})
                                 this.props.getscore(value)
                               }}>{item=='0'?'0':item}</Button>

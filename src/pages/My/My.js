@@ -39,6 +39,7 @@ class MyPageComponent extends Component {
             value: "",
             hasAvatar: false,
             userName: "小明",
+            userCn:'',
             selectedTitle: "No items selected",
             moduleVisible: false,
             fullModuleVisible: false,
@@ -52,6 +53,9 @@ class MyPageComponent extends Component {
         });
     };
 
+    UNSAFE_componentWillMount(){
+        this.setState({userName: global.constants.userName,userCn: global.constants.userCn})
+    }
     renderAvatar = () => {
         return (
             <TouchableOpacity
@@ -167,7 +171,7 @@ class MyPageComponent extends Component {
                     <View style={styles.alternativeContainer}>
                         <Text style={styles.textLeft}>账号信息</Text>
                         <Text style={styles.textRight}>
-                            {this.state.userName}
+                            {this.state.userCn+'('+this.state.userName+')'}
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -241,7 +245,7 @@ class MyPageComponent extends Component {
                                         //         type:'new'   //区别是新进去的还是选完进去的
                                         //     }
                                         // })
-                                        this.props.navigation.navigate('vvnew')
+                                        this.props.navigation.navigate('LiveingLession')
                                     }
                             }
                 >

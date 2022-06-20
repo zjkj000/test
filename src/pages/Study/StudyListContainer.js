@@ -524,6 +524,7 @@ class StudyList extends React.Component {
         return (
             <View>
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     //定义数据显示效果
                     data={this.state.todos}
                     renderItem={this._renderItemView.bind(this)}

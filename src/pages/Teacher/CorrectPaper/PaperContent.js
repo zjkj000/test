@@ -24,7 +24,7 @@ export default class PaperContent extends Component {
             questionID: 'PRQUI6000703359',                      //试题id
             status: '2',                                        //状态1正确；2错误；3部分答对；4手工未阅 
             type: "60000054",
-
+            correctingstatus:'',
 
             paperId:'826c0915-2e9c-47bb-ab07-ac8f2f66b9ce',     //试卷id
             userName: 'UN97225',                                //学生登录名
@@ -34,9 +34,9 @@ export default class PaperContent extends Component {
             orderCount: 13,                                     //试题的总题数
             stuscore: 0,                                          //学生得分    初始得分    要根据这个选中得分选项的                    				
             shitiShow:'填数。<br>（1）5+□=9<br>（2）2+□=7<br>（3）1+7-3=□<br>（4）8-2+3=□<br><br>',     //试题题面
-            stuAnswer: '11',                                      //学生答案，如果为空，表示学生未作答
-            shitiAnswer: '1' ,                                    //试题答案
-            shitiAnalysis:'11',
+            stuAnswer: '',                                      //学生答案，如果为空，表示学生未作答
+            shitiAnswer: '' ,                                    //试题答案
+            shitiAnalysis:'',
            
             }
      }
@@ -56,6 +56,7 @@ export default class PaperContent extends Component {
         userName:this.props.userName,
         userCn:this.props.userCn,
         type:this.props.type,
+        correctingstatus:this.props.correctingstatus,
         CorrectResultList:this.props.CorrectResultList})
     }
     
@@ -84,31 +85,32 @@ export default class PaperContent extends Component {
                   <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                       <Text style={styles.Titletext}>[{this.state.data.typeName}]</Text>
                       <View style={{flexDirection:'row',marginTop:4}}>
-                        <Text style={{color:'#59B9E0',fontSize:20}}>({this.state.data.order}/</Text>
-                        <Text style={{color:'#000000',fontSize:20}}> {this.state.data.orderCount}</Text>
-                        <Text style={{color:'#59B9E0',fontSize:20}}>)</Text>
+                        <Text style={{color:'#59B9E0',fontSize:20}}>{this.state.data.order}</Text>
+                        <Text style={{color:'#000000',fontSize:20}}>/{this.state.data.orderCount}</Text>
                       </View>
                   </View>
 
                 <RenderHTML contentWidth={width} source={{html:this.state.data.shitiShow}}></RenderHTML>
                 <Text style={styles.Titletext}>[得分]   {this.state.data.status==4&&CorrectResultList[i].hand==0?'':this.state.CorrectResultList[i].stuscore}</Text>
-                
-                {/* 选择得了几分的区域 */}
-                <View style={{flexDirection:'row',flexWrap:'wrap',width:'100%'}}>
-                    
-                    {/* <SelectScore scoreList={[0,1,2,3]} selectedScore={'1'} /> */}
+                 
+                 {/* 选择得了几分的区域 */}
+                {this.state.correctingstatus=='5'?(<></>):( 
+                <View style={{flexDirection:'row',flexWrap:'wrap',width:'100%'}}> 
                     <SelectScore getscore={this.setscore} scoreList={selectScore}  selectedScore={newSelectedScore}></SelectScore>
-                    {/* <SelectScore></SelectScore> */}
-                </View>
+                </View>)}
+               
+               
                 
                 <Text style={styles.Titletext}>[学生答案]</Text>
-                {this.state.stuAnswer==''?<Text>未答</Text>:<Text>{this.state.data.stuAnswer}</Text>}
+
+                {this.state.data.stuAnswer==''?<Text style={{fontSize:20,marginBottom:10}}>未答</Text>: <RenderHTML contentWidth={width} source={{html:this.state.data.stuAnswer}}></RenderHTML>}
                
                 <Text style={styles.Titletext}>[标准答案]</Text>
-                <RenderHTML contentWidth={width} source={this.state.data.shitiAnswer}></RenderHTML>  
+      
+                {this.state.data.shitiAnswer==''?<Text style={{fontSize:20,marginBottom:10}}>略</Text>:<RenderHTML contentWidth={width} source={{html:this.state.data.shitiAnswer}}></RenderHTML> } 
 
                 <Text style={styles.Titletext}>[解析]</Text>
-                <RenderHTML contentWidth={width} source={this.state.data.shitiAnalysis}></RenderHTML>
+                {this.state.data.shitiAnalysis==''?<Text style={{fontSize:20,marginBottom:10}}>略</Text>: <RenderHTML contentWidth={width} source={{html:this.state.data.shitiAnalysis}}></RenderHTML>}
               </View>
     )
   }

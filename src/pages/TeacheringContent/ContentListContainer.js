@@ -342,10 +342,28 @@ class ContentList extends React.Component {
                                     }
                                 })
                             }else{
-                                Alert.alert('普通试卷编辑暂未开发！')
-                            }
-                            
-                    }}>
+                                this.props.navigation.navigate({
+                                        name:'创建作业',
+                                        params:{
+                                            type: 'update',
+                                            name: name,
+                                            introduction: todo.description,
+                                            paperId: id,
+                                            studyRankId: todo.channelCode,
+                                            studyRank: todo.channel,
+                                            studyClassId: todo.subjectId,
+                                            studyClass: todo.subject,
+                                            editionId: todo.textBookId,
+                                            edition: todo.textBook,
+                                            bookId: todo.gradeBookCode,
+                                            book: todo.gradeBook,
+                                            knowledgeCode: todo.knowledgeCode,
+                                            knowledge: todo.knowledge
+                                        }
+                                    })
+                                }
+                            }}
+                        >
                             编辑
                         </Text>
                     </View>
@@ -431,6 +449,7 @@ class ContentList extends React.Component {
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
                 <Waiting/>
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     //定义数据显示效果
                     data={this.state.todos}
                     renderItem={this._renderItemView.bind(this)}

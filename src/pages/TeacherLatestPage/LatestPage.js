@@ -136,10 +136,6 @@ class LatestPage extends React.Component {
         this.setState({ createmoduleVisible: false });
         this.props.navigation.navigate("设置导学案属性", {});
     }
-    creatPictureWork = () =>{
-        this.setState({ createmoduleVisible: false });
-        this.props.navigation.navigate("CreatePicturePaperWork", {});
-    }
 
 
     //显示筛选filter
@@ -277,20 +273,29 @@ class LatestPage extends React.Component {
                     />
                     <MenuItem
                         title="拍照布置作业"
-                         onPress={this.creatPictureWork}
+                         onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate({
+                                name:'CreatePicturePaperWork',
+                            })
+                         }}
                     />
                     <MenuItem
                         title="发布通知"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            Alert.alert('该部分暂时未开发！')
+                            this.props.navigation.navigate({
+                                name:'CreateInform',
+                            })
                         }}
                     />
                     <MenuItem
                         title="发布公告"
                         onPress={()=>{
                             this.setState({ createmoduleVisible: false });
-                            Alert.alert('该部分暂时未开发！')
+                            this.props.navigation.navigate({
+                                name:'CreateNotice',
+                            })
                         }}
                     />
                 </OverflowMenu>
@@ -345,7 +350,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff",
     },
     todoList: {
-        height: screenHeight * 0.8,
+        height: screenHeight * 0.9,
+        backgroundColor:'#fff'
     },
     flexNew: {
         paddingTop: screenHeight * 0.02,

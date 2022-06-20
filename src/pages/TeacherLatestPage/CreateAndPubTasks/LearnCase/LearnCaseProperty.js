@@ -980,7 +980,7 @@ class LearnCaseProperty extends React.Component {
                     <Text style={{ width: screenWidth * 0.1 }}></Text>
                     <Button style={styles.button}
                         onPress={() => { 
-                            Alert.alert('该功能还未开发');
+                            // Alert.alert('该功能还未开发');
                             //console.log('----------',textInputName , textInputPaper); 
                             // if(
                             //     textInputName != ''
@@ -992,37 +992,37 @@ class LearnCaseProperty extends React.Component {
                             //     && textLearnSumTime != ''
                             //     && textStudyTime != ''
                             // )(
-                            //         this.props.navigation.navigate({
-                            //             name: '创建导学案',
-                            //             params: {
-                            //                 name: textInputName,
-                            //                 introduction: textInputPaper,
-                            //                 useAim: this.state.useAim,
-                            //                 learnSumTime: textLearnSumTime,
-                            //                 studyTime: textStudyTime,
-                            //                 learnAim: textLearnAim,
-                            //                 learnPoint: textLearnAim,
-                            //                 learnDiff: textLearnDiff,
-                            //                 courseSummary: textCourseSummary,
-                            //                 courseExpansion: textCourseExpansion,
-                            //                 studyRankId: this.state.studyRankId,
-                            //                 studyRank: this.state.studyRank,
-                            //                 studyClassId: this.state.studyClassId,
-                            //                 studyClass: this.state.studyClass,
-                            //                 editionId: this.state.editionId,
-                            //                 edition: this.state.edition,
-                            //                 bookId: this.state.bookId,
-                            //                 book: this.state.book,
-                            //                 knowledgeCode: this.state.knowledgeCode,
-                            //                 knowledge: this.state.knowledge,
+                                    this.props.navigation.navigate({
+                                        name: '创建导学案',
+                                        params: {
+                                            name: textInputName,
+                                            introduction: textInputPaper,
+                                            useAim: this.state.useAim,
+                                            learnSumTime: textLearnSumTime,
+                                            studyTime: textStudyTime,
+                                            learnAim: textLearnAim,
+                                            learnPoint: textLearnAim,
+                                            learnDiff: textLearnDiff,
+                                            courseSummary: textCourseSummary,
+                                            courseExpansion: textCourseExpansion,
+                                            studyRankId: this.state.studyRankId,
+                                            studyRank: this.state.studyRank,
+                                            studyClassId: this.state.studyClassId,
+                                            studyClass: this.state.studyClass,
+                                            editionId: this.state.editionId,
+                                            edition: this.state.edition,
+                                            bookId: this.state.bookId,
+                                            book: this.state.book,
+                                            knowledgeCode: this.state.knowledgeCode,
+                                            knowledge: this.state.knowledge,
 
-                            //                 channelNameList: this.state.channelNameList, //学段名列表（接口数据）
-                            //                 studyClassList: this.state.studyClassList, //学科列表（接口数据）
-                            //                 editionList: this.state.editionList, //版本列表（接口数据）
-                            //                 bookList: this.state.bookList, //教材列表（接口数据）  
-                            //                 knowledgeList: this.state.knowledgeList, //从接口中返回的数据
-                            //             }
-                            //         })
+                                            channelNameList: this.state.channelNameList, //学段名列表（接口数据）
+                                            studyClassList: this.state.studyClassList, //学科列表（接口数据）
+                                            editionList: this.state.editionList, //版本列表（接口数据）
+                                            bookList: this.state.bookList, //教材列表（接口数据）  
+                                            knowledgeList: this.state.knowledgeList, //从接口中返回的数据
+                                        }
+                                    })
                             // )
                             // else{
                             //     Alert.alert('必填项不完整');

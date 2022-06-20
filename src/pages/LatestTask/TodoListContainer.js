@@ -173,7 +173,7 @@ class TodoList extends React.Component {
             } else {
                 // console.log("componentWillUpdate*********1111", Date.parse(new Date()));
 
-                console.log('______________');
+                // console.log('______________');
                 flag = 2;
                 this._onRefresh();
             }
@@ -354,6 +354,7 @@ class TodoList extends React.Component {
                             : require("../../assets/LatestTaskImages/public-notice.png");
             //根据图标状态指定图标的url(对于已读的通知，应该不显示任何图标，此处使用三目运算，且需要require请求资源，故设置请求资源为空白图片../Image/readInform.png)
             var statusUrl = todo.status;
+            console.log('状态：',statusUrl)
             // console.log('*****任务状态图标****', todoType, statusUrl);
             const statusImg =
                 statusUrl == "1" || statusUrl == "5"
@@ -423,6 +424,7 @@ class TodoList extends React.Component {
                                     //this.setState({ todos: todosList });
                                 }
                             } else if (todoType == "导学案") {
+                                console.log('我要的++++++++',statusUrl)
                                 //学导学案
                                 if (statusUrl == 2) {
                                     navigation.navigate({
@@ -541,6 +543,7 @@ class TodoList extends React.Component {
         return (
             <View>
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     //定义数据显示效果
                     data={this.state.todos}
                     renderItem={this._renderItemView.bind(this)}

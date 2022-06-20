@@ -224,7 +224,7 @@ class TeachingContentPage extends React.Component {
 
     render() {
         return (
-            <View>
+            <View >
                 <View style={styles.header}>
                     <Flex style={styles.flexNew}>
                         <Flex style={{ width: screenWidth * 0.12 }}>
@@ -255,7 +255,7 @@ class TeachingContentPage extends React.Component {
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)}
+                    {/* {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)} */}
                     <ContentListContainer navigation={this.props.navigation}  resourceType={this.state.resourceType} searchStr={SearchText} />                   
                 </View>
             </View>
@@ -269,7 +269,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#4DC7F8",
     },
     todoList: {
-        height: screenHeight * 0.8,
+        height: screenHeight * 0.9,
+        backgroundColor:'fff'
     },
     flexNew: {
         paddingTop: screenHeight * 0.02,

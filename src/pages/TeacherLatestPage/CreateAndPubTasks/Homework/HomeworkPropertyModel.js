@@ -5,40 +5,15 @@ import {
     StyleSheet,
     Image,
     TouchableOpacity,
-    TouchableHighlight,
-    TextInput,
     Alert,
-    Platform,
     ScrollView,
-    Overlay,
-    Modal,
 } from "react-native";
-import { SearchBar } from "@ant-design/react-native";
-//import { SearchBar } from 'react-native-elements';
-import { Flex } from "@ant-design/react-native";
 import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 import { useNavigation } from "@react-navigation/native";
-//import { Container , Header , Item , Input , Icon , Button } from 'native-base';
 import http from "../../../../utils/http/request";
-import {
-    Avatar,
-    Layout,
-    Button,
-    Divider,
-    Input,
-    OverflowMenu,
-    MenuItem,
-} from "@ui-kitten/components";
-//import { ScrollView } from "react-native-gesture-handler";
-import { WebView } from 'react-native-webview';
-import HTMLView from 'react-native-htmlview';
-import RenderHtml from 'react-native-render-html';
 
 import Toast from '../../../../utils/Toast/Toast';
 
-// import Modal from 'react-native-modal';
-
-let isFetchPaperType = true;
 
 export default function HomeworkPropertyModelContainer(props) {
     const paperTypeList = props.paperTypeList; 
@@ -101,13 +76,27 @@ class HomeworkPropertyModel extends React.Component {
             knowledge: this.props.knowledge, //知识点(选中的)
             knowledgeCode: this.props.knowledgeCode, //选中的知识点项的编码
             knowledgeVisibility: false, //知识点选择列表是否显示     
-            // knowledgeModelVisibility: false, //知识点悬浮框model是否显示      
-            // knowledgeList: this.props.knowledgeList, //从接口中返回的数据
-
-            paperType: '',
-            paperTypeList: [],
-            paperTypeListFetch: [], //比paperTypeList少一个‘全部’
             paperTypeVisibility: false, //试题类型列表是否显示
+
+            //共享内容
+            questionType1: '',
+            questionTypeId1: '',
+            questionTypeList1: [], //试题类型列表
+            questionTypeListFetch1: [], 
+
+
+            //本校内容
+            questionType2: '',
+            questionTypeId2: '',
+            questionTypeList2: [], //试题类型列表
+            questionTypeListFetch2: [],
+
+
+            //私有内容
+            questionType3: '',
+            questionTypeId3: '',
+            questionTypeList3: [], //试题类型列表
+            questionTypeListFetch3: [],
 
             resetButton: false, //重置
             sureButton: true, //确定
@@ -129,14 +118,29 @@ class HomeworkPropertyModel extends React.Component {
 
     //请求试题类型
     fetchPaperType = () => {
+        const { shareContent, schoolContent, privateContent } = this.state;
+        const { studyRankId, studyClassId, editionId , bookId , knowledgeCode } = this.state;
+        var shareTag;
+        if(shareContent){
+            shareTag = '99';
+        }else if(schoolContent){
+            shareTag = '10';
+        }else if(privateContent){
+            shareTag = '50';
+        }
+        const userId = global.constants.userName;
+        const token = global.constants.token;
         const ip = global.constants.baseUrl;
-        const url = ip + "teacherApp_getQuestionTypeList.do";
+        const url = ip + "teacherApp_getQuestionTypeList1.do";
         const params = {
-            channelCode: this.state.studyRankId,
-            subjectCode: this.state.studyClassId,
-            textBookCode: this.state.editionId,
-            gradeLevelCode: this.state.bookId,
-            pointCode: this.state.knowledgeCode,
+            teacherId: userId,
+            channelCode: shareTag != '50' ? studyRankId : '',
+            subjectCode: shareTag != '50' ? studyClassId : '',
+            textBookCode: shareTag != '50' ? editionId : '',
+            gradeLevelCode: shareTag != '50' ? bookId : '',
+            pointCode: shareTag != '50' ? knowledgeCode : '',
+            token: token,
+            shareTag: shareTag
             //callback:'ha',
         };
 
@@ -150,16 +154,39 @@ class HomeworkPropertyModel extends React.Component {
 
                 if(resJson.data.length > 0){
                     var resJsonData = [];
-                    for(let i = 0 ; i < resJson.data.length ; i++){
-                        resJsonData.push((resJson.data)[i]);
+                    var paperTypeListTemp = [];
+                    if(!this.state.privateContent){  
+                        for(let i = 0 ; i < resJson.data.length ; i++){
+                            resJsonData.push(((resJson.data)[i])[1]);
+                            paperTypeListTemp.push(((resJson.data)[i])[1]);
+                            console.log('****',((resJson.data)[i])[1]);
+                        }
+                        paperTypeListTemp.splice(0 , 0 , "全部"); 
+                    }else{
+                        for(let i = 0 ; i < resJson.data.length ; i++){
+                            resJsonData.push(((resJson.data)[i]));
+                            paperTypeListTemp.push(((resJson.data)[i]));
+                            console.log('****',((resJson.data)[i]));
+                        }
+                        paperTypeListTemp.splice(0 , 0 , "全部"); 
                     }
-                    var paperTypeListTemp = resJson.data;
-                    paperTypeListTemp.splice(0 , 0 , "全部"); 
                     // console.log('----resJsonData---',resJsonData);
-                    this.setState({ 
-                        paperTypeList: paperTypeListTemp,
-                        paperTypeListFetch: resJsonData,
-                    });
+                    if(shareContent){
+                        this.setState({ 
+                            questionTypeList1: paperTypeListTemp,
+                            questionTypeListFetch1: resJsonData,
+                        });
+                    }else if(schoolContent){
+                        this.setState({ 
+                            questionTypeList2: paperTypeListTemp,
+                            questionTypeListFetch2: resJsonData,
+                        });
+                    }else{
+                        this.setState({ 
+                            questionTypeList3: paperTypeListTemp,
+                            questionTypeListFetch3: resJsonData,
+                        });
+                    }
                 }else{
                     Alert.alert('该知识点没有对应的试题');
                     Toast.showInfoToast('该知识点没有对应的试题',1000);
@@ -177,7 +204,6 @@ class HomeworkPropertyModel extends React.Component {
 
     componentWillUnmount(){
         console.log('----------设置属性------WillUnmount------');
-        isFetchPaperType = true;
     }
 
     //更新是否显示状态
@@ -260,6 +286,8 @@ class HomeworkPropertyModel extends React.Component {
                     shareContent: true,
                     schoolContent: false,
                     privateContent: false,
+                    paperTypeVisibility: false,
+                    questionType1: '', 
                 })
             }
         }else if(type == 2){
@@ -268,6 +296,8 @@ class HomeworkPropertyModel extends React.Component {
                     shareContent: false,
                     schoolContent: true,
                     privateContent: false,
+                    paperTypeVisibility: false,
+                    questionType2: '', 
                 })
             }
         }else{
@@ -276,6 +306,8 @@ class HomeworkPropertyModel extends React.Component {
                     shareContent: false,
                     schoolContent: false,
                     privateContent: true,
+                    paperTypeVisibility: false,
+                    questionType3: '', 
                 })
             }
         }
@@ -599,26 +631,67 @@ class HomeworkPropertyModel extends React.Component {
 
     //显示试题类型列表数据
     showPaperType = () => {
-        const { paperTypeList } = this.state;
-        const content = paperTypeList.map((item, index) => {
+        const { shareContent , schoolContent , privateContent } = this.state;
+        const { questionType1 , questionTypeList1 } = this.state;
+        const { questionType2 , questionTypeList2} = this.state;
+        const { questionType3 , questionTypeList3 } = this.state;
+        var questionType = '';
+        var questionTypeList = [];
+        if(shareContent){
+            questionType = questionType1;
+            questionTypeList = questionTypeList1;
+        }else if(schoolContent){
+            questionType = questionType2;
+            questionTypeList = questionTypeList2;
+        }else{
+            questionType = questionType3;
+            questionTypeList = questionTypeList3;
+        }
+        const content = questionTypeList.map((item, index) => {
             return (
                 <View key={index}>
                     <Text
                         numberOfLines={1}
                         ellipsizeMode={"tail"}
-                        style={this.state.paperType == item ?
+                        style={questionType ==  item ?
                             styles.studyRankItemSelected :
                             styles.studyRankItem
                         }
                         onPress={() => {
-                            if (this.state.paperType != item) {
-                                this.setState({
-                                    paperType: item
-                                })
+                            if (questionType !=  item) {
+                                if(shareContent){
+                                    this.setState({
+                                        questionType1: item,
+                                        questionType2: '',
+                                        questionType3: '',
+                                    })
+                                }else if(schoolContent){
+                                    this.setState({
+                                        questionType1: '',
+                                        questionType2: item,
+                                        questionType3: '',
+                                    })
+                                }else if(privateContent){
+                                    this.setState({
+                                        questionType1: '',
+                                        questionType2: '',
+                                        questionType3: item,
+                                    })
+                                }
                             } else {
-                                this.setState({
-                                    paperType: ''
-                                })
+                                if(shareContent){
+                                    this.setState({
+                                        questionType1: '',
+                                    })
+                                }else if(schoolContent){
+                                    this.setState({
+                                        questionType2: '',
+                                    })
+                                }else if(privateContent){
+                                    this.setState({
+                                        questionType3: '',
+                                    })
+                                }
                             }
                         }}
                     >
@@ -630,6 +703,46 @@ class HomeworkPropertyModel extends React.Component {
         return content;        
     }
 
+    //重新设置导学案属性
+    setFetchAgainPropertys = ()=> {
+        const { shareContent , schoolContent } = this.state;
+        const { questionType1 , questionType2 , questionType3 } = this.state;
+        const { questionTypeList1 , questionTypeList2 , questionTypeList3 } = this.state;
+        let shareTagTepm = shareContent 
+                                ? '99'
+                                : schoolContent
+                                ? '10'
+                                : '50';
+        var paperType = '';
+        var paperTypeListFetch = [];
+        if(shareContent){
+            paperType = questionType1;
+            paperTypeListFetch = questionTypeList1;
+        }else if(schoolContent){
+            paperType = questionType2;
+            paperTypeListFetch = questionTypeList2;
+        }else{
+            paperType = questionType3;
+            paperTypeListFetch = questionTypeList3;
+            console.log('*******questionType3**********', questionType3);
+        }
+        let paramsObj = {
+            shareTag: shareTagTepm,
+            studyRank: this.state.studyRank,
+            studyRankId: this.state.studyRankId,
+            studyClass: this.state.studyClass,
+            studyClassId: this.state.studyClassId,
+            edition: this.state.edition,
+            editionId: this.state.editionId,
+            book: this.state.book,
+            bookId: this.state.bookId,
+            knowledge: this.state.knowledge,
+            knowledgeCode: this.state.knowledgeCode,
+            paperType: paperType,
+            paperTypeListFetch: paperTypeListFetch,
+        };
+        this.props.setFetchAgainProperty(paramsObj);
+    }
 
 
     render() {
@@ -652,26 +765,30 @@ class HomeworkPropertyModel extends React.Component {
                     </View>
 
                     {/**学段 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(1, this.state.studyRankVisibility);
-                        }}
-                    >
-                        <View style={styles.itemView}>
-                            <Text style={styles.title}>学段:</Text>
-                            <Text style={styles.studyRank}>{this.state.studyRank}</Text>
-                            {this.state.studyRankVisibility ?
-                                <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/top.png')}
-                                />
-                                : <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/bot.png')}
-                                />
-                            }
-                        </View>
-                    </TouchableOpacity>
+                    {
+                        !this.state.privateContent
+                        ?   <TouchableOpacity
+                                onPress={() => {
+                                    this.updateVisibility(1, this.state.studyRankVisibility);
+                                }}
+                            >
+                                <View style={styles.itemView}>
+                                    <Text style={styles.title}>学段:</Text>
+                                    <Text style={styles.studyRank}>{this.state.studyRank}</Text>
+                                    {this.state.studyRankVisibility ?
+                                        <Image
+                                            style={styles.studyRankImg}
+                                            source={require('../../../../assets/teacherLatestPage/top.png')}
+                                        />
+                                        : <Image
+                                            style={styles.studyRankImg}
+                                            source={require('../../../../assets/teacherLatestPage/bot.png')}
+                                        />
+                                    }
+                                </View>
+                            </TouchableOpacity>
+                        : null
+                    }
                     {/**学段列表 */}
                     {this.state.studyRankVisibility ?
                         <View style={styles.contentlistView}>
@@ -692,26 +809,30 @@ class HomeworkPropertyModel extends React.Component {
                     <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
 
                     {/**学科 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(2, this.state.studyClassVisibility);
-                        }}
-                    >
-                        <View style={styles.itemView}>
-                            <Text style={styles.title}>学科:</Text>
-                            <Text style={styles.studyRank}>{this.state.studyClass}</Text>
-                            {this.state.studyClassVisibility ?
-                                <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/top.png')}
-                                />
-                                : <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/bot.png')}
-                                />
-                            }
-                        </View>
-                    </TouchableOpacity>
+                    {
+                        !this.state.privateContent
+                        ?   <TouchableOpacity
+                                onPress={() => {
+                                    this.updateVisibility(2, this.state.studyClassVisibility);
+                                }}
+                            >
+                                <View style={styles.itemView}>
+                                    <Text style={styles.title}>学科:</Text>
+                                    <Text style={styles.studyRank}>{this.state.studyClass}</Text>
+                                    {this.state.studyClassVisibility ?
+                                        <Image
+                                            style={styles.studyRankImg}
+                                            source={require('../../../../assets/teacherLatestPage/top.png')}
+                                        />
+                                        : <Image
+                                            style={styles.studyRankImg}
+                                            source={require('../../../../assets/teacherLatestPage/bot.png')}
+                                        />
+                                    }
+                                </View>
+                            </TouchableOpacity>
+                        : null
+                    }
                     {/**学科列表 */}
                     {this.state.studyClassVisibility ?
                         <View style={styles.contentlistView}>
@@ -733,26 +854,30 @@ class HomeworkPropertyModel extends React.Component {
                     <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
                 
                     {/**版本 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(3, this.state.editionVisibility);
-                        }}
-                    >
-                        <View style={styles.itemView}>
-                            <Text style={styles.title}>版本:</Text>
-                            <Text style={styles.studyRank}>{this.state.edition}</Text>
-                            {this.state.editionVisibility ?
-                                <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/top.png')}
-                                />
-                                : <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/bot.png')}
-                                />
-                            }
-                        </View>
-                    </TouchableOpacity>
+                    {
+                        !this.state.privateContent
+                        ?   <TouchableOpacity
+                                onPress={() => {
+                                    this.updateVisibility(3, this.state.editionVisibility);
+                                }}
+                            >
+                                <View style={styles.itemView}>
+                                    <Text style={styles.title}>版本:</Text>
+                                    <Text style={styles.studyRank}>{this.state.edition}</Text>
+                                    {this.state.editionVisibility ?
+                                        <Image
+                                            style={styles.studyRankImg}
+                                            source={require('../../../../assets/teacherLatestPage/top.png')}
+                                        />
+                                        : <Image
+                                            style={styles.studyRankImg}
+                                            source={require('../../../../assets/teacherLatestPage/bot.png')}
+                                        />
+                                    }
+                                </View>
+                            </TouchableOpacity>
+                        : null
+                    }
                     {/**版本列表 */}
                     {this.state.editionVisibility ?
                         <View style={styles.contentlistView}>
@@ -775,26 +900,30 @@ class HomeworkPropertyModel extends React.Component {
                     <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
                     
                     {/**教材 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(4, this.state.bookVisibility);
-                        }}
-                    >
-                        <View style={styles.itemView}>
-                            <Text style={styles.title}>教材:</Text>
-                            <Text style={styles.studyRank}>{this.state.book}</Text>
-                            {this.state.bookVisibility ?
-                                <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/top.png')}
-                                />
-                                : <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/bot.png')}
-                                />
-                            }
-                        </View>
-                    </TouchableOpacity>
+                    {
+                        !this.state.privateContent
+                        ?   <TouchableOpacity
+                                onPress={() => {
+                                    this.updateVisibility(4, this.state.bookVisibility);
+                                }}
+                            >
+                                <View style={styles.itemView}>
+                                    <Text style={styles.title}>教材:</Text>
+                                    <Text style={styles.studyRank}>{this.state.book}</Text>
+                                    {this.state.bookVisibility ?
+                                        <Image
+                                            style={styles.studyRankImg}
+                                            source={require('../../../../assets/teacherLatestPage/top.png')}
+                                        />
+                                        : <Image
+                                            style={styles.studyRankImg}
+                                            source={require('../../../../assets/teacherLatestPage/bot.png')}
+                                        />
+                                    }
+                                </View>
+                            </TouchableOpacity>
+                        : null
+                    }
                     {/**教材列表 */}
                     {this.state.bookVisibility ?
                         <View style={styles.contentlistView}>
@@ -818,19 +947,23 @@ class HomeworkPropertyModel extends React.Component {
                     <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
                 
                     {/**知识点 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(5, this.state.knowledgeVisibility);
-                        }}
-                    >
-                        <View style={styles.itemView}>
-                            <Text style={styles.longTitle}>知识点:</Text>
-                            <Text style={styles.studyRank}
-                                numberOfLines={1}
-                                ellipsizeMode={"tail"}
-                            >{this.state.knowledge}</Text>
-                        </View>
-                    </TouchableOpacity>
+                    {
+                        !this.state.privateContent
+                        ?   <TouchableOpacity
+                                onPress={() => {
+                                    this.updateVisibility(5, this.state.knowledgeVisibility);
+                                }}
+                            >
+                                <View style={styles.itemView}>
+                                    <Text style={styles.longTitle}>知识点:</Text>
+                                    <Text style={styles.studyRank}
+                                        numberOfLines={1}
+                                        ellipsizeMode={"tail"}
+                                    >{this.state.knowledge}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        : null
+                    }
                     {/**知识点选择悬浮页面!!! */}
                     {this.state.knowledgeVisibility ?
                         <TouchableOpacity
@@ -840,12 +973,16 @@ class HomeworkPropertyModel extends React.Component {
                                 this.props.setAllProperty(
                                     this.state.studyRank,
                                     this.state.studyRankId,
+                                    this.state.channelNameList,
                                     this.state.studyClass,
-                                    this.state.studyClassId,              
+                                    this.state.studyClassId, 
+                                    this.state.studyClassList,            
                                     this.state.edition,
                                     this.state.editionId,
+                                    this.state.editionList,
                                     this.state.book,
-                                    this.state.bookId
+                                    this.state.bookId,
+                                    this.state.bookList
                                 );
                             }}
                         >
@@ -867,7 +1004,15 @@ class HomeworkPropertyModel extends React.Component {
                     >
                         <View style={styles.itemView}>
                             <Text style={styles.title}>类型:</Text>
-                            <Text style={styles.studyRank}>{this.state.paperType}</Text>
+                            <Text style={styles.studyRank}>
+                                {
+                                    this.state.shareContent 
+                                    ? this.state.questionType1
+                                    : this.state.schoolContent
+                                    ? this.state.questionType2
+                                    : this.state.questionType3
+                                }
+                            </Text>
                             {this.state.paperTypeVisibility ?
                                 <Image
                                     style={styles.studyRankImg}
@@ -884,9 +1029,40 @@ class HomeworkPropertyModel extends React.Component {
                     {this.state.paperTypeVisibility ?
                         <View style={styles.contentlistView}>
                             {
-                                this.state.paperTypeList.length > 0
+                                this.state.shareContent 
+                                && this.state.questionTypeList1.length <= 0
+                                    ? this.fetchPaperType()
+                                    : null
+                            }
+                            {
+                                this.state.schoolContent 
+                                && this.state.questionTypeList2.length <= 0
+                                    ? this.fetchPaperType()
+                                    : null
+                            }
+                            {
+                                this.state.privateContent
+                                && this.state.questionTypeList3.length <= 0
+                                    ? this.fetchPaperType()
+                                    : null
+                            }
+                            {
+                                this.state.shareContent 
+                                && this.state.questionTypeList1.length > 0
                                     ? this.showPaperType()
-                                    : <Text>试题类型列表未获取到或者为空</Text>
+                                    : null
+                            }
+                            {
+                                this.state.schoolContent 
+                                && this.state.questionTypeList2.length > 0
+                                    ? this.showPaperType()
+                                    : null
+                            }
+                            {
+                                this.state.privateContent 
+                                && this.state.questionTypeList3.length > 0
+                                    ? this.showPaperType()
+                                    : null
                             }
                         </View>
                         : null
@@ -936,9 +1112,11 @@ class HomeworkPropertyModel extends React.Component {
                                 knowledgeCode: '', //选中的知识点项的编码
                                 knowledgeVisibility: false, //知识点选择列表是否显示 
 
-                                paperType: '',
-                                paperTypeList: [],
                                 paperTypeVisibility: false, //试题类型列表是否显示
+                            
+                                questionType1: '',
+                                questionType2: '',
+                                questionType3: ''
                             });
                         }}
                     >
@@ -947,30 +1125,24 @@ class HomeworkPropertyModel extends React.Component {
                     <Text style={this.state.sureButton ? styles.buttonSelect : styles.button}
                         onPress={() => { 
                             // Alert.alert('确定功能还未写！！！')
-                            if(this.state.paperType == ''){
-                                Alert.alert('请选择属性');
+                            if(this.state.shareContent){
+                                if(this.state.questionType1 == ''){
+                                    Alert.alert('请选择属性');
+                                }else{
+                                    this.setFetchAgainPropertys();
+                                }
+                            }else if(this.state.schoolContent){
+                                if(this.state.questionType2 == ''){
+                                    Alert.alert('请选择属性');
+                                }else{
+                                    this.setFetchAgainPropertys();
+                                }
                             }else{
-                                let shareTagTepm = this.state.shareContent 
-                                                ? '99'
-                                                : this.state.schoolContent
-                                                ? '10'
-                                                : '50';
-                                let paramsObj = {
-                                    shareTag: shareTagTepm,
-                                    studyRank: this.state.studyRank,
-                                    studyRankId: this.state.studyRankId,
-                                    studyClass: this.state.studyClass,
-                                    studyClassId: this.state.studyClassId,
-                                    edition: this.state.edition,
-                                    editionId: this.state.editionId,
-                                    book: this.state.book,
-                                    bookId: this.state.bookId,
-                                    knowledge: this.state.knowledge,
-                                    knowledgeCode: this.state.knowledgeCode,
-                                    paperType: this.state.paperType,
-                                    paperTypeListFetch: this.state.paperTypeListFetch,
-                                };
-                                this.props.setFetchAgainProperty(paramsObj);
+                                if(this.state.questionType3 == ''){
+                                    Alert.alert('请选择属性');
+                                }else{
+                                    this.setFetchAgainPropertys();
+                                }
                             }
                         }}
                     >

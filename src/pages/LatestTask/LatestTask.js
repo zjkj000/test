@@ -24,11 +24,11 @@ let SearchText = '';
 export default function LatestTaskContainer(props) {
     let learnId = props.learnId;
     let status = props.status;
-    console.log('###learnId###status##',learnId , status);
+    // console.log('###learnId###status##',learnId , status);
     const navigation = useNavigation();
 
     useEffect(()=>{
-        console.log('#####useEffect####');
+        // console.log('#####useEffect####');
         learnId = props.learnId;
         status = props.status;
     },[props.learnId , props.status])
@@ -61,7 +61,7 @@ class LatestTask extends React.Component {
         };
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
-            console.log("resStr", resJson);
+            // console.log("resStr", resJson);
             this.setState({ resourceRead: resJson.data });
             //console.log('data' , this.state.resourceRead);
             return ;
@@ -71,7 +71,7 @@ class LatestTask extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log('###learnId000###status000##', this.props.learnId , this.props.status);
+                // console.log('###learnId000###status000##', this.props.learnId , this.props.status);
                 // this.setState({});
             }
         );
@@ -290,7 +290,7 @@ class LatestTask extends React.Component {
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('###learnId000###status000##',this.props.learnId , this.props.status)}
+                    {/* {console.log('###learnId000###status000##',this.props.learnId , this.props.status)} */}
                     <TodoListContainer resourceType={this.state.resourceType} searchStr={SearchText}  learnId={this.props.learnId} status={this.props.status} />
                 </View>
             </View>
@@ -304,7 +304,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6CC5CB",
     },
     todoList: {
-        height: screenHeight * 0.8,
+        height: screenHeight * 0.9,
     },
     flexNew: {
         paddingTop: 0,

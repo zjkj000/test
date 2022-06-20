@@ -246,16 +246,39 @@ class CreateList extends React.Component {
                 <TouchableOpacity
                     onPress = {() => {
                         //把未读消息清掉   跳转作业批改页面
+
                         todosList[todoIndex].value.fNumber = 0;
                         this.setState({ todos: todosList });
-                        this.props.navigation.navigate({
-                            name: 'CorrectPaperList',
-                            params:{ 
-                                taskId:todo.fId, 
-                                type:todo.fType==1?'learnPlan':'paper'
-                                   },
-                        })
-
+                        if(todo.fType=='3'){
+                            //跳转  通知
+                            this.props.navigation.navigate({
+                                name: 'LookInform',
+                                params:{ 
+                                    taskId:todo.fId, 
+                                    type:todo.fType,
+                                    data:todo
+                                       },
+                            })
+                        }else if(todo.fType=='4'){
+                            //跳转公告
+                            this.props.navigation.navigate({
+                                name: 'LookNotice',
+                                params:{ 
+                                    taskId:todo.fId, 
+                                    type:todo.fType,
+                                    data:todo
+                                       },
+                            })
+                        }else{
+                            this.props.navigation.navigate({
+                                name: 'CorrectPaperList',
+                                params:{ 
+                                    taskId:todo.fId, 
+                                    type:todo.fType=='2'?'paper':'learnPlan'
+                                       },
+                            })
+                        }
+                        
                         // if(todo.fNumber > 0){  //还有待批改的作业
                         //     todosList[todoIndex].value.fNumber = 0;
                         //     this.setState({ todos: todosList });
@@ -415,6 +438,7 @@ class CreateList extends React.Component {
             <View>
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
                 <FlatList
+                    showsVerticalScrollIndicator={false}
                     //定义数据显示效果
                     data={this.state.todos}
                     renderItem={this._renderItemView.bind(this)}
