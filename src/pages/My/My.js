@@ -213,7 +213,9 @@ class MyPageComponent extends Component {
                     </View>
                 </TouchableOpacity>
                 <TouchableOpacity
-                    onPress={this.props.navigation.navigate("ControllerLogin")}
+                    onPress={() => {
+                        this.props.navigation.navigate("ControllerLogin");
+                    }}
                 >
                     <Divider />
                     <View style={styles.alternativeContainer}>

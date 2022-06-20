@@ -7,7 +7,7 @@ import React, { Component, useRef, useState } from "react";
 import { TouchableOpacity, View, Image } from "react-native";
 import { Icon, Button, Layout } from "@ui-kitten/components";
 import http from "../../../utils/http/request";
-import HistoryInput from "../OnlineClass/HistoryInput";
+import HistoryInput from "../../OnlineClass/HistoryInput";
 import { styles } from "./styles";
 import Toast from "../../../utils/Toast/Toast";
 import Loading from "../../../utils/loading/Loading";
@@ -110,7 +110,7 @@ export default ControllerLogin = () => {
     const handleScan = () => {
         navigation.navigate({
             name: "QRCodeScanner",
-            params: { backPage: "线上课程" },
+            params: { backPage: { name: "ControllerLogin" } },
             merge: true,
         });
     };

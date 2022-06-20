@@ -3,9 +3,9 @@ import { Button, Icon, Layout } from "@ui-kitten/components";
 import React, { Component } from "react";
 import { Image, TouchableOpacity, View, Text } from "react-native";
 import { styles } from "./styles";
-import ImageHandler from "../../utils/Camera/Camera";
-import http from "../../utils/http/request";
-import Loading from "../../utils/loading/Loading";
+import ImageHandler from "../../../utils/Camera/Camera";
+import http from "../../../utils/http/request";
+import Loading from "../../../utils/loading/Loading";
 
 export default function ControllerSharePhoto(props) {
     const navigation = useNavigation();

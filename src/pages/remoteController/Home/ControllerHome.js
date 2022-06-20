@@ -9,15 +9,15 @@ import {
 import React, { Component } from "react";
 import { View, Text, Image, TouchableOpacity } from "react-native";
 import { styles } from "./styles";
-import http from "../../utils/http/request";
-import Toast from "../../utils/Toast/Toast";
+import http from "../../../utils/http/request";
+import Toast from "../../../utils/Toast/Toast";
 import Controller from "./Controller";
 import Info from "./Info";
 import Module from "./Module";
 import Img_arr from "./Img_arr";
-import theme from "../../theme/custom-theme.json";
+import theme from "../../../theme/custom-theme.json";
 import ClassList from "./ClassList";
-import Loading from "../../utils/loading/Loading";
+import Loading from "../../../utils/loading/Loading";
 
 export default ControllerHome = () => {
     const navigation = useNavigation();
@@ -285,7 +285,7 @@ class HomeComponent extends Component {
                     >
                         <Image
                             style={styles.bottomImg}
-                            source={require("../../assets/image2/bottom/stpz.png")}
+                            source={require("../../../assets/image2/bottom/stpz.png")}
                         ></Image>
                     </TouchableOpacity>
                     <TouchableOpacity
@@ -296,13 +296,13 @@ class HomeComponent extends Component {
                     >
                         <Image
                             style={styles.bottomImg}
-                            source={require("../../assets/image2/bottom/jrdm.png")}
+                            source={require("../../../assets/image2/bottom/jrdm.png")}
                         ></Image>
                     </TouchableOpacity>
                     <TouchableOpacity onPress={this.handleQuestionAnalysis}>
                         <Image
                             style={styles.bottomImg}
-                            source={require("../../assets/image2/bottom/ckxq.png")}
+                            source={require("../../../assets/image2/bottom/ckxq.png")}
                         ></Image>
                     </TouchableOpacity>
                     <Modal visible={this.state.signModalVisible}>

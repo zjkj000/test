@@ -1,5 +1,5 @@
 import { StyleSheet } from "react-native";
-import { screenHeight, screenWidth } from "../../utils/Screen/GetSize";
+import { screenHeight, screenWidth } from "../../../utils/Screen/GetSize";
 
 export const styles = StyleSheet.create({
     mainContainer: {

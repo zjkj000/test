@@ -3,8 +3,8 @@ import React, { Component } from "react";
 import { View, Text, Image } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "./styles";
-import http from "../../utils/http/request";
-import Toast from "../../utils/Toast/Toast";
+import http from "../../../utils/http/request";
+import Toast from "../../../utils/Toast/Toast";
 import Img_arr from "./Img_arr";
 
 export default class Info extends Component {

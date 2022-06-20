@@ -1,7 +1,7 @@
 import React from "react";
 import { Button, MenuItem, OverflowMenu } from "@ui-kitten/components";
 import { TouchableOpacity, Image } from "react-native";
-import http from "../../utils/http/request";
+import http from "../../../utils/http/request";
 import { styles } from "./styles";
 
 export default function ClassList(props) {
@@ -19,7 +19,7 @@ export default function ClassList(props) {
             <TouchableOpacity onPress={getListItem}>
                 <Image
                     style={styles.smallImg}
-                    source={require("../../assets/image2/top/skbcd.png")}
+                    source={require("../../../assets/image2/top/skbcd.png")}
                 ></Image>
             </TouchableOpacity>
         );
