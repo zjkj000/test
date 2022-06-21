@@ -40,9 +40,9 @@ let focusFlag = false;
 export default function TodoListContainer(props) {
     //console.log(props.resourceType);
     const rsType = props.resourceType;
-    console.log('**rsType', rsType);
+    // console.log('**rsType', rsType);
     const searchStr1 = props.searchStr;
-    console.log('**searchStr1', searchStr1);
+    // console.log('**searchStr1', searchStr1);
     const status = props.status;
     const navigation = useNavigation();
     //将navigation传给TodoList组件，防止路由出错
@@ -81,7 +81,7 @@ class TodoList extends React.Component {
         searchStr = this.props.searchStr;
 
 
-        console.log("componentWillMount**************", 'oldtype', oldtype, 'rescouceType', this.props.resourceType, this.props.searchStr);
+        // console.log("componentWillMount**************", 'oldtype', oldtype, 'rescouceType', this.props.resourceType, this.props.searchStr);
         this.fetchData(pageNo, oldtype, searchStr, true);
     }
 
@@ -117,8 +117,8 @@ class TodoList extends React.Component {
         //oldtype = this.props.resourceType;
         //searchStr = this.props.searchStr;
 
-        console.log("componentWillUpdate*********", Date.parse(new Date()), 'type:', oldtype, 'nextProps.type:', nextProps.resourceType);
-        console.log("componentWillUpdate*********", Date.parse(new Date()), 'searchStr:', searchStr, 'nextProps.searchStr:', nextProps.searchStr);
+        // console.log("componentWillUpdate*********", Date.parse(new Date()), 'type:', oldtype, 'nextProps.type:', nextProps.resourceType);
+        // console.log("componentWillUpdate*********", Date.parse(new Date()), 'searchStr:', searchStr, 'nextProps.searchStr:', nextProps.searchStr);
 
         if (
             oldtype != nextProps.resourceType ||
@@ -126,7 +126,7 @@ class TodoList extends React.Component {
         ) {
             oldtype = nextProps.resourceType;
             searchStr = nextProps.searchStr;
-            console.log("componentWillUpdate*********0000", Date.parse(new Date()));
+            // console.log("componentWillUpdate*********0000", Date.parse(new Date()));
             //当此次请求与上次请求的数据类型不一致时，先清空上一次的数据再请求
             this.setState({
                 todos: [],
@@ -151,7 +151,7 @@ class TodoList extends React.Component {
             this.props.navigation.getState().routes[1].params = null;
 
             if (status == 3) {
-                console.log("componentWillUpdate*********0000", Date.parse(new Date()));
+                // console.log("componentWillUpdate*********0000", Date.parse(new Date()));
                 //未批改的作业，不请求数据
                 //console.log('获取到的status' , status);
                 for (var i = 0; i < todosList.length; i++) {
@@ -165,7 +165,7 @@ class TodoList extends React.Component {
                     }
                 }
             } else {
-                console.log("componentWillUpdate*********1111", Date.parse(new Date()));
+                // console.log("componentWillUpdate*********1111", Date.parse(new Date()));
 
                 console.log('______________');
                 flag = 2;
@@ -198,7 +198,7 @@ class TodoList extends React.Component {
 
     //通过fetch请求数据
     fetchData(pageNo, type, search, onRefresh = false) {
-        console.log("fetchData*********", Date.parse(new Date()));
+        // console.log("fetchData*********", Date.parse(new Date()));
         // const rsType = this.props.resourceType;
         // const searchStr = this.props.searchStr;
         const token = global.constants.token;

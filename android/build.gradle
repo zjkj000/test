@@ -13,6 +13,7 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        
     }
     dependencies {
         classpath("com.android.tools.build:gradle:4.2.2")
@@ -21,6 +22,17 @@ buildscript {
     }
 }
 
+     configurations.all {
+         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+             def requested = details.requested
+             if (requested.group == 'com.android.support') {
+                 if (!requested.name.startsWith("multidex")) {
+                     details.useVersion 'xx.x.x'
+                 }
+             }
+         }
+     }
+    
 allprojects {
     repositories {
         maven {
@@ -38,13 +50,13 @@ allprojects {
                 excludeGroup "com.facebook.react"
             }
         }
-        google()
-        maven { url 'https://www.jitpack.io' }
-        //react-native-video
-        jcenter() {
+
+         jcenter() {
             content {
                 includeModule("com.yqritc", "android-scalablevideoview")
             }
         }
+        google()
+        maven { url 'https://www.jitpack.io' }
     }
 }

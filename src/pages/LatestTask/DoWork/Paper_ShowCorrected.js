@@ -23,6 +23,7 @@ export default function Paper_ShowCorrected(props) {
       
       //getData()函数是为了获取试题资源，和学生之前可能作答的结果   得到之后设置状态success 是否成功  data 具体试题数据  dataNum题目总数  
      function  getData() {
+        const userId = global.constants.userName;
         const data_url = 
           "http://"+
           "www.cn901.net" +
@@ -39,7 +40,7 @@ export default function Paper_ShowCorrected(props) {
           // cd81138e-b440-4606-ad63-1b2449458e8d
           // learnPlanId :props.route.params.learnId,
           learnPlanId :props.route.params.learnId,
-          userName : 'ming6005',
+          userName : global.constants.userName,
           learnPlanType :props.route.params.learnPlanType?props.route.params.learnPlanType:'paper',
         }
         if(!success){
@@ -65,8 +66,8 @@ export default function Paper_ShowCorrected(props) {
          
 
     return (
-      <ViewPager  style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}
-       shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
+      <ViewPager  style={{backgroundColor:'#fff',borderTopColor:'#000000',borderTopWidth:0.5}}
+              shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
               onSelect={index => setSelectedIndex(index)}>
             
             {/* 根据这套题的data使用map遍历加载 */}
@@ -102,9 +103,9 @@ export default function Paper_ShowCorrected(props) {
                       <Image source={require('../../../assets/image3/you_03.png')}></Image>
                     </TouchableOpacity>
                     {/* 题目内容 */}
-                    <ScrollView  style={{paddingLeft:15}}>
+                    <ScrollView  style={{paddingLeft:15,backgroundColor:'#fff'}}>
                         {/* 题目名称 */}
-                        <View style={{backgroundColor:'#FFFFFF'}}>
+                        <View style={{backgroundColor:'#fff'}}>
                             <Text style={styles.Titletext}>[{Item.typeName}]</Text>
                             <View style={{position:'absolute',right:20,top:10,flexDirection:'row'}}>
                               <Text style={{color:'#59B9E0',fontSize:15}}> {selectedIndex+1}</Text>  
@@ -133,7 +134,7 @@ const styles = StyleSheet.create({
     height: "100%",
   },
   Titletext:{
-    fontWeight:'600',
+    fontWeight:'bold',
     color:	'#000000',
     fontSize: 20,
     marginTop:10,

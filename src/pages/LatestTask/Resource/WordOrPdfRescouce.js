@@ -77,6 +77,7 @@ export default class Videos extends Component {
     }else{     
         return(
             <View style={styles.area}>
+                {console.log('------url---------',this.state.resource.url , typeof(this.state.resource.url))}
                 <WebView  source={{ uri: this.state.resource.url}} />
             </View>
         );

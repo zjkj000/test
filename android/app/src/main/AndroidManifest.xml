@@ -23,17 +23,17 @@
     <application
       android:usesCleartextTraffic='true' 
       android:name=".MainApplication"
-      android:label="@string/app_name"
+      android:label="学习一点通_0.3"
       android:icon="@mipmap/ic_launcher"
       android:roundIcon="@mipmap/ic_launcher_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
       <activity
         android:name=".MainActivity"
-        android:label="@string/app_name"
+        android:label="学习一点通_0.3"
         android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
         android:launchMode="singleTask"
-        android:windowSoftInputMode="stateAlwaysHidden|adjustPan|adjustResize"
+        android:windowSoftInputMode="adjustPan"  
         >
         <intent-filter>
             <action android:name="android.intent.action.MAIN" />

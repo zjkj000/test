@@ -13,6 +13,7 @@ export default class Toast {
             position: toast.Position.Top,
             animateEasing: Easing.in(Easing.bounce),
         });
+        console.log('------showDangerToast--------',message , mm);
     }
     static showSuccessToast(message, mm) {
         toast.show(message, mm ? mm : 3000, {
@@ -24,6 +25,7 @@ export default class Toast {
             position: toast.Position.Top,
             animateEasing: Easing.in(Easing.bounce),
         });
+        console.log('------showSuccessToast--------',message , mm);
     }
     static showWarningToast(message, mm) {
         toast.show(message, mm ? mm : 2000, {
@@ -35,6 +37,7 @@ export default class Toast {
             position: toast.Position.Top,
             animateEasing: Easing.in(Easing.bounce),
         });
+        console.log('------showWarningToast--------',message , mm);
     }
     static showInfoToast(message, mm) {
         toast.show(message, mm ? mm : 3000, {
@@ -46,5 +49,6 @@ export default class Toast {
             position: toast.Position.Top,
             animateEasing: Easing.in(Easing.bounce),
         });
+        console.log('------showInfoToast--------',message , mm);
     }
 }

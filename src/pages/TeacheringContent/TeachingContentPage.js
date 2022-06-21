@@ -1,10 +1,10 @@
 import React from "react";
-import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Text, View, StyleSheet, Image, TouchableOpacity, Alert } from "react-native";
 import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
 import { Flex } from "@ant-design/react-native";
 import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation  , useRoute } from "@react-navigation/native";
 //import { Container , Header , Item , Input , Icon , Button } from 'native-base';
 import http from "../../utils/http/request";
 import {
@@ -21,10 +21,12 @@ import ContentListContainer from "./ContentListContainer";
 
 let SearchText = '';
 
-export default function LatestPageContainer() {
+export default function LatestPageContainer(props) {
+    console.log('教学内容页面：',props)
     const navigation = useNavigation();
+    const route = useRoute();
     //将navigation传给LatestTask组件，防止路由出错
-    return <TeachingContentPage navigation={navigation}></TeachingContentPage>;
+    return <TeachingContentPage navigation={navigation}   route={route}></TeachingContentPage>;
 }
 
 class TeachingContentPage extends React.Component {
@@ -39,12 +41,31 @@ class TeachingContentPage extends React.Component {
         };
     }
 
-    //第一次加载页面请求资料夹是否已读api
-    // UNSAFE_componentWillMount() {
-        
-    // }
+    componentDidMount() {
+        const { navigation } = this.props;
+        this._unsubscribeNavigationFocusEvent = navigation.addListener(
+            "focus",
+            () => {
+                console.log("TeachingContentPageFocused====================================");
+                console.log(this.props.route);
+                if (this.props.route.params !== undefined && 
+                    this.props.route.params.isRefresh !== undefined && 
+                    this.props.route.params.isRefresh
+                ) { 
+                        this.props.navigation.setParams({ isRefresh: false }); 
+                        // console.log("刷新====================================",this.props.route);
+                } 
+                console.log("====================================");
+                // bindBackExitApp();
+            }
+        );
+    }
 
-    
+
+    componentWillUnmount() {
+        this._unsubscribeNavigationFocusEvent();
+    } 
+
 
     //搜索框内容改变时触发，更新value
     onChange = (value) => {
@@ -98,29 +119,63 @@ class TeachingContentPage extends React.Component {
 
     //全部最新内容
     handleAll = () => {
-        console.log("获取全部最新内容");
-        this.setState({ resourceType: "all" });
+        this.setState({ resourceType: "all",filtermoduleVisible: false});
     };
     //作业
     handleHomework = () => {
-        console.log("获取作业内容");
-        this.setState({ resourceType: "paper" });
+        this.setState({ resourceType: "paper",filtermoduleVisible: false});
     };
     //导学案
     handleGuidance = () => {
-        console.log("获取导学案内容");
-        this.setState({ resourceType: "learnPlan" });
+        this.setState({ resourceType: "learnPlan" ,filtermoduleVisible: false});
     };
     //授课包
     handleTeachingPackages = () => {
-        console.log("获取授课包内容");
-        this.setState({ resourceType: "package" });
+        this.setState({ resourceType: "package" ,filtermoduleVisible: false});
     };
     //微课
     handleMicroClass = () => {
-        console.log("获取微课内容");
-        this.setState({ resourceType: "weike" });
+        this.setState({ resourceType: "weike" ,filtermoduleVisible: false});
     };
+
+    //创建+布置作业
+    createHomework = () => {
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate("设置作业属性", {});
+    }
+
+    //创建+布置导学案
+    createLearnCase = () => {
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate({
+            name: "设置导学案属性",
+            params: {
+                createType: 'learnCase',
+            }
+        });
+    }
+
+    //创建+布置微课
+    createWeiKe = () => {
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate({
+            name: "设置导学案属性",
+            params: {
+                createType: 'weiKe',
+            }
+        });
+    }
+
+    //创建授课包
+    createTeachingPackages = () => {
+        // this.setState({ createmoduleVisible: false });
+        this.props.navigation.navigate({
+            name: "设置导学案属性",
+            params: {
+                createType: 'TeachingPackages',
+            }
+        });
+    }
     
 
 
@@ -183,27 +238,42 @@ class TeachingContentPage extends React.Component {
                 >
                     <MenuItem
                         title="创建授课包"
-                        // onPress={this.handleAll}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.createTeachingPackages();
+                        }}
                         style={{ fontSize: 40 }}
                     />
                     <MenuItem
                         title="创建导学案+布置"
-                        // onPress={this.handleGuidance}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.createLearnCase();
+                        }}
                         style={styles.menuItem}
                     />
                     <MenuItem 
                         title = "创建微课+布置"
-                        // onPress={this.handleTeachingPackages}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.createWeiKe();
+                        }}
                         style={styles.menuItem}
                     />
                     <MenuItem 
                         title = "创建作业+布置"
-                        // onPress={this.handleMicroClass}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.createHomework();
+                        }}
                         style={styles.menuItem}
                     />
                     <MenuItem
                         title="拍照布置作业"
-                        // onPress={this.handleNotice}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate("CreatePicturePaperWork", {});
+                        }}
                         style={styles.menuItem}
                     />
                 </OverflowMenu>
@@ -213,7 +283,7 @@ class TeachingContentPage extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style={{backgroundColor:'#fff'}}>
                 <View style={styles.header}>
                     <Flex style={styles.flexNew}>
                         <Flex style={{ width: screenWidth * 0.12 }}>
@@ -245,7 +315,17 @@ class TeachingContentPage extends React.Component {
                 </View>
                 <View style={styles.todoList}>
                     {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)}
-                    <ContentListContainer resourceType={this.state.resourceType} searchStr={SearchText} />                   
+                    <ContentListContainer 
+                        navigation={this.props.navigation}  
+                        resourceType={this.state.resourceType} 
+                        searchStr={SearchText} 
+                        isRefresh= {
+                            this.props.route.params !== undefined && 
+                            this.props.route.params.isRefresh !== undefined 
+                            ? this.props.route.params.isRefresh
+                            : ''
+                        }
+                    />                   
                 </View>
             </View>
         );
@@ -259,6 +339,7 @@ const styles = StyleSheet.create({
     },
     todoList: {
         height: screenHeight * 0.8,
+        backgroundColor: '#fff'
     },
     flexNew: {
         paddingTop: screenHeight * 0.02,

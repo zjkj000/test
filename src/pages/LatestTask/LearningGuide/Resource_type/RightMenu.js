@@ -1,5 +1,5 @@
 import { Text, View,TouchableOpacity,Alert} from 'react-native'
-import React, { Component,forwardRef } from 'react'
+import React, { Component } from 'react'
 import {OverflowMenu,MenuItem} from "@ui-kitten/components";
 import http from '../../../../utils/http/request'
 import { useNavigation } from "@react-navigation/native";
@@ -24,8 +24,8 @@ export default class RightMenu extends Component {
                 ":8111" +
                 "/AppServer/ajax/studentApp_getCatalog.do"
         const params ={
-            //learnPlanId : this.props.learnPlanId,
-            learnPlanId:'f930226b-1f96-4794-8a13-73f3cf641b6b',//各种题型
+            learnPlanId : this.props.learnPlanId,
+            // learnPlanId:'f930226b-1f96-4794-8a13-73f3cf641b6b',//各种题型
             deviceType:'PHONE'
         }
         http.get(url,params).then((resStr)=>{

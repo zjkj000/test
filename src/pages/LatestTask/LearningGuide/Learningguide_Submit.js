@@ -14,6 +14,7 @@ import RenderHtml from "react-native-render-html";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../../utils/loading/Loading";
 import Toast from "../../../utils/Toast/Toast";
+import { Waiting, WaitLoading } from "../../../utils/WaitLoading/WaitLoading";
 // 提交导学案页面
 export default function Learningguide_SubmitContainer(props) {
     const start_date = props.route.params.startdate;
@@ -90,6 +91,7 @@ class Learningguide_Submit extends Component {
     }
 
     submit_answer() {
+        WaitLoading.show('提交中...',-1)
         const url =
             "http://" +
             "www.cn901.net" +
@@ -145,24 +147,36 @@ class Learningguide_Submit extends Component {
             learnPlanId: this.state.learnPlanId,
             learnPlanName: this.props.papername,
             userName: global.constants.userName,
-            userCn: "测试统一固定",
+            userCn: global.constants.userCn,
             status: newsub_status,
         };
-        var subsuccess = false;
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
-            subsuccess = resJson.success;
+            if (resJson.success) {
+                WaitLoading.dismiss()
+                Toast.showSuccessToast("导学案提交成功了!", 1000);
+                // Alert.alert('','作业布置成功！',[{},
+                //     {text:'ok',onPress:()=>this.props.navigation.navigate({
+                //         name: "Home",
+                //         params: {
+                //             learnId: this.state.learnPlanId,
+                //             status: change_status,
+                //         },
+                //     })}
+                //   ])
+                this.props.navigation.navigate({
+                    name: "Home",
+                    params: {
+                        learnId: this.state.learnPlanId,
+                        status: change_status,
+                    },
+                })
+            }else{
+                WaitLoading.show_false()
+            }
+            
         });
-        if (subsuccess) {
-            Toast.showSuccessToast("提交成功了!", 1000);
-        }
-        this.props.navigation.navigate({
-            name: "Home",
-            params: {
-                learnId: this.state.learnPlanId,
-                status: change_status,
-            },
-        });
+        
     }
 
     render() {
@@ -220,6 +234,7 @@ class Learningguide_Submit extends Component {
                         borderTopWidth: 0.5,
                     }}
                 >
+                    <Waiting/>
                     {/* 答案预览区域 */}
                     <ScrollView style={styles.preview_area}>
                         {/* 题目展示内容：序号 + 答案 */}

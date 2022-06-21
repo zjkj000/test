@@ -15,6 +15,8 @@ import Loading from "../../utils/loading/Loading";
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
 import '../../utils/global/wrongBook'
+import emitter from '../Wrongbook/utils/event.js'
+
 
 
 export default WrongSee = () => {
@@ -33,15 +35,24 @@ export default WrongSee = () => {
     global.wrongBook.subjectName = subjectName
 
     //初始化props
-    const [data, setData] = useState([])
-    //const [success, setSuccess] = useState(false)
-    const [show, setShow] = useState(false)
+    const [{ data, ready }, setState] = useState({ data: [], ready: 0 })
+    const [refreash , setRefreash] = useState(0)
+
+   
+    
 
     //useEffect
     useEffect(() => {
+        //WrongDeatil删题本页面刷新
+        setState({ ready: 0 })
         getData()
-    }, [show])
+        setRefreash(0)
 
+    }, [refreash])
+    //监听WrongDetail页面refreash是否变化，变化了需要相应刷新
+    emitter.addListener('wrongBook_refreash', () => {
+        setRefreash(1)
+      });
     //设置导航
     const navigation = useNavigation()
 
@@ -62,67 +73,79 @@ export default WrongSee = () => {
                 const res = eval('(' + text.substring(2) + ')')
 
                 //数据与props绑定
-                setData(res.data)
+                setState({ data: res.data, ready: 1 })
                 //setSuccess(res.success)
             })
             .catch(err => console.log('Request Failed', err))
-        setShow(false)
+
         // 修改导航标题
         navigation.setOptions({ title: subjectName + '错题本' })
 
     }
+
+    
+    //错题列表渲染
     const handleErrList = () => {
         if (data != '') {
             return (
-                data.map((item, index) => {
-                    return (
-                        <View style={styles.class}>
-                            <View style={styles.class_type}>
-                                <View style={styles.textAndimg}>
-                                    {handleImg(item.sourceType)}
-                                    <Text style={styles.class_type_text}> {item.sourceName}</Text>
+                <ScrollView style={styles.scrollView}>
+                    {
+                        data.map((item, index) => {
+                            return (
+                                <View style={styles.class}>
+                                    <View style={styles.class_type}>
+                                        <View style={styles.textAndimg}>
+                                            {handleImg(item.sourceType)}
+                                            <Text style={styles.class_type_text}> {item.sourceName}</Text>
 
-                                    <View style={styles.right}>
-                                        <Text style={styles.class_type_text}> 道错题  </Text>
-                                        <Text style={styles.errorQueNum}>{item.errorQueNum}</Text>
+                                            <View style={styles.right}>
+                                                <Text style={styles.class_type_text}> 道错题  </Text>
+                                                <Text style={styles.errorQueNum}>{item.errorQueNum}</Text>
+                                            </View>
+                                        </View>
+
+                                    </View>
+                                    <View style={styles.class_content}>
+                                        {
+                                            item.list.map((item1, index1) => {
+                                                return (
+                                                    <View>
+                                                        <View style={styles.class_content_title}>
+                                                            <Text>  {item1.num}</Text>
+                                                            {handleMp4(item1.mp4Flag)}
+                                                            <View style={styles.right}>
+                                                                <Text style={styles.textRight}>得分：{item1.stuScore}  全班平均分：{item1.avgScore}/{item1.score}  </Text>
+                                                            </View>
+                                                        </View>
+                                                        <TouchableOpacity onPress={() => handleWrong(item.sourceId, subjectId, item1.questionId,item1.mp4Flag)}>
+                                                            <View style={styles.class_content_con}>
+                                                                <RenderHtml
+                                                                    contentWidth={width - 6}
+                                                                    source={{ html: item1.shitiShow }}
+                                                                />
+                                                            </View>
+                                                        </TouchableOpacity>
+                                                    </View>
+                                                )
+                                            })
+                                        }
                                     </View>
                                 </View>
+                            )
+                        }
+                        )
+                    }
+                </ScrollView>
+            )
 
-                            </View>
-                            <View style={styles.class_content}>
-                                {
-                                    item.list.map((item1, index1) => {
-                                        return (
-                                            <View>
-                                                <View style={styles.class_content_title}>
-                                                    <Text>  {item1.num}</Text>
-                                                    {handleMp4(item1.mp4Flag)}
-                                                    <View style={styles.right}>
-                                                        <Text style={styles.textRight}>得分：{item1.stuScore}  全班平均分：{item1.avgScore}/{item1.score}  </Text>
-                                                    </View>
-                                                </View>
-                                                <TouchableOpacity onPress={() => handleWrong(item.sourceId, subjectId, item1.questionId)}>
-                                                    <View style={styles.class_content_con}>
-                                                        <RenderHtml
-                                                            contentWidth={width - 6}
-                                                            source={{ html: item1.shitiShow }}
-                                                        />
-                                                    </View>
-                                                </TouchableOpacity>
-                                            </View>
-                                        )
-                                    })
-                                }
-                            </View>
-                        </View>)
-                }
-                ))
         }
         else {
             return (
-                <View style={styles.null}>
-                    <Image source={require('../../assets/photoImage/beijing.png')} />
-                </View>
+                <ScrollView style={styles.scrollView}>
+                    <View style={styles.null}>
+                        <Image source={require('../../assets/errorQue/null.png')} />
+                    </View>
+                </ScrollView>
             )
         }
     }
@@ -136,7 +159,7 @@ export default WrongSee = () => {
         }
     }
     //页面跳转
-    const handleWrong = (sourceId, subjectId, questionId) => {
+    const handleWrong = (sourceId, subjectId, questionId, mp4) => {
         navigation.navigate({
             name: 'WrongDetails',
             params: {
@@ -144,24 +167,34 @@ export default WrongSee = () => {
                 questionId: questionId,
                 subjectId: subjectId,
                 subjectName: subjectName,
-                currentPage: -1
-            }
+                mp4: mp4,
+                currentPage: -1,
+            },
+            
         })
     }
+    //加载等待页
+    const renderLoadingView = () => {
+        console.log('正在加载')
+        return (
+            <Loading show={true} />
+        );
+    }
+    //处理视频小红点
     const handleMp4 = (mp4Flag) => {
         if (mp4Flag == '0') {
             return (<Text />)
         } else if (mp4Flag == '1') {
             return (
-                <Image source={require('../../assets/stuImg/MP4.png')} style={styles.mp4Img} />
+                <Image source={require('../../assets/errorQue/play.png')} style={styles.mp4Img} />
             )
         }
     }
     //渲染
     return (
-        <ScrollView style={styles.scrollView}>
-            {handleErrList()}
-        </ScrollView>
+        ready == '1' ?
+            handleErrList()
+            : renderLoadingView()
     )
 
 }
@@ -169,12 +202,14 @@ export default WrongSee = () => {
 
 
 const styles = StyleSheet.create({
-    Loading: {
+    container: {
         flex: 1,
+        width: '100%',
+        height: '100%',
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
-        backgroundColor: "#F5FCFF",
+        backgroundColor: "white",
     },
     scrollView: {
         width: '100%',
@@ -219,11 +254,12 @@ const styles = StyleSheet.create({
         flex: 1,
         height: '100%',
         flexDirection: 'row-reverse',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginRight:2
     },
     mp4Img: {
         height: 15,
-        width: 15,
+        width: 20,
         marginLeft: 5
     },
     null: {

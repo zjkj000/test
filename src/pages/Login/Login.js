@@ -17,8 +17,8 @@ const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 
 export default Login = () => {
     const navigation = useNavigation();
-    const [Name, setName] = React.useState("ming6002");
-    const [Password, setPassword] = React.useState("2020");
+    const [Name, setName] = React.useState("");
+    const [Password, setPassword] = React.useState("");
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
     const [showLoading, setShowLoading] = React.useState(false);
 
@@ -67,6 +67,7 @@ export default Login = () => {
         )
             .then((response) => response.text())
             .then((text) => {
+                
                 let res = eval("(" + text.substring(2) + ")");
                 let homePage = "Home";
                 let property = "STUDENT";
@@ -80,23 +81,30 @@ export default Login = () => {
                 if (res.success == true) {
                     //console.log(res.data.STUDENT.userId)
                     //设置全局信息
+                    global.constants.company = res.data[property].company 
+                    global.constants.isadmin = res.data[property].isadmin    //1普通教师  2管理员
+                    global.constants.dcompany = res.data[property].dcompany
                     global.constants.userName = res.data[property].userName;
                     global.constants.token = res.data.token;
                     global.constants.userId = res.data[property].userId;
+                    global.constants.passWord = param.passWord;
                     global.constants.userPhoto = res.data[property].userPhoto;
+                    global.constants.userCn = res.data[property].cn;
                     setShowLoading(false);
-                    Toast.showSuccessToast(res.message, 500);
+                    // Toast.showSuccessToast(res.message, 500);
                     // Alert.alert(res.message);
-                    navigation.navigate(homePage);
+                    navigation.navigate({
+                        name:homePage
+                    });
                 } else if (res.success == false) {
                     setShowLoading(false);
-                    Toast.showWarningToast(res.message, 2000);
+                    Toast.showWarningToast('用户名密码错误！请重新输入！', 2000);
                     // Alert.alert(res.message);
                 }
             })
             .catch((err) => {
                 setShowLoading(false);
-                Toast.showDangerToast("Request Failed" + err.toString());
+                Toast.showDangerToast('用户名密码错误！请重新输入！', 2000);
             });
     };
     //渲染
@@ -131,7 +139,15 @@ export default Login = () => {
                 onChangeText={(nextValue) => setPassword(nextValue)}
                 style={styles.Input}
             />
-            <Button onPress={() => handleLogin(true)} style={styles.Button}>
+            <Button onPress={() =>{
+                if(Name==''){
+                    Toast.showWarningToast('请输入用户名',1000)
+                }else if(Password==''){
+                    Toast.showWarningToast('请输入密码',1000)
+                }else{
+                    handleLogin(true)
+                }
+            } } style={styles.Button}>
                 登 录
             </Button>
             <Loading show={showLoading}></Loading>
@@ -164,6 +180,7 @@ const styles = StyleSheet.create({
     Image: {
         alignItems: "center",
         margin: 20,
+        marginTop:100
     },
     Input: {
         alignItems: "center",

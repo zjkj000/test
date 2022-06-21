@@ -39,6 +39,7 @@ class MyPageComponent extends Component {
             value: "",
             hasAvatar: false,
             userName: "小明",
+            userCn: "",
             selectedTitle: "No items selected",
             moduleVisible: false,
             fullModuleVisible: false,
@@ -52,6 +53,12 @@ class MyPageComponent extends Component {
         });
     };
 
+    UNSAFE_componentWillMount() {
+        this.setState({
+            userName: global.constants.userName,
+            userCn: global.constants.userCn,
+        });
+    }
     renderAvatar = () => {
         return (
             <TouchableOpacity
@@ -167,7 +174,10 @@ class MyPageComponent extends Component {
                     <View style={styles.alternativeContainer}>
                         <Text style={styles.textLeft}>账号信息</Text>
                         <Text style={styles.textRight}>
-                            {this.state.userName}
+                            {this.state.userCn +
+                                "(" +
+                                this.state.userName +
+                                ")"}
                         </Text>
                     </View>
                 </TouchableOpacity>
@@ -212,8 +222,26 @@ class MyPageComponent extends Component {
                         </Text>
                     </View>
                 </TouchableOpacity>
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.navigation.navigate("ControllerLogin");
+                    }}
+                >
+                    <Divider />
+                    <View style={styles.alternativeContainer}>
+                        <Text style={styles.textLeft}>遥控器</Text>
+                        <Text style={styles.textRight}>
+                            {" "}
+                            <Icon
+                                style={styles.icon}
+                                fill="#8F9BB3"
+                                name="arrow-ios-forward-outline"
+                            />
+                        </Text>
+                    </View>
+                </TouchableOpacity>
                 <Divider />
-                
+
                 <TouchableOpacity
                     onPress={() => {
                         this.setState({ fullModuleVisible: true });
@@ -235,9 +263,13 @@ class MyPageComponent extends Component {
                 <Divider />
                 <TouchableOpacity
                     onPress={() => {
-                                        this.props.navigation.navigate('Select_subject')
-                                    }
-                            }
+                        this.props.navigation.navigate({
+                            name: "Select_subject",
+                            params: {
+                                type: "new", //区别是新进去的还是选完进去的
+                            },
+                        });
+                    }}
                 >
                     <View style={styles.alternativeContainer}>
                         <Text style={styles.textLeft}>选科中心</Text>
