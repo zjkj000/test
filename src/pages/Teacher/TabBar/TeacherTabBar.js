@@ -15,11 +15,9 @@ import StatisticalForm from "../../TeacherStatisticalForm/StatisticalForm";
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
-    const type = props.route.params.type!=null?props.route.params.type:''
-    const isRefresh =  props.route.params.isRefresh!=null?props.route.params.isRefresh:''
     const navigation = useNavigation();
     const route = useRoute();
-    return <TeacherTabBarComponent navigation={navigation} route={route}  type={type} isRefresh={isRefresh}/>;
+    return <TeacherTabBarComponent navigation={navigation} route={route} />;
 }
 
 class TeacherTabBarComponent extends React.Component {
