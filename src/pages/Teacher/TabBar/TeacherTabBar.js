@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, ActivityIndicator } from "react-native";
 import {
     bindBackExitApp,
@@ -15,11 +15,11 @@ import StatisticalForm from '../../TeacherStatisticalForm/StatisticalForm'
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
-    const type = props.route.params.type?props.route.params.type:''
-    console.log('整个页面是否刷新',type)
+    const type = props.route.params.type!=null?props.route.params.type:''
+    const isRefresh =  props.route.params.isRefresh!=null?props.route.params.isRefresh:''
     const navigation = useNavigation();
     const route = useRoute();
-    return <TeacherTabBarComponent navigation={navigation} route={route}  type={type}/>;
+    return <TeacherTabBarComponent navigation={navigation} route={route}  type={type} isRefresh={isRefresh}/>;
 }
 
 class TeacherTabBarComponent extends React.Component {
@@ -35,7 +35,7 @@ class TeacherTabBarComponent extends React.Component {
             "focus",
             () => {
                 // console.log('#############tabTeacher###############', this.props.route);
-                // this.renderHome();
+                this.renderHome();
                 bindBackExitApp();
             }
         );
@@ -56,6 +56,7 @@ class TeacherTabBarComponent extends React.Component {
         this._unsubscribeNavigationBlurEvent();
         this._unsubscribeNavigationFocusEvent();
     }
+
     renderHome = () => {
         // console.log('###########renderHome####################',this.props.route);
         // console.log('---teacher-TabBar-renderHome----' , this.props.navigation.getState().routes);

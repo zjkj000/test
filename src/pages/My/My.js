@@ -261,26 +261,6 @@ class MyPageComponent extends Component {
                         </Text>
                     </View>
                 </TouchableOpacity>
-                        
-                <Divider />
-                <TouchableOpacity
-                    onPress={() => {
-                                        this.props.navigation.navigate('LiveingLession')
-                                    }
-                            }
-                >
-                    <View style={styles.alternativeContainer}>
-                        <Text style={styles.textLeft}>直播课列表</Text>
-                        <Text style={styles.textRight}>
-                            {" "}
-                            <Icon
-                                style={styles.icon}
-                                fill="#8F9BB3"
-                                name="arrow-ios-forward-outline"
-                            />
-                        </Text>
-                    </View>
-                </TouchableOpacity>
 
                 <Divider />
                 <Button

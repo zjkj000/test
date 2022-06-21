@@ -275,14 +275,16 @@ class LiveingLessonContent extends Component {
                 <Text style={{marginLeft:10}}>教师: </Text>
                 <Text>{this.state.teacherName}</Text>
                 {this.state.status=='1'?(
-                    <TouchableOpacity style={{position:"absolute",right:25}} onPress={()=>{Alert.alert('进入直播间')}}>
+                    <TouchableOpacity style={{position:"absolute",right:25}} onPress={
+                        ()=>{
+                            Alert.alert('进入直播间')
+                        }
+                        }>
                          <Text style={{color:'#77A5BD'}}>进入课堂{'>>'}</Text>
                     </TouchableOpacity>
                 ):
                  this.state.status=='2'?(
-                    <TouchableOpacity style={{position:"absolute",right:25}} onPress={()=>{Alert.alert('进入直播间')}}>
-                        <Text>进入课堂{'>>'}</Text>
-                    </TouchableOpacity>
+                        <Text style={{position:"absolute",right:25}}>进入课堂{'>>'}</Text>
                  ):
                  (<></>)}
             </View>

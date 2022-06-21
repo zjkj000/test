@@ -86,7 +86,8 @@ class Tea_Informcontent extends Component {
             this.props.navigation.navigate({
               name:'Teacher_Home',
               params:{
-                type:'freshInform'
+                type:'freshInform',
+                isRefresh:true,
               }
             })
           }}
@@ -133,7 +134,7 @@ class Tea_Informcontent extends Component {
   render() {
     return (
       <View style={{backgroundColor:'#fff'}}>
-            <ScrollView style={{width:screenWidth,borderTopWidth:0.5}}>
+            <ScrollView style={{width:screenWidth,borderTopWidth:0.5,height:screenHeight-50}}>
                 {/* *未读的通知或公告将调用Api修改状态 */}
                 {/* {(status == 5)? (this.updateStatus(status , type , learnId)) : null} */}
                 <View style={{paddingBottom:20,borderBottomWidth:0.5}}>

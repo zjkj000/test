@@ -448,7 +448,8 @@ class AssignPicturesWork extends Component {
                             this.props.navigation.navigate({
                                 name:'Teacher_Home',
                                 params:{
-                                    type:'fresh'
+                                    type:'fresh',
+                                    isRefresh:true,
                                 }
                             })
                         }}

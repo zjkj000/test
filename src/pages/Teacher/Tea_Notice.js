@@ -81,7 +81,8 @@ class Tea_Noticecontent extends Component {
             this.props.navigation.navigate({
               name:'Teacher_Home',
               params:{
-                type:'freshNotice'
+                type:'freshNotice',
+                isRefresh:true,
               }
             })
           }}
@@ -114,7 +115,7 @@ class Tea_Noticecontent extends Component {
               noreadList:resJson.data.noreadList,
               isAuthor:resJson.data.isAuthor,
               isUpdate:resJson.data.isUpdate,
-              author:this.state.author
+              author:resJson.data.author
             })
         }
       })
@@ -128,7 +129,7 @@ class Tea_Noticecontent extends Component {
   render() {
     return (
       <View style={{backgroundColor:'#fff',height:'100%',borderTopWidth:0.5}}>
-          <ScrollView style={{width:screenWidth}}>
+          <ScrollView style={{width:screenWidth,height:screenHeight*0.95}}>
             
               {/**未读的通知或公告将调用Api修改状态   这部分没写*/}
               {/* {(status == 5)? (this.updateStatus(status , type , learnId)) : null} */}
