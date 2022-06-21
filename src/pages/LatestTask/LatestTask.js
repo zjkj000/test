@@ -71,25 +71,11 @@ class LatestTask extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log('###learnId000###status000##', this.props.learnId , this.props.status);
+                console.log('##latest#learnId000###status000##', this.props.learnId , this.props.status);
                 // this.setState({});
             }
         );
     }
-
-    componentDidMount() {
-        // const { navigation } = this.props;
-        // this._unsubscribeNavigationFocusEvent = navigation.addListener(
-        //     "focus",
-        //     () => {
-        //         console.log('###learnId000###status000##', this.props , this.props.learnId , this.props.status);
-        //     }
-        // );
-    }
-
-    // UNSAFE_componentWillUpdate(nextProps){
-    //     console.log('###componentWillUpdate##nexProps##', nextProps);
-    // }
 
     componentWillUnmount() {
         this._unsubscribeNavigationFocusEvent();
@@ -255,7 +241,7 @@ class LatestTask extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style={{backgroundColor:'#fff',flex:1}}>
                 <View style={styles.header}>
                     <Flex style={styles.flexNew}>
                         <TouchableOpacity
@@ -304,7 +290,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6CC5CB",
     },
     todoList: {
-        height: screenHeight * 1,
+        height: screenHeight * 0.8,
         backgroundColor: '#fff'
     },
     flexNew: {

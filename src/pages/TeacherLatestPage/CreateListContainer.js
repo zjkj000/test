@@ -51,6 +51,7 @@ export default function CreateListContainer(props) {
             navigation={navigation}
             resourceType={rsType}
             searchStr={searchStr1}
+            isRefresh={props.isRefresh}
         ></CreateList>
     );
 }
@@ -78,7 +79,7 @@ class CreateList extends React.Component {
         oldsearchStr = this.props.searchStr;
 
 
-        // console.log("componentWillMount**************" , 'oldtype' , oldtype , 'rescouceType' , this.props.resourceType , this.props.searchStr);
+        console.log("componentWillMount**********isRefresh****" , this.props.isRefresh);
         this.fetchData(pageNo , oldtype , oldsearchStr , true);
     }
 
@@ -89,13 +90,11 @@ class CreateList extends React.Component {
     
 
     UNSAFE_componentWillUpdate(nextProps) {
-        // console.log("componentWillUpdate*********", Date.parse(new Date()) , 'type:' , oldtype, 'nextProps.type:' , nextProps.resourceType);
-        // console.log("componentWillUpdate*********", Date.parse(new Date()) , 'searchStr:' , oldsearchStr , 'nextProps.searchStr:' , nextProps.searchStr);
-
-        
+        console.log("componentWillUpdate******首页****isRefresh****" , nextProps.isRefresh); 
         if (
             oldtype != nextProps.resourceType ||
-            oldsearchStr != nextProps.searchStr 
+            oldsearchStr != nextProps.searchStr ||
+            nextProps.isRefresh
         ) {
             oldtype = nextProps.resourceType;
             oldsearchStr = nextProps.searchStr;
@@ -439,7 +438,7 @@ class CreateList extends React.Component {
                     //上拉加载相关
                     ListFooterComponent={this._renderFooter.bind(this)}
                     onEndReached={this._onEndReached.bind(this)}
-                    onEndReachedThreshold={0.5}
+                    onEndReachedThreshold={0.8}
                 />
             </View>
         );

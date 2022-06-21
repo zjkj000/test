@@ -258,7 +258,16 @@ class PushOrSaveContentPage extends React.Component {
                     Alert.alert(this.props.paramsData.name ,  
                         this.props.createType == 'learnCase' ? '导学案布置成功' : '微课布置成功', [{} ,
                         {text: 'ok', onPress: ()=>{
-                            this.props.navigation.navigate({name: 'Teacher_Home'});
+                            this.props.navigation.navigate({
+                                name: "Teacher_Home",
+                                params: {
+                                    screen: "最新",
+                                    params: {
+                                        isRefresh: true, 
+                                    },
+                                },
+                                merge: true,
+                            });
                         }}       
                     ]);
                 }else{
@@ -309,13 +318,14 @@ class PushOrSaveContentPage extends React.Component {
                         : this.props.createType == 'weiKe' ? '微课保存成功' : '授课包保存成功', [{} ,
                         {text: 'ok', onPress: ()=>{
                             this.props.navigation.navigate({
-                                name: 'Teacher_Home',
+                                name: "Teacher_Home",
                                 params: {
-                                    screen: '最新',
+                                    screen: "教学内容",
                                     params: {
                                         isRefresh: true, 
-                                    }
-                                }
+                                    },
+                                },
+                                merge: true,
                             });
                         }}       
                     ]);

@@ -98,7 +98,7 @@ class TodoList extends React.Component {
             "focus",
             () => {
                 console.log('#####unsubscribeNavigationFocusEvent###');
-                console.log('****learnId000***status000**', this.props.learnId , this.props.status);
+                console.log('*todoContain***learnId111***status111**', this.props.learnId , this.props.status);
                 if (focusFlag == true) {
                     // console.log('###route params###', navigation.getState());
                     pageNo = 1;
@@ -157,6 +157,7 @@ class TodoList extends React.Component {
 
             this.props.navigation.getState().routes[1].params = null;
 
+            console.log("componentWillUpdate*****todoContain****0000", status);
             if (status == 3) {
                 // console.log("componentWillUpdate*********0000", Date.parse(new Date()));
                 //未批改的作业，不请求数据
@@ -412,6 +413,7 @@ class TodoList extends React.Component {
                         onPress={() => {
                             if (todoType == "作业") {
                                 // 查看已经批改的作业
+                                console.log('=================todoType == "作业"======================',statusUrl)
                                 if (statusUrl == 2) {
                                     navigation.navigate({
                                         name: "ShowCorrected",
@@ -589,6 +591,7 @@ class TodoList extends React.Component {
         return (
             <View style={{backgroundColor: '#fff',flex:1}}>
                 <FlatList
+                    //contentContainerStyle={{paddingVertical: 10}}
                     showsVerticalScrollIndicator={false}
                     //定义数据显示效果
                     data={this.state.todos}
@@ -601,7 +604,7 @@ class TodoList extends React.Component {
                     //上拉加载相关
                     ListFooterComponent={this._renderFooter.bind(this)}
                     onEndReached={this._onEndReached.bind(this)}
-                    onEndReachedThreshold={0.5}
+                    onEndReachedThreshold={0.8}
                 />
             </View>
         );

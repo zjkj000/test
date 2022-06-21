@@ -473,7 +473,16 @@ class AssignLearnPlan extends Component {
                         Alert.alert('','布置成功！',[{},
                             {text:'ok',onPress:()=>{
                                 WaitLoading.dismiss()
-                                this.props.navigation.navigate('Teacher_Home')
+                                this.props.navigation.navigate({
+                                    name: "Teacher_Home",
+                                    params: {
+                                        screen: "最新",
+                                        params: {
+                                            isRefresh: true, 
+                                        },
+                                    },
+                                    merge: true,
+                                });
                             }}
                         ])   
                     }else{

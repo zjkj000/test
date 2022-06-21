@@ -727,7 +727,16 @@ class CreateHomework extends React.Component {
                 if(resJson.success){
                     Alert.alert(this.props.paramsData.name , '作业布置成功' , [{} ,
                         {text: 'ok', onPress: ()=>{
-                            this.props.navigation.navigate({name: 'Teacher_Home'});
+                            this.props.navigation.navigate({
+                                name: "Teacher_Home",
+                                params: {
+                                    screen: "最新",
+                                    params: {
+                                        isRefresh: true, 
+                                    },
+                                },
+                                merge: true,
+                            });
                         }}       
                     ]);
                 }else{
@@ -775,7 +784,16 @@ class CreateHomework extends React.Component {
                 if(resJson.success){
                     Alert.alert(this.props.paramsData.name , '作业保存成功' , [{} ,
                         {text: 'ok', onPress: ()=>{
-                            this.props.navigation.navigate({name: 'Teacher_Home'});
+                            this.props.navigation.navigate({
+                                name: "Teacher_Home",
+                                params: {
+                                    screen: "教学内容",
+                                    params: {
+                                        isRefresh: true, 
+                                    },
+                                },
+                                merge: true,
+                            });
                         }}       
                     ]);
                 }else{

@@ -19,7 +19,12 @@ export default function ContentListContainer(props) {
     const navigation =useNavigation()
     const rsType = props.resourceType;
     const searchStr1 = props.searchStr;
-    return <ContentList navigation={navigation} resourceType={rsType} searchStr={searchStr1} />;
+    return <ContentList 
+        navigation={navigation} 
+        resourceType={rsType} 
+        searchStr={searchStr1} 
+        isRefresh={props.isRefresh}
+    />;
 }
 
 class ContentList extends React.Component {
@@ -51,13 +56,15 @@ class ContentList extends React.Component {
     }
     
     UNSAFE_componentWillUpdate(nextProps) {
+        console.log("componentWillUpdate******教学内容****isRefresh****" , nextProps.isRefresh);
         //console.log("componentWillUpdate*********", Date.parse(new Date()) , 'type:' , oldtype, 'nextProps.type:' , nextProps.resourceType);
         //console.log("componentWillUpdate*********", Date.parse(new Date()) , 'searchStr:' , oldsearchStr , 'nextProps.searchStr:' , nextProps.searchStr);
 
         
         if (
             oldtype != nextProps.resourceType ||
-            oldsearchStr != nextProps.searchStr 
+            oldsearchStr != nextProps.searchStr ||
+            nextProps.isRefresh
         ) {
             oldtype = nextProps.resourceType;
             oldsearchStr = nextProps.searchStr;
@@ -526,7 +533,7 @@ class ContentList extends React.Component {
                     //上拉加载相关
                     ListFooterComponent={this._renderFooter.bind(this)}
                     onEndReached={this._onEndReached.bind(this)}
-                    onEndReachedThreshold={0.5}
+                    onEndReachedThreshold={0.8}
                 />
             </View>
         );
