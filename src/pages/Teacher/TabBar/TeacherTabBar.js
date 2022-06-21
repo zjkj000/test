@@ -11,7 +11,7 @@ import MyPage from "../../My/My";
 
 import LatestPage from "../../TeacherLatestPage/LatestPage";
 import TeachingContentPage from "../../TeacheringContent/TeachingContentPage";
-import StatisticalForm from '../../TeacherStatisticalForm/StatisticalForm'
+import StatisticalForm from "../../TeacherStatisticalForm/StatisticalForm";
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
@@ -48,7 +48,7 @@ class TeacherTabBarComponent extends React.Component {
         );
     }
 
-    componentDidUpdate(){
+    componentDidUpdate() {
         // console.log('#############tabTeacher#######222########', this.props.route);
     }
 
@@ -63,20 +63,18 @@ class TeacherTabBarComponent extends React.Component {
         return (
             <View>
                 {/* <Text>我是教师端首页</Text> */}
-                <LatestPage fresh={this.props.type}/>
+                <LatestPage fresh={this.props.type} />
             </View>
         );
     };
     renderStatistic = () => {
-        return (
-            <StatisticalForm />
-        );
+        return <StatisticalForm />;
     };
     renderStudyTask = () => {
         return (
             <View>
                 {/* <Text>我是教师端教学内容</Text> */}
-                <TeachingContentPage type={this.props.type}/>
+                <TeachingContentPage type={this.props.type} />
             </View>
         );
     };

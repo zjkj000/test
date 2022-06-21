@@ -1,4 +1,4 @@
-import { Text, View,Image,ScrollView, FlatList, TouchableOpacity,Alert } from 'react-native'
+import { Text, View,Image,ScrollView, FlatList, TouchableOpacity,Alert, NativeModules } from 'react-native'
 import React, { Component,useEffect, useState } from 'react'
 import { useNavigation } from "@react-navigation/native";
 import { OverflowMenu, MenuItem } from "@ui-kitten/components";
@@ -221,7 +221,8 @@ class LiveingLessonContent extends Component {
             teacherName:'',
             subject:'',
             title:'',
-            status:''     //   1  直播中   2 未开始  3已结束
+            status:'',     //   1  直播中   2 未开始  3已结束
+            roomId:'',
         }
     }
 
@@ -277,7 +278,13 @@ class LiveingLessonContent extends Component {
                 {this.state.status=='1'?(
                     <TouchableOpacity style={{position:"absolute",right:25}} onPress={
                         ()=>{
-                            Alert.alert('进入直播间')
+                            NativeModules.IntentMoudle.startActivityFromJS(
+                                "EntranceActivity", 
+                                    global.constants.userName+"-"+      //userid 学生id
+                                    global.constants.userCn+"-"+        //usercn 学生中文名   
+                                    this.state.roomId+"-"+              //roomid 直播房间号
+                                    this.state.teacherName              //teachercn 教师中文名   
+                            );  
                         }
                         }>
                          <Text style={{color:'#77A5BD'}}>进入课堂{'>>'}</Text>

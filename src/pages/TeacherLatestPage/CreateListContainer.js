@@ -36,7 +36,6 @@ let oldsearchStr = ""; //保存上一次搜索框内容
 
 let todosList = []; //复制一份api请求得到的数据
 
-
 export default function CreateListContainer(props) {
     const navigation = useNavigation();
 
@@ -77,25 +76,22 @@ class CreateList extends React.Component {
         oldtype = this.props.resourceType;
         oldsearchStr = this.props.searchStr;
 
-
         // console.log("componentWillMount**************" , 'oldtype' , oldtype , 'rescouceType' , this.props.resourceType , this.props.searchStr);
-        this.fetchData(pageNo , oldtype , oldsearchStr , true);
+        this.fetchData(pageNo, oldtype, oldsearchStr, true);
     }
 
     componentDidMount() {
         //初始挂载执行一遍
         //this.fetchData(pageNo);
     }
-    
 
     UNSAFE_componentWillUpdate(nextProps) {
         // console.log("componentWillUpdate*********", Date.parse(new Date()) , 'type:' , oldtype, 'nextProps.type:' , nextProps.resourceType);
         // console.log("componentWillUpdate*********", Date.parse(new Date()) , 'searchStr:' , oldsearchStr , 'nextProps.searchStr:' , nextProps.searchStr);
 
-        
         if (
             oldtype != nextProps.resourceType ||
-            oldsearchStr != nextProps.searchStr 
+            oldsearchStr != nextProps.searchStr
         ) {
             oldtype = nextProps.resourceType;
             oldsearchStr = nextProps.searchStr;
@@ -111,7 +107,7 @@ class CreateList extends React.Component {
             pageNo = 0; //当前第几页
             itemNo = 0; //item的个数
             dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
-            this.fetchData(pageNo , oldtype , oldsearchStr , true);
+            this.fetchData(pageNo, oldtype, oldsearchStr, true);
         }
     }
 
@@ -120,15 +116,14 @@ class CreateList extends React.Component {
     }
 
     componentWillUnmount() {
-        oldsearchStr = '';
-        oldtype = '';
+        oldsearchStr = "";
+        oldtype = "";
     }
 
-
     //通过fetch请求数据
-    fetchData(pageNo , type , search , onRefresh = false) {
+    fetchData(pageNo, type, search, onRefresh = false) {
         // console.log("fetchData*********", Date.parse(new Date()));
-        
+
         const token = global.constants.token;
         const userId = global.constants.userName;
         // const ip = global.constants.baseUrl;
@@ -141,19 +136,19 @@ class CreateList extends React.Component {
             currentPage: pageNo,
             userID: userId,
             resourceType: type,
-            type: 'new',
+            type: "new",
             searchStr: search,
             //callback:'ha',
             token: token,
-        }; 
+        };
         // console.log('*******请求的url' , url);
-        // console.group('*********参数' , params);     
+        // console.group('*********参数' , params);
 
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
                 // console.log('--------resJson-----' , resJson);
-                let todosList1 =  resJson.data.list; //重要！！！
+                let todosList1 = resJson.data.list; //重要！！！
                 // console.log('********请求数据返回的message', resJson.message);
                 // console.log('********请求数据返回的success', resJson.success);
                 // console.log('******请求的数据******', todosList1[0]);
@@ -162,7 +157,7 @@ class CreateList extends React.Component {
                 let i = itemNo;
 
                 //console.log("fetchData*********success", Date.parse(new Date()));
-                
+
                 todosList1.map(function (item) {
                     dataBlob.push({
                         key: i,
@@ -171,14 +166,14 @@ class CreateList extends React.Component {
                     i++;
                 });
                 itemNo = i;
-                
+
                 //console.log("itemNo", itemNo);
                 let foot = 0;
                 if (todosList1.length < 12) {
                     foot = 1; //未请求到数据，数据加载完了
                     dataFlag = false; //数据加载完了
                 }
-                
+
                 this.setState({
                     message: resJson.message,
 
@@ -188,15 +183,15 @@ class CreateList extends React.Component {
                         : this.state.todos.concat(dataBlob),
                     isLoading: false,
                     isRefresh: false,
-                    showFoot: foot, 
+                    showFoot: foot,
                     //isRefreshing: false,
                 });
-                
+
                 todosList1 = null;
                 dataBlob = null;
             })
             .catch((error) => {
-                console.log('******catch***error**' , error);
+                console.log("******catch***error**", error);
                 this.setState({
                     error: true,
                     errorInfo: error,
@@ -241,57 +236,78 @@ class CreateList extends React.Component {
         //console.log('index',todoIndex);
         //Object.keys(todoItem).length != 0
         if (todo != null) {
-            //console.log('tododo' , todo);      
+            //console.log('tododo' , todo);
             return (
                 <TouchableOpacity
-                    onPress = {() => {
+                    onPress={() => {
                         //把未读消息清掉   跳转页面
-                        
-                        if(todo.fNumber > 0){  //还有待批改的作业
+
+                        if (todo.fNumber > 0) {
+                            //还有待批改的作业
                             todosList[todoIndex].value.fNumber = 0;
                             this.setState({ todos: todosList });
                         }
 
-                        if(todo.fType=='3'){
+                        if (todo.fType == "3") {
                             //跳转  通知
                             this.props.navigation.navigate({
-                                name: 'LookInform',
-                                params:{ 
-                                    taskId:todo.fId, 
-                                    type:todo.fType,
-                                    data:todo,
-                                    fNumber:todo.fNumber   // 0 已读   1  未读
-                                       },
-                            })
-                        }else if(todo.fType=='4'){
+                                name: "LookInform",
+                                params: {
+                                    taskId: todo.fId,
+                                    type: todo.fType,
+                                    data: todo,
+                                    fNumber: todo.fNumber, // 0 已读   1  未读
+                                },
+                            });
+                        } else if (todo.fType == "4") {
                             //跳转公告
                             this.props.navigation.navigate({
-                                name: 'LookNotice',
-                                params:{ 
-                                    taskId:todo.fId, 
-                                    type:todo.fType,
-                                    data:todo,
-                                    fNumber:todo.fNumber   // 0 已读   1  未读
-                                       },
-                            })
-                        }else{
+                                name: "LookNotice",
+                                params: {
+                                    taskId: todo.fId,
+                                    type: todo.fType,
+                                    data: todo,
+                                    fNumber: todo.fNumber, // 0 已读   1  未读
+                                },
+                            });
+                        } else {
                             this.props.navigation.navigate({
-                                name: 'CorrectPaperList',
-                                params:{ 
-                                    taskId:todo.fId, 
-                                    type:todo.fType=='2'?'paper':'learnPlan'
-                                       },
-                            })
+                                name: "CorrectPaperList",
+                                params: {
+                                    taskId: todo.fId,
+                                    type:
+                                        todo.fType == "2"
+                                            ? "paper"
+                                            : "learnPlan",
+                                },
+                            });
                         }
-                        
                     }}
                 >
-                    <View style={{flexDirection: 'row' , backgroundColor: '#fff' , padding: 10}}>
-                        <View style={{flexDirection: 'row',width: '20%',height:'100%'}}>
+                    <View
+                        style={{
+                            flexDirection: "row",
+                            backgroundColor: "#fff",
+                            padding: 10,
+                        }}
+                    >
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                width: "20%",
+                                height: "100%",
+                            }}
+                        >
                             {this.showTaskImg(todo.fType)}
                             {this.showTaskReadNum(todo.fNumber)}
                         </View>
-                        <View style={{flexDirection: 'column',width: '80%',height:'100%'}}>
+                        <View
+                            style={{
+                                flexDirection: "column",
+                                width: "80%",
+                                height: "100%",
+                            }}
+                        >
                             <Text
                                 numberOfLines={1}
                                 ellipsizeMode={"tail"}
@@ -303,16 +319,21 @@ class CreateList extends React.Component {
                             >
                                 {todo.fName}
                             </Text>
-                            <View><Text style={{height:10}}></Text></View>
-                            <View style={{flexDirection: 'row'}}>
+                            <View>
+                                <Text style={{ height: 10 }}></Text>
+                            </View>
+                            <View style={{ flexDirection: "row" }}>
                                 <Text
                                     numberOfLines={1}
                                     ellipsizeMode={"tail"}
-                                    style={{width: screenWidth * 0.55 , fontWeight: "400"}}
+                                    style={{
+                                        width: screenWidth * 0.55,
+                                        fontWeight: "400",
+                                    }}
                                 >
                                     {todo.fDescription}
                                 </Text>
-                                <Text 
+                                <Text
                                     style={{
                                         paddingLeft: screenWidth * 0.6,
                                         position: "absolute",
@@ -322,19 +343,28 @@ class CreateList extends React.Component {
                                     {todo.fTime}
                                 </Text>
                             </View>
-                            <View style={{flexDirection: 'row'}}>
-                                <Text style={{fontWeight: "400"}}>{todo.fNum1}</Text>
-                                <Text style={{width: 5}}></Text>
-                                <Text style={{fontWeight: "400"}}>{todo.fNum2}</Text>
-                                <Text style={{width: 5}}></Text>
-                                <Text style={{fontWeight: "400"}}>{todo.fNum3}</Text>
-                                
-                                {this.showTaskProgress(todo.fType , todo.fNum4 , todo.fNum5)}
+                            <View style={{ flexDirection: "row" }}>
+                                <Text style={{ fontWeight: "400" }}>
+                                    {todo.fNum1}
+                                </Text>
+                                <Text style={{ width: 5 }}></Text>
+                                <Text style={{ fontWeight: "400" }}>
+                                    {todo.fNum2}
+                                </Text>
+                                <Text style={{ width: 5 }}></Text>
+                                <Text style={{ fontWeight: "400" }}>
+                                    {todo.fNum3}
+                                </Text>
+
+                                {this.showTaskProgress(
+                                    todo.fType,
+                                    todo.fNum4,
+                                    todo.fNum5
+                                )}
                             </View>
                         </View>
                     </View>
                 </TouchableOpacity>
-
             );
         } else {
             return (
@@ -346,97 +376,138 @@ class CreateList extends React.Component {
     };
 
     //显示任务图标
-    showTaskImg(fType){
-        if(fType == 1){//导学案
-            return <View style={{alignItems: 'center',paddingTop: 10}}><Image 
-                        source = {require('../../assets/teacherLatestPage/learnPlan.png')}
-                        style = {styles.typeImg}
-                   /></View>
-        } else if(fType == 2){//作业
-            return <View style={{alignItems: 'center',paddingTop: 10}}><Image 
-                        source = {require('../../assets/teacherLatestPage/homework.png')}
-                        style = {styles.typeImg}
-                   /></View>
-        }else if(fType == 3){//通知
-            return <View style={{alignItems: 'center',paddingTop: 10}}><Image 
-                        source = {require('../../assets/teacherLatestPage/notice.png')}
-                        style = {styles.typeImg}
-                   /></View>
-        }else if(fType == 4){//公告
-            return <View style={{alignItems: 'center',paddingTop: 10}}><Image 
-                        source = {require('../../assets/teacherLatestPage/article.png')}
-                        style = {styles.typeImg}
-                   /></View>
-        }else if(fType == 7){//微课
-            return <View style={{alignItems: 'center',paddingTop: 10}}><Image 
-                        source = {require('../../assets/teacherLatestPage/weike.png')}
-                        style = {styles.typeImg}
-                   /></View>
-        }  
+    showTaskImg(fType) {
+        if (fType == 1) {
+            //导学案
+            return (
+                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                    <Image
+                        source={require("../../assets/teacherLatestPage/learnPlan.png")}
+                        style={styles.typeImg}
+                    />
+                </View>
+            );
+        } else if (fType == 2) {
+            //作业
+            return (
+                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                    <Image
+                        source={require("../../assets/teacherLatestPage/homework.png")}
+                        style={styles.typeImg}
+                    />
+                </View>
+            );
+        } else if (fType == 3) {
+            //通知
+            return (
+                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                    <Image
+                        source={require("../../assets/teacherLatestPage/notice.png")}
+                        style={styles.typeImg}
+                    />
+                </View>
+            );
+        } else if (fType == 4) {
+            //公告
+            return (
+                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                    <Image
+                        source={require("../../assets/teacherLatestPage/article.png")}
+                        style={styles.typeImg}
+                    />
+                </View>
+            );
+        } else if (fType == 7) {
+            //微课
+            return (
+                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                    <Image
+                        source={require("../../assets/teacherLatestPage/weike.png")}
+                        style={styles.typeImg}
+                    />
+                </View>
+            );
+        }
     }
 
     //显示任务是否还有未读以及未读数
-    showTaskReadNum(fNumber){
-        if(fNumber >= 10){
-            return <ImageBackground
-                        source = {require('../../assets/teacherLatestPage/rightNum.png')} 
+    showTaskReadNum(fNumber) {
+        if (fNumber >= 10) {
+            return (
+                <ImageBackground
+                    source={require("../../assets/teacherLatestPage/rightNum.png")}
+                    style={{
+                        height: "42%",
+                        width: "42%",
+                        resizeMode: "contain",
+                    }}
+                >
+                    <Text
                         style={{
-                            height: '42%',   
-                            width: '42%',
-                            resizeMode: "contain",          
+                            color: "white",
+                            fontSize: 9,
+                            fontWeight: "600",
+                            paddingLeft: 2,
                         }}
                     >
-                        <Text style={{color: 'white', fontSize: 9 , fontWeight: '600', paddingLeft: 2}}>{fNumber}</Text>
-                    </ImageBackground>
-                // return <Text style={{color: 'red', fontSize: 15}}>{fNumber}</Text>
-        }else if(fNumber > 0){
-            return <ImageBackground
-                source = {require('../../assets/teacherLatestPage/rightNum.png')} 
-                style={{
-                    height: '42%',   
-                    width: '42%',
-                    resizeMode: "contain",       
-                }}
-            >
-                <Text style={{color: 'white', fontSize: 10 , paddingLeft: 4}}>{fNumber}</Text>
-            </ImageBackground>
-        }else{
+                        {fNumber}
+                    </Text>
+                </ImageBackground>
+            );
+            // return <Text style={{color: 'red', fontSize: 15}}>{fNumber}</Text>
+        } else if (fNumber > 0) {
+            return (
+                <ImageBackground
+                    source={require("../../assets/teacherLatestPage/rightNum.png")}
+                    style={{
+                        height: "42%",
+                        width: "42%",
+                        resizeMode: "contain",
+                    }}
+                >
+                    <Text
+                        style={{ color: "white", fontSize: 10, paddingLeft: 4 }}
+                    >
+                        {fNumber}
+                    </Text>
+                </ImageBackground>
+            );
+        } else {
             return null;
         }
     }
 
     //显示任务进度
-    showTaskProgress(fType , fNum4 , fNum5){
-        if(fType == 1 || fType == 7){
-            return(
-                <View  
+    showTaskProgress(fType, fNum4, fNum5) {
+        if (fType == 1 || fType == 7) {
+            return (
+                <View
                     style={{
-                        flexDirection: 'row' , 
+                        flexDirection: "row",
                         paddingLeft: screenWidth * 0.48,
                         position: "absolute",
                     }}
                 >
-                    <Text style={{width: 20}}></Text>
+                    <Text style={{ width: 20 }}></Text>
                     <Image
                         source={require("../../assets/teacherLatestPage/progress.png")}
                         // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
-                        style={{width: 20, height: 20 }}
+                        style={{ width: 20, height: 20 }}
                     />
                     <Text>{fNum4}</Text>
-                    <Text style={{width: 20}}></Text>
+                    <Text style={{ width: 20 }}></Text>
                     <Image
                         source={require("../../assets/teacherLatestPage/resourceSum.png")}
                         // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
-                        style={{width: 20, height: 20 }}
+                        style={{ width: 20, height: 20 }}
                     />
                     <Text>{fNum5}</Text>
                 </View>
             );
-        }else{
+        } else {
             return null;
         }
     }
-
 
     renderData() {
         return (
@@ -469,7 +540,7 @@ class CreateList extends React.Component {
             return this.renderLoadingView();
         } else if (this.state.error) {
             //请求失败view
-            console.log('请求失败！！！！！！！')
+            console.log("请求失败！！！！！！！");
             return this.renderErrorView();
         }
         //加载数据
@@ -487,7 +558,7 @@ class CreateList extends React.Component {
             showFoot: 0, // 控制foot， 0：隐藏footer  1：已加载完成,没有更多数据   2 ：显示加载中
             //isRefreshing: false, //下拉控制
         });
-        this.fetchData(pageNo , oldtype , oldsearchStr , true);
+        this.fetchData(pageNo, oldtype, oldsearchStr, true);
     };
 
     //分割线
@@ -554,7 +625,7 @@ class CreateList extends React.Component {
         //底部显示正在加载更多数据
         this.setState({ showFoot: 2 });
         //获取数据
-        this.fetchData(pageNo , oldtype , oldsearchStr);
+        this.fetchData(pageNo, oldtype, oldsearchStr);
     }
 }
 
@@ -572,6 +643,6 @@ const styles = StyleSheet.create({
         // resizeMode: "stretch",
         height: 60,
         width: 60,
-        alignContent: 'center'
-    }
+        alignContent: "center",
+    },
 });

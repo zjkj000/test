@@ -35,7 +35,7 @@ let searchStr = ""; //保存上一次搜索框内容
 
 let todosList = []; //复制一份api请求得到的数据
 
-let flag = 1;   //提交作业页面返回，已批改作业的状态图标问题（两次主动请求数据）
+let flag = 1; //提交作业页面返回，已批改作业的状态图标问题（两次主动请求数据）
 let focusFlag = false;
 
 export default function TodoListContainer(props) {
@@ -47,7 +47,7 @@ export default function TodoListContainer(props) {
 
     const learnId = props.learnId;
     const status = props.status;
-    console.log('****learnId***status**',learnId , status);
+    // console.log("****learnId***status**", learnId, status);
 
     const navigation = useNavigation();
     //将navigation传给TodoList组件，防止路由出错
@@ -56,7 +56,7 @@ export default function TodoListContainer(props) {
             navigation={navigation}
             resourceType={rsType}
             searchStr={searchStr1}
-            learnId={learnId} 
+            learnId={learnId}
             status={status}
         ></TodoList>
     );
@@ -76,7 +76,6 @@ class TodoList extends React.Component {
             errorInfo: "",
             showFoot: 0, //控制foot， 0：隐藏footer 1：已加载完成，没有更多数据 2：正在加载中
             //isRefreshing: false, //下拉控制
-
         };
         this.fetchData = this.fetchData.bind(this); //fetchData函数中this指向问题
     }
@@ -86,19 +85,21 @@ class TodoList extends React.Component {
         oldtype = this.props.resourceType;
         searchStr = this.props.searchStr;
 
-
         // console.log("componentWillMount**************", 'oldtype', oldtype, 'rescouceType', this.props.resourceType, this.props.searchStr);
         this.fetchData(pageNo, oldtype, searchStr, true);
     }
 
     componentDidMount() {
-        
         const { navigation } = this.props;
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log('#####unsubscribeNavigationFocusEvent###');
-                console.log('****learnId000***status000**', this.props.learnId , this.props.status);
+                // console.log("#####unsubscribeNavigationFocusEvent###");
+                // console.log(
+                //     "****learnId000***status000**",
+                //     this.props.learnId,
+                //     this.props.status
+                // );
                 if (focusFlag == true) {
                     // console.log('###route params###', navigation.getState());
                     pageNo = 1;
@@ -115,7 +116,6 @@ class TodoList extends React.Component {
     componentWillUnmount() {
         this._unsubscribeNavigationFocusEvent();
     }
-
 
     UNSAFE_componentWillUpdate(nextProps) {
         //fetchData执行会触发setState函数，又会重新执行componentWillUpdate函数，
@@ -217,11 +217,10 @@ class TodoList extends React.Component {
             userId: userId,
             resourceType: type,
             searchStr: search,
-            source: 'RN',
+            source: "RN",
             //callback:'ha',
             token: token,
         };
-
 
         // if(flag == 3){
         //     console.log('&&&&&&&&&*******&&&&&&&&&');
@@ -235,6 +234,11 @@ class TodoList extends React.Component {
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
+                // console.log(
+                //     "fetchLatestData===================================="
+                // );
+                // console.log(resJson);
+                // console.log("====================================");
                 let todosList1 = [];
                 todosList1 = resJson.data; //重要！！！
 
@@ -269,7 +273,6 @@ class TodoList extends React.Component {
                     //isRefreshing: false,
                 });
 
-
                 // if(flag == 2){
                 //     console.log('&&&&&&&&&&&&&&&&&&');
                 //     flag = 3;
@@ -283,9 +286,8 @@ class TodoList extends React.Component {
                 todosList1 = null;
                 dataBlob = null;
 
-
                 if (flag == 2) {
-                    console.log('&&&&&&&&&&&&&&&&&&');
+                    // console.log("&&&&&&&&&&&&&&&&&&");
                     flag = 1;
                     this._onRefresh();
                     return;
@@ -350,26 +352,28 @@ class TodoList extends React.Component {
                 todoType == "导学案"
                     ? require("../../assets/LatestTaskImages/study.png")
                     : todoType == "作业"
-                        ? require("../../assets/LatestTaskImages/homework.png")
-                        : todoType == "通知"
-                            ? require("../../assets/LatestTaskImages/inform.png")
-                            : todoType == "直播课消息"
-                                ? require("../../assets/LatestTaskImages/nowPlay.png")
-                                : todoType == "公告"
-                                ? require("../../assets/LatestTaskImages/public-notice.png")
-                                : require("../../assets/LatestTaskImages/weike.png")
+                    ? require("../../assets/LatestTaskImages/homework.png")
+                    : todoType == "通知"
+                    ? require("../../assets/LatestTaskImages/inform.png")
+                    : todoType == "直播课消息"
+                    ? require("../../assets/LatestTaskImages/nowPlay.png")
+                    : todoType == "公告"
+                    ? require("../../assets/LatestTaskImages/public-notice.png")
+                    : require("../../assets/LatestTaskImages/weike.png");
             //根据图标状态指定图标的url(对于已读的通知，应该不显示任何图标，此处使用三目运算，且需要require请求资源，故设置请求资源为空白图片../Image/readInform.png)
             var statusUrl = todo.status;
             // console.log('*****任务状态图标****', todoType, statusUrl);
             const statusImg =
                 statusUrl == "1" || statusUrl == "5"
                     ? require("../../assets/LatestTaskImages/new.png")
-                    : statusUrl == "2" || (statusUrl == "4" && (todoType == "导学案" || todoType == "微课"))
-                        ? require("../../assets/LatestTaskImages/hasCheck.png")
-                        : statusUrl == "3"
-                            ? require("../../assets/LatestTaskImages/noCheck.png")
-                            : require("../../assets/LatestTaskImages/readInform.png");
-            
+                    : statusUrl == "2" ||
+                      (statusUrl == "4" &&
+                          (todoType == "导学案" || todoType == "微课"))
+                    ? require("../../assets/LatestTaskImages/hasCheck.png")
+                    : statusUrl == "3"
+                    ? require("../../assets/LatestTaskImages/noCheck.png")
+                    : require("../../assets/LatestTaskImages/readInform.png");
+
             //小标题
             const bottomTitle = todo.bottomTitle;
             //创建者
@@ -397,14 +401,14 @@ class TodoList extends React.Component {
                 todoType == "导学案"
                     ? 1
                     : todoType == "作业"
-                        ? 2
-                        : todoType == "通知"
-                            ? 3
-                            : todoType == "公告"
-                                ? 4
-                                : todoType == "微课"
-                                    ? 7
-                                    : 5; //直播，不在筛选属性中
+                    ? 2
+                    : todoType == "通知"
+                    ? 3
+                    : todoType == "公告"
+                    ? 4
+                    : todoType == "微课"
+                    ? 7
+                    : 5; //直播，不在筛选属性中
 
             return (
                 <View>
@@ -433,7 +437,10 @@ class TodoList extends React.Component {
                                     });
                                     //this.setState({ todos: todosList });
                                 }
-                            } else if (todoType == "导学案" || todoType == "微课") {
+                            } else if (
+                                todoType == "导学案" ||
+                                todoType == "微课"
+                            ) {
                                 //学导学案（已批改）
                                 if (statusUrl == 4 || statusUrl == 2) {
                                     navigation.navigate({
@@ -480,8 +487,8 @@ class TodoList extends React.Component {
                                     //todos = todosList; //将本地缓存数据覆盖state中的todos
                                     this.setState({ todos: todosList });
                                 }
-                            }else{
-                                navigation.navigate('LiveingLession')
+                            } else {
+                                navigation.navigate("LiveingLession");
                             }
                         }}
                         style={{
@@ -508,44 +515,68 @@ class TodoList extends React.Component {
                                     {bottomTitle}
                                 </Text>
                             </View>
-                            {
-                                createrName == '直播中'
-                                ?   <View style={{
-                                        width: 70, 
-                                        height: 23, 
-                                        backgroundColor: '#FF6666' ,
-                                        alignItems: 'center'
-                                    }}>
-                                        <Text style={{fontSize: 17,fontWeight: "bold",color: 'white'}}>
-                                            {createrName}
-                                        </Text>
-                                    </View>
-                                : createrName == '未开始'
-                                    ?   <View style={{
-                                            width: 70, 
-                                            height: 23, 
-                                            backgroundColor: '#6600FF' ,
-                                            alignItems: 'center'
-                                        }}>
-                                            <Text style={{fontSize: 17,fontWeight: "bold",color: 'white'}}>
-                                                {createrName}
-                                            </Text>
-                                        </View>
-                                    : createrName == '已结束'
-                                        ?   <View style={{
-                                                width: 70, 
-                                                height: 23, 
-                                                backgroundColor: '#949599' ,
-                                                alignItems: 'center'
-                                            }}>
-                                                <Text style={{fontSize: 17,fontWeight: "bold",color: 'white'}}>
-                                                    {createrName}
-                                                </Text>
-                                            </View>
-                                        : <Text style={styles.createrName}>
-                                            {createrName}
-                                        </Text>
-                            }
+                            {createrName == "直播中" ? (
+                                <View
+                                    style={{
+                                        width: 70,
+                                        height: 23,
+                                        backgroundColor: "#FF6666",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            fontSize: 17,
+                                            fontWeight: "bold",
+                                            color: "white",
+                                        }}
+                                    >
+                                        {createrName}
+                                    </Text>
+                                </View>
+                            ) : createrName == "未开始" ? (
+                                <View
+                                    style={{
+                                        width: 70,
+                                        height: 23,
+                                        backgroundColor: "#6600FF",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            fontSize: 17,
+                                            fontWeight: "bold",
+                                            color: "white",
+                                        }}
+                                    >
+                                        {createrName}
+                                    </Text>
+                                </View>
+                            ) : createrName == "已结束" ? (
+                                <View
+                                    style={{
+                                        width: 70,
+                                        height: 23,
+                                        backgroundColor: "#949599",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    <Text
+                                        style={{
+                                            fontSize: 17,
+                                            fontWeight: "bold",
+                                            color: "white",
+                                        }}
+                                    >
+                                        {createrName}
+                                    </Text>
+                                </View>
+                            ) : (
+                                <Text style={styles.createrName}>
+                                    {createrName}
+                                </Text>
+                            )}
                         </Flex>
                         <Flex>
                             {/*课程名courseName  截止时间timeStop  资源发布时间time*/}
@@ -587,7 +618,7 @@ class TodoList extends React.Component {
 
     renderData() {
         return (
-            <View style={{backgroundColor: '#fff',flex:1}}>
+            <View style={{ backgroundColor: "#fff", flex: 1 }}>
                 <FlatList
                     showsVerticalScrollIndicator={false}
                     //定义数据显示效果

@@ -1,4 +1,4 @@
-import React , {useEffect,useState} from "react";
+import React, { useEffect, useState } from "react";
 import { Text, View, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
@@ -19,7 +19,7 @@ import {
 
 import TodoListContainer from "./TodoListContainer";
 
-let SearchText = '';
+let SearchText = "";
 
 export default function LatestTaskContainer(props) {
     let learnId = props.learnId;
@@ -31,9 +31,15 @@ export default function LatestTaskContainer(props) {
         // console.log('#####useEffect####');
         learnId = props.learnId;
         status = props.status;
-    },[props.learnId , props.status])
+    }, [props.learnId, props.status]);
     //将navigation传给LatestTask组件，防止路由出错
-    return <LatestTask navigation={navigation} learnId={learnId} status={status}></LatestTask>;
+    return (
+        <LatestTask
+            navigation={navigation}
+            learnId={learnId}
+            status={status}
+        ></LatestTask>
+    );
 }
 
 class LatestTask extends React.Component {
@@ -42,12 +48,11 @@ class LatestTask extends React.Component {
         this.state = {
             showSearch: false,
             showFilter: true,
-            value: '',  //搜索栏中的内容
-            resourceType: 'all', //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
-                                //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
-            
-            
-            resourceRead: '', //资料夹是否已读接口返回的数据
+            value: "", //搜索栏中的内容
+            resourceType: "all", //TodoList组件所要渲染的页面内容类型all:所有， 1：导学案,2：作业，3：通知4：公告
+            //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
+
+            resourceRead: "", //资料夹是否已读接口返回的数据
         };
     }
 
@@ -64,8 +69,8 @@ class LatestTask extends React.Component {
             // console.log("resStr", resJson);
             this.setState({ resourceRead: resJson.data });
             //console.log('data' , this.state.resourceRead);
-            return ;
-        })
+            return;
+        });
 
         const { navigation } = this.props;
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
@@ -98,7 +103,7 @@ class LatestTask extends React.Component {
     //点击文件夹图标跳转
     packagesPage = () => {
         this.setState({ resourceRead: 0 }); //资料夹状态改为已读
-        console.log("文件夹页面跳转");
+        // console.log("文件夹页面跳转");
         this.props.navigation.navigate("资料夹", {});
     };
 
@@ -112,13 +117,13 @@ class LatestTask extends React.Component {
         // const {searchText} = this;
         // console.log('serachText' , searchText.state.value);
         // console.log('******' , searchText.state.value);
-        console.log('*******');
+        // console.log("*******");
         this.setState({});
     };
-    
+
     //点击键盘中的提交按钮，光标移出搜索框，“搜索“二字消失
     onBlur = () => {
-        console.log('点击了键盘中的提交按钮');
+        // console.log("点击了键盘中的提交按钮");
         this.setState({});
     };
 
@@ -140,38 +145,38 @@ class LatestTask extends React.Component {
     };
     //全部最新内容
     handleAll = () => {
-        console.log("获取全部最新内容");
-        this.setState({ resourceType: "all",moduleVisible:false });
+        // console.log("获取全部最新内容");
+        this.setState({ resourceType: "all", moduleVisible: false });
     };
     //作业
     handleHomework = () => {
-        console.log("获取作业内容");
-        this.setState({ resourceType: "2" ,moduleVisible:false});
+        // console.log("获取作业内容");
+        this.setState({ resourceType: "2", moduleVisible: false });
     };
     //导学案
     handleGuidance = () => {
-        console.log("获取导学案内容");
-        this.setState({ resourceType: "1",moduleVisible:false });
+        // console.log("获取导学案内容");
+        this.setState({ resourceType: "1", moduleVisible: false });
     };
     //授课包
     handleTeachingPackages = () => {
-        console.log("获取授课包内容");
-        this.setState({ resourceType: "6" ,moduleVisible:false});
+        // console.log("获取授课包内容");
+        this.setState({ resourceType: "6", moduleVisible: false });
     };
     //微课
     handleMicroClass = () => {
-        console.log("获取微课内容");
-        this.setState({ resourceType: "7" ,moduleVisible:false});
+        // console.log("获取微课内容");
+        this.setState({ resourceType: "7", moduleVisible: false });
     };
     //通知
     handleInform = () => {
-        console.log("获取通知内容");
-        this.setState({ resourceType: "3" ,moduleVisible:false});
+        // console.log("获取通知内容");
+        this.setState({ resourceType: "3", moduleVisible: false });
     };
     //公告
     handleNotice = () => {
-        console.log("获取公告内容");
-        this.setState({ resourceType: "4" ,moduleVisible:false});
+        // console.log("获取公告内容");
+        this.setState({ resourceType: "4", moduleVisible: false });
     };
 
     //资料夹是否已读图标
@@ -271,7 +276,7 @@ class LatestTask extends React.Component {
                         <View style={styles.searchView}>
                             <SearchBar
                                 style={styles.searchBar}
-                                value={{SearchText}}
+                                value={{ SearchText }}
                                 placeholder="学案/作业"
                                 ref={(ref) => (this.searchText = ref)}
                                 onCancel={this.onSearch}
