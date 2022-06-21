@@ -61,7 +61,7 @@ class TeacherTabBarComponent extends React.Component {
         return (
             <View>
                 {/* <Text>我是教师端首页</Text> */}
-                <LatestPage fresh={this.props.type} />
+                <LatestPage />
             </View>
         );
     };
@@ -72,7 +72,7 @@ class TeacherTabBarComponent extends React.Component {
         return (
             <View>
                 {/* <Text>我是教师端教学内容</Text> */}
-                <TeachingContentPage type={this.props.type} />
+                <TeachingContentPage  />
             </View>
         );
     };

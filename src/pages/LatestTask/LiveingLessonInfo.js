@@ -279,7 +279,7 @@ class LiveingLessonContent extends Component {
                     <TouchableOpacity style={{position:"absolute",right:25}} onPress={
                         ()=>{
                             NativeModules.IntentMoudle.startActivityFromJS(
-                                "EntranceActivity", 
+                                "LaunchActivity", 
                                     global.constants.userName+"-"+      //userid 学生id
                                     global.constants.userCn+"-"+        //usercn 学生中文名   
                                     this.state.roomId+"-"+              //roomid 直播房间号
