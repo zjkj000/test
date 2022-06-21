@@ -465,7 +465,10 @@ class ContentList extends React.Component {
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
-                        <Text style={styles.selectContent} onPress={() => {this.deletepaper(id)}}>
+                        <Text style={styles.selectContent} onPress={() => {
+                            this.deleteLearnPlan(id);
+                            WaitLoading.show('删除中',-1);
+                        }}>
                             删除
                         </Text>
                     </View>
@@ -514,7 +517,10 @@ class ContentList extends React.Component {
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
-                        <Text style={styles.selectContent}  onPress={() => {Alert.alert('该功能还未写！！！')}}>
+                        <Text style={styles.selectContent}  onPress={() => {
+                            this.deleteLearnPlan(id);
+                            WaitLoading.show('删除中',-1);
+                        }}>
                             删除
                         </Text>
                     </View>
@@ -553,6 +559,7 @@ class ContentList extends React.Component {
         );
     }
 
+    //删除试卷
     deletepaper(paperId){
         const url =
             "http://" +
@@ -563,6 +570,28 @@ class ContentList extends React.Component {
             token:global.constants.token,
             paperId:paperId 
           };
+        http.get(url, params).then((resStr) => {
+            let resJson = JSON.parse(resStr);
+            if(resJson.success){
+                WaitLoading.show_success('删除成功！',1000)
+                this.setState({todos:[]})
+                this.fetchData(pageNo , oldtype , oldsearchStr , true);
+            }
+            
+        })
+    }
+
+    //删除导学案、微课、授课包
+    deleteLearnPlan(learnPlanId){
+        const url =
+            "http://" +
+            "www.cn901.net" +
+            ":8111" +
+            "/AppServer/ajax/teacherApp_deleteLearnPlan.do";
+        const params = {
+            token: global.constants.token,
+            learnPlanId: learnPlanId,
+        };
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
             if(resJson.success){
