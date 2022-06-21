@@ -331,6 +331,7 @@ class LatestPage extends React.Component {
                                     Screen: "教学内容",
                                     resourceType: "paper",
                                 },
+                                merge:true
                             });
                         }}
                     />

@@ -81,9 +81,9 @@ class Tea_Noticecontent extends Component {
             this.props.navigation.navigate({
               name:'Teacher_Home',
               params:{
-                type:'freshNotice',
                 isRefresh:true,
-              }
+              },
+              merge:true
             })
           }}
         ])

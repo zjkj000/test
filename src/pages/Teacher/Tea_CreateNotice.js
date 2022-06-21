@@ -100,7 +100,8 @@ class Tea_CreateNoticeContent extends Component {
                         params:{
                             Screen:'通知公告',
                             isRefresh:true,
-                        }
+                        },
+                        merge:true
                     })
                 }}
           ])
