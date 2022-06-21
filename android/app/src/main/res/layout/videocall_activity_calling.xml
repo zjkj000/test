@@ -1,0 +1,723 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/rl_main_bg"
+    android:orientation="horizontal">
+
+    <com.tencent.rtmp.ui.TXCloudVideoView
+        android:id="@+id/teacher_share"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/temp"
+        android:gravity="center"
+        android:padding="0dp"
+        app:layout_constraintBottom_toTopOf="parent"
+
+
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+
+        app:layout_constraintWidth_percent="1.0">
+        <!--        app:layout_constraintHorizontal_bias="0.5"-->
+
+    </com.tencent.rtmp.ui.TXCloudVideoView>
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/common_ic_back"
+        android:gravity="left|top"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintHeight_percent="0."
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tv_room_number"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:paddingLeft="10dp"
+        android:gravity="left|center_vertical"
+        android:text="房间号：12345678"
+        android:textColor="@android:color/white"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toEndOf="@+id/iv_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.4" />
+
+
+    <ScrollView
+        android:id="@+id/stroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        android:fadingEdge="vertical"
+        android:gravity="right"
+        android:scrollbars="vertical"
+        android:background="@color/background_chatroom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="1.0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.2">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+
+            <!--教师端摄像头流 teacher_camera-->
+            <TextView
+                android:id="@+id/teacher_camera_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:gravity="left"
+                android:padding="5dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintBottom_toBottomOf="@+id/teacher_camera"
+                app:layout_constraintStart_toStartOf="@+id/teacher_camera"
+                />
+
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/teacher_camera"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@mipmap/temp"
+                android:padding="2dp"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></com.tencent.rtmp.ui.TXCloudVideoView>
+
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/teacher_background"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@mipmap/temp"
+                android:padding="2dp"
+                android:visibility="invisible"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+
+
+            <!--学生端摄像头 txcvv_main-->
+            <TextView
+                android:id="@+id/myself_camera_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:gravity="left"
+                android:padding="5dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintBottom_toBottomOf="@+id/myself_camera"
+                app:layout_constraintStart_toStartOf="@+id/myself_camera"
+                />
+
+            <ImageView
+                android:id="@+id/myself_platform"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:background="@mipmap/my_p"
+                android:gravity="right"
+                android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/myself_background"
+                app:layout_constraintEnd_toEndOf="@+id/myself_background"
+            />
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/myself_camera"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@mipmap/temp"
+                android:padding="2dp"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teacher_background" />
+
+
+            <!--学生端摄像头 txcvv_main-->
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/myself_background"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:background="@mipmap/temp"
+                android:padding="2dp"
+                android:visibility="invisible"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/teacher_background" />
+
+            <!--学生端_6个学生 student_1/2/3/4/5/6-->
+            <TextView
+                android:id="@+id/student_1_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:gravity="left"
+                android:padding="5dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintBottom_toBottomOf="@+id/student_1"
+                app:layout_constraintStart_toStartOf="@+id/student_1"
+                />
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/student_1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="2dp"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/myself_background" />
+
+
+
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/student_2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="2dp"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/student_1"/>
+            <TextView
+                android:id="@+id/student_2_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:gravity="left"
+                android:padding="5dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintBottom_toBottomOf="@+id/student_2"
+                app:layout_constraintStart_toStartOf="@+id/student_2"
+                />
+
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/student_3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="2dp"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/student_2" />
+            <TextView
+                android:id="@+id/student_3_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:gravity="left"
+                android:padding="5dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintBottom_toBottomOf="@+id/student_3"
+                app:layout_constraintStart_toStartOf="@+id/student_3"
+                />
+
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/student_4"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="2dp"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/student_3" />
+            <TextView
+                android:id="@+id/student_4_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:gravity="left"
+                android:padding="5dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintBottom_toBottomOf="@+id/student_4"
+                app:layout_constraintStart_toStartOf="@+id/student_4"
+                />
+
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/student_5"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="2dp"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/student_4" />
+            <TextView
+                android:id="@+id/student_5_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:gravity="left"
+                android:padding="5dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintBottom_toBottomOf="@+id/student_5"
+                app:layout_constraintStart_toStartOf="@+id/student_5"
+                />
+
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/student_6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="2dp"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/student_5" />
+            <TextView
+                android:id="@+id/student_6_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textColor="@android:color/white"
+                android:gravity="left"
+                android:padding="5dp"
+                android:stateListAnimator="@null"
+                app:layout_constraintBottom_toBottomOf="@+id/student_6"
+                app:layout_constraintStart_toStartOf="@+id/student_6"
+                />
+
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <!--底部一排功能按钮-->
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_buttons"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom"
+        android:visibility="visible"
+        app:constraint_referenced_ids="message_input,submit_mess,hands,message,btn_mute_audio,btn_mute_video,btn_switch_camera,refresh,fullscreen,exitroom"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintWidth_percent="1.0" />
+
+
+<!--</android:focusable="true"-->
+    <EditText
+        android:id="@+id/message_input"
+        android:background="@drawable/message_input"
+        android:paddingTop="4dp"
+        android:paddingBottom="4dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="4dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:text=""
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="w,10:1"
+        app:layout_constraintEnd_toStartOf="@+id/submit_mess"
+        app:layout_constraintWidth_percent="0.7"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="parent" />
+
+        <Button
+            android:id="@+id/submit_mess"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:background="@mipmap/submit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/hands"
+            app:layout_constraintHeight_percent="0.1" />
+
+    <Button
+        android:id="@+id/hands"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginLeft="30dp"
+        android:background="@drawable/btn_select_hand"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintDimensionRatio="w,1:1"
+        app:layout_constraintEnd_toStartOf="@+id/message"
+        app:layout_constraintHeight_percent="0.1" />
+
+        <Button
+            android:id="@+id/message"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/btn_select_message"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/btn_mute_audio"
+            app:layout_constraintHeight_percent="0.1" />
+
+
+        <Button
+            android:id="@+id/btn_mute_audio"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/btn_select_audio"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/btn_mute_video"
+            app:layout_constraintHeight_percent="0.1" />
+
+
+        <Button
+            android:id="@+id/btn_mute_video"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/btn_select_video"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/btn_switch_camera"
+            app:layout_constraintHeight_percent="0.1" />
+
+
+        <Button
+            android:id="@+id/btn_switch_camera"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:background="@mipmap/c"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/refresh"
+            app:layout_constraintHeight_percent="0.1" />
+
+
+        <Button
+            android:id="@+id/refresh"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:background="@mipmap/d"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/exitroom"
+            app:layout_constraintHeight_percent="0.1" />
+
+        <Button
+            android:id="@+id/exitroom"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/btn_select_exitroom"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/fullscreen"
+            app:layout_constraintHeight_percent="0.1" />
+
+
+        <Button
+            android:id="@+id/fullscreen"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="30dp"
+            android:background="@drawable/btn_select_fullscreen"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0." />
+
+
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/tfanswer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom"
+        android:background="@color/gray_back"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="1.0">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <CheckBox
+                android:id="@+id/tfyes"
+                style="@style/select_style"
+                android:tag="1"
+                android:text="对" />
+
+            <CheckBox
+                android:id="@+id/tfno"
+                style="@style/select_style"
+                android:tag="0"
+                android:text="错" />
+
+            <Button
+                android:id="@+id/tfsubmit"
+                style="@style/submit_style"
+                android:tag="0"
+                android:text="提交" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/singleanswer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom"
+        android:background="@color/gray_back"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="1.0">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <CheckBox
+                android:id="@+id/singlea"
+                style="@style/select_style"
+                android:tag="A"
+                android:text="A" />
+
+            <CheckBox
+                android:id="@+id/singleb"
+                style="@style/select_style"
+                android:tag="B"
+                android:text="B" />
+
+            <CheckBox
+                android:id="@+id/singlec"
+                style="@style/select_style"
+                android:tag="C"
+                android:text="C" />
+
+            <CheckBox
+                android:id="@+id/singled"
+                style="@style/select_style"
+                android:tag="D"
+                android:text="D" />
+
+            <CheckBox
+                android:id="@+id/singlee"
+                style="@style/select_style"
+                android:tag="E"
+                android:text="E" />
+
+            <CheckBox
+                android:id="@+id/singlef"
+                style="@style/select_style"
+                android:tag="F"
+                android:text="F" />
+
+            <CheckBox
+                android:id="@+id/singleg"
+                style="@style/select_style"
+                android:tag="G"
+                android:text="G" />
+
+            <CheckBox
+                android:id="@+id/singleh"
+                style="@style/select_style"
+                android:tag="H"
+                android:text="H" />
+
+            <Button
+                android:id="@+id/singlesubmit"
+                style="@style/submit_style"
+                android:tag="0"
+                android:text="提交" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/multianswer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom"
+        android:background="@color/gray_back"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="1.0">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <CheckBox
+                android:id="@+id/multia"
+                style="@style/multiselect_style"
+                android:tag="A"
+                android:text="A" />
+
+            <CheckBox
+                android:id="@+id/multib"
+                style="@style/multiselect_style"
+                android:tag="B"
+                android:text="B" />
+
+            <CheckBox
+                android:id="@+id/multic"
+                style="@style/multiselect_style"
+                android:tag="C"
+                android:text="C" />
+
+            <CheckBox
+                android:id="@+id/multid"
+                style="@style/multiselect_style"
+                android:tag="D"
+                android:text="D" />
+
+            <CheckBox
+                android:id="@+id/multie"
+                style="@style/multiselect_style"
+                android:tag="E"
+                android:text="E" />
+
+            <CheckBox
+                android:id="@+id/multif"
+                style="@style/multiselect_style"
+                android:tag="F"
+                android:text="F" />
+
+            <CheckBox
+                android:id="@+id/multig"
+                style="@style/multiselect_style"
+                android:tag="G"
+                android:text="G" />
+
+            <CheckBox
+                android:id="@+id/multih"
+                style="@style/multiselect_style"
+                android:tag="H"
+                android:text="H" />
+
+            <Button
+                android:id="@+id/multisubmit"
+                style="@style/submit_style"
+                android:tag="0"
+                android:text="提交" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/subjectiveanswer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom"
+        android:background="@color/gray_back"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="1.0">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <EditText
+                android:id="@+id/tiankong"
+                android:layout_width="300dp"
+                style="@style/select_style"
+                android:tag=""
+                android:text="" />
+
+            <Button
+                android:id="@+id/subjectivesubmit"
+                style="@style/submit_style"
+                android:tag="0"
+                android:text="提交" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="1.0"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.2">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatroom"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="top"
+            android:background="@color/gray_text_dark"
+            android:scrollbars="vertical"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toTopOf="@+id/chatroom_temp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.9"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent="1.0" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/chatroom_temp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_gravity="top"
+            android:background="@color/gray_text_dark"
+            android:scrollbars="vertical"
+            android:visibility="invisible"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.1"
+            app:layout_constraintTop_toBottomOf="@+id/chatroom"
+            app:layout_constraintWidth_percent="1.0" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

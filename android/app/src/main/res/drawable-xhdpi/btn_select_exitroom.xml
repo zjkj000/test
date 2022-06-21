@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- pressed -->
+    <item android:state_selected="false"
+        android:drawable="@mipmap/exit_home" />
+
+    <!-- focused -->
+    <item android:state_selected="true"
+        android:drawable="@mipmap/exit_home"/>
+
+    <!-- 默认时的背景图片-->
+    <item android:drawable="@mipmap/exit_home" />
+</selector>
