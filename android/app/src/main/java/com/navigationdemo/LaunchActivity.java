@@ -63,6 +63,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static String                          mRoomId;
     public static String                          mUserId;
     public static String                          mUserCn;
+    public static String                          mTeacherCn;
 
     public static TRTCCloud                       mTRTCCloud;
     public static TXDeviceManager                 mTXDeviceManager;
@@ -96,7 +97,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static ImageView                       mPlatform;
     public static HashMap<String,String>          id_name_map;
 
-    //底部一排button、顶部返回、教师共享点击
+    //底部一排button、顶部返回、教师共享点�?
     public static ImageView                       mImageBack;
     public static Button                          mExitBack;
     public static Button                          mButtonHand;
@@ -110,7 +111,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static EditText                        mMessageInput;
     public static Button                          mMessageSubmit;
 
-    //答题界面，判断、单选、多选、主观
+    //答题界面，判断、单选、多选、主�?
     public static CheckBox tfyes,tfno;
     public static List<CheckBox> radios_tf;
     public static CheckBox sa,sb,sc,sd,se,sf,sg,sh;
@@ -133,7 +134,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static String last_platformUserId = "";
 
 
-    //聊天室
+    //聊天�?
     public static RecyclerView recyclerView;
     public static int refreshChatFlag=1;
 
@@ -158,7 +159,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             enterRoom();
         }
 
-        //先进房间，才能进行举手请求
+        //先进房间，才能进行举手请�?
         HttpActivity.testJoinOrLeaveRoom("join");
 
         //按时间间隔捕获教师端消息
@@ -180,7 +181,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         },300,300);
     }
 
-    // 构建Runnable对象，在runnable中更新界面
+    // 构建Runnable对象，在runnable中更新界�?
     Runnable runnableUi = new Runnable() {
         @Override
         public void run(){
@@ -188,7 +189,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             getview();
             //更新互动答题界面
             getteacher();
-            //更新聊天室界面
+            //更新聊天室界�?
             getchatroom();
         }
 
@@ -381,9 +382,9 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             }
     }
 
-    //更新聊天室界面
+    //更新聊天室界�?
     private void getchatroom(){
-        //将messageList动态渲染到聊天室当中
+        //将messageList动态渲染到聊天室当�?
         if(AnswerActivity.messageList==null||AnswerActivity.messageList.size()==0) {
             System.out.println("messagelist is null!");
             return;
@@ -398,11 +399,11 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 //            last_actiontime_chat=AnswerActivity.chatTime;
 //            return;
 //        }
-//        //1、设置布局管理器
+//        //1、设置布局管理�?
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //2、设置adapter
         recyclerView.setAdapter(new ChatAdapter(this, AnswerActivity.messageList));
-        //3、设置默认动画
+        //3、设置默认动�?
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.scrollToPosition(AnswerActivity.messageList.size()-1);
 
@@ -428,9 +429,11 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         LaunchActivity.mUserId = strArr[0];
         LaunchActivity.mUserCn = strArr[1];
         LaunchActivity.mRoomId = strArr[2];
+        LaunchActivity.mTeacherCn = strArr[3];
         System.out.println("LaunchActivity-userinit:"+LaunchActivity.mUserId);
         System.out.println("LaunchActivity-usercninit:"+LaunchActivity.mUserCn);
         System.out.println("LaunchActivity-roominit:"+LaunchActivity.mRoomId);
+        System.out.println("LaunchActivity-mTeacherCn:"+LaunchActivity.mTeacherCn);
 
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
@@ -516,26 +519,27 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         mstroll.setOnClickListener(this);
     }
 
-    //初始化顶部、底部按钮
+    //初始化顶部、底部按�?
     private void initViewBottomButton(){
         mTextTitle = findViewById(R.id.tv_room_number);
         //mImageBack = findViewById(R.id.iv_back);
         mExitBack = findViewById(R.id.exitroom);
-        mTXCVVLocalPreviewView = findViewById(R.id.myself_camera);//自己摄像头
-        mTXCVVLocalPreviewView_background = findViewById(R.id.myself_background);//自己摄像头
+        mTXCVVLocalPreviewView = findViewById(R.id.myself_camera);//自己摄像�?
+        mTXCVVLocalPreviewView_background = findViewById(R.id.myself_background);//自己摄像�?
         mButtonHand = findViewById(R.id.hands);
         mButtonMessage = findViewById(R.id.message);
         mButtonMuteVideo = findViewById(R.id.btn_mute_video);
         mButtonMuteAudio = findViewById(R.id.btn_mute_audio);
         mRefresh = findViewById(R.id.refresh);
-        mButtonSwitchCamera = findViewById(R.id.btn_switch_camera); //前置后置摄像头切换
+        mButtonSwitchCamera = findViewById(R.id.btn_switch_camera); //前置后置摄像头切�?
         mFullScreen = findViewById(R.id.fullscreen);
         mGroupButtons=findViewById(R.id.group_buttons);
         mMessageInput=findViewById(R.id.message_input);
         mMessageSubmit=findViewById(R.id.submit_mess);
 
         if (!TextUtils.isEmpty(mRoomId)) {
-            mTextTitle.setText(getString(R.string.videocall_roomid) + mRoomId);
+            //mTextTitle.setText(getString(R.string.videocall_roomid) + mRoomId);
+            mTextTitle.setText( mRoomId);
         }
         //mImageBack.setOnClickListener(this);
         mExitBack.setOnClickListener(this);
@@ -550,7 +554,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         mMessageSubmit.setOnClickListener(this);
     }
 
-    //初始化互动答题界面：判断、单选、多选、主观
+    //初始化互动答题界面：判断、单选、多选、主�?
     private void initViewAnswer(){
         group_tfanswer = findViewById(R.id.tfanswer);
         group_tfanswer.setOnClickListener(this);
@@ -636,7 +640,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
     private void initChatRoom(){
         recyclerView = (RecyclerView) findViewById(R.id.chatroom);
-        //1、设置布局管理器
+        //1、设置布局管理�?
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
     }
 
@@ -694,7 +698,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         }
         mTRTCCloud = null;
         TRTCCloud.destroySharedInstance();
-        //退出房间
+        //退出房�?
         HttpActivity.testJoinOrLeaveRoom("leave");
     }
 
@@ -722,7 +726,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
         }
 
-        //举手上讲台
+        //举手上讲�?
         else if(id == R.id.hands){
             BottomButtonActivity.muteHand();
         }
@@ -742,7 +746,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             BottomButtonActivity.muteAudio();
         }
 
-        //前置后置摄像头
+        //前置后置摄像�?
         else if (id == R.id.btn_switch_camera) {
             BottomButtonActivity.switchCamera();
         }
@@ -750,12 +754,12 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         //刷新
         else if (id == R.id.refresh){
             BottomButtonActivity.remoteRefresh();
-//            new Thread(new Runnable() {//创建子线程
+//            new Thread(new Runnable() {//创建子线�?
 //                @Override
 //                public void run() {
-//                    getwebinfo();//把路径选到MainActivity中
+//                    getwebinfo();//把路径选到MainActivity�?
 //                }
-//            }).start();//启动子线程
+//            }).start();//启动子线�?
         }
 
         //全屏
@@ -763,7 +767,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             BottomButtonActivity.fullscreen();
         }
 
-        //点击教师分享流隐藏顶部底部按钮
+        //点击教师分享流隐藏顶部底部按�?
         else if(id == R.id.teacher_share){
             BottomButtonActivity.touchTeachershare();
         }
@@ -771,7 +775,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         //判断
         else if(id == R.id.tfyes ||id == R.id.tfno
               ||id == R.id.tfsubmit){
-            // 显示选中项值
+            // 显示选中项�?
             if(id == R.id.tfsubmit){
                 String checkedValues = SelectUtil.getOne(radios_tf);
                 System.out.println("判断选中了：" + checkedValues);
@@ -784,11 +788,11 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             thisbox.setChecked(true);
         }
 
-        //单选
+        //单�?
         else if(id == R.id.singlea ||id == R.id.singleb || id == R.id.singlec ||id == R.id.singled
               ||id == R.id.singlee ||id == R.id.singlef || id == R.id.singleg ||id == R.id.singleh
               ||id == R.id.singlesubmit){
-            // 显示选中项值
+            // 显示选中项�?
             if(id == R.id.singlesubmit){
                 String checkedValues = SelectUtil.getOne(radios_single);
                 System.out.println("单选选中了：" + checkedValues+"id:"+HttpActivity.questionId);
@@ -800,14 +804,14 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             thisbox.setChecked(true);
         }
 
-        //多选
+        //多�?
         else if(id == R.id.multia ||id == R.id.multib || id == R.id.multic ||id == R.id.multid
               ||id == R.id.multie ||id == R.id.multif || id == R.id.multig ||id == R.id.multih
               ||id == R.id.multisubmit){
-            // 显示选中项值
+            // 显示选中项�?
             if(id == R.id.multisubmit){
                 String checkedValues = SelectUtil.getMany(radios_multi);
-                System.out.println("多选选中了:"+checkedValues);
+                System.out.println("多选选中�?:"+checkedValues);
                 HttpActivity.stuSaveAnswer(checkedValues);
                 return;
             }
@@ -820,24 +824,24 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             }
         }
 
-        //主观_填空题
+        //主观_填空�?
         else if(id == R.id.subjectivesubmit){
-            // 显示选中项值
+            // 显示选中项�?
             EditText editone = findViewById(R.id.tiankong);
             String editoneValue = editone.getText().toString();
-            System.out.println("填空的内容:"+editoneValue);
+            System.out.println("填空的内�?:"+editoneValue);
             HttpActivity.stuSaveAnswer(editoneValue);
         }
 
-        //消息框
+        //消息�?
         else if(id == R.id.submit_mess){
-            //显示选中值
+            //显示选中�?
             EditText editone = findViewById(R.id.message_input);
             String editoneValue = editone.getText().toString();
-            System.out.println("聊天打出的内容:"+editoneValue);
-            if(editoneValue.length()==0||editoneValue.equals("消息不允许为空")){
+            System.out.println("聊天打出的内�?:"+editoneValue);
+            if(editoneValue.length()==0||editoneValue.equals("消息不允许为�?")){
                 mMessageInput.setEnabled(false);
-                mMessageInput.setText("消息不允许为空");
+                mMessageInput.setText("消息不允许为�?");
                 new Handler().postDelayed(new Runnable() {
                     @Override
                     public void run() {
@@ -995,7 +999,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                             mPlatform.setVisibility(View.VISIBLE);
                             mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVLocalPreviewView);
                             mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
-                            HttpActivity.testRaiseHandAction("down");//放手下讲台
+                            HttpActivity.testRaiseHandAction("down");//放手下讲�?
                             mButtonHand.setSelected(false);
                         }
                     }
@@ -1033,7 +1037,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                     //teacher-camera
                     else if(remoteUid.contains("_camera")){
                         //mTeacherCamera_name.setText(id_name_map.get(remoteUid));
-                        mTeacherCamera_name.setText("教师");
+                        mTeacherCamera_name.setText(mTeacherCn);
 
                         mTeacherCamera.setVisibility(View.VISIBLE);
                         mTRTCCloud.startRemoteView(remoteUid, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SMALL,mTeacherCamera);
@@ -1108,7 +1112,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         }
     }
 
-    /*为了方便这个类是写在MainActivity里作为内部类的*/
+    /*为了方便这个类是写在MainActivity里作为内部类�?*/
     class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ChatViewHolder> {
         private List<ChatBean> chatBeanList;
         private LayoutInflater inflater;
@@ -1147,7 +1151,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
         @Override
         public int getItemViewType(int position) {
-            return chatBeanList.get(position).getType();//**返回集合Bean里的值作为标记值将传递到onCreateViewHolder里
+            return chatBeanList.get(position).getType();//**返回集合Bean里的值作为标记值将传递到onCreateViewHolder�?
         }
 
         @Override
@@ -1188,7 +1192,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         public int getItemCount() {
             return chatBeanList.size();
         }
-        //简单实现的ViewHolder，开发中最好再做些优化可以参考上一篇
+        //简单实现的ViewHolder，开发中最好再做些优化可以参考上一�?
         class ChatViewHolder extends RecyclerView.ViewHolder {
 
             TextView tvResponse;

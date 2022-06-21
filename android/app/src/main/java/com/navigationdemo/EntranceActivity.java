@@ -59,9 +59,11 @@ public class EntranceActivity extends AppCompatActivity {
         LaunchActivity.mUserId = strArr[0];
         LaunchActivity.mUserCn = strArr[1];
         LaunchActivity.mRoomId = strArr[2];
+        LaunchActivity.mTeacherCn = strArr[3];
         System.out.println("EntranceActivity-userinit:"+LaunchActivity.mUserId);
         System.out.println("EntranceActivity-usercninit:"+LaunchActivity.mUserCn);
         System.out.println("EntranceActivity-roominit:"+LaunchActivity.mRoomId);
+        System.out.println("EntranceActivity-mTeacherCn:"+LaunchActivity.mTeacherCn);
 
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
