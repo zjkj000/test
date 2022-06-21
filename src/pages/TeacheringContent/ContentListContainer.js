@@ -238,7 +238,6 @@ class ContentList extends React.Component {
                             </View>
                         </View>
                         <View style={{backgroundColor:'#fff'}}><Text style={{width:20}}></Text></View>
-                        {/* {console.log('!!!!!!!!!!!!!!!!!!',todo.knowledgeCode,todo.knowledge)} */}
                         {this.showTodo(todoImg,todo.id,todo.name,todo.paperType,todo)}
                 </ScrollView>
 
@@ -330,7 +329,6 @@ class ContentList extends React.Component {
                                     }
                                 })
                             }else{
-                                console.log('============!!!!!!!!!!!!=============',todo)
                                 this.props.navigation.navigate({
                                     name:'AssignPaper',
                                     params:{
@@ -349,9 +347,25 @@ class ContentList extends React.Component {
                         <Text style={styles.selectContent}  
                             onPress={() => {
                                 if(todo.paperType == '6'){
-                                    Alert.alert('拍照布置作业编辑');
+                                    this.props.navigation.navigate({
+                                        name:'EditPicturePaperWork',
+                                        params:{
+                                        paperName:name,
+                                        paperId:id,
+                                        type:'update',
+                                        channelName:todo.channel,
+                                        channelCode:todo.channelCode,
+                                        gradeLevelName:todo.gradeBook,
+                                        subjectCode:todo.subjectId,
+                                        textBookCode:todo.textBookId,
+                                        gradeLevelCode:todo.gradeBookCode,
+                                        pointCode:todo.knowledgeCode,
+                                        subjectName:todo.subject,
+                                        textBookName:todo.textBook,
+                                        pointName:todo.knowledge,
+                                        }
+                                    })
                                 }else{
-                                    console.log(todo); //选题布置作业编辑
                                     this.props.navigation.navigate({
                                         name:'创建作业',
                                         params:{

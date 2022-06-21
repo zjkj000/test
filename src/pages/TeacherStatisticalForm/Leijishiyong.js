@@ -74,8 +74,9 @@ export default class Leijishiyong extends Component {
 
   renderAvatar = () => {
     return (
-        <TouchableOpacity onPress={() => {this.setState({ moduleVisible: true });}}>
+        <TouchableOpacity style={{flexDirection:'row'}} onPress={() => {this.setState({ moduleVisible: true });}}>
             <Text style={{fontSize:15,color:'#87CEFA'}}>{this.state.SchoolYearTermName}</Text>
+            <Text> ▼</Text>
         </TouchableOpacity>
     );
 };

@@ -52,7 +52,7 @@ export default function StatisticalForm() {
           <View style={{height:40,backgroundColor:'#FFFFFF',alignItems:'center',alignContent:'center'}}>
             <Text style={{fontSize:20,marginTop:5}}>统计报表</Text>
           </View>
-          <ScrollView style={{backgroundColor:'#ECEEED',padding:10,flexDirection:'column',marginBottom:50}}>
+          <ScrollView style={{backgroundColor:'#ECEEED',padding:10,flexDirection:'column',marginBottom:45}}>
             {/* 累计使用 */}
             <Leijishiyong data={this.state.leijishiyonglist}/>
             {/* 课堂授课标题+日历 */}
@@ -100,7 +100,7 @@ export default function StatisticalForm() {
             </View>
             {/* 批阅试题图表 */}
             <Piyueshiti data={this.state.piyueshitilist} date={this.state.PiyueshitiDateStr}/>
-            </ScrollView>
+          </ScrollView>
       </View>
     
     );

@@ -38,7 +38,7 @@ export default function PaperList(props) {
             taskId:    props.route.params.taskId,      //作业id或者导学案id
             teacherId: global.constants.userName,               // 老师登录名
             type:      props.route.params.type,          //  paper,表示作业；learnPlan表示导学案
-            status:    statusa,                            //  2未批改；4以批改，空或者0代表全部
+            status:    statusa,                            //  2未批改；4以批改，空或者0代表全部  
             searchStr : SearchText
           };
         http.get(url, params).then((resStr) => {
@@ -89,12 +89,13 @@ export default function PaperList(props) {
 
     function _renderItemView(dataItem){
       return (<Paper_List_Details navigation={navigation}  
-                                  scoure={dataItem} 
+                                  source={dataItem} 
                                   type={props.route.params.type}
                                   CorrectAllQuestion={CorrectAllQuestion}/>)
     }
 
     function _onRefresh(){
+      setdata([])
       setisRefresh(true)
       fetchData(isRefreshing=true);
     }
@@ -218,6 +219,7 @@ export default function PaperList(props) {
           </View>
             <View style={{alignItems:'center',height:'85%',paddingBottom:10,backgroundColor:'#FFFFFF',borderColor:'#000000',borderTopWidth:0.5}}>
                   <FlatList
+                     showsVerticalScrollIndicator={false}
                       //定义数据显示效果
                       data={data}
                       renderItem={_renderItemView.bind(this)}
@@ -253,20 +255,20 @@ export default function PaperList(props) {
               time: "",
               paperId: "",
               scoreCount: "",
-              status: "",              // 2未批改；4以批改，空或者  0代表全部
+              status: "",              // 2未批改；4以批改，5代表已批改已阅
               optionTimeStr: "", 
               score: "",
               userPhoto: '',
               userName: '',
               userCn: '',
-              description: "(chijiao)"
+              description: ""
               }
       }
       
       UNSAFE_componentWillMount(){
          this.setState({CorrectAllQuestion:this.props.CorrectAllQuestion,
                         type:this.props.type,
-                        ...this.props.scoure.item})
+                        ...this.props.source.item})
       }
       
       UNSAFE_componentWillReceiveProps(nextProps){
@@ -285,7 +287,8 @@ export default function PaperList(props) {
                         userCn:this.state.userCn,
                         userName:this.state.userName,
                         selectedindex:0,
-                        type:this.props.type
+                        type:this.props.type,
+                        correctingstatus:this.state.status      //  2 未批改     4   已批改
                           }
                 })
               }}>
@@ -298,7 +301,7 @@ export default function PaperList(props) {
                 <View style={{paddingLeft:15,width:'90%',justifyContent:'center'}}>
                     <View style={{flexDirection:'row',marginBottom:8}}>
                         <Text style={{width:'27%'}}>{this.state.userCn}</Text>
-                        {this.state.status=='4'?
+                        {(this.state.status=='4'||this.state.status=='5')?
                         (<View style={{flexDirection:'row',width:'25%'}}>
                               <Text style={{color:'#FF0000'}}>已批改</Text>
                               <Image style={{width:17,height:17,marginLeft:5}} source={require('../../../assets/teacherLatestPage/hasCheck.png')}></Image>
@@ -315,7 +318,7 @@ export default function PaperList(props) {
                     </View>
 
                     {/* 已批改的作业才会展示分数 */}
-                    {this.state.status=='4'?
+                    {(this.state.status=='4'||this.state.status=='5')?
                     (<View style={{flexDirection:'row'}}>
                         <Text style={{marginRight:20}}>得分:</Text>
                         <Text>{this.state.score}</Text>

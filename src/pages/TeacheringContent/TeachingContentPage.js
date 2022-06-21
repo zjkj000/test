@@ -21,7 +21,8 @@ import ContentListContainer from "./ContentListContainer";
 
 let SearchText = '';
 
-export default function LatestPageContainer() {
+export default function LatestPageContainer(props) {
+    console.log('教学内容页面：',props)
     const navigation = useNavigation();
     const route = useRoute();
     //将navigation传给LatestTask组件，防止路由出错

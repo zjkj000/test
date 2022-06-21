@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, ActivityIndicator } from "react-native";
 import {
     bindBackExitApp,
@@ -11,7 +11,7 @@ import MyPage from "../../My/My";
 
 import LatestPage from "../../TeacherLatestPage/LatestPage";
 import TeachingContentPage from "../../TeacheringContent/TeachingContentPage";
-import StatisticalForm from '../../TeacherStatisticalForm/StatisticalForm'
+import StatisticalForm from "../../TeacherStatisticalForm/StatisticalForm";
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
@@ -48,6 +48,7 @@ class TeacherTabBarComponent extends React.Component {
         this._unsubscribeNavigationBlurEvent();
         this._unsubscribeNavigationFocusEvent();
     }
+
     renderHome = () => {
         return (
             <View>
@@ -57,15 +58,13 @@ class TeacherTabBarComponent extends React.Component {
         );
     };
     renderStatistic = () => {
-        return (
-            <StatisticalForm />
-        );
+        return <StatisticalForm />;
     };
     renderStudyTask = () => {
         return (
             <View>
                 {/* <Text>我是教师端教学内容</Text> */}
-                <TeachingContentPage/>
+                <TeachingContentPage  />
             </View>
         );
     };

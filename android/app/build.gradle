@@ -199,6 +199,7 @@ dependencies {
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
     implementation "androidx.core:core:1.1.0"
     implementation "androidx.media:media:1.1.0"
+    implementation 'com.android.support:support-annotations:22.0.0'
     // react-native-camera依赖
     implementation project(path: ':react-native-camera')
 

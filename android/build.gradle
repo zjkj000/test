@@ -20,16 +20,16 @@ buildscript {
     }
 }
 
-    configurations.all {
-        resolutionStrategy.eachDependency { DependencyResolveDetails details ->
-            def requested = details.requested
-            if (requested.group == 'com.android.support') {
-                if (!requested.name.startsWith("multidex")) {
-                    details.useVersion 'xx.x.x'
-                }
-            }
-        }
-    }
+     configurations.all {
+         resolutionStrategy.eachDependency { DependencyResolveDetails details ->
+             def requested = details.requested
+             if (requested.group == 'com.android.support') {
+                 if (!requested.name.startsWith("multidex")) {
+                     details.useVersion 'xx.x.x'
+                 }
+             }
+         }
+     }
     
 allprojects {
     repositories {
@@ -56,11 +56,5 @@ allprojects {
         }
         google()
         maven { url 'https://www.jitpack.io' }
-        //react-native-video
-        jcenter() {
-            content {
-                includeModule("com.yqritc", "android-scalablevideoview")
-            }
-        }
     }
 }

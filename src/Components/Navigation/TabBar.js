@@ -54,18 +54,18 @@ class MyTabBarComponent extends React.Component {
     }
     renderHome = () => {
         const { navigation } = this.props;
-        console.log('----TabBar-renderHome----' , navigation.getState().routes);
+        console.log("----TabBar-renderHome----", navigation.getState().routes);
         const paramsData = navigation.getState().routes[1].params;
-        const learnId = paramsData != null ? paramsData.learnId : '' ;
-        const status = paramsData != null ? paramsData.status : '';
+        const learnId = paramsData != null ? paramsData.learnId : "";
+        const status = paramsData != null ? paramsData.status : "";
         //this.navigation.getState().routes[1].params = null;
         console.log('-----tabbar--------learnId-----------status---------',learnId , status);
         return (
             /*
             <View>
                 <Text>我是首页</Text>
-            </View>*/          
-            <LatestTask learnId={learnId} status={status}/>
+            </View>*/
+            <LatestTask learnId={learnId} status={status} />
         );
     };
     renderStudy = () => {

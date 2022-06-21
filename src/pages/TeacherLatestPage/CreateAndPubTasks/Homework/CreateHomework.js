@@ -22,6 +22,7 @@ import RenderHtml from 'react-native-render-html';
 import Toast from '../../../../utils/Toast/Toast';
 
 import HomeworkPropertyModelContainer from "./HomeworkPropertyModel";
+import { Waiting, WaitLoading } from "../../../../utils/WaitLoading/WaitLoading";
 
 
 //暂存请求到的试题(定义为二维数组，每一维存放相同类型的试题)
@@ -719,11 +720,12 @@ class CreateHomework extends React.Component {
             ...allParams,
             //callback:'ha',
         };
-        console.log('-----pushAndSavePaper-----', Date.parse(new Date()))
+        // console.log('-----pushAndSavePaper-----', Date.parse(new Date()))
+        WaitLoading.show('保存中...',-1)
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log('****************resJson.success*********', resJson);
+                // console.log('****************resJson.success*********', resJson);
                 if(resJson.success){
                     Alert.alert(this.props.paramsData.name , '作业布置成功' , [{} ,
                         {text: 'ok', onPress: ()=>{
@@ -740,7 +742,8 @@ class CreateHomework extends React.Component {
                         }}       
                     ]);
                 }else{
-                    Alert.alert(resJson.message);
+                    WaitLoading.show_false()
+                    // Alert.alert(resJson.message);
                 }
             })
             .catch((error) => {
@@ -755,9 +758,6 @@ class CreateHomework extends React.Component {
     //点击“布置作业”页面的保存按钮，即保存但不布置试卷
     savePaper = () => {
         var saveParamsObj = this.setSavePapersParams();
-        console.log('---------saveParamsObj--------');
-        console.log(saveParamsObj);
-        console.log('------------------------------');
         var allParams = {
             ...saveParamsObj,
             token: global.constants.token,
@@ -774,11 +774,12 @@ class CreateHomework extends React.Component {
             //callback:'ha',
         };
         console.log('-----savePaper-----', Date.parse(new Date()))
+        WaitLoading.show('保存中...',-1)
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log('****************resJson.success*********', resJson , typeof(resJson));
-                console.log('*************************');
+                // console.log('****************resJson.success*********', resJson , typeof(resJson));
+                // console.log('*************************');
                 // console.log('****************resJson.success***Type******', resJson.success);
                 
                 if(resJson.success){
@@ -797,7 +798,8 @@ class CreateHomework extends React.Component {
                         }}       
                     ]);
                 }else{
-                    Alert.alert(resJson.message);
+                    WaitLoading.show_false()
+                    // Alert.alert(resJson.message);
                 }
             })
             .catch((error) => {
@@ -2098,7 +2100,7 @@ class CreateHomework extends React.Component {
 
 
     render() {
-        console.log('----render----类式props---试题类型----', this.state.paperTypeList, Date.parse(new Date()));
+        // console.log('----render----类式props---试题类型----', this.state.paperTypeList, Date.parse(new Date()));
         return (
             <View style={{ flexDirection: 'column', backgroundColor: '#fff' }}>
                 {/**导航项 */}
@@ -2157,7 +2159,7 @@ class CreateHomework extends React.Component {
                         this.state.filterModelVisiblity || this.state.knowledgeModelVisibility ? this.showFilter() : null
                     }
                 </View>
-            
+                <Waiting/>
                 {/**试题展示、调整顺序、布置作业展示区 */}
                 {
                     this.state.addPaperFlag 

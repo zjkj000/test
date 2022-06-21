@@ -13,6 +13,7 @@ export default function AssignPicturesWorkContainer(props) {
     const navigation = useNavigation();
     const paperName=props.route.params.paperName
     var paperId = props.route.params.paperId
+    console.log('布置页面接收到的作业ID：',paperId)
     navigation.setOptions({title:'布置作业'});
     return <AssignPicturesWork navigation={navigation} paperName={paperName} paperId={paperId} />;
 }
@@ -424,7 +425,7 @@ class AssignPicturesWork extends Component {
                 ":8111" +
                 "/AppServer/ajax/teacherApp_phoneBuzhiZY.do";
             const params = {
-                paperId:this.state.paperId,		//试卷id
+                paperId:this.props.paperId,		//试卷id
                 paperName:this.state.paperName,	        //含中文，前端加码	试卷name
                 userName:global.constants.userName,		//教师登录名
                 startTime:this.state.beginstr,		    //开始时间
@@ -444,7 +445,13 @@ class AssignPicturesWork extends Component {
                     Alert.alert('','作业布置成功！',[{},
                         {text:'ok',onPress:()=>{
                             WaitLoading.dismiss()
-                            this.props.navigation.navigate('Teacher_Home')
+                            this.props.navigation.navigate({
+                                name:'Teacher_Home',
+                                params:{
+                                    isRefresh:true,
+                                },
+                                merge:true
+                            })
                         }}
                       ])
                     

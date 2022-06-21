@@ -21,11 +21,10 @@ export default function EditWorkContioner(props) {
   const subjectName      =props.route.params.subjectName?props.route.params.subjectName:''
   const textBookName     =props.route.params.textBookName?props.route.params.textBookName:''
   const gradeLevelName   =props.route.params.gradeLevelName?props.route.params.gradeLevelName:''
-  const pointName        =props.route.params.paperName?props.route.params.paperName:''
+  const pointName        =props.route.params.pointName?props.route.params.pointName:''
   const paperName        =props.route.params.paperName?props.route.params.paperName:''
   const type             =props.route.params.type?props.route.params.type:''
   const paperId          =props.route.params.paperId?props.route.params.paperId:''
-
   useEffect(()=>{
     getTimuType()
       }
@@ -79,7 +78,7 @@ class EditWork extends Component{
     this.updateupdateFlag =this.updateupdateFlag.bind(this)
     this.setanswerNum     = this.setanswerNum.bind(this)
     this.state={
-        updateFlag:0,   //记录保存后是否继续修改   0 代表未修改  1代表修改
+        updateFlag:'1',   //记录保存后是否继续修改   0 代表未修改    1代表修改过
         paperName:'',
         paperId:'-1',    //保存之后就会获取到这个paperID  
         subjectName:'',
@@ -155,7 +154,7 @@ class EditWork extends Component{
   }
 
   updateupdateFlag(){
-    this.setState({updateFlag:1})
+    this.setState({updateFlag:'1'})
   }
   //添加试题，（包括传参数--修改题目的情况）
   addTimu(typeId,typeName,baseTypeId,score){
@@ -172,7 +171,7 @@ class EditWork extends Component{
                 newdata[(this.state.isupdateExistTimuOrder-1)].questionName=this.state.questionName
                 newdata[(this.state.isupdateExistTimuOrder-1)].questionScore=this.state.questionScore
                 this.setState({modalVisible:false,
-                  updateFlag:0,
+                  updateFlag:'1',
                   data:newdata,
                   typeId:'',
                   questionName:'',
@@ -220,7 +219,7 @@ class EditWork extends Component{
                     AnswerContentList:[],
                     AnalysisContentList:[]})
                   this.setState({
-                    updateFlag:0,
+                    updateFlag:'1',
                     data:newdata,
                     typeId:'',
                     baseTypeId:'',
@@ -349,7 +348,6 @@ class EditWork extends Component{
   }
 
   deleteTimu(Timuindex,questionId){
-    this.updateupdateFlag()
     const url =
       "http://" +
       "www.cn901.net" +
@@ -368,7 +366,7 @@ class EditWork extends Component{
               newTimudata.push(item)
             }
           });
-          this.setState({data:newTimudata,updateFlag:0,})
+          this.setState({data:newTimudata,updateFlag:'1',})
         }else{
             Toast.showInfoToast('再试一下',500)
         }
@@ -472,8 +470,8 @@ class EditWork extends Component{
   savepaper(Assign){
     var isnull = true;
     this.state.data.map((item,index)=>{
-      console.log(index,this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList))
       isnull = isnull&&this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList)
+      //if判断的是 题面答案 没有设置的情况
       if(!this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList)){
         if(item.TimuContentList.length==0){
           const str= '请设置第'+(index+1)+'题题面'
@@ -484,96 +482,102 @@ class EditWork extends Component{
           Alert.alert(str)
           Toast.showWarningToast(str,1000)
         }
-      }
-    })
-    // console.log('保存参数之前','paperId：',this.state.paperId,'isnull：',isnull,'Assign:',Assign)
-    //如果都不为空  保存或者提交
-    if((isnull&&this.state.paperId=='-1')||this.state.updateFlag=='1'){
-      // console.log('保存之前：',this.state.data)
-      WaitLoading.show('保存中...',-1)
-          var SubAnswerStr = []
-          this.state.data.map((item,index)=>{
-            SubAnswerStr.push({
-              "questionId":item.questionId,
-              "shitiShow":this.listchangeToStr(item.TimuContentList),
-              "shitiAnswer":this.listchangeToStr(item.AnswerContentList,item.baseTypeId,item.subjectName),
-              "shitiAnalysis":(item.AnalysisContentList.length==0)?'略':this.listchangeToStr(item.AnalysisContentList),
-              "baseTypeId":item.baseTypeId,
-              "typeId" :item.typeId,
-              "typeName" :item.questionName,
-              "score" :item.questionScore,
-              "order" :index+1,
-              "answerNum":item.baseTypeId=='101'?item.answerNum:item.baseTypeId=='102'?item.answerNum:"-1",    //101   102 存选项个数       否则-1
-              "smallQueNum":item.baseTypeId=='108'?item.AnswerContentList.length:"-1"                    // 108   英语  存小题个数   否则-1
-            })})
-            var newjsonstr=''
-            SubAnswerStr.map(item=>{
-              newjsonstr+=','+JSON.stringify(item)
-            })
-            newjsonstr =newjsonstr.substring(1)
-            // console.log('提交要保存的数据是:',newjsonstr)
+        //else 是判断过了  题面  答案是否设置
+      }else{
+                // console.log('保存参数之前','paperId：',this.state.paperId,'isnull：',isnull,'Assign:',Assign)
+                //如果都不为空  保存或者提交
+                //true代表不为空 && paperid没有           ||     修改过的情况 需要重新保存
+                if((isnull&&this.state.paperId=='-1')||this.state.updateFlag=='1'){
+                  // console.log('保存之前：',this.state.data)
+                      var SubAnswerStr = []
+                      this.state.data.map((item,index)=>{
+                        SubAnswerStr.push({
+                          "questionId":item.questionId,
+                          "shitiShow":this.listchangeToStr(item.TimuContentList),
+                          "shitiAnswer":this.listchangeToStr(item.AnswerContentList,item.baseTypeId,item.subjectName),
+                          "shitiAnalysis":(item.AnalysisContentList.length==0)?'略':this.listchangeToStr(item.AnalysisContentList),
+                          "baseTypeId":item.baseTypeId,
+                          "typeId" :item.typeId,
+                          "typeName" :item.questionName,
+                          "score" :item.questionScore,
+                          "order" :index+1,
+                          "answerNum":item.baseTypeId=='101'?item.answerNum:item.baseTypeId=='102'?item.answerNum:"-1",    //101   102 存选项个数       否则-1
+                          "smallQueNum":item.baseTypeId=='108'?item.AnswerContentList.length:"-1"                    // 108   英语  存小题个数   否则-1
+                        })})
+                        var newjsonstr=''
+                        SubAnswerStr.map(item=>{
+                          newjsonstr+=','+JSON.stringify(item)
+                        })
+                        newjsonstr =newjsonstr.substring(1)
+                        // console.log('提交要保存的数据是:',newjsonstr)
 
-          //2.调用接口，同时页面进行loadding，并提示“试题正在保存中...”
-            const url =
-              "http://" +
-              "www.cn901.net" +
-              ":8111" +
-              "/AppServer/ajax/teacherApp_phoneSaveQuestionAndPaper.do";
-            const params = {
-                  token:     global.constants.token,
-                  userName: global.constants.userName,                  // 学科编码
-                  paperName:this.state.paperName,
-                  paperId:this.state.paperId,
-                  jsonStr:'['+newjsonstr+']',                                      //封装的试题信息
-                  channelCode:this.props.channelCode,              //学段id
-                  subjectCode:this.props.subjectCode,              //学科id
-                  textBookCode:this.props.textBookCode,            //版本id
-                  gradeLevelCode:this.props.gradeLevelCode,        //教材id
-                  pointCode:this.props.pointCode,                  //知识点id
-                  channelName:this.props.channelName,              //学段Name
-                  subjectName:this.props.subjectName,              //学科Name
-                  textBookName:this.props.textBookName,            //版本Name
-                  gradeLevelName:this.props.gradeLevelName,        //教材Name
-                  pointName:this.props.pointName,                  //知识点Name
-                };
-            // console.log('提交了.....')
-              http.get(url, params).then((resStr) => {
-                let resJson = JSON.parse(resStr);
-                // console.log('保存接口：',resJson)
-                //根据接口返回值，直接提示message
-                if(resJson.success){
-                  // console.log('请求了试卷id',resJson)
-                  this.setState({paperId:resJson.data,updateFlag:1,})
-                  if(Assign){
-                    WaitLoading.dismiss()
-                    this.props.navigation.navigate({
-                      name:'AssignPicturePaperWork',
-                      params:{
-                        paperName:this.state.paperName,
-                        paperId:resJson.data,
-                      }
-                    })
-                  }else{
-                    WaitLoading.show_success('保存成功！',1000)
-                  }
-                }else{
-                  WaitLoading.show_false()
-                  console.log('保存失败！')
-                  Toast.showDangerToast('保存失败！',1000)
+                      //2.调用接口，同时页面进行loadding，并提示“试题正在保存中...”
+                        const url =
+                          "http://" +
+                          "www.cn901.net" +
+                          ":8111" +
+                          "/AppServer/ajax/teacherApp_phoneSaveQuestionAndPaper.do";
+                        const params = {
+                              token:     global.constants.token,
+                              userName: global.constants.userName,                  // 学科编码
+                              paperName:this.state.paperName,
+                              paperId:this.state.paperId,
+                              jsonStr:'['+newjsonstr+']',                                      //封装的试题信息
+                              channelCode:this.props.channelCode,              //学段id
+                              subjectCode:this.props.subjectCode,              //学科id
+                              textBookCode:this.props.textBookCode,            //版本id
+                              gradeLevelCode:this.props.gradeLevelCode,        //教材id
+                              pointCode:this.props.pointCode,                  //知识点id
+                              channelName:this.props.channelName,              //学段Name
+                              subjectName:this.props.subjectName,              //学科Name
+                              textBookName:this.props.textBookName,            //版本Name
+                              gradeLevelName:this.props.gradeLevelName,        //教材Name
+                              pointName:this.props.pointName,                  //知识点Name
+                            };
+                        // console.log('提交了.....')
+                          WaitLoading.show('保存中...',-1)
+                          http.get(url, params).then((resStr) => {
+                            let resJson = JSON.parse(resStr);
+                            // console.log('保存接口：',resJson)
+                            //根据接口返回值，直接提示message
+                            if(resJson.success){
+                              // console.log('请求了试卷id',resJson)
+                              this.setState({paperId:resJson.data,updateFlag:'0',})
+                              if(Assign){
+                                WaitLoading.dismiss()
+                                this.props.navigation.navigate({
+                                  name:'AssignPicturePaperWork',
+                                  params:{
+                                    paperName:this.state.paperName,
+                                    paperId:resJson.data,
+                                  }
+                                })
+                              }else{
+                                WaitLoading.show_success('保存成功！',1000)
+                              }
+                            }else{
+                              WaitLoading.show_false()
+                              console.log('保存失败！')
+                              Toast.showDangerToast('保存失败！',1000)
+                            }
+                          })
+                }else if(!Assign&&this.state.paperId!='-1'&&this.state.updateFlag=='0'){//试卷已经点过了保存
+                  Toast.showSuccessToast('试卷已经保存！',2000)
                 }
-              })
-    }else if(!Assign&&this.state.paperId!='-1'&&this.updateFlag){
-      Toast.showSuccessToast('试卷已经保存！',2000)
-    }
-    if(Assign){
-      this.props.navigation.navigate({
-        name:'AssignPicturePaperWork',
-        params:{
-            paperId:this.state.paperId,
-            paperName:this.state.paperName
-        }
+
+                if(Assign){
+                  this.props.navigation.navigate({
+                    name:'AssignPicturePaperWork',
+                    params:{
+                        paperId:this.state.paperId,
+                        paperName:this.state.paperName
+                    }
+                })
+                }
+      }
+
     })
-    }
+    
 
   }
 
@@ -708,7 +712,6 @@ class EditWork extends Component{
                       Alert.alert('请先添加试题！')
                       Toast.showWarningToast('请先添加试题！',1000)
                     }else{
-                    
                       this.savepaper(false)
                     }
                   }

@@ -567,9 +567,9 @@ class LearnCaseProperty extends React.Component {
 
     render() {
         return (
-            <View style={{ flexDirection: 'column', backgroundColor: '#fff' }}>
+            <View style={{ flexDirection: 'column', backgroundColor: '#fff'  }}>
                 <ScrollView horizontal={false} showsVerticalScrollIndicator={false}
-                    style={{ height: '90%', backgroundColor: '#fff' }}
+                    style={{ height: '92%', backgroundColor: '#fff' }}
                 >
                     {/**名称 */}
                     <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
@@ -975,7 +975,7 @@ class LearnCaseProperty extends React.Component {
                         position: 'absolute',
                     }}
                 >
-                    <Text style={{ width: screenWidth * 0.05 }}></Text>
+                    <Text style={{ width: screenWidth * 0.05 , backgroundColor: '#fff'}}></Text>
                     <Button style={styles.button}
                         onPress={() => {
                             //Alert.alert('取消功能还未写！！！')
