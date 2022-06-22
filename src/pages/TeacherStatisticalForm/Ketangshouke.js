@@ -7,8 +7,10 @@ import http from '../../utils/http/request'
 import { useNavigation } from '@react-navigation/native';
 export default function Ketangshouke(props) {
   const navigation = useNavigation()
+  const yearTermStartTime = props.yearTermStartTime
+  const yearTermEndTime = props.yearTermEndTime
   return (
-    <KetangshoukeContent navigation={navigation}/>
+    <KetangshoukeContent navigation={navigation} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
   )
 } 
 
@@ -17,38 +19,43 @@ class KetangshoukeContent extends Component {
         super(props)
         this.state={
             KetangTableNum:3,
-            status: 'yes' ,               //先看该字段，no，表示没有数据；yes表示有数据
-            hdNum:  9,                //互动数量
-            xList: ["提问","抢答","随机","连答"],
-            contentNum: 4, //内容数量
-            effectiveKeci: 2.5, //有效课次
-            yList: [ 0, 0, 10, 0],
+            status: '' ,               //先看该字段，no，表示没有数据；yes表示有数据
+            hdNum:  0,                //互动数量
+            xList: [],
+            contentNum: 0, //内容数量
+            effectiveKeci: 0, //有效课次
+            yList: [],
             tableData:[],
-            sumKeci : 3, //总课次
-            tableHead: ["序号", "班级", "时间", "内容", "批注", "板书", "互动","有效课次"],
-            pzNum: 13, //批注数量
-            bsNum: 9 ,  //板书课次
+            sumKeci : 0, //总课次
+            tableHead: [],
+            pzNum: 0, //批注数量
+            bsNum: 0 ,  //板书课次
             startTime:'',
             endTime:'',
         }
       }
 
       UNSAFE_componentWillMount(){
-        this.getanayGetKTNum()
+        this.getanayGetKTNum(this.props.yearTermStartTime,this.props.yearTermEndTime)
+      }
+      UNSAFE_componentWillReceiveProps(nextprops){
+        if(nextprops.yearTermStartTime!=this.state.yearTermStartTime){
+          this.getanayGetKTNum(nextprops.yearTermStartTime,nextprops.yearTermEndTime)
+        }
       }
 
     //第二模块数据
-    getanayGetKTNum(){
+    getanayGetKTNum(startTime,endTime){
       const url =
                 "http://" +
                 "www.cn901.net" +
                 ":8111" +
                 "/AppServer/ajax/teacherApp_anayGetKTNum.do";
       const params = {
-                unitId:'6105230000001',                   //单位id
-                userId:'dlzx2019',
-                startTime:'2021-12-27%2000:00:00',
-                endTime:'2021-12-29%2000:00:00',       
+                unitId:global.constants.company,                   //单位id
+                userId:global.constants.userId,
+                startTime:startTime,
+                endTime:endTime,        
               }
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
@@ -104,7 +111,7 @@ class KetangshoukeContent extends Component {
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:20}}>
         <View style={{flexDirection:'row',marginLeft:20,marginRight:10,marginBottom:10}}>
                 <View style={{flex:1,justifyContent:'center'}}  >
-                      <Image source={require('../../assets/StatisticalForm/Ima_ketang.png')}></Image>
+                      <Image style={{width:70,height:70}} source={require('../../assets/StatisticalForm/Ima_ketang.png')}></Image>
                 </View>
                 <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
                     <View>
@@ -135,8 +142,11 @@ class KetangshoukeContent extends Component {
                     </View>
                 </View>
                 <View>
+                  {this.state.tableData.length>0?(
                     <MyTable data={this.state.tableData.length>this.state.KetangTableNum?this.state.tableData.slice(0,this.state.KetangTableNum):this.state.tableData} 
                              tablehead={this.state.tableHead}/>
+                             ):(<></>)}
+                    
                 </View>
                 {this.state.tableData.length>this.state.KetangTableNum?(
                   <View style={{justifyContent:'center',flexDirection:'row'}}>

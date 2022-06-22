@@ -44,7 +44,8 @@ export default class CorrectSubmit extends Component {
         //hand这个属性是自己添加的  用来记录作业是否被手动修改过分数 0是默认   1表示手工修改
         if(CorrectResultList[result_Item].hand==1){
           //手工批阅的情况   正确 半对  错误  未阅
-          if(parseFloat(CorrectResultList[result_Item].stuscore)==10||parseFloat(CorrectResultList[result_Item].stuscore==CorrectResultList[result_Item].questionScore)){
+          console.log('要测试：',parseFloat(CorrectResultList[result_Item].stuscore),CorrectResultList[result_Item].questionScore)
+          if(parseFloat(CorrectResultList[result_Item].stuscore)==10||parseFloat(CorrectResultList[result_Item].stuscore)==CorrectResultList[result_Item].questionScore){
                 result.push(
                   <TouchableOpacity 
                     key={result_Item}    
@@ -106,7 +107,7 @@ export default class CorrectSubmit extends Component {
           }else{return(<View></View>)}
         }else{
           //自动批阅过的  正确  错误  半对 hand==0
-          if(parseFloat(CorrectResultList[result_Item].stuscore)==10||parseFloat(CorrectResultList[result_Item].stuscore==CorrectResultList[result_Item].questionScore)){
+          if(parseFloat(CorrectResultList[result_Item].stuscore)==10||parseFloat(CorrectResultList[result_Item].stuscore)==CorrectResultList[result_Item].questionScore){
             result.push(
               <TouchableOpacity 
                 key={result_Item}    

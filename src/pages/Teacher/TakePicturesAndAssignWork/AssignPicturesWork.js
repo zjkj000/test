@@ -60,7 +60,7 @@ class AssignPicturesWork extends Component {
         
     }
     setBeginDateTime(str){
-        this.setState({beginstr:str,endstr:str})
+        this.setState({beginstr:str})
     }
     setEndDateTime(str){
         this.setState({endstr:str})
@@ -448,7 +448,10 @@ class AssignPicturesWork extends Component {
                             this.props.navigation.navigate({
                                 name:'Teacher_Home',
                                 params:{
-                                    isRefresh:true,
+                                    screen:'最新',
+                                    params:{
+                                        isRefresh:true,
+                                    }
                                 },
                                 merge:true
                             })

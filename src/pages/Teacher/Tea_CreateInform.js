@@ -108,8 +108,10 @@ class Tea_CreateInformContent extends Component {
                         this.props.navigation.navigate({
                             name:'Teacher_Home',
                             params:{
-                                Screen:'通知公告',
-                                isRefresh:true,
+                                screen:'最新',
+                                params:{
+                                    isRefresh:true,
+                                }
                             },
                             merge:true
                         })
@@ -258,7 +260,7 @@ class Tea_CreateInformContent extends Component {
             </View>
         </ScrollView>
         <View style={{width:'100%',position:'absolute',bottom:10,flexDirection:'row',justifyContent:'space-around'}}>
-            <Button onPress={()=>{this.props.navigation.goback()}} style={{width:'40%'}}>取消</Button>
+            <Button onPress={()=>{this.props.navigation.goBack()}} style={{width:'40%'}}>取消</Button>
             <Button onPress={()=>{
                 this.saveOrUpdateInform()
             }} style={{width:'40%'}}>确定</Button>

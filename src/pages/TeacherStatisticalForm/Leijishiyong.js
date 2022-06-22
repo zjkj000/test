@@ -7,10 +7,10 @@ export default class Leijishiyong extends Component {
     super(props)
     this.state={
       SchoolYearTerm:[],
-      ketangshouke:'627',
-      shishenghudong:'3701',
-      buzhizuoye :'328',
-      piyueshiti:'1751/1980',
+      ketangshouke:'',
+      shishenghudong:'',
+      buzhizuoye :'',
+      piyueshiti:'',
       moduleVisible: false,
       SchoolYearTermName:'本学期统计',
       yearTermStartTime:'',
@@ -18,45 +18,33 @@ export default class Leijishiyong extends Component {
     }
   }
   UNSAFE_componentWillMount(){
-    this.getSchoolYearTerm()
-    this.getanayGetSunNum()
+    this.setState(
+      {SchoolYearTerm:this.props.SchoolYearTerm,
+        SchoolYearTermName:this.props.SchoolYearTermName,
+        yearTermStartTime:this.props.yearTermStartTime,
+        yearTermEndTime:this.props.yearTermEndTime,
+      }
+    )
+    this.getanayGetSunNum(this.props.yearTermStartTime,this.props.yearTermEndTime)
   }
-  //获取学年数据
-  getSchoolYearTerm(){
-    const url =
-              "http://" +
-              "www.cn901.net" +
-              ":8111" +
-              "/AppServer/ajax/teacherApp_anayGetSchoolYearTerm.do";
-    const params = {
-              unitId:'6105230000001 '                //单位id
-            }
-      http.get(url, params).then((resStr) => {
-          let resJson = JSON.parse(resStr);
-          if(resJson.success){
-            this.setState(
-              {SchoolYearTerm:resJson.data,
-                SchoolYearTermName:resJson.data[0].name,
-                yearTermStartTime:resJson.data[0].yearTermStartTime,
-                yearTermEndTime:resJson.data[0].yearTermEndTime,
-              }
-            )
-          }
-      })
+  UNSAFE_componentWillReceiveProps(nextprops){
+    if(nextprops.yearTermStartTime!=this.state.yearTermStartTime){
+      this.getanayGetSunNum(nextprops.yearTermStartTime,nextprops.yearTermEndTime)
+    }
   }
 
   //第一模块数据
-  getanayGetSunNum(){
+  getanayGetSunNum(startTime,endTime){
     const url =
               "http://" +
               "www.cn901.net" +
               ":8111" +
               "/AppServer/ajax/teacherApp_anayGetSunNum.do";
     const params = {
-              unitId:'6105230000001',                   //单位id
-              userId:'dlzx2019',                        //教师id
-              startTime:'2021-12-27 00:00:00',          //开始时间
-              endTime:'2021-12-29 00:00:00',            //结束时间
+              unitId:global.constants.company,                   //单位id
+              userId:global.constants.userId,                   //教师id
+              startTime:startTime,          //开始时间
+              endTime:endTime,            //结束时间
             }
       http.get(url, params).then((resStr) => {
           let resJson = JSON.parse(resStr);
@@ -89,6 +77,7 @@ export default class Leijishiyong extends Component {
                     title={this.state.SchoolYearTerm[item_num].name}
                     key={item_num}
                     onPress={() => {
+                      this.props.setdatastr(this.state.SchoolYearTerm[item_num].name,this.state.SchoolYearTerm[item_num].yearTermStartTime,this.state.SchoolYearTerm[item_num].yearTermEndTime)
                       this.setState({ 
                         moduleVisible: false ,
                         yearTermStartTime:this.state.SchoolYearTerm[item_num].yearTermStartTime,
@@ -114,14 +103,14 @@ export default class Leijishiyong extends Component {
           </View>
           <View  style={{flexDirection:'row',alignContent:'space-around',marginBottom:20,zIndex:1}}>
             <View style={{backgroundColor:'#E0F3E0',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
-              <View style={{flex:1,justifyContent:'center'}}><Image source={require('../../assets/StatisticalForm/Ima_1.png')}></Image></View>
+              <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_1.png')}></Image></View>
               <View style={{flex:2,flexDirection:'column',padding:10}}>
                 <Text style={{fontSize:15}}>{this.state.ketangshouke}</Text>
                 <Text style={{fontSize:15}}>课堂授课</Text>
               </View>
             </View>
             <View style={{backgroundColor:'#FCF5E5',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
-                <View style={{flex:1,justifyContent:'center',paddingLeft:15}}><Image source={require('../../assets/StatisticalForm/Ima_2.png')}></Image></View>
+                <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_2.png')}></Image></View>
                 <View style={{flex:2,flexDirection:'column',padding:10}}>
                     <Text style={{fontSize:15}}>{this.state.shishenghudong}</Text>
                     <Text style={{fontSize:15}}>师生互动</Text>
@@ -130,14 +119,14 @@ export default class Leijishiyong extends Component {
           </View> 
           <View style={{flexDirection:'row',alignContent:'space-around'}}>
             <View style={{backgroundColor:'#F2E4FD',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
-                <View style={{flex:1,justifyContent:'center',paddingLeft:15}}><Image source={require('../../assets/StatisticalForm/Ima_3.png')}></Image></View>
+                <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_3.png')}></Image></View>
                   <View style={{flex:2,flexDirection:'column',padding:10}}>
                     <Text style={{fontSize:15}}>{this.state.buzhizuoye}</Text>
                     <Text style={{fontSize:15}}>布置作业</Text>
                 </View>
             </View>
             <View style={{backgroundColor:'#D9F8FA',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
-                <View style={{flex:1,justifyContent:'center',paddingLeft:15}}><Image source={require('../../assets/StatisticalForm/Ima_4.png')}></Image></View>
+                <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_4.png')}></Image></View>
                   <View style={{flex:2,flexDirection:'column',padding:10}}>
                     <Text style={{fontSize:15}}>{this.state.piyueshiti}</Text>
                     <Text style={{fontSize:15}}>批阅试题</Text>

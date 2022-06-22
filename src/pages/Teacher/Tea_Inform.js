@@ -82,11 +82,14 @@ class Tea_Informcontent extends Component {
         let resJson = JSON.parse(resStr);
         if(resJson.success){
           Alert.alert('','撤回成功！',[{},
-          {text:'ok',onPress:()=>{
+          {text:'确定',onPress:()=>{
             this.props.navigation.navigate({
               name:'Teacher_Home',
               params:{
-                isRefresh:true,
+                screen:'最新',
+                params:{
+                  isRefresh:true,
+              }
               },
               merge:true
             })

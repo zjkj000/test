@@ -5,10 +5,12 @@ import Echarts from 'native-echarts';
 import MyTable from './MyTable'
 import http from '../../utils/http/request'
 import { useNavigation } from '@react-navigation/native';
-export default function Buzhizuoye() {
+export default function Buzhizuoye(props) {
   const navigation = useNavigation()
+  const yearTermStartTime = props.yearTermStartTime
+  const yearTermEndTime = props.yearTermEndTime
   return (
-    <BuzhizuoyeContent navigation={navigation}/>
+    <BuzhizuoyeContent navigation={navigation} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
   )
 }
 class BuzhizuoyeContent extends Component {
@@ -17,49 +19,55 @@ class BuzhizuoyeContent extends Component {
     this.state={
       BuzhizuoyeTableNum:3,
       startTime:'',
-      effectiveKeciNum: '2.10',   //有效次数
-      queSumNum: 30,             //试题总数
-      queAvgNum: 7,             //平均试题数
-      sumKeciNum: 4,             //总次数
-      status:'yes',             //先看该字段，no，表示没有数据；yes表示有数据
+      effectiveKeciNum: '0',   //有效次数
+      queSumNum: 0,             //试题总数
+      queAvgNum: 0,             //平均试题数
+      sumKeciNum: 0,             //总次数
+      status:'',             //先看该字段，no，表示没有数据；yes表示有数据
       X1List: [
-        {"data": [88.1,100,4.76,100],
+        {"data": [],
           "name": "提交率"},
-        {"data": [100,100,100,100],
+        {"data": [],
           "name": "批改率"}
       ],
       X2List: [
-        {"data": [30,30,104,104],
+        {"data": [],
           "name": "总分"
         },
-        {"data": [22.4,27.5,32.5,88.5],
+        {"data": [],
           "name": "平均分"
         },
-        {"data": [74.67,91.67,31.25,85.1],
+        {"data": [],
           "name": "得分率"
         }
       ],
       tableHead:[],
       tableData:[],
-      classNameList: ["高二(1)班","高二(2)班","高二(3)班","高二(4)班"],
+      classNameList: [],
     }
   }
   
   UNSAFE_componentWillMount(){
-    this.getanayGetBZZYNum()
+    this.getanayGetBZZYNum(this.props.yearTermStartTime,this.props.yearTermEndTime)
+  }
+
+  UNSAFE_componentWillReceiveProps(nextprops){
+    if(nextprops.yearTermStartTime!=this.state.yearTermStartTime){
+      this.getanayGetBZZYNum(nextprops.yearTermStartTime,nextprops.yearTermEndTime)
+    }
   }
   //第三模块数据
-  getanayGetBZZYNum(){
+  getanayGetBZZYNum(startTime,endTime){
     const url =
               "http://" +
               "www.cn901.net" +
               ":8111" +
               "/AppServer/ajax/teacherApp_anayGetBZZYNum.do";
     const params = {
-              unitId:'6105230000008',                   //单位id
-              userId:'cjzx2028',
-              startTime:'2021-12-17%2000:00:00',
-              endTime:'2021-12-22%2000:00:00',       
+              unitId:global.constants.company,                   //单位id
+              userId:global.constants.userId,
+              startTime:startTime,
+              endTime:endTime,         
             }
       http.get(url, params).then((resStr) => {
           let resJson = JSON.parse(resStr);
@@ -209,10 +217,10 @@ class BuzhizuoyeContent extends Component {
     };
     
     return (
-        <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:20}}>
+        <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:10}}>
         <View style={{flexDirection:'row',marginLeft:20,marginRight:20}}>
           <View style={{flex:1,justifyContent:'center'}}  >
-            <Image source={require('../../assets/StatisticalForm/Ima_book.png')}></Image>
+            <Image style={{width:70,height:70}} source={require('../../assets/StatisticalForm/Ima_book.png')}></Image>
           </View>
           <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
               <View>
@@ -237,7 +245,9 @@ class BuzhizuoyeContent extends Component {
             <Echarts option={option1} height={250} width={width-40}/>
         </View>
         <View>
-          <MyTable data={this.state.tableData.length>this.state.BuzhizuoyeTableNum?this.state.tableData.slice(0,this.state.BuzhizuoyeTableNum):this.state.tableData} tablehead={this.state.tableHead}/>
+          {this.state.tableData.length>0?(
+            <MyTable data={this.state.tableData.length>this.state.BuzhizuoyeTableNum?this.state.tableData.slice(0,this.state.BuzhizuoyeTableNum):this.state.tableData} tablehead={this.state.tableHead}/>
+          ):(<></>)}
         </View>
         {this.state.tableData.length>this.state.BuzhizuoyeTableNum?(
                   <View style={{justifyContent:'center',flexDirection:'row'}}>

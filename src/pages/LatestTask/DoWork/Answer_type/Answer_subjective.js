@@ -1,4 +1,4 @@
-import {Text,StyleSheet,View,ScrollView,Image,TextInput,Button,Alert,TouchableOpacity,Modal,Dimensions,} from "react-native";
+import {Text,StyleSheet,View,ScrollView,Image,TextInput,Button,Alert,TouchableOpacity,Modal,Dimensions, Keyboard,} from "react-native";
 import React, { Component, useState } from "react";
 import RenderHtml from "react-native-render-html";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
@@ -435,6 +435,7 @@ class Answer_subjective extends Component {
                         }}
                     >
                         <TextInput
+
                             placeholder="请输入答案"
                             multiline
                             value={this.state.textinputAnswer}
@@ -455,6 +456,7 @@ class Answer_subjective extends Component {
                                 newanswer += this.state.textinputAnswer;
                                 this.setState({ textinputAnswer: "" });
                                 this.stuAnswer(newanswer);
+                                // Keyboard.dismiss()
                             }}
                             style={{
                                 width: 100,

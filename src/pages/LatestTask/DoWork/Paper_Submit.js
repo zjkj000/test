@@ -86,7 +86,6 @@ class Paper_Submit extends Component {
     }
 
     submit_answer() {
-        WaitLoading.show('作业提交中...',-1)
         const url =
             "http://" +
             "www.cn901.net" +
@@ -125,10 +124,10 @@ class Paper_Submit extends Component {
                 noSubmitID += noSubmitID + item.questionId + ",";
             }
         });
+
         if (noSubmitID == "未答" || noSubmitID == "") {
             noSubmitID = "-1";
         }
-
         var answerdate = 0;
         var nowdate = this.getDate();
         var startdatearr = this.props.startdate.split(":");
@@ -153,31 +152,59 @@ class Paper_Submit extends Component {
             status: newsub_status,
             noAnswerQueId: noSubmitID,
         };
-        http.get(url, params).then((resStr) => {
-            let resJson = JSON.parse(resStr);
-            if(resJson.success){
-                WaitLoading.dismiss()
-                Toast.showSuccessToast('作业提交成功！',1000)
-                // Alert.alert('','作业提交成功！',[{},
-                //     {text:'ok',onPress:()=>this.props.navigation.navigate({
-                //         name: "Home",
-                //         params: {
-                //             learnId: this.state.paperId,
-                //             status: change_status,
-                //         },
-                //     })}
-                //   ])
-                this.props.navigation.navigate({
-                    name: "Home",
-                    params: {
-                        learnId: this.state.paperId,
-                        status: change_status,
-                    },
-                })
-            }else{
-                WaitLoading.show_false()
-            }
-        });        
+
+        if(noSubmitID!='-1'){
+            Alert.alert('','有题目未作答,是否提交？',[{text:'取消',onPress:()=>{}},{},{
+                text:'确定',onPress:()=>{
+                    WaitLoading.show('作业提交中...',-1)
+                    http.get(url, params).then((resStr) => {
+                        let resJson = JSON.parse(resStr);
+                        if(resJson.success){
+                            WaitLoading.dismiss()
+                            Toast.showSuccessToast('作业提交成功！',1000)
+                            // Alert.alert('','作业提交成功！',[{},
+                            //     {text:'ok',onPress:()=>this.props.navigation.navigate({
+                            //         name: "Home",
+                            //         params: {
+                            //             learnId: this.state.paperId,
+                            //             status: change_status,
+                            //         },
+                            //     })}
+                            //   ])
+                            this.props.navigation.navigate({
+                                name: "Home",
+                                params: {
+                                    learnId: this.state.paperId,
+                                    status: change_status,
+                                },
+                            })
+                        }else{
+                            WaitLoading.show_false()
+                        }
+                    });
+                }
+            }])
+        }else{
+            WaitLoading.show('作业提交中...',-1)
+            http.get(url, params).then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                if(resJson.success){
+                    WaitLoading.dismiss()
+                    Toast.showSuccessToast('作业提交成功！',1000)
+                    this.props.navigation.navigate({
+                        name: "Home",
+                        params: {
+                            learnId: this.state.paperId,
+                            status: change_status,
+                        },
+                    })
+                }else{
+                    WaitLoading.show_false()
+                }
+            });
+        }
+         
+
         ;
     }
 

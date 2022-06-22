@@ -23,22 +23,12 @@ export default function Paper_ShowCorrected(props) {
       
       //getData()函数是为了获取试题资源，和学生之前可能作答的结果   得到之后设置状态success 是否成功  data 具体试题数据  dataNum题目总数  
      function  getData() {
-        const userId = global.constants.userName;
         const data_url = 
           "http://"+
           "www.cn901.net" +
           ":8111" +
           "/AppServer/ajax/studentApp_getMarkedJob.do"
         const data_params ={
-          // ming6001
-          // 0a4d30ee-27f7-4e0c-97d5-e28275af5853
-          // 526e645b-67e7-47f5-b85a-f84ae60d7ae3
-          // a51fc8e1-2448-4731-bab4-94c0b1400298
-          // 555432f3-de4e-4242-a197-5952120f415b
-          // 75b82788-37b3-48ec-9b66-2b8408a874c8
-          // 11895efa-9f4f-48d1-8d3f-6d31953850c3
-          // cd81138e-b440-4606-ad63-1b2449458e8d
-          // learnPlanId :props.route.params.learnId,
           learnPlanId :props.route.params.learnId,
           userName : global.constants.userName,
           learnPlanType :props.route.params.learnPlanType?props.route.params.learnPlanType:'paper',
@@ -114,11 +104,11 @@ export default function Paper_ShowCorrected(props) {
                         </View>
                         <RenderHTML source={{html:Item.tiMian}}></RenderHTML>
                         <Text style={styles.Titletext}>[参考答案]</Text>
-                        <Text style={styles.text}>{Item.answer}</Text>
+                        {Item.answer==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.answer}}></RenderHTML>)}
                         <Text style={styles.Titletext}>[解析]</Text>
-                        <Text style={styles.text}>{Item.standardAnswer}</Text>
+                        {Item.standardAnswer==''?(<Text >略</Text>):(<RenderHTML source={{html:Item.standardAnswer}}></RenderHTML>)}
                         <Text style={styles.Titletext}>[你的答案]</Text>
-                        <Text style={styles.text}>{Item.stuAnswer}</Text>
+                        {Item.stuAnswer==''?(<Text >未答</Text>):(<RenderHTML source={{html:Item.stuAnswer}}></RenderHTML>)}
                     </ScrollView>
                   </Layout>
                 )
