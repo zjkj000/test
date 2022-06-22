@@ -1,0 +1,10 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="callvideo">
+
+    <application>
+        <activity android:name="callvideo.com.navigationdemo.LaunchActivity"
+            android:screenOrientation="landscape"/>
+        <!--        <activity android:name="callvideo.VideoCallingActivity_before" />-->
+    </application>
+
+</manifest>

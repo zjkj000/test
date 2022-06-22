@@ -4,8 +4,8 @@ import {
     useRoute,
 } from "@react-navigation/native";
 import React, { Component, useRef, useState } from "react";
-import { TouchableOpacity, View, Image } from "react-native";
-import { Icon, Button, Layout } from "@ui-kitten/components";
+import { TouchableOpacity, View, Image, NativeModules } from "react-native";
+import { Icon, Button, Layout, Input } from "@ui-kitten/components";
 import http from "../../utils/http/request";
 import HistoryInput from "./HistoryInput";
 import { styles } from "./styles";
@@ -108,7 +108,11 @@ export default ConnectClass = () => {
         });
     };
 
-    const handleLiveClass = () => {};
+    const handleLiveClass = () => {
+        NativeModules.IntentMoudle.startActivityFromJS("LaunchActivity", userId+"-"+userCn+"-"+roomId);
+    };
+
+    
     return (
         <View style={styles.View}>
             <Layout style={styles.Layout}>
@@ -134,6 +138,25 @@ export default ConnectClass = () => {
                 value={ipAddress}
                 setValue={setIpAddress}
             ></HistoryInput>
+            <HistoryInput
+                icon={<Icon name="person" />}
+                style={styles.Input}
+                value={userId}
+                setValue={setUserId}
+            ></HistoryInput>
+            <HistoryInput
+                icon={<Icon name="person" />}
+                style={styles.Input}
+                value={userCn}
+                setValue={setuserCn}
+            ></HistoryInput>
+            <HistoryInput
+                icon={<Icon name="lock" />}
+                style={styles.Input}
+                value={roomId}
+                setValue={setRoomId}
+            ></HistoryInput>
+
             <Button onPress={handleLogin} style={styles.Button}>
                 连接
             </Button>

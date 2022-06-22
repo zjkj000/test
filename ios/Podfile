@@ -21,6 +21,8 @@ target 'NavigationDemo' do
 
   pod 'react-native-video', :path => '../node_modules/react-native-video'
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   target 'NavigationDemoTests' do
     inherit! :complete
     # Pods for testing
