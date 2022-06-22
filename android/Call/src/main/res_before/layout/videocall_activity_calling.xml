@@ -1,0 +1,421 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/rl_main_bg"
+    android:orientation="horizontal">
+
+    <ImageView
+        android:id="@+id/iv_back"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/common_ic_back"
+        android:gravity="left|top"
+
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.05" />
+
+    <TextView
+        android:id="@+id/tv_room_number"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="left|center_vertical"
+
+        android:text="房间号：12345678"
+        android:textColor="@android:color/white"
+
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintStart_toEndOf="@+id/iv_back"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.4" />
+
+    <com.tencent.rtmp.ui.TXCloudVideoView
+        android:id="@+id/teacher_share"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/temp"
+        android:gravity="center"
+        android:padding="2dp"
+        app:layout_constraintBottom_toTopOf="parent"
+        app:layout_constraintDimensionRatio="w,9:16"
+        app:layout_constraintEnd_toStartOf="@+id/stroll"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintWidth_percent="0.8">
+        <!--        app:layout_constraintHorizontal_bias="0.5"-->
+
+    </com.tencent.rtmp.ui.TXCloudVideoView>
+
+
+    <ScrollView
+        android:id="@+id/stroll"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fadingEdge="vertical"
+        android:gravity="right"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.9"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.2">
+
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <!--教师端摄像头流 teacher_camera-->
+                    <com.tencent.rtmp.ui.TXCloudVideoView
+                        android:id="@+id/teacher_camera"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@mipmap/temp"
+                        android:padding="2dp"
+                        app:layout_constraintDimensionRatio="w,9:16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent">
+
+                    </com.tencent.rtmp.ui.TXCloudVideoView>
+
+                    <!--学生端摄像头 txcvv_main-->
+                    <com.tencent.rtmp.ui.TXCloudVideoView
+                        android:id="@+id/myself_camera"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+
+                        android:background="@mipmap/temp"
+                        android:padding="2dp"
+                        app:layout_constraintDimensionRatio="w,9:16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/teacher_camera" />
+
+                    <!--学生端_6个学生 student_1/2/3/4/5/6-->
+                    <com.tencent.rtmp.ui.TXCloudVideoView
+                        android:id="@+id/student_1"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:padding="2dp"
+                        app:layout_constraintDimensionRatio="w,9:16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/myself_camera" />
+
+                    <com.tencent.rtmp.ui.TXCloudVideoView
+                        android:id="@+id/student_2"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:padding="2dp"
+                        app:layout_constraintDimensionRatio="w,9:16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/student_1" />
+
+                    <com.tencent.rtmp.ui.TXCloudVideoView
+                        android:id="@+id/student_3"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:padding="2dp"
+                        app:layout_constraintDimensionRatio="w,9:16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/student_2" />
+
+                    <com.tencent.rtmp.ui.TXCloudVideoView
+                        android:id="@+id/student_4"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:padding="2dp"
+                        app:layout_constraintDimensionRatio="w,9:16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/student_3" />
+
+                    <com.tencent.rtmp.ui.TXCloudVideoView
+                        android:id="@+id/student_5"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:padding="2dp"
+                        app:layout_constraintDimensionRatio="w,9:16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/student_4" />
+
+                    <com.tencent.rtmp.ui.TXCloudVideoView
+                        android:id="@+id/student_6"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:padding="2dp"
+                        app:layout_constraintDimensionRatio="w,9:16"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/student_5" />
+
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+    <!--底部一排功能按钮-->
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_buttons"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom"
+        android:visibility="invisible"
+        app:constraint_referenced_ids="message,btn_mute_audio,btn_mute_video,btn_switch_camera,refresh,fullscreen"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintHeight_percent="0.1"
+        app:layout_constraintWidth_percent="1.0" />
+
+
+        <Button
+            android:id="@+id/message"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="15dp"
+            android:background="@mipmap/f"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/btn_mute_audio"
+            app:layout_constraintHeight_percent="0.06" />
+
+
+        <Button
+            android:id="@+id/btn_mute_audio"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/btn_select_audio"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/btn_mute_video"
+            app:layout_constraintHeight_percent="0.06" />
+
+
+        <Button
+            android:id="@+id/btn_mute_video"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="15dp"
+            android:background="@drawable/btn_select_video"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/btn_switch_camera"
+            app:layout_constraintHeight_percent="0.06" />
+
+
+        <Button
+            android:id="@+id/btn_switch_camera"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="15dp"
+            android:background="@mipmap/c"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/refresh"
+            app:layout_constraintHeight_percent="0.06" />
+
+
+        <Button
+            android:id="@+id/refresh"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="15dp"
+            android:background="@mipmap/d"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+
+
+            app:layout_constraintEnd_toStartOf="@+id/fullscreen"
+            app:layout_constraintHeight_percent="0.06" />
+
+
+        <Button
+            android:id="@+id/fullscreen"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginLeft="15dp"
+            android:background="@mipmap/e"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHeight_percent="0.06" />
+
+    <!--判断题-->
+<!--    <androidx.constraintlayout.widget.Group-->
+<!--        android:id="@+id/true_false_group"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/gray_back"-->
+<!--        android:gravity="bottom|center_vertical"-->
+<!--        android:visibility="visible"-->
+<!--        app:constraint_referenced_ids="true_button,false_button,submit_true_false"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHeight_percent="0.15"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintWidth_percent="1.0" />-->
+<!--    <RadioGroup-->
+<!--        android:id="@+id/true_false_group"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/gray_back"-->
+<!--        android:gravity="bottom|center_vertical"-->
+<!--        android:visibility="visible"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHeight_percent="0.15"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintWidth_percent="1.0"-->
+<!--        >-->
+<!--    <RadioButton-->
+<!--        android:id="@+id/true_button"-->
+<!--        android:layout_width="30dp"-->
+<!--        android:layout_height="30dp"-->
+<!--        android:background="@drawable/btn_select_t"-->
+<!--        android:gravity="center"-->
+<!--        app:layout_constraintDimensionRatio="w,1:1"-->
+<!--        app:layout_constraintHeight_percent="0.1"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/false_button"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/true_false_group"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/true_false_group"-->
+<!-- />-->
+
+
+<!--    <RadioButton-->
+<!--        android:id="@+id/false_button"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@drawable/btn_select_r"-->
+<!--        android:gravity="center_horizontal"-->
+<!--        app:layout_constraintDimensionRatio="w,1:1"-->
+<!--        app:layout_constraintHeight_percent="0.1"-->
+<!--        app:layout_constraintStart_toEndOf="@id/true_button"-->
+
+<!--        app:layout_constraintTop_toBottomOf="@+id/true_false_group"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/true_false_group"-->
+<!--    />-->
+<!--    </RadioGroup>-->
+<!--    <Button-->
+<!--        android:id="@+id/submit_true_false"-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@drawable/btn_select_submit"-->
+<!--        app:layout_constraintDimensionRatio="w,1:1"-->
+<!--        app:layout_constraintHeight_percent="0.1"-->
+<!--        app:layout_constraintStart_toEndOf="@id/false_button"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/true_false_group"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/true_false_group"-->
+<!--        app:layout_constraintBottom_toTopOf="@id/true_false_group"-->
+<!-- />-->
+<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
+<!--        android:layout_width="0dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        android:background="@color/gray_back"-->
+<!--        app:layout_constraintHeight_percent="0.15"-->
+<!--        app:layout_constraintWidth_percent="1.0"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        >-->
+
+<!--        <LinearLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center_horizontal"-->
+
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:orientation="horizontal">-->
+
+
+<!--            <RadioGroup-->
+<!--                android:id="@+id/true_false_group"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
+<!--                android:gravity="center_vertical"-->
+<!--                android:orientation="horizontal">-->
+
+<!--                <RadioButton-->
+<!--                    style="@style/select_style"-->
+<!--                    android:id="@+id/true_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@drawable/btn_select_t"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:layout_marginLeft="10dp"-->
+<!--                    android:layout_marginRight="10dp"-->
+<!--                    android:text="对" />-->
+
+<!--                <RadioButton-->
+<!--                    style="@style/select_style"-->
+<!--                    android:id="@+id/false_button"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:background="@drawable/btn_select_r"-->
+<!--                    android:gravity="center_vertical"-->
+<!--                    android:text="错" />-->
+<!--            </RadioGroup>-->
+
+<!--            <Button-->
+<!--                android:id="@+id/submit_true_false"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:text="提交" />-->
+<!--        </LinearLayout>-->
+
+<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:gravity="bottom"
+        android:background="@color/gray_back"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.15"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintWidth_percent="1.0">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <CheckBox
+                android:id="@+id/radio1"
+                style="@style/select_style"
+                android:tag="1"
+                android:text="对" />
+
+            <CheckBox
+                android:id="@+id/radio2"
+                style="@style/select_style"
+                android:tag="0"
+                android:text="错" />
+
+            <CheckBox
+                android:id="@+id/radio3"
+                style="@style/select_style"
+                android:tag="0"
+                android:text="提交" />
+
+        </LinearLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

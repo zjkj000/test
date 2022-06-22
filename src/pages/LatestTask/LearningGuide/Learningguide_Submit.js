@@ -91,7 +91,7 @@ class Learningguide_Submit extends Component {
     }
 
     submit_answer() {
-        WaitLoading.show('提交中...',-1)
+       
         const url =
             "http://" +
             "www.cn901.net" +
@@ -150,6 +150,8 @@ class Learningguide_Submit extends Component {
             userCn: global.constants.userCn,
             status: newsub_status,
         };
+
+        WaitLoading.show('提交中...',-1)
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
             if (resJson.success) {
@@ -202,6 +204,9 @@ class Learningguide_Submit extends Component {
                                 },
                             });
                         }
+                        // else{
+                        //     Alert.alert('需要跳转')
+                        // }
                     }}
                 >
                     <View key={result_Item} style={styles.result}>
