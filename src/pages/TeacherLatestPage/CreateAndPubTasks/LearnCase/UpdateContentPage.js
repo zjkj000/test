@@ -230,10 +230,7 @@ class UpdateContentPage extends React.Component {
             return(
                 <ScrollView  showsVerticalScrollIndicator={false}>
                     {/**题面 */}
-                    <Text style={styles.paperContent}>
-                        [题面]{updateContentIndex + 1}. {selectContentList[updateContentIndex].typeName}
-                        {selectContentList[updateContentIndex].baseTypeId}
-                    </Text>
+                    <Text style={styles.paperContent}>[题面]</Text>
                     <View style={{padding: 10}}>
                         <RenderHtml contentWidth={screenWidth} source={{html: selectContentList[updateContentIndex].shitiShow}}></RenderHtml>
                     </View>

@@ -377,7 +377,7 @@ class PushOrSaveContentPage extends React.Component {
 
     //设置开始时间
     setStartTime = (time) => {
-        this.setState({ startTime: time, endTime: time });
+        this.setState({ startTime: time });
     };
     //设置结束时间
     setEndTime = (time) => {

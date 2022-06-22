@@ -1,13 +1,12 @@
 import React from "react";
-import {ScrollView,StyleSheet,Modal,Image, View,Text,TextInput,ActivityIndicator,FlatList,Alert,ImageBackground,} from "react-native";
+import {ScrollView,StyleSheet,TouchableOpacity,Image, View,Text,Dimensions,ActivityIndicator,FlatList,Alert,ImageBackground,} from "react-native";
+import { SearchBar, TabBar } from "@ant-design/react-native";
+import { Icon, Flex } from "@ant-design/react-native";
 import { useNavigation } from "@react-navigation/native";
 import {screenWidth,screenHeight,userId,token,} from "../../utils/Screen/GetSize";
 import http from "../../utils/http/request";
 import Loading from "../../utils/loading/Loading"; //Loading组件使用export {Loading}或者export default Loading;
 import "../../utils/global/constants";
-import {
-    Button,
-} from "@ui-kitten/components";
 import {WaitLoading,Waiting} from '../../utils/WaitLoading/WaitLoading' 
 let pageNo = 1; //当前第几页
 let itemNo = 0; //item的个数
@@ -16,15 +15,6 @@ let dataFlag = true; //此次是否请求到了数据，若请求的数据为空
 var oldtype = ""; //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
 let oldsearchStr = ""; //保存上一次搜索框内容
 let todosList = []; //复制一份api请求得到的数据
-
-let textInputPaper = ''; //设置属性---试卷简介
-let textLearnAim = ''; //设置属性---学习目标
-let textLearnPoint = ''; //设置属性---学习重点
-let textLearnDiff = ''; //设置属性---学习难点
-let textCourseSummary = ''; //设置属性---课堂总结
-let textCourseExpansion = ''; //设置属性---课外扩展
-
-let isFetchProperty = false;
 export default function ContentListContainer(props) {
     const navigation =useNavigation()
     const rsType = props.resourceType;
@@ -41,14 +31,6 @@ class ContentList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            PropertyModelVisiblity: false, //属性悬浮框
-            learnPlanId: '',
-            content: '', //属性--内容简介
-            aim: '', //属性--目标
-            point: '', //属性--重点
-            diff: '', //属性--难点
-            summary: '', //属性--总结
-            extension: '', //属性--扩展
             //type为2是作业，为1是导学案，3通知，4公告
             message: "",
             todos: [],
@@ -107,18 +89,8 @@ class ContentList extends React.Component {
     }
 
     componentWillUnmount() {
-        pageNo = 1; //当前第几页
-        itemNo = 0; //item的个数
-        dataFlag = true;
         oldsearchStr='';
         oldtype = '';
-        textInputPaper = '';
-        textLearnAim = '';
-        textLearnPoint = '';
-        textLearnDiff = '';
-        textCourseSummary = '';
-        textCourseExpansion = '';
-        isFetchProperty = false;
     }
 
 
@@ -331,224 +303,6 @@ class ContentList extends React.Component {
         }
     }
 
-    setModalVisible = (visible) => {
-        console.log('-----------setModalVisible---------------', visible);
-        this.setState({ PropertyModelVisiblity: visible , learnPlanId: '' });   
-    }
-
-    fetchProperty(){
-        const ip = global.constants.baseUrl;
-        const url = ip + "teacherApp_saveLpProperty.do";
-        const params = {
-            learnPlanId: this.state.learnPlanId,
-            token: global.constants.token,
-            //callback:'ha',
-        };
-
-        console.log('-----fetchProperty-----', Date.parse(new Date()))
-        http.get(url, params)
-            .then((resStr) => {
-                isFetchProperty = true;
-                let resJson = JSON.parse(resStr);
-                console.log('==============FetchProperty=========================');
-                console.log(resJson.data);
-                console.log('====================================================');
-                if(resJson.data != null){
-                    this.setState({ 
-                        content: resJson.data.introduction,
-                        aim: resJson.data.goal,
-                        point: resJson.data.emphasis,
-                        diff: resJson.data.difficulty,
-                        summary: resJson.data.summary,
-                        extension: resJson.data.extension,
-                    },()=>{
-                        textInputPaper = this.state.content;
-                        textLearnAim = this.state.aim;
-                        textLearnPoint = this.state.point;
-                        textLearnDiff = this.state.diff;
-                        textCourseSummary = this.state.summary;
-                        textCourseExpansion = this.state.extension;
-                        console.log('==============Property==============================');
-                        console.log(textInputPaper, textLearnAim, textLearnPoint, textLearnDiff, textCourseSummary, textCourseExpansion);
-                        console.log('====================================================');
-                    });
-                }
-            })
-            .catch((error) => {
-                console.log('******catch***error**', error);
-                this.setState({
-                    error: true,
-                    errorInfo: error,
-                });
-            });
-    }
-
-    saveProperty(){
-        console.log('======================saveProperty==========输入的属性==================');
-        console.log(textInputPaper, textLearnAim, textLearnPoint, textLearnDiff, textCourseSummary, textCourseExpansion);
-        console.log('====================================================');
-        const ip = global.constants.baseUrl;
-        const url = ip + "teacherApp_saveLpProperty.do";
-        const params = {
-            teacherId: global.constants.userName,
-            learnPlanId: this.state.learnPlanId,
-            Goal: textLearnAim,
-            Emphasis: textLearnPoint,
-            Difficulty: textLearnDiff,
-            Summary: textCourseSummary,
-            Extension: textCourseExpansion,
-            introduction: textInputPaper,
-            token: global.constants.token,
-            //callback:'ha',
-        };
-
-        console.log('-----saveProperty-----', Date.parse(new Date()))
-        http.get(url, params)
-            .then((resStr) => {
-                isFetchProperty = true;
-                let resJson = JSON.parse(resStr);
-                console.log('==============saveProperty=========================');
-                console.log(resJson);
-                console.log('====================================================');
-                if(resJson.success){
-                    Alert.alert('属性保存成功');
-                }else{
-                    Alert.alert('属性保存失败');
-                }
-                this.setState({ PropertyModelVisiblity: false , learnPlanId: '' });
-            })
-            .catch((error) => {
-                console.log('******catch***error**', error);
-                this.setState({
-                    error: true,
-                    errorInfo: error,
-                });
-            });
-    }
-
-    //显示属性悬浮框
-    showPropertyModal(){
-        console.log('===================showPropertyModal=========================',this.state.learnPlanId,isFetchProperty);
-        const { PropertyModelVisiblity } = this.state;
-        isFetchProperty == false ? this.fetchProperty() : null;
-        return(
-            <Modal
-                animationType="none"
-                transparent={true}
-                visible={PropertyModelVisiblity}
-                onRequestClose={() => {
-                    console.log('----------------Modal has been closed.---------------------');
-                    Alert.alert("Modal has been closed.");
-                    this.setModalVisible(!PropertyModelVisiblity);
-                }}
-            >
-                <View style={{
-                    flexDirection: 'column',
-                    top: screenHeight*0.15, 
-                    width: screenWidth*0.9,
-                    alignSelf: 'center',
-                    backgroundColor: '#fff',
-                    borderWidth: 2,
-                    borderRadius: 5,
-                    borderColor: 'grey'
-                }}>
-                    <View>
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
-                            <Text style={styles.longTitle}>内容简介：</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={(text)=>{ textInputPaper = text }}
-                            >{textInputPaper}</TextInput>
-                        </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
-                            <Text style={styles.longTitle}>学习目标：</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={(text)=>{ textLearnAim = text }}
-                            >{textLearnAim}</TextInput>
-                        </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
-                            <Text style={styles.longTitle}>学习重点：</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={(text)=>{ textLearnPoint = text }}
-                            >{textLearnPoint}</TextInput>
-                        </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
-                            <Text style={styles.longTitle}>学习难点：</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={(text)=>{ textLearnDiff = text }}
-                            >{textLearnDiff}</TextInput>
-                        </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
-                            <Text style={styles.longTitle}>课堂总结：</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={(text)=>{ textCourseSummary = text }}
-                            >{textCourseSummary}</TextInput>
-                        </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
-                            <Text style={styles.longTitle}>课外扩展：</Text>
-                            <TextInput
-                                style={styles.textInput}
-                                onChangeText={(text)=>{ textCourseExpansion = text }}
-                            >{textCourseExpansion}</TextInput>
-                        </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
-                    </View>
-                    
-                
-                    {/**取消 确定按钮 */}
-                    <View
-                        style={{
-                            paddingTop: 10,
-                            alignSelf: 'center',
-                            flexDirection: 'row',
-                            backgroundColor: '#fff',
-                            paddingBottom: 10,
-                        }}
-                    >
-                        <Button style={styles.button}
-                            onPress={() => {
-                                textInputPaper = '';
-                                textLearnAim = '';
-                                textLearnPoint = '';
-                                textLearnDiff = '';
-                                textCourseSummary = '';
-                                textCourseExpansion = '';
-                                isFetchProperty = false;
-                                this.setModalVisible(!PropertyModelVisiblity);
-                            }}
-                        >
-                            取消修改
-                        </Button>
-                        <Text style={{ width: screenWidth * 0.1 }}></Text>
-                        <Button style={styles.button}
-                            onPress={() => {
-                                this.saveProperty();
-                                textInputPaper = '';
-                                textLearnAim = '';
-                                textLearnPoint = '';
-                                textLearnDiff = '';
-                                textCourseSummary = '';
-                                textCourseExpansion = '';
-                                isFetchProperty = false;
-                            }}
-                        >
-                            确定修改
-                        </Button>
-                    </View>
-                </View>
-            </Modal>
-        );
-    }
-
     //显示作业、导学案等可选操作
     showTodo(todoImg,id,name,paperType,todo){
         if(todoImg == 'paper.png'){
@@ -716,11 +470,7 @@ class ContentList extends React.Component {
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
-                        <Text style={styles.selectContent} onPress={() => {
-                            Alert.alert('该功能还未写！！！')
-                            // isFetchProperty = false;
-                            // this.setState({ PropertyModelVisiblity: true , learnPlanId: id });
-                        }}>
+                        <Text style={styles.selectContent} onPress={() => {Alert.alert('该功能还未写！！！')}}>
                             属性
                         </Text>
                     </View>
@@ -772,11 +522,7 @@ class ContentList extends React.Component {
                     </View>
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
-                        <Text style={styles.selectContent} onPress={() => {
-                            Alert.alert('该功能还未写！！！')
-                            // isFetchProperty = false;
-                            // this.setState({ PropertyModelVisiblity: true  , learnPlanId: id });
-                        }}>
+                        <Text style={styles.selectContent} onPress={() => {Alert.alert('该功能还未写！！！')}}>
                             属性
                         </Text>
                     </View>
@@ -805,9 +551,6 @@ class ContentList extends React.Component {
                     onEndReached={this._onEndReached.bind(this)}
                     onEndReachedThreshold={0.8}
                 />
-                {/* {
-                    this.state.PropertyModelVisiblity && this.state.learnPlanId != '' ? this.showPropertyModal() : null
-                } */}
             </View>
         );
     }
@@ -960,26 +703,6 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         marginBottom: 10,
-    },
-    longTitle: {
-        fontSize: 15,
-        color: 'black',
-        fontWeight: '500',
-        width: screenWidth * 0.23,
-        paddingTop: 12,
-    },
-    button: {
-        width: screenWidth * 0.35,
-        color: 'white',
-        backgroundColor: '#4DC7F8',
-    },
-    textInput: {
-        width: screenWidth * 0.6,
-        backgroundColor: '#fff',
-        borderColor: '#DCDCDC',
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingLeft: 20,
     },
     typeImg: {
         // height: "100%",
