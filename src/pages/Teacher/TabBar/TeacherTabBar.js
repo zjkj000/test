@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, ActivityIndicator } from "react-native";
+import { Text, View, ActivityIndicator, Image } from "react-native";
 import {
     bindBackExitApp,
     removeBackExitApp,
@@ -12,6 +12,9 @@ import MyPage from "../../My/My";
 import LatestPage from "../../TeacherLatestPage/LatestPage";
 import TeachingContentPage from "../../TeacheringContent/TeachingContentPage";
 import StatisticalForm from "../../TeacherStatisticalForm/StatisticalForm";
+import http from "../../../utils/http/request";
+import ActionButton from "react-native-action-button";
+import { styles } from "./styles";
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
@@ -33,6 +36,7 @@ class TeacherTabBarComponent extends React.Component {
         super(props);
         this.state = {
             isLoading: false,
+            showBubble: false,
         };
     }
     componentDidMount() {
@@ -52,6 +56,10 @@ class TeacherTabBarComponent extends React.Component {
                 removeBackExitApp();
             }
         );
+        // 轮询
+        this.timerId = setInterval(() => {
+            this.getClassStatus();
+        }, 500);
     }
 
     componentDidUpdate() {
@@ -61,7 +69,37 @@ class TeacherTabBarComponent extends React.Component {
     componentWillUnmount() {
         this._unsubscribeNavigationBlurEvent();
         this._unsubscribeNavigationFocusEvent();
+
+        // 清空定时器
+        clearInterval(this.timerId);
     }
+    getClassStatus = () => {
+        const { ipAddress, userName } = this.props.route.params;
+        const url =
+            "http://" +
+            "www.cn901.net" +
+            ":8111" +
+            "/AppServer/ajax/teacherApp_getSkydtStatus.do";
+        const params = {
+            userId: userName,
+        };
+        http.get(url, params)
+            .then((resStr) => {
+                // Toast.showDangerToast(resStr);
+                resJson = JSON.parse(resStr);
+                this.setState({
+                    resJson,
+                });
+                console.log(
+                    "getClassStatus===================================="
+                );
+                console.log(resJson);
+                console.log("====================================");
+            })
+            .catch((error) => {
+                Toast.showDangerToast(error.toString());
+            });
+    };
     renderHome = () => {
         // console.log('###########renderHome####################',this.props.route);
         // console.log('---teacher-TabBar-renderHome----' , this.props.navigation.getState().routes);
@@ -95,50 +133,73 @@ class TeacherTabBarComponent extends React.Component {
     };
     render() {
         return (
-            <Tab.Navigator
-                screenOptions={({ route }) => ({
-                    tabBarIcon: ({ focused, color, size }) => {
-                        let iconName;
-                        switch (route.name) {
-                            case "最新":
-                                iconName = "grid";
-                                break;
-                            case "统计报告":
-                                iconName = "bar-chart-2";
-                                break;
-                            case "教学内容":
-                                iconName = "file-text";
-                                break;
-                            case "通知公告":
-                                iconName = "bell";
-                                break;
-                            case "我的":
-                                iconName = "person";
-                            default:
-                                break;
-                        }
-                        if (!focused) {
-                            iconName += "-outline";
-                        }
+            <>
+                <Tab.Navigator
+                    screenOptions={({ route }) => ({
+                        tabBarIcon: ({ focused, color, size }) => {
+                            let iconName;
+                            switch (route.name) {
+                                case "最新":
+                                    iconName = "grid";
+                                    break;
+                                case "统计报告":
+                                    iconName = "bar-chart-2";
+                                    break;
+                                case "教学内容":
+                                    iconName = "file-text";
+                                    break;
+                                case "通知公告":
+                                    iconName = "bell";
+                                    break;
+                                case "我的":
+                                    iconName = "person";
+                                default:
+                                    break;
+                            }
+                            if (!focused) {
+                                iconName += "-outline";
+                            }
+                            return (
+                                <Icon
+                                    style={{ width: 20, height: 20 }}
+                                    name={iconName}
+                                    fill={color}
+                                />
+                            );
+                        },
+                        tabBarActiveTintColor: "#6CC1E0",
+                        tabBarInactiveTintColor: "#949494",
+                        headerShown: false,
+                    })}
+                >
+                    <Tab.Screen name="最新" component={this.renderHome} />
+                    <Tab.Screen
+                        name="统计报告"
+                        component={this.renderStatistic}
+                    />
+                    <Tab.Screen
+                        name="教学内容"
+                        component={this.renderStudyTask}
+                    />
+                    <Tab.Screen name="通知公告" component={this.renderNotice} />
+                    <Tab.Screen name="我的" component={this.renderMy} />
+                </Tab.Navigator>
+                <ActionButton
+                    renderIcon={() => {
                         return (
-                            <Icon
-                                style={{ width: 20, height: 20 }}
-                                name={iconName}
-                                fill={color}
+                            <Image
+                                source={require("../../../assets/classImg/sjBubble.png")}
                             />
                         );
-                    },
-                    tabBarActiveTintColor: "#6CC1E0",
-                    tabBarInactiveTintColor: "#949494",
-                    headerShown: false,
-                })}
-            >
-                <Tab.Screen name="最新" component={this.renderHome} />
-                <Tab.Screen name="统计报告" component={this.renderStatistic} />
-                <Tab.Screen name="教学内容" component={this.renderStudyTask} />
-                <Tab.Screen name="通知公告" component={this.renderNotice} />
-                <Tab.Screen name="我的" component={this.renderMy} />
-            </Tab.Navigator>
+                    }}
+                    buttonColor="rgba(0,0,10,0.3)"
+                    onPress={() => {
+                        this.props.navigation.navigate("ControllerLogin");
+                    }}
+                    offsetY={100}
+                    offsetX={10}
+                ></ActionButton>
+            </>
         );
     }
 }

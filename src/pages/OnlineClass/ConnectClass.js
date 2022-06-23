@@ -11,7 +11,8 @@ import HistoryInput from "./HistoryInput";
 import { styles } from "./styles";
 import Toast from "../../utils/Toast/Toast";
 import Loading from "../../utils/loading/Loading";
-import StorageUtil from "../../utils/Storage/Storage";1
+import StorageUtil from "../../utils/Storage/Storage";
+1;
 
 export default ConnectClass = () => {
     // StorageUtil.clear();
@@ -103,7 +104,7 @@ export default ConnectClass = () => {
     const handleScan = () => {
         navigation.navigate({
             name: "QRCodeScanner",
-            params: { backPage: "线上课程" },
+            params: { backPage: { name: "线上课程" } },
             merge: true,
         });
     };

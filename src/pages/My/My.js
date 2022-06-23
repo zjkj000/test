@@ -222,26 +222,7 @@ class MyPageComponent extends Component {
                         </Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => {
-                        this.props.navigation.navigate("ControllerLogin");
-                    }}
-                >
-                    <Divider />
-                    <View style={styles.alternativeContainer}>
-                        <Text style={styles.textLeft}>遥控器</Text>
-                        <Text style={styles.textRight}>
-                            {" "}
-                            <Icon
-                                style={styles.icon}
-                                fill="#8F9BB3"
-                                name="arrow-ios-forward-outline"
-                            />
-                        </Text>
-                    </View>
-                </TouchableOpacity>
                 <Divider />
-
                 <TouchableOpacity
                     onPress={() => {
                         this.setState({ fullModuleVisible: true });

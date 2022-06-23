@@ -100,8 +100,8 @@ export const styles = StyleSheet.create({
     },
     header: {
         width: screenHeight,
-        flex: 1,
-        padding: 10,
+        flex: 2,
+        // padding: 10,
         flexDirection: "row",
         textAlign: "center",
         justifyContent: "space-evenly",
@@ -119,6 +119,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         height: "100%",
         textAlign: "center",
+        alignItems: "center",
         justifyContent: "space-evenly",
         textAlignVertical: "center",
     },

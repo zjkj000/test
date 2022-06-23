@@ -203,6 +203,9 @@ dependencies {
     // react-native-camera依赖
     implementation project(path: ':react-native-camera')
 
+    // react-native-video依赖
+    implementation project(':react-native-video')
+
     implementation('com.google.android.exoplayer:exoplayer:2.13.3') {
         exclude group: 'com.android.support'
     }

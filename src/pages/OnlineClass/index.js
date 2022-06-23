@@ -184,7 +184,13 @@ class OnlineClassTemp extends Component {
                     imgURL,
                 });
             case 5:
-                return this._renderTempPage();
+                return this._renderTempPage({
+                    ...resJson,
+                    ipAddress,
+                    introduction,
+                    userName,
+                    imgURL,
+                });
             default:
                 break;
         }
@@ -221,8 +227,8 @@ class OnlineClassTemp extends Component {
         return <AnonymousCorrecting {...props} />;
     }
 
-    _renderTempPage() {
-        return <TempPage />;
+    _renderTempPage(props) {
+        return <TempPage {...props} />;
     }
 
     render() {
