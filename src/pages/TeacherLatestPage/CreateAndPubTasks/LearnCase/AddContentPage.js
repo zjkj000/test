@@ -293,7 +293,7 @@ class AddContentPage extends React.Component {
                     }
                 }else if(resJson.data.esmodelList.length == 0){
                     isLastPage = true;
-                    Alert.alert('没有请求到导学案数据');
+                    Alert.alert('','没有请求到导学案数据', [{} , {text: '关闭', onPress: ()=>{}}]);
                 } 
 
                 if(resJson.data.esmodelList.length < 5){
@@ -703,14 +703,14 @@ class AddContentPage extends React.Component {
                                     }
                                     this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
                                 }else{
-                                    Alert.alert('已经是第一页数据了！！！');
+                                    Alert.alert('','已经是第一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }
                             }else{ //私有内容
                                 if(!isFirstPage){
                                     currentPage = currentPage - 1;
                                     this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
                                 }else{
-                                    Alert.alert('已经是第一页数据了！！！');
+                                    Alert.alert('','已经是第一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }
                             }
                         }}
@@ -738,14 +738,14 @@ class AddContentPage extends React.Component {
                                     }
                                     this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
                                 }else{
-                                    Alert.alert('已经是最后一页数据了！！！');
+                                    Alert.alert('','已经是最后一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }  
                             }else{
                                 if(!isLastPage){
                                     currentPage = currentPage + 1;
                                     this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
                                 }else{
-                                    Alert.alert('已经是最后一页数据了！！！');
+                                    Alert.alert('','已经是最后一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 } 
                             }
                         }}

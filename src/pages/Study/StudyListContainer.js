@@ -536,7 +536,7 @@ class StudyList extends React.Component {
                     //上拉加载相关
                     ListFooterComponent={this._renderFooter.bind(this)}
                     onEndReached={this._onEndReached.bind(this)}
-                    onEndReachedThreshold={0.5}
+                    onEndReachedThreshold={0.8}
                 />
             </View>
         );
