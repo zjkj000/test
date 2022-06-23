@@ -232,10 +232,10 @@ export default function CorrectingPaper(props) {
             scoreCount:newscoreCount,
             jsonStr:JSON.stringify(newsonStr),              // 格式如下    
           };
-        console.log(JSON.stringify(newsonStr))
+        // console.log(JSON.stringify(newsonStr))
         http.get(url, params).then((resStr) => {
           let resJson = JSON.parse(resStr);
-          console.log(resJson)
+          // console.log(resJson)
           if(resJson.success){
             WaitLoading.dismiss()
               //提交完之后 跳转 PaperList  刷新页面

@@ -33,7 +33,7 @@ export default class Notice extends React.Component {
         http.get(url,params).then((resStr)=>{
             let resJson = JSON.parse(resStr);
             // console.log('resStr' , resStr);
-            console.log('此通知或公告状态已修改为已读');
+            // console.log('此通知或公告状态已修改为已读');
             return ;
         })
   };

@@ -281,7 +281,7 @@ class LatestTask extends React.Component {
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('###learnId000#############SearchText######status000##',this.props.learnId , SearchText , this.props.status)}
+                    {/* {console.log('###learnId000#############SearchText######status000##',this.props.learnId , SearchText , this.props.status)} */}
                     <TodoListContainer resourceType={this.state.resourceType} searchStr={SearchText}  learnId={this.props.learnId} status={this.props.status} />
                 </View>
             </View>

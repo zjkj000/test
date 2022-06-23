@@ -9,7 +9,7 @@ import Orientation from 'react-native-orientation';
 
 let screenWidth  = Dimensions.get('window').width;
 let screenHeight = Dimensions.get('window').height;
-console.log(screenWidth+"   "+screenHeight+"带有小数");
+// console.log(screenWidth+"   "+screenHeight+"带有小数");
 
 export default class App extends React.Component{
     constructor(props){
@@ -98,7 +98,7 @@ export default class App extends React.Component{
     }
 
     _onStartShouldSetResponder(e){
-        console.log(e);
+        // console.log(e);
     }
 
     componentWillUnmount(){
@@ -108,9 +108,9 @@ export default class App extends React.Component{
     componentDidMount() {
         var initial = Orientation.getInitialOrientation();
         if (initial === 'PORTRAIT') {
-         console.log('是竖屏');
+        //  console.log('是竖屏');
         } else {
-            console.log('如果是横屏，就将其旋转过来');
+            // console.log('如果是横屏，就将其旋转过来');
             Orientation.lockToPortrait();
         }
     }

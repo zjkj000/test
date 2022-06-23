@@ -24,7 +24,6 @@ export default function TeacherTabBar(props) {
             ? props.route.params.type
             : ""
         : "";
-    console.log("整个页面是否刷新", type);
     const navigation = useNavigation();
     const route = useRoute();
     return (
@@ -95,11 +94,11 @@ class TeacherTabBarComponent extends React.Component {
                 this.setState({
                     resJson,
                 });
-                console.log(
-                    "getClassStatus===================================="
-                );
-                console.log(resJson);
-                console.log("====================================");
+                // console.log(
+                //     "getClassStatus===================================="
+                // );
+                // console.log(resJson);
+                // console.log("====================================");
             })
             .catch((error) => {
                 Toast.showDangerToast(error.toString());
