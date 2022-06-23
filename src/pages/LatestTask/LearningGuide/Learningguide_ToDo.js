@@ -31,7 +31,7 @@ export default function Paper_ToDo(props) {
     const [ischange, setLG_ischange] = useState(false);
     const [Stu_answer_i, setStu_LG_answer_i] = useState([]);
     const [Stu_answer, setStu_answer] = useState([]);
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedIndex, setSelectedIndex] = useState();
     const shouldLoadComponent = (index) => index === selectedIndex;
     const [success, setSuccess] = useState(false);
     const [oldStuAnswer_success, setoldStuAnswer_success] = useState(false);
@@ -47,6 +47,7 @@ export default function Paper_ToDo(props) {
 
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
+        console.log('props.route.params.selectedindex',props.route.params.selectedindex)
         navigation.setOptions({
             title: props.route.params.papername,
             headerRight: () => (
@@ -550,8 +551,7 @@ export default function Paper_ToDo(props) {
                                                     learnPlanId: learnPlanId,
                                                     submit_status: status,
                                                     startdate: startdate,
-                                                    papername:
-                                                        props.route.params.papername,
+                                                    papername:props.route.params.papername,
                                                     isallObj: isallObj,
                                                 },
                                                 megre: true,

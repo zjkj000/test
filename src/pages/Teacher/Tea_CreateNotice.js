@@ -98,10 +98,10 @@ class Tea_CreateNoticeContent extends Component {
                     this.props.navigation.navigate({
                         name:'Teacher_Home',
                         params:{
-                            screen:'最新',
+                            screen:'通知公告',
                             params:{
                                 isRefresh:true,
-                            }
+                            }  
                         },
                         merge:true
                     })
@@ -166,7 +166,6 @@ class Tea_CreateNoticeContent extends Component {
                         }}>定时发布</Radio>
                         <DateTime ref={ref => this.mysetdate = ref} setDateTime={this.setDateStr} selectedDateTime={this.state.setDate}></DateTime>
                         <TextInput
-                            ref={ref => this.mytextinput = ref}
                             editable={this.state.setDateFlag=='2'?true:false}
                             value={this.state.setDate}
                             onFocus={()=>{

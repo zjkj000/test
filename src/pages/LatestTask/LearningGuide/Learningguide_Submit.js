@@ -193,17 +193,18 @@ class Learningguide_Submit extends Component {
                     //设置一个函数  传递一个index参数控制跳转做题第几题。
                     //onPress={this.props.navigation.getState().routes[2].getSelectIndex()}
                     onPress={() => {
-                        if (this.state.data[result_Item].type == "01") {
+                        // if (this.state.data[result_Item].type == "01") {
                             this.props.navigation.navigate({
                                 name: "DoLearningGuide",
                                 params: {
                                     learnId: this.state.learnPlanId,
                                     status: this.props.submit_status, //导学案状态
-                                    selectedindex: result_Item,
+                                    selectedindex:result_Item,
                                     papername: this.props.papername,
                                 },
+                                megre: true,
                             });
-                        }
+                        // }
                         // else{
                         //     Alert.alert('需要跳转')
                         // }

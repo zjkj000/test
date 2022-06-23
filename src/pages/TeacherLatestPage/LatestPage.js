@@ -99,7 +99,7 @@ class LatestPage extends React.Component {
                 <Avatar
                     size={"tiny"}
                     shape={"square"}
-                    source={require("../../assets/teacherLatestPage/filter2.png")}
+                    source={require("../../assets/teacherLatestPage/filter1.png")}
                 />
             </TouchableOpacity>
         );
@@ -116,7 +116,7 @@ class LatestPage extends React.Component {
                 <Avatar
                     size={"tiny"}
                     shape={"square"}
-                    source={require("../../assets/teacherLatestPage/create2.png")}
+                    source={require("../../assets/teacherLatestPage/create1.png")}
                 />
             </TouchableOpacity>
         );
@@ -426,7 +426,7 @@ class LatestPage extends React.Component {
 const styles = StyleSheet.create({
     header: {
         height: screenHeight * 0.1,
-        backgroundColor: "#fff",
+        backgroundColor: "#4DC7F8",
     },
     todoList: {
         height: screenHeight*0.85,

@@ -63,7 +63,7 @@ export default class Leijishiyong extends Component {
   renderAvatar = () => {
     return (
         <TouchableOpacity style={{flexDirection:'row'}} onPress={() => {this.setState({ moduleVisible: true });}}>
-            <Text style={{fontSize:15,color:'#87CEFA'}}>{this.state.SchoolYearTermName}</Text>
+            <Text style={{fontSize:18,color:'#87CEFA'}}>{this.state.SchoolYearTermName}</Text>
             <Text> ▼</Text>
         </TouchableOpacity>
     );
@@ -105,15 +105,15 @@ export default class Leijishiyong extends Component {
             <View style={{backgroundColor:'#E0F3E0',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
               <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_1.png')}></Image></View>
               <View style={{flex:2,flexDirection:'column',padding:10}}>
-                <Text style={{fontSize:15}}>{this.state.ketangshouke}</Text>
-                <Text style={{fontSize:15}}>课堂授课</Text>
+                <Text style={{fontSize:22}}>{this.state.ketangshouke}</Text>
+                <Text style={{fontSize:18}}>课堂授课</Text>
               </View>
             </View>
             <View style={{backgroundColor:'#FCF5E5',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
                 <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_2.png')}></Image></View>
                 <View style={{flex:2,flexDirection:'column',padding:10}}>
-                    <Text style={{fontSize:15}}>{this.state.shishenghudong}</Text>
-                    <Text style={{fontSize:15}}>师生互动</Text>
+                    <Text style={{fontSize:22}}>{this.state.shishenghudong}</Text>
+                    <Text style={{fontSize:18}}>师生互动</Text>
                 </View>
             </View>
           </View> 
@@ -121,15 +121,15 @@ export default class Leijishiyong extends Component {
             <View style={{backgroundColor:'#F2E4FD',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
                 <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_3.png')}></Image></View>
                   <View style={{flex:2,flexDirection:'column',padding:10}}>
-                    <Text style={{fontSize:15}}>{this.state.buzhizuoye}</Text>
-                    <Text style={{fontSize:15}}>布置作业</Text>
+                    <Text style={{fontSize:22}}>{this.state.buzhizuoye}</Text>
+                    <Text style={{fontSize:18}}>布置作业</Text>
                 </View>
             </View>
             <View style={{backgroundColor:'#D9F8FA',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
                 <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_4.png')}></Image></View>
                   <View style={{flex:2,flexDirection:'column',padding:10}}>
-                    <Text style={{fontSize:15}}>{this.state.piyueshiti}</Text>
-                    <Text style={{fontSize:15}}>批阅试题</Text>
+                    <Text style={{fontSize:22}}>{this.state.piyueshiti}</Text>
+                    <Text style={{fontSize:18}}>批阅试题</Text>
                 </View>
             </View>
           </View>

@@ -224,17 +224,21 @@ class BuzhizuoyeContent extends Component {
           </View>
           <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
               <View>
-                <View style={{height:50}}>
-                  <Text style={{fontSize:18}}>有效次数</Text>
+                <View style={{height:30}}>
+                  <Text style={{fontSize:16}}>有效次数</Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'flex-end'}}>
-                    <Text style={{fontSize:30,color:'#9A07D1'}}>{this.state.effectiveKeciNum}</Text>
-                    <Text style={{fontSize:20}}>/{this.state.sumKeciNum}</Text>
+                    <Text style={{fontSize:50,color:'#9A07D1'}}>{this.state.effectiveKeciNum}</Text>
+                    <Text style={{fontSize:25}}>/{this.state.sumKeciNum}</Text>
                 </View>
           </View>
           <View style={{flexDirection:'column',padding:10}}>
-                  <View style={{margin:10}}><Text style={{fontSize:20}}>试题总数:{this.state.queSumNum}</Text></View>
-                  <View style={{margin:10}}><Text style={{fontSize:20}}>平均题数:{this.state.queAvgNum}</Text></View>
+                  <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                    <Text style={{fontSize:16}}>试题总数:</Text>
+                    <Text style={{fontSize:25,marginLeft:5}}>{this.state.queSumNum}</Text></View>
+                  <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                    <Text style={{fontSize:16}}>平均题数:</Text>
+                    <Text style={{fontSize:25,marginLeft:5}}>{this.state.queAvgNum}</Text></View>
           </View>
         </View>
     </View>
@@ -252,12 +256,12 @@ class BuzhizuoyeContent extends Component {
         {this.state.tableData.length>this.state.BuzhizuoyeTableNum?(
                   <View style={{justifyContent:'center',flexDirection:'row'}}>
                     <Text  onPress={()=>this.setState({BuzhizuoyeTableNum:this.state.tableData.length})
-                      }  style={{color:'#87CEFA'}} >查看全部{' >>'}</Text>
+                      }  style={{color:'#87CEFA',fontSize:18}} >查看全部{' >>'}</Text>
                   </View>
                 ):this.state.tableData.length<=3?(<View></View>):
                 (<View style={{justifyContent:'center',flexDirection:'row'}}>
                 <Text  onPress={()=>this.setState({BuzhizuoyeTableNum:3})
-                  }  style={{color:'#87CEFA'}} >收起{' >>'}</Text>
+                  }  style={{color:'#87CEFA',fontSize:18}} >收起{' >>'}</Text>
               </View>)}
         
   </View>

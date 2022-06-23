@@ -115,23 +115,34 @@ class KetangshoukeContent extends Component {
                 </View>
                 <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
                     <View>
-                        <View style={{height:50}}>
-                            <Text style={{fontSize:18}}>有效课次</Text>
+                        <View style={{height:30}}>
+                            <Text style={{fontSize:16}}>有效课次:</Text>
                         </View>
                         <View style={{flexDirection:'row',alignItems:'flex-end'}}>
-                            <Text style={{fontSize:30,color:'#3BBF36'}}>{this.state.effectiveKeci}</Text>
-                            <Text style={{fontSize:20}}>/{this.state.sumKeci}</Text>
+                            <Text style={{fontSize:50,color:'#3BBF36'}}>{this.state.effectiveKeci}</Text>
+                            <Text style={{fontSize:25}}>/{this.state.sumKeci}</Text>
                     </View>
                 
                     </View>
                     <View style={{flexDirection:'column',padding:10,paddingRight:0}}>
                         <View style={{flexDirection:'row',alignContent:'space-around'}}>
-                            <View style={{margin:10}}><Text style={{fontSize:20}}>内容:{this.state.contentNum}</Text></View>
-                            <View style={{margin:10}}><Text style={{fontSize:20}}>互动:{this.state.hdNum}</Text></View>
+                            <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                              <Text style={{fontSize:16}}>内容:</Text>
+                              <Text style={{fontSize:25,marginLeft:5}}>{this.state.contentNum}</Text>
+                            </View>
+                            <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                              <Text style={{fontSize:16}}>互动:</Text>
+                              <Text style={{fontSize:25,marginLeft:5}}>{this.state.hdNum}</Text></View>
                         </View>
                         <View style={{flexDirection:'row',alignContent:'space-around'}}>
-                            <View style={{margin:10}}><Text style={{fontSize:20}}>批注:{this.state.pzNum}</Text></View>
-                            <View style={{margin:10}}><Text style={{fontSize:20}}>板书:{this.state.bsNum}</Text></View>
+                            <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                              <Text style={{fontSize:16}}>批注:</Text>
+                              <Text style={{fontSize:25,marginLeft:5}}>{this.state.pzNum}</Text>
+                            </View>
+                            <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                              <Text style={{fontSize:16}}>板书:</Text>
+                              <Text style={{fontSize:25,marginLeft:5}}>{this.state.bsNum}</Text>
+                            </View>
                         </View>
                     </View>
                 </View>
@@ -151,12 +162,12 @@ class KetangshoukeContent extends Component {
                 {this.state.tableData.length>this.state.KetangTableNum?(
                   <View style={{justifyContent:'center',flexDirection:'row'}}>
                     <Text  onPress={()=>this.setState({KetangTableNum:this.state.tableData.length})
-                      }  style={{color:'#87CEFA'}} >查看全部{' >>'}</Text>
+                      }  style={{color:'#87CEFA',fontSize:18}} >查看全部{' >>'}</Text>
                   </View>
                 ):this.state.tableData.length<=3?(<View></View>):
                 (<View style={{justifyContent:'center',flexDirection:'row'}}>
                 <Text  onPress={()=>this.setState({KetangTableNum:3})
-                  }  style={{color:'#87CEFA'}} >收起{' >>'}</Text>
+                  }  style={{color:'#87CEFA',fontSize:18}} >收起{' >>'}</Text>
               </View>)}
             
                 

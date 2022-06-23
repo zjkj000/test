@@ -1051,7 +1051,7 @@ class CreateHomework extends React.Component {
             <ScrollView  showsVerticalScrollIndicator={false}>
                 {/**题面 */}
                 {/* {console.log('---题目-----' ,paperList[selectPaperIndex].tiMian)} */}
-                <Text style={styles.paperContent}>[题面]{selectPaperIndex + 1}. {paperList[selectPaperIndex].typeName}{paperList[selectPaperIndex].baseTypeId}</Text>
+                <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{padding: 10}}>
                     <RenderHtml contentWidth={screenWidth} source={{html: paperList[selectPaperIndex].tiMian}}></RenderHtml>
                 </View>
@@ -1472,7 +1472,7 @@ class CreateHomework extends React.Component {
             <ScrollView  showsVerticalScrollIndicator={false}>
                 {/**题面 */}
                 {/* {console.log('---题目-----' ,selectPaperList[updatePaperIndex].tiMian)} */}
-                <Text style={styles.paperContent}>[题面] {selectPaperList[updatePaperIndex].typeName}{selectPaperList[updatePaperIndex].baseTypeId}</Text>
+                <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{padding: 10}}>
                     <RenderHtml contentWidth={screenWidth} source={{html: selectPaperList[updatePaperIndex].tiMian}}></RenderHtml>
                 </View>
@@ -1916,7 +1916,7 @@ class CreateHomework extends React.Component {
 
     //设置开始时间
     setStartTime = (time) => {
-        this.setState({ startTime: time , endTime: time });
+        this.setState({ startTime: time  });
     }
     //设置结束时间
     setEndTime = (time) => {

@@ -270,7 +270,7 @@ class EditWork extends Component{
       List.push(
                   <TouchableOpacity key={index} onPress={
                     ()=>{
-                      if(item.typeName=='阅读理解题'||item.typeName=='七选五'){
+                      if(item.typeName=='阅读理解题'){
                         this.setState({typeId:item.typeId,
                           questionName:item.typeName,
                           baseTypeId:item.baseTypeId,
@@ -616,7 +616,7 @@ class EditWork extends Component{
                                           }}
                               ></TextInput>
                           </View>
-                        ):this.state.typeId!=''&&this.props.subjectName=='英语'&&this.state.baseTypeId=='108'?(
+                        ):this.state.typeId!=''&&this.props.subjectName=='英语'&&this.state.baseTypeId=='108'&&this.state.questionName!='七选五'?(
                           <>
                           <View style={{width:'70%',borderBottomWidth:1,paddingLeft:20,flexDirection:'row',alignItems:'center'}}>
                               <Text style={{marginRight:30}}>每道子题目预设分值</Text>
@@ -662,11 +662,39 @@ class EditWork extends Component{
                             }}><Text style={{color:'#59B9E0'}}>取消</Text></TouchableOpacity>
 
                             <TouchableOpacity onPress={()=>{
-                              this.addTimu(
-                                this.state.typeId,
-                                this.state.questionName,
-                                this.state.baseTypeId,
-                                this.state.questionScore)
+
+                              // 先判断输入的是否为正整数
+                              
+                                if(this.state.questionName=='七选五'){
+                                  if(parseInt(this.state.questionScore)%5==0&&parseInt(this.state.questionScore)>0){
+                                    TiMuTypeList.map((item,index)=>{
+                                      if(item.typeId==this.state.typeId){
+                                        item.score=this.state.questionScore
+                                      }
+                                    })
+                                    this.addTimu(
+                                      this.state.typeId,
+                                      this.state.questionName,
+                                      this.state.baseTypeId,
+                                      this.state.questionScore)
+                                  }else{
+                                    Alert.alert('分值必须为5的倍数!')
+                                  }
+                                }else{
+                                  TiMuTypeList.map((item,index)=>{
+                                    if(item.typeId==this.state.typeId){
+                                      item.score=this.state.questionScore
+                                    }
+                                  })
+                                  this.addTimu(
+                                    this.state.typeId,
+                                    this.state.questionName,
+                                    this.state.baseTypeId,
+                                    this.state.questionScore)
+                                }
+                              
+
+                              
                             }}>
                               <Text style={{color:'#59B9E0'}}>确定</Text></TouchableOpacity>
                         </View>

@@ -12,6 +12,7 @@ import MyPage from "../../My/My";
 import LatestPage from "../../TeacherLatestPage/LatestPage";
 import TeachingContentPage from "../../TeacheringContent/TeachingContentPage";
 import StatisticalForm from "../../TeacherStatisticalForm/StatisticalForm";
+import InformAndNoticePage from "../Tea_InformAndNotice/InformAndNoticePage";
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
@@ -71,7 +72,8 @@ class TeacherTabBarComponent extends React.Component {
     renderNotice = () => {
         return (
             <View>
-                <Text>我是教师端通知公共</Text>
+                {/* <Text>我是教师端通知公共</Text> */}
+                <InformAndNoticePage />
             </View>
         );
     };

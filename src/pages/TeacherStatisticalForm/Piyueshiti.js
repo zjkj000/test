@@ -147,12 +147,18 @@ export default function Piyueshiti(props) {
           <View style={{flex:1,justifyContent:'center'}}  ><Image style={{width:70,height:70}} source={require('../../assets/StatisticalForm/Ima_piyue.png')}></Image></View>
           <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
               <View style={{flexDirection:'column'}}>
-                  <Text style={{flex:1,fontSize:18}}>批阅总数</Text>
-                  <Text style={{flex:2,fontSize:30,color:'#7B70BE'}}>{this.state.sumNum}</Text>
+                        <View style={{height:30}}>
+                            <Text style={{fontSize:16}}>批阅总数</Text>
+                        </View>
+                        <View style={{flexDirection:'row',alignItems:'flex-end'}}>
+                        <Text style={{fontSize:50,color:'#7B70BE'}}>{this.state.sumNum}</Text>
+                        </View>
               </View>
               <View style={{flexDirection:'column',padding:10}}>
-                    <View style={{margin:10}}><Text style={{fontSize:20}}>填空题:{this.state.tkNum}</Text></View>
-                    <View style={{margin:10}}><Text style={{fontSize:20}}>其它题:{this.state.qtNum}</Text></View>
+                    <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}><Text style={{fontSize:18}}>填空题:</Text>
+                    <Text style={{fontSize:25,marginLeft:5}}>{this.state.tkNum}</Text></View>
+                    <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}><Text style={{fontSize:18}}>其它题:</Text>
+                    <Text style={{fontSize:25,marginLeft:5}}>{this.state.qtNum}</Text></View>
               </View>
           </View>
         </View>
@@ -168,11 +174,11 @@ export default function Piyueshiti(props) {
         {this.state.tableData.length>this.state.PiuyueshitiTableNum?(
                   <View style={{justifyContent:'center',flexDirection:'row'}}>
                     <Text  onPress={()=>this.setState({PiuyueshitiTableNum:this.state.tableData.length})
-                      }  style={{color:'#87CEFA'}} >查看全部{' >>'}</Text>
+                      }  style={{color:'#87CEFA',fontSize:18}} >查看全部{' >>'}</Text>
                   </View>
                 ):this.state.tableData.length>3?(<View style={{justifyContent:'center',flexDirection:'row'}}>
                 <Text  onPress={()=>this.setState({PiuyueshitiTableNum:3})
-                  }  style={{color:'#87CEFA'}} >收起{' >>'}</Text>
+                  }  style={{color:'#87CEFA',fontSize:18}} >收起{' >>'}</Text>
               </View>):
                 (<View></View>)}
   </View>

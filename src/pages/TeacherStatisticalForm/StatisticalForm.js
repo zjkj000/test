@@ -152,18 +152,18 @@ export default function StatisticalForm() {
             {/* 累计使用 */}
             <Leijishiyong data={this.state.leijishiyonglist} setdatastr={this.setselectYearTerm} SchoolYearTerm={this.state.SchoolYearTerm} SchoolYearTermName={this.state.SchoolYearTermName}yearTermStartTime={this.state.yearTermStartTime}yearTermEndTime={this.state.yearTermEndTime}/>
             {/* 课堂授课标题+日历 */}
-            <View style={{height:20,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
+            <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
               <View style={{flexDirection:'row'}}>
-                <View style={{height:18,width:5,backgroundColor:'#47BB3E',marginRight:8}}></View>
-                <Text>课堂授课</Text>
+                <View style={{height:25,width:5,backgroundColor:'#47BB3E',marginRight:5}}></View>
+                <Text style={{fontSize:20}}>课堂授课</Text>
               </View>
               <View style={{flexDirection:'row'}}>
                 <TouchableOpacity onPress={()=>{this.setState({KetangshoukeDateStr:this.theLastDay(this.state.KetangshoukeDateStr)})}}>
-                  <Text style={{color:'#87CEFA'}} >{'<'}   </Text>
+                  <Text style={{color:'#87CEFA',fontSize:18}} >{'<'}   </Text>
                 </TouchableOpacity>
-                <Text>{this.state.KetangshoukeDateStr}</Text>
+                <Text style={{fontSize:18}}>{this.state.KetangshoukeDateStr}</Text>
                 <TouchableOpacity onPress={()=>{this.setState({KetangshoukeDateStr:this.nextDay(this.state.KetangshoukeDateStr)})}}>
-                  <Text style={{color:'#87CEFA'}} >   {'>'}</Text>
+                  <Text style={{color:'#87CEFA',fontSize:18}} >   {'>'}</Text>
                 </TouchableOpacity>
                 
               </View>
@@ -172,18 +172,18 @@ export default function StatisticalForm() {
             {/* 课堂授课图表 */}
             <Ketangshouke data={this.state.ketangshoukelist} date={this.state.KetangshoukeDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime} />
             {/* 布置作业标题+日历 */}
-            <View style={{height:20,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
+            <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
               <View style={{flexDirection:'row'}}>
-                <View style={{height:18,width:5,backgroundColor:'#9518BA',marginRight:8}}></View>
-                <Text>布置作业</Text>
+                <View style={{height:25,width:5,backgroundColor:'#9518BA',marginRight:5}}></View>
+                <Text style={{fontSize:20}}>布置作业</Text>
               </View>
               <View style={{flexDirection:'row'}}>
                   <TouchableOpacity onPress={()=>{this.setState({BuzhizuoyeDateStr:this.theLastDay(this.state.BuzhizuoyeDateStr)})}}>
-                    <Text style={{color:'#87CEFA'}} >{'<'}   </Text>
+                    <Text style={{color:'#87CEFA',fontSize:18}} >{'<'}   </Text>
                   </TouchableOpacity>
-                <Text>{this.state.BuzhizuoyeDateStr}   </Text>
+                <Text style={{fontSize:18}}>{this.state.BuzhizuoyeDateStr}</Text>
                 <TouchableOpacity onPress={()=>{this.setState({BuzhizuoyeDateStr:this.nextDay(this.state.BuzhizuoyeDateStr)})}}>
-                  <Text style={{color:'#87CEFA'}} >{'>'}</Text>
+                  <Text style={{color:'#87CEFA',fontSize:18}} >{'>'}</Text>
                 </TouchableOpacity>
                 
               </View>
@@ -192,18 +192,18 @@ export default function StatisticalForm() {
             {/* 布置作业图表 */}
             <Buzhizuoye data={this.state.buzhizuoyelist} date={this.state.BuzhizuoyeDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime}/>
             {/* 批阅试题标题+日历 */}
-            <View style={{height:20,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
+            <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
               <View style={{flexDirection:'row'}}>
-                <View style={{height:18,width:5,backgroundColor:'#7C67F4',marginRight:8}}></View>
-                <Text>批阅试题</Text>
+                <View style={{height:25,width:5,backgroundColor:'#7C67F4',marginRight:5}}></View>
+                <Text style={{fontSize:20}}>批阅试题</Text>
               </View>
               <View style={{flexDirection:'row'}}>
                 <TouchableOpacity onPress={()=>{this.setState({PiyueshitiDateStr:this.theLastDay(this.state.PiyueshitiDateStr)})}}>
-                  <Text style={{color:'#87CEFA'}} >{'<'}   </Text>
+                  <Text style={{color:'#87CEFA',fontSize:18}} >{'<'}   </Text>
                 </TouchableOpacity>
-                <Text>{this.state.PiyueshitiDateStr}   </Text>
+                <Text style={{fontSize:18}}>{this.state.PiyueshitiDateStr}</Text>
                 <TouchableOpacity onPress={()=>{this.setState({PiyueshitiDateStr:this.nextDay(this.state.PiyueshitiDateStr)})}}>
-                  <Text style={{color:'#87CEFA'}} >{'>'}</Text>
+                  <Text style={{color:'#87CEFA',fontSize:18}} >{'>'}</Text>
                 </TouchableOpacity>
                 
               </View>
