@@ -1554,19 +1554,19 @@ class LearnCasePropertyModal extends React.Component {
                             // Alert.alert('确定功能还未写！！！')
                             if(this.state.shareContent){
                                 if(this.state.learnPlanType1 == ''){
-                                    Alert.alert('请选择属性');
+                                    Alert.alert('','请选择属性', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }else{
                                     this.setFetchAgainPropertys();
                                 }
                             }else if(this.state.schoolContent){
                                 if(this.state.learnPlanType2 == ''){
-                                    Alert.alert('请选择属性');
+                                    Alert.alert('','请选择属性', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }else{
                                     this.setFetchAgainPropertys();
                                 }
                             }else{
                                 if(this.state.learnPlanType3 == ''){
-                                    Alert.alert('请选择属性');
+                                    Alert.alert('','请选择属性', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }else{
                                     this.setFetchAgainPropertys();
                                 }

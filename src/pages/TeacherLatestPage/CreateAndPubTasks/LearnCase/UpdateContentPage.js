@@ -503,7 +503,7 @@ class UpdateContentPage extends React.Component {
     moveUpPaper = () => {
         const { updateContentIndex , selectContentList } = this.state;
         if(updateContentIndex == 0){
-            Alert.alert('已经是第一个内容了');
+            Alert.alert('','已经是第一个内容了', [{} , {text: '关闭', onPress: ()=>{}}]);
             Toast.showInfoToast('已经是第一个内容了',1000);
         }else{
             const tempPaperList = selectContentList;
@@ -521,7 +521,7 @@ class UpdateContentPage extends React.Component {
     moveDownPaper = () => {
         const { updateContentIndex , selectContentList } = this.state;
         if(updateContentIndex == (selectContentList.length - 1)){
-            Alert.alert('已经是最后一个内容了');
+            Alert.alert('','已经是最后一个内容了', [{} , {text: '关闭', onPress: ()=>{}}]);
             Toast.showInfoToast('已经是最后一个内容了',1000);
         }else{
             const tempPaperList = selectContentList;

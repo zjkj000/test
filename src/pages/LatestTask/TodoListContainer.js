@@ -120,8 +120,8 @@ class TodoList extends React.Component {
         //oldtype = this.props.resourceType;
         //searchStr = this.props.searchStr;
 
-        // console.log("componentWillUpdate*********", Date.parse(new Date()), 'type:', oldtype, 'nextProps.type:', nextProps.resourceType);
-        // console.log("componentWillUpdate*********", Date.parse(new Date()), 'searchStr:', searchStr, 'nextProps.searchStr:', nextProps.searchStr);
+        console.log("componentWillUpdate*****todoList****", Date.parse(new Date()), 'type:', oldtype, 'nextProps.type:', nextProps.resourceType);
+        console.log("componentWillUpdate*****todoList****", Date.parse(new Date()), 'searchStr:', searchStr, 'nextProps.searchStr:', nextProps.searchStr);
 
         if (
             oldtype != nextProps.resourceType ||
