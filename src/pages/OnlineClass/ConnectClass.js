@@ -12,7 +12,6 @@ import { styles } from "./styles";
 import Toast from "../../utils/Toast/Toast";
 import Loading from "../../utils/loading/Loading";
 import StorageUtil from "../../utils/Storage/Storage";
-1;
 
 export default ConnectClass = () => {
     // StorageUtil.clear();
@@ -110,10 +109,12 @@ export default ConnectClass = () => {
     };
 
     const handleLiveClass = () => {
-        NativeModules.IntentMoudle.startActivityFromJS("LaunchActivity", userId+"-"+userCn+"-"+roomId);
+        NativeModules.IntentMoudle.startActivityFromJS(
+            "LaunchActivity",
+            userId + "-" + userCn + "-" + roomId
+        );
     };
 
-    
     return (
         <View style={styles.View}>
             <Layout style={styles.Layout}>
@@ -139,7 +140,7 @@ export default ConnectClass = () => {
                 value={ipAddress}
                 setValue={setIpAddress}
             ></HistoryInput>
-            <HistoryInput
+            {/* <HistoryInput
                 icon={<Icon name="person" />}
                 style={styles.Input}
                 value={userId}
@@ -156,7 +157,7 @@ export default ConnectClass = () => {
                 style={styles.Input}
                 value={roomId}
                 setValue={setRoomId}
-            ></HistoryInput>
+            ></HistoryInput> */}
 
             <Button onPress={handleLogin} style={styles.Button}>
                 连接

@@ -18,8 +18,13 @@ import { styles } from "./styles";
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
-    // const type = props.route.params.type ? props.route.params.type : "";
-    // console.log("整个页面是否刷新", type);
+    // console.log(props.route);
+    const type = props.route.params
+        ? props.route.params.type
+            ? props.route.params.type
+            : ""
+        : "";
+    console.log("整个页面是否刷新", type);
     const navigation = useNavigation();
     const route = useRoute();
     return (
@@ -74,7 +79,7 @@ class TeacherTabBarComponent extends React.Component {
         clearInterval(this.timerId);
     }
     getClassStatus = () => {
-        const { ipAddress, userName } = this.props.route.params;
+        const { userName } = this.props.route.params;
         const url =
             "http://" +
             "www.cn901.net" +

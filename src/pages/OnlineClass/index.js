@@ -16,6 +16,7 @@ import LockedPage from "./ClassPages/LockedPage";
 import HTML from "react-native-render-html";
 import ShareStuAnswer from "./ClassPages/ShareStuAnswer";
 import AnonymousCorrecting from "./ClassPages/AnonymousCorrecting";
+import RushPage from "./ClassPages/RushPage";
 
 export default function OnlineClassTempPage() {
     const navigation = useNavigation();
@@ -29,6 +30,7 @@ class OnlineClassTemp extends Component {
         this.state = {
             resJson: {},
             pageRender: 0,
+            isRushReady: 0,
         };
     }
 
@@ -93,6 +95,12 @@ class OnlineClassTemp extends Component {
                         console.log("匿名评分");
                         this.setState({ pageRender: 4 });
                         break;
+                    case "readyResponder":
+                        this.setState({ pageRender: 6, isRushReady: 0 });
+                        break;
+                    case "startResponder":
+                        this.setState({ isRushReady: 1 });
+                        break;
                     case "QuitTask":
                     default:
                         console.log("结束答题");
@@ -145,7 +153,7 @@ class OnlineClassTemp extends Component {
     }
 
     pageRender = () => {
-        const { pageRender, resJson } = this.state;
+        const { pageRender, resJson, isRushReady } = this.state;
         const { ipAddress, userName, imgURL } = this.props.route.params;
         const { introduction } = this.props.route.params.learnPlan;
         switch (pageRender) {
@@ -191,6 +199,15 @@ class OnlineClassTemp extends Component {
                     userName,
                     imgURL,
                 });
+            case 6:
+                return this._renderRushPage({
+                    ...resJson,
+                    ipAddress,
+                    introduction,
+                    userName,
+                    imgURL,
+                    isReady: isRushReady,
+                });
             default:
                 break;
         }
@@ -229,6 +246,10 @@ class OnlineClassTemp extends Component {
 
     _renderTempPage(props) {
         return <TempPage {...props} />;
+    }
+
+    _renderRushPage(props) {
+        return <RushPage {...props} />;
     }
 
     render() {
