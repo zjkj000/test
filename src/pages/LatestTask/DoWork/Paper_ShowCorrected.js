@@ -23,6 +23,7 @@ export default function Paper_ShowCorrected(props) {
       
       //getData()函数是为了获取试题资源，和学生之前可能作答的结果   得到之后设置状态success 是否成功  data 具体试题数据  dataNum题目总数  
      function  getData() {
+        const userId = global.constants.userName;
         const data_url = 
           "http://"+
           "www.cn901.net" +

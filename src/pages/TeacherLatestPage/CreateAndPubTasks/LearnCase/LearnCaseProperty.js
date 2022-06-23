@@ -567,9 +567,9 @@ class LearnCaseProperty extends React.Component {
 
     render() {
         return (
-            <View style={{ flexDirection: 'column', backgroundColor: '#fff' }}>
+            <View style={{ flexDirection: 'column', backgroundColor: '#fff'  }}>
                 <ScrollView horizontal={false} showsVerticalScrollIndicator={false}
-                    style={{ height: '90%', backgroundColor: '#fff' }}
+                    style={{ height: '92%', backgroundColor: '#fff' }}
                 >
                     {/**名称 */}
                     <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
@@ -975,7 +975,7 @@ class LearnCaseProperty extends React.Component {
                         position: 'absolute',
                     }}
                 >
-                    <Text style={{ width: screenWidth * 0.05 }}></Text>
+                    <Text style={{ width: screenWidth * 0.05 , backgroundColor: '#fff'}}></Text>
                     <Button style={styles.button}
                         onPress={() => {
                             //Alert.alert('取消功能还未写！！！')
@@ -989,16 +989,16 @@ class LearnCaseProperty extends React.Component {
                         onPress={() => { 
                             // Alert.alert('该功能还未开发');
                             //console.log('----------',textInputName , textInputPaper); 
-                            // if(
-                            //     textInputName != ''
-                            //     && this.state.studyRank != ''
-                            //     && this.state.studyClass != ''
-                            //     && this.state.edition != ''
-                            //     && this.state.book != ''
-                            //     && this.state.knowledge != ''
-                            //     && textLearnSumTime != ''
-                            //     && textStudyTime != ''
-                            // )(
+                            if(
+                                textInputName != ''
+                                && this.state.studyRank != ''
+                                && this.state.studyClass != ''
+                                && this.state.edition != ''
+                                && this.state.book != ''
+                                && this.state.knowledge != ''
+                                && textLearnSumTime != ''
+                                && textStudyTime != ''
+                            )(
                                     this.props.navigation.navigate({
                                         name: '创建导学案',
                                         params: {
@@ -1032,10 +1032,10 @@ class LearnCaseProperty extends React.Component {
                                             knowledgeList: this.state.knowledgeList, //从接口中返回的数据
                                         }
                                     })
-                            // )
-                            // else{
-                            //     Alert.alert('必填项不完整');
-                            // }
+                            )
+                            else{
+                                Alert.alert('必填项不完整');
+                            }
                         }}
                     >
                         确定

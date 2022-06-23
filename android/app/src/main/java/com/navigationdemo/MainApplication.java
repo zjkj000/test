@@ -8,19 +8,23 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.rnfs.RNFSPackage;
 import com.beefe.picker.PickerViewPackage;
-import com.reactnativecommunity.webview.RNCWebViewPackage;
 import com.brentvatne.react.ReactVideoPackage;
+import com.reactnativecommunity.webview.RNCWebViewPackage;
+import com.facebook.react.shell.MainReactPackage;
+import com.horcrux.svg.SvgPackage;
 import com.reactnativecommunity.asyncstorage.AsyncStoragePackage;
-import com.github.yamill.orientation.OrientationPackage;
-import com.github.yamill.orientation.OrientationPackage;
-import com.github.yamill.orientation.OrientationPackage;
-import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.soloader.SoLoader;
+import com.swmansion.gesturehandler.RNGestureHandlerPackage;
+import com.swmansion.rnscreens.RNScreensPackage;
+import com.th3rdwave.safeareacontext.SafeAreaContextPackage;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
+
+
 
 public class MainApplication extends Application implements ReactApplication {
 
@@ -31,16 +35,29 @@ public class MainApplication extends Application implements ReactApplication {
           return BuildConfig.DEBUG;
         }
 
+        // @Override
+        // protected List<ReactPackage> getPackages() {
+        //   @SuppressWarnings("UnnecessaryLocalVariable")
+        //   List<ReactPackage> packages = new PackageList(this).getPackages();
+        //   // Packages that cannot be autolinked yet can be added manually here, for example:
+        //   // packages.add(new MyReactNativePackage());
+        //   return packages;
+        // }
         @Override
         protected List<ReactPackage> getPackages() {
-          @SuppressWarnings("UnnecessaryLocalVariable")
-          List<ReactPackage> packages = new PackageList(this).getPackages();
-          // Packages that cannot be autolinked yet can be added manually here, for example:
-          // packages.add(new MyReactNativePackage());
-
-          // react-native-video依赖
-          packages.add(new ReactVideoPackage());
-          return packages;
+          return Arrays.<ReactPackage>asList(
+            new MainReactPackage(),
+            new RNFSPackage(),
+            new PickerViewPackage(),
+            new ReactVideoPackage(),
+            new RNCWebViewPackage(),
+            new AsyncStoragePackage(),
+            new RNGestureHandlerPackage(),
+            new SafeAreaContextPackage(),
+            new RNScreensPackage(),
+            new SvgPackage(),
+            new MyReactPackage()
+          );
         }
 
         @Override

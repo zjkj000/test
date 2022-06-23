@@ -11,7 +11,7 @@ import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
 import { Flex } from "@ant-design/react-native";
 import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
-import { useNavigation, useRoute } from "@react-navigation/native";
+import { useNavigation , useRoute } from "@react-navigation/native";
 //import { Container , Header , Item , Input , Icon , Button } from 'native-base';
 import http from "../../utils/http/request";
 import {
@@ -32,7 +32,7 @@ export default function LatestPageContainer() {
     const navigation = useNavigation();
     const route = useRoute();
     //将navigation传给LatestTask组件，防止路由出错
-    return <LatestPage navigation={navigation} route={route}></LatestPage>;
+    return <LatestPage navigation={navigation}  route={route}></LatestPage>;
 }
 
 class LatestPage extends React.Component {
@@ -47,38 +47,30 @@ class LatestPage extends React.Component {
         };
     }
 
-    //第一次加载页面请求资料夹是否已读api
-    // UNSAFE_componentWillMount() {
-
-    // }
     componentDidMount() {
         const { navigation } = this.props;
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log(
-                    "LatestPageFocused===================================="
-                );
+                console.log("LatestPageFocused====================================");
                 console.log(this.props.route);
-                if (
-                    this.props.route.params !== undefined &&
-                    this.props.route.params.isRefresh !== undefined &&
+                if (this.props.route.params !== undefined && 
+                    this.props.route.params.isRefresh !== undefined && 
                     this.props.route.params.isRefresh
-                ) {
-                    this.props.navigation.setParams({ isRefresh: false });
-                    console.log("刷新");
-                }
+                ) { 
+                        this.props.navigation.setParams({ isRefresh: false }); 
+                        // console.log("刷新====================================",this.props.route);
+                } 
                 console.log("====================================");
-                //console.log('%%%%TabBar%%%' , navigation.getState().routes);
-                // this.renderHome();
                 // bindBackExitApp();
             }
         );
     }
 
+
     componentWillUnmount() {
         this._unsubscribeNavigationFocusEvent();
-    }
+    } 
 
     //搜索框内容改变时触发，更新value
     onChange = (value) => {
@@ -107,7 +99,7 @@ class LatestPage extends React.Component {
                 <Avatar
                     size={"tiny"}
                     shape={"square"}
-                    source={require("../../assets/teacherLatestPage/filter2.png")}
+                    source={require("../../assets/teacherLatestPage/filter1.png")}
                 />
             </TouchableOpacity>
         );
@@ -124,7 +116,7 @@ class LatestPage extends React.Component {
                 <Avatar
                     size={"tiny"}
                     shape={"square"}
-                    source={require("../../assets/teacherLatestPage/create2.png")}
+                    source={require("../../assets/teacherLatestPage/create1.png")}
                 />
             </TouchableOpacity>
         );
@@ -331,6 +323,7 @@ class LatestPage extends React.Component {
                                     Screen: "教学内容",
                                     resourceType: "paper",
                                 },
+                                merge:true
                             });
                         }}
                     />
@@ -380,7 +373,7 @@ class LatestPage extends React.Component {
 
     render() {
         return (
-            <View>
+            <View  style={{backgroundColor:'#fff'}}>
                 <View style={styles.header}>
                     <Flex style={styles.flexNew}>
                         <Flex style={{ width: screenWidth * 0.12 }}>
@@ -412,10 +405,16 @@ class LatestPage extends React.Component {
                 </View>
                 <View style={styles.todoList}>
                     {/* {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)} */}
-                    <CreateListContainer
-                        resourceType={this.state.resourceType}
-                        searchStr={SearchText}
-                    />
+                    <CreateListContainer 
+                        resourceType={this.state.resourceType} 
+                        searchStr={SearchText} 
+                        isRefresh= {
+                            this.props.route.params !== undefined && 
+                            this.props.route.params.isRefresh !== undefined 
+                            ? this.props.route.params.isRefresh
+                            : ''
+                        }
+                    />                   
                 </View>
             </View>
         );
@@ -425,11 +424,11 @@ class LatestPage extends React.Component {
 const styles = StyleSheet.create({
     header: {
         height: screenHeight * 0.1,
-        backgroundColor: "#fff",
+        backgroundColor: "#4DC7F8",
     },
     todoList: {
-        height: screenHeight * 0.9,
-        backgroundColor: "#fff",
+        height: screenHeight * 0.8,
+        backgroundColor: '#fff'
     },
     flexNew: {
         paddingTop: screenHeight * 0.02,

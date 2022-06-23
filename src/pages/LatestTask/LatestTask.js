@@ -76,25 +76,11 @@ class LatestTask extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                // console.log('###learnId000###status000##', this.props.learnId , this.props.status);
+                console.log('##latest#learnId000###status000##', this.props.learnId , this.props.status);
                 // this.setState({});
             }
         );
     }
-
-    componentDidMount() {
-        // const { navigation } = this.props;
-        // this._unsubscribeNavigationFocusEvent = navigation.addListener(
-        //     "focus",
-        //     () => {
-        //         console.log('###learnId000###status000##', this.props , this.props.learnId , this.props.status);
-        //     }
-        // );
-    }
-
-    // UNSAFE_componentWillUpdate(nextProps){
-    //     console.log('###componentWillUpdate##nexProps##', nextProps);
-    // }
 
     componentWillUnmount() {
         this._unsubscribeNavigationFocusEvent();
@@ -103,7 +89,7 @@ class LatestTask extends React.Component {
     //点击文件夹图标跳转
     packagesPage = () => {
         this.setState({ resourceRead: 0 }); //资料夹状态改为已读
-        console.log("文件夹页面跳转");
+        // console.log("文件夹页面跳转");
         this.props.navigation.navigate("资料夹", {});
     };
 
@@ -117,13 +103,13 @@ class LatestTask extends React.Component {
         // const {searchText} = this;
         // console.log('serachText' , searchText.state.value);
         // console.log('******' , searchText.state.value);
-        console.log("*******");
+        // console.log("*******");
         this.setState({});
     };
 
     //点击键盘中的提交按钮，光标移出搜索框，“搜索“二字消失
     onBlur = () => {
-        console.log("点击了键盘中的提交按钮");
+        // console.log("点击了键盘中的提交按钮");
         this.setState({});
     };
 
@@ -145,37 +131,37 @@ class LatestTask extends React.Component {
     };
     //全部最新内容
     handleAll = () => {
-        console.log("获取全部最新内容");
+        // console.log("获取全部最新内容");
         this.setState({ resourceType: "all", moduleVisible: false });
     };
     //作业
     handleHomework = () => {
-        console.log("获取作业内容");
+        // console.log("获取作业内容");
         this.setState({ resourceType: "2", moduleVisible: false });
     };
     //导学案
     handleGuidance = () => {
-        console.log("获取导学案内容");
+        // console.log("获取导学案内容");
         this.setState({ resourceType: "1", moduleVisible: false });
     };
     //授课包
     handleTeachingPackages = () => {
-        console.log("获取授课包内容");
+        // console.log("获取授课包内容");
         this.setState({ resourceType: "6", moduleVisible: false });
     };
     //微课
     handleMicroClass = () => {
-        console.log("获取微课内容");
+        // console.log("获取微课内容");
         this.setState({ resourceType: "7", moduleVisible: false });
     };
     //通知
     handleInform = () => {
-        console.log("获取通知内容");
+        // console.log("获取通知内容");
         this.setState({ resourceType: "3", moduleVisible: false });
     };
     //公告
     handleNotice = () => {
-        console.log("获取公告内容");
+        // console.log("获取公告内容");
         this.setState({ resourceType: "4", moduleVisible: false });
     };
 
@@ -260,7 +246,7 @@ class LatestTask extends React.Component {
 
     render() {
         return (
-            <View>
+            <View style={{backgroundColor:'#fff',flex:1}}>
                 <View style={styles.header}>
                     <Flex style={styles.flexNew}>
                         <TouchableOpacity
@@ -309,7 +295,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#6CC5CB",
     },
     todoList: {
-        height: screenHeight * 0.9,
+        height: screenHeight * 0.8,
+        backgroundColor: '#fff'
     },
     flexNew: {
         paddingTop: 0,

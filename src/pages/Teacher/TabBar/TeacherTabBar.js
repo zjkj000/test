@@ -18,8 +18,8 @@ import { styles } from "./styles";
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
-    const type = props.route.params.type ? props.route.params.type : "";
-    console.log("整个页面是否刷新", type);
+    // const type = props.route.params.type ? props.route.params.type : "";
+    // console.log("整个页面是否刷新", type);
     const navigation = useNavigation();
     const route = useRoute();
     return (

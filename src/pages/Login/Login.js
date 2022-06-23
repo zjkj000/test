@@ -94,10 +94,7 @@ export default Login = () => {
                     // Toast.showSuccessToast(res.message, 500);
                     // Alert.alert(res.message);
                     navigation.navigate({
-                        name:homePage,
-                        params:{
-                            type:'login'
-                        }
+                        name:homePage
                     });
                 } else if (res.success == false) {
                     setShowLoading(false);

@@ -108,8 +108,12 @@ class Tea_CreateInformContent extends Component {
                         this.props.navigation.navigate({
                             name:'Teacher_Home',
                             params:{
-                                Screen:'通知公告'
-                            }
+                                screen:'通知公告',
+                                params:{
+                                    isRefresh:true,
+                                }  
+                            },
+                            merge:true
                         })
                     }}
               ])

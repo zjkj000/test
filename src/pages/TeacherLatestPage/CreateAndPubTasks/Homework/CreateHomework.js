@@ -727,16 +727,20 @@ class CreateHomework extends React.Component {
                 let resJson = JSON.parse(resStr);
                 // console.log('****************resJson.success*********', resJson);
                 if(resJson.success){
-                    Alert.alert(this.props.paramsData.name ,'作业布置成功',[{}, {text:'ok',onPress:()=>{
-                        WaitLoading.dismiss()
-                        this.props.navigation.navigate({
-                            name:'Teacher_Home',
-                                params:{
-                                    type:'fresh'
-                                }
-                        })
-                        }}
-                ]);
+                    Alert.alert(this.props.paramsData.name , '作业布置成功' , [{} ,
+                        {text: 'ok', onPress: ()=>{
+                            this.props.navigation.navigate({
+                                name: "Teacher_Home",
+                                params: {
+                                    screen: "最新",
+                                    params: {
+                                        isRefresh: true, 
+                                    },
+                                },
+                                merge: true,
+                            });
+                        }}       
+                    ]);
                 }else{
                     WaitLoading.show_false()
                     // Alert.alert(resJson.message);
@@ -779,16 +783,20 @@ class CreateHomework extends React.Component {
                 // console.log('****************resJson.success***Type******', resJson.success);
                 
                 if(resJson.success){
-                    Alert.alert(this.props.paramsData.name ,'作业保存成功!',[{}, {text:'ok',onPress:()=>{
-                        WaitLoading.dismiss()
-                        this.props.navigation.navigate({
-                            name:'Teacher_Home',
-                                params:{
-                                    type:'fresh'
-                                }
-                        })
-                        }}
-                ]);
+                    Alert.alert(this.props.paramsData.name , '作业保存成功' , [{} ,
+                        {text: 'ok', onPress: ()=>{
+                            this.props.navigation.navigate({
+                                name: "Teacher_Home",
+                                params: {
+                                    screen: "教学内容",
+                                    params: {
+                                        isRefresh: true, 
+                                    },
+                                },
+                                merge: true,
+                            });
+                        }}       
+                    ]);
                 }else{
                     WaitLoading.show_false()
                     // Alert.alert(resJson.message);
@@ -1043,7 +1051,7 @@ class CreateHomework extends React.Component {
             <ScrollView  showsVerticalScrollIndicator={false}>
                 {/**题面 */}
                 {/* {console.log('---题目-----' ,paperList[selectPaperIndex].tiMian)} */}
-                <Text style={styles.paperContent}>[题面]{selectPaperIndex + 1}. {paperList[selectPaperIndex].typeName}{paperList[selectPaperIndex].baseTypeId}</Text>
+                <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{padding: 10}}>
                     <RenderHtml contentWidth={screenWidth} source={{html: paperList[selectPaperIndex].tiMian}}></RenderHtml>
                 </View>
@@ -1464,7 +1472,7 @@ class CreateHomework extends React.Component {
             <ScrollView  showsVerticalScrollIndicator={false}>
                 {/**题面 */}
                 {/* {console.log('---题目-----' ,selectPaperList[updatePaperIndex].tiMian)} */}
-                <Text style={styles.paperContent}>[题面] {selectPaperList[updatePaperIndex].typeName}{selectPaperList[updatePaperIndex].baseTypeId}</Text>
+                <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{padding: 10}}>
                     <RenderHtml contentWidth={screenWidth} source={{html: selectPaperList[updatePaperIndex].tiMian}}></RenderHtml>
                 </View>
@@ -1908,7 +1916,7 @@ class CreateHomework extends React.Component {
 
     //设置开始时间
     setStartTime = (time) => {
-        this.setState({ startTime: time , endTime: time });
+        this.setState({ startTime: time  });
     }
     //设置结束时间
     setEndTime = (time) => {

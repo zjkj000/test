@@ -706,7 +706,7 @@ class HomeworkProperty extends React.Component {
         return (
             <View style={{ flexDirection: 'column', backgroundColor: '#fff' }}>
                 <ScrollView horizontal={false} showsVerticalScrollIndicator={false}
-                    style={{ height: '90%', backgroundColor: '#fff' }}
+                    style={{ height: '92%', backgroundColor: '#fff' }}
                 >
                     {/**名称 */}
                     <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
@@ -957,11 +957,10 @@ class HomeworkProperty extends React.Component {
                         flexDirection: 'row',
                         bacgroundColor: '#fff',
                         top: '100%',
-                        //height: '8%',
                         position: 'absolute',
                     }}
                 >
-                    <Text style={{ width: screenWidth * 0.05 }}></Text>
+                    <Text style={{ width: screenWidth * 0.05, backgroundColor: '#fff' }}></Text>
                     <Button style={styles.button}
                         onPress={() => {
                             //Alert.alert('取消功能还未写！！！')
@@ -970,7 +969,7 @@ class HomeworkProperty extends React.Component {
                     >
                         取消
                     </Button>
-                    <Text style={{ width: screenWidth * 0.1 }}></Text>
+                    <Text style={{ width: screenWidth * 0.1 , backgroundColor: '#fff'  }}></Text>
                     <Button style={styles.button}
                         onPress={() => { 
                             //console.log('----------',textInputName , textInputPaper); 
@@ -1021,7 +1020,7 @@ class HomeworkProperty extends React.Component {
                     >
                         确定
                     </Button>
-                    <Text style={{ width: screenWidth * 0.05 }}></Text>
+                    <Text style={{ width: screenWidth * 0.05 , backgroundColor: '#fff' }}></Text>
                 </View>
             </View>
         );

@@ -6,7 +6,9 @@ buildscript {
         minSdkVersion = 21
         compileSdkVersion = 30
         targetSdkVersion = 30
-        ndkVersion = "21.4.7075529"
+        ndkVersion = "24.0.8215888"
+        kotlin_version = "1.6.0"
+        liteavSdk="com.tencent.liteav:LiteAVSDK_TRTC:latest.release"
     }
     repositories {
         google()
