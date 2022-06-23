@@ -429,19 +429,19 @@ class AssignLearnPlan extends Component {
     SaveAssign(){
         if(this.state.beginstr==''){
             Toast.showDangerToast('请设置开始时间')
-            Alert.alert('请设置开始时间')
+            Alert.alert('','请设置开始时间', [{} ,{text: '关闭', onPress: ()=>{}}]);
         }else if(this.state.endstr==''){
             Toast.showDangerToast('请设置结束时间')
-            Alert.alert('请设置结束时间')
+            Alert.alert('','请设置结束时间', [{} ,{text: '关闭', onPress: ()=>{}}]);
         }else if(this.state.assigntoWho=='0'&&this.state.studentsList.length==0){
             Toast.showDangerToast('请先选择布置对象')
-            Alert.alert('请先选择布置对象')
+            Alert.alert('','请先选择布置对象', [{} ,{text: '关闭', onPress: ()=>{}}]);
         }else if(this.state.assigntoWho=='1'&&this.state.groupSelected.length==0){
             Toast.showDangerToast('请先选择布置对象')
-            Alert.alert('请先选择布置对象')
+            Alert.alert('','请先选择布置对象', [{} ,{text: '关闭', onPress: ()=>{}}]);
         }else if(this.state.assigntoWho=='2'&&this.state.studentSelected.length==0){
             Toast.showDangerToast('请先选择布置对象')
-            Alert.alert('请先选择布置对象')
+            Alert.alert('','请先选择布置对象', [{} ,{text: '关闭', onPress: ()=>{}}]);
         }else{
             WaitLoading.show('布置中...',-1)
             
@@ -471,7 +471,7 @@ class AssignLearnPlan extends Component {
                     console.log('****************resJson.success*********', resJson);
                     if(resJson.success){
                         Alert.alert('','布置成功！',[{},
-                            {text:'ok',onPress:()=>{
+                            {text:'关闭',onPress:()=>{
                                 WaitLoading.dismiss()
                                 this.props.navigation.navigate({
                                     name: "Teacher_Home",
@@ -487,7 +487,7 @@ class AssignLearnPlan extends Component {
                         ])   
                     }else{
                         WaitLoading.show_false()
-                        Alert.alert(resJson.message);
+                        Alert.alert('',resJson.message, [{} , {text: '关闭', onPress: ()=>{  }}]);
                         Toast.showDangerToast('布置失败！',1000)
                     }
                 })

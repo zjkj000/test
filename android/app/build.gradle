@@ -227,6 +227,9 @@ dependencies {
     implementation project(':Common')
     implementation project(':Debug')
 
+    // react-native-video依赖
+    implementation project(':react-native-video')
+
     implementation('com.google.android.exoplayer:exoplayer:2.13.3') {
         exclude group: 'com.android.support'
     }

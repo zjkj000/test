@@ -67,7 +67,6 @@ export default Login = () => {
         )
             .then((response) => response.text())
             .then((text) => {
-                
                 let res = eval("(" + text.substring(2) + ")");
                 let homePage = "Home";
                 let property = "STUDENT";
@@ -81,9 +80,9 @@ export default Login = () => {
                 if (res.success == true) {
                     //console.log(res.data.STUDENT.userId)
                     //设置全局信息
-                    global.constants.company = res.data[property].company 
-                    global.constants.isadmin = res.data[property].isadmin    //1普通教师  2管理员
-                    global.constants.dcompany = res.data[property].dcompany
+                    global.constants.company = res.data[property].company;
+                    global.constants.isadmin = res.data[property].isadmin; //1普通教师  2管理员
+                    global.constants.dcompany = res.data[property].dcompany;
                     global.constants.userName = res.data[property].userName;
                     global.constants.token = res.data.token;
                     global.constants.userId = res.data[property].userId;
@@ -94,17 +93,23 @@ export default Login = () => {
                     // Toast.showSuccessToast(res.message, 500);
                     // Alert.alert(res.message);
                     navigation.navigate({
-                        name:homePage
+                        name: homePage,
+                        params: {
+                            userName: param.userName,
+                        },
                     });
                 } else if (res.success == false) {
                     setShowLoading(false);
-                    Toast.showWarningToast('用户名密码错误！请重新输入！', 2000);
+                    Toast.showWarningToast(
+                        "用户名密码错误！请重新输入！",
+                        2000
+                    );
                     // Alert.alert(res.message);
                 }
             })
             .catch((err) => {
                 setShowLoading(false);
-                Toast.showDangerToast('用户名密码错误！请重新输入！', 2000);
+                Toast.showDangerToast("用户名密码错误！请重新输入！", 2000);
             });
     };
     //渲染
@@ -139,15 +144,18 @@ export default Login = () => {
                 onChangeText={(nextValue) => setPassword(nextValue)}
                 style={styles.Input}
             />
-            <Button onPress={() =>{
-                if(Name==''){
-                    Toast.showWarningToast('请输入用户名',1000)
-                }else if(Password==''){
-                    Toast.showWarningToast('请输入密码',1000)
-                }else{
-                    handleLogin(true)
-                }
-            } } style={styles.Button}>
+            <Button
+                onPress={() => {
+                    if (Name == "") {
+                        Toast.showWarningToast("请输入用户名", 1000);
+                    } else if (Password == "") {
+                        Toast.showWarningToast("请输入密码", 1000);
+                    } else {
+                        handleLogin(true);
+                    }
+                }}
+                style={styles.Button}
+            >
                 登 录
             </Button>
             <Loading show={showLoading}></Loading>
@@ -180,7 +188,7 @@ const styles = StyleSheet.create({
     Image: {
         alignItems: "center",
         margin: 20,
-        marginTop:100
+        marginTop: 100,
     },
     Input: {
         alignItems: "center",

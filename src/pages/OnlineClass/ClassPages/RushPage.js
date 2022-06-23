@@ -3,9 +3,35 @@ import React, { Component } from "react";
 import { Image, Text, View, TouchableOpacity } from "react-native";
 import { styles } from "../styles";
 
-export default class TempPage extends Component {
+export default class RushPage extends Component {
+    handlePress = () => {
+        const { ipAddress, userName } = this.props;
+        const url =
+            "http://" +
+            ipAddress +
+            ":8901" +
+            "/KeTangServer/ajax/ketang_getMessageListByStu.do";
+        const params = {
+            userId: userName,
+        };
+        http.get(url, params)
+            .then((resStr) => {
+                // Toast.showDangerToast(resStr);
+                resJson = JSON.parse(resStr);
+                this.setState({
+                    resJson,
+                });
+                // console.log(resJson);
+            })
+            .catch((error) => {
+                Toast.showDangerToast(error.toString());
+            });
+    };
     render() {
         const { userName, introduction } = this.props;
+        console.log("RushPage====================================");
+        console.log(this.props);
+        console.log("====================================");
         return (
             <View style={styles.mainContainer}>
                 <Layout style={styles.header}>
@@ -34,12 +60,20 @@ export default class TempPage extends Component {
                     </Layout>
                 </Layout>
                 <Layout style={{ ...styles.body, flexDirection: "column" }}>
-                    <Image
+                    {this.props.isReady ? (
+                        <TouchableOpacity onPress={() => {}}>
+                            <Image
+                                source={require("../../../assets/classImg/qiangDaButton.png")}
+                            />
+                        </TouchableOpacity>
+                    ) : (
+                        <Image
+                            source={require("../../../assets/classImg/readyQiangda.png")}
+                        />
+                    )}
+                    {/* <Image
                         source={require("../../../assets/stuImg/qing.png")}
-                    />
-                    <Text style={styles.alertFont}>
-                        老师正在讲解，请看大屏幕
-                    </Text>
+                    />{" "} */}
                 </Layout>
             </View>
         );

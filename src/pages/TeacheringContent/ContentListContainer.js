@@ -336,9 +336,10 @@ class ContentList extends React.Component {
         this.setState({ PropertyModelVisiblity: visible , learnPlanId: '' });   
     }
 
+    //获取资源属性
     fetchProperty(){
         const ip = global.constants.baseUrl;
-        const url = ip + "teacherApp_saveLpProperty.do";
+        const url = ip + "teacherApp_getLpProperty.do";
         const params = {
             learnPlanId: this.state.learnPlanId,
             token: global.constants.token,
@@ -355,12 +356,12 @@ class ContentList extends React.Component {
                 console.log('====================================================');
                 if(resJson.data != null){
                     this.setState({ 
-                        content: resJson.data.introduction,
-                        aim: resJson.data.goal,
-                        point: resJson.data.emphasis,
-                        diff: resJson.data.difficulty,
-                        summary: resJson.data.summary,
-                        extension: resJson.data.extension,
+                        content: resJson.data.introduction != null ? resJson.data.introduction : '',
+                        aim: resJson.data.goal != null ? resJson.data.goal : '',
+                        point: resJson.data.emphasis != null ? resJson.data.emphasis : '',
+                        diff: resJson.data.difficulty != null ? resJson.data.difficulty : '',
+                        summary: resJson.data.summary != null ? resJson.data.summary : '',
+                        extension: resJson.data.extension != null ? resJson.data.extension : '',
                     },()=>{
                         textInputPaper = this.state.content;
                         textLearnAim = this.state.aim;
@@ -381,8 +382,9 @@ class ContentList extends React.Component {
                     errorInfo: error,
                 });
             });
-    }
+    }   
 
+    //保存资源属性
     saveProperty(){
         console.log('======================saveProperty==========输入的属性==================');
         console.log(textInputPaper, textLearnAim, textLearnPoint, textLearnDiff, textCourseSummary, textCourseExpansion);
@@ -392,12 +394,12 @@ class ContentList extends React.Component {
         const params = {
             teacherId: global.constants.userName,
             learnPlanId: this.state.learnPlanId,
-            Goal: textLearnAim,
-            Emphasis: textLearnPoint,
-            Difficulty: textLearnDiff,
-            Summary: textCourseSummary,
-            Extension: textCourseExpansion,
-            introduction: textInputPaper,
+            Goal: textLearnAim == "null" ? '' : textLearnAim,
+            Emphasis: textLearnPoint == "null" ? '' : textLearnPoint,
+            Difficulty: textLearnDiff == "null" ? '' : textLearnDiff,
+            Summary: textCourseSummary == "null" ? '' : textCourseSummary,
+            Extension: textCourseExpansion == "null" ? '' : textCourseExpansion,
+            introduction: textInputPaper == "null" ? '' : textInputPaper,
             token: global.constants.token,
             //callback:'ha',
         };
@@ -411,11 +413,45 @@ class ContentList extends React.Component {
                 console.log(resJson);
                 console.log('====================================================');
                 if(resJson.success){
-                    Alert.alert('属性保存成功');
+                    Alert.alert('','属性保存成功', [{} ,
+                        {text: '关闭', onPress: ()=>{
+                            this.setState({
+                                PropertyModelVisiblity: false , 
+                                learnPlanId: '',
+                                content: '',
+                                aim: '',
+                                point: '',
+                                diff: '',
+                                summary: '',
+                                extension: '',
+                                todos: [],
+                                isLoading: true,
+                                error: false,
+                                isRefresh: true,
+                                showFoot: 0,
+                            });
+                            pageNo = 1; //当前第几页
+                            itemNo = 0; //item的个数
+                            dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
+                            this.fetchData(pageNo , oldtype , oldsearchStr , true);
+                        }}       
+                    ]);
                 }else{
-                    Alert.alert('属性保存失败');
+                    Alert.alert('','属性保存失败', [{} ,
+                        {text: '关闭', onPress: ()=>{
+                            this.setState({ 
+                                PropertyModelVisiblity: false , 
+                                learnPlanId: '',
+                                content: '',
+                                aim: '',
+                                point: '',
+                                diff: '',
+                                summary: '',
+                                extension: '', 
+                            });
+                        }}       
+                    ]);
                 }
-                this.setState({ PropertyModelVisiblity: false , learnPlanId: '' });
             })
             .catch((error) => {
                 console.log('******catch***error**', error);
@@ -428,7 +464,9 @@ class ContentList extends React.Component {
 
     //显示属性悬浮框
     showPropertyModal(){
-        console.log('===================showPropertyModal=========================',this.state.learnPlanId,isFetchProperty);
+        console.log('===================showPropertyModal========显示属性悬浮框=================',this.state.learnPlanId,isFetchProperty);
+        console.log(textInputPaper, textLearnAim, textLearnPoint, textLearnDiff, textCourseSummary, textCourseExpansion);
+        console.log('=============================================================');
         const { PropertyModelVisiblity } = this.state;
         isFetchProperty == false ? this.fetchProperty() : null;
         return(
@@ -458,7 +496,7 @@ class ContentList extends React.Component {
                             <TextInput
                                 style={styles.textInput}
                                 onChangeText={(text)=>{ textInputPaper = text }}
-                            >{textInputPaper}</TextInput>
+                            >{this.state.content == "null" ? '' : this.state.content}</TextInput>
                         </View>
                         <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
@@ -466,7 +504,7 @@ class ContentList extends React.Component {
                             <TextInput
                                 style={styles.textInput}
                                 onChangeText={(text)=>{ textLearnAim = text }}
-                            >{textLearnAim}</TextInput>
+                            >{this.state.aim == "null" ? '' : this.state.aim}</TextInput>
                         </View>
                         <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
@@ -474,7 +512,7 @@ class ContentList extends React.Component {
                             <TextInput
                                 style={styles.textInput}
                                 onChangeText={(text)=>{ textLearnPoint = text }}
-                            >{textLearnPoint}</TextInput>
+                            >{this.state.point == "null" ? '' : this.state.point}</TextInput>
                         </View>
                         <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
@@ -482,7 +520,7 @@ class ContentList extends React.Component {
                             <TextInput
                                 style={styles.textInput}
                                 onChangeText={(text)=>{ textLearnDiff = text }}
-                            >{textLearnDiff}</TextInput>
+                            >{this.state.diff == "null" ? '' : this.state.diff}</TextInput>
                         </View>
                         <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
@@ -490,7 +528,7 @@ class ContentList extends React.Component {
                             <TextInput
                                 style={styles.textInput}
                                 onChangeText={(text)=>{ textCourseSummary = text }}
-                            >{textCourseSummary}</TextInput>
+                            >{this.state.summary == "null" ? '' : this.state.summary}</TextInput>
                         </View>
                         <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
@@ -498,7 +536,7 @@ class ContentList extends React.Component {
                             <TextInput
                                 style={styles.textInput}
                                 onChangeText={(text)=>{ textCourseExpansion = text }}
-                            >{textCourseExpansion}</TextInput>
+                            >{this.state.extension == "null" ? '' : this.state.extension}</TextInput>
                         </View>
                         <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
                     </View>
@@ -717,9 +755,9 @@ class ContentList extends React.Component {
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
-                            Alert.alert('该功能还未写！！！')
-                            // isFetchProperty = false;
-                            // this.setState({ PropertyModelVisiblity: true , learnPlanId: id });
+                            // Alert.alert('该功能还未写！！！')
+                            isFetchProperty = false;
+                            this.setState({ PropertyModelVisiblity: true , learnPlanId: id });
                         }}>
                             属性
                         </Text>
@@ -773,9 +811,9 @@ class ContentList extends React.Component {
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
-                            Alert.alert('该功能还未写！！！')
-                            // isFetchProperty = false;
-                            // this.setState({ PropertyModelVisiblity: true  , learnPlanId: id });
+                            // Alert.alert('该功能还未写！！！')
+                            isFetchProperty = false;
+                            this.setState({ PropertyModelVisiblity: true  , learnPlanId: id });
                         }}>
                             属性
                         </Text>
@@ -805,9 +843,9 @@ class ContentList extends React.Component {
                     onEndReached={this._onEndReached.bind(this)}
                     onEndReachedThreshold={0.8}
                 />
-                {/* {
+                {
                     this.state.PropertyModelVisiblity && this.state.learnPlanId != '' ? this.showPropertyModal() : null
-                } */}
+                }
             </View>
         );
     }

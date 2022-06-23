@@ -188,7 +188,7 @@ class HomeworkPropertyModel extends React.Component {
                         });
                     }
                 }else{
-                    Alert.alert('该知识点没有对应的试题');
+                    Alert.alert('','该知识点没有对应的试题', [{} , {text: '关闭', onPress: ()=>{}}]);
                     Toast.showInfoToast('该知识点没有对应的试题',1000);
                     return;
                 }
@@ -1127,19 +1127,19 @@ class HomeworkPropertyModel extends React.Component {
                             // Alert.alert('确定功能还未写！！！')
                             if(this.state.shareContent){
                                 if(this.state.questionType1 == ''){
-                                    Alert.alert('请选择属性');
+                                    Alert.alert('','请选择属性', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }else{
                                     this.setFetchAgainPropertys();
                                 }
                             }else if(this.state.schoolContent){
                                 if(this.state.questionType2 == ''){
-                                    Alert.alert('请选择属性');
+                                    Alert.alert('','请选择属性', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }else{
                                     this.setFetchAgainPropertys();
                                 }
                             }else{
                                 if(this.state.questionType3 == ''){
-                                    Alert.alert('请选择属性');
+                                    Alert.alert('','请选择属性', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }else{
                                     this.setFetchAgainPropertys();
                                 }
