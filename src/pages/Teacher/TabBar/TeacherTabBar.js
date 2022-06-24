@@ -84,22 +84,22 @@ class TeacherTabBarComponent extends React.Component {
         const params = {
             userId: userName,
         };
-        // http.get(url, params)
-        //     .then((resStr) => {
-        //         // Toast.showDangerToast(resStr);
-        //         resJson = JSON.parse(resStr);
-        //         this.setState({
-        //             resJson,
-        //         });
-        //         // console.log(
-        //         //     "getClassStatus===================================="
-        //         // );
-        //         // console.log(resJson);
-        //         // console.log("====================================");
-        //     })
-        //     .catch((error) => {
-        //         Toast.showDangerToast(error.toString());
-        //     });
+        http.get(url, params)
+            .then((resStr) => {
+                // Toast.showDangerToast(resStr);
+                resJson = JSON.parse(resStr);
+                this.setState({
+                    resJson,
+                });
+                // console.log(
+                //     "getClassStatus===================================="
+                // );
+                // console.log(resJson);
+                // console.log("====================================");
+            })
+            .catch((error) => {
+                Toast.showDangerToast(error.toString());
+            });
     };
     renderHome = () => {
         // console.log('###########renderHome####################',this.props.route);
