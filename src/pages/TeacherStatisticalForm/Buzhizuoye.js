@@ -63,7 +63,11 @@ class BuzhizuoyeContent extends Component {
               unitId:global.constants.company,                   //单位id
               userId:global.constants.userId,
               startTime:startTime,
-              endTime:endTime,         
+              endTime:endTime,     
+              // unitId:'6105230000001',                   //单位id
+              //   userId:'dlzx2019',
+              //   startTime:'2021-12-27 00:00:00',
+              //   endTime:'2021-12-29 00:00:00',     
             }
       http.get(url, params).then((resStr) => {
           let resJson = JSON.parse(resStr);
@@ -214,14 +218,14 @@ class BuzhizuoyeContent extends Component {
     
     return (
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:10}}>
-        <View style={{flexDirection:'row',marginLeft:20,marginRight:20}}>
+        <View style={{flexDirection:'row',marginLeft:10,marginRight:20}}>
           <View style={{flex:1,justifyContent:'center'}}  >
             <Image style={{width:70,height:70}} source={require('../../assets/StatisticalForm/Ima_book.png')}></Image>
           </View>
-          <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
+          <View style={{flex:3,flexDirection:'row',justifyContent:'space-evenly'}}>
               <View>
                 <View style={{height:30}}>
-                  <Text style={{fontSize:16}}>有效次数</Text>
+                  <Text style={{fontSize:16}}>有效次数:</Text>
                 </View>
                 <View style={{flexDirection:'row',alignItems:'flex-end'}}>
                     <Text style={{fontSize:50,color:'#9A07D1'}}>{this.state.effectiveKeciNum}</Text>

@@ -54,7 +54,11 @@ export default function Piyueshiti(props) {
                 unitId:global.constants.company,                   //单位id
                 userId:global.constants.userId,
                 startTime:startTime,
-                endTime:endTime,       
+                endTime:endTime,    
+                // unitId:'6105230000001',                   //单位id
+                // userId:'dlzx2019',
+                // startTime:'2021-12-27 00:00:00',
+                // endTime:'2021-12-29 00:00:00',    
               }
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
@@ -139,12 +143,14 @@ export default function Piyueshiti(props) {
 
     return (
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingBottom:20}}>
-        <View style={{flexDirection:'row',marginLeft:20,marginTop:20}}>
-          <View style={{flex:1,justifyContent:'center'}}  ><Image style={{width:70,height:70}} source={require('../../assets/StatisticalForm/Ima_piyue.png')}></Image></View>
-          <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
+        <View style={{flexDirection:'row',marginLeft:10,marginTop:20}}>
+          <View style={{flex:1,justifyContent:'center'}}  >
+            <Image style={{width:70,height:70}} source={require('../../assets/StatisticalForm/Ima_piyue.png')}></Image>
+          </View>
+          <View style={{flex:3,flexDirection:'row',justifyContent:'space-evenly'}}>
               <View style={{flexDirection:'column'}}>
                         <View style={{height:30}}>
-                            <Text style={{fontSize:16}}>批阅总数</Text>
+                            <Text style={{fontSize:16}}>批阅总数:</Text>
                         </View>
                         <View style={{flexDirection:'row',alignItems:'flex-end'}}>
                         <Text style={{fontSize:50,color:'#7B70BE'}}>{this.state.sumNum}</Text>

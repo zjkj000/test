@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef} from 'react';
-import { StyleSheet,View,Image,Alert,Text,TouchableOpacity} from 'react-native';
+import { StyleSheet,View,Image,Alert,Text,TouchableOpacity,BackHandler} from 'react-native';
 import { Layout, ViewPager } from '@ui-kitten/components';
 import Answer_readContainer from './Answer_type/Answer_read';
 import Answer_judgementContainer from './Answer_type/Answer_judgment';
@@ -34,16 +34,34 @@ export default function Paper_ToDo(props) {
 
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
+      console.log('获取了权限')
       // console.log(props.route.params.papername,props.route.params.learnId);
       navigation.setOptions({title:props.route.params.papername,
       headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)})
       setSelectedIndex(props.route.params.selectedindex)
       getData();
+      BackHandler.addEventListener("hardwareBackPress",changestatus)
+      return ()=>{
+        BackHandler.removeEventListener("hardwareBackPress",changestatus)
+        changestatus()
+      }
+      
       // var date = getDate()
       // setstartdate(date)  // 记录总的开始时间
       // setstart_date(date) //记录每道题的开始时间
     },[props.route.params.selectedindex]);
      
+   
+    function changestatus(){
+      
+      const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+      const params = {studentID:global.constants.userName};
+        console.log('清除了个人操作')
+        http.get(url, params).then((resStr) => {
+        })
+      
+    }
+
     // 获取时间返回 00::00:00
     function getDate() {
       var date = new Date();
@@ -228,6 +246,7 @@ export default function Paper_ToDo(props) {
                         Submit_Stu_answer(selectedIndex,selectedIndex);
                         Alert.alert('','已经最后一题，确定提交作业？',[{text:'取消',onPress:()=>{}},{},
                             {text:'确定',onPress:()=>{
+
                               navigation.navigate(
                                 {
                                   name:"SubmitPaper", 

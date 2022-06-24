@@ -5,7 +5,7 @@ import {
     Image,
     Alert,
     Text,
-    TouchableOpacity,
+    TouchableOpacity,BackHandler
 } from "react-native";
 import { Layout, ViewPager } from "@ui-kitten/components";
 import LG_readContainer from "./Resource_type/LG_read";
@@ -58,11 +58,25 @@ export default function Paper_ToDo(props) {
         });
         setSelectedIndex(props.route.params.selectedindex);
         getData();
+
+        BackHandler.addEventListener("hardwareBackPress",changestatus)
+      return ()=>{
+        BackHandler.removeEventListener("hardwareBackPress",changestatus)
+        changestatus()
+      }
         // var date = getDate()
         // setstartdate(date)  // 记录总的开始时间
         // setstart_date(date) //记录每道题的开始时间
     }, [props.route.params.selectedindex]);
 
+    function changestatus(){
+        const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+        const params = {studentID:global.constants.userName};
+          console.log('清除了个人操作')
+          http.get(url, params).then((resStr) => {
+          })
+        
+      }
     // 获取时间返回 00::00:00
     function getDate() {
         var date = new Date();
