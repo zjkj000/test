@@ -60,7 +60,7 @@ export default class DateTime extends Component {
               }
     let hh=[]
     for(let z=0;z<24;z++){
-      hh.push(z+'时');
+      hh.push(z.toString()+'时');
     }
     time.push(hh)
     time.push(mm)
@@ -69,14 +69,16 @@ export default class DateTime extends Component {
 
   }
   _showTimePicker() {
-    var hh= ''
+    let hh=''
     var mm=''
-    var ss= ''
+    var ss=''
     var dateStr = this.state.selectedDatetime.substring(11,19)
-    hh=  dateStr.substring(0,2)
+    // console.log(dateStr)
+    hh=parseInt(dateStr.substring(0,2))
     mm=parseInt(dateStr.substring(3,5))
     ss=dateStr.substring(6,8)
-    Picker.init({
+    Picker.init(
+      {
       pickerTitleText:'时间选择',
       pickerCancelBtnText:'取消',
       pickerConfirmBtnText:'确定',
@@ -94,7 +96,7 @@ export default class DateTime extends Component {
         mm = mm.padStart(2,'0')
         ss = ss.padStart(2,'0')
         let str = hh+':'+mm+':'+ss
-        let date =this.state.selectedDatetime.substring(0,11)
+        let date= this.state.selectedDatetime.substring(0,11)
         this.props.setDateTime(date+str)
         this.setState({selectedDatetime:date+str})
       },

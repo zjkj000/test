@@ -1,4 +1,4 @@
-import {Text,StyleSheet,View,ScrollView,Image,TextInput,Button,Alert,TouchableOpacity,Modal,Dimensions,} from "react-native";
+import {Text,StyleSheet,View,ScrollView,Image,TextInput,Button,Alert,TouchableOpacity,Modal,Dimensions, Keyboard,} from "react-native";
 import React, { Component, useState } from "react";
 import RenderHtml from "react-native-render-html";
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
@@ -199,11 +199,7 @@ class Answer_subjective extends Component {
     handleCamera = () => {
         ImageHandler.handleCamera().then((res) => {
             if (res) {
-                const url =
-                    "http://" +
-                    "www.cn901.net" +
-                    ":8111" +
-                    "/AppServer/ajax/studentApp_saveBase64Image.do";
+                const url = global.constants.baseUrl+"studentApp_saveBase64Image.do";
                 const params = {
                     baseCode: res.base64,
                     learnPlanId: this.state.paperId,
@@ -211,7 +207,7 @@ class Answer_subjective extends Component {
                 };
                 WaitLoading.show('照片提交中...',-1)
                 http.post(url, params,false).then((resStr) => {
-                    console.log('结果：',resStr,typeof(resStr))
+                    // console.log('结果：',resStr,typeof(resStr))
                     let resJson = resStr;
                     if (resJson.success) {
                         WaitLoading.dismiss()
@@ -243,11 +239,7 @@ class Answer_subjective extends Component {
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
                 WaitLoading.show('照片提交中...',-1)
-                const url =
-                    "http://" +
-                    "www.cn901.net" +
-                    ":8111" +
-                    "/AppServer/ajax/studentApp_saveBase64Image.do";
+                const url = global.constants.baseUrl+"studentApp_saveBase64Image.do";
                 const params = {
                     baseCode: res.base64,
                     learnPlanId: this.state.paperId,
@@ -273,7 +265,7 @@ class Answer_subjective extends Component {
                                 hasImage: true,
                             });
                         }
-                        console.log('新答案',newstuanswer)
+                        // console.log('新答案',newstuanswer)
                         this.stuAnswer(newstuanswer);
                     } else {
                         WaitLoading.dismiss()
@@ -289,7 +281,7 @@ class Answer_subjective extends Component {
         const width = Dimensions.get("window").width;
         var questionHTML = []; //用于接收  html解析之后添加到数组中
         questionHTML = this.showStuAnswer();
-        console.log('答案要显示的内容：',questionHTML)
+        // console.log('答案要显示的内容：',questionHTML)
         return (
             <View
                 style={{
@@ -435,12 +427,14 @@ class Answer_subjective extends Component {
                         }}
                     >
                         <TextInput
+                             ref={(ref) => this.mytextinput = ref}
                             placeholder="请输入答案"
                             multiline
                             value={this.state.textinputAnswer}
                             onChangeText={(text) => {
                                 this.setState({ textinputAnswer: text });
                             }}
+                            onBlur={()=>{}}
                             style={{
                                 width: 200,
                                 backgroundColor: "#FFFFFF",
@@ -455,6 +449,8 @@ class Answer_subjective extends Component {
                                 newanswer += this.state.textinputAnswer;
                                 this.setState({ textinputAnswer: "" });
                                 this.stuAnswer(newanswer);
+                                this.mytextinput.onBlur
+                                Keyboard.dismiss()
                             }}
                             style={{
                                 width: 100,

@@ -39,7 +39,7 @@ export default class Inform extends React.Component {
   };
   
   render() {
-    console.log('route' , this.props.navigation.getState().routes[2].params);
+    // console.log('route' , this.props.navigation.getState().routes[2].params);
     const paramsData = this.props.navigation.getState().routes[2].params;
     const bottomTitle = paramsData.bottomTitle;
     const createrName = paramsData.createrName;

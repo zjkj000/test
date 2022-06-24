@@ -18,11 +18,7 @@ export default function Tea_CreateNotice(props) {
         }
     },[])
     function updateInform(){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_getNoticeInfo.do";
+        const url = global.constants.baseUrl+"teacherApp_getNoticeInfo.do";
         const params = {
                 noticeId:noticeId,
                 type:type,           //类型：3  通知  4  公告
@@ -72,11 +68,7 @@ class Tea_CreateNoticeContent extends Component {
     }
     //type  是  save  或  update
     saveOrUpdateNotice(){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_saveManageNotice.do";
+        const url = global.constants.baseUrl+"teacherApp_saveManageNotice.do";
         const params = {
                 userName:global.constants.userName,
                 userCN:global.constants.userCn,
@@ -166,7 +158,6 @@ class Tea_CreateNoticeContent extends Component {
                         }}>定时发布</Radio>
                         <DateTime ref={ref => this.mysetdate = ref} setDateTime={this.setDateStr} selectedDateTime={this.state.setDate}></DateTime>
                         <TextInput
-                            ref={ref => this.mytextinput = ref}
                             editable={this.state.setDateFlag=='2'?true:false}
                             value={this.state.setDate}
                             onFocus={()=>{
@@ -212,7 +203,7 @@ class Tea_CreateNoticeContent extends Component {
             </View>
         </ScrollView>
         <View style={{width:'100%',position:'absolute',bottom:10,flexDirection:'row',justifyContent:'space-around'}}>
-            <Button onPress={()=>{this.props.navigation.goback()}} style={{width:'40%'}}>取消</Button>
+            <Button onPress={()=>{this.props.navigation.goBack()}} style={{width:'40%'}}>取消</Button>
             <Button onPress={()=>{
                 this.saveOrUpdateNotice()
             }} style={{width:'40%'}}>确定</Button>

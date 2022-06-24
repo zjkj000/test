@@ -32,15 +32,15 @@ export default class Display extends Component {
         };
         http.get("teacherApp_lookNotice.do", param)
             .then((res) => {
-                console.log(res);
+                // console.log(res);
                 let data = JSON.parse(res);
                 this.setState({
                     message: data.message,
                 });
-                console.log(data);
+                // console.log(data);
             })
             .catch((error) => {
-                console.log(error);
+                // console.log(error);
             });
     }
 

@@ -79,7 +79,7 @@ class LatestTask extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log('##latest#learnId000###status000##', this.props.learnId , this.props.status);
+                // console.log('##latest#learnId000###status000##', this.props.learnId , this.props.status);
                 // this.setState({});
             }
         );

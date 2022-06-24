@@ -120,8 +120,8 @@ class TodoList extends React.Component {
         //oldtype = this.props.resourceType;
         //searchStr = this.props.searchStr;
 
-        console.log("componentWillUpdate*****todoList****", Date.parse(new Date()), 'type:', oldtype, 'nextProps.type:', nextProps.resourceType);
-        console.log("componentWillUpdate*****todoList****", Date.parse(new Date()), 'searchStr:', searchStr, 'nextProps.searchStr:', nextProps.searchStr);
+        // console.log("componentWillUpdate*****todoList****", Date.parse(new Date()), 'type:', oldtype, 'nextProps.type:', nextProps.resourceType);
+        // console.log("componentWillUpdate*****todoList****", Date.parse(new Date()), 'searchStr:', searchStr, 'nextProps.searchStr:', nextProps.searchStr);
 
         if (
             oldtype != nextProps.resourceType ||
@@ -153,7 +153,7 @@ class TodoList extends React.Component {
 
             this.props.navigation.getState().routes[1].params = null;
 
-            console.log("componentWillUpdate*****todoContain****0000", status);
+            // console.log("componentWillUpdate*****todoContain****0000", status);
             if (status == 3) {
                 // console.log("componentWillUpdate*********0000", Date.parse(new Date()));
                 //未批改的作业，不请求数据
@@ -413,7 +413,7 @@ class TodoList extends React.Component {
                         onPress={() => {
                             if (todoType == "作业") {
                                 // 查看已经批改的作业
-                                console.log('=================todoType == "作业"======================',statusUrl)
+                                // console.log('=================todoType == "作业"======================',statusUrl)
                                 if (statusUrl == 2) {
                                     navigation.navigate({
                                         name: "ShowCorrected",

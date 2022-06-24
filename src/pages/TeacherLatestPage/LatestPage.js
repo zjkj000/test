@@ -326,8 +326,10 @@ class LatestPage extends React.Component {
                             this.props.navigation.navigate({
                                 name: "Teacher_Home",
                                 params: {
-                                    Screen: "教学内容",
-                                    resourceType: "paper",
+                                    screen: "最新",
+                                    params: {
+                                            isRefresh: true, 
+                                        },
                                 },
                                 merge:true
                             });
@@ -433,7 +435,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#4DC7F8",
     },
     todoList: {
-        height: screenHeight * 0.8,
+        height: screenHeight*0.85,
         backgroundColor: '#fff'
     },
     flexNew: {
