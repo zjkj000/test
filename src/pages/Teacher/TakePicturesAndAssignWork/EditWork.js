@@ -31,11 +31,7 @@ export default function EditWorkContioner(props) {
     ,[]) 
   
     function getTimuType(){
-      const url =
-        "http://" +
-        "www.cn901.net" +
-        ":8111" +
-        "/AppServer/ajax/teacherApp_phoneGetQueType.do";
+      const url = global.constants.baseUrl+"teacherApp_phoneGetQueType.do";
       const params = {
             token:     global.constants.token,
             subjectId: subjectCode,                  // 学科编码
@@ -105,11 +101,7 @@ class EditWork extends Component{
   
   //走的是编辑试卷的接口  只有编辑的时候才走这个接口
   EditData(paperId,paperName){
-    const url =
-        "http://" +
-        "www.cn901.net" +
-        ":8111" +
-        "/AppServer/ajax/teacherApp_phoneEditZY.do";
+    const url = global.constants.baseUrl+"teacherApp_phoneEditZY.do";
     const params = {
             userName:global.constants.userName,
             paperId: paperId,                      // 传过来的paperID
@@ -181,11 +173,7 @@ class EditWork extends Component{
                   isupdateExistTimuOrder:'new'
               })
           }else{
-              const url =
-                "http://" +
-                "www.cn901.net" +
-                ":8111" +
-                "/AppServer/ajax/teacherApp_phoneAddQuestion.do";
+              const url = global.constants.baseUrl+"teacherApp_phoneAddQuestion.do";
               const params = {
                     token:     global.constants.token,
                     userName:		global.constants.userName,
@@ -348,11 +336,7 @@ class EditWork extends Component{
   }
 
   deleteTimu(Timuindex,questionId){
-    const url =
-      "http://" +
-      "www.cn901.net" +
-      ":8111" +
-      "/AppServer/ajax/teacherApp_phoneDeleteQuestion.do";
+    const url = global.constants.baseUrl+"teacherApp_phoneDeleteQuestion.do";
     const params = {
           token:global.constants.token,
           questionId: questionId,                           // 学科编码
@@ -449,9 +433,9 @@ class EditWork extends Component{
     if(baseTypeId=='108'&&subjectName=='英语'){
       var Str =''
       list.map((item)=>{
-        Str+=(','+item)
+        Str+=(item)
        })
-      return Str.substring(1)
+      return Str
     }else{
       var Str =''
       list.map((item)=>{
@@ -510,13 +494,9 @@ class EditWork extends Component{
                         })
                         newjsonstr =newjsonstr.substring(1)
                         // console.log('提交要保存的数据是:',newjsonstr)
-
+                        console.log('提交的作业字符串',newjsonstr)
                       //2.调用接口，同时页面进行loadding，并提示“试题正在保存中...”
-                        const url =
-                          "http://" +
-                          "www.cn901.net" +
-                          ":8111" +
-                          "/AppServer/ajax/teacherApp_phoneSaveQuestionAndPaper.do";
+                        const url = global.constants.baseUrl+"teacherApp_phoneSaveQuestionAndPaper.do";
                         const params = {
                               token:     global.constants.token,
                               userName: global.constants.userName,                  // 学科编码

@@ -18,11 +18,7 @@ export default class RightMenu extends Component {
     }
     
     UNSAFE_componentWillMount(){
-        const url = 
-                "http://"+
-                "www.cn901.net" +
-                ":8111" +
-                "/AppServer/ajax/studentApp_getCatalog.do"
+        const url = global.constants.baseUrl+"studentApp_getCatalog.do"
         const params ={
             learnPlanId : this.props.learnPlanId,
             // learnPlanId:'f930226b-1f96-4794-8a13-73f3cf641b6b',//各种题型

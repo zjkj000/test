@@ -18,11 +18,7 @@ export default function Tea_CreateNotice(props) {
         }
     },[])
     function updateInform(){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_getNoticeInfo.do";
+        const url = global.constants.baseUrl+"teacherApp_getNoticeInfo.do";
         const params = {
                 noticeId:noticeId,
                 type:type,           //类型：3  通知  4  公告
@@ -72,11 +68,7 @@ class Tea_CreateNoticeContent extends Component {
     }
     //type  是  save  或  update
     saveOrUpdateNotice(){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_saveManageNotice.do";
+        const url = global.constants.baseUrl+"teacherApp_saveManageNotice.do";
         const params = {
                 userName:global.constants.userName,
                 userCN:global.constants.userCn,

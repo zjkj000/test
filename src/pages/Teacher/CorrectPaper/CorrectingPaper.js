@@ -23,21 +23,23 @@ export default function CorrectingPaper(props) {
     const shouldLoadComponent = (index) => index === selectedIndex;
     const [CorrectResultList,setCorrectResultList] = useState([])    // 批改结果  只自己用
     useEffect(()=>{
-      props.route.params.CorrectResultList?setCorrectResultList(props.route.params.CorrectResultList):setCorrectResultList([])
-      getData()
       navigation.setOptions( {title:props.route.params.userCn,
         // headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)
       })
-      setSelectedIndex(props.route.params.selectedindex)
-  
+      props.route.params.CorrectResultList?setCorrectResultList(props.route.params.CorrectResultList):setCorrectResultList([])
+      getData()
+      console.log('props.route.params.correctingstatus',props.route.params.correctingstatus)
+      if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){
+          Alert.alert('','该学生已批改！是否直接查看批改结果？',[{text:'否',onPress:()=>setSelectedIndex(0)},{text:'是',onPress:()=>
+          setSelectedIndex(Allquestion.length)
+        }])
+      }else{
+        setSelectedIndex(props.route.params.selectedindex)
+      }
     },[props.route.params.selectedindex])
     
     function getData(){
-      const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_correctingHomeWork.do";
+      const url = global.constants.baseUrl+"teacherApp_correctingHomeWork.do";
       const params = {
             taskId:taskId,  //作业id或者导学案id
             type:type,          //  paper,表示作业；learnPlan表示导学案
@@ -82,12 +84,9 @@ export default function CorrectingPaper(props) {
           }
 
           setSuccess(resJson.success)
-
-
         // 如果autoMark值为yes  则跳转到结果页面，也给他批改结果数组
         if(resJson.data.autoMark=='yes'){
           setData(Allquestion)
-          setSelectedIndex(CorrectResultList.length)
          }
           
           });                                                   
@@ -217,11 +216,7 @@ export default function CorrectingPaper(props) {
           {stuscore:item.stuscore+'',questionID:item.questionID}
         )
       })
-      const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_saveHomeWorkCorrectResult.do";
+      const url = global.constants.baseUrl+"teacherApp_saveHomeWorkCorrectResult.do";
       const params = {
             taskId:taskId,  //作业id或者导学案id
             type:type,             //  paper,表示作业；learnPlan表示导学案

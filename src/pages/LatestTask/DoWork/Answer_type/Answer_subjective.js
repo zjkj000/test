@@ -199,11 +199,7 @@ class Answer_subjective extends Component {
     handleCamera = () => {
         ImageHandler.handleCamera().then((res) => {
             if (res) {
-                const url =
-                    "http://" +
-                    "www.cn901.net" +
-                    ":8111" +
-                    "/AppServer/ajax/studentApp_saveBase64Image.do";
+                const url = global.constants.baseUrl+"studentApp_saveBase64Image.do";
                 const params = {
                     baseCode: res.base64,
                     learnPlanId: this.state.paperId,
@@ -243,11 +239,7 @@ class Answer_subjective extends Component {
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
                 WaitLoading.show('照片提交中...',-1)
-                const url =
-                    "http://" +
-                    "www.cn901.net" +
-                    ":8111" +
-                    "/AppServer/ajax/studentApp_saveBase64Image.do";
+                const url = global.constants.baseUrl+"studentApp_saveBase64Image.do";
                 const params = {
                     baseCode: res.base64,
                     learnPlanId: this.state.paperId,

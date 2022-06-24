@@ -63,11 +63,7 @@ class Learningguide_Submit extends Component {
 
         //先将接收到的 learnPlanId  submit_tatus参数接收赋值进去
         //根据导学案ID  和用户姓名  请求  答题的内容
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_getstuAnswerLearnPlanList.do";
+        const url = global.constants.baseUrl+"studentApp_getstuAnswerLearnPlanList.do";
         const params = {
             learnPlanId: this.props.learnPlanId,
             userName: global.constants.userName,
@@ -92,11 +88,7 @@ class Learningguide_Submit extends Component {
 
     submit_answer() {
        
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_savestuAnswerFromLearnPlan.do";
+        const url = global.constants.baseUrl+"studentApp_savestuAnswerFromLearnPlan.do";
 
         let change_status = 0; //记录返回的状态
         let newsub_status = 0; // 记录提交的状态

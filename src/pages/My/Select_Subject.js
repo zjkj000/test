@@ -14,11 +14,7 @@ export default function Select_SubjectContainer(props) {
 
   function getData(){
     setdata([])
-    const url =
-      "http://" +
-      "www.cn901.net" +
-      ":8111" +
-      "/AppServer/ajax/studentApp_getSelectCourseTaskList.do"
+    const url = global.constants.baseUrl+"studentApp_getSelectCourseTaskList.do"
       const params = {
         userId: global.constants.userName,
         unitId: '1101010010001'

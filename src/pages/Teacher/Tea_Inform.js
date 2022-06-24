@@ -27,11 +27,7 @@ export default function Tea_Inform(props) {
     },[])
 
     function readInform(){
-          const url =
-              "http://" +
-              "www.cn901.net" +
-              ":8111" +
-              "/AppServer/ajax/studentApp_readNotice.do";
+          const url = global.constants.baseUrl+"studentApp_readNotice.do";
           const params = {
                   type:type,           //类型：3  通知  4  公告
                   userName:global.constants.userName 
@@ -69,11 +65,7 @@ class Tea_Informcontent extends Component {
   //http://192.168.1.57:8080/AppServer/ajax/studentApp_readNotice.do?userName=UN97221&type=3&classTimeId=13033&callback=ha
 
   deleteInform(classTimeId){
-    const url =
-        "http://" +
-        "www.cn901.net" +
-        ":8111" +
-        "/AppServer/ajax/teacherApp_deleteNotice.do";
+    const url = global.constants.baseUrl+"teacherApp_deleteNotice.do";
     const params = {
               noticeId:classTimeId,
               token:global.constants.token  
@@ -86,7 +78,7 @@ class Tea_Informcontent extends Component {
             this.props.navigation.navigate({
               name:'Teacher_Home',
               params:{
-                screen:'最新',
+                screen:'通知公告',
                 params:{
                   isRefresh:true,
               }
@@ -100,11 +92,7 @@ class Tea_Informcontent extends Component {
   }
   
   fetchData(fid,type){
-    const url =
-        "http://" +
-        "www.cn901.net" +
-        ":8111" +
-        "/AppServer/ajax/teacherApp_lookNotice.do";
+    const url = global.constants.baseUrl+"teacherApp_lookNotice.do";
     const params = {
               classTimeId:fid,
               type:type,

@@ -52,7 +52,7 @@ export default class CorrectSubmit extends Component {
                     onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
                       <View style={style.result_View}>
                         <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct1Yue.png')}></Image>
-                        <Text style={style.result_Text}>{result_Item+1}</Text>
+                        <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                       </View>
                   </TouchableOpacity>)
           }else if(parseFloat(CorrectResultList[result_Item].stuscore)==0){
@@ -61,7 +61,7 @@ export default class CorrectSubmit extends Component {
                   <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
                       <View style={style.result_View}>
                         <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct2noAnsYue.png')}></Image>
-                        <Text style={style.result_Text}>{result_Item+1}</Text>
+                        <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                       </View>
                   </TouchableOpacity>)
               }else{
@@ -69,7 +69,7 @@ export default class CorrectSubmit extends Component {
                   <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
                       <View style={style.result_View}>
                         <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct2Yue.png')}></Image>
-                        <Text style={style.result_Text}>{result_Item+1}</Text>
+                        <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                       </View>
                   </TouchableOpacity>)
               }
@@ -78,7 +78,7 @@ export default class CorrectSubmit extends Component {
               <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
                   <View style={style.result_View}>
                     <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct3Yue.png')}></Image>
-                    <Text style={style.result_Text}>{result_Item+1}</Text>
+                    <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                   </View>
               </TouchableOpacity>)
           }else if(CorrectResultList[result_Item].status==4){
@@ -89,7 +89,7 @@ export default class CorrectSubmit extends Component {
                           <Image  style={style.result_Image} source={      
                             CorrectResultList[result_Item].stuAnswer==''?require('../../../assets/teacherLatestPage/correct4noAnsYue.png')
                                               :require('../../../assets/teacherLatestPage/correct4Yue.png')}></Image>
-                          <Text style={style.result_Text}>{result_Item+1}</Text>
+                          <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                         </View>
                     </TouchableOpacity>)
             }else{
@@ -99,7 +99,7 @@ export default class CorrectSubmit extends Component {
                           <Image  style={style.result_Image} source={      
                             CorrectResultList[result_Item].stuAnswer==''?require('../../../assets/teacherLatestPage/correct4Yue.png')
                                               :require('../../../assets/teacherLatestPage/correct4Yue.png')}></Image>
-                          <Text style={style.result_Text}>{result_Item+1}</Text>
+                          <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                         </View>
                     </TouchableOpacity>)
             }
@@ -114,7 +114,7 @@ export default class CorrectSubmit extends Component {
                 onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
                   <View style={style.result_View}>
                     <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct1.png')}></Image>
-                    <Text style={style.result_Text}>{result_Item+1}</Text>
+                    <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                   </View>
               </TouchableOpacity>)
           }else if(CorrectResultList[result_Item].status==4){
@@ -123,7 +123,7 @@ export default class CorrectSubmit extends Component {
                 <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
                     <View style={style.result_View}>
                       <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct4noAns.png')}></Image>
-                      <Text style={style.result_Text}>{result_Item+1}</Text>
+                      <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                     </View>
                 </TouchableOpacity>)
             }else{
@@ -131,7 +131,7 @@ export default class CorrectSubmit extends Component {
                 <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
                     <View style={style.result_View}>
                       <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct4.png')}></Image>
-                      <Text style={style.result_Text}>{result_Item+1}</Text>
+                      <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                     </View>
                 </TouchableOpacity>)
             }
@@ -142,7 +142,7 @@ export default class CorrectSubmit extends Component {
                 <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
                     <View style={style.result_View}>
                       <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct2noAns.png')}></Image>
-                      <Text style={style.result_Text}>{result_Item+1}</Text>
+                      <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                     </View>
                 </TouchableOpacity>)
             }else{
@@ -150,7 +150,7 @@ export default class CorrectSubmit extends Component {
                 <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
                     <View style={style.result_View}>
                       <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct2.png')}></Image>
-                      <Text style={style.result_Text}>{result_Item+1}</Text>
+                      <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                     </View>
                 </TouchableOpacity>)
             }
@@ -160,7 +160,7 @@ export default class CorrectSubmit extends Component {
               <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
                   <View style={style.result_View}>
                     <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct3.png')}></Image>
-                    <Text style={style.result_Text}>{result_Item+1}</Text>
+                    <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                   </View>
               </TouchableOpacity>)
           }else{return(<View></View>)}
@@ -202,12 +202,12 @@ export default class CorrectSubmit extends Component {
 
   const style =StyleSheet.create({
     result_View:{
-      margin:screenWidth*0.045
+      margin:screenWidth*0.04
     },
     result_Image:{
       position:'absolute',
-      width:screenWidth*0.125,
-      height:screenWidth*0.125
+      width:screenWidth*0.123,
+      height:screenWidth*0.123
     },
     result_Text:{
       marginTop:screenWidth*0.03,
@@ -215,7 +215,15 @@ export default class CorrectSubmit extends Component {
       fontWeight:'bold',
       fontSize:screenWidth*0.05,
       color:'#fff'
-    }
+    },
+    result_Text2:{
+      marginTop:screenWidth*0.025,
+      marginLeft:screenWidth*0.03,
+      fontWeight:'bold',
+      fontSize:screenWidth*0.05,
+      color:'#fff'
+    },
+
 
   })
 

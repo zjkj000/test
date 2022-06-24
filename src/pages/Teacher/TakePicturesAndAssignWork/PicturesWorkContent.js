@@ -247,8 +247,7 @@ export default class PicturesWorkContent extends Component {
       WaitLoading.show('提交中...',-1)
       ImageHandler.handleCamera().then((res) => {
           if (res) {
-                  const url ="http://" +"www.cn901.net" +":8111" +
-                              "/AppServer/ajax/teacherApp_saveBase64Image.do";
+                  const url = global.constants.baseUrl+"teacherApp_saveBase64Image.do";
                   const params = {
                       baseCode: res.base64,
                       questionId: this.state.questionId,
@@ -289,8 +288,7 @@ export default class PicturesWorkContent extends Component {
       WaitLoading.show('提交中...',-1)
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
-              const url ="http://" +"www.cn901.net" +":8111" +
-                          "/AppServer/ajax/teacherApp_saveBase64Image.do";
+              const url = global.constants.baseUrl+"teacherApp_saveBase64Image.do";
               const params = {
                   baseCode: res.base64,
                   questionId: this.state.questionId,

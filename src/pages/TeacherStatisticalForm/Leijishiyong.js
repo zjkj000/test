@@ -35,11 +35,7 @@ export default class Leijishiyong extends Component {
 
   //第一模块数据
   getanayGetSunNum(startTime,endTime){
-    const url =
-              "http://" +
-              "www.cn901.net" +
-              ":8111" +
-              "/AppServer/ajax/teacherApp_anayGetSunNum.do";
+    const url = global.constants.baseUrl+"teacherApp_anayGetSunNum.do";
     const params = {
               unitId:global.constants.company,                   //单位id
               userId:global.constants.userId,                   //教师id

@@ -18,11 +18,7 @@ export default function Tea_CreateInform(props) {
         }
     },[])
     function updateInform(){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_getNoticeInfo.do";
+        const url = global.constants.baseUrl+"teacherApp_getNoticeInfo.do";
         const params = {
                 noticeId:noticeId,
                 type:type,           //类型：3  通知  4  公告
@@ -81,11 +77,7 @@ class Tea_CreateInformContent extends Component {
 
     //type  是  save  或  update
     saveOrUpdateInform(){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_saveNotice.do";
+        const url = global.constants.baseUrl+"teacherApp_saveNotice.do";
         const params = {
                 classId:this.state.classId,
                 className:this.state.className,
@@ -124,11 +116,7 @@ class Tea_CreateInformContent extends Component {
     //通知获取学生列表
     //如果data为空，即没有班级信息，则在显示班级的位置标红显示这样一句话：您还没有课堂和班级信息，请联系管理员创建。然后将确定按钮置灰，不可点
     getStuClassList(){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_publishNotice.do";
+        const url = global.constants.baseUrl+"teacherApp_publishNotice.do";
         const params = {
                 userName : global.constants.userName,
             };

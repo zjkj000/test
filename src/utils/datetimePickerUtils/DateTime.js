@@ -60,7 +60,7 @@ export default class DateTime extends Component {
               }
     let hh=[]
     for(let z=0;z<24;z++){
-      hh.push(z+'时');
+      hh.push(z.toString()+'时');
     }
     time.push(hh)
     time.push(mm)

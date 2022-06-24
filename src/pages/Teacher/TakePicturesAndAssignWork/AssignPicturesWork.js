@@ -417,11 +417,7 @@ class AssignPicturesWork extends Component {
                 }
                 
             }
-            const url =
-                "http://" +
-                "www.cn901.net" +
-                ":8111" +
-                "/AppServer/ajax/teacherApp_phoneBuzhiZY.do";
+            const url = global.constants.baseUrl+"teacherApp_phoneBuzhiZY.do";
             const params = {
                 paperId:this.props.paperId,		//试卷id
                 paperName:this.state.paperName,	        //含中文，前端加码	试卷name

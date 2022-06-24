@@ -49,11 +49,7 @@ export default function Piyueshiti(props) {
 
     //第四模块数据
     getanayGetPGQueNum(startTime,endTime){
-      const url =
-                "http://" +
-                "www.cn901.net" +
-                ":8111" +
-                "/AppServer/ajax/teacherApp_anayGetPGQueNum.do";
+      const url = global.constants.baseUrl+"teacherApp_anayGetPGQueNum.do";
       const params = {
                 unitId:global.constants.company,                   //单位id
                 userId:global.constants.userId,

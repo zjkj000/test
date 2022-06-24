@@ -58,11 +58,7 @@ class Paper_Submit extends Component {
 
         //先将接收到的 paperId  submit_tatus参数接收赋值进去
         //根据作业ID  和用户姓名  请求  答题的内容
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_getStudentAnswerList.do";
+        const url = global.constants.baseUrl+"studentApp_getStudentAnswerList.do";
         const params = {
             paperId: this.props.paperId,
             userName: global.constants.userName,
@@ -86,11 +82,7 @@ class Paper_Submit extends Component {
     }
 
     submit_answer() {
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_saveStudentHomeWork.do";
+        const url = global.constants.baseUrl+"studentApp_saveStudentHomeWork.do";
         let change_status = 0; //记录返回的状态
         let newsub_status = 0; // 记录提交的状态
         //接收到的是状态是：1  新作业

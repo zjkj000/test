@@ -59,8 +59,8 @@ export default class DateTime extends Component {
                   mm.push(y+'分');
               }
     let hh=[]
-    for(let z=0;z<4;z++){
-      hh.push(z+'时');
+    for(let z=0;z<24;z++){
+      hh.push(z.toString()+'时');
     }
     time.push(hh)
     time.push(mm)
@@ -73,6 +73,7 @@ export default class DateTime extends Component {
     var mm=''
     var ss=''
     var dateStr = this.state.selectedDatetime.substring(11,19)
+    // console.log(dateStr)
     hh=parseInt(dateStr.substring(0,2))
     mm=parseInt(dateStr.substring(3,5))
     ss=dateStr.substring(6,8)

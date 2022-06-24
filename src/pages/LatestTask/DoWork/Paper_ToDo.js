@@ -56,11 +56,7 @@ export default function Paper_ToDo(props) {
 
     //getData()函数是为了获取试题资源，和学生之前可能作答的结果   得到之后设置状态success 是否成功  data 具体试题数据  dataNum题目总数  
      function  getData() {
-      const data_url = 
-        "http://"+
-        "www.cn901.net" +
-        ":8111" +
-        "/AppServer/ajax/studentApp_getJobDetails.do"
+      const data_url = global.constants.baseUrl+"studentApp_getJobDetails.do"
       const data_params ={
         learnPlanId : props.route.params.learnId,
         userName : global.constants.userName
@@ -82,11 +78,7 @@ export default function Paper_ToDo(props) {
       }
       
       //获取历史答案记录
-      const oldAnswer_url = 
-        "http://"+
-        "www.cn901.net" +
-        ":8111" +
-        "/AppServer/ajax/studentApp_getStudentAnswerList.do"
+      const oldAnswer_url = global.constants.baseUrl+"studentApp_getStudentAnswerList.do"
       const oldAnswer_params ={
           
           paperId : props.route.params.learnId,
@@ -173,11 +165,7 @@ export default function Paper_ToDo(props) {
       
       if(answerlist[selectedIndex]!=oldAnswerdata[selectedIndex]&&ischange){
         // console.log('题目序号：',selectedIndex+1,'题目用时',answerdate,'提交的答案:',Stu_answer[selectedIndex])
-        const submit_url = 
-          "http://"+
-          "www.cn901.net" +
-          ":8111" +
-          "/AppServer/ajax/studentApp_saveAnswer.do"
+        const submit_url = global.constants.baseUrl+"studentApp_saveAnswer.do"
         const submit_params ={
           learnPlanId :learnPlanId,
           stuId : global.constants.userName,

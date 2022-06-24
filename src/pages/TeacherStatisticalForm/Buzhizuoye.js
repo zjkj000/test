@@ -58,11 +58,7 @@ class BuzhizuoyeContent extends Component {
   }
   //第三模块数据
   getanayGetBZZYNum(startTime,endTime){
-    const url =
-              "http://" +
-              "www.cn901.net" +
-              ":8111" +
-              "/AppServer/ajax/teacherApp_anayGetBZZYNum.do";
+    const url = global.constants.baseUrl+"teacherApp_anayGetBZZYNum.do";
     const params = {
               unitId:global.constants.company,                   //单位id
               userId:global.constants.userId,

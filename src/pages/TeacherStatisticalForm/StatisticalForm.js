@@ -34,11 +34,7 @@ export default function StatisticalForm() {
     }   
 
     UNSAFE_componentWillMount(){
-      const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_anayGetSchoolYearTerm.do";
+      const url = global.constants.baseUrl+"teacherApp_anayGetSchoolYearTerm.do";
       const params = {
             unitId:global.constants.company                //单位id
           }

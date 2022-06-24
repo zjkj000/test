@@ -46,11 +46,7 @@ class KetangshoukeContent extends Component {
 
     //第二模块数据
     getanayGetKTNum(startTime,endTime){
-      const url =
-                "http://" +
-                "www.cn901.net" +
-                ":8111" +
-                "/AppServer/ajax/teacherApp_anayGetKTNum.do";
+      const url = global.constants.baseUrl+"teacherApp_anayGetKTNum.do";
       const params = {
                 unitId:global.constants.company,                   //单位id
                 userId:global.constants.userId,
