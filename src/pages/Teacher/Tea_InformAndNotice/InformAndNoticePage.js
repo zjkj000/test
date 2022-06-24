@@ -31,6 +31,8 @@ class InformAndNoticePage extends React.Component {
             
             createmoduleVisible: false, //创建通知公告弹出框是否显示
             filtermoduleVisible: false, //筛选通知公告弹出框是否显示
+
+            searchPoint: ''
         };
     }
 
@@ -67,13 +69,17 @@ class InformAndNoticePage extends React.Component {
     //点击"搜索"按钮时触发
     onSearch = () => {
         console.log('*******');
-        this.setState({});
+        this.setState({
+            searchPoint: SearchText
+        });
     };
     
     //点击键盘中的提交按钮，光标移出搜索框，“搜索“二字消失
     onBlur = () => {
         console.log('点击了键盘中的提交按钮');
-        this.setState({});
+        this.setState({
+            searchPoint: SearchText
+        });
     };
 
     //显示filter图标
@@ -239,7 +245,7 @@ class InformAndNoticePage extends React.Component {
                 <View style={styles.todoList}>
                     <Inform_NoticeListContainer 
                         resourceType={this.state.resourceType} 
-                        searchStr={SearchText}
+                        searchStr={this.state.searchPoint}
                         isRefresh= {
                             this.props.route.params !== undefined && 
                             this.props.route.params.isRefresh !== undefined 

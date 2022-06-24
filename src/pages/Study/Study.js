@@ -38,6 +38,8 @@ class StudyComponent extends React.Component {
             //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
 
             resourceRead: "", //资料夹是否已读接口返回的数据
+
+            searchPoint: '',
         };
     }
 
@@ -78,7 +80,9 @@ class StudyComponent extends React.Component {
         console.log("*******");
         //this.setState({ value : SearchText });
         //this.onSubmit(SearchText);
-        this.setState({});
+        this.setState({
+            searchPoint: SearchText
+        });
     };
     //点击"搜索"按钮时触发
     // onSubmit = (searchValue) => {
@@ -94,7 +98,9 @@ class StudyComponent extends React.Component {
         // const {searchText} = this;
         // const searchValue = searchText.state.value;
         //this.setState({ value: SearchText });
-        this.setState({});
+        this.setState({
+            searchPoint: SearchText
+        });
     };
 
     //显示filter图标
@@ -230,11 +236,11 @@ class StudyComponent extends React.Component {
                         this.state.resourceType,
                         Date.parse(new Date()),
                         "search:",
-                        SearchText
+                        this.state.searchPoint
                     )}
                     <StudyListContainer
                         resourceType={this.state.resourceType}
-                        searchStr={SearchText}
+                        searchStr={this.state.searchPoint}
                         status={"2"}
                     />
                 </View>
@@ -249,7 +255,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6CC5CB",
     },
     todoList: {
-        height: screenHeight * 1,
+        height: screenHeight * 0.8,
         backgroundColor: '#fff'
     },
     flexNew: {

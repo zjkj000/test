@@ -44,6 +44,8 @@ class LatestPage extends React.Component {
 
             createmoduleVisible: false, //创建作业等弹出框是否显示
             filtermoduleVisible: false, //筛选作业等弹出框是否显示
+
+            searchPoint: ''
         };
     }
 
@@ -79,13 +81,17 @@ class LatestPage extends React.Component {
     //点击"搜索"按钮时触发
     onSearch = () => {
         // console.log('*******');
-        this.setState({});
+        this.setState({
+            searchPoint: SearchText
+        });
     };
 
     //点击键盘中的提交按钮，光标移出搜索框，“搜索“二字消失
     onBlur = () => {
         console.log("点击了键盘中的提交按钮");
-        this.setState({});
+        this.setState({
+            searchPoint: SearchText
+        });
     };
 
     //显示filter图标
@@ -409,7 +415,7 @@ class LatestPage extends React.Component {
                     {/* {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)} */}
                     <CreateListContainer 
                         resourceType={this.state.resourceType} 
-                        searchStr={SearchText} 
+                        searchStr={this.state.searchPoint} 
                         isRefresh= {
                             this.props.route.params !== undefined && 
                             this.props.route.params.isRefresh !== undefined 

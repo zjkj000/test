@@ -544,7 +544,7 @@ class HomeworkProperty extends React.Component {
                         }}
                     >
                         {/* {console.log('-----学科名称-----' , item.subjectName , item.subjectId)} */}
-                        {item.subjectName}
+                        {item.subjectName.substring(2)}
                     </Text>
                 </View>
             );
