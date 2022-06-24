@@ -866,6 +866,9 @@ class ContentList extends React.Component {
             if(resJson.success){
                 WaitLoading.show_success('删除成功！',1000)
                 this.setState({todos:[]})
+                pageNo = 1; //当前第几页
+                itemNo = 0; //item的个数
+                dataFlag = true; 
                 this.fetchData(pageNo , oldtype , oldsearchStr , true);
             }
             
@@ -888,6 +891,9 @@ class ContentList extends React.Component {
             if(resJson.success){
                 WaitLoading.show_success('删除成功！',1000)
                 this.setState({todos:[]})
+                pageNo = 1; //当前第几页
+                itemNo = 0; //item的个数
+                dataFlag = true; 
                 this.fetchData(pageNo , oldtype , oldsearchStr , true);
             }
             

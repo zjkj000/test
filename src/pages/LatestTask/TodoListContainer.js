@@ -94,17 +94,17 @@ class TodoList extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log('#####unsubscribeNavigationFocusEvent###');
-                console.log('*todoContain***learnId111***status111**', this.props.learnId , this.props.status);
-                if (focusFlag == true) {
-                    // console.log('###route params###', navigation.getState());
-                    pageNo = 1;
-                    itemNo = 0;
-                    dataFlag = true;
-                    flag = 2;
-                    this._onRefresh();
-                }
-                focusFlag = true;
+                // console.log('#####unsubscribeNavigationFocusEvent###');
+                // console.log('*todoContain***learnId111***status111**', this.props.learnId , this.props.status);
+                // if (focusFlag == true) {
+                //     // console.log('###route params###', navigation.getState());
+                //     pageNo = 1;
+                //     itemNo = 0;
+                //     dataFlag = true;
+                //     flag = 2;
+                //     this._onRefresh();
+                // }
+                // focusFlag = true;
             }
         );
     }
