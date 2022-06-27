@@ -6,6 +6,7 @@ import Echarts from 'native-echarts';
 
 import http from '../../utils/http/request'
 import { useNavigation } from '@react-navigation/native';
+import { screenWidth } from '../../utils/Screen/GetSize';
 export default function Piyueshiti(props) {
   const navigation = useNavigation()
   const yearTermStartTime = props.yearTermStartTime
@@ -144,22 +145,22 @@ export default function Piyueshiti(props) {
     return (
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingBottom:20}}>
         <View style={{flexDirection:'row',marginLeft:10,marginTop:20}}>
-          <View style={{flex:1,justifyContent:'center'}}  >
-            <Image style={{width:70,height:70}} source={require('../../assets/StatisticalForm/Ima_piyue.png')}></Image>
-          </View>
-          <View style={{flex:3,flexDirection:'row',justifyContent:'space-evenly'}}>
-              <View style={{flexDirection:'column'}}>
+          <View style={{flex:3,justifyContent:'space-between',flexDirection:'row'}}  >
+            <Image style={{width:screenWidth*0.25,height:screenWidth*0.25}} source={require('../../assets/StatisticalForm/Ima_piyue.png')}></Image>
+            <View style={{flexDirection:'column'}}>
                         <View style={{height:30}}>
                             <Text style={{fontSize:16}}>批阅总数:</Text>
                         </View>
-                        <View style={{flexDirection:'row',alignItems:'flex-end'}}>
+                        <View style={{flexDirection:'row',alignItems:'baseline'}}>
                         <Text style={{fontSize:50,color:'#7B70BE'}}>{this.state.sumNum}</Text>
                         </View>
               </View>
-              <View style={{flexDirection:'column',padding:10}}>
-                    <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}><Text style={{fontSize:18}}>填空题:</Text>
+          </View>
+          <View style={{flex:3,flexDirection:'row',justifyContent:'space-evenly'}}>
+              <View style={{flexDirection:'column',padding:10,paddingTop:0}}>
+                    <View style={{margin:10,flexDirection:'row',alignItems:'baseline',marginTop:0}}><Text style={{fontSize:18}}>填空题:</Text>
                     <Text style={{fontSize:25,marginLeft:5}}>{this.state.tkNum}</Text></View>
-                    <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}><Text style={{fontSize:18}}>其它题:</Text>
+                    <View style={{margin:10,flexDirection:'row',alignItems:'baseline'}}><Text style={{fontSize:18}}>其它题:</Text>
                     <Text style={{fontSize:25,marginLeft:5}}>{this.state.qtNum}</Text></View>
               </View>
           </View>

@@ -1,4 +1,4 @@
-import { Text, StyleSheet, View, ScrollView, Image, TextInput, Button, Alert, TouchableOpacity, Modal, Dimensions } from 'react-native'
+import { Text, StyleSheet, View, ScrollView, Image, TextInput, Button, Alert, TouchableOpacity, Modal, Dimensions, Keyboard } from 'react-native'
 import React, { Component, useState } from 'react'
 import RenderHtml from 'react-native-render-html';
 import { launchCamera, launchImageLibrary } from "react-native-image-picker";
@@ -275,25 +275,6 @@ class LG_subjective extends Component {
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.answer_title}>
                     <Text  style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
-                    <View style={{position:'absolute',right:80,top:10,flexDirection:'row'}}>
-                    <Text style={{color:'#59B9E0'}} >{(this.state.numid?this.state.numid:0)+1}</Text>
-                    <Text >/{this.props.sum?this.props.sum:1} </Text>
-                </View>
-                    <TouchableOpacity style={{ position: 'absolute', right: 20, top: 10 }}
-                                        onPress={
-                                            ()=>{
-                                                //导航跳转
-                                                this.props.navigation.navigate('SubmitLearningGuide',
-                                                {   learnPlanId:this.props.learnPlanId,
-                                                    submit_status:this.props.submit_status,
-                                                    startdate:this.props.startdate,
-                                                    papername:this.props.papername,
-                                                    isallObj:this.props.isallObj})
-                                            }
-                                        }
-                    >
-                        <Image source={require('../../../../assets/image3/look.png')}></Image>
-                    </TouchableOpacity>
                 </View>
 
                 {/* 题目展示区域 */}
@@ -344,7 +325,11 @@ class LG_subjective extends Component {
                 <View style={styles.content}>
                     {/* 文本框+保存按钮区域 */}
                     <View style={{borderColor:'#000000',borderWidth:1,flexDirection:'row'}}>
-                        <TextInput placeholder="请输入答案" multiline value={this.state.textinputAnswer}
+                        <TextInput 
+                            ref={(ref) => this.mytextinput = ref}
+                            placeholder="请输入答案" 
+                             multiline value={this.state.textinputAnswer}
+                             onBlur={()=>{}}
                             onChangeText={(text)=>{
                                 this.setState({textinputAnswer:text})
                             }}
@@ -356,7 +341,10 @@ class LG_subjective extends Component {
                                 var newanswer = this.state.stuAnswer;
                                 newanswer += this.state.textinputAnswer;
                                 this.setState({textinputAnswer:''})
-                                this.stuAnswer(newanswer)}}
+                                this.stuAnswer(newanswer)
+                                this.mytextinput.onBlur
+                                Keyboard.dismiss()
+                            }}
                             style={{ width: 100, height: 35,backgroundColor:'#59B9E0'}}
                         ></Button>
                     </View>

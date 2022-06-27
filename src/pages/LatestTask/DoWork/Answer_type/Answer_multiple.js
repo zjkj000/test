@@ -104,7 +104,7 @@ class Answer_multiple extends Component {
                     <Text style={{ marginLeft: 20 }}>
                         {this.state.questionTypeName}
                     </Text>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         style={{ position: "absolute", right: 20 }}
                         onPress={() => {
                             //导航跳转
@@ -120,7 +120,7 @@ class Answer_multiple extends Component {
                         <Image
                             source={require("../../../../assets/image3/look.png")}
                         ></Image>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
                 {/* 题目展示区域 */}
