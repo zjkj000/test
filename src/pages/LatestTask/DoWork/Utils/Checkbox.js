@@ -69,10 +69,10 @@ export default class Checkbox extends PureComponent {
             });
         }
         if (prevProps.checkedlist !== this.props.checkedlist) {
-            console.log("====================================");
-            console.log(prevProps);
-            console.log(this.props);
-            console.log("====================================");
+            // console.log("====================================");
+            // console.log(prevProps);
+            // console.log(this.props);
+            // console.log("====================================");
             this.setState({
                 StuAnswer: this.props.checkedlist,
             });

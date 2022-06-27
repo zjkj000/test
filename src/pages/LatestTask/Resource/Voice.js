@@ -79,7 +79,7 @@ export default class Videos extends Component {
         }
         http.get(url,params).then((resStr)=>{
             let resJson = JSON.parse(resStr);
-            console.log('resJson' , resJson.data);
+            // console.log('resJson' , resJson.data);
             let url = resJson.data.url;
             this.setState({ resource: resJson.data , videoUrl: url });
         })

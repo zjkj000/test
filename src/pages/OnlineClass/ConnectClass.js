@@ -52,7 +52,7 @@ export default ConnectClass = () => {
                         res = res ? res : [];
                         let storageFlag = true;
                         for (let item in res) {
-                            console.log(res[item]);
+                            // console.log(res[item]);
                             if (res[item].title === ipAddress) {
                                 storageFlag = false;
                             }

@@ -183,7 +183,7 @@ class Inform_NoticeList extends React.Component {
                 dataBlob = null;
             })
             .catch((error) => {
-                console.log("******catch***error**", error);
+                // console.log("******catch***error**", error);
                 this.setState({
                     error: true,
                     errorInfo: error,

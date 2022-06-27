@@ -47,7 +47,7 @@ class HomePage extends React.Component {
                     i++;
                 });
                 itemNo = i;
-                console.log("itemNo:" + itemNo);
+                // console.log("itemNo:" + itemNo);
                 let foot = 0;
                 if (pageNo >= totalPage) {
                     foot = 1; //listView底部显示没有更多数据了

@@ -5,7 +5,7 @@ import {
     Image,
     Alert,
     Text,
-    TouchableOpacity,
+    TouchableOpacity,BackHandler
 } from "react-native";
 import { Layout, ViewPager } from "@ui-kitten/components";
 import LG_readContainer from "./Resource_type/LG_read";
@@ -31,7 +31,7 @@ export default function Paper_ToDo(props) {
     const [ischange, setLG_ischange] = useState(false);
     const [Stu_answer_i, setStu_LG_answer_i] = useState([]);
     const [Stu_answer, setStu_answer] = useState([]);
-    const [selectedIndex, setSelectedIndex] = useState(0);
+    const [selectedIndex, setSelectedIndex] = useState();
     const shouldLoadComponent = (index) => index === selectedIndex;
     const [success, setSuccess] = useState(false);
     const [oldStuAnswer_success, setoldStuAnswer_success] = useState(false);
@@ -58,11 +58,25 @@ export default function Paper_ToDo(props) {
         });
         setSelectedIndex(props.route.params.selectedindex);
         getData();
+
+        BackHandler.addEventListener("hardwareBackPress",changestatus)
+      return ()=>{
+        BackHandler.removeEventListener("hardwareBackPress",changestatus)
+        changestatus()
+      }
         // var date = getDate()
         // setstartdate(date)  // 记录总的开始时间
         // setstart_date(date) //记录每道题的开始时间
     }, [props.route.params.selectedindex]);
 
+    function changestatus(){
+        const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+        const params = {studentID:global.constants.userName};
+          console.log('清除了个人操作')
+          http.get(url, params).then((resStr) => {
+          })
+        
+      }
     // 获取时间返回 00::00:00
     function getDate() {
         var date = new Date();
@@ -74,11 +88,7 @@ export default function Paper_ToDo(props) {
 
     //getData()函数是为了获取导学案内容，和学生之前可能作答的结果   得到之后设置状态success 是否成功  data 具体试题数据  dataNum题目总数
     function getData() {
-        const data_url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_getCatalog.do";
+        const data_url = global.constants.baseUrl+"studentApp_getCatalog.do";
         const data_params = {
             learnPlanId: learnPlanId, //各种题型
             deviceType: "PAD",
@@ -132,11 +142,7 @@ export default function Paper_ToDo(props) {
         }
 
         //获取历史导学案作答记录
-        const oldAnswer_url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_getstuAnswerLearnPlanList.do";
+        const oldAnswer_url = global.constants.baseUrl+"studentApp_getstuAnswerLearnPlanList.do";
         const oldAnswer_params = {
             learnPlanId: learnPlanId,
             userName: global.constants.userName,
@@ -415,11 +421,7 @@ export default function Paper_ToDo(props) {
         // 且重置下一道题目 start_date
         if (data[selectedIndex].resourceType != "01") {
             //是导学案的话就提交作答时间   毫秒值   累加在服务器端做
-            const submitResource_url =
-                "http://" +
-                "www.cn901.net" +
-                ":8111" +
-                "/AppServer/ajax/studentApp_stuSaveLearnResTime.do";
+            const submitResource_url = global.constants.baseUrl+"studentApp_stuSaveLearnResTime.do";
             const submitResource_params = {
                 learnPlanId: learnPlanId,
                 userName: global.constants.userName,
@@ -448,11 +450,7 @@ export default function Paper_ToDo(props) {
                 ischange
             ) {
                 // console.log('题目序号：',selectedIndex+1,'题目用时',answerdate,'提交的答案:',Stu_answer[selectedIndex])
-                const submit_url =
-                    "http://" +
-                    "www.cn901.net" +
-                    ":8111" +
-                    "/AppServer/ajax/studentApp_stuSaveLpAnswer.do";
+                const submit_url = global.constants.baseUrl+"studentApp_stuSaveLpAnswer.do";
                 const submit_params = {
                     learnPlanId: learnPlanId,
                     userName: global.constants.userName,
@@ -550,8 +548,7 @@ export default function Paper_ToDo(props) {
                                                     learnPlanId: learnPlanId,
                                                     submit_status: status,
                                                     startdate: startdate,
-                                                    papername:
-                                                        props.route.params.papername,
+                                                    papername:props.route.params.papername,
                                                     isallObj: isallObj,
                                                 },
                                                 megre: true,

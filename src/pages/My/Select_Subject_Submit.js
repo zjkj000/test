@@ -29,11 +29,7 @@ class Select_Subject_Submit extends Component {
         }
     }
     UNSAFE_componentWillMount(){
-        const url = 
-                    "http://"+
-                    "www.cn901.net" +
-                    ":8111" +
-                    "/AppServer/ajax/studentApp_getSelectCourseTaskDetial.do"
+        const url =  global.constants.baseUrl+"studentApp_getSelectCourseTaskDetial.do"
         const params ={
                     userId: global.constants.userName,
                     mode:'1',
@@ -60,11 +56,7 @@ class Select_Subject_Submit extends Component {
     sub_select(){
         const selectedIndex= parseInt(this.state.selectedIndex)
         const list = this.state.list
-        const url = 
-                "http://"+
-                "www.cn901.net" +
-                ":8111" +
-                "/AppServer/ajax/studentApp_saveSelectsubject.do"
+        const url = global.constants.baseUrl+"studentApp_saveSelectsubject.do"
         const params ={
                 userId:global.constants.userName,
                 userCn:global.constants.userCn,

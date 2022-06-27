@@ -557,11 +557,7 @@ class ContentList extends React.Component {
 
     //删除试卷
     deletepaper(paperId){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_deletePaper.do";
+        const url = global.constants.baseUrl+"teacherApp_deletePaper.do";
       const params = {
             token:global.constants.token,
             paperId:paperId 
@@ -579,11 +575,7 @@ class ContentList extends React.Component {
 
     //删除导学案、微课、授课包
     deleteLearnPlan(learnPlanId){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_deleteLearnPlan.do";
+        const url = global.constants.baseUrl+"teacherApp_deleteLearnPlan.do";
         const params = {
             token: global.constants.token,
             learnPlanId: learnPlanId,

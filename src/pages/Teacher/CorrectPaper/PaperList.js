@@ -29,11 +29,7 @@ export default function PaperList(props) {
     },[props.route.params.whohassubmit])
 
     function fetchData(isRefreshing=false,statusa='0'){
-      const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_getSubmitHomeworkStuList.do";
+      const url = global.constants.baseUrl+"teacherApp_getSubmitHomeworkStuList.do";
         const params = {
             taskId:    props.route.params.taskId,      //作业id或者导学案id
             teacherId: global.constants.userName,               // 老师登录名
@@ -58,11 +54,7 @@ export default function PaperList(props) {
     }
 
     function Submit_CorrectAllQuestion(CorrectAllQuestionstatus){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_saveCoorectMode.do";
+        const url = global.constants.baseUrl+"teacherApp_saveCoorectMode.do";
         const params = {
           userName : global.constants.userName,     
           mode:CorrectAllQuestionstatus?'1':'2',         //  1逐题批阅；(true)    2只显示需手工批阅试题 (false)
@@ -73,11 +65,7 @@ export default function PaperList(props) {
 
     //是否模式为  批阅全部试题
     function get_CorrectAllQuestion(){
-      const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_getCoorectMode.do";
+      const url = global.constants.baseUrl+"teacherApp_getCoorectMode.do";
       const params = {
           userName : global.constants.userName,     
           };
@@ -279,18 +267,37 @@ export default function PaperList(props) {
       render(){
         return(
           <TouchableOpacity onPress={()=>{
-                  this.props.navigation.navigate({
-                    name: 'Correcting_Paper',
-                    params:{
-                        CorrectAllQuestion:this.props.CorrectAllQuestion,
-                        taskId:this.state.paperId,
-                        userCn:this.state.userCn,
-                        userName:this.state.userName,
-                        selectedindex:0,
-                        type:this.props.type,
-                        correctingstatus:this.state.status      //  2 未批改     4   已批改
-                          }
-                })
+                  //检查权限
+                  const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+                  const params = {
+                  taskId:this.state.paperId,
+                  userName:this.state.userName,
+                  userType:'teacher',
+                  teacherId:global.constants.userName
+                  };
+                  http.get(url, params).then((resStr) => {
+                      let resJson = JSON.parse(resStr);
+                      if(resJson.data){
+                        this.props.navigation.navigate({
+                          name: 'Correcting_Paper',
+                          params:{
+                              CorrectAllQuestion:this.props.CorrectAllQuestion,
+                              taskId:this.state.paperId,
+                              userCn:this.state.userCn,
+                              userName:this.state.userName,
+                              selectedindex:0,
+                              type:this.props.type,
+                              correctingstatus:this.state.status      //  2 未批改     4   已批改
+                                }
+                        })
+                      }
+                      else{
+                        Alert.alert(resJson.message)
+                      }
+                  })
+
+                  
+
               }}>
 
               <View style={{borderBottomColor:'#000000',borderBottomWidth:0.5,flexDirection:'row',height:80,padding:15}}>

@@ -94,17 +94,17 @@ class TodoList extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log('#####unsubscribeNavigationFocusEvent###');
-                console.log('*todoContain***learnId111***status111**', this.props.learnId , this.props.status);
-                if (focusFlag == true) {
-                    // console.log('###route params###', navigation.getState());
-                    pageNo = 1;
-                    itemNo = 0;
-                    dataFlag = true;
-                    flag = 2;
-                    this._onRefresh();
-                }
-                focusFlag = true;
+                // console.log('#####unsubscribeNavigationFocusEvent###');
+                // console.log('*todoContain***learnId111***status111**', this.props.learnId , this.props.status);
+                // if (focusFlag == true) {
+                //     // console.log('###route params###', navigation.getState());
+                //     pageNo = 1;
+                //     itemNo = 0;
+                //     dataFlag = true;
+                //     flag = 2;
+                //     this._onRefresh();
+                // }
+                // focusFlag = true;
             }
         );
     }
@@ -120,8 +120,8 @@ class TodoList extends React.Component {
         //oldtype = this.props.resourceType;
         //searchStr = this.props.searchStr;
 
-        console.log("componentWillUpdate*****todoList****", Date.parse(new Date()), 'type:', oldtype, 'nextProps.type:', nextProps.resourceType);
-        console.log("componentWillUpdate*****todoList****", Date.parse(new Date()), 'searchStr:', searchStr, 'nextProps.searchStr:', nextProps.searchStr);
+        // console.log("componentWillUpdate*****todoList****", Date.parse(new Date()), 'type:', oldtype, 'nextProps.type:', nextProps.resourceType);
+        // console.log("componentWillUpdate*****todoList****", Date.parse(new Date()), 'searchStr:', searchStr, 'nextProps.searchStr:', nextProps.searchStr);
 
         if (
             oldtype != nextProps.resourceType ||
@@ -153,7 +153,7 @@ class TodoList extends React.Component {
 
             this.props.navigation.getState().routes[1].params = null;
 
-            console.log("componentWillUpdate*****todoContain****0000", status);
+            // console.log("componentWillUpdate*****todoContain****0000", status);
             if (status == 3) {
                 // console.log("componentWillUpdate*********0000", Date.parse(new Date()));
                 //未批改的作业，不请求数据
@@ -181,6 +181,8 @@ class TodoList extends React.Component {
     componentDidUpdate() {
         // console.log("componentDidUpdate*********", Date.parse(new Date()));
     }
+  
+    
 
     //显示任务状态的图标
     showStatusUrl = (todo, todoIndex, statusImg) => {
@@ -413,7 +415,7 @@ class TodoList extends React.Component {
                         onPress={() => {
                             if (todoType == "作业") {
                                 // 查看已经批改的作业
-                                console.log('=================todoType == "作业"======================',statusUrl)
+                                // console.log('=================todoType == "作业"======================',statusUrl)
                                 if (statusUrl == 2) {
                                     navigation.navigate({
                                         name: "ShowCorrected",
@@ -427,12 +429,27 @@ class TodoList extends React.Component {
                                 }
                                 // 做作业
                                 else {
-                                    navigation.navigate("DoPaper", {
-                                        learnId: learnId,
-                                        status: statusUrl, //作业状态
-                                        selectedindex: 0,
-                                        papername: bottomTitle,
-                                    });
+                                    //检查权限
+                                    const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+                                    const params = {
+                                      taskId:learnId,
+                                      userName:global.constants.userName,
+                                      userType:'student',
+                                      teacherId:''
+                                    };
+                                    http.get(url, params).then((resStr) => {
+                                        let resJson = JSON.parse(resStr);
+                                        if(resJson.data){
+                                            navigation.navigate("DoPaper", {
+                                                learnId: learnId,
+                                                status: statusUrl, //作业状态
+                                                selectedindex: 0,
+                                                papername: bottomTitle,
+                                            });
+                                        }else{
+                                            Alert.alert(resJson.message)
+                                        }
+                                    })
                                     //this.setState({ todos: todosList });
                                 }
                             } else if (
@@ -453,12 +470,27 @@ class TodoList extends React.Component {
                                 }
                                 // 做导学案
                                 else {
-                                    navigation.navigate("DoLearningGuide", {
-                                        learnId: learnId,
-                                        status: statusUrl, //导学案状态
-                                        selectedindex: 0,
-                                        papername: bottomTitle,
-                                    });
+                                        //检查权限
+                                        const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+                                        const params = {
+                                        taskId:learnId,
+                                        userName:global.constants.userName,
+                                        userType:'student',
+                                        teacherId:''
+                                        };
+                                        http.get(url, params).then((resStr) => {
+                                            let resJson = JSON.parse(resStr);
+                                            if(resJson.data){
+                                                navigation.navigate("DoLearningGuide", {
+                                                    learnId: learnId,
+                                                    status: statusUrl, //导学案状态
+                                                    selectedindex: 0,
+                                                    papername: bottomTitle,
+                                                });
+                                            }else{
+                                                Alert.alert(resJson.message)
+                                            }
+                                        })
                                 }
                             } else if (
                                 todoType == "通知" ||

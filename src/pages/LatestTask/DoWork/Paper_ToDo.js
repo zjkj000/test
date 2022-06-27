@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef} from 'react';
-import { StyleSheet,View,Image,Alert,Text,TouchableOpacity} from 'react-native';
+import { StyleSheet,View,Image,Alert,Text,TouchableOpacity,BackHandler} from 'react-native';
 import { Layout, ViewPager } from '@ui-kitten/components';
 import Answer_readContainer from './Answer_type/Answer_read';
 import Answer_judgementContainer from './Answer_type/Answer_judgment';
@@ -34,16 +34,34 @@ export default function Paper_ToDo(props) {
 
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
+      console.log('获取了权限')
       // console.log(props.route.params.papername,props.route.params.learnId);
       navigation.setOptions({title:props.route.params.papername,
       headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)})
       setSelectedIndex(props.route.params.selectedindex)
       getData();
+      BackHandler.addEventListener("hardwareBackPress",changestatus)
+      return ()=>{
+        BackHandler.removeEventListener("hardwareBackPress",changestatus)
+        changestatus()
+      }
+      
       // var date = getDate()
       // setstartdate(date)  // 记录总的开始时间
       // setstart_date(date) //记录每道题的开始时间
     },[props.route.params.selectedindex]);
      
+   
+    function changestatus(){
+      
+      const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+      const params = {studentID:global.constants.userName};
+        console.log('清除了个人操作')
+        http.get(url, params).then((resStr) => {
+        })
+      
+    }
+
     // 获取时间返回 00::00:00
     function getDate() {
       var date = new Date();
@@ -56,11 +74,7 @@ export default function Paper_ToDo(props) {
 
     //getData()函数是为了获取试题资源，和学生之前可能作答的结果   得到之后设置状态success 是否成功  data 具体试题数据  dataNum题目总数  
      function  getData() {
-      const data_url = 
-        "http://"+
-        "www.cn901.net" +
-        ":8111" +
-        "/AppServer/ajax/studentApp_getJobDetails.do"
+      const data_url = global.constants.baseUrl+"studentApp_getJobDetails.do"
       const data_params ={
         learnPlanId : props.route.params.learnId,
         userName : global.constants.userName
@@ -82,11 +96,7 @@ export default function Paper_ToDo(props) {
       }
       
       //获取历史答案记录
-      const oldAnswer_url = 
-        "http://"+
-        "www.cn901.net" +
-        ":8111" +
-        "/AppServer/ajax/studentApp_getStudentAnswerList.do"
+      const oldAnswer_url = global.constants.baseUrl+"studentApp_getStudentAnswerList.do"
       const oldAnswer_params ={
           
           paperId : props.route.params.learnId,
@@ -173,11 +183,7 @@ export default function Paper_ToDo(props) {
       
       if(answerlist[selectedIndex]!=oldAnswerdata[selectedIndex]&&ischange){
         // console.log('题目序号：',selectedIndex+1,'题目用时',answerdate,'提交的答案:',Stu_answer[selectedIndex])
-        const submit_url = 
-          "http://"+
-          "www.cn901.net" +
-          ":8111" +
-          "/AppServer/ajax/studentApp_saveAnswer.do"
+        const submit_url = global.constants.baseUrl+"studentApp_saveAnswer.do"
         const submit_params ={
           learnPlanId :learnPlanId,
           stuId : global.constants.userName,
@@ -240,6 +246,7 @@ export default function Paper_ToDo(props) {
                         Submit_Stu_answer(selectedIndex,selectedIndex);
                         Alert.alert('','已经最后一题，确定提交作业？',[{text:'取消',onPress:()=>{}},{},
                             {text:'确定',onPress:()=>{
+
                               navigation.navigate(
                                 {
                                   name:"SubmitPaper", 

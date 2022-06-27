@@ -12,7 +12,7 @@ export default class Details extends Component {
 
     render() {
         const routeParams = this.props.route.params;
-        console.log(this.props.route.params?.post);
+        // console.log(this.props.route.params?.post);
         const item = routeParams.article;
         // console.log(item);
         return (
