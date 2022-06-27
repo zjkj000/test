@@ -53,11 +53,14 @@ class LatestTask extends React.Component {
             //6：授课包，7：微课，9：导学案+作业+微课+授课包 10：通知+公告
 
             resourceRead: "", //资料夹是否已读接口返回的数据
+
+            searchPoint: '',
         };
     }
 
     //第一次加载页面请求资料夹是否已读api
     UNSAFE_componentWillMount() {
+        console.log('==================latest===========WillMount=========================')
         const userId = global.constants.userName;
         const ip = global.constants.baseUrl;
         const url = ip + "studentApp_checkMineFloder.do";
@@ -76,14 +79,22 @@ class LatestTask extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log('##latest#learnId000###status000##', this.props.learnId , this.props.status);
+                // console.log('##latest#learnId000###status000##', this.props.learnId , this.props.status);
                 // this.setState({});
+            }
+        );
+        this._unsubscribeNavigationBlurEvent = navigation.addListener(
+            "blur",
+            () => {
+                console.log('============latest====Blur==================================')
+                // SearchText = '';
             }
         );
     }
 
     componentWillUnmount() {
         this._unsubscribeNavigationFocusEvent();
+        this._unsubscribeNavigationBlurEvent();
     }
 
     //点击文件夹图标跳转
@@ -96,6 +107,7 @@ class LatestTask extends React.Component {
     //搜索框内容改变时触发，更新value
     onChange = (value) => {
         //this.setState({ value });
+        console.log('================onChange===================',typeof(value), value)
         SearchText = value;
     };
     //点击"搜索"按钮时触发
@@ -104,13 +116,17 @@ class LatestTask extends React.Component {
         // console.log('serachText' , searchText.state.value);
         // console.log('******' , searchText.state.value);
         // console.log("*******");
-        this.setState({});
+        this.setState({
+            searchPoint: SearchText
+        });
     };
 
     //点击键盘中的提交按钮，光标移出搜索框，“搜索“二字消失
     onBlur = () => {
         // console.log("点击了键盘中的提交按钮");
-        this.setState({});
+        this.setState({
+            searchPoint: SearchText
+        });
     };
 
     //显示filter图标
@@ -260,9 +276,10 @@ class LatestTask extends React.Component {
                         </TouchableOpacity>
                         {this.showPackagesStatus()}
                         <View style={styles.searchView}>
+                            {console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++',SearchText,typeof(SearchText))}
                             <SearchBar
                                 style={styles.searchBar}
-                                value={{ SearchText }}
+                                value={{SearchText}}
                                 placeholder="学案/作业"
                                 ref={(ref) => (this.searchText = ref)}
                                 onCancel={this.onSearch}
@@ -281,8 +298,8 @@ class LatestTask extends React.Component {
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {/* {console.log('###learnId000###status000##',this.props.learnId , this.props.status)} */}
-                    <TodoListContainer resourceType={this.state.resourceType} searchStr={SearchText}  learnId={this.props.learnId} status={this.props.status} />
+                    {console.log('###learnId000#############SearchText######status000##',this.props.learnId , this.state.searchPoint , this.props.status)}
+                    <TodoListContainer resourceType={this.state.resourceType} searchStr={this.state.searchPoint}  learnId={this.props.learnId} status={this.props.status} />
                 </View>
             </View>
         );

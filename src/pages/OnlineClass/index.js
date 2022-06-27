@@ -16,6 +16,7 @@ import LockedPage from "./ClassPages/LockedPage";
 import HTML from "react-native-render-html";
 import ShareStuAnswer from "./ClassPages/ShareStuAnswer";
 import AnonymousCorrecting from "./ClassPages/AnonymousCorrecting";
+import RushPage from "./ClassPages/RushPage";
 
 export default function OnlineClassTempPage() {
     const navigation = useNavigation();
@@ -29,6 +30,9 @@ class OnlineClassTemp extends Component {
         this.state = {
             resJson: {},
             pageRender: 0,
+            isRushReady: 0,
+            rushListening: 500,
+            buttonDisable: false,
         };
     }
 
@@ -62,7 +66,7 @@ class OnlineClassTemp extends Component {
         if (resJson.hasOwnProperty("messageList")) {
             messageList = resJson.messageList;
             if (messageList.length !== 0) {
-                let events = messageList[0];
+                let events = messageList[messageList.length - 1];
                 // console.log("====================================");
                 // console.log(events);
                 // console.log("====================================");
@@ -73,7 +77,7 @@ class OnlineClassTemp extends Component {
                         break;
                     case "read-lock":
                         console.log("单题模式");
-                        this.setState({ pageRender: 1 });
+                        this.setState({ pageRender: 1, buttonDisable: false });
                         // TODO: 渲染单题组件
                         break;
                     case "no-lock":
@@ -83,7 +87,11 @@ class OnlineClassTemp extends Component {
                         break;
                     case "lock":
                         console.log("结束答题");
-                        this.setState({ pageRender: 5 });
+                        if (period !== null) {
+                            this.setState({ buttonDisable: true });
+                        } else {
+                            this.setState({ pageRender: 5 });
+                        }
                         break;
                     case "ShareStuAnswer":
                         console.log("分享答案");
@@ -92,6 +100,19 @@ class OnlineClassTemp extends Component {
                     case "AnonymousCorrecting":
                         console.log("匿名评分");
                         this.setState({ pageRender: 4 });
+                        break;
+                    case "readyResponder":
+                        this.setState({
+                            pageRender: 6,
+                            isRushReady: 0,
+                            rushListening: 200,
+                        });
+                        break;
+                    case "startResponder":
+                        this.setState({ isRushReady: 1, rushListening: 1000 });
+                        break;
+                    case "stopResponder":
+                        console.log("抢到了！");
                         break;
                     case "QuitTask":
                     default:
@@ -117,7 +138,7 @@ class OnlineClassTemp extends Component {
         // 轮询
         this.timerId = setInterval(() => {
             this.handleMessageQueue();
-        }, 500);
+        }, this.state.rushListening);
     }
 
     componentWillUnmount() {
@@ -145,7 +166,7 @@ class OnlineClassTemp extends Component {
     }
 
     pageRender = () => {
-        const { pageRender, resJson } = this.state;
+        const { pageRender, resJson, isRushReady, buttonDisable } = this.state;
         const { ipAddress, userName, imgURL } = this.props.route.params;
         const { introduction } = this.props.route.params.learnPlan;
         switch (pageRender) {
@@ -158,6 +179,7 @@ class OnlineClassTemp extends Component {
                     introduction,
                     userName,
                     imgURL,
+                    buttonDisable,
                 });
             case 2:
                 return this._renderFreePage({
@@ -166,6 +188,7 @@ class OnlineClassTemp extends Component {
                     introduction,
                     userName,
                     imgURL,
+                    // touchable,
                 });
             case 3:
                 return this._renderShareStuAnswer({
@@ -184,7 +207,22 @@ class OnlineClassTemp extends Component {
                     imgURL,
                 });
             case 5:
-                return this._renderTempPage();
+                return this._renderTempPage({
+                    ...resJson,
+                    ipAddress,
+                    introduction,
+                    userName,
+                    imgURL,
+                });
+            case 6:
+                return this._renderRushPage({
+                    ...resJson,
+                    ipAddress,
+                    introduction,
+                    userName,
+                    imgURL,
+                    isReady: isRushReady,
+                });
             default:
                 break;
         }
@@ -221,8 +259,12 @@ class OnlineClassTemp extends Component {
         return <AnonymousCorrecting {...props} />;
     }
 
-    _renderTempPage() {
-        return <TempPage />;
+    _renderTempPage(props) {
+        return <TempPage {...props} />;
+    }
+
+    _renderRushPage(props) {
+        return <RushPage {...props} />;
     }
 
     render() {

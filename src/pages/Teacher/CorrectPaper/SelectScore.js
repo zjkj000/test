@@ -14,7 +14,7 @@ export default class SelectScore extends Component {
   UNSAFE_componentWillMount(){
     this.setState({
       scoreList:this.props.scoreList?this.props.scoreList:[0,1,2,3,4,5,6,7,8,9,10],
-      selectedScore:this.props.selectedScore?this.props.selectedScore:''
+      selectedScore:this.props.selectedScore?Math.floor(this.props.selectedScore):''
   })
 }
   

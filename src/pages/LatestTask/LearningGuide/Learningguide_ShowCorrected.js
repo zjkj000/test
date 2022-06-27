@@ -23,11 +23,7 @@ export default function Learningguide_ShowCorrected(props) {
       
       //getData()函数是为了获取试题资源，和学生之前可能作答的结果   得到之后设置状态success 是否成功  data 具体试题数据  dataNum题目总数  
      function  getData() {
-        const data_url = 
-          "http://"+
-          "www.cn901.net" +
-          ":8111" +
-          "/AppServer/ajax/studentApp_getMarkedJob.do"
+        const data_url = global.constants.baseUrl+"studentApp_getMarkedJob.do"
         const data_params ={
           learnPlanId :props.route.params.learnId,
           userName : global.constants.userName,

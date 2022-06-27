@@ -48,6 +48,14 @@ export default class LockedPage extends Component {
         let newHTML = { html: html.html + str };
         this.setState({ html: newHTML, answer: answer + str });
     };
+    setSingleAnswer = (str) => {
+        // let { html, answer } = this.state;
+        console.log("setSingleAnswer====================================");
+        console.log(str);
+        console.log("====================================");
+        let newHTML = { html: str };
+        this.setState({ html: newHTML, answer: str });
+    };
     imageUpload = (base64) => {
         const { messageList, ipAddress, userName } = this.props;
         const event = messageList[0];
@@ -221,7 +229,13 @@ export default class LockedPage extends Component {
                 <View style={styles.inputArea}>
                     <Text
                         onPress={() =>
-                            this.setState({ answer: "", imgURL: [] })
+                            this.setState({
+                                answer: "",
+                                imgURL: [],
+                                html: {
+                                    html: "",
+                                },
+                            })
                         }
                         style={{ color: "#B68459" }}
                     >
@@ -284,7 +298,7 @@ export default class LockedPage extends Component {
         let optionBar = (
             <RadioList
                 checkedindexID={this.state.answer}
-                getstuanswer={this.setAnswer}
+                getstuanswer={this.setSingleAnswer}
                 ChoiceList={period.questionValueList}
             />
         );
@@ -294,7 +308,7 @@ export default class LockedPage extends Component {
             optionBar = (
                 <Checkbox
                     checkedlist={this.state.answer}
-                    getstuanswer={this.setAnswer}
+                    getstuanswer={this.setSingleAnswer}
                     ChoiceList={period.questionValueList}
                 />
             );
@@ -313,14 +327,24 @@ export default class LockedPage extends Component {
                                 this.setState({ visible: true });
                             }}
                         >
-                            <Icon name="cast" />
+                            <Image
+                                source={require("../../../assets/classImg/subj.png")}
+                                style={styles.smallImg}
+                            />
                         </TouchableOpacity>
                     </Layout>
                     <Layout style={styles.header_middle}>
                         <Text>{introduction + "(" + userName + ")"}</Text>
                     </Layout>
                     <Layout style={styles.header_right}>
-                        <Button onPress={this.handleSubmit}>提交</Button>
+                        <Button
+                            appearance="ghost"
+                            size="medium"
+                            onPress={this.handleSubmit}
+                            disabled={this.props.buttonDisable}
+                        >
+                            提交
+                        </Button>
                     </Layout>
                 </Layout>
                 <Layout style={styles.body}>

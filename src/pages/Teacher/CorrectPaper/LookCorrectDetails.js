@@ -19,11 +19,7 @@ export default class LookCorrectDetails extends Component {
         taskId:this.props.route.params.taskId, 
         type:this.props.route.params.type
       })
-      const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/teacherApp_lookPresentation.do";
+      const url = global.constants.baseUrl+"teacherApp_lookPresentation.do";
       const params = {
             taskId:this.props.route.params.taskId,           //作业id或者导学案id
             type:this.props.route.params.type,               //  paper；learnPlan

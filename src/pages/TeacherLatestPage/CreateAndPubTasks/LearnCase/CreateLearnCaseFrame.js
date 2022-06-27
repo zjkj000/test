@@ -135,7 +135,7 @@ class CreateLearnCase extends React.Component {
                         updatePaperIndex: 0, //添加到试卷中的试题当前显示的试题索引
                     })
                 }else{
-                    Alert.alert('暂无选中试题');
+                    Alert.alert('','暂无选中试题', [{} , {text: '关闭', onPress: ()=>{}}]);
                     Toast.showInfoToast('暂无选中试题',1000);
                 }
             }
@@ -153,7 +153,7 @@ class CreateLearnCase extends React.Component {
                         pushPaperFlag: true,
                     })
                 }else{
-                    Alert.alert('暂无选中试题');
+                    Alert.alert('','暂无选中试题', [{} , {text: '关闭', onPress: ()=>{}}]);
                     Toast.showInfoToast('暂无选中试题',1000);
                 }
             }

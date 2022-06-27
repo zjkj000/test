@@ -13,7 +13,6 @@ export default function AssignPicturesWorkContainer(props) {
     const navigation = useNavigation();
     const paperName=props.route.params.paperName
     var paperId = props.route.params.paperId
-    console.log('布置页面接收到的作业ID：',paperId)
     navigation.setOptions({title:'布置作业'});
     return <AssignPicturesWork navigation={navigation} paperName={paperName} paperId={paperId} />;
 }
@@ -60,7 +59,7 @@ class AssignPicturesWork extends Component {
         
     }
     setBeginDateTime(str){
-        this.setState({beginstr:str,endstr:str})
+        this.setState({beginstr:str})
     }
     setEndDateTime(str){
         this.setState({endstr:str})
@@ -272,7 +271,6 @@ class AssignPicturesWork extends Component {
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log('测试',resJson)
                 this.setState({ groupList: resJson.data.groupList , studentsList: resJson.data.classList });
             })
     }
@@ -419,11 +417,7 @@ class AssignPicturesWork extends Component {
                 }
                 
             }
-            const url =
-                "http://" +
-                "www.cn901.net" +
-                ":8111" +
-                "/AppServer/ajax/teacherApp_phoneBuzhiZY.do";
+            const url = global.constants.baseUrl+"teacherApp_phoneBuzhiZY.do";
             const params = {
                 paperId:this.props.paperId,		//试卷id
                 paperName:this.state.paperName,	        //含中文，前端加码	试卷name
@@ -440,7 +434,7 @@ class AssignPicturesWork extends Component {
                 };
             http.get(url, params).then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log('布置页面保存：',resJson)
+                // console.log('布置页面保存：',resJson)
                 if(resJson.success){
                     Alert.alert('','作业布置成功！',[{},
                         {text:'ok',onPress:()=>{
@@ -448,7 +442,10 @@ class AssignPicturesWork extends Component {
                             this.props.navigation.navigate({
                                 name:'Teacher_Home',
                                 params:{
-                                    isRefresh:true,
+                                    screen:'最新',
+                                    params:{
+                                        isRefresh:true,
+                                    }
                                 },
                                 merge:true
                             })

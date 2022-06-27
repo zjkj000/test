@@ -19,11 +19,7 @@ export default function LiveingLessonInfo() {
       },[])
 
     function fetchData(newtype,newcurrentPage,isRefreshing=false){
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_getZBLiveList.do";
+        const url = global.constants.baseUrl +"studentApp_getZBLiveList.do";
         const params = {
                 type:newtype,   //   默认全部   1直播中  2 未开始  3 已结束
                 searchStr:SearchText,
@@ -283,7 +279,8 @@ class LiveingLessonContent extends Component {
                                     global.constants.userName+"-"+      //userid 学生id
                                     global.constants.userCn+"-"+        //usercn 学生中文名   
                                     this.state.roomId+"-"+              //roomid 直播房间号
-                                    this.state.teacherName              //teachercn 教师中文名   
+                                    this.state.teacherName+"-"+         //teachercn 教师中文名
+                                    global.constants.userPhoto         //用户头像连接 
                             );  
                         }
                         }>

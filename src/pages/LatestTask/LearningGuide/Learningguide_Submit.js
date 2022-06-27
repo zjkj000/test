@@ -63,11 +63,7 @@ class Learningguide_Submit extends Component {
 
         //先将接收到的 learnPlanId  submit_tatus参数接收赋值进去
         //根据导学案ID  和用户姓名  请求  答题的内容
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_getstuAnswerLearnPlanList.do";
+        const url = global.constants.baseUrl+"studentApp_getstuAnswerLearnPlanList.do";
         const params = {
             learnPlanId: this.props.learnPlanId,
             userName: global.constants.userName,
@@ -91,12 +87,8 @@ class Learningguide_Submit extends Component {
     }
 
     submit_answer() {
-        WaitLoading.show('提交中...',-1)
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_savestuAnswerFromLearnPlan.do";
+       
+        const url = global.constants.baseUrl+"studentApp_savestuAnswerFromLearnPlan.do";
 
         let change_status = 0; //记录返回的状态
         let newsub_status = 0; // 记录提交的状态
@@ -150,6 +142,8 @@ class Learningguide_Submit extends Component {
             userCn: global.constants.userCn,
             status: newsub_status,
         };
+
+        WaitLoading.show('提交中...',-1)
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
             if (resJson.success) {
@@ -191,17 +185,21 @@ class Learningguide_Submit extends Component {
                     //设置一个函数  传递一个index参数控制跳转做题第几题。
                     //onPress={this.props.navigation.getState().routes[2].getSelectIndex()}
                     onPress={() => {
-                        if (this.state.data[result_Item].type == "01") {
+                        // if (this.state.data[result_Item].type == "01") {
                             this.props.navigation.navigate({
                                 name: "DoLearningGuide",
                                 params: {
                                     learnId: this.state.learnPlanId,
                                     status: this.props.submit_status, //导学案状态
-                                    selectedindex: result_Item,
+                                    selectedindex:result_Item,
                                     papername: this.props.papername,
                                 },
+                                megre: true,
                             });
-                        }
+                        // }
+                        // else{
+                        //     Alert.alert('需要跳转')
+                        // }
                     }}
                 >
                     <View key={result_Item} style={styles.result}>

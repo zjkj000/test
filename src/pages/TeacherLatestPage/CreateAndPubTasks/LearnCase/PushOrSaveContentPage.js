@@ -284,7 +284,7 @@ class PushOrSaveContentPage extends React.Component {
                 if(resJson.success){
                     Alert.alert(this.props.paramsData.name ,  
                         this.props.createType == 'learnCase' ? '导学案布置成功' : '微课布置成功', [{} ,
-                        {text: 'ok', onPress: ()=>{
+                        {text: '关闭', onPress: ()=>{
                             this.props.navigation.navigate({
                                 name: "Teacher_Home",
                                 params: {
@@ -349,7 +349,7 @@ class PushOrSaveContentPage extends React.Component {
                     Alert.alert(this.props.paramsData.name ,  
                         this.props.createType == 'learnCase' ? '导学案保存成功' 
                         : this.props.createType == 'weiKe' ? '微课保存成功' : '授课包保存成功', [{} ,
-                        {text: 'ok', onPress: ()=>{
+                        {text: '关闭', onPress: ()=>{
                             this.props.navigation.navigate({
                                 name: "Teacher_Home",
                                 params: {
@@ -363,7 +363,7 @@ class PushOrSaveContentPage extends React.Component {
                         }}       
                     ]);
                 }else{
-                    Alert.alert(resJson.message);
+                    Alert.alert('',resJson.message, [{} , {text: '关闭', onPress: ()=>{}}]);
                 }
             })
             .catch((error) => {
@@ -377,7 +377,7 @@ class PushOrSaveContentPage extends React.Component {
 
     //设置开始时间
     setStartTime = (time) => {
-        this.setState({ startTime: time, endTime: time });
+        this.setState({ startTime: time });
     };
     //设置结束时间
     setEndTime = (time) => {
@@ -905,7 +905,7 @@ class PushOrSaveContentPage extends React.Component {
                             top: 10,
                         }}
                         onPress={() => {
-                            Alert.alert("点击下方确定按钮可布置");
+                            Alert.alert('','点击下方确定按钮可布置', [{} , {text: '关闭', onPress: ()=>{}}]);
                         }}
                     >
                         布置
@@ -1177,7 +1177,7 @@ class PushOrSaveContentPage extends React.Component {
                             (assigntoWho == "1" && groupSelected.length == 0) ||
                             (assigntoWho == "2" && studentSelected.length == 0)
                         ) {
-                            Alert.alert("请选择以上属性");
+                            Alert.alert('','请选择以上属性', [{} , {text: '关闭', onPress: ()=>{}}]);
                         } else {
                             this.pushAndSaveLearnPlan();
                         }

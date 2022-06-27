@@ -49,9 +49,9 @@ import Tea_Inform from "../../pages/Teacher/Tea_Inform";
 import Tea_Notice from "../../pages/Teacher/Tea_Notice";
 import AssignPaperContainer from "../../pages/TeacheringContent/AssignPaper";
 import AssignLearnPlanContainer from "../../pages/TeacheringContent/AssignLearnPlan";
-import ControllerLogin from '../../pages/remoteController/Login/ControllerLogin'
-import ControllerHome from '../../pages/remoteController/Home/ControllerHome'
-import  ControllerSharePhoto  from '../../pages/remoteController/SharePhoto/ControllerSharePhoto'
+import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin";
+import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
+import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -146,7 +146,7 @@ export default class MainNavigation extends Component {
                         }}
                     />
                     <Stack.Screen
-                        name="QRCodeScanner"
+                        name="扫码"
                         component={QRCodeScanner}
                     />
                 </Stack.Group>

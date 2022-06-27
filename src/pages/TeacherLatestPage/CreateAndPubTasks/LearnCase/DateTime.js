@@ -52,7 +52,7 @@ export default class DateTime extends Component {
         }
         let hh = []
         for (let z = 0; z < 24; z++) {
-            hh.push(z + '时');
+            hh.push(z.toString() + '时');
         }
         time.push(hh)
         time.push(mm)
@@ -65,7 +65,7 @@ export default class DateTime extends Component {
         var mm = ''
         var ss = ''
         var dateStr = this.state.selectedDatetime.substring(11, 19)
-        hh = dateStr.substring(0, 2)
+        hh = parseInt(dateStr.substring(0, 2))
         mm = parseInt(dateStr.substring(3, 5))
         ss = dateStr.substring(6, 8)
         Picker.init({

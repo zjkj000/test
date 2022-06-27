@@ -230,10 +230,7 @@ class UpdateContentPage extends React.Component {
             return(
                 <ScrollView  showsVerticalScrollIndicator={false}>
                     {/**题面 */}
-                    <Text style={styles.paperContent}>
-                        [题面]{updateContentIndex + 1}. {selectContentList[updateContentIndex].typeName}
-                        {selectContentList[updateContentIndex].baseTypeId}
-                    </Text>
+                    <Text style={styles.paperContent}>[题面]</Text>
                     <View style={{padding: 10}}>
                         <RenderHtml contentWidth={screenWidth} source={{html: selectContentList[updateContentIndex].shitiShow}}></RenderHtml>
                     </View>
@@ -506,7 +503,7 @@ class UpdateContentPage extends React.Component {
     moveUpPaper = () => {
         const { updateContentIndex , selectContentList } = this.state;
         if(updateContentIndex == 0){
-            Alert.alert('已经是第一个内容了');
+            Alert.alert('','已经是第一个内容了', [{} , {text: '关闭', onPress: ()=>{}}]);
             Toast.showInfoToast('已经是第一个内容了',1000);
         }else{
             const tempPaperList = selectContentList;
@@ -524,7 +521,7 @@ class UpdateContentPage extends React.Component {
     moveDownPaper = () => {
         const { updateContentIndex , selectContentList } = this.state;
         if(updateContentIndex == (selectContentList.length - 1)){
-            Alert.alert('已经是最后一个内容了');
+            Alert.alert('','已经是最后一个内容了', [{} , {text: '关闭', onPress: ()=>{}}]);
             Toast.showInfoToast('已经是最后一个内容了',1000);
         }else{
             const tempPaperList = selectContentList;

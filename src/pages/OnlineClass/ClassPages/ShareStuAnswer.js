@@ -16,108 +16,6 @@ export default class ShareStuAnswer extends Component {
         const event = messageList[0];
         const periodList = event.periodList;
         console.log(periodList);
-        // const periodList = [
-        //     {
-        //         anchor: null,
-        //         anchorType: null,
-        //         answer: null,
-        //         id: null,
-        //         imgSource: null,
-        //         links: null,
-        //         name: "索夏利",
-        //         optionCount: null,
-        //         questionAnswerStr:
-        //             'Shawna<img onclick="changeBig(this)" src="http://172.20.10.5:8901/html/image/bc2219ce-1d46-478a-ae4a-64814a92ac83/20220422/ming6002_112737773.png" style="max-width:80px" onclick="changeBig(this)" __cid="cv2Urqi" class="cv2Urqi"><img src="http://172.20.10.5:8901/html/image/bc2219ce-1d46-478a-ae4a-64814a92ac83/20220422/ming6003_112708268.png"/>',
-        //         questionAnswerText: null,
-        //         questionId: null,
-        //         questionScore: null,
-        //         questionSource: null,
-        //         questionType: null,
-        //         questionTypeName: null,
-        //         questionValueList: null,
-        //         resourceFormat: null,
-        //         resourceId: null,
-        //         resourceNote: null,
-        //         resourceParentid: null,
-        //         score: null,
-        //         type: null,
-        //     },
-        //     {
-        //         anchor: null,
-        //         anchorType: null,
-        //         answer: null,
-        //         id: null,
-        //         imgSource: null,
-        //         links: null,
-        //         name: "卢文静",
-        //         optionCount: null,
-        //         questionAnswerStr:
-        //             '叽叽叽<img onclick="changeBig(this)" src="http://172.20.10.5:8901/html/image/bc2219ce-1d46-478a-ae4a-64814a92ac83/20220422/ming6003_112708268.png" /><img onclick="changeBig(this)" src="http://172.20.10.5:8901/html/image/bc2219ce-1d46-478a-ae4a-64814a92ac83/20220422/ming6003_112708268.png" />',
-        //         questionAnswerText: null,
-        //         questionId: null,
-        //         questionScore: null,
-        //         questionSource: null,
-        //         questionType: null,
-        //         questionTypeName: null,
-        //         questionValueList: null,
-        //         resourceFormat: null,
-        //         resourceId: null,
-        //         resourceNote: null,
-        //         resourceParentid: null,
-        //         score: null,
-        //         type: null,
-        //     },
-        //     {
-        //         anchor: null,
-        //         anchorType: null,
-        //         answer: null,
-        //         id: null,
-        //         imgSource: null,
-        //         links: null,
-        //         name: "小明",
-        //         optionCount: null,
-        //         questionAnswerStr:
-        //             '叽叽叽<img src="http://172.20.10.5:8901/html/image/bc2219ce-1d46-478a-ae4a-64814a92ac83/20220422/ming6003_112708268.png"/>',
-        //         questionAnswerText: null,
-        //         questionId: null,
-        //         questionScore: null,
-        //         questionSource: null,
-        //         questionType: null,
-        //         questionTypeName: null,
-        //         questionValueList: null,
-        //         resourceFormat: null,
-        //         resourceId: null,
-        //         resourceNote: null,
-        //         resourceParentid: null,
-        //         score: null,
-        //         type: null,
-        //     },
-        //     {
-        //         anchor: null,
-        //         anchorType: null,
-        //         answer: null,
-        //         id: null,
-        //         imgSource: null,
-        //         links: null,
-        //         name: "小明",
-        //         optionCount: null,
-        //         questionAnswerStr:
-        //             '叽叽叽<img src="http://172.20.10.5:8901/html/image/bc2219ce-1d46-478a-ae4a-64814a92ac83/20220422/ming6003_112708268.png"/>',
-        //         questionAnswerText: null,
-        //         questionId: null,
-        //         questionScore: null,
-        //         questionSource: null,
-        //         questionType: null,
-        //         questionTypeName: null,
-        //         questionValueList: null,
-        //         resourceFormat: null,
-        //         resourceId: null,
-        //         resourceNote: null,
-        //         resourceParentid: null,
-        //         score: null,
-        //         type: null,
-        //     },
-        // ];
         super(props);
         this.state = {
             periodList: periodList ? periodList : [],
@@ -309,7 +207,10 @@ export default class ShareStuAnswer extends Component {
                                 this.setState({ visible: true });
                             }}
                         >
-                            <Icon name="cast" />
+                            <Image
+                                source={require("../../../assets/classImg/subj.png")}
+                                style={styles.smallImg}
+                            />
                         </TouchableOpacity>
                     </Layout>
                     <Layout style={styles.header_middle}></Layout>

@@ -19,14 +19,10 @@ export default class Menu extends Component {
     }
 
     UNSAFE_componentWillMount() {
-        const url =
-            "http://" +
-            "www.cn901.net" +
-            ":8111" +
-            "/AppServer/ajax/studentApp_getJobDetails.do";
+        const url = global.constants.baseUrl+"studentApp_getJobDetails.do";
         const params = {
             learnPlanId: this.props.learnPlanId,
-            userName: "ming5059",
+            userName: global.constants.userName,
         };
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);

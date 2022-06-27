@@ -1,7 +1,8 @@
 import { Button } from '@ui-kitten/components'
 import http from '../../../utils/http/request'
-import { Text, View ,TouchableOpacity,ScrollView,Image} from 'react-native'
+import { Text, View ,TouchableOpacity,ScrollView,Image,StyleSheet} from 'react-native'
 import React, { Component } from 'react'
+import { screenWidth } from '../../../utils/Screen/GetSize'
 
 export default class CorrectSubmit extends Component {
     constructor(props){
@@ -44,61 +45,61 @@ export default class CorrectSubmit extends Component {
         //hand这个属性是自己添加的  用来记录作业是否被手动修改过分数 0是默认   1表示手工修改
         if(CorrectResultList[result_Item].hand==1){
           //手工批阅的情况   正确 半对  错误  未阅
-          if(parseFloat(CorrectResultList[result_Item].stuscore)==10||parseFloat(CorrectResultList[result_Item].stuscore==CorrectResultList[result_Item].questionScore)){
+          if(parseFloat(CorrectResultList[result_Item].stuscore)==CorrectResultList[result_Item].questionScore){
                 result.push(
                   <TouchableOpacity 
                     key={result_Item}    
                     onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                      <View style={{margin:15}}>
-                        <Image  style={{position:'absolute',width:45,height:45}} source={require('../../../assets/teacherLatestPage/correct1Yue.png')}></Image>
-                        <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                      <View style={style.result_View}>
+                        <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct1Yue.png')}></Image>
+                        <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                       </View>
                   </TouchableOpacity>)
           }else if(parseFloat(CorrectResultList[result_Item].stuscore)==0){
               if(CorrectResultList[result_Item].stuAnswer==''){
                 result.push(
                   <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                      <View style={{margin:15}}>
-                        <Image  style={{position:'absolute',width:45,height:45}} source={require('../../../assets/teacherLatestPage/correct2noAnsYue.png')}></Image>
-                        <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                      <View style={style.result_View}>
+                        <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct2noAnsYue.png')}></Image>
+                        <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                       </View>
                   </TouchableOpacity>)
               }else{
                 result.push(
                   <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                      <View style={{margin:15}}>
-                        <Image  style={{position:'absolute',width:45,height:45}} source={require('../../../assets/teacherLatestPage/correct2Yue.png')}></Image>
-                        <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                      <View style={style.result_View}>
+                        <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct2Yue.png')}></Image>
+                        <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                       </View>
                   </TouchableOpacity>)
               }
-          }else if(parseFloat(CorrectResultList[result_Item].stuscore)>0&&parseFloat(CorrectResultList[result_Item].stuscore)<10){
+          }else if(parseFloat(CorrectResultList[result_Item].stuscore)>0&&parseFloat(CorrectResultList[result_Item].stuscore)<CorrectResultList[result_Item].questionScore){
             result.push(
               <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                  <View style={{margin:15}}>
-                    <Image  style={{position:'absolute',width:45,height:45}} source={require('../../../assets/teacherLatestPage/correct3Yue.png')}></Image>
-                    <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                  <View style={style.result_View}>
+                    <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct3Yue.png')}></Image>
+                    <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                   </View>
               </TouchableOpacity>)
           }else if(CorrectResultList[result_Item].status==4){
             if(CorrectResultList[result_Item].stuAnswer==''){
               result.push(
                 <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                        <View style={{margin:15}}>
-                          <Image  style={{position:'absolute',width:45,height:45}} source={      
+                        <View style={style.result_View}>
+                          <Image  style={style.result_Image} source={      
                             CorrectResultList[result_Item].stuAnswer==''?require('../../../assets/teacherLatestPage/correct4noAnsYue.png')
                                               :require('../../../assets/teacherLatestPage/correct4Yue.png')}></Image>
-                          <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                          <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                         </View>
                     </TouchableOpacity>)
             }else{
               result.push(
                 <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                        <View style={{margin:15}}>
-                          <Image  style={{position:'absolute',width:45,height:45}} source={      
+                        <View style={style.result_View}>
+                          <Image  style={style.result_Image} source={      
                             CorrectResultList[result_Item].stuAnswer==''?require('../../../assets/teacherLatestPage/correct4Yue.png')
                                               :require('../../../assets/teacherLatestPage/correct4Yue.png')}></Image>
-                          <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                          <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                         </View>
                     </TouchableOpacity>)
             }
@@ -106,31 +107,31 @@ export default class CorrectSubmit extends Component {
           }else{return(<View></View>)}
         }else{
           //自动批阅过的  正确  错误  半对 hand==0
-          if(parseFloat(CorrectResultList[result_Item].stuscore)==10||parseFloat(CorrectResultList[result_Item].stuscore==CorrectResultList[result_Item].questionScore)){
+          if(parseFloat(CorrectResultList[result_Item].stuscore)==CorrectResultList[result_Item].questionScore){
             result.push(
               <TouchableOpacity 
                 key={result_Item}    
                 onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                  <View style={{margin:15}}>
-                    <Image  style={{position:'absolute',width:45,height:45}} source={require('../../../assets/teacherLatestPage/correct1.png')}></Image>
-                    <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                  <View style={style.result_View}>
+                    <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct1.png')}></Image>
+                    <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                   </View>
               </TouchableOpacity>)
           }else if(CorrectResultList[result_Item].status==4){
             if(CorrectResultList[result_Item].stuAnswer==''){
               result.push(
                 <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                    <View style={{margin:15}}>
-                      <Image  style={{position:'absolute',width:45,height:45}} source={require('../../../assets/teacherLatestPage/correct4noAns.png')}></Image>
-                      <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                    <View style={style.result_View}>
+                      <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct4noAns.png')}></Image>
+                      <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                     </View>
                 </TouchableOpacity>)
             }else{
               result.push(
                 <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                    <View style={{margin:15}}>
-                      <Image  style={{position:'absolute',width:45,height:45}} source={require('../../../assets/teacherLatestPage/correct4.png')}></Image>
-                      <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                    <View style={style.result_View}>
+                      <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct4.png')}></Image>
+                      <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                     </View>
                 </TouchableOpacity>)
             }
@@ -139,27 +140,27 @@ export default class CorrectSubmit extends Component {
             if(CorrectResultList[result_Item].stuAnswer==''){
               result.push(
                 <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                    <View style={{margin:15}}>
-                      <Image  style={{position:'absolute',width:45,height:45}} source={require('../../../assets/teacherLatestPage/correct2noAns.png')}></Image>
-                      <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                    <View style={style.result_View}>
+                      <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct2noAns.png')}></Image>
+                      <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                     </View>
                 </TouchableOpacity>)
             }else{
               result.push(
                 <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                    <View style={{margin:15}}>
-                      <Image  style={{position:'absolute',width:45,height:45}} source={require('../../../assets/teacherLatestPage/correct2.png')}></Image>
-                      <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                    <View style={style.result_View}>
+                      <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct2.png')}></Image>
+                      <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                     </View>
                 </TouchableOpacity>)
             }
             
-          }else if(parseFloat(CorrectResultList[result_Item].stuscore)>0&&parseFloat(CorrectResultList[result_Item].stuscore)<10){
+          }else if(parseFloat(CorrectResultList[result_Item].stuscore)>0&&parseFloat(CorrectResultList[result_Item].stuscore)<CorrectResultList[result_Item].questionScore){
             result.push(
               <TouchableOpacity  key={result_Item} onPress={()=>{this.props.setSelectedIndex(result_Item)}}> 
-                  <View style={{margin:15}}>
-                    <Image  style={{position:'absolute',width:45,height:45}} source={require('../../../assets/teacherLatestPage/correct3.png')}></Image>
-                    <Text style={{marginTop:12,marginLeft:18,fontWeight:'bold',fontSize:17,color:'#fff'}}>{result_Item+1}</Text>
+                  <View style={style.result_View}>
+                    <Image  style={style.result_Image} source={require('../../../assets/teacherLatestPage/correct3.png')}></Image>
+                    <Text style={result_Item<9?style.result_Text:style.result_Text2}>{result_Item+1}</Text>
                   </View>
               </TouchableOpacity>)
           }else{return(<View></View>)}
@@ -198,3 +199,31 @@ export default class CorrectSubmit extends Component {
       </View>
     )
   }}
+
+  const style =StyleSheet.create({
+    result_View:{
+      margin:screenWidth*0.04
+    },
+    result_Image:{
+      position:'absolute',
+      width:screenWidth*0.123,
+      height:screenWidth*0.123
+    },
+    result_Text:{
+      marginTop:screenWidth*0.03,
+      marginLeft:screenWidth*0.045,
+      fontWeight:'bold',
+      fontSize:screenWidth*0.05,
+      color:'#fff'
+    },
+    result_Text2:{
+      marginTop:screenWidth*0.025,
+      marginLeft:screenWidth*0.03,
+      fontWeight:'bold',
+      fontSize:screenWidth*0.05,
+      color:'#fff'
+    },
+
+
+  })
+

@@ -22,6 +22,7 @@ import {
 import http from "../../utils/http/request";
 import ImageHandler from "../../utils/Camera/Camera";
 import { styles } from "./styles";
+import Toast from "../../utils/Toast/Toast";
 
 const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 import { useNavigation } from "@react-navigation/native";
@@ -46,6 +47,14 @@ class MyPageComponent extends Component {
             password: "",
             secureTextEntry: true,
         };
+    }
+    componentDidMount() {
+        if (global.constants.userPhoto !== "") {
+            this.setState({
+                imgURL: global.constants.userPhoto,
+                hasAvatar: true,
+            });
+        }
     }
     setValue = (value) => {
         this.setState({
@@ -112,13 +121,47 @@ class MyPageComponent extends Component {
         const { navigation } = this.props;
         navigation.navigate("Login");
     };
-
+    upLoadAvatar = (img) => {
+        const userName = global.constants.userName;
+        const url = global.constants.baseUrl + "studentApp_uploadUserPhoto.do";
+        const params = {
+            userId: userName,
+            baseCode: img,
+        };
+        console.log("upLoadAvatar====================================");
+        console.log(url);
+        console.log(params.userId);
+        console.log("====================================");
+        http.post(url, params, false)
+            .then((res) => {
+                console.log(res);
+                // Toast.showDangerToast(resStr);
+                // resJson = JSON.parse(resStr);
+                if (res.success === true) {
+                    this.setState({
+                        imgURL: res.data,
+                        hasAvatar: true,
+                    });
+                    Toast.showSuccessToast(res.message);
+                } else {
+                    Toast.showWarningToast(res.message);
+                }
+                // console.log(resJson);
+            })
+            .catch((error) => {
+                Toast.showDangerToast(error.toString());
+            });
+    };
     handleCamera = () => {
         ImageHandler.handleCamera().then((res) => {
             if (res) {
+                // console.log("ImageHandler====================================");
+                // console.log(res);
+                // console.log("====================================");
+                this.upLoadAvatar(res.base64);
                 this.setState({
-                    imgURL: res.uri,
-                    hasAvatar: true,
+                    // imgURL: res.uri,
+                    // hasAvatar: true,
                     moduleVisible: false,
                 });
             } else {
@@ -129,9 +172,13 @@ class MyPageComponent extends Component {
     handleLibrary = () => {
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
+                // console.log("ImageHandler====================================");
+                // console.log(res);
+                // console.log("====================================");
+                this.upLoadAvatar(res.base64);
                 this.setState({
-                    imgURL: res.uri,
-                    hasAvatar: true,
+                    // imgURL: res.uri,
+                    // hasAvatar: true,
                     moduleVisible: false,
                 });
             } else {
@@ -208,45 +255,12 @@ class MyPageComponent extends Component {
                         </Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity>
-                    <Divider />
-                    <View style={styles.alternativeContainer}>
-                        <Text style={styles.textLeft}>我要选课</Text>
-                        <Text style={styles.textRight}>
-                            {" "}
-                            <Icon
-                                style={styles.icon}
-                                fill="#8F9BB3"
-                                name="arrow-ios-forward-outline"
-                            />
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => {
-                        this.props.navigation.navigate("ControllerLogin");
-                    }}
-                >
-                    <Divider />
-                    <View style={styles.alternativeContainer}>
-                        <Text style={styles.textLeft}>遥控器</Text>
-                        <Text style={styles.textRight}>
-                            {" "}
-                            <Icon
-                                style={styles.icon}
-                                fill="#8F9BB3"
-                                name="arrow-ios-forward-outline"
-                            />
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-                <Divider />
-
                 <TouchableOpacity
                     onPress={() => {
                         this.setState({ fullModuleVisible: true });
                     }}
                 >
+                    <Divider />
                     <View style={styles.alternativeContainer}>
                         <Text style={styles.textLeft}>修改密码</Text>
                         <Text style={styles.textRight}>
@@ -259,31 +273,49 @@ class MyPageComponent extends Component {
                         </Text>
                     </View>
                 </TouchableOpacity>
-
-                <Divider />
-                <TouchableOpacity
-                    onPress={() => {
-                        this.props.navigation.navigate({
-                            name: "Select_subject",
-                            params: {
-                                type: "new", //区别是新进去的还是选完进去的
-                            },
-                        });
-                    }}
-                >
-                    <View style={styles.alternativeContainer}>
-                        <Text style={styles.textLeft}>选科中心</Text>
-                        <Text style={styles.textRight}>
-                            {" "}
-                            <Icon
-                                style={styles.icon}
-                                fill="#8F9BB3"
-                                name="arrow-ios-forward-outline"
-                            />
-                        </Text>
-                    </View>
-                </TouchableOpacity>
-
+                {global.constants.userType === "STUDENT" ? (
+                    <>
+                        <TouchableOpacity>
+                            <Divider />
+                            <View style={styles.alternativeContainer}>
+                                <Text style={styles.textLeft}>我要选课</Text>
+                                <Text style={styles.textRight}>
+                                    {" "}
+                                    <Icon
+                                        style={styles.icon}
+                                        fill="#8F9BB3"
+                                        name="arrow-ios-forward-outline"
+                                    />
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                        <Divider />
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.props.navigation.navigate({
+                                    name: "Select_subject",
+                                    params: {
+                                        type: "new", //区别是新进去的还是选完进去的
+                                    },
+                                });
+                            }}
+                        >
+                            <View style={styles.alternativeContainer}>
+                                <Text style={styles.textLeft}>选科中心</Text>
+                                <Text style={styles.textRight}>
+                                    {" "}
+                                    <Icon
+                                        style={styles.icon}
+                                        fill="#8F9BB3"
+                                        name="arrow-ios-forward-outline"
+                                    />
+                                </Text>
+                            </View>
+                        </TouchableOpacity>
+                    </>
+                ) : (
+                    <></>
+                )}
                 <Divider />
                 <Button
                     style={styles.button}

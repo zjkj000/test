@@ -487,7 +487,7 @@ class CreateHomework extends React.Component {
                 if(resJson.data != null || resJson.data != ''){
                     this.setState({ knowledgeList: resJson.data });
                 }else{
-                    Alert.alert('没有相关知识点')
+                    Alert.alert('','没有相关知识点', [{} ,{text: '关闭', onPress: ()=>{}}]);
                     // this.setState({ knowledgeList: '' });
                 }
             })
@@ -533,7 +533,7 @@ class CreateHomework extends React.Component {
                         updatePaperIndex: 0, //添加到试卷中的试题当前显示的试题索引
                     })
                 }else{
-                    Alert.alert('暂无选中试题');
+                    Alert.alert('','暂无选中试题', [{} , {text: '关闭', onPress: ()=>{}}]);
                     Toast.showInfoToast('暂无选中试题',1000);
                 }
             }
@@ -556,7 +556,7 @@ class CreateHomework extends React.Component {
                         pushPaperFlag: true,
                     })
                 }else{
-                    Alert.alert('暂无选中试题');
+                    Alert.alert('','暂无选中试题', [{} , {text: '关闭', onPress: ()=>{}}]);
                     Toast.showInfoToast('暂无选中试题',1000);
                 }
             }
@@ -728,7 +728,7 @@ class CreateHomework extends React.Component {
                 // console.log('****************resJson.success*********', resJson);
                 if(resJson.success){
                     Alert.alert(this.props.paramsData.name , '作业布置成功' , [{} ,
-                        {text: 'ok', onPress: ()=>{
+                        {text: '关闭', onPress: ()=>{
                             this.props.navigation.navigate({
                                 name: "Teacher_Home",
                                 params: {
@@ -784,7 +784,7 @@ class CreateHomework extends React.Component {
                 
                 if(resJson.success){
                     Alert.alert(this.props.paramsData.name , '作业保存成功' , [{} ,
-                        {text: 'ok', onPress: ()=>{
+                        {text: '关闭', onPress: ()=>{
                             this.props.navigation.navigate({
                                 name: "Teacher_Home",
                                 params: {
@@ -1051,7 +1051,7 @@ class CreateHomework extends React.Component {
             <ScrollView  showsVerticalScrollIndicator={false}>
                 {/**题面 */}
                 {/* {console.log('---题目-----' ,paperList[selectPaperIndex].tiMian)} */}
-                <Text style={styles.paperContent}>[题面]{selectPaperIndex + 1}. {paperList[selectPaperIndex].typeName}{paperList[selectPaperIndex].baseTypeId}</Text>
+                <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{padding: 10}}>
                     <RenderHtml contentWidth={screenWidth} source={{html: paperList[selectPaperIndex].tiMian}}></RenderHtml>
                 </View>
@@ -1087,7 +1087,7 @@ class CreateHomework extends React.Component {
                             clickBack = true;
                             clickNext = false;
                             if(currentBeginPaperIndex == 0 || currentBottomPage == 0){
-                                Alert.alert('已经是第一页试题了');
+                                Alert.alert('','已经是第一页试题了', [{} , {text: '关闭', onPress: ()=>{}}]);
                             }else{
                                 currentBottomPage--;
                                 // this.setState({ selectPaperIndex: currentBeginPaperIndex - 5 });
@@ -1114,9 +1114,9 @@ class CreateHomework extends React.Component {
                             console.log('####################################',(currentBottomPage + 1) * 5,this.state.paperList.length);
                             if(currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == false ){
                                 if(this.state.paperList.length % 5 == 0){
-                                    Alert.alert('没有更多试题了');
+                                    Alert.alert('','没有更多试题了', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }else{
-                                    Alert.alert('已经是最后一页试题了');
+                                    Alert.alert('','已经是最后一页试题了', [{} , {text: '关闭', onPress: ()=>{}}]);
                                 }
                             }else if(currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == true){ //试题还未请求完
                                 //currentBottomPage++;
@@ -1283,7 +1283,7 @@ class CreateHomework extends React.Component {
                     if(paperListOne == null){
                         //console.log('!!!!!params!!!!resJson!!!' , params , resJson);
                         //参数存在问题token失效等
-                        Alert.alert(resJson);
+                        Alert.alert('',resJson, [{} , {text: '关闭', onPress: ()=>{}}]);
                         return;
                     }else{
                         paperLength = paperListOne != '' ? paperListOne.length : 0;
@@ -1346,13 +1346,13 @@ class CreateHomework extends React.Component {
     moveUpPaper = () => {
         const { updatePaperIndex , selectPaperList } = this.state;
         if(updatePaperIndex == 0){
-            Alert.alert('已经是第一道题了');
+            Alert.alert('','已经是第一道题了', [{} , {text: '关闭', onPress: ()=>{}}]);
             Toast.showInfoToast('已经是第一道题了',1000);
         }else{
             const baseTypeId1 = selectPaperList[updatePaperIndex].baseTypeId;
             const baseTypeId2 = selectPaperList[updatePaperIndex - 1].baseTypeId;
             if(baseTypeId1 != baseTypeId2){
-                Alert.alert('类型不一致，不能移动');
+                Alert.alert('','类型不一致，不能移动', [{} , {text: '关闭', onPress: ()=>{}}]);
                 Toast.showInfoToast('类型不一致，不能移动',1000);
             }else{
                 const tempPaperList = selectPaperList;
@@ -1371,13 +1371,13 @@ class CreateHomework extends React.Component {
     moveDownPaper = () => {
         const { updatePaperIndex , selectPaperList } = this.state;
         if(updatePaperIndex == (selectPaperList.length - 1)){
-            Alert.alert('已经是最后一道题了');
+            Alert.alert('','已经是第一道题了', [{} , {text: '关闭', onPress: ()=>{}}]);
             Toast.showInfoToast('已经是最后一道题了',1000);
         }else{
             const baseTypeId1 = selectPaperList[updatePaperIndex].baseTypeId;
             const baseTypeId2 = selectPaperList[updatePaperIndex + 1].baseTypeId;
             if(baseTypeId1 != baseTypeId2){
-                Alert.alert('类型不一致，不能移动');
+                Alert.alert('','类型不一致，不能移动', [{} , {text: '关闭', onPress: ()=>{}}]);
                 Toast.showInfoToast('类型不一致，不能移动',1000);
             }else{
                 const tempPaperList = selectPaperList;
@@ -1455,7 +1455,7 @@ class CreateHomework extends React.Component {
                         {
                             this.state.selectPaperList.length > 0 
                                 ? this.showSelectedPaperTitle() 
-                                : Alert.alert('还没有选择试题')
+                                : Alert.alert('','还没有选择试题', [{} , {text: '关闭', onPress: ()=>{}}])
                         }
                     </View>
                 </View>
@@ -1472,7 +1472,7 @@ class CreateHomework extends React.Component {
             <ScrollView  showsVerticalScrollIndicator={false}>
                 {/**题面 */}
                 {/* {console.log('---题目-----' ,selectPaperList[updatePaperIndex].tiMian)} */}
-                <Text style={styles.paperContent}>[题面] {selectPaperList[updatePaperIndex].typeName}{selectPaperList[updatePaperIndex].baseTypeId}</Text>
+                <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{padding: 10}}>
                     <RenderHtml contentWidth={screenWidth} source={{html: selectPaperList[updatePaperIndex].tiMian}}></RenderHtml>
                 </View>
@@ -1916,7 +1916,7 @@ class CreateHomework extends React.Component {
 
     //设置开始时间
     setStartTime = (time) => {
-        this.setState({ startTime: time , endTime: time });
+        this.setState({ startTime: time  });
     }
     //设置结束时间
     setEndTime = (time) => {
@@ -1936,7 +1936,7 @@ class CreateHomework extends React.Component {
                             color: '#4DC7F8',
                             top: 10,
                         }}
-                        onPress={()=>{Alert.alert('点击下方确定按钮可布置')}}
+                        onPress={()=>{Alert.alert('','点击下方确定按钮可布置', [{} , {text: '关闭', onPress: ()=>{}}])}}
                     >布置</Text>
                     <Text
                         style={{
@@ -2088,7 +2088,7 @@ class CreateHomework extends React.Component {
                                 || (assigntoWho == '1' && groupSelected.length == 0)
                                 || (assigntoWho == '2' && studentSelected.length ==0)
                             ){
-                                Alert.alert('请选择以上属性');
+                                Alert.alert('','请选择以上属性', [{} , {text: '关闭', onPress: ()=>{}}]);
                             }else{
                                 this.pushAndSavePaper();
                             }

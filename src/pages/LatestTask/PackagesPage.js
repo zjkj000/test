@@ -105,7 +105,7 @@ class PackagesPage extends React.Component {
                 i++;
             });
             itemNo = i;
-            console.log('itemNo' , itemNo);
+            // console.log('itemNo' , itemNo);
             let foot = 0;
             if(todosList.length < 12){
                 foot = 1; //未请求到数据，数据加载完了
