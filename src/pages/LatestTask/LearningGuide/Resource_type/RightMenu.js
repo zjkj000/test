@@ -40,7 +40,7 @@ export default class RightMenu extends Component {
 
     renderAvatar = () => {
         return (
-            <TouchableOpacity style={{marginRight:20}}
+            <TouchableOpacity style={{marginRight:10}}
                 onPress={() => {
                     this.setState({ moduleVisible: true });
                 }}
@@ -77,6 +77,7 @@ export default class RightMenu extends Component {
                                             title={'        '+(item_num+1)+'. '+this.state.data[i].activityList[j].resourceList[k].resourceName}
                                             key={item_num}
                                             onPress={() => {
+                                                this.props.Sub_Stu_answer(this.props.selectedIndex,this.props.selectedIndex)
                                                 this.props.getselectedindex(index)
                                                 this.setState({ moduleVisible: false });
                                                 // console.log('点了题目导航的：',this.props,index)
