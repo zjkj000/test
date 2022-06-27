@@ -70,12 +70,15 @@ export default Login = () => {
                 let res = eval("(" + text.substring(2) + ")");
                 let homePage = "Home";
                 let property = "STUDENT";
+                let userType = "STUDENT";
                 if ("COMMON_TEACHER" in res.data) {
                     homePage = "Teacher_Home";
                     property = "COMMON_TEACHER";
+                    userType = "TEACHER";
                 } else if ("ADMIN_TEACHER" in res.data) {
                     homePage = "Teacher_Home";
                     property = "ADMIN_TEACHER";
+                    userType = "TEACHER";
                 }
                 if (res.success == true) {
                     //console.log(res.data.STUDENT.userId)
@@ -89,6 +92,7 @@ export default Login = () => {
                     global.constants.passWord = param.passWord;
                     global.constants.userPhoto = res.data[property].userPhoto;
                     global.constants.userCn = res.data[property].cn;
+                    global.constants.userType = userType;
                     setShowLoading(false);
                     // Toast.showSuccessToast(res.message, 500);
                     // Alert.alert(res.message);

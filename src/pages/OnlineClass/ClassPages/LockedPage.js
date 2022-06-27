@@ -341,6 +341,7 @@ export default class LockedPage extends Component {
                             appearance="ghost"
                             size="medium"
                             onPress={this.handleSubmit}
+                            disabled={this.props.buttonDisable}
                         >
                             提交
                         </Button>

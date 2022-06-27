@@ -38,7 +38,7 @@ export default function HistoryInput(props) {
     return (
         <Autocomplete
             accessoryLeft={props.icon ? props.icon : <></>}
-            placeholder="Place your Text"
+            placeholder="请输入IP地址"
             value={value}
             onSelect={onSelect}
             onChangeText={onChangeText}

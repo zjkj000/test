@@ -46,7 +46,7 @@ export default class ImageHandler {
                 console.log("Camera permission denied");
             }
         } catch (error) {
-            console.warn(err);
+            console.warn(error.toString());
         }
         // let resImg = null;
         // await launchCamera(option, (response) => {
