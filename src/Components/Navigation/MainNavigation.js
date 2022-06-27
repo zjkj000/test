@@ -147,7 +147,7 @@ export default class MainNavigation extends Component {
                         }}
                     />
                     <Stack.Screen
-                        name="QRCodeScanner"
+                        name="扫码"
                         component={QRCodeScanner}
                     />
                 </Stack.Group>
