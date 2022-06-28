@@ -218,7 +218,7 @@ export default function Paper_ToDo(props) {
                 <TouchableOpacity style={{position:'absolute',left:0}} onPress={()=>{props.navigation.goBack()}}>
                      <Image style={{width:30,height:30}} source={require('../../../assets/TakePicturesAndAssignWork/goback.png')}></Image>
                 </TouchableOpacity>
-                <Text style={{fontSize:17,color:'#59B9E0'}}>{props.route.params.papername}</Text>
+                <Text style={{fontSize:17,color:'#59B9E0'}}>{props.route.params.papername.length>8?props.route.params.papername.substring(0,8)+"...":props.route.params.papername}</Text>
                 <View style={{flexDirection:'row',position:"absolute",right:0}}>
                     <TouchableOpacity onPress={()=>{
                             Submit_Stu_answer(selectedIndex, selectedIndex)

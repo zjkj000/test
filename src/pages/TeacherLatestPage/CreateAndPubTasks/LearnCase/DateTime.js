@@ -65,7 +65,7 @@ export default class DateTime extends Component {
         var mm = ''
         var ss = ''
         var dateStr = this.state.selectedDatetime.substring(11, 19)
-        hh = parseInt(dateStr.substring(0, 2))
+        hh = parseInt(dateStr.substring(0, 2))+8
         mm = parseInt(dateStr.substring(3, 5))
         ss = dateStr.substring(6, 8)
         Picker.init({

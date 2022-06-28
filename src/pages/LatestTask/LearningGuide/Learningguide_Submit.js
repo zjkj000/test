@@ -219,6 +219,7 @@ class Learningguide_Submit extends Component {
                             ({this.state.data[result_Item].order})
                         </Text>
                         {/* 具体答案  or   红色的未答 */}
+                        {console.log('设置的未学',this.state.data)}
                         {this.state.data[result_Item].stuAnswer != "" ? (
                             <RenderHtml
                                 contentWidth={width}

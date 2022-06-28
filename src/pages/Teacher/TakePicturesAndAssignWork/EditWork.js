@@ -74,7 +74,7 @@ class EditWork extends Component{
     this.updateupdateFlag =this.updateupdateFlag.bind(this)
     this.setanswerNum     = this.setanswerNum.bind(this)
     this.state={
-        updateFlag:'1',   //记录保存后是否继续修改   0 代表未修改    1代表修改过
+        updateFlag:'0',   //记录保存后是否继续修改   0 代表未修改    1代表修改过
         paperName:'',
         paperId:'-1',    //保存之后就会获取到这个paperID  
         subjectName:'',
@@ -454,7 +454,7 @@ class EditWork extends Component{
   savepaper(Assign){
     var isnull = true;
     this.state.data.map((item,index)=>{
-      isnull = isnull&&this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList)
+      isnull = isnull&&this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList)   //true是都设置了答案  false还有未设置答案
       //if判断的是 题面答案 没有设置的情况
       if(!this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList)){
         if(item.TimuContentList.length==0){
@@ -467,11 +467,13 @@ class EditWork extends Component{
           Toast.showWarningToast(str,1000)
         }
         //else 是判断过了  题面  答案是否设置
-      }else{
-                // console.log('保存参数之前','paperId：',this.state.paperId,'isnull：',isnull,'Assign:',Assign)
-                //如果都不为空  保存或者提交
-                //true代表不为空 && paperid没有           ||     修改过的情况 需要重新保存
-                if((isnull&&this.state.paperId=='-1')||this.state.updateFlag=='1'){
+      }
+    })
+
+    // console.log('保存参数之前','paperId：',this.state.paperId,'isnull：',isnull,'Assign:',Assign)
+    //如果都不为空  保存或者提交
+    //true代表不为空 && paperid没有           ||     修改过的情况 需要重新保存
+    if(isnull&&(this.state.paperId=='-1'||this.state.updateFlag=='1')){
                   // console.log('保存之前：',this.state.data)
                       var SubAnswerStr = []
                       this.state.data.map((item,index)=>{
@@ -541,11 +543,11 @@ class EditWork extends Component{
                               Toast.showDangerToast('保存失败！',1000)
                             }
                           })
-                }else if(!Assign&&this.state.paperId!='-1'&&this.state.updateFlag=='0'){//试卷已经点过了保存
-                  Toast.showSuccessToast('试卷已经保存！',2000)
-                }
+    }else if(!Assign&&this.state.paperId!='-1'&&this.state.updateFlag=='0'){//试卷已经点过了保存
+        Toast.showSuccessToast('试卷已经保存！',2000)
+    }
 
-                if(Assign){
+    if(isnull&&Assign){
                   this.props.navigation.navigate({
                     name:'AssignPicturePaperWork',
                     params:{
@@ -553,10 +555,7 @@ class EditWork extends Component{
                         paperName:this.state.paperName
                     }
                 })
-                }
-      }
-
-    })
+    }
     
 
   }

@@ -47,10 +47,13 @@ export default class PaperContent extends Component {
     
     setscore(stuscore){
       var newscoreList = this.state.CorrectResultList
-      newscoreList[parseInt(this.state.data.order)-1].stuscore=stuscore
+      newscoreList[parseInt(this.state.data.order)-1].stuscore=stuscore+(this.state.halfistrue&&stuscore!=newscoreList[this.state.data.order-1].questionScore?0.5:0)
       newscoreList[parseInt(this.state.data.order)-1].hand= 1
       this.props.setCorrected(newscoreList)
-      this.setState({CorrectResultList:newscoreList,halfistrue:false})
+      this.setState({
+        CorrectResultList:newscoreList,
+        halfistrue:stuscore==newscoreList[this.state.data.order-1].questionScore?false:this.state.halfistrue
+      })
     }
 
     UNSAFE_componentWillMount(){
@@ -115,7 +118,7 @@ export default class PaperContent extends Component {
                         newCorrectResultList[parseInt(this.state.data.order)-1].hand= 1
                         this.props.setCorrected(newCorrectResultList)
                         newCorrectResultList[i].stuscore=(newCorrectResultList[i].stuscore-0.5)<0?0:(newCorrectResultList[i].stuscore-0.5)
-                          this.setState({
+                        this.setState({
                             halfistrue:false,
                             CorrectResultList:newCorrectResultList
                           })

@@ -112,50 +112,53 @@ class KetangshoukeContent extends Component {
       };
     return (
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:20}}>
-        <View style={{flexDirection:'row',marginLeft:10,marginRight:10,marginBottom:10}}>
-                <View style={{flex:3,flexDirection:"row",justifyContent:'space-between'}}  >
-                  <View>
-                     <Image style={{width:screenWidth*0.25,height:screenWidth*0.25}} source={require('../../assets/StatisticalForm/Ima_ketang.png')}></Image>
-                  </View>
-                  <View>
-                        <View style={{height:30}}>
-                            <Text style={{fontSize:16}}>有效课次:</Text>
-                        </View>
-                        <View style={{flexDirection:'row',alignItems:'baseline',justifyContent:'flex-end'}}>
-                            <Text style={{fontSize:50,color:'#3BBF36'}}>{this.state.effectiveKeci}</Text>
-                            <Text style={{fontSize:25}}>/{this.state.sumKeci}</Text>
-                        </View>
-                  </View>
-                </View>
-                <View style={{flex:3,flexDirection:'row',justifyContent:'space-evenly'}}>
-                    <View style={{flexDirection:'column',padding:10,paddingRight:0,paddingTop:0}}>
-                        <View style={{flexDirection:'row',alignContent:'space-around'}}>
-                            <View style={{margin:10,flexDirection:'row',alignItems:'baseline',marginTop:0}}>
-                              <Text style={{fontSize:16}}>内容:</Text>
-                              <Text style={{fontSize:25,marginLeft:5}}>{this.state.contentNum}</Text>
-                            </View>
-                            <View style={{margin:10,flexDirection:'row',alignItems:'baseline',marginTop:0}}>
-                              <Text style={{fontSize:16}}>互动:</Text>
-                              <Text style={{fontSize:25,marginLeft:5}}>{this.state.hdNum}</Text></View>
-                        </View>
-                        <View style={{flexDirection:'row',alignContent:'space-around'}}>
-                            <View style={{margin:10,flexDirection:'row',alignItems:'baseline'}}>
-                              <Text style={{fontSize:16}}>批注:</Text>
-                              <Text style={{fontSize:25,marginLeft:5}}>{this.state.pzNum}</Text>
-                            </View>
-                            <View style={{margin:10,flexDirection:'row',alignItems:'baseline'}}>
-                              <Text style={{fontSize:16}}>板书:</Text>
-                              <Text style={{fontSize:25,marginLeft:5}}>{this.state.bsNum}</Text>
+            <View style={{flexDirection:'row',marginLeft:10,marginRight:10,marginBottom:10}}>
+                        <View style={{flex:3,flexDirection:"row",justifyContent:'space-between'}}  >
+                            {/* <View> */}
+                              <Image style={{width:screenWidth*0.24,height:screenWidth*0.24}} source={require('../../assets/StatisticalForm/Ima_ketang.png')}></Image>
+                            {/* </View> */}
+                            <View style={{alignItems:'flex-start'}}>
+                                  <View style={{height:30}}>
+                                      <Text style={{fontSize:16}}>有效课次:</Text>
+                                  </View>
+                                  <View style={{flexDirection:'row',alignItems:'baseline'}}>
+                                      <Text style={{fontSize:50,color:'#3BBF36'}}>{this.state.effectiveKeci}</Text>
+                                      <Text style={{fontSize:25}}>/{this.state.sumKeci}</Text>
+                                  </View>
                             </View>
                         </View>
-                    </View>
-                </View>
-                </View>
+                        <View style={{flex:3,flexDirection:'row',justifyContent:'space-between'}}>
+                            <View style={{flexDirection:'column',padding:10,paddingRight:0,paddingTop:0}}>
+                                <View style={{flexDirection:'row',alignContent:'space-around'}}>
+                                    <View style={{margin:10,flexDirection:'row',alignItems:'baseline',marginTop:0}}>
+                                      <Text style={{fontSize:16}}>内容:</Text>
+                                      <Text style={{fontSize:25,marginLeft:5}}>{this.state.contentNum}</Text>
+                                    </View>
+                                    <View style={{margin:10,flexDirection:'row',alignItems:'baseline',marginTop:0}}>
+                                      <Text style={{fontSize:16}}>互动:</Text>
+                                      <Text style={{fontSize:25,marginLeft:5}}>{this.state.hdNum}</Text></View>
+                                </View>
+                                <View style={{flexDirection:'row',alignContent:'space-around'}}>
+                                    <View style={{margin:10,flexDirection:'row',alignItems:'baseline'}}>
+                                      <Text style={{fontSize:16}}>批注:</Text>
+                                      <Text style={{fontSize:25,marginLeft:5}}>{this.state.pzNum}</Text>
+                                    </View>
+                                    <View style={{margin:10,flexDirection:'row',alignItems:'baseline'}}>
+                                      <Text style={{fontSize:16}}>板书:</Text>
+                                      <Text style={{fontSize:25,marginLeft:5}}>{this.state.bsNum}</Text>
+                                    </View>
+                                </View>
+                            </View>
+                        </View>
+            </View>
+               
+
                 <View style={{marginLeft:10,marginRight:10}}>
                     <View>
                         <Echarts option={option} height={250} width={width-20} />
                     </View>
                 </View>
+
                 <View>
                   {this.state.tableData.length>0?(
                     <MyTable data={this.state.tableData.length>this.state.KetangTableNum?this.state.tableData.slice(0,this.state.KetangTableNum):this.state.tableData} 
