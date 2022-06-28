@@ -262,7 +262,7 @@ class ContentList extends React.Component {
                             </View>
                         </View>
                         <View style={{backgroundColor:'#fff'}}><Text style={{width:20}}></Text></View>
-                        {this.showTodo(todoImg,todo.id,todo.name,todo.paperType,todo)}
+                        {this.showTodo(todoImg,todo.id,todo.name,todo.paperType,todo,todoItem.item)}
                 </ScrollView>
 
             );
@@ -588,7 +588,7 @@ class ContentList extends React.Component {
     }
 
     //显示作业、导学案等可选操作
-    showTodo(todoImg,id,name,paperType,todo){
+    showTodo(todoImg,id,name,paperType,todo,todoItem){
         if(todoImg == 'paper.png'){
             return(
                 <View 
@@ -674,8 +674,16 @@ class ContentList extends React.Component {
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
-                            this.deletepaper(id)
-                            WaitLoading.show('删除中',-1)
+                            Alert.alert('','是否确认删除',
+                                [
+                                    {text:'取消',onPress:()=>{}},
+                                    {},
+                                    {text:'确定',onPress:()=>{
+                                        this.deletepaper(id,todoItem);
+                                        WaitLoading.show('删除中',-1)
+                                    }}
+                                ])
+                            
                     }}>
                             删除
                         </Text>
@@ -746,8 +754,15 @@ class ContentList extends React.Component {
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
-                            this.deleteLearnPlan(id);
-                            WaitLoading.show('删除中',-1);
+                            Alert.alert('','是否确认删除',
+                            [
+                                {text:'取消',onPress:()=>{}},
+                                {},
+                                {text:'确定',onPress:()=>{
+                                    this.deleteLearnPlan(id,todoItem);
+                                    WaitLoading.show('删除中',-1);
+                                }}
+                            ])
                         }}>
                             删除
                         </Text>
@@ -802,8 +817,15 @@ class ContentList extends React.Component {
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
                         <Text style={styles.selectContent}  onPress={() => {
-                            this.deleteLearnPlan(id);
-                            WaitLoading.show('删除中',-1);
+                            Alert.alert('','是否确认删除',
+                            [
+                                {text:'取消',onPress:()=>{}},
+                                {},
+                                {text:'确定',onPress:()=>{
+                                    this.deleteLearnPlan(id,todoItem);
+                                    WaitLoading.show('删除中',-1);
+                                }}
+                            ])
                         }}>
                             删除
                         </Text>
@@ -851,7 +873,7 @@ class ContentList extends React.Component {
     }
 
     //删除试卷
-    deletepaper(paperId){
+    deletepaper(paperId,todo){
         const url = global.constants.baseUrl+"teacherApp_deletePaper.do";
       const params = {
             token:global.constants.token,
@@ -861,18 +883,26 @@ class ContentList extends React.Component {
             let resJson = JSON.parse(resStr);
             if(resJson.success){
                 WaitLoading.show_success('删除成功！',1000)
-                this.setState({todos:[]})
-                pageNo = 1; //当前第几页
-                itemNo = 0; //item的个数
-                dataFlag = true; 
-                this.fetchData(pageNo , oldtype , oldsearchStr , true);
+                const { todos } = this.state;
+                var todosTemp = todos;
+                var index = todos.indexOf(todo);
+
+                console.log('==================删除索引======================================',index);
+                if(index >= 0){
+                    console.log('================删除前数组长度============1================',todosTemp.length);
+                    todosTemp.splice(index , 1);
+                    this.setState({
+                        todos: todosTemp
+                    },()=>{
+                        console.log('================删除后数组长度===========2=================',this.state.todos.length);
+                    })
+                }
             }
-            
         })
     }
 
     //删除导学案、微课、授课包
-    deleteLearnPlan(learnPlanId){
+    deleteLearnPlan(learnPlanId,todo){
         const url = global.constants.baseUrl+"teacherApp_deleteLearnPlan.do";
         const params = {
             token: global.constants.token,
@@ -881,14 +911,22 @@ class ContentList extends React.Component {
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
             if(resJson.success){
-                WaitLoading.show_success('删除成功！',1000)
-                this.setState({todos:[]})
-                pageNo = 1; //当前第几页
-                itemNo = 0; //item的个数
-                dataFlag = true; 
-                this.fetchData(pageNo , oldtype , oldsearchStr , true);
+                WaitLoading.show_success('删除成功！',1000);
+                const { todos } = this.state;
+                var todosTemp = todos;
+                var index = todos.indexOf(todo);
+
+                console.log('==================删除索引======================================',index);
+                if(index >= 0){
+                    console.log('================删除前数组长度============1================',todosTemp.length);
+                    todosTemp.splice(index , 1);
+                    this.setState({
+                        todos: todosTemp
+                    },()=>{
+                        console.log('================删除后数组长度===========2=================',this.state.todos.length);
+                    })
+                }
             }
-            
         })
     }
 

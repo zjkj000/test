@@ -163,13 +163,25 @@ class Paper_Submit extends Component {
                             //         },
                             //     })}
                             //   ])
+                            // this.props.navigation.navigate({
+                            //     name: "Home",
+                            //     params: {
+                            //         learnId: this.state.paperId,
+                            //         status: change_status,
+                            //     },
+                            // })
+                            
                             this.props.navigation.navigate({
                                 name: "Home",
                                 params: {
-                                    learnId: this.state.paperId,
-                                    status: change_status,
+                                    screen: "首页",
+                                    params: {
+                                        learnId: this.state.paperId,
+                                        status: change_status,
+                                    },
                                 },
-                            })
+                                merge: true,
+                            });
                         }else{
                             WaitLoading.show_false()
                         }

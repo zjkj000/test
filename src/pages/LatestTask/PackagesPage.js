@@ -61,7 +61,7 @@ class PackagesPage extends React.Component {
     }
 
     componentDidMount(){   //初始挂载执行一遍
-        this.fetchData(pageNo);
+        this.fetchData(pageNo , true);
     }
 
     
@@ -81,7 +81,7 @@ class PackagesPage extends React.Component {
 
 
     //通过fetch请求数据
-    fetchData(pageNo , onRefresh = false){      
+    fetchData(pageNo , onRefresh){      
        const token = global.constants.token;
        const userId = global.constants.userName;
        const ip = global.constants.baseUrl;  
@@ -155,6 +155,55 @@ class PackagesPage extends React.Component {
         );
     }
 
+    //请求资料夹单个资料信息
+    showPackage = (imgUrl , id , type , deviceType) => {
+        const ip = global.constants.baseUrl;  
+        const url = ip + "studentApp_lookMineFloderFile.do";
+        const params = {
+            id: id,
+            type: type,
+            deviceType: deviceType,
+        }
+        http.get(url,params).then((resStr)=>{
+            let resJson = JSON.parse(resStr);
+            //console.log('resJson' , resJson.data);
+            let url = resJson.data.url;
+            if(url == '预览文件不存在'){
+                Alert.alert('','文件正在转换，请稍后查看',
+                    [{},{},{text:'确定',onPress:()=>{}}])
+            }else{
+                console.log('======imgUrl=====',imgUrl)
+                console.log(resJson.data)
+                console.log(url)
+                if(imgUrl == "mp3.png"){
+                    this.props.navigation.navigate("音频", 
+                    {
+                        resource: resJson.data,
+                        videoUrl: url
+                    });
+                }else if(imgUrl == "mp4.png"){
+                    this.props.navigation.navigate("视频", 
+                    {
+                        resource: resJson.data,
+                        videoUrl: url
+                    });
+                }else if(imgUrl == "doc.png" || imgUrl == "pdf.png" || imgUrl == "docx.png"){
+                    this.props.navigation.navigate("文档" , 
+                    {
+                        resource: resJson.data,
+                    });
+                }else if(imgUrl == "ppt.png"){    
+                    this.props.navigation.navigate("PPT" , 
+                    {
+                        resource: resJson.data , 
+                        pptList: resJson.data.pptList ,
+                        uri: resJson.data.pptList[0]
+                    });
+                }        
+            }
+        })
+    }
+
     //返回itemView(单个todo)
     _renderItemView = ( todoItem ) => {
         const navigation = this.props.navigation;
@@ -195,36 +244,37 @@ class PackagesPage extends React.Component {
                 <View>
                     <TouchableOpacity
                         onPress={() => {
-                            if(imgUrl == "mp3.png"){
-                                navigation.navigate("音频", 
-                                {
-                                    id: id,
-                                    type: type,
-                                    deviceType: 'PHONE',
-                                });
-                            }else if(imgUrl == "mp4.png"){
-                                navigation.navigate("视频", 
-                                {
-                                    id: id,
-                                    type: type,
-                                    deviceType: 'PHONE',
-                                });
-                            }else if(imgUrl == "doc.png" || imgUrl == "pdf.png"){
-                                navigation.navigate("文档" , 
-                                {
-                                    id: id,
-                                    type: type,
-                                    deviceType: 'PHONE',
-                                });
-                                //Alert.alert('文档类型的组件还未实现');
-                            }else if(imgUrl == "ppt.png"){    
-                                navigation.navigate("PPT" , 
-                                {
-                                    id: id,
-                                    type: type,
-                                    deviceType: 'PHONE',
-                                });
-                            }                                       
+                            this.showPackage(imgUrl,id,type,'PHONE');
+                            // if(imgUrl == "mp3.png"){
+                            //     navigation.navigate("音频", 
+                            //     {
+                            //         id: id,
+                            //         type: type,
+                            //         deviceType: 'PHONE',
+                            //     });
+                            // }else if(imgUrl == "mp4.png"){
+                            //     navigation.navigate("视频", 
+                            //     {
+                            //         id: id,
+                            //         type: type,
+                            //         deviceType: 'PHONE',
+                            //     });
+                            // }else if(imgUrl == "doc.png" || imgUrl == "pdf.png"){
+                            //     navigation.navigate("文档" , 
+                            //     {
+                            //         id: id,
+                            //         type: type,
+                            //         deviceType: 'PHONE',
+                            //     });
+                            //     //Alert.alert('文档类型的组件还未实现');
+                            // }else if(imgUrl == "ppt.png"){    
+                            //     navigation.navigate("PPT" , 
+                            //     {
+                            //         id: id,
+                            //         type: type,
+                            //         deviceType: 'PHONE',
+                            //     });
+                            // }                                       
                         }}
                         style={{
                             //borderWidth: 0.5,
@@ -321,7 +371,7 @@ class PackagesPage extends React.Component {
             showFoot: 0, // 控制foot， 0：隐藏footer  1：已加载完成,没有更多数据   2 ：显示加载中
             //isRefreshing: false, //下拉控制
         });
-        this.fetchData(pageNo , (onRefresh = true));
+        this.fetchData(pageNo , true);
     }
 
     //分割线
@@ -387,7 +437,7 @@ class PackagesPage extends React.Component {
         //底部显示正在加载更多数据
         this.setState({ showFoot: 2 });
         //获取数据
-        this.fetchData(pageNo);
+        this.fetchData(pageNo , false);
     }
 }
 

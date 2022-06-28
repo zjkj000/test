@@ -145,6 +145,37 @@ class TodoList extends React.Component {
             //this.setState({ status: '3' });
         }
 
+        // if (this.props.navigation.getState().routes[1].params != null) {
+        //     const todoId =
+        //         this.props.navigation.getState().routes[1].params.learnId;
+        //     const status =
+        //         this.props.navigation.getState().routes[1].params.status;
+
+        //     this.props.navigation.getState().routes[1].params = null;
+
+        //     // console.log("componentWillUpdate*****todoContain****0000", status);
+        //     if (status == 3) {
+        //         // console.log("componentWillUpdate*********0000", Date.parse(new Date()));
+        //         //未批改的作业，不请求数据
+        //         //console.log('获取到的status' , status);
+        //         for (var i = 0; i < todosList.length; i++) {
+        //             if (todosList[i].value.learnId == todoId) {
+        //                 //console.log('当前todo' , todosList[i]);
+        //                 //console.log('之前的状态' , todosList[i].value.status);
+        //                 todosList[i].value.status = status;
+        //                 //console.log('修改后的状态' , todosList[i].value.status);
+        //                 this.setState({ todos: todosList });
+        //                 return;
+        //             }
+        //         }
+        //     } else {
+        //         // console.log("componentWillUpdate*********1111", Date.parse(new Date()));
+
+        //         // console.log('______________');
+        //         flag = 2;
+        //         this._onRefresh();
+        //     }
+        // }
 
         if (nextProps.learnId != '' && nextProps.status != '') {
             const todoId = nextProps.learnId;
@@ -171,6 +202,10 @@ class TodoList extends React.Component {
                     }
                 }
             } else {
+                // console.log("componentWillUpdate*********1111", Date.parse(new Date()));
+
+                // console.log('______________');
+                // flag = 2;
                 this._onRefresh();
             }
         }
@@ -407,7 +442,6 @@ class TodoList extends React.Component {
                                         status: statusUrl, //作业状态
                                         selectedindex: 0,
                                         papername: bottomTitle,
-                                        tab: '首页'
                                     });
                                     //this.setState({ todos: todosList });
                                 }
@@ -434,7 +468,6 @@ class TodoList extends React.Component {
                                         status: statusUrl, //导学案状态
                                         selectedindex: 0,
                                         papername: bottomTitle,
-                                        tab: '首页'
                                     });
                                 }
                             } else if (

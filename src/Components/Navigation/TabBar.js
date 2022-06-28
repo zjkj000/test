@@ -53,16 +53,12 @@ class MyTabBarComponent extends React.Component {
         this._unsubscribeNavigationFocusEvent();
     }
     renderHome = () => {
-        const { navigation } = this.props;
-        const paramsData = navigation.getState().routes[1].params;
-        const learnId = paramsData != null ? paramsData.learnId : "";
-        const status = paramsData != null ? paramsData.status : "";
         return (
             /*
             <View>
                 <Text>我是首页</Text>
             </View>*/
-            <LatestTask learnId={learnId} status={status} />
+            <LatestTask/>
         );
     };
     renderStudy = () => {

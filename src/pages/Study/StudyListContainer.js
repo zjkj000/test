@@ -136,14 +136,16 @@ class StudyList extends React.Component {
             //this.setState({ status: '3' });
         }
 
-        if (this.props.navigation.getState().routes[1].params != null) {
-            const todoId =
-                this.props.navigation.getState().routes[1].params.learnId;
-            const status =
-                this.props.navigation.getState().routes[1].params.status;
+        if (nextProps.learnId != '' && nextProps.status != '') {
+            const todoId = nextProps.learnId;
+            const status = nextProps.status;
 
-            this.props.navigation.getState().routes[1].params = null;
+            this.props.navigation.setParams({ 
+                learnId: '',
+                status: ''
+            }); 
 
+            // console.log("componentWillUpdate*****todoContain****0000", status);
             if (status == 3) {
                 // console.log("componentWillUpdate*********0000", Date.parse(new Date()));
                 //未批改的作业，不请求数据
@@ -160,8 +162,9 @@ class StudyList extends React.Component {
                 }
             } else {
                 // console.log("componentWillUpdate*********1111", Date.parse(new Date()));
-                console.log('__________________');
-                flag = 2;
+
+                // console.log('______________');
+                // flag = 2;
                 this._onRefresh();
             }
         }
@@ -212,9 +215,6 @@ class StudyList extends React.Component {
 
     //通过fetch请求数据
     fetchData(pageNo , type , search , onRefresh = false) {
-        // console.log("fetchData*********", Date.parse(new Date()));
-        // const rsType = this.props.resourceType;
-        // const searchStr = this.props.searchStr;
         const token = global.constants.token;
         const userId = global.constants.userName;
         const ip = global.constants.baseUrl;
@@ -265,13 +265,6 @@ class StudyList extends React.Component {
                 });
                 todosList1 = null;
                 dataBlob = null;
-
-                if(flag == 2){
-                    console.log('&&&&&&&&&&&&&&&&&&');
-                    flag = 1;
-                    this._onRefresh();
-                    return;
-                }
             })
             .catch((error) => {
                 this.setState({
@@ -402,6 +395,7 @@ class StudyList extends React.Component {
                                         status: statusUrl, //作业状态
                                         selectedindex: 0,
                                         papername: bottomTitle,
+                                        tab: '学习'
                                     });
                                     //this.setState({ todos: todosList });
                                 }
@@ -425,6 +419,7 @@ class StudyList extends React.Component {
                                         status: statusUrl, //导学案状态
                                         selectedindex: 0,
                                         papername: bottomTitle,
+                                        tab: '学习'
                                     });
                                 }
                             } else if (

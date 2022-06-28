@@ -514,6 +514,7 @@ class CreateHomework extends React.Component {
                     updatePaperFlag: false,
                     pushPaperFlag: false,
 
+                    baseTypeIdLists: [],
                     //selectPaperIndex: 0, //选中的试题索引
                 })
             }
@@ -525,6 +526,7 @@ class CreateHomework extends React.Component {
                 })
             }else{
                 if(this.state.selectPaperList.length > 0){
+                    this.sortSelectPaperList();
                     this.setState({ 
                         addPaperFlag: false,
                         updatePaperFlag: true,
@@ -549,7 +551,13 @@ class CreateHomework extends React.Component {
                 })
             }else{
                 if(this.state.selectPaperList.length > 0){
-                    this.createPaperObject(); //生成试卷对象
+                    if(this.state.baseTypeIdLists.length <= 0){
+                        this.sortSelectPaperList();
+                        this.createPaperObject(); //生成试卷对象
+                    }else{
+                        this.createPaperObject();
+                    }
+                    
                     this.setState({ 
                         addPaperFlag: false,
                         updatePaperFlag: false,
@@ -825,41 +833,13 @@ class CreateHomework extends React.Component {
         }
     }
 
-    //修改选中题目数(添加试题小页面)
-    updateSlectNum = (flag) => {
+    //将已选择的试题进行排序(调整顺序小页面)
+    sortSelectPaperList = () => {
+        const { selectPaperList } = this.state;
+        var selectPaperListCopy = selectPaperList;
 
-        const { selectPaperIndex , selectPaperList , paperList , paperTypeList } = this.state;
-        if(flag == true){ //删除试题
-            var index = selectPaperList.indexOf(paperList[selectPaperIndex]); //查询要删除元素的位置
-            var selectPaperListCopy = selectPaperList;
-            if(index >= 0){
-                selectPaperListCopy.splice(index , 1); //删除指定位置元素
-
-                var baseTypeIdList = []; //记录选中题目的baseTypeId个数
-                if(selectPaperListCopy.length > 0){
-                    var baseTypeIdtemp = selectPaperListCopy[0].baseTypeId;
-                    baseTypeIdList.push(baseTypeIdtemp);
-                    for(let i = 0 ; i < selectPaperListCopy.length ; i++){ //获取选中题目的baseTypeId个数    
-                        if(selectPaperListCopy[i].baseTypeId.indexOf(baseTypeIdtemp) < 0){
-                            if(baseTypeIdList.indexOf(selectPaperListCopy[i].baseTypeId) < 0){
-                                baseTypeIdList.push(selectPaperListCopy[i].baseTypeId);
-                                baseTypeIdtemp = selectPaperListCopy[i].baseTypeId;
-                            }
-                        }
-                    }
-                }
-
-                this.setState({
-                    selectPaperNum: this.state.selectPaperNum - 1,
-                    selectPaperList: selectPaperListCopy,
-                    baseTypeIdLists: baseTypeIdList.length > 0 ? baseTypeIdList : [],
-                })
-            } 
-        }else{  //添加试题
-            var selectPaperListCopy = selectPaperList;
-            selectPaperListCopy.push(paperList[selectPaperIndex]);
-
-            var baseTypeIdList = []; //记录选中题目的baseTypeId个数
+        var baseTypeIdList = []; //记录选中题目的baseTypeId个数
+        if(selectPaperListCopy.length > 0){
             var baseTypeIdtemp = selectPaperListCopy[0].baseTypeId;
             baseTypeIdList.push(baseTypeIdtemp);
             for(let i = 0 ; i < selectPaperListCopy.length ; i++){ //获取选中题目的baseTypeId个数    
@@ -870,37 +850,49 @@ class CreateHomework extends React.Component {
                     }
                 }
             }
-            console.log('-------baseTypeIdList-----',baseTypeIdList);
-            //按照id大小排序
-            for(let i = 0 ; i < baseTypeIdList.length ; i++){
-                for(let j = i ; j < baseTypeIdList.length ; j++){
-                    if(baseTypeIdList[j] < baseTypeIdList[i]){
-                        var tempId = baseTypeIdList[i];
-                        baseTypeIdList[i] = baseTypeIdList[j];
-                        baseTypeIdList[j] = tempId;
-                    }
+        }
+        console.log('-------baseTypeIdList-----',baseTypeIdList);
+        baseTypeIdList.sort();
+        console.log('-----baseTypeIdList--sort---',baseTypeIdList);
+        //调整顺序（相同类型在一块）
+        var tempPaperList = [];
+        for(let i = 0 ; i < baseTypeIdList.length ; i++){
+            // console.log('----试题类型---' , paperTypeList[i]);
+            for(let j = 0 ; j < selectPaperListCopy.length ; j++){
+                // console.log('----添加试题类型---' , selectPaperListCopy[j].typeName);
+                if(selectPaperListCopy[j].baseTypeId == baseTypeIdList[i]){
+                        // console.log('----类型一致-------');
+                        tempPaperList.push(selectPaperListCopy[j]);//添加的试题
                 }
             }
-            console.log('-----baseTypeIdList--sort---',baseTypeIdList);
+        }
+        this.setState({
+            selectPaperList: tempPaperList,
+            baseTypeIdLists: baseTypeIdList.length > 0 ? baseTypeIdList : [],
+        })
+    }
 
-            //调整顺序（相同类型在一块）
-            var tempPaperList = [];
-            for(let i = 0 ; i < baseTypeIdList.length ; i++){
-                // console.log('----试题类型---' , paperTypeList[i]);
-                for(let j = 0 ; j < selectPaperListCopy.length ; j++){
-                    // console.log('----添加试题类型---' , selectPaperListCopy[j].typeName);
-                    if(selectPaperListCopy[j].baseTypeId.indexOf(baseTypeIdList[i]) >= 0
-                        || baseTypeIdList[i].indexOf(selectPaperListCopy[j].baseTypeId) >= 0){
-                            // console.log('----类型一致-------');
-                            tempPaperList.push(selectPaperListCopy[j]);//添加的试题
-                    }
-                }
-            }
+    //修改选中题目数(添加试题小页面)
+    updateSlectNum = (flag) => {
+        const { selectPaperIndex , selectPaperList , paperList  } = this.state;
+        if(flag == true){ //删除试题
+            var index = selectPaperList.indexOf(paperList[selectPaperIndex]); //查询要删除元素的位置
+            var selectPaperListCopy = selectPaperList;
+            if(index >= 0){
+                selectPaperListCopy.splice(index , 1); //删除指定位置元素
+
+                this.setState({
+                    selectPaperNum: this.state.selectPaperNum - 1,
+                    selectPaperList: selectPaperListCopy,
+                })
+            } 
+        }else{  //添加试题
+            var selectPaperListCopy = selectPaperList;
+            selectPaperListCopy.push(paperList[selectPaperIndex]);
  
             this.setState({
                 selectPaperNum: this.state.selectPaperNum + 1,
-                selectPaperList: tempPaperList,  
-                baseTypeIdLists: baseTypeIdList,
+                selectPaperList: selectPaperListCopy,  
             })
         }
     }
@@ -912,12 +904,28 @@ class CreateHomework extends React.Component {
         var selectPaperListCopy = selectPaperList;
         if(updatePaperIndex >= 0){
             selectPaperListCopy.splice(updatePaperIndex , 1); //删除指定位置元素
+
+            var baseTypeIdList = []; //记录选中题目的baseTypeId个数
+            if(selectPaperListCopy.length > 0){
+                var baseTypeIdtemp = selectPaperListCopy[0].baseTypeId;
+                baseTypeIdList.push(baseTypeIdtemp);
+                for(let i = 0 ; i < selectPaperListCopy.length ; i++){ //获取选中题目的baseTypeId个数    
+                    if(selectPaperListCopy[i].baseTypeId.indexOf(baseTypeIdtemp) < 0){
+                        if(baseTypeIdList.indexOf(selectPaperListCopy[i].baseTypeId) < 0){
+                            baseTypeIdList.push(selectPaperListCopy[i].baseTypeId);
+                            baseTypeIdtemp = selectPaperListCopy[i].baseTypeId;
+                        }
+                    }
+                }
+            }
+            console.log('-----baseTypeIdList--delete---',baseTypeIdList);
             this.setState({
                 selectPaperNum: this.state.selectPaperNum - 1,
                 //若删除的是最后一道题，则页面显示selectPaperList最新的最后一道题
                 updatePaperIndex: updatePaperIndex == selectPaperList.length ? 
                                                         selectPaperList.length - 1 : updatePaperIndex,
                 selectPaperList: selectPaperListCopy,
+                baseTypeIdLists: baseTypeIdList,
             })
         } 
     }

@@ -32,10 +32,13 @@ export default class Videos extends Component {
       //oldtype = this.props.resourceType;
       const paramsData = this.props.navigation.getState().routes[3].params;
       //console.log(this.props.navigation.getState().routes);
-      const id = paramsData.id;
-      const type = paramsData.type;
-      const deviceType = paramsData.deviceType;
-      this.fetchData(id , type , deviceType);
+      // const id = paramsData.id;
+      // const type = paramsData.type;
+      // const deviceType = paramsData.deviceType;
+      // this.fetchData(id , type , deviceType);
+      this.setState({ 
+          resource: paramsData.resource , 
+      });
   }
 
   //"http://www.cn901.net:8111/AppServer/ajax/studentApp_lookMineFloderFile.do?id=8bc75fef-e4c0-4106-a68f-d15bd6fac164&type=resource&deviceType=PAD&callback=ha"
