@@ -146,8 +146,8 @@ export default function Piyueshiti(props) {
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingBottom:20}}>
         <View style={{flexDirection:'row',marginLeft:10,marginTop:20}}>
           <View style={{flex:3,justifyContent:'space-between',flexDirection:'row'}}  >
-            <Image style={{width:screenWidth*0.25,height:screenWidth*0.25}} source={require('../../assets/StatisticalForm/Ima_piyue.png')}></Image>
-            <View style={{flexDirection:'column'}}>
+            <Image style={{width:screenWidth*0.24,height:screenWidth*0.24}} source={require('../../assets/StatisticalForm/Ima_piyue.png')}></Image>
+            <View style={{alignItems:'flex-start'}}>
                         <View style={{height:30}}>
                             <Text style={{fontSize:16}}>批阅总数:</Text>
                         </View>
@@ -165,6 +165,7 @@ export default function Piyueshiti(props) {
               </View>
           </View>
         </View>
+
         <View>
           <Echarts option={option} height={250} width={width-20} />
         </View>

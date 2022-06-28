@@ -8,6 +8,7 @@ import  Toast  from '../../../utils/Toast/Toast';
 import Loading  from '../../../utils/loading/Loading';
 import CorrectSubmitContainer from './CorrectSubmit';
 import {WaitLoading,Waiting} from '../../../utils/WaitLoading/WaitLoading'
+import { screenWidth } from '../../../utils/Screen/GetSize';
 var Allquestion = [];
 export default function CorrectingPaper(props) {
     const navigation = useNavigation();
@@ -26,12 +27,13 @@ export default function CorrectingPaper(props) {
       navigation.setOptions( {title:props.route.params.userCn,
         // headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)
       })
+
       props.route.params.CorrectResultList?setCorrectResultList(props.route.params.CorrectResultList):setCorrectResultList([])
       getData()
 
       // console.log('props.route.params.correctingstatus',props.route.params.correctingstatus)
       if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){
-          Alert.alert('','该学生已批改！是否直接查看批改结果？',[{text:'否',onPress:()=>setSelectedIndex(0)},{text:'是',onPress:()=>
+          Alert.alert('','该学生已批改！是否直接查看批改结果？',[{},{text:'否',onPress:()=>setSelectedIndex(0)},{text:'是',onPress:()=>
           setSelectedIndex(Allquestion.length)
         }])
       }else{
@@ -266,8 +268,9 @@ export default function CorrectingPaper(props) {
     return (
       <View>
         {/* 自定义导航栏 */}
-        <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF'}}>
-         <TouchableOpacity style={{marginLeft:10,marginRight:10}} 
+        <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center"}}>
+
+         <TouchableOpacity style={{position:'absolute',left:10}} 
                                   onPress={()=>{navigation.goBack({
                                               name: 'CorrectPaperList',
                                               params:{ 
@@ -277,13 +280,11 @@ export default function CorrectingPaper(props) {
                                           })
               }}>
                   <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goback.png')} ></Image>
-          </TouchableOpacity>
+         </TouchableOpacity>
           
-
-          <View style={{flexDirection:'row',marginLeft:'32%'}}>
-              <Text style={{color:'#59B9E0',fontSize:20}}>{userCn}</Text>
-          </View>
-          {(selectedIndex!=Allquestion.length)?(<TouchableOpacity style={{position:'absolute',right:16,top:13}}
+          <Text style={{color:'#59B9E0',fontSize:20}}>{userCn}</Text>
+          {(selectedIndex!=Allquestion.length)?(
+          <TouchableOpacity style={{position:'absolute',right:16,top:13}}
                             onPress={()=>{
                               if(data.length==CorrectResultList.length){
                                 setSelectedIndex(data.length)
