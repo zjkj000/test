@@ -3,17 +3,13 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
-    <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -21,7 +17,8 @@
     <!-- react-native-camera依赖 -->
     <uses-permission android:name="android.permission.CAMERA" />
     <application
-      android:usesCleartextTraffic='true' 
+      android:usesCleartextTraffic='true'
+      android:requestLegacyExternalStorage="true"
       android:name=".MainApplication"
       android:label="学习一点通_1.1"
       android:icon="@mipmap/ic_launcher"
@@ -41,9 +38,10 @@
         </intent-filter>
       </activity>
         <!--        <activity android:name="callvideo.VideoCallingActivity_before" />-->
-        <activity android:name="callvideo.VideoCallingEnterActivity" />
+<!--        <activity android:name="com.navigationdemo.VideoCallingEnterActivity" />-->
         <activity android:name="com.navigationdemo.LaunchActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:requestLegacyExternalStorage="true"/>
         <activity android:name="com.navigationdemo.EntranceActivity"/>
     </application>
 </manifest>

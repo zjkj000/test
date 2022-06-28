@@ -45,3 +45,7 @@ include ':Call'
 // react-native-camera依赖
 include ':react-native-camera'
 project(':react-native-camera').projectDir = new File(rootProject.projectDir, '../node_modules/react-native-camera/android')
+include ':app:cameralibrary'
+include ':app:Cameralibrary'
+include ':Cameralibrary'
+include ':Cameralibrary'

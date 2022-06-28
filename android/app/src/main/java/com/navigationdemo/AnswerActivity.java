@@ -16,6 +16,7 @@ public class AnswerActivity extends LaunchActivity {
     public static String deviceWordsAction;
     public static String deviceWordsTime;
     public static String platformUserId;
+    public static String allHandAction;
     public static String success;
     public static String message;
 

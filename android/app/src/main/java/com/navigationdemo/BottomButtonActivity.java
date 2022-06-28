@@ -8,8 +8,22 @@ import com.tencent.trtc.TRTCCloudDef;
 
 public class BottomButtonActivity extends LaunchActivity implements View.OnClickListener{
     public static ViewGroup.LayoutParams oldparams;
+    public static void qiangDa(){
+        boolean isSelected = mQiangda.isSelected();
+        if (!isSelected) {
+            mQiangda.setVisibility(View.GONE);
+            HttpActivity.testQiangDa();//举手上讲台
+
+        } else {
+            mQiangda.setVisibility(View.VISIBLE);
+
+        }
+        mQiangda.setSelected(!isSelected);
+    }
+
     //举手
     public static void muteHand() {
+
         boolean isSelected = mButtonHand.isSelected();
         if (!isSelected) {
             HttpActivity.testRaiseHandAction("up");//举手上讲台
@@ -18,6 +32,21 @@ public class BottomButtonActivity extends LaunchActivity implements View.OnClick
             HttpActivity.testRaiseHandAction("down");//放手下讲台
         }
         mButtonHand.setSelected(!isSelected);
+//        //先判断是否禁止举手
+//        boolean isActivated = mButtonHand.isActivated();
+//        if(!isActivated){
+//            HttpActivity.testRaiseHandAction("down");//放手下讲台
+//        }
+//        else{
+//            boolean isSelected = mButtonHand.isSelected();
+//            if (!isSelected) {
+//                HttpActivity.testRaiseHandAction("up");//举手上讲台
+//            }
+//            else{
+//                HttpActivity.testRaiseHandAction("down");//放手下讲台
+//            }
+//            mButtonHand.setSelected(!isSelected);
+//        }
     }
 
     //开闭聊天室
@@ -158,8 +187,8 @@ public class BottomButtonActivity extends LaunchActivity implements View.OnClick
     public static void fullscreen(){
         boolean isSelected = mFullScreen.isSelected();
         if (isSelected) {
-            mTextTitle.setVisibility(View.VISIBLE);
-            mImageBack.setVisibility(View.VISIBLE);
+            //mTextTitle.setVisibility(View.VISIBLE);
+            //mImageBack.setVisibility(View.VISIBLE);
             mstroll.setVisibility(View.VISIBLE);
             ViewGroup.LayoutParams params = mTeacherShare.getLayoutParams();
             params.width = 0;
@@ -169,8 +198,8 @@ public class BottomButtonActivity extends LaunchActivity implements View.OnClick
             mTeacherShare.setLayoutParams(params);
         }
         else {
-            mTextTitle.setVisibility(View.GONE);
-            mImageBack.setVisibility(View.GONE);
+            //mTextTitle.setVisibility(View.GONE);
+            //mImageBack.setVisibility(View.GONE);
             mstroll.setVisibility(View.GONE);
             ViewGroup.LayoutParams params = mTeacherShare.getLayoutParams();
             params.width = ViewGroup.LayoutParams.MATCH_PARENT;
@@ -206,17 +235,17 @@ public class BottomButtonActivity extends LaunchActivity implements View.OnClick
         else{
             if (!isSelected) {
                 //顶部出现
-                mTextTitle.setVisibility(View.VISIBLE);
-                mImageBack.setVisibility(View.VISIBLE);
+                //mTextTitle.setVisibility(View.VISIBLE);
+                //mImageBack.setVisibility(View.VISIBLE);
                 //底部出现
-                mGroupButtons.setVisibility(View.VISIBLE);
+                //mGroupButtons.setVisibility(View.VISIBLE);
             }
             else {
                 //顶部消失
-                mImageBack.setVisibility(View.GONE);
-                mTextTitle.setVisibility(View.GONE);
+                //mImageBack.setVisibility(View.GONE);
+                //mTextTitle.setVisibility(View.GONE);
                 //底部消失
-                mGroupButtons.setVisibility(View.GONE);
+                //mGroupButtons.setVisibility(View.GONE);
             }
         }
 

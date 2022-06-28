@@ -16,7 +16,7 @@ import http from "../../../utils/http/request";
 import ActionButton from "react-native-action-button";
 import { styles } from "./styles";
 import Toast from "../../../utils/Toast/Toast";
-import InformAndNticePage from '../Tea_InformAndNotice/InformAndNoticePage'
+import InformAndNticePage from "../Tea_InformAndNotice/InformAndNoticePage";
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
@@ -81,26 +81,31 @@ class TeacherTabBarComponent extends React.Component {
     }
     getClassStatus = () => {
         const { userName } = this.props.route.params;
-        const url = global.constants.baseUrl+"teacherApp_getSkydtStatus.do";
+        const url =
+            global.constants.baseUrl +
+            "/AppServer/ajax/teacherApp_getSkydtStatus.do";
         const params = {
             userId: userName,
         };
-        // http.get(url, params)
-        //     .then((resStr) => {
-        //         // Toast.showDangerToast(resStr);
-        //         let resJson = JSON.parse(resStr);
-        //         this.setState({
-        //             resJson,
-        //         });
-        //         // console.log(
-        //         //     "getClassStatus===================================="
-        //         // );
-        //         // console.log(resJson);
-        //         // console.log("====================================");
-        //     })
-        //     .catch((error) => {
-        //         Toast.showDangerToast(error.toString());
-        //     }); 
+        http.get(url, params)
+            .then((resStr) => {
+                // Toast.showDangerToast(resStr);
+                let resJson = JSON.parse(resStr);
+                this.setState({
+                    resJson,
+                });
+                console.log(
+                    "getClassStatus===================================="
+                );
+                console.log(resJson);
+                if (resJson.success) {
+                    this.setState({ showBubble: resJson.data });
+                }
+                console.log("====================================");
+            })
+            .catch((error) => {
+                Toast.showDangerToast(error.toString());
+            });
     };
     renderHome = () => {
         // console.log('###########renderHome####################',this.props.route);
@@ -127,7 +132,7 @@ class TeacherTabBarComponent extends React.Component {
         return (
             <View>
                 {/* <Text>我是教师端通知公共</Text> */}
-                <InformAndNticePage/>
+                <InformAndNticePage />
             </View>
         );
     };
