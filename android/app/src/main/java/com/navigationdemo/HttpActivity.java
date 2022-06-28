@@ -19,6 +19,8 @@ import java.util.TimerTask;
 
 public class HttpActivity extends AnswerActivity {
 
+    public static Drawable mydrawable = null;
+
     public static void timer() {
 
         Timer timer = new Timer();
@@ -180,6 +182,8 @@ public class HttpActivity extends AnswerActivity {
                 backlogJsonStr = backlogJsonStr.replace("\\\"","'");
                 JSONObject jsonObject = new JSONObject(backlogJsonStr);
 
+                System.out.println("last_actiontime_chat==>"+last_actiontime_chat);
+
                 chatTime = jsonObject.getString("currentTime");
                 System.out.println("currentTime==>"+chatTime);
 
@@ -201,6 +205,7 @@ public class HttpActivity extends AnswerActivity {
 
                 //AnswerActivity.messageList;
                 //chatBeanList.add(new ChatBean("Hello~~~",null,0));
+                mydrawable = HttpActivity.loadImageFromNetwork(mUserPhoto);
                 for(int i=0;i<messages.length();i++){
                     ChatBean item = new ChatBean();
                     item.messageStuget = messages.getJSONObject(i).getString("message");
@@ -212,6 +217,7 @@ public class HttpActivity extends AnswerActivity {
                     item.role = messages.getJSONObject(i).getString("role");
                     item.type=Integer.parseInt(item.role);
                     item.drawable = loadImageFromNetwork(item.phone);
+                    System.out.println("phone:"+item.phone);
 
                     System.out.println("currentTime==>"+chatTime);
                     System.out.println("iiiitemTime==>"+item.time);
@@ -231,7 +237,7 @@ public class HttpActivity extends AnswerActivity {
         }
     }
 
-    private static Drawable loadImageFromNetwork(String urladdr) {
+    static Drawable loadImageFromNetwork(String urladdr) {
         Drawable drawable = null;
         try{
             //judge if has picture locate or not according to filename

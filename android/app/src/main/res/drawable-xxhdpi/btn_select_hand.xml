@@ -1,18 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
     <!-- focused -->
-    <item android:state_enabled="false" android:state_selected="false"
+    <item android:state_enabled="false"
         android:drawable="@mipmap/hand_ban"/>
 
-    <item android:state_enabled="false" android:state_selected="true"
-        android:drawable="@mipmap/hand_onplatform"/>
-
     <!-- focused -->
-    <item android:state_enabled="true" android:state_selected="false"
+    <item android:state_enabled="true"  android:state_selected="false"
         android:drawable="@mipmap/hand_down"/>
 
     <!-- focused -->
-    <item android:state_enabled="true" android:state_selected="true"
+    <item android:state_enabled="true"  android:state_selected="true"
         android:drawable="@mipmap/hand_up"/>
 
 <!--    &lt;!&ndash; pressed &ndash;&gt;-->

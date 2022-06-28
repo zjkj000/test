@@ -27,9 +27,12 @@ import android.text.SpannableString;
 import android.text.TextUtils;
 import android.text.style.ImageSpan;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
@@ -86,6 +89,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static String                          mUserId;
     public static String                          mUserCn;
     public static String                          mTeacherCn;
+    public static String                          mUserPhoto;
 
     public static TRTCCloud                       mTRTCCloud;
     public static TXDeviceManager                 mTXDeviceManager;
@@ -123,6 +127,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static ImageView                       mImageBack;
     public static Button                          mExitBack;
     public static Button                          mButtonHand;
+    public static Button                          mButtonHandOnPlatform;
     public static Button                          mButtonMessage;
     public static Button                          mButtonMuteVideo;
     public static Button                          mButtonMuteAudio;
@@ -132,6 +137,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static Group                           mGroupButtons;
     public static EditText                        mMessageInput;
     public static Button                          mMessageSubmit;
+
 
     //答题界面，判断、单选、多选、主�?
     public static CheckBox tfyes,tfno;
@@ -168,9 +174,12 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static String last_actiontime_stopqd = "";
 
 
-    //聊天�?
+    //聊天
     public static RecyclerView recyclerView;
     public static int refreshChatFlag=1;
+
+    public static TRTCCloudDef.TRTCParams trtcParams = new TRTCCloudDef.TRTCParams();
+    public static TRTCCloudDef.TRTCRenderParams trtcRenderParams = new TRTCCloudDef.TRTCRenderParams();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -237,7 +246,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             }
             else{
                 mButtonHand.setEnabled(true);
-                mButtonHand.setSelected(false);
+                //mButtonHand.setSelected(false);
             }
         }
 
@@ -485,10 +494,10 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             System.out.println("messagelist is null!");
             return;
         }
-        if(LaunchActivity.refreshChatFlag == 0){
-            System.out.println("LaunchActivity.refreshChatFlag is 0!");
-            return;
-        }
+//        if(LaunchActivity.refreshChatFlag == 0){
+//            System.out.println("LaunchActivity.refreshChatFlag is 0!");
+//            return;
+//        }
         System.out.print("xuanran size:");
         System.out.println(AnswerActivity.messageList.size());
 //        if(last_actiontime_chat.compareTo(AnswerActivity.chatTime)<0){
@@ -521,15 +530,17 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         Intent intent = getIntent();
         String params = intent.getStringExtra("params");
         System.out.println("LaunchActivity-params:"+params);
-        String[] strArr = params.split("-");
+        String[] strArr = params.split("-", 5);
         LaunchActivity.mUserId = strArr[0];
         LaunchActivity.mUserCn = strArr[1];
         LaunchActivity.mRoomId = strArr[2];
         LaunchActivity.mTeacherCn = strArr[3];
+        LaunchActivity.mUserPhoto = strArr[4];
         System.out.println("LaunchActivity-userinit:"+LaunchActivity.mUserId);
         System.out.println("LaunchActivity-usercninit:"+LaunchActivity.mUserCn);
         System.out.println("LaunchActivity-roominit:"+LaunchActivity.mRoomId);
         System.out.println("LaunchActivity-mTeacherCn:"+LaunchActivity.mTeacherCn);
+        System.out.println("LaunchActivity-mUserPhoto:"+LaunchActivity.mUserPhoto);
 
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
@@ -613,6 +624,11 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
         mstroll=findViewById(R.id.stroll);
         mstroll.setOnClickListener(this);
+
+        mCamera_name.setText(mUserCn);
+        mCamera_name.bringToFront();
+
+
     }
 
     //初始化顶部、底部按�?
@@ -623,6 +639,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         mTXCVVLocalPreviewView = findViewById(R.id.myself_camera);//自己摄像�?
         mTXCVVLocalPreviewView_background = findViewById(R.id.myself_background);//自己摄像�?
         mButtonHand = findViewById(R.id.hands);
+        mButtonHandOnPlatform = findViewById(R.id.hands_onplatform);
         mButtonMessage = findViewById(R.id.message);
         mButtonMuteVideo = findViewById(R.id.btn_mute_video);
         mButtonMuteAudio = findViewById(R.id.btn_mute_audio);
@@ -648,6 +665,30 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         mFullScreen.setOnClickListener(this);
         mMessageInput.setOnClickListener(this);
         mMessageSubmit.setOnClickListener(this);
+
+        mButtonHandOnPlatform.setVisibility(GONE);
+
+        mMessageInput.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        mMessageInput.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId,                   KeyEvent event)  {
+                if (actionId==EditorInfo.IME_ACTION_DONE ||(event!=null&&event.getKeyCode()== KeyEvent.KEYCODE_ENTER))
+                {
+                    //do something;
+                    System.out.println("edittext true!");
+//                    mMessageInput.clearFocus();
+//                    InputMethodManager manager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+//                    manager.hideSoftInputFromWindow(InputMethodManager.HIDE_NOT_ALWAYS);
+                    InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    im.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                    return true;
+                }
+                System.out.println("edittext false!");
+                return false;
+            }
+        });
+
+
     }
 
     //初始化互动答题界面：判断、单选、多选、主�?
@@ -748,6 +789,22 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
         subjective_answer = findViewById(R.id.tiankong);
         subjective_answer.setOnClickListener(this);
+        subjective_answer.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        subjective_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId,                   KeyEvent event)  {
+                if (actionId==EditorInfo.IME_ACTION_DONE ||(event!=null&&event.getKeyCode()== KeyEvent.KEYCODE_ENTER))
+                {
+                    //do something;
+                    System.out.println("edittext true!");
+                    InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    im.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                    return true;
+                }
+                System.out.println("edittext false!");
+                return false;
+            }
+        });
     }
 
     private CharSequence getDrawableStr(Uri picPath) {
@@ -809,11 +866,11 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         mTRTCCloud.setListener(new TRTCCloudImplListener(LaunchActivity.this));
         mTXDeviceManager = mTRTCCloud.getDeviceManager();
 
-        TRTCCloudDef.TRTCParams trtcParams = new TRTCCloudDef.TRTCParams();
         trtcParams.sdkAppId = GenerateTestUserSig.SDKAPPID;
         trtcParams.userId = mUserId;
         trtcParams.roomId = Integer.parseInt(mRoomId);
         trtcParams.userSig = GenerateTestUserSig.genTestUserSig(trtcParams.userId);
+
 
         //进入房间
         mTRTCCloud.enterRoom(trtcParams, TRTCCloudDef.TRTC_APP_SCENE_VIDEOCALL);
@@ -1280,9 +1337,10 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                             mPlatform.setVisibility(View.VISIBLE);
                             mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVLocalPreviewView);
                             mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
-                            HttpActivity.testRaiseHandAction("down");//放手下讲�?
-                            mButtonHand.setEnabled(false);
-                            mButtonHand.setSelected(true);
+                            HttpActivity.testRaiseHandAction("down");//放手下讲
+                            mButtonHandOnPlatform.bringToFront();
+                            mButtonHandOnPlatform.setVisibility(View.VISIBLE);
+
                         }
                     }
                 }
@@ -1292,15 +1350,19 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 //                    mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVLocalPreviewView);
 //                    mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
                     mPlatform.setVisibility(View.GONE);
+                    mButtonHandOnPlatform.setVisibility(View.GONE);
+                    mButtonHand.setSelected(true);
+                    BottomButtonActivity.muteHand();
 //                    mTRTCCloud.stopLocalPreview();
 //                    mTRTCCloud.stopLocalAudio();
 //                    BottomButtonActivity.muteVideo();
                 }
-//                else{
+                else{
 //                    mPlatform.setVisibility(View.GONE);
 //                    mTRTCCloud.stopLocalPreview();
 //                    mTRTCCloud.stopLocalAudio();
-//                }
+
+                }
             }
 
             stu_index = 0;
@@ -1313,7 +1375,8 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                     //teacher-share  "xxx_share" "share_xxx"
                     if(remoteUid.contains("share")){
                         mTeacherShare.setVisibility(View.VISIBLE);
-                        mTRTCCloud.startRemoteView(remoteUid, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SMALL,mTeacherShare);
+                        mTRTCCloud.setRemoteRenderParams(remoteUid,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
+                        mTRTCCloud.startRemoteView(remoteUid, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTeacherShare);
                     }
 
                     //teacher-camera
@@ -1454,7 +1517,9 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 System.out.println("getMessageStuget333:"+chatBeanList.get(position).getMessageStuget());
                 holder.tvSend.setText(chatBeanList.get(position).getMessageStuget());
                 holder.tvSendNameTime.setText(chatBeanList.get(position).getNameStuget()+" "+chatBeanList.get(position).getTimeStr());
-                holder.ivSend.setImageDrawable(chatBeanList.get(position).getDrawable());
+                //holder.ivSend.setImageDrawable(chatBeanList.get(position).getDrawable());
+                System.out.println("phone_user:"+mUserPhoto);
+                holder.ivSend.setImageDrawable(HttpActivity.mydrawable);
             }
             // 2:远端学生
             else {
