@@ -109,7 +109,7 @@ export default ControllerLogin = () => {
 
     const handleScan = () => {
         navigation.navigate({
-            name: "QRCodeScanner",
+            name: "扫码",
             params: { backPage: { name: "ControllerLogin" } },
             merge: true,
         });

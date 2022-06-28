@@ -8,6 +8,7 @@ import BasePicker from '../../utils/datetimePickerUtils/BasePicker'
 import http from '../../utils/http/request'
 import Loading from '../../utils/loading/Loading'
 import { useNavigation } from '@react-navigation/native';
+import { screenWidth } from '../../utils/Screen/GetSize';
 export default function StatisticalForm() {
   const navigation = useNavigation()
   return (
@@ -34,6 +35,10 @@ export default function StatisticalForm() {
     }   
 
     UNSAFE_componentWillMount(){
+      this.getData()
+    }
+    
+    getData(){
       const url = global.constants.baseUrl+"teacherApp_anayGetSchoolYearTerm.do";
       const params = {
             unitId:global.constants.company                //单位id
@@ -53,7 +58,6 @@ export default function StatisticalForm() {
             }
       })
     }
-    
 
     setselectYearTerm(name,starstr,endstr){
       this.setState({
@@ -141,8 +145,18 @@ export default function StatisticalForm() {
     }else{
       return (
         <View>
-          <View style={{height:40,backgroundColor:'#FFFFFF',alignItems:'center',alignContent:'center'}}>
-            <Text style={{fontSize:20,marginTop:5}}>统计报表</Text>
+          <View style={{height:40,backgroundColor:'#FFFFFF',alignContent:'center',flexDirection:'row'}}>
+            <View style={{width:screenWidth,alignItems:'center'}}>
+              <Text style={{fontSize:21,marginTop:5}}>统计报表</Text>
+            </View>
+            <View style={{position:'absolute',right:20,top:10}}>
+              <TouchableOpacity onPress={()=>{
+                this.setState({SchoolYearTermName:''})
+                this.getData()
+              }}>
+                <Image style={{width:20,height:20}} source={require('../../assets/StatisticalForm/shuaxin.png')}></Image>
+              </TouchableOpacity>
+            </View>
           </View>
           <ScrollView style={{backgroundColor:'#ECEEED',padding:10,flexDirection:'column',marginBottom:45}}>
             {/* 累计使用 */}
@@ -179,7 +193,7 @@ export default function StatisticalForm() {
                   </TouchableOpacity>
                 <Text style={{fontSize:18}}>{this.state.BuzhizuoyeDateStr}</Text>
                 <TouchableOpacity onPress={()=>{this.setState({BuzhizuoyeDateStr:this.nextDay(this.state.BuzhizuoyeDateStr)})}}>
-                  <Text style={{color:'#87CEFA',fontSize:18}} >{'>'}</Text>
+                  <Text style={{color:'#87CEFA',fontSize:18}} >   {'>'}</Text>
                 </TouchableOpacity>
                 
               </View>
@@ -199,7 +213,7 @@ export default function StatisticalForm() {
                 </TouchableOpacity>
                 <Text style={{fontSize:18}}>{this.state.PiyueshitiDateStr}</Text>
                 <TouchableOpacity onPress={()=>{this.setState({PiyueshitiDateStr:this.nextDay(this.state.PiyueshitiDateStr)})}}>
-                  <Text style={{color:'#87CEFA',fontSize:18}} >{'>'}</Text>
+                  <Text style={{color:'#87CEFA',fontSize:18}} >   {'>'}</Text>
                 </TouchableOpacity>
                 
               </View>

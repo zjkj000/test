@@ -15,6 +15,7 @@ import StatisticalForm from "../../TeacherStatisticalForm/StatisticalForm";
 import http from "../../../utils/http/request";
 import ActionButton from "react-native-action-button";
 import { styles } from "./styles";
+import Toast from "../../../utils/Toast/Toast";
 import InformAndNticePage from '../Tea_InformAndNotice/InformAndNoticePage'
 const Tab = createBottomTabNavigator();
 
@@ -84,22 +85,22 @@ class TeacherTabBarComponent extends React.Component {
         const params = {
             userId: userName,
         };
-        // http.get(url, params)
-        //     .then((resStr) => {
-        //         // Toast.showDangerToast(resStr);
-        //         resJson = JSON.parse(resStr);
-        //         this.setState({
-        //             resJson,
-        //         });
-        //         // console.log(
-        //         //     "getClassStatus===================================="
-        //         // );
-        //         // console.log(resJson);
-        //         // console.log("====================================");
-        //     })
-        //     .catch((error) => {
-        //         Toast.showDangerToast(error.toString());
-        //     });
+        http.get(url, params)
+            .then((resStr) => {
+                // Toast.showDangerToast(resStr);
+                let resJson = JSON.parse(resStr);
+                this.setState({
+                    resJson,
+                });
+                // console.log(
+                //     "getClassStatus===================================="
+                // );
+                // console.log(resJson);
+                // console.log("====================================");
+            })
+            .catch((error) => {
+                Toast.showDangerToast(error.toString());
+            }); 
     };
     renderHome = () => {
         // console.log('###########renderHome####################',this.props.route);
@@ -186,21 +187,25 @@ class TeacherTabBarComponent extends React.Component {
                     <Tab.Screen name="通知公告" component={this.renderNotice} />
                     <Tab.Screen name="我的" component={this.renderMy} />
                 </Tab.Navigator>
-                <ActionButton
-                    renderIcon={() => {
-                        return (
-                            <Image
-                                source={require("../../../assets/classImg/sjBubble.png")}
-                            />
-                        );
-                    }}
-                    buttonColor="rgba(0,0,10,0.3)"
-                    onPress={() => {
-                        this.props.navigation.navigate("ControllerLogin");
-                    }}
-                    offsetY={100}
-                    offsetX={10}
-                ></ActionButton>
+                {this.state.showBubble ? (
+                    <ActionButton
+                        renderIcon={() => {
+                            return (
+                                <Image
+                                    source={require("../../../assets/classImg/sjBubble.png")}
+                                />
+                            );
+                        }}
+                        buttonColor="rgba(0,0,10,0.3)"
+                        onPress={() => {
+                            this.props.navigation.navigate("ControllerLogin");
+                        }}
+                        offsetY={100}
+                        offsetX={10}
+                    ></ActionButton>
+                ) : (
+                    <></>
+                )}
             </>
         );
     }

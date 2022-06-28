@@ -5,6 +5,7 @@ import Echarts from 'native-echarts';
 import MyTable from './MyTable'
 import http from '../../utils/http/request'
 import { useNavigation } from '@react-navigation/native';
+import {screenWidth,screenHeight} from '../../utils/Screen/GetSize'
 export default function Ketangshouke(props) {
   const navigation = useNavigation()
   const yearTermStartTime = props.yearTermStartTime
@@ -51,7 +52,13 @@ class KetangshoukeContent extends Component {
                 unitId:global.constants.company,                   //单位id
                 userId:global.constants.userId,
                 startTime:startTime,
-                endTime:endTime,        
+                endTime:endTime,  
+                // unitId:'6105230000001',                   //单位id
+                // userId:'dlzx2019',
+                // startTime:'2021-12-27 00:00:00',
+                // endTime:'2021-12-29 00:00:00', 
+                
+
               }
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
@@ -105,37 +112,38 @@ class KetangshoukeContent extends Component {
       };
     return (
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:20}}>
-        <View style={{flexDirection:'row',marginLeft:20,marginRight:10,marginBottom:10}}>
-                <View style={{flex:1,justifyContent:'center'}}  >
-                      <Image style={{width:70,height:70}} source={require('../../assets/StatisticalForm/Ima_ketang.png')}></Image>
-                </View>
-                <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
-                    <View>
+        <View style={{flexDirection:'row',marginLeft:10,marginRight:10,marginBottom:10}}>
+                <View style={{flex:3,flexDirection:"row",justifyContent:'space-between'}}  >
+                  <View>
+                     <Image style={{width:screenWidth*0.25,height:screenWidth*0.25}} source={require('../../assets/StatisticalForm/Ima_ketang.png')}></Image>
+                  </View>
+                  <View>
                         <View style={{height:30}}>
                             <Text style={{fontSize:16}}>有效课次:</Text>
                         </View>
-                        <View style={{flexDirection:'row',alignItems:'flex-end'}}>
+                        <View style={{flexDirection:'row',alignItems:'baseline',justifyContent:'flex-end'}}>
                             <Text style={{fontSize:50,color:'#3BBF36'}}>{this.state.effectiveKeci}</Text>
                             <Text style={{fontSize:25}}>/{this.state.sumKeci}</Text>
-                    </View>
-                
-                    </View>
-                    <View style={{flexDirection:'column',padding:10,paddingRight:0}}>
+                        </View>
+                  </View>
+                </View>
+                <View style={{flex:3,flexDirection:'row',justifyContent:'space-evenly'}}>
+                    <View style={{flexDirection:'column',padding:10,paddingRight:0,paddingTop:0}}>
                         <View style={{flexDirection:'row',alignContent:'space-around'}}>
-                            <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                            <View style={{margin:10,flexDirection:'row',alignItems:'baseline',marginTop:0}}>
                               <Text style={{fontSize:16}}>内容:</Text>
                               <Text style={{fontSize:25,marginLeft:5}}>{this.state.contentNum}</Text>
                             </View>
-                            <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                            <View style={{margin:10,flexDirection:'row',alignItems:'baseline',marginTop:0}}>
                               <Text style={{fontSize:16}}>互动:</Text>
                               <Text style={{fontSize:25,marginLeft:5}}>{this.state.hdNum}</Text></View>
                         </View>
                         <View style={{flexDirection:'row',alignContent:'space-around'}}>
-                            <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                            <View style={{margin:10,flexDirection:'row',alignItems:'baseline'}}>
                               <Text style={{fontSize:16}}>批注:</Text>
                               <Text style={{fontSize:25,marginLeft:5}}>{this.state.pzNum}</Text>
                             </View>
-                            <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                            <View style={{margin:10,flexDirection:'row',alignItems:'baseline'}}>
                               <Text style={{fontSize:16}}>板书:</Text>
                               <Text style={{fontSize:25,marginLeft:5}}>{this.state.bsNum}</Text>
                             </View>

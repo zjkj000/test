@@ -149,14 +149,14 @@ export default class PaperContent extends Component {
                 
                 <Text style={styles.Titletext}>[学生答案]</Text>
 
-                {this.state.data.stuAnswer==''?<Text style={{fontSize:20,marginBottom:10}}>未答</Text>: <RenderHTML contentWidth={width} source={{html:this.state.data.stuAnswer}}></RenderHTML>}
+                {this.state.data.stuAnswer==''?<Text style={{fontSize:20,marginBottom:10}}>未答</Text>:<RenderHTML contentWidth={width} source={{html:this.state.data.stuAnswer}}></RenderHTML>}
                
                 <Text style={styles.Titletext}>[标准答案]</Text>
       
                 {this.state.data.shitiAnswer==''?<Text style={{fontSize:20,marginBottom:10}}>略</Text>:<RenderHTML contentWidth={width} source={{html:this.state.data.shitiAnswer}}></RenderHTML> } 
 
                 <Text style={styles.Titletext}>[解析]</Text>
-                {this.state.data.shitiAnalysis==''?<Text style={{fontSize:20,marginBottom:10}}>略</Text>: <RenderHTML contentWidth={width} source={{html:this.state.data.shitiAnalysis}}></RenderHTML>}
+                {this.state.data.shitiAnalysis==''?<Text style={{fontSize:20,marginBottom:10}}>略</Text>:<RenderHTML contentWidth={width} source={{html:this.state.data.shitiAnalysis}}></RenderHTML>}
               </View>
     )
   }

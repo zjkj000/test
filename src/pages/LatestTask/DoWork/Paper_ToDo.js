@@ -1,5 +1,5 @@
 import React,{useState,useEffect,useRef} from 'react';
-import { StyleSheet,View,Image,Alert,Text,TouchableOpacity} from 'react-native';
+import { StyleSheet,View,Image,Alert,Text,TouchableOpacity,BackHandler} from 'react-native';
 import { Layout, ViewPager } from '@ui-kitten/components';
 import Answer_readContainer from './Answer_type/Answer_read';
 import Answer_judgementContainer from './Answer_type/Answer_judgment';
@@ -11,6 +11,7 @@ import { useNavigation } from "@react-navigation/native";
 import Menu from './Utils/Menu';
 import Answer_singleContainer from './Answer_type/Answer_single';
 import Toast from '../../../utils/Toast/Toast';
+import { screenHeight,screenWidth } from '../../../utils/Screen/GetSize';
 //这个页面是 获取题目的页面
 export default function Paper_ToDo(props) {
 
@@ -35,15 +36,31 @@ export default function Paper_ToDo(props) {
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
       // console.log(props.route.params.papername,props.route.params.learnId);
-      navigation.setOptions({title:props.route.params.papername,
-      headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)})
+      // navigation.setOptions({title:props.route.params.papername,
+      // headerRight:()=>()})
       setSelectedIndex(props.route.params.selectedindex)
       getData();
+      BackHandler.addEventListener("hardwareBackPress",changestatus)
+      return ()=>{
+        BackHandler.removeEventListener("hardwareBackPress",changestatus)
+        changestatus()
+      }
+      
       // var date = getDate()
       // setstartdate(date)  // 记录总的开始时间
       // setstart_date(date) //记录每道题的开始时间
     },[props.route.params.selectedindex]);
      
+   
+    function changestatus(){
+      
+      const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+      const params = {studentID:global.constants.userName};
+        http.get(url, params).then((resStr) => {
+        })
+      
+    }
+
     // 获取时间返回 00::00:00
     function getDate() {
       var date = new Date();
@@ -196,7 +213,28 @@ export default function Paper_ToDo(props) {
 
 
   return (
-    <ViewPager style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
+    <View>
+      <View style={{height:50,flexDirection:'row',alignItems:"center",backgroundColor:'#fff',width:screenWidth,justifyContent:'center'}}>
+                <TouchableOpacity style={{position:'absolute',left:0}} onPress={()=>{props.navigation.goBack()}}>
+                     <Image style={{width:30,height:30}} source={require('../../../assets/TakePicturesAndAssignWork/goback.png')}></Image>
+                </TouchableOpacity>
+                <Text style={{fontSize:17,color:'#59B9E0'}}>{props.route.params.papername}</Text>
+                <View style={{flexDirection:'row',position:"absolute",right:0}}>
+                    <TouchableOpacity onPress={()=>{
+                            Submit_Stu_answer(selectedIndex, selectedIndex)
+                            props.navigation.navigate('SubmitPaper',
+                              {   paperId:learnPlanId,
+                                  submit_status:status,
+                                  startdate:startdate,
+                                  papername:props.route.params.papername,
+                                  isallObj:isallObj})
+                            }}>
+                            <Image style={{marginRight:8,marginLeft:5}} source={require('../../../assets/image3/look.png')}></Image>
+                    </TouchableOpacity>
+                    <Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId} Sub_stu_Ans={Submit_Stu_answer} selectedIndex={selectedIndex}/>
+                </View>
+      </View>
+      <ViewPager style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:screenHeight-50}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
                   onSelect={index => Submit_Stu_answer(index,selectedIndex)}>  
   
           {/* 根据这套题的data使用map遍历加载 */}
@@ -228,6 +266,7 @@ export default function Paper_ToDo(props) {
                         Submit_Stu_answer(selectedIndex,selectedIndex);
                         Alert.alert('','已经最后一题，确定提交作业？',[{text:'取消',onPress:()=>{}},{},
                             {text:'确定',onPress:()=>{
+
                               navigation.navigate(
                                 {
                                   name:"SubmitPaper", 
@@ -262,6 +301,8 @@ export default function Paper_ToDo(props) {
           {/* 每道题都有提交页面 ，当没有题目的时候显示加载页面*/}
           {loading(success)}
       </ViewPager>
+    </View>
+     
   );
 };
 

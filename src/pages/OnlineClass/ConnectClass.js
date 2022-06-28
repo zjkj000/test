@@ -102,7 +102,7 @@ export default ConnectClass = () => {
 
     const handleScan = () => {
         navigation.navigate({
-            name: "QRCodeScanner",
+            name: "扫码",
             params: { backPage: { name: "线上课程" } },
             merge: true,
         });

@@ -69,25 +69,6 @@ export default function ShowImageContainer(props) {
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.title}>  
                 <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}} >{this.state.resourceName}</Text>
-                <View style={{position:'absolute',right:80,top:10,flexDirection:'row'}}>
-                    <Text style={{color:'#59B9E0'}} >{(this.state.numid?this.state.numid:0)+1}</Text>
-                    <Text >/{this.props.sum?this.props.sum:1} </Text>
-                </View>
-                <TouchableOpacity onPress={
-                    ()=>{
-                        //导航跳转
-                        this.props.navigation.navigate('SubmitLearningGuide',
-                        {   learnPlanId:this.props.learnPlanId,
-                            submit_status:this.props.submit_status,
-                            startdate:this.props.startdate,
-                            papername:this.props.papername,
-                            isallObj:this.props.isallObj})
-                    }
-                } style={{position:'absolute',right:20,top:10}}
-                    
-                    >
-                        <Image source={require('../../../../assets/image3/look.png')}></Image>
-                </TouchableOpacity>
             </View>
             
             {/* 展示ShowImage就行 */}

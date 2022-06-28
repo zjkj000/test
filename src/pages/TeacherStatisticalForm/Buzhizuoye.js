@@ -5,6 +5,7 @@ import Echarts from 'native-echarts';
 import MyTable from './MyTable'
 import http from '../../utils/http/request'
 import { useNavigation } from '@react-navigation/native';
+import { screenWidth } from '../../utils/Screen/GetSize';
 export default function Buzhizuoye(props) {
   const navigation = useNavigation()
   const yearTermStartTime = props.yearTermStartTime
@@ -63,7 +64,11 @@ class BuzhizuoyeContent extends Component {
               unitId:global.constants.company,                   //单位id
               userId:global.constants.userId,
               startTime:startTime,
-              endTime:endTime,         
+              endTime:endTime,     
+              // unitId:'6105230000001',                   //单位id
+              //   userId:'dlzx2019',
+              //   startTime:'2021-12-27 00:00:00',
+              //   endTime:'2021-12-29 00:00:00',     
             }
       http.get(url, params).then((resStr) => {
           let resJson = JSON.parse(resStr);
@@ -214,28 +219,28 @@ class BuzhizuoyeContent extends Component {
     
     return (
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:10}}>
-        <View style={{flexDirection:'row',marginLeft:20,marginRight:20}}>
-          <View style={{flex:1,justifyContent:'center'}}  >
-            <Image style={{width:70,height:70}} source={require('../../assets/StatisticalForm/Ima_book.png')}></Image>
-          </View>
-          <View style={{flex:5,flexDirection:'row',justifyContent:'space-evenly'}}>
-              <View>
+        <View style={{flexDirection:'row',marginLeft:10,marginRight:20}}>
+          <View style={{flex:3,flexDirection:'row',justifyContent:'space-between'}}  >
+            <Image style={{width:screenWidth*0.25,height:screenWidth*0.25}} source={require('../../assets/StatisticalForm/Ima_book.png')}></Image>
+            <View>
                 <View style={{height:30}}>
-                  <Text style={{fontSize:16}}>有效次数</Text>
+                  <Text style={{fontSize:16}}>有效次数:</Text>
                 </View>
-                <View style={{flexDirection:'row',alignItems:'flex-end'}}>
+                <View style={{flexDirection:'row',alignItems:'baseline'}}>
                     <Text style={{fontSize:50,color:'#9A07D1'}}>{this.state.effectiveKeciNum}</Text>
                     <Text style={{fontSize:25}}>/{this.state.sumKeciNum}</Text>
                 </View>
+            </View>
           </View>
-          <View style={{flexDirection:'column',padding:10}}>
-                  <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+          <View style={{flex:3,flexDirection:'row',justifyContent:'space-evenly'}}>
+            <View style={{flexDirection:'column',padding:10,paddingTop:0}}>
+                  <View style={{margin:10,flexDirection:'row',alignItems:'baseline',marginTop:0}}>
                     <Text style={{fontSize:16}}>试题总数:</Text>
                     <Text style={{fontSize:25,marginLeft:5}}>{this.state.queSumNum}</Text></View>
-                  <View style={{margin:10,flexDirection:'row',alignItems:'flex-end'}}>
+                  <View style={{margin:10,flexDirection:'row',alignItems:'baseline'}}>
                     <Text style={{fontSize:16}}>平均题数:</Text>
                     <Text style={{fontSize:25,marginLeft:5}}>{this.state.queAvgNum}</Text></View>
-          </View>
+            </View>
         </View>
     </View>
         <View style={{marginBottom:10}}>

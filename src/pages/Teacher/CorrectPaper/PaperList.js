@@ -267,18 +267,37 @@ export default function PaperList(props) {
       render(){
         return(
           <TouchableOpacity onPress={()=>{
-                  this.props.navigation.navigate({
-                    name: 'Correcting_Paper',
-                    params:{
-                        CorrectAllQuestion:this.props.CorrectAllQuestion,
-                        taskId:this.state.paperId,
-                        userCn:this.state.userCn,
-                        userName:this.state.userName,
-                        selectedindex:0,
-                        type:this.props.type,
-                        correctingstatus:this.state.status      //  2 未批改     4   已批改
-                          }
-                })
+                  //检查权限
+                  const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+                  const params = {
+                  taskId:this.state.paperId,
+                  userName:this.state.userName,
+                  userType:'teacher',
+                  teacherId:global.constants.userName
+                  };
+                  http.get(url, params).then((resStr) => {
+                      let resJson = JSON.parse(resStr);
+                      if(resJson.data){
+                        this.props.navigation.navigate({
+                          name: 'Correcting_Paper',
+                          params:{
+                              CorrectAllQuestion:this.props.CorrectAllQuestion,
+                              taskId:this.state.paperId,
+                              userCn:this.state.userCn,
+                              userName:this.state.userName,
+                              selectedindex:0,
+                              type:this.props.type,
+                              correctingstatus:this.state.status      //  2 未批改     4   已批改
+                                }
+                        })
+                      }
+                      else{
+                        Alert.alert(resJson.message)
+                      }
+                  })
+
+                  
+
               }}>
 
               <View style={{borderBottomColor:'#000000',borderBottomWidth:0.5,flexDirection:'row',height:80,padding:15}}>

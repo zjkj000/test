@@ -87,7 +87,7 @@ class Answer_judgment extends Component {
               <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
               <Text>/{this.props.sum?this.props.sum:1}题 </Text>
               <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
-              <TouchableOpacity style={{position:'absolute',right:20}}
+              {/* <TouchableOpacity style={{position:'absolute',right:20}}
                     // 小眼睛 先提交本题目，在跳转到提交页面
                     onPress={
                       ()=>{
@@ -103,7 +103,7 @@ class Answer_judgment extends Component {
                   }
                 >
                     <Image source={require('../../../../assets/image3/look.png')}></Image>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
           </View>
 
         {/* 题目展示区域 */}

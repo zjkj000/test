@@ -179,6 +179,8 @@ class TodoList extends React.Component {
     componentDidUpdate() {
         // console.log("componentDidUpdate*********", Date.parse(new Date()));
     }
+  
+    
 
     //显示任务状态的图标
     showStatusUrl = (todo, todoIndex, statusImg) => {
@@ -402,6 +404,7 @@ class TodoList extends React.Component {
                                 }
                                 // 做作业
                                 else {
+<<<<<<< HEAD
                                     navigation.navigate("DoPaper", {
                                         learnId: learnId,
                                         status: statusUrl, //作业状态
@@ -409,6 +412,29 @@ class TodoList extends React.Component {
                                         papername: bottomTitle,
                                         tab: '首页'
                                     });
+=======
+                                    //检查权限
+                                    const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+                                    const params = {
+                                      taskId:learnId,
+                                      userName:global.constants.userName,
+                                      userType:'student',
+                                      teacherId:''
+                                    };
+                                    http.get(url, params).then((resStr) => {
+                                        let resJson = JSON.parse(resStr);
+                                        if(resJson.data){
+                                            navigation.navigate("DoPaper", {
+                                                learnId: learnId,
+                                                status: statusUrl, //作业状态
+                                                selectedindex: 0,
+                                                papername: bottomTitle,
+                                            });
+                                        }else{
+                                            Alert.alert(resJson.message)
+                                        }
+                                    })
+>>>>>>> 992104e797b09d9b03323a50af4269fbcaa168f5
                                     //this.setState({ todos: todosList });
                                 }
                             } else if (
@@ -429,6 +455,7 @@ class TodoList extends React.Component {
                                 }
                                 // 做导学案
                                 else {
+<<<<<<< HEAD
                                     navigation.navigate("DoLearningGuide", {
                                         learnId: learnId,
                                         status: statusUrl, //导学案状态
@@ -436,6 +463,29 @@ class TodoList extends React.Component {
                                         papername: bottomTitle,
                                         tab: '首页'
                                     });
+=======
+                                        //检查权限
+                                        const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+                                        const params = {
+                                        taskId:learnId,
+                                        userName:global.constants.userName,
+                                        userType:'student',
+                                        teacherId:''
+                                        };
+                                        http.get(url, params).then((resStr) => {
+                                            let resJson = JSON.parse(resStr);
+                                            if(resJson.data){
+                                                navigation.navigate("DoLearningGuide", {
+                                                    learnId: learnId,
+                                                    status: statusUrl, //导学案状态
+                                                    selectedindex: 0,
+                                                    papername: bottomTitle,
+                                                });
+                                            }else{
+                                                Alert.alert(resJson.message)
+                                            }
+                                        })
+>>>>>>> 992104e797b09d9b03323a50af4269fbcaa168f5
                                 }
                             } else if (
                                 todoType == "通知" ||

@@ -56,8 +56,11 @@ export default class Menu extends Component {
                     title={this.state.data[item_num].questionName}
                     key={item_num}
                     onPress={() => {
-                        this.props.getselectedindex(item_num);
                         this.setState({ moduleVisible: false });
+                        this.props.Sub_stu_Ans(this.props.selectedIndex,this.props.selectedIndex)
+                        this.props.getselectedindex(item_num);
+                        
+                        
                     }}
                 />
             );
