@@ -11,9 +11,24 @@ buildscript {
         liteavSdk="com.tencent.liteav:LiteAVSDK_TRTC:latest.release"
     }
     repositories {
-        google()
+        //google()
+        //jcenter()
+        maven {url "https://jitpack.io"}
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/central/' }
+        maven { url 'https://maven.aliyun.com/repository/google/'}
+        maven { url 'https://maven.aliyun.com/repository/jcenter/'}
+        maven { url 'https://maven.aliyun.com/repository/grails-core'}
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin'}
+        maven { url 'https://maven.aliyun.com/repository/spring'}
+        maven { url 'https://maven.aliyun.com/repository/spring-plugin'}
+        maven { url 'https://maven.aliyun.com/repository/apache-snapshots'}
+
+
+        mavenLocal()
         mavenCentral()
-        
+        google()
     }
     dependencies {
         classpath("com.android.tools.build:gradle:4.2.2")
@@ -51,12 +66,23 @@ allprojects {
             }
         }
 
-         jcenter() {
-            content {
-                includeModule("com.yqritc", "android-scalablevideoview")
-            }
-        }
+        //google()
+        //jcenter()
+        maven {url "https://jitpack.io"}
+        maven { url 'https://maven.aliyun.com/nexus/content/groups/public/'}
+        maven { url 'https://maven.aliyun.com/repository/public/' }
+        maven { url 'https://maven.aliyun.com/repository/central/' }
+        maven { url 'https://maven.aliyun.com/repository/google/'}
+        maven { url 'https://maven.aliyun.com/repository/jcenter/'}
+        maven { url 'https://maven.aliyun.com/repository/grails-core'}
+        maven { url 'https://maven.aliyun.com/repository/gradle-plugin'}
+        maven { url 'https://maven.aliyun.com/repository/spring'}
+        maven { url 'https://maven.aliyun.com/repository/spring-plugin'}
+        maven { url 'https://maven.aliyun.com/repository/apache-snapshots'}
+        mavenLocal()
+        mavenCentral()
         google()
-        maven { url 'https://www.jitpack.io' }
+
+
     }
 }

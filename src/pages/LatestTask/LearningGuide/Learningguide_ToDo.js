@@ -24,6 +24,7 @@ import PPTContainer from "../LearningGuide/Resource_type/PPT";
 import VideoContainer from "../LearningGuide/Resource_type/Video";
 import ShowImageContainer from "../LearningGuide/Resource_type/ShowImage";
 import WordContainer from "../LearningGuide/Resource_type/Word";
+import { screenHeight, screenWidth } from "../../../utils/Screen/GetSize";
 
 //这个页面是 获取题目的页面
 export default function Paper_ToDo(props) {
@@ -47,15 +48,6 @@ export default function Paper_ToDo(props) {
 
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
-        navigation.setOptions({
-            title: props.route.params.papername,
-            headerRight: () => (
-                <RightMenu
-                    getselectedindex={setSelectedIndex}
-                    learnPlanId={props.route.params.learnId}
-                />
-            ),
-        });
         setSelectedIndex(props.route.params.selectedindex);
         getData();
 
@@ -72,7 +64,6 @@ export default function Paper_ToDo(props) {
     function changestatus(){
         const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
         const params = {studentID:global.constants.userName};
-          console.log('清除了个人操作')
           http.get(url, params).then((resStr) => {
           })
         
@@ -485,93 +476,129 @@ export default function Paper_ToDo(props) {
     }
 
     return (
-        <ViewPager
-            style={{ backgroundColor: "#FFFFFF", borderTopWidth: 0.5 }}
-            swipeEnabled={false}
-            shouldLoadComponent={shouldLoadComponent}
-            selectedIndex={selectedIndex}
-            onSelect={(index) => Submit_Stu_answer(index, selectedIndex)}
-        >
-            {/* 根据这套导学案的data使用map遍历加载 */}
-            {data.map(function (item, index) {
-                // console.log('正在测试',index,item)
-                return (
-                    // 每个题目都是一页，都需要一个layout
-                    // 每一个layout里面都是有左右两张图片，绝对定位悬浮在页面上面，getTimu函数是加载题目数据。
-                    <Layout key={index} style={styles.tab} level="2">
-                        <TouchableOpacity
-                            style={{
-                                position: "absolute",
-                                left: 10,
-                                top: "45%",
-                                zIndex: 99,
-                            }}
-                            onPress={() => {
-                                const newindex = selectedIndex - 1;
-                                if (newindex == -1) {
-                                    Toast.showInfoToast("已经是第一题", 1000);
-                                    //提交一下答案
-                                    Submit_Stu_answer(
-                                        selectedIndex,
-                                        selectedIndex
-                                    );
-                                } else {
-                                    Submit_Stu_answer(newindex, selectedIndex);
-                                }
-                            }}
-                        >
-                            <Image
-                                source={require("../../../assets/image3/zuo_03.png")}
-                            ></Image>
+        <View>
+            <View style={{height:50,flexDirection:'row',alignItems:"center",backgroundColor:'#fff',width:screenWidth,justifyContent:'center'}}>
+                <TouchableOpacity style={{position:'absolute',left:0}} onPress={()=>{props.navigation.goBack()}}>
+                     <Image style={{width:30,height:30}} source={require('../../../assets/TakePicturesAndAssignWork/goback.png')}></Image>
+                </TouchableOpacity>
+               
+                <Text style={{fontSize:17,color:'#59B9E0'}}>{props.route.params.papername}</Text>
+                {data.length>0?(
+                     <View style={{flexDirection:'row',alignItems:'center',position:"absolute",right:0}}>
+                        <Text style={{color:'#59B9E0'}}>{selectedIndex+1}</Text>
+                        <Text>/{data.length}</Text>
+                        <TouchableOpacity onPress={()=>{
+                            Submit_Stu_answer(selectedIndex, selectedIndex)
+                            props.navigation.navigate('SubmitLearningGuide',
+                                {   learnPlanId:learnPlanId,
+                                    submit_status:status,
+                                    startdate:startdate,
+                                    papername:props.route.params.papername,
+                                    isallObj:isallObj})
+                            }}>
+                            <Image style={{marginRight:8,marginLeft:5}} source={require('../../../assets/image3/look.png')}></Image>
                         </TouchableOpacity>
+                        
+                        <RightMenu
+                            getselectedindex={setSelectedIndex}
+                            learnPlanId={props.route.params.learnId}
+                            Sub_Stu_answer={Submit_Stu_answer}
+                            selectedIndex={selectedIndex}
+                        />
+                    </View>
+                ):(<></>)}
+               
+              
+            </View>
+            <ViewPager
+                style={{ backgroundColor: "#FFFFFF", borderTopWidth: 0.5,height:screenHeight-50 }}
+                swipeEnabled={false}
+                shouldLoadComponent={shouldLoadComponent}
+                selectedIndex={selectedIndex}
+                onSelect={(index) => Submit_Stu_answer(index, selectedIndex)}
+            >
+                {/* 根据这套导学案的data使用map遍历加载 */}
+                {data.map(function (item, index) {
+                    // console.log('正在测试',index,item)
+                    return (
+                        // 每个题目都是一页，都需要一个layout
+                        // 每一个layout里面都是有左右两张图片，绝对定位悬浮在页面上面，getTimu函数是加载题目数据。
+                        <Layout key={index} style={styles.tab} level="2">
+                            <TouchableOpacity
+                                style={{
+                                    position: "absolute",
+                                    left: 10,
+                                    top: "45%",
+                                    zIndex: 99,
+                                }}
+                                onPress={() => {
+                                    const newindex = selectedIndex - 1;
+                                    if (newindex == -1) {
+                                        Toast.showInfoToast("已经是第一题", 1000);
+                                        //提交一下答案
+                                        Submit_Stu_answer(
+                                            selectedIndex,
+                                            selectedIndex
+                                        );
+                                    } else {
+                                        Submit_Stu_answer(newindex, selectedIndex);
+                                    }
+                                }}
+                            >
+                                <Image
+                                    source={require("../../../assets/image3/zuo_03.png")}
+                                ></Image>
+                            </TouchableOpacity>
 
-                        <TouchableOpacity
-                            style={{
-                                position: "absolute",
-                                right: 10,
-                                top: "45%",
-                                zIndex: 99,
-                            }}
-                            onPress={() => {
-                                const newindex = selectedIndex + 1;
-                                if (newindex == dataNum) {
-                                    //Toast.showInfoToast('已经是最后一题') 需要跳转到答题页面
-                                    Submit_Stu_answer(
-                                        selectedIndex,
-                                        selectedIndex
-                                    );
-                                    Alert.alert('','已经最后一题，确定提交导学案？',[{text:'取消',onPress:()=>{}},{},
-                                    {text:'确定',onPress:()=>{
-                                            navigation.navigate({
-                                                name: "SubmitLearningGuide",
-                                                params: {
-                                                    learnPlanId: learnPlanId,
-                                                    submit_status: status,
-                                                    startdate: startdate,
-                                                    papername:props.route.params.papername,
-                                                    isallObj: isallObj,
-                                                },
-                                                megre: true,
-                                            });
-                                        }}
-                                    ])
-                                } else {
-                                    Submit_Stu_answer(newindex, selectedIndex);
-                                }
-                            }}
-                        >
-                            <Image
-                                source={require("../../../assets/image3/you_03.png")}
-                            ></Image>
-                        </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    position: "absolute",
+                                    right: 10,
+                                    top: "45%",
+                                    zIndex: 99,
+                                }}
+                                onPress={() => {
+                                    const newindex = selectedIndex + 1;
+                                    if (newindex == dataNum) {
+                                        //Toast.showInfoToast('已经是最后一题') 需要跳转到答题页面
+                                        Submit_Stu_answer(
+                                            selectedIndex,
+                                            selectedIndex
+                                        );
+                                        Alert.alert('','已经最后一题，确定提交导学案？',[{text:'取消',onPress:()=>{}},{},
+                                        {text:'确定',onPress:()=>{
+                                                navigation.navigate({
+                                                    name: "SubmitLearningGuide",
+                                                    params: {
+                                                        learnPlanId: learnPlanId,
+                                                        submit_status: status,
+                                                        startdate: startdate,
+                                                        papername:props.route.params.papername,
+                                                        isallObj: isallObj,
+                                                    },
+                                                    megre: true,
+                                                });
+                                            }}
+                                        ])
+                                    } else {
+                                        Submit_Stu_answer(newindex, selectedIndex);
+                                    }
+                                }}
+                            >
+                                <Image
+                                    source={require("../../../assets/image3/you_03.png")}
+                                ></Image>
+                            </TouchableOpacity>
 
-                        {getTiMu(item, index)}
-                    </Layout>
-                );
-            })}
-            {/* 每道题都有提交页面 ，当没有题目的时候显示加载页面*/}
-            {loading(success)}
-        </ViewPager>
+                            {getTiMu(item, index)}
+                        </Layout>
+                    );
+                })}
+                {/* 每道题都有提交页面 ，当没有题目的时候显示加载页面*/}
+                {loading(success)}
+            </ViewPager>
+        </View>
+       
     );
 }
 

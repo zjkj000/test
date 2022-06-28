@@ -109,7 +109,7 @@ class Answer_single extends Component {
                     <Text style={{ marginLeft: 20 }}>
                         {this.state.questionTypeName}
                     </Text>
-                    <TouchableOpacity
+                    {/* <TouchableOpacity
                         onPress={() => {
                             //导航跳转
                             this.props.navigation.navigate("SubmitPaper", {
@@ -125,7 +125,7 @@ class Answer_single extends Component {
                         <Image
                             source={require("../../../../assets/image3/look.png")}
                         ></Image>
-                    </TouchableOpacity>
+                    </TouchableOpacity> */}
                 </View>
 
                 {/* 题目展示区域 */}

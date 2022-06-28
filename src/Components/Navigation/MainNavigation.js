@@ -100,7 +100,11 @@ export default class MainNavigation extends Component {
                     <Stack.Screen name="文档" component={WordOrPdfRescouce} />
 
                     {/* 做作业部分 */}
-                    <Stack.Screen name="DoPaper" component={Paper_ToDo} />
+                    <Stack.Screen
+                        name="DoPaper"
+                        component={Paper_ToDo}
+                        options={{ headerShown: false }}
+                    />
                     <Stack.Screen
                         name="SubmitPaper"
                         component={Paper_SubmitContainer}
@@ -113,6 +117,7 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="DoLearningGuide"
                         component={Learningguide_ToDo}
+                        options={{ headerShown: false }}
                     />
                     <Stack.Screen
                         name="SubmitLearningGuide"

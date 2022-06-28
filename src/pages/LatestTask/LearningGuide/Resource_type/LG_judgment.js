@@ -83,30 +83,7 @@ class LG_judgment extends Component {
     <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}  >
         {/* 第一行显示 第几题  题目类型 */}
           <View  style={styles.answer_title}>
-              <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}} >{this.state.resourceName}</Text>
-              <View style={{position:'absolute',right:80,top:10,flexDirection:'row'}}>
-                <Text style={{color:'#59B9E0'}} >{(this.state.numid?this.state.numid:0)+1}</Text>
-                <Text >/{this.props.sum?this.props.sum:1} </Text>
-              </View>
-              
-              
-              <TouchableOpacity style={{position:'absolute',right:20}}
-                    // 小眼睛 先提交本题目，在跳转到提交页面
-                    onPress={
-                      ()=>{
-                          
-                          //导航跳转
-                          this.props.navigation.navigate('SubmitLearningGuide',
-                          {   learnPlanId:this.props.learnPlanId,
-                              submit_status:this.props.submit_status,
-                              startdate:this.props.startdate,
-                              papername:this.props.papername,
-                              isallObj:this.props.isallObj})
-                      }
-                  }
-                >
-                    <Image source={require('../../../../assets/image3/look.png')}></Image>
-                </TouchableOpacity>
+              <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}} >{this.state.resourceName}</Text> 
           </View>
 
         {/* 题目展示区域 */}

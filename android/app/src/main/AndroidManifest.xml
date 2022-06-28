@@ -17,7 +17,8 @@
     <!-- react-native-camera依赖 -->
     <uses-permission android:name="android.permission.CAMERA" />
     <application
-      android:usesCleartextTraffic='true' 
+      android:usesCleartextTraffic='true'
+      android:requestLegacyExternalStorage="true"
       android:name=".MainApplication"
       android:label="学习一点通_1.0"
       android:icon="@mipmap/ic_launcher"
@@ -37,9 +38,10 @@
         </intent-filter>
       </activity>
         <!--        <activity android:name="callvideo.VideoCallingActivity_before" />-->
-        <activity android:name="callvideo.VideoCallingEnterActivity" />
+<!--        <activity android:name="com.navigationdemo.VideoCallingEnterActivity" />-->
         <activity android:name="com.navigationdemo.LaunchActivity"
-            android:screenOrientation="landscape"/>
+            android:screenOrientation="landscape"
+            android:requestLegacyExternalStorage="true"/>
         <activity android:name="com.navigationdemo.EntranceActivity"/>
     </application>
 </manifest>
