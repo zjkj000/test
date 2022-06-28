@@ -15,11 +15,8 @@ import StatisticalForm from "../../TeacherStatisticalForm/StatisticalForm";
 import http from "../../../utils/http/request";
 import ActionButton from "react-native-action-button";
 import { styles } from "./styles";
-<<<<<<< HEAD
 import Toast from "../../../utils/Toast/Toast";
-=======
-import InformAndNticePage from '../Tea_InformAndNotice/InformAndNoticePage'
->>>>>>> 3fd35de7094dcb8ab8db8a5899233f2adb7431f5
+import InformAndNticePage from "../Tea_InformAndNotice/InformAndNoticePage";
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
@@ -84,13 +81,9 @@ class TeacherTabBarComponent extends React.Component {
     }
     getClassStatus = () => {
         const { userName } = this.props.route.params;
-<<<<<<< HEAD
         const url =
             global.constants.baseUrl +
             "/AppServer/ajax/teacherApp_getSkydtStatus.do";
-=======
-        const url = global.constants.baseUrl+"teacherApp_getSkydtStatus.do";
->>>>>>> 3fd35de7094dcb8ab8db8a5899233f2adb7431f5
         const params = {
             userId: userName,
         };
@@ -101,7 +94,6 @@ class TeacherTabBarComponent extends React.Component {
                 this.setState({
                     resJson,
                 });
-<<<<<<< HEAD
                 console.log(
                     "getClassStatus===================================="
                 );
@@ -110,13 +102,6 @@ class TeacherTabBarComponent extends React.Component {
                     this.setState({ showBubble: resJson.data });
                 }
                 console.log("====================================");
-=======
-                // console.log(
-                //     "getClassStatus===================================="
-                // );
-                // console.log(resJson);
-                // console.log("====================================");
->>>>>>> 3fd35de7094dcb8ab8db8a5899233f2adb7431f5
             })
             .catch((error) => {
                 Toast.showDangerToast(error.toString());
@@ -147,7 +132,7 @@ class TeacherTabBarComponent extends React.Component {
         return (
             <View>
                 {/* <Text>我是教师端通知公共</Text> */}
-                <InformAndNticePage/>
+                <InformAndNticePage />
             </View>
         );
     };

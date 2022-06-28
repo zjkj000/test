@@ -65,8 +65,9 @@ export default class FreePage extends Component {
             if (element.type === "question") {
                 tjAnswer[element.id] = {
                     answer: "",
-                    html: { html: "" },
+                    html: "",
                     imgURL: [],
+                    postHtml: "",
                 };
             }
         }

@@ -66,7 +66,7 @@ class OnlineClassTemp extends Component {
         if (resJson.hasOwnProperty("messageList")) {
             messageList = resJson.messageList;
             if (messageList.length !== 0) {
-                let events = messageList[0];
+                let events = messageList[messageList.length - 1];
                 // console.log("====================================");
                 // console.log(events);
                 // console.log("====================================");

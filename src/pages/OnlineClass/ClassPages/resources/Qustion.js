@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    TextInput,
+    ScrollView,
+} from "react-native";
 import http from "../../../../utils/http/request";
 import RadioList from "../../../LatestTask/DoWork/Utils/RadioList";
 import Checkbox from "../../../LatestTask/DoWork/Utils/Checkbox";
@@ -17,6 +24,7 @@ import WebView from "react-native-webview";
 import { styles } from "../../styles";
 import { deepEqual } from "../../../../utils/Compare/Compare";
 import StorageUtil from "../../../../utils/Storage/Storage";
+import ZoomPictureModel from "../../../../utils/ZoomPictureModel/ZoomPictureModel";
 
 export default class Question extends Component {
     constructor(props) {
@@ -25,9 +33,7 @@ export default class Question extends Component {
             periodNow.questionType == "3" || periodNow.questionType == "5";
         super(props);
         this.state = {
-            html: {
-                html: "",
-            },
+            html: "",
             questionType: periodNow.questionType ? periodNow.questionType : "1",
             questionValueList: periodNow.questionValueList,
             subjective: subjective,
@@ -36,6 +42,10 @@ export default class Question extends Component {
             answer: "",
             showSideBox: false,
             imgURL: [],
+            showImageLayer: false,
+            zoomImageIndexNow: 0,
+            zoomImages: [],
+            postHtml: "",
         };
         this.initAnswerState();
     }
@@ -52,20 +62,23 @@ export default class Question extends Component {
                 let tjAnswer = res[periodNow.id];
                 if (tjAnswer) {
                     this.setState({
-                        html: tjAnswer.html ? tjAnswer.html : { html: "" },
+                        html: tjAnswer.html ? tjAnswer.html : "",
+                        postHtml: tjAnswer.postHtml ? tjAnswer.postHtml : "",
                         answer: tjAnswer.answer ? tjAnswer.answer : "",
                         imgURL: tjAnswer.imgURL ? tjAnswer.imgURL : [],
                     });
                 } else {
                     this.setState({
-                        html: { html: "" },
+                        html: "",
+                        postHtml: "",
                         answer: "",
                         imgURL: [],
                     });
                 }
             } else {
                 this.setState({
-                    html: { html: "" },
+                    html: "",
+                    postHtml: "",
                     answer: "",
                     imgURL: [],
                 });
@@ -82,14 +95,16 @@ export default class Question extends Component {
         }
         if (
             prevState.answer !== this.state.answer ||
-            !deepEqual(prevState.html, this.state.html) ||
-            !deepEqual(prevState.imgURL, this.state.imgURL)
+            prevState.html !== this.state.html ||
+            !deepEqual(prevState.imgURL, this.state.imgURL) ||
+            prevProps.postHtml !== this.state.postHtml
         ) {
             const { periodNow } = this.props;
             StorageUtil.get("tjAnswer").then((res) => {
                 if (res) {
                     let tjAnswer = res;
                     tjAnswer[periodNow.id].answer = this.state.answer;
+                    tjAnswer[periodNow.id].postHtml = this.state.postHtml;
                     tjAnswer[periodNow.id].html = this.state.html;
                     tjAnswer[periodNow.id].imgURL = this.state.imgURL;
                     StorageUtil.save("tjAnswer", tjAnswer);
@@ -101,7 +116,14 @@ export default class Question extends Component {
         return (
             <View style={styles.inputArea}>
                 <Text
-                    onPress={() => this.setState({ answer: "", imgURL: [] })}
+                    onPress={() =>
+                        this.setState({
+                            answer: "",
+                            imgURL: [],
+                            html: "",
+                            postHtml: "",
+                        })
+                    }
                     style={{ color: "#B68459" }}
                 >
                     删除
@@ -172,13 +194,12 @@ export default class Question extends Component {
         http.post(url, params, false)
             .then((res) => {
                 if (res.status === "success") {
-                    let { imgURL, html } = this.state;
-                    let newHTML = {
-                        html: html.html + `<img src="${res.url}" \/>`,
-                    };
+                    let { imgURL, html, postHtml } = this.state;
+                    let imgLength = imgURL.length;
                     this.setState({
-                        imgURL: [...imgURL, res.url],
-                        html: newHTML,
+                        imgURL: [...imgURL, { url: res.url, index: imgLength }],
+                        html: html + "<img>!imgReplace!<img>",
+                        postHtml: postHtml + `<img src= "${res.url}" \/>`,
                     });
                 }
             })
@@ -240,7 +261,7 @@ export default class Question extends Component {
             questionTypeName: periodNow.questionTypeName,
             questionAnswer: periodNow.questionAnswerStr,
             questionScore: periodNow.questionScore,
-            stuAnswer: subjective ? this.state.html.html : this.state.answer,
+            stuAnswer: subjective ? this.state.postHtml : this.state.answer,
             version: 3, //防止接口空指针
         };
         http.post(url, params)
@@ -256,6 +277,20 @@ export default class Question extends Component {
             .catch((error) => {
                 Toast.showDangerToast("请求失败: " + error.toString());
             });
+    };
+    handlePressImage = (index, zoomImages) => {
+        console.log("PressImage====================================");
+        console.log(index);
+        console.log(zoomImages);
+        console.log("====================================");
+        this.setState({
+            // showZoomImage,
+            showImageLayer: true,
+            // zoomImageListIndex:
+            //     indexRow * 2 + indexCol,
+            zoomImageIndexNow: index,
+            zoomImages,
+        });
     };
 
     //默认弹框不显示，以及需要把弹窗效果加在的地方的  相机图片  显示
@@ -301,12 +336,15 @@ export default class Question extends Component {
         );
     };
     setSingleSelect = (str) => {
-        this.setState({ answer: str });
+        this.setState({ answer: str, postHtml: str, html: str });
     };
     setAnswer = (str) => {
-        let { html, answer } = this.state;
-        let newHTML = { html: html.html + str };
-        this.setState({ html: newHTML, answer: answer + str });
+        let { html, answer, postHtml } = this.state;
+        this.setState({
+            html: html + str,
+            answer: answer + str,
+            postHtml: postHtml + str,
+        });
     };
     getHTML = (period, ipAddress) => {
         let resURL =
@@ -322,22 +360,55 @@ export default class Question extends Component {
     };
     renderAnswerBox = (questionType) => {
         let subjective = questionType === "3" || questionType === "5";
-        const { html } = this.state;
+        const { html, imgURL } = this.state;
         const { periodNow } = this.props;
-        let htmlNow = html.html;
-        if (subjective && htmlNow !== "") {
+        if (subjective && html !== "") {
+            let textSeq = html.split("<img>");
+            let imgIndex = 0;
+            let urlObjectAry = [];
+            for (let i = 0; i < imgURL.length; i++) {
+                urlObjectAry.push({ url: imgURL[i].url, props: {} });
+            }
             return (
                 <Layout style={styles.body_answerBox}>
-                    <WebView
-                        scalesPageToFit={Platform.OS === "ios" ? true : false}
-                        source={this.state.html}
-                    />
+                    <ScrollView horizontal={true}>
+                        {textSeq.map((item, index) => {
+                            if (item === "!imgReplace!") {
+                                let picNow = imgURL[imgIndex].index;
+                                let img = (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.handlePressImage(
+                                                picNow,
+                                                urlObjectAry
+                                            );
+                                        }}
+                                    >
+                                        <Image
+                                            style={{ width: 150, height: 100 }}
+                                            key={`image-${index}`}
+                                            source={{
+                                                uri: imgURL[imgIndex].url,
+                                            }}
+                                        />
+                                    </TouchableOpacity>
+                                );
+                                imgIndex = imgIndex + 1;
+                                return img;
+                            } else {
+                                return (
+                                    <Text key={`text-${index}`}>{item}</Text>
+                                );
+                            }
+                        })}
+                    </ScrollView>
                 </Layout>
             );
         }
     };
 
     render() {
+        const { zoomImageIndexNow, zoomImages, showImageLayer } = this.state;
         return (
             <>
                 <Layout style={styles.body}>
@@ -386,6 +457,14 @@ export default class Question extends Component {
                         </Button>
                     </Layout>
                 </Layout>
+                <ZoomPictureModel
+                    isShowImage={showImageLayer}
+                    zoomImages={zoomImages}
+                    currShowImgIndex={zoomImageIndexNow}
+                    callBack={() => {
+                        this.setState({ showImageLayer: false });
+                    }}
+                />
             </>
         );
     }
