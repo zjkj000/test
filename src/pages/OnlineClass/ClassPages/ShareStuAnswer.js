@@ -1,7 +1,13 @@
 import { Button, Card, Layout, Modal } from "@ui-kitten/components";
 import React, { Component } from "react";
-import { View, Text, StyleSheet, Image } from "react-native";
-import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
+import {
+    View,
+    Text,
+    StyleSheet,
+    Image,
+    ScrollView,
+    TouchableOpacity,
+} from "react-native";
 import { screenHeight, screenWidth } from "../../../utils/Screen/GetSize";
 import { styles } from "../styles";
 import { Icon } from "react-native-elements";

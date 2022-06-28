@@ -100,7 +100,11 @@ export default class MainNavigation extends Component {
                     <Stack.Screen name="文档" component={WordOrPdfRescouce} />
 
                     {/* 做作业部分 */}
-                    <Stack.Screen name="DoPaper" component={Paper_ToDo}  options={{ headerShown: false }} />
+                    <Stack.Screen
+                        name="DoPaper"
+                        component={Paper_ToDo}
+                        options={{ headerShown: false }}
+                    />
                     <Stack.Screen
                         name="SubmitPaper"
                         component={Paper_SubmitContainer}
@@ -146,10 +150,7 @@ export default class MainNavigation extends Component {
                             headerShown: false,
                         }}
                     />
-                    <Stack.Screen
-                        name="扫码"
-                        component={QRCodeScanner}
-                    />
+                    <Stack.Screen name="扫码" component={QRCodeScanner} />
                 </Stack.Group>
 
                 {/* 错题本模块的导航 */}
