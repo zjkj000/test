@@ -4,7 +4,7 @@ import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
 import { Flex } from "@ant-design/react-native";
 import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation  , useRoute } from "@react-navigation/native";
 //import { Container , Header , Item , Input , Icon , Button } from 'native-base';
 import http from "../../utils/http/request";
 import {
@@ -22,22 +22,13 @@ import TodoListContainer from "./TodoListContainer";
 let SearchText = "";
 
 export default function LatestTaskContainer(props) {
-    let learnId = props.learnId;
-    let status = props.status;
-    // console.log('###learnId###status##',learnId , status);
     const navigation = useNavigation();
-
-    useEffect(()=>{
-        // console.log('#####useEffect####');
-        learnId = props.learnId;
-        status = props.status;
-    }, [props.learnId, props.status]);
+    const route = useRoute();
     //将navigation传给LatestTask组件，防止路由出错
     return (
         <LatestTask
             navigation={navigation}
-            learnId={learnId}
-            status={status}
+            route={route}
         ></LatestTask>
     );
 }
@@ -79,7 +70,10 @@ class LatestTask extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                // console.log('##latest#learnId000###status000##', this.props.learnId , this.props.status);
+                console.log('##latest#learnId000###status000##', );
+                console.log("LatestTaskFocused====================================");
+                console.log(this.props.route);
+                console.log("====================================");
                 // this.setState({});
             }
         );
@@ -93,6 +87,8 @@ class LatestTask extends React.Component {
     }
 
     componentWillUnmount() {
+        SearchText = ""
+        console.log('==========latest================卸载=================');
         this._unsubscribeNavigationFocusEvent();
         this._unsubscribeNavigationBlurEvent();
     }
@@ -298,8 +294,23 @@ class LatestTask extends React.Component {
                     </Flex>
                 </View>
                 <View style={styles.todoList}>
-                    {console.log('###learnId000#############SearchText######status000##',this.props.learnId , this.state.searchPoint , this.props.status)}
-                    <TodoListContainer resourceType={this.state.resourceType} searchStr={this.state.searchPoint}  learnId={this.props.learnId} status={this.props.status} />
+                    {/* {console.log('###learnId000#############SearchText######status000##',this.props.learnId , this.state.searchPoint , this.props.status)} */}
+                    <TodoListContainer 
+                        resourceType={this.state.resourceType} 
+                        searchStr={this.state.searchPoint}  
+                        learnId= {
+                            this.props.route.params !== undefined && 
+                            this.props.route.params.learnId !== undefined 
+                            ? this.props.route.params.learnId
+                            : ''
+                        }
+                        status= {
+                            this.props.route.params !== undefined && 
+                            this.props.route.params.status !== undefined 
+                            ? this.props.route.params.status
+                            : ''
+                        }
+                    />
                 </View>
             </View>
         );

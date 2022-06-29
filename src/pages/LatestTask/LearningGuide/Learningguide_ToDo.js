@@ -419,9 +419,6 @@ export default function Paper_ToDo(props) {
                 contentId: data[selectedIndex].resourceId,
                 useTime: newdate_arr[selectedIndex],
             };
-
-            //  console.log('导学案学习时长提交测试:',answerdate_minute,answerdate_seconds,'该资源名称',data[selectedIndex].resourceName,newdate_arr[selectedIndex])
-
             http.get(submitResource_url, submitResource_params).then(
                 (resStr) => {}
             );
@@ -451,12 +448,9 @@ export default function Paper_ToDo(props) {
                     status: change_status,
                 };
                 // 提交答案
-                // console.log('导学案部分测试状态提交：',change_status,'作答答案：',Stu_answer[selectedIndex],'URL:',submit_url,submit_params)
                 // 现在导学案要做的是  提交答案（根据情况）  +  提交作答时间（必须交）
-                // console.log(submit_url,submit_params)
                 http.get(submit_url, submit_params).then((resStr) => {
                     let submit_resJson = JSON.parse(resStr);
-                    // console.log('我是导学案TODO页面的提交函数，提交结果之后，接收到的服务器返回的是：',submit_resJson)
                 });
 
                 //提交完之后把历史答案改了
@@ -482,7 +476,7 @@ export default function Paper_ToDo(props) {
                      <Image style={{width:30,height:30}} source={require('../../../assets/TakePicturesAndAssignWork/goback.png')}></Image>
                 </TouchableOpacity>
                
-                <Text style={{fontSize:17,color:'#59B9E0'}}>{props.route.params.papername}</Text>
+                <Text style={{fontSize:17,color:'#59B9E0'}}>{props.route.params.papername.length>6?props.route.params.papername.substring(0,6)+"...":props.route.params.papername}</Text>
                 {data.length>0?(
                      <View style={{flexDirection:'row',alignItems:'center',position:"absolute",right:0}}>
                         <Text style={{color:'#59B9E0'}}>{selectedIndex+1}</Text>
@@ -519,7 +513,6 @@ export default function Paper_ToDo(props) {
             >
                 {/* 根据这套导学案的data使用map遍历加载 */}
                 {data.map(function (item, index) {
-                    // console.log('正在测试',index,item)
                     return (
                         // 每个题目都是一页，都需要一个layout
                         // 每一个layout里面都是有左右两张图片，绝对定位悬浮在页面上面，getTimu函数是加载题目数据。

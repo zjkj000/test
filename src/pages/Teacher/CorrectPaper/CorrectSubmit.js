@@ -186,12 +186,12 @@ export default class CorrectSubmit extends Component {
                 <Image style={{height:15,width:15}} source={require('../../../assets/teacherLatestPage/correct4.png')}></Image>
                 <Text  >未阅</Text>
             </View>
-            <ScrollView style={{height:'78%',paddingLeft:30,paddingRight:20,width:'95%'}}>
+            <ScrollView style={{height:'78%',width:'100%'}}>
                 {/* 显示批改部分 */}
                 {/* 一位数  两位数 有所不同 记得判断 */}
                 {/* 判断题号》10   
                      判断题目状态   */}
-                <View style={{flexDirection:'row',flexWrap:'wrap'}}>
+                <View style={{flexDirection:'row',flexWrap:'wrap',width:'100%',paddingLeft:'5%'}}>
                   {result}
                 </View>
 
@@ -202,12 +202,12 @@ export default class CorrectSubmit extends Component {
 
   const style =StyleSheet.create({
     result_View:{
-      margin:screenWidth*0.04
+      margin:screenWidth*0.045
     },
     result_Image:{
       position:'absolute',
-      width:screenWidth*0.123,
-      height:screenWidth*0.123
+      width:screenWidth*0.126,
+      height:screenWidth*0.126
     },
     result_Text:{
       marginTop:screenWidth*0.03,
@@ -217,7 +217,7 @@ export default class CorrectSubmit extends Component {
       color:'#fff'
     },
     result_Text2:{
-      marginTop:screenWidth*0.025,
+      marginTop:screenWidth*0.03,
       marginLeft:screenWidth*0.03,
       fontWeight:'bold',
       fontSize:screenWidth*0.05,

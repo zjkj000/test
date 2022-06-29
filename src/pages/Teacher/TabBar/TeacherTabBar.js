@@ -94,14 +94,10 @@ class TeacherTabBarComponent extends React.Component {
                 this.setState({
                     resJson,
                 });
-                console.log(
-                    "getClassStatus===================================="
-                );
-                console.log(resJson);
                 if (resJson.success) {
                     this.setState({ showBubble: resJson.data });
                 }
-                console.log("====================================");
+                // console.log("====================================");
             })
             .catch((error) => {
                 Toast.showDangerToast(error.toString());

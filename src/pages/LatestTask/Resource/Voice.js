@@ -63,10 +63,14 @@ export default class Videos extends Component {
       //oldtype = this.props.resourceType;
       const paramsData = this.props.navigation.getState().routes[3].params;
       console.log(this.props.navigation.getState().routes);
-      const id = paramsData.id;
-      const type = paramsData.type;
-      const deviceType = paramsData.deviceType;
-      this.fetchData(id , type , deviceType);
+      // const id = paramsData.id;
+      // const type = paramsData.type;
+      // const deviceType = paramsData.deviceType;
+      // this.fetchData(id , type , deviceType);
+      this.setState({
+          resource: paramsData.resource , 
+          videoUrl: paramsData.videoUrl
+      })
   }
 
   fetchData = (id , type , deviceType) => {

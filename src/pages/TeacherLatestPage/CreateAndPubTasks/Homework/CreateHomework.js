@@ -88,6 +88,7 @@ class CreateHomework extends React.Component {
             knowledgeModelVisibility: false, //知识点悬浮框是否显示
 
             shareTag: '99', //‘共享内容’
+            paperTypeName: 'all',
 
             paperTypeList: [], //试题库试题类型
             paperList: [], //试题库试题
@@ -138,12 +139,18 @@ class CreateHomework extends React.Component {
         console.log('------componentWillMount--------');
         console.log(this.state.paramsDataProps);
         console.log('-------------------------------');
-        if(this.state.paperId == ''){ //调接口，获取paperId
-            this.fetchPaperId();
-        }
+        // if(this.state.paperId == ''){ //调接口，获取paperId
+        //     this.fetchPaperId();
+        // }
         if(this.props.paramsData.type == 'update'){
             this.fetchPaperEditContent(); 
         }
+        var _dateStr=new Date().toISOString().substring(0,10)+' '+new Date().toISOString().substring(11,16)
+        _dateStr = _dateStr.substring(0,11)+(parseInt(_dateStr.substring(12,13))+8)+_dateStr.substring(13,16)
+        this.setState({
+            startTime:_dateStr,
+            endTime:this.nextDay(_dateStr.substring(0,10)), //结束时间
+        })
     }
 
     UNSAFE_componentWillUpdate(nextProps , nextState){
@@ -194,9 +201,9 @@ class CreateHomework extends React.Component {
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                // console.log('--------试卷内容列表------',resJson.data.length);
-                // console.log(resJson.data);
-                // console.log('------------------------');
+                console.log('--------试卷内容列表------',resJson.data.length);
+                console.log(resJson.data);
+                console.log('------------------------');
                 //获取已选择试题的baseTypeIdLists
                 var selectPaperListCopy = resJson.data;
                 var baseTypeIdList = []; //记录选中题目的baseTypeId个数
@@ -444,21 +451,20 @@ class CreateHomework extends React.Component {
             knowledge: paramsObj.knowledge,
             knowledgeCode: paramsObj.knowledgeCode,
         };
-        let paperTypeTtem = [];
+        let paperTypeTtem = '';
         if(paramsObj.paperType == '全部'){
-            paperTypeTtem = paramsObj.paperTypeListFetch;
+            paperTypeTtem = 'all';
         }else{
-            paperTypeTtem.push(paramsObj.paperType);
+            paperTypeTtem = paramsObj.paperType;
         }
         console.log('-----试题类型----',paperTypeTtem);
-        typeAll = paperTypeTtem.length; //试题类型总数
         this.setState({
             filterModelVisiblity: false , 
             knowledgeModelVisibility: false ,
             shareTag: paramsObj.shareTag,
             paramsDataProps: paramsDataPropsTemp,
 
-            paperTypeList: paperTypeTtem, //试题库试题类型
+            paperTypeName: paperTypeTtem, //试题库试题类型
             paperList: [], //试题库试题
             selectPaperIndex: 0, //选中的试题索引
             updatePaperIndex: 0, //添加到试卷中的试题当前显示的试题索引
@@ -514,6 +520,7 @@ class CreateHomework extends React.Component {
                     updatePaperFlag: false,
                     pushPaperFlag: false,
 
+                    baseTypeIdLists: [],
                     //selectPaperIndex: 0, //选中的试题索引
                 })
             }
@@ -525,6 +532,7 @@ class CreateHomework extends React.Component {
                 })
             }else{
                 if(this.state.selectPaperList.length > 0){
+                    this.sortSelectPaperList();
                     this.setState({ 
                         addPaperFlag: false,
                         updatePaperFlag: true,
@@ -549,7 +557,16 @@ class CreateHomework extends React.Component {
                 })
             }else{
                 if(this.state.selectPaperList.length > 0){
-                    this.createPaperObject(); //生成试卷对象
+                    if(this.state.paperId == ''){ //调接口，获取paperId
+                        this.fetchPaperId();
+                    }
+                    if(this.state.baseTypeIdLists.length <= 0){
+                        this.sortSelectPaperList();
+                        this.createPaperObject(); //生成试卷对象
+                    }else{
+                        this.createPaperObject();
+                    }
+                    
                     this.setState({ 
                         addPaperFlag: false,
                         updatePaperFlag: false,
@@ -825,41 +842,13 @@ class CreateHomework extends React.Component {
         }
     }
 
-    //修改选中题目数(添加试题小页面)
-    updateSlectNum = (flag) => {
+    //将已选择的试题进行排序(调整顺序小页面)
+    sortSelectPaperList = () => {
+        const { selectPaperList } = this.state;
+        var selectPaperListCopy = selectPaperList;
 
-        const { selectPaperIndex , selectPaperList , paperList , paperTypeList } = this.state;
-        if(flag == true){ //删除试题
-            var index = selectPaperList.indexOf(paperList[selectPaperIndex]); //查询要删除元素的位置
-            var selectPaperListCopy = selectPaperList;
-            if(index >= 0){
-                selectPaperListCopy.splice(index , 1); //删除指定位置元素
-
-                var baseTypeIdList = []; //记录选中题目的baseTypeId个数
-                if(selectPaperListCopy.length > 0){
-                    var baseTypeIdtemp = selectPaperListCopy[0].baseTypeId;
-                    baseTypeIdList.push(baseTypeIdtemp);
-                    for(let i = 0 ; i < selectPaperListCopy.length ; i++){ //获取选中题目的baseTypeId个数    
-                        if(selectPaperListCopy[i].baseTypeId.indexOf(baseTypeIdtemp) < 0){
-                            if(baseTypeIdList.indexOf(selectPaperListCopy[i].baseTypeId) < 0){
-                                baseTypeIdList.push(selectPaperListCopy[i].baseTypeId);
-                                baseTypeIdtemp = selectPaperListCopy[i].baseTypeId;
-                            }
-                        }
-                    }
-                }
-
-                this.setState({
-                    selectPaperNum: this.state.selectPaperNum - 1,
-                    selectPaperList: selectPaperListCopy,
-                    baseTypeIdLists: baseTypeIdList.length > 0 ? baseTypeIdList : [],
-                })
-            } 
-        }else{  //添加试题
-            var selectPaperListCopy = selectPaperList;
-            selectPaperListCopy.push(paperList[selectPaperIndex]);
-
-            var baseTypeIdList = []; //记录选中题目的baseTypeId个数
+        var baseTypeIdList = []; //记录选中题目的baseTypeId个数
+        if(selectPaperListCopy.length > 0){
             var baseTypeIdtemp = selectPaperListCopy[0].baseTypeId;
             baseTypeIdList.push(baseTypeIdtemp);
             for(let i = 0 ; i < selectPaperListCopy.length ; i++){ //获取选中题目的baseTypeId个数    
@@ -870,37 +859,49 @@ class CreateHomework extends React.Component {
                     }
                 }
             }
-            console.log('-------baseTypeIdList-----',baseTypeIdList);
-            //按照id大小排序
-            for(let i = 0 ; i < baseTypeIdList.length ; i++){
-                for(let j = i ; j < baseTypeIdList.length ; j++){
-                    if(baseTypeIdList[j] < baseTypeIdList[i]){
-                        var tempId = baseTypeIdList[i];
-                        baseTypeIdList[i] = baseTypeIdList[j];
-                        baseTypeIdList[j] = tempId;
-                    }
+        }
+        console.log('-------baseTypeIdList-----',baseTypeIdList);
+        baseTypeIdList.sort();
+        console.log('-----baseTypeIdList--sort---',baseTypeIdList);
+        //调整顺序（相同类型在一块）
+        var tempPaperList = [];
+        for(let i = 0 ; i < baseTypeIdList.length ; i++){
+            // console.log('----试题类型---' , paperTypeList[i]);
+            for(let j = 0 ; j < selectPaperListCopy.length ; j++){
+                // console.log('----添加试题类型---' , selectPaperListCopy[j].typeName);
+                if(selectPaperListCopy[j].baseTypeId == baseTypeIdList[i]){
+                        // console.log('----类型一致-------');
+                        tempPaperList.push(selectPaperListCopy[j]);//添加的试题
                 }
             }
-            console.log('-----baseTypeIdList--sort---',baseTypeIdList);
+        }
+        this.setState({
+            selectPaperList: tempPaperList,
+            baseTypeIdLists: baseTypeIdList.length > 0 ? baseTypeIdList : [],
+        })
+    }
 
-            //调整顺序（相同类型在一块）
-            var tempPaperList = [];
-            for(let i = 0 ; i < baseTypeIdList.length ; i++){
-                // console.log('----试题类型---' , paperTypeList[i]);
-                for(let j = 0 ; j < selectPaperListCopy.length ; j++){
-                    // console.log('----添加试题类型---' , selectPaperListCopy[j].typeName);
-                    if(selectPaperListCopy[j].baseTypeId.indexOf(baseTypeIdList[i]) >= 0
-                        || baseTypeIdList[i].indexOf(selectPaperListCopy[j].baseTypeId) >= 0){
-                            // console.log('----类型一致-------');
-                            tempPaperList.push(selectPaperListCopy[j]);//添加的试题
-                    }
-                }
-            }
+    //修改选中题目数(添加试题小页面)
+    updateSlectNum = (flag) => {
+        const { selectPaperIndex , selectPaperList , paperList  } = this.state;
+        if(flag == true){ //删除试题
+            var index = selectPaperList.indexOf(paperList[selectPaperIndex]); //查询要删除元素的位置
+            var selectPaperListCopy = selectPaperList;
+            if(index >= 0){
+                selectPaperListCopy.splice(index , 1); //删除指定位置元素
+
+                this.setState({
+                    selectPaperNum: this.state.selectPaperNum - 1,
+                    selectPaperList: selectPaperListCopy,
+                })
+            } 
+        }else{  //添加试题
+            var selectPaperListCopy = selectPaperList;
+            selectPaperListCopy.push(paperList[selectPaperIndex]);
  
             this.setState({
                 selectPaperNum: this.state.selectPaperNum + 1,
-                selectPaperList: tempPaperList,  
-                baseTypeIdLists: baseTypeIdList,
+                selectPaperList: selectPaperListCopy,  
             })
         }
     }
@@ -912,12 +913,28 @@ class CreateHomework extends React.Component {
         var selectPaperListCopy = selectPaperList;
         if(updatePaperIndex >= 0){
             selectPaperListCopy.splice(updatePaperIndex , 1); //删除指定位置元素
+
+            var baseTypeIdList = []; //记录选中题目的baseTypeId个数
+            if(selectPaperListCopy.length > 0){
+                var baseTypeIdtemp = selectPaperListCopy[0].baseTypeId;
+                baseTypeIdList.push(baseTypeIdtemp);
+                for(let i = 0 ; i < selectPaperListCopy.length ; i++){ //获取选中题目的baseTypeId个数    
+                    if(selectPaperListCopy[i].baseTypeId.indexOf(baseTypeIdtemp) < 0){
+                        if(baseTypeIdList.indexOf(selectPaperListCopy[i].baseTypeId) < 0){
+                            baseTypeIdList.push(selectPaperListCopy[i].baseTypeId);
+                            baseTypeIdtemp = selectPaperListCopy[i].baseTypeId;
+                        }
+                    }
+                }
+            }
+            console.log('-----baseTypeIdList--delete---',baseTypeIdList);
             this.setState({
                 selectPaperNum: this.state.selectPaperNum - 1,
                 //若删除的是最后一道题，则页面显示selectPaperList最新的最后一道题
                 updatePaperIndex: updatePaperIndex == selectPaperList.length ? 
                                                         selectPaperList.length - 1 : updatePaperIndex,
                 selectPaperList: selectPaperListCopy,
+                baseTypeIdLists: baseTypeIdList,
             })
         } 
     }
@@ -965,11 +982,9 @@ class CreateHomework extends React.Component {
 
     //展示添加试题页面
     showAddPaper = () => {
-        this.state.paperTypeList.length <= 0 ? this.fetchPaperType() : null;
-        this.state.paperTypeList.length > 0
-                                && this.state.paperList.length <= 0
-                                ? this.fetchData(pageNo , this.state.paperTypeList[count] , this.state.shareTag , false)
-                                : null
+        this.state.paperList.length <= 0
+            ? this.fetchData(pageNo , this.state.paperTypeName , this.state.shareTag , false)
+            : null
         if(this.state.paperList.length <= 0){
             console.log('======================this.state.paperList.length <= 0============================');
             return(
@@ -1027,12 +1042,11 @@ class CreateHomework extends React.Component {
 
                         {/**题目展示 */}
                         <View style={styles.showPaper}>
-                            {
-                                this.state.paperTypeList.length > 0
-                                && this.state.paperList.length <= 0
-                                ? this.fetchData(pageNo , this.state.paperTypeList[count] , this.state.shareTag , false)
+                            {/* {
+                                this.state.paperList.length <= 0
+                                ? this.fetchData(pageNo , this.state.paperTypeName , this.state.shareTag , false)
                                 : null
-                            }
+                            } */}
                             {/**题目 答案 解析*/}
                             {
                                 this.state.paperList.length > 0 ? this.showAllPaperTitle() : null
@@ -1088,8 +1102,17 @@ class CreateHomework extends React.Component {
                             clickNext = false;
                             if(currentBeginPaperIndex == 0 || currentBottomPage == 0){
                                 Alert.alert('','已经是第一页试题了', [{} , {text: '关闭', onPress: ()=>{}}]);
+                            }else if(currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == false){
+                                currentBottomPage = currentBottomPage - 2;
+                                // this.setState({ selectPaperIndex: currentBeginPaperIndex - 5 });
+                                if(currentBottomPage >= 0){
+                                    this.setState({ selectPaperIndex: currentBottomPage * 5 });
+                                }else{
+                                    currentBottomPage = currentBottomPage + 1;
+                                    this.setState({ selectPaperIndex: currentBottomPage * 5 });
+                                }
                             }else{
-                                currentBottomPage--;
+                                currentBottomPage = currentBottomPage - 1;
                                 // this.setState({ selectPaperIndex: currentBeginPaperIndex - 5 });
                                 this.setState({ selectPaperIndex: currentBottomPage * 5 });
                             }
@@ -1122,27 +1145,14 @@ class CreateHomework extends React.Component {
                                 //currentBottomPage++;
                                 console.log('#################11111111###################');
                                 pageNo++;
-                                this.fetchData(pageNo , this.state.paperTypeList[count] , this.state.shareTag , false);
+                                this.fetchData(pageNo , this.state.paperTypeName , this.state.shareTag , false);
                             }
-                            if((currentBottomPage + 1) * 5 > this.state.paperList.length && dataFlag == true){
-                                //当前页展示的试题不足5个,且试题还未请求完
-                                console.log('#################22222222###################');
-                                pageNo++;
-                                this.fetchData(pageNo , this.state.paperTypeList[count] , this.state.shareTag , false);
-                            }
+                            
                             //当前展示的试题并不是最后一页数据
                             if(currentLastPaperIndex + 1 != this.state.paperList.length){ 
                                 console.log('#################33333333###################');
                                 //currentBottomPage++;
                                 this.setState({ selectPaperIndex: currentBeginPaperIndex + 5 });
-                            }
-                            //最后一页正好有5个试题，提前请求下一页
-                            if(this.state.paperList.length % 5 == 0 
-                                && currentLastPaperIndex + 1 == this.state.paperList.length
-                            ){
-                                console.log('#################44444444444###################');
-                                pageNo++;
-                                this.fetchData(pageNo , this.state.paperTypeList[count] , this.state.shareTag , false);
                             }
                         }}
                     >
@@ -1271,8 +1281,8 @@ class CreateHomework extends React.Component {
             //callback:'ha',
         };
 
-        console.log('-----fetchData---pageNo---试题类型---', pageNo , this.state.paperTypeList[count] , Date.parse(new Date()))
-        if(count < this.state.paperTypeList.length){
+        console.log('-----fetchData---pageNo---试题类型---', pageNo , paperType , Date.parse(new Date()))
+        if(dataFlag){
             http.get(url, params)
                 .then((resStr) => {
                     fetchNum++; //请求次数增加
@@ -1288,47 +1298,28 @@ class CreateHomework extends React.Component {
                     }else{
                         paperLength = paperListOne != '' ? paperListOne.length : 0;
                     }
-                    console.log('*****currentFecthLength***' , paperLength , Date.parse(new Date()));
+                    console.log('***pageNo**currentFecthLength***' , paperNum , paperLength , Date.parse(new Date()));
 
-                    if(fetchNum != 2){
+                    // if(fetchNum != 2){
                         let foot = 0;
                         //试题请求接口每次最多返回5个数据
                         if(paperLength < 5){ //当前类型试题请求完
-                            pageNo = 0; //点击右箭头，若需要请求数据，pageNo会加1
-                            count++;
-                            if(count >= typeAll){
-                                foot = 1; //未请求到数据，数据加载完了
-                                dataFlag = false; //数据加载完了
-                                console.log('==================所有试题都加载完了===========================', this.state.paperList.length + paperLength , Date.parse(new Date()));
-                                // Alert.alert('总试题数'+this.state.paperList.length);
-                            }else{
-                                console.log('------试题类型已取完-count---typeAll-' , this.state.paperTypeList[count-1] ,  count, typeAll);
-                                console.log('=======currentBottomPage===paperList.length==此次请求试题数===', currentBottomPage , this.state.paperList.length , paperLength);
-                                console.log('=================================', (currentBottomPage + 1) * 5 > this.state.paperList + paperLength)
-                                if((currentBottomPage + 1) * 5 > this.state.paperList.length + paperLength){
-                                    //当前页底部显示的数据不足5个，需要重新请求新的类型
-                                    console.log('===============当前页底部显示的数据不足5个，需要重新请求新的类型====================')
-                                    pageNo = 1;
-                                    this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
-                                }       
-                            }
+                            // pageNo = 0; //点击右箭头，若需要请求数据，pageNo会加1
+                            
+                            foot = 1; //未请求到数据，数据加载完了
+                            dataFlag = false; //数据加载完了
+                            console.log('==================所有试题都加载完了===========================', this.state.paperList.length + paperLength , Date.parse(new Date()));
                         }
                         //paperList: isRefresh || fetchNum == 1 || fetchNum == 2 ? paperListOne : this.state.paperList.concat(paperListOne),
                         this.setState({
                             paperList: isRefresh ? paperListOne : this.state.paperList.concat(paperListOne),
                             showFoot: foot, 
                         },()=>{
-                            console.log('++++++++++++setState试题已保存++++++++++++++++++');
+                            // console.log('++++++++++++setState试题已保存++++++++++++++++++');
+                            console.log('*******allLength**' , this.state.paperList.length , Date.parse(new Date()));
                         });
-                        console.log('++++++++++++setState试题++++++++++++++++++');
-                        console.log('*******allLength**' , this.state.paperList.length , Date.parse(new Date()));
-                        
-                        // if(paperLength == 5){
-                        //     console.log('++++++++++++此次请求了5个试题，继续请求当前类型的下一页++++++++++++++++++');
-                        //     pageNo++;
-                        //     this.fetchData(pageNo , this.state.paperTypeList[count] , 99 , false);
-                        // }
-                    }
+                        // console.log('++++++++++++setState试题++++++++++++++++++');
+                    // }
                     
                     paperListOne = [];
                 })
@@ -1460,8 +1451,21 @@ class CreateHomework extends React.Component {
                     </View>
                 </View>
             );
-        }else{
-            return null;
+        }else if(this.props.paramsData.type == 'update'){
+            return(
+                <View style={styles.bodyView}>
+                    <View>
+                        <Text
+                            style={{
+                                fontSize: 18,
+                                color: 'black',
+                                paddingTop: 40,
+                                textAlign: 'center'
+                            }}
+                        >正在获取试卷中的试题，请耐心等待</Text>
+                    </View>
+                </View>
+            );
         }
     }
 
@@ -1916,8 +1920,38 @@ class CreateHomework extends React.Component {
 
     //设置开始时间
     setStartTime = (time) => {
-        this.setState({ startTime: time  });
+        this.setState({ startTime: time,endTime: this.nextDay(time.substring(0,10))  });
     }
+
+    nextDay(str){
+        var year = parseInt(str.substring(0,4))
+        var month = parseInt(str.substring(5,7))
+        var day = parseInt(str.substring(8,10))
+        if(month==2&&day==28&&year%100==0&&yaer%400!=0){
+           month=3
+           day=1
+        }else if(month==2&&day==28&&day%4!=0){
+          month=3
+          day=1
+        }else if(month==2&&day<28){
+          day+=1
+        }else if(day=='30'&&(month=='2'||month=='4'||month=='6'||month=='9'||month=='11')){
+          month+=1
+          day=1
+        }else if(day=='31'){
+          day = 1
+          if(month<12){
+            month=month+1
+          }else{
+            month=1
+            year+=1
+          }
+        }else{
+          day+=1
+        }
+        return year+'-'+ month.toString().padStart(2,'0')+'-'+day.toString().padStart(2,'0')+' 23:59'
+      }
+      
     //设置结束时间
     setEndTime = (time) => {
         this.setState({ endTime: time });

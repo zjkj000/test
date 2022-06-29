@@ -110,6 +110,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static TXCloudVideoView                mStudent_6;
     public static HashMap<Integer,TXCloudVideoView>       stu_map;
     public static int                             stu_index;
+    public static boolean                         teacher_inclass;
     public static ScrollView                      mstroll;
 
     public static TextView                        mTeacherCamera_name;
@@ -906,7 +907,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         exitRoom();
     }
 
-    private void exitRoom() {
+    private static void exitRoom() {
         if (mTRTCCloud != null) {
             mTRTCCloud.stopLocalAudio();
             mTRTCCloud.stopLocalPreview();
@@ -915,7 +916,8 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         }
         mTRTCCloud = null;
         TRTCCloud.destroySharedInstance();
-        //退出房�?
+        //手放下、退出直播间
+        HttpActivity.testRaiseHandAction("down");//放手下讲台
         HttpActivity.testJoinOrLeaveRoom("leave");
     }
 
@@ -1087,7 +1089,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             // 显示选中项�?
             EditText editone = findViewById(R.id.tiankong);
             String editoneValue = editone.getText().toString();
-            System.out.println("填空的内�?:"+editoneValue);
+            System.out.println("填空的内容:"+editoneValue);
             HttpActivity.stuSaveAnswer(editoneValue);
 
             if(AnswerActivity.questionAction.equals("startAnswerSuiji")
@@ -1333,39 +1335,28 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                         id_name_map.put(ids[i].split("_")[0],ids[i].split("_")[1]);
                         if(HttpActivity.platformUserId!=null && mUserId.equals(ids[i].split("_")[0])) {
                             flagp = 1;
-                            mPlatform.bringToFront();
-                            mPlatform.setVisibility(View.VISIBLE);
-                            mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVLocalPreviewView);
-                            mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
-                            HttpActivity.testRaiseHandAction("down");//放手下讲
-                            mButtonHandOnPlatform.bringToFront();
-                            mButtonHandOnPlatform.setVisibility(View.VISIBLE);
-
                         }
                     }
                 }
                 if(flagp==0){
-//                    mPlatform.bringToFront();
-//                    mPlatform.setVisibility(View.VISIBLE);
-//                    mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVLocalPreviewView);
-//                    mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
                     mPlatform.setVisibility(View.GONE);
                     mButtonHandOnPlatform.setVisibility(View.GONE);
                     mButtonHand.setSelected(true);
                     BottomButtonActivity.muteHand();
-//                    mTRTCCloud.stopLocalPreview();
-//                    mTRTCCloud.stopLocalAudio();
-//                    BottomButtonActivity.muteVideo();
                 }
                 else{
-//                    mPlatform.setVisibility(View.GONE);
-//                    mTRTCCloud.stopLocalPreview();
-//                    mTRTCCloud.stopLocalAudio();
-
+                    mPlatform.bringToFront();
+                    mPlatform.setVisibility(View.VISIBLE);
+                    mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVLocalPreviewView);
+                    mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
+                    HttpActivity.testRaiseHandAction("down");//放手下讲
+                    mButtonHandOnPlatform.bringToFront();
+                    mButtonHandOnPlatform.setVisibility(View.VISIBLE);
                 }
             }
 
             stu_index = 0;
+            teacher_inclass = false;
             for (int i = 0; i < mRemoteViewList.size(); i++) {
                 if (i < mRemoteUidList.size()) {
                     System.out.println("mRemoteViewList["+i+"]"+mRemoteViewList.get(i));
@@ -1377,6 +1368,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                         mTeacherShare.setVisibility(View.VISIBLE);
                         mTRTCCloud.setRemoteRenderParams(remoteUid,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
                         mTRTCCloud.startRemoteView(remoteUid, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTeacherShare);
+                        teacher_inclass = true;
                     }
 
                     //teacher-camera
@@ -1389,6 +1381,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                         mTRTCCloud.muteRemoteAudio(remoteUid, false);
                         mTeacherCamera.bringToFront();
                         mTeacherCamera_name.bringToFront();
+                        teacher_inclass = true;
 
 
                     }
@@ -1438,6 +1431,9 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
 
                 }
+            }
+            if(!teacher_inclass){
+                exitRoom();
             }
 
 
@@ -1566,83 +1562,6 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
 
     //拍照主观题
-
-
-
-
-
-//    @Override
-//    public void onCreate(Bundle savedInstanceState) {  //初始化控件
-//        super.onCreate(savedInstanceState);
-//        setContentView(R.layout.videocall_activity_calling);
-//        Button takePhoto=(Button)findViewById(R.id.paizhao);
-//        Button chooseFromAlbum=(Button)findViewById(R.id.xiangce);
-//        Button submit=(Button)findViewById(R.id.subjectivesubmit);
-//        picture=(EditText)findViewById(R.id.tiankong);
-//        pref = PreferenceManager.getDefaultSharedPreferences(this);
-//        String data = pref.getString("data","");
-//        if(data != ""){
-//            Bitmap bitmap = BitmapFactory.decodeFile(data);
-//            imgP=data;
-//            //picture.setImageBitmap(bitmap);
-//            //picture.set(bitmap);
-//            editpic(bitmap);
-//
-//        }
-//
-//
-//
-//        takePhoto.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {  //设置监听器
-//                //创建File对象，用于存储拍照后的图片
-//                File outputImage=new File(getExternalCacheDir(),"output_image.jpg");
-//                try {
-//                    if(outputImage.exists()){
-//                        outputImage.delete();
-//                    }
-//                    outputImage.createNewFile();
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                if(Build.VERSION.SDK_INT >= 24){
-//                    imageUri = FileProvider.getUriForFile(LaunchActivity.this,
-//                            "com.example.shiyan21.fileprovider",outputImage);//查找存储在File对象中的图片URL地址
-//                }else {
-//                    imageUri = Uri.fromFile(outputImage);
-//                }
-//
-//                //启动相机程序
-//                Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
-//                intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
-//                startActivityForResult(intent,TAKE_PHOTO);
-//            }
-//        });
-//
-//        chooseFromAlbum.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {   //选择相机或相册的点击事件监听器
-//                if (ContextCompat.checkSelfPermission(LaunchActivity.this,
-//                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
-//                    ActivityCompat.requestPermissions(LaunchActivity.this,new
-//                            String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
-//                }else {
-//                    openAlbum();
-//                }
-//            }
-//        });
-//
-//        submit.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Intent intent = new Intent();
-//                intent.putExtra("imgP",imgP);
-//                setResult(RESULT_OK,intent);
-//                finish();
-//            }
-//        });
-//    }
 
     protected void editpic(Bitmap bitmap){
         try {
