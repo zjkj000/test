@@ -80,6 +80,13 @@ class StudyComponent extends React.Component {
         );
     }
 
+    componentWillUnmount() {
+        SearchText = "";
+        console.log('==========study================卸载=================');
+        this._unsubscribeNavigationFocusEvent();
+        this._unsubscribeNavigationBlurEvent();
+    }
+
     //点击文件夹图标跳转
     packagesPage = () => {
         this.setState({ resourceRead: 0 }); //资料夹状态改为已读

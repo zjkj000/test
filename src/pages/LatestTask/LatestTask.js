@@ -87,6 +87,8 @@ class LatestTask extends React.Component {
     }
 
     componentWillUnmount() {
+        SearchText = ""
+        console.log('==========latest================卸载=================');
         this._unsubscribeNavigationFocusEvent();
         this._unsubscribeNavigationBlurEvent();
     }
