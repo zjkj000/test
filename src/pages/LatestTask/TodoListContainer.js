@@ -110,6 +110,15 @@ class TodoList extends React.Component {
     }
 
     componentWillUnmount() {
+        pageNo = 1; //当前第几页
+        itemNo = 0; //item的个数
+        dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
+
+        oldtype = ""; //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
+        searchStr = ""; //保存上一次搜索框内容
+
+        todosList = []; //复制一份api请求得到的数据
+        console.log('==========todo================卸载=================');
         this._unsubscribeNavigationFocusEvent();
     }
 
@@ -404,7 +413,6 @@ class TodoList extends React.Component {
                                 }
                                 // 做作业
                                 else {
-<<<<<<< HEAD
                                     navigation.navigate("DoPaper", {
                                         learnId: learnId,
                                         status: statusUrl, //作业状态
@@ -412,29 +420,6 @@ class TodoList extends React.Component {
                                         papername: bottomTitle,
                                         tab: '首页'
                                     });
-=======
-                                    //检查权限
-                                    const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
-                                    const params = {
-                                      taskId:learnId,
-                                      userName:global.constants.userName,
-                                      userType:'student',
-                                      teacherId:''
-                                    };
-                                    http.get(url, params).then((resStr) => {
-                                        let resJson = JSON.parse(resStr);
-                                        if(resJson.data){
-                                            navigation.navigate("DoPaper", {
-                                                learnId: learnId,
-                                                status: statusUrl, //作业状态
-                                                selectedindex: 0,
-                                                papername: bottomTitle,
-                                            });
-                                        }else{
-                                            Alert.alert(resJson.message)
-                                        }
-                                    })
->>>>>>> 992104e797b09d9b03323a50af4269fbcaa168f5
                                     //this.setState({ todos: todosList });
                                 }
                             } else if (
@@ -455,7 +440,6 @@ class TodoList extends React.Component {
                                 }
                                 // 做导学案
                                 else {
-<<<<<<< HEAD
                                     navigation.navigate("DoLearningGuide", {
                                         learnId: learnId,
                                         status: statusUrl, //导学案状态
@@ -463,29 +447,6 @@ class TodoList extends React.Component {
                                         papername: bottomTitle,
                                         tab: '首页'
                                     });
-=======
-                                        //检查权限
-                                        const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
-                                        const params = {
-                                        taskId:learnId,
-                                        userName:global.constants.userName,
-                                        userType:'student',
-                                        teacherId:''
-                                        };
-                                        http.get(url, params).then((resStr) => {
-                                            let resJson = JSON.parse(resStr);
-                                            if(resJson.data){
-                                                navigation.navigate("DoLearningGuide", {
-                                                    learnId: learnId,
-                                                    status: statusUrl, //导学案状态
-                                                    selectedindex: 0,
-                                                    papername: bottomTitle,
-                                                });
-                                            }else{
-                                                Alert.alert(resJson.message)
-                                            }
-                                        })
->>>>>>> 992104e797b09d9b03323a50af4269fbcaa168f5
                                 }
                             } else if (
                                 todoType == "通知" ||

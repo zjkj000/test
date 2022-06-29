@@ -192,7 +192,7 @@ class PackagesPage extends React.Component {
                     {
                         resource: resJson.data,
                     });
-                }else if(imgUrl == "ppt.png"){    
+                }else if(imgUrl == "ppt.png" || imgUrl == "pptx.png"){    
                     this.props.navigation.navigate("PPT" , 
                     {
                         resource: resJson.data , 

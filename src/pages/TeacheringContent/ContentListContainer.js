@@ -674,7 +674,7 @@ class ContentList extends React.Component {
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
-                            Alert.alert('','是否确认删除',
+                            Alert.alert('','是否确认删除?',
                                 [
                                     {text:'取消',onPress:()=>{}},
                                     {},
@@ -754,7 +754,7 @@ class ContentList extends React.Component {
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
-                            Alert.alert('','是否确认删除',
+                            Alert.alert('','是否确认删除?',
                             [
                                 {text:'取消',onPress:()=>{}},
                                 {},
@@ -817,7 +817,7 @@ class ContentList extends React.Component {
                     <View style={{ top: 10, width: 1.5, height: '70%', backgroundColor: "#fff"}} />
                     <View style={styles.select}>
                         <Text style={styles.selectContent}  onPress={() => {
-                            Alert.alert('','是否确认删除',
+                            Alert.alert('','是否确认删除?',
                             [
                                 {text:'取消',onPress:()=>{}},
                                 {},

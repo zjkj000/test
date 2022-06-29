@@ -89,19 +89,6 @@ class StudyList extends React.Component {
         //this.fetchData(pageNo);
     }
 
-    // UNSAFE_componentWillReceiveProps(props){
-    //     console.log('componentWillReceiveProps' , props);
-    // }
-
-
-    // shouldComponentUpdate(nextProps , nextState){
-    //     console.log('shouldComponentUpdate*****Props', this.props.resourceType , this.props.searchStr);
-    //     console.log('shouldComponentUpdate*****nextProps', nextProps.resourceType , nextProps.searchStr);
-    //     if(this.props.resourceType != nextProps.resourceType || this.props.searchStr != nextProps.searchStr){
-    //         return true;
-    //     }
-    //     return true;
-    // }
     
 
     UNSAFE_componentWillUpdate(nextProps) {
@@ -171,28 +158,18 @@ class StudyList extends React.Component {
     }
 
     componentDidUpdate() {
-        //console.log('oldtype' , oldtype);
-        //console.log('resourceType' , this.props.resourceType);
         console.log("componentDidUpdate*********", Date.parse(new Date()));
-        // if (
-        //     oldtype != this.props.resourceType ||
-        //     searchStr != this.props.searchStr
-        // ) {
-        //     console.log("componentDidUpdate*********0000", Date.parse(new Date()));
-        //     //当此次请求与上次请求的数据类型不一致时，先清空上一次的数据再请求
-        //     this.setState({
-        //         todos: [],
-        //         isLoading: true,
-        //         error: false,
-        //         isRefresh: true,
-        //         showFoot: 0,
-        //     });
-        //     pageNo = 1; //当前第几页
-        //     itemNo = 0; //item的个数
-        //     dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
-        //     this.fetchData(pageNo, (onRefresh = true));
-        //     //this.setState({ status: '3' });
-        // }
+    }
+    componentWillUnmount() {
+        pageNo = 1; //当前第几页
+        itemNo = 0; //item的个数
+        dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
+
+        oldtype = ""; //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
+        searchStr = ""; //保存上一次搜索框内容
+
+        todosList = []; //复制一份api请求得到的数据
+        console.log('==========studyContain================卸载=================');
     }
 
     //显示任务状态的图标

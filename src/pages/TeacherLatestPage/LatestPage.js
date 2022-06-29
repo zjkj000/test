@@ -71,6 +71,7 @@ class LatestPage extends React.Component {
 
 
     componentWillUnmount() {
+        SearchText = "";
         this._unsubscribeNavigationFocusEvent();
     } 
 
