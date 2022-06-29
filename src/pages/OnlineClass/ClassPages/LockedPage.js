@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Image, TextInput } from "react-native";
+import {
+    View,
+    Text,
+    TouchableOpacity,
+    Image,
+    ScrollView,
+    TextInput,
+} from "react-native";
 import http from "../../../utils/http/request";
 import RadioList from "../../LatestTask/DoWork/Utils/RadioList";
 import Checkbox from "../../LatestTask/DoWork/Utils/Checkbox";
@@ -16,6 +23,7 @@ import Toast from "../../../utils/Toast/Toast";
 import { Icon } from "react-native-elements";
 import ImageHandler from "../../../utils/Camera/Camera";
 import WebView from "react-native-webview";
+import ZoomPictureModel from "../../../utils/ZoomPictureModel/ZoomPictureModel";
 
 export default class LockedPage extends Component {
     constructor(props) {
@@ -26,9 +34,8 @@ export default class LockedPage extends Component {
             period.questionType == "3" || period.questionType == "5";
         super(props);
         this.state = {
-            html: {
-                html: "",
-            },
+            postHtml: "",
+            html: "",
             visible: false,
             msg: "",
             moduleVisible: false,
@@ -38,23 +45,28 @@ export default class LockedPage extends Component {
             subjective: subjective,
             imgURL: [],
             htmlURL: "",
+            showImageLayer: false,
+            zoomImageIndexNow: 0,
+            zoomImages: [],
         };
     }
     componentDidMount() {
         this.getHTML();
     }
     setAnswer = (str) => {
-        let { html, answer } = this.state;
-        let newHTML = { html: html.html + str };
-        this.setState({ html: newHTML, answer: answer + str });
+        let { html, answer, postHtml } = this.state;
+        this.setState({
+            html: html + str,
+            answer: answer + str,
+            postHtml: postHtml + str,
+        });
     };
     setSingleAnswer = (str) => {
         // let { html, answer } = this.state;
         console.log("setSingleAnswer====================================");
         console.log(str);
         console.log("====================================");
-        let newHTML = { html: str };
-        this.setState({ html: newHTML, answer: str });
+        this.setState({ html: str, postHtml: str, answer: str });
     };
     imageUpload = (base64) => {
         const { messageList, ipAddress, userName } = this.props;
@@ -75,14 +87,18 @@ export default class LockedPage extends Component {
         http.post(url, params, false)
             .then((res) => {
                 if (res.status === "success") {
-                    let { imgURL, html } = this.state;
-                    let newHTML = {
-                        html: html.html + `<img src= "${res.url}" \/>`,
-                    };
+                    let { imgURL, html, postHtml } = this.state;
+                    let imgLength = imgURL.length;
                     this.setState({
-                        imgURL: [...imgURL, res.url],
-                        html: newHTML,
+                        imgURL: [...imgURL, { url: res.url, index: imgLength }],
+                        html: html + "<img>!imgReplace!<img>",
+                        postHtml: postHtml + `<img src= "${res.url}" \/>`,
                     });
+                    console.log(
+                        "handleImage===================================="
+                    );
+                    console.log(this.state.html);
+                    console.log("====================================");
                 }
             })
             .catch((error) => {
@@ -147,7 +163,7 @@ export default class LockedPage extends Component {
             questionAnswer: period.questionAnswerStr
                 ? period.questionAnswerStr
                 : "",
-            content: subjective ? this.state.html.html : this.state.answer,
+            content: subjective ? this.state.postHtml : this.state.answer,
             learnPlanName: "",
             answerTime: event.desc,
         };
@@ -185,6 +201,20 @@ export default class LockedPage extends Component {
         console.log(resURL);
         this.setState({ htmlURL: resURL });
     };
+    handlePressImage = (index, zoomImages) => {
+        console.log("PressImage====================================");
+        console.log(index);
+        console.log(zoomImages);
+        console.log("====================================");
+        this.setState({
+            // showZoomImage,
+            showImageLayer: true,
+            // zoomImageListIndex:
+            //     indexRow * 2 + indexCol,
+            zoomImageIndexNow: index,
+            zoomImages,
+        });
+    };
 
     //默认弹框不显示，以及需要把弹窗效果加在的地方的  相机图片  显示
     renderAvatar = () => {
@@ -203,14 +233,47 @@ export default class LockedPage extends Component {
     };
 
     renderAnswerBox = () => {
-        const { subjective, html } = this.state;
-        if (subjective && html.html !== "") {
+        const { subjective, html, imgURL } = this.state;
+        if (subjective && html !== "") {
+            let textSeq = html.split("<img>");
+            let imgIndex = 0;
+            let urlObjectAry = [];
+            for (let i = 0; i < imgURL.length; i++) {
+                urlObjectAry.push({ url: imgURL[i].url, props: {} });
+            }
             return (
                 <Layout style={styles.body_answerBox}>
-                    <WebView
-                        scalesPageToFit={Platform.OS === "ios" ? true : false}
-                        source={this.state.html}
-                    />
+                    <ScrollView horizontal={true}>
+                        {textSeq.map((item, index) => {
+                            if (item === "!imgReplace!") {
+                                let picNow = imgURL[imgIndex].index;
+                                let img = (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            this.handlePressImage(
+                                                picNow,
+                                                urlObjectAry
+                                            );
+                                        }}
+                                    >
+                                        <Image
+                                            style={{ width: 150, height: 100 }}
+                                            key={`image-${index}`}
+                                            source={{
+                                                uri: imgURL[imgIndex].url,
+                                            }}
+                                        />
+                                    </TouchableOpacity>
+                                );
+                                imgIndex = imgIndex + 1;
+                                return img;
+                            } else {
+                                return (
+                                    <Text key={`text-${index}`}>{item}</Text>
+                                );
+                            }
+                        })}
+                    </ScrollView>
                 </Layout>
             );
         }
@@ -232,9 +295,8 @@ export default class LockedPage extends Component {
                             this.setState({
                                 answer: "",
                                 imgURL: [],
-                                html: {
-                                    html: "",
-                                },
+                                html: "",
+                                postHtml: "",
                             })
                         }
                         style={{ color: "#B68459" }}
@@ -318,6 +380,7 @@ export default class LockedPage extends Component {
 
     renderSAQ = () => {
         const { userName, introduction, imgURL } = this.props;
+        const { zoomImageIndexNow, zoomImages, showImageLayer } = this.state;
         return (
             <Layout style={styles.mainContainer}>
                 <Layout style={styles.header}>
@@ -366,6 +429,14 @@ export default class LockedPage extends Component {
                         ></Image>
                     </Card>
                 </Modal>
+                <ZoomPictureModel
+                    isShowImage={showImageLayer}
+                    zoomImages={zoomImages}
+                    currShowImgIndex={zoomImageIndexNow}
+                    callBack={() => {
+                        this.setState({ showImageLayer: false });
+                    }}
+                />
             </Layout>
         );
     };

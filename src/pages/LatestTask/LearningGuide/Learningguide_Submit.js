@@ -87,9 +87,7 @@ class Learningguide_Submit extends Component {
     }
 
     submit_answer() {
-       
         const url = global.constants.baseUrl+"studentApp_savestuAnswerFromLearnPlan.do";
-
         let change_status = 0; //记录返回的状态
         let newsub_status = 0; // 记录提交的状态
         //接收到的是状态是：1  新作业
@@ -143,33 +141,63 @@ class Learningguide_Submit extends Component {
             status: newsub_status,
         };
 
-        WaitLoading.show('提交中...',-1)
-        http.get(url, params).then((resStr) => {
-            let resJson = JSON.parse(resStr);
-            if (resJson.success) {
-                WaitLoading.dismiss()
-                Toast.showSuccessToast("导学案提交成功了!", 1000);
-                // Alert.alert('','作业布置成功！',[{},
-                //     {text:'ok',onPress:()=>this.props.navigation.navigate({
-                //         name: "Home",
-                //         params: {
-                //             learnId: this.state.learnPlanId,
-                //             status: change_status,
-                //         },
-                //     })}
-                //   ])
-                this.props.navigation.navigate({
-                    name: "Home",
-                    params: {
-                        learnId: this.state.learnPlanId,
-                        status: change_status,
-                    },
-                })
-            }else{
-                WaitLoading.show_false()
+        let noSubmitID = "-1";
+        this.state.data.map(function (item) {
+            if (item.stuAnswer == "未答" || item.stuAnswer == ""||item.stuAnswer == "未学") {
+                noSubmitID='1';  //1记录有未学的
             }
-            
         });
+        if(noSubmitID=='-1'){   //代表都作答了
+            WaitLoading.show('提交中...',-1)
+            http.get(url, params).then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                if (resJson.success) {
+                    WaitLoading.dismiss()
+                    Toast.showSuccessToast("导学案提交成功了!", 1000);
+                    this.props.navigation.navigate({
+                        name: "Home",
+                        params: {
+                            screen: "首页",
+                            params: {
+                                learnId: this.state.learnPlanId,
+                                status: change_status,
+                            },
+                        },
+                        merge: true,
+                    });
+                }else{
+                    WaitLoading.show_false()
+                }
+                
+            });
+        }else{
+            Alert.alert('','有题目未作答,是否提交？',[{text:'取消',onPress:()=>{}},{},{
+                text:'确定',onPress:()=>{
+                    WaitLoading.show('提交中...',-1)
+                    http.get(url, params).then((resStr) => {
+                        let resJson = JSON.parse(resStr);
+                        if (resJson.success) {
+                            WaitLoading.dismiss()
+                            Toast.showSuccessToast("导学案提交成功了!", 1000);
+                            this.props.navigation.navigate({
+                                name: "Home",
+                                params: {
+                                    screen: "首页",
+                                    params: {
+                                        learnId: this.state.learnPlanId,
+                                        status: change_status,
+                                    },
+                                },
+                                merge: true,
+                            });
+                        }else{
+                            WaitLoading.show_false()
+                        }
+                        
+                    });
+                }}])
+        }
+        
         
     }
 
@@ -208,7 +236,7 @@ class Learningguide_Submit extends Component {
                             ({this.state.data[result_Item].order})
                         </Text>
                         {/* 具体答案  or   红色的未答 */}
-                        {this.state.data[result_Item].stuAnswer != "" ? (
+                        {this.state.data[result_Item].stuAnswer != ""? (
                             <RenderHtml
                                 contentWidth={width}
                                 source={{
@@ -216,9 +244,9 @@ class Learningguide_Submit extends Component {
                                         .stuAnswer,
                                 }}
                             />
-                        ) : (
-                            <Text style={{ color: "red" }}>未学</Text>
-                        )}
+                        ) :this.state.data[result_Item].type=='01'? (
+                            <Text style={{ color: "red" }}>未答</Text>
+                        ):(<Text style={{ color: "red" }}>未学</Text>)}
                     </View>
                 </TouchableOpacity>
             );

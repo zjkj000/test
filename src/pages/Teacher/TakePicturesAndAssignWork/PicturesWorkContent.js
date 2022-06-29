@@ -58,7 +58,7 @@ export default class PicturesWorkContent extends Component {
           WanxingTimuNumber:10,                                //         完形填空也用这个
           WanxingSelectedList:['*','*','*','*','*','*','*','*','*','*'],  //完形填空也用这个
 
-          Read7_5_SelectList:['A','B','C','D','E','F'],      //七选五选项列表
+          Read7_5_SelectList:['A','B','C','D','E','F','G'],      //七选五选项列表
           Read7_5_TimuNumber:5,                              //七选五小题个数   默认五个
           Read7_5_SelectedList:['*','*','*','*','*'],                  //七选五小题答案设置
       } 

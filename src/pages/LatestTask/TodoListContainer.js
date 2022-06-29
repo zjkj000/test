@@ -47,7 +47,7 @@ export default function TodoListContainer(props) {
 
     const learnId = props.learnId;
     const status = props.status;
-    // console.log("****learnId***status**", learnId, status);
+    console.log("****learnId***status************todoContain****************", learnId, status);
 
     const navigation = useNavigation();
     //将navigation传给TodoList组件，防止路由出错
@@ -110,6 +110,15 @@ class TodoList extends React.Component {
     }
 
     componentWillUnmount() {
+        pageNo = 1; //当前第几页
+        itemNo = 0; //item的个数
+        dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
+
+        oldtype = ""; //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
+        searchStr = ""; //保存上一次搜索框内容
+
+        todosList = []; //复制一份api请求得到的数据
+        console.log('==========todo================卸载=================');
         this._unsubscribeNavigationFocusEvent();
     }
 
@@ -145,13 +154,15 @@ class TodoList extends React.Component {
             //this.setState({ status: '3' });
         }
 
-        if (this.props.navigation.getState().routes[1].params != null) {
-            const todoId =
-                this.props.navigation.getState().routes[1].params.learnId;
-            const status =
-                this.props.navigation.getState().routes[1].params.status;
 
-            this.props.navigation.getState().routes[1].params = null;
+        if (nextProps.learnId != '' && nextProps.status != '') {
+            const todoId = nextProps.learnId;
+            const status = nextProps.status;
+
+            this.props.navigation.setParams({ 
+                learnId: '',
+                status: ''
+            }); 
 
             // console.log("componentWillUpdate*****todoContain****0000", status);
             if (status == 3) {
@@ -169,10 +180,6 @@ class TodoList extends React.Component {
                     }
                 }
             } else {
-                // console.log("componentWillUpdate*********1111", Date.parse(new Date()));
-
-                // console.log('______________');
-                flag = 2;
                 this._onRefresh();
             }
         }
@@ -221,23 +228,10 @@ class TodoList extends React.Component {
             token: token,
         };
 
-        // if(flag == 3){
-        //     console.log('&&&&&&&&&*******&&&&&&&&&');
-        //     flag = 1;
-        //     this.setState({
-        //         todos: todosList,
-        //     });
-        //     return;
-        // }
-        // console.log('&&&&&&&&&&******&&&&&&&&');
+
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                // console.log(
-                //     "fetchLatestData===================================="
-                // );
-                // console.log(resJson);
-                // console.log("====================================");
                 let todosList1 = [];
                 todosList1 = resJson.data; //重要！！！
 
@@ -272,25 +266,15 @@ class TodoList extends React.Component {
                     //isRefreshing: false,
                 });
 
-                // if(flag == 2){
-                //     console.log('&&&&&&&&&&&&&&&&&&');
-                //     flag = 3;
-                //     //flag = 1;
-                //     todosList = dataBlob;
-
-                //     this._onRefresh();
-                //     //this.setState({ todos: todosList });
-                //     return;
-                // }
                 todosList1 = null;
                 dataBlob = null;
 
-                if (flag == 2) {
-                    // console.log("&&&&&&&&&&&&&&&&&&");
-                    flag = 1;
-                    this._onRefresh();
-                    return;
-                }
+                // if (flag == 2) {
+                //     // console.log("&&&&&&&&&&&&&&&&&&");
+                //     flag = 1;
+                //     this._onRefresh();
+                //     return;
+                // }
             })
             .catch((error) => {
                 this.setState({
@@ -426,8 +410,7 @@ class TodoList extends React.Component {
                                         },
                                         megre: true,
                                     });
-                                }
-                                // 做作业
+                                }// 做作业
                                 else {
                                     //检查权限
                                     const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
@@ -467,8 +450,7 @@ class TodoList extends React.Component {
                                         },
                                         megre: true,
                                     });
-                                }
-                                // 做导学案
+                                }          // 做导学案
                                 else {
                                         //检查权限
                                         const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"

@@ -221,8 +221,8 @@ class BuzhizuoyeContent extends Component {
         <View style={{backgroundColor:'#FFFFFF',flexDirection:'column',paddingTop:20,paddingBottom:10}}>
         <View style={{flexDirection:'row',marginLeft:10,marginRight:20}}>
           <View style={{flex:3,flexDirection:'row',justifyContent:'space-between'}}  >
-            <Image style={{width:screenWidth*0.25,height:screenWidth*0.25}} source={require('../../assets/StatisticalForm/Ima_book.png')}></Image>
-            <View>
+            <Image style={{width:screenWidth*0.24,height:screenWidth*0.24}} source={require('../../assets/StatisticalForm/Ima_book.png')}></Image>
+            <View style={{alignItems:'flex-start'}}>
                 <View style={{height:30}}>
                   <Text style={{fontSize:16}}>有效次数:</Text>
                 </View>

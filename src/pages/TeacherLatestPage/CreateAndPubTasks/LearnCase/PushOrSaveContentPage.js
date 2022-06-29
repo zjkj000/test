@@ -85,6 +85,13 @@ class PushOrSaveContentPage extends React.Component {
             this.props.selectContentList.length
         );
         this.createContentObjList(); //生成试卷对象
+
+        var _dateStr=new Date().toISOString().substring(0,10)+' '+new Date().toISOString().substring(11,16)
+        _dateStr = _dateStr.substring(0,11)+(parseInt(_dateStr.substring(12,13))+8)+_dateStr.substring(13,16)
+        this.setState({
+            startTime:_dateStr,
+            endTime:this.nextDay(_dateStr.substring(0,10))
+        })
     }
 
     componentWillUnmount(){
@@ -377,8 +384,38 @@ class PushOrSaveContentPage extends React.Component {
 
     //设置开始时间
     setStartTime = (time) => {
-        this.setState({ startTime: time });
-    };
+        this.setState({ startTime: time,endTime: this.nextDay(time.substring(0,10))  });
+    }
+
+    nextDay(str){
+        var year = parseInt(str.substring(0,4))
+        var month = parseInt(str.substring(5,7))
+        var day = parseInt(str.substring(8,10))
+        if(month==2&&day==28&&year%100==0&&yaer%400!=0){
+           month=3
+           day=1
+        }else if(month==2&&day==28&&day%4!=0){
+          month=3
+          day=1
+        }else if(month==2&&day<28){
+          day+=1
+        }else if(day=='30'&&(month=='2'||month=='4'||month=='6'||month=='9'||month=='11')){
+          month+=1
+          day=1
+        }else if(day=='31'){
+          day = 1
+          if(month<12){
+            month=month+1
+          }else{
+            month=1
+            year+=1
+          }
+        }else{
+          day+=1
+        }
+        return year+'-'+ month.toString().padStart(2,'0')+'-'+day.toString().padStart(2,'0')+' 23:59'
+      }
+
     //设置结束时间
     setEndTime = (time) => {
         this.setState({ endTime: time });

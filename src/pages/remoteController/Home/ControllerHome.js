@@ -81,10 +81,6 @@ class HomeComponent extends Component {
         if (resJson.hasOwnProperty("messageList")) {
             let messageList = resJson.messageList;
             if (messageList.length !== 0) {
-                console.log(
-                    "handleMessage===================================="
-                );
-                console.log(resJson);
                 let event = messageList[0];
                 console.log("messageList===========================");
                 for (let i = 0; i < messageList.length; i++) {
@@ -145,24 +141,14 @@ class HomeComponent extends Component {
         const params = {
             userId: userName,
         };
-        // console.log("getMessage====================================");
-        // console.log(ipAddress);
-        // console.log(url);
-        // console.log(params);
-        // console.log("====================================");
         this.setState({ showLoading: true });
         http.get(url, params)
             .then((resStr) => {
-                // console.log("getMessage====================================");
-                // console.log(resStr);
-                // console.log("====================================");
-                // Toast.showSuccessToast(resStr);
                 resJson = JSON.parse(resStr);
                 this.setState({
                     showLoading: false,
                     resJson,
                 });
-                // console.log(resJson);
             })
             .catch((error) => {
                 Toast.showDangerToast(error.toString());

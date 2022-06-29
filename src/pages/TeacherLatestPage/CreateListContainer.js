@@ -117,8 +117,13 @@ class CreateList extends React.Component {
     }
 
     componentWillUnmount() {
-        oldsearchStr = "";
-        oldtype = "";
+        pageNo = 0; //当前第几页
+        itemNo = 0; //item的个数
+        dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
+        
+        oldtype = ""; //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
+        oldsearchStr = ""; //保存上一次搜索框内容
+        todosList = []; //复制一份api请求得到的数据
     }
 
     //通过fetch请求数据

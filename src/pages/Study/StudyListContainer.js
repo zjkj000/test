@@ -89,19 +89,6 @@ class StudyList extends React.Component {
         //this.fetchData(pageNo);
     }
 
-    // UNSAFE_componentWillReceiveProps(props){
-    //     console.log('componentWillReceiveProps' , props);
-    // }
-
-
-    // shouldComponentUpdate(nextProps , nextState){
-    //     console.log('shouldComponentUpdate*****Props', this.props.resourceType , this.props.searchStr);
-    //     console.log('shouldComponentUpdate*****nextProps', nextProps.resourceType , nextProps.searchStr);
-    //     if(this.props.resourceType != nextProps.resourceType || this.props.searchStr != nextProps.searchStr){
-    //         return true;
-    //     }
-    //     return true;
-    // }
     
 
     UNSAFE_componentWillUpdate(nextProps) {
@@ -136,14 +123,16 @@ class StudyList extends React.Component {
             //this.setState({ status: '3' });
         }
 
-        if (this.props.navigation.getState().routes[1].params != null) {
-            const todoId =
-                this.props.navigation.getState().routes[1].params.learnId;
-            const status =
-                this.props.navigation.getState().routes[1].params.status;
+        if (nextProps.learnId != '' && nextProps.status != '') {
+            const todoId = nextProps.learnId;
+            const status = nextProps.status;
 
-            this.props.navigation.getState().routes[1].params = null;
+            this.props.navigation.setParams({ 
+                learnId: '',
+                status: ''
+            }); 
 
+            // console.log("componentWillUpdate*****todoContain****0000", status);
             if (status == 3) {
                 // console.log("componentWillUpdate*********0000", Date.parse(new Date()));
                 //未批改的作业，不请求数据
@@ -160,36 +149,27 @@ class StudyList extends React.Component {
                 }
             } else {
                 // console.log("componentWillUpdate*********1111", Date.parse(new Date()));
-                console.log('__________________');
-                flag = 2;
+
+                // console.log('______________');
+                // flag = 2;
                 this._onRefresh();
             }
         }
     }
 
     componentDidUpdate() {
-        //console.log('oldtype' , oldtype);
-        //console.log('resourceType' , this.props.resourceType);
         console.log("componentDidUpdate*********", Date.parse(new Date()));
-        // if (
-        //     oldtype != this.props.resourceType ||
-        //     searchStr != this.props.searchStr
-        // ) {
-        //     console.log("componentDidUpdate*********0000", Date.parse(new Date()));
-        //     //当此次请求与上次请求的数据类型不一致时，先清空上一次的数据再请求
-        //     this.setState({
-        //         todos: [],
-        //         isLoading: true,
-        //         error: false,
-        //         isRefresh: true,
-        //         showFoot: 0,
-        //     });
-        //     pageNo = 1; //当前第几页
-        //     itemNo = 0; //item的个数
-        //     dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
-        //     this.fetchData(pageNo, (onRefresh = true));
-        //     //this.setState({ status: '3' });
-        // }
+    }
+    componentWillUnmount() {
+        pageNo = 1; //当前第几页
+        itemNo = 0; //item的个数
+        dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
+
+        oldtype = ""; //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
+        searchStr = ""; //保存上一次搜索框内容
+
+        todosList = []; //复制一份api请求得到的数据
+        console.log('==========studyContain================卸载=================');
     }
 
     //显示任务状态的图标
@@ -212,9 +192,6 @@ class StudyList extends React.Component {
 
     //通过fetch请求数据
     fetchData(pageNo , type , search , onRefresh = false) {
-        // console.log("fetchData*********", Date.parse(new Date()));
-        // const rsType = this.props.resourceType;
-        // const searchStr = this.props.searchStr;
         const token = global.constants.token;
         const userId = global.constants.userName;
         const ip = global.constants.baseUrl;
@@ -265,13 +242,6 @@ class StudyList extends React.Component {
                 });
                 todosList1 = null;
                 dataBlob = null;
-
-                if(flag == 2){
-                    console.log('&&&&&&&&&&&&&&&&&&');
-                    flag = 1;
-                    this._onRefresh();
-                    return;
-                }
             })
             .catch((error) => {
                 this.setState({
@@ -402,6 +372,7 @@ class StudyList extends React.Component {
                                         status: statusUrl, //作业状态
                                         selectedindex: 0,
                                         papername: bottomTitle,
+                                        tab: '学习'
                                     });
                                     //this.setState({ todos: todosList });
                                 }
@@ -425,6 +396,7 @@ class StudyList extends React.Component {
                                         status: statusUrl, //导学案状态
                                         selectedindex: 0,
                                         papername: bottomTitle,
+                                        tab: '学习'
                                     });
                                 }
                             } else if (

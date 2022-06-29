@@ -4,7 +4,7 @@ import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
 import { Flex } from "@ant-design/react-native";
 import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation , useRoute } from "@react-navigation/native";
 //import { Container , Header , Item , Input , Icon , Button } from 'native-base';
 import http from "../../utils/http/request";
 import {
@@ -23,8 +23,9 @@ let SearchText = "";
 
 export default function StudyContainer() {
     const navigation = useNavigation();
+    const route = useRoute();
     //将navigation传给LatestTask组件，防止路由出错
-    return <StudyComponent navigation={navigation}></StudyComponent>;
+    return <StudyComponent navigation={navigation} route={route}></StudyComponent>;
 }
 
 class StudyComponent extends React.Component {
@@ -58,6 +59,32 @@ class StudyComponent extends React.Component {
             //console.log('data' , this.state.resourceRead);
             return;
         });
+
+        const { navigation } = this.props;
+        this._unsubscribeNavigationFocusEvent = navigation.addListener(
+            "focus",
+            () => {
+                console.log('##study#learnId000###status000##', );
+                console.log("StudyFocused====================================");
+                console.log(this.props.route);
+                console.log("====================================");
+                // this.setState({});
+            }
+        );
+        this._unsubscribeNavigationBlurEvent = navigation.addListener(
+            "blur",
+            () => {
+                console.log('============Study====Blur==================================')
+                // SearchText = '';
+            }
+        );
+    }
+
+    componentWillUnmount() {
+        SearchText = "";
+        console.log('==========study================卸载=================');
+        this._unsubscribeNavigationFocusEvent();
+        this._unsubscribeNavigationBlurEvent();
     }
 
     //点击文件夹图标跳转
@@ -195,7 +222,7 @@ class StudyComponent extends React.Component {
     };
 
     render() {
-        return (
+        return ( //<View style={{...styles.header,paddingTop: 12}}>
             <View>
                 <View style={styles.header}>
                     <Flex style={styles.flexNew}>
@@ -209,6 +236,7 @@ class StudyComponent extends React.Component {
                             />
                         </TouchableOpacity>
                         {this.showPackagesStatus()}
+                        {/* <View style={styles.packagesView}></View> */}
                         <View style={styles.searchView}>
                             <SearchBar
                                 style={styles.searchBar}
@@ -241,7 +269,18 @@ class StudyComponent extends React.Component {
                     <StudyListContainer
                         resourceType={this.state.resourceType}
                         searchStr={this.state.searchPoint}
-                        status={"2"}
+                        learnId= {
+                            this.props.route.params !== undefined && 
+                            this.props.route.params.learnId !== undefined 
+                            ? this.props.route.params.learnId
+                            : ''
+                        }
+                        status= {
+                            this.props.route.params !== undefined && 
+                            this.props.route.params.status !== undefined 
+                            ? this.props.route.params.status
+                            : ''
+                        }
                     />
                 </View>
             </View>

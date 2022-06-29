@@ -88,6 +88,7 @@ export default class Leijishiyong extends Component {
           <View style={{flexDirection:'row',justifyContent:'space-between',marginBottom:20,flexWrap:'wrap'}}>
             <Text style={{fontSize:20}}>累计使用</Text>
             <OverflowMenu
+                    style={{width:170}}
                     anchor={this.renderAvatar}
                     visible={this.state.moduleVisible}
                     onBackdropPress={() => {
@@ -101,14 +102,14 @@ export default class Leijishiyong extends Component {
             <View style={{backgroundColor:'#E0F3E0',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
               <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_1.png')}></Image></View>
               <View style={{flex:2,flexDirection:'column',padding:10}}>
-                <Text style={{fontSize:22}}>{this.state.ketangshouke}</Text>
+                <Text style={{fontSize:25}}>{this.state.ketangshouke}</Text>
                 <Text style={{fontSize:18}}>课堂授课</Text>
               </View>
             </View>
             <View style={{backgroundColor:'#FCF5E5',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
                 <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_2.png')}></Image></View>
                 <View style={{flex:2,flexDirection:'column',padding:10}}>
-                    <Text style={{fontSize:22}}>{this.state.shishenghudong}</Text>
+                    <Text style={{fontSize:25}}>{this.state.shishenghudong}</Text>
                     <Text style={{fontSize:18}}>师生互动</Text>
                 </View>
             </View>
@@ -117,14 +118,14 @@ export default class Leijishiyong extends Component {
             <View style={{backgroundColor:'#F2E4FD',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
                 <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_3.png')}></Image></View>
                   <View style={{flex:2,flexDirection:'column',padding:10}}>
-                    <Text style={{fontSize:22}}>{this.state.buzhizuoye}</Text>
+                    <Text style={{fontSize:25}}>{this.state.buzhizuoye}</Text>
                     <Text style={{fontSize:18}}>布置作业</Text>
                 </View>
             </View>
             <View style={{backgroundColor:'#D9F8FA',flex: 1,marginLeft: 10,marginRight:10,flexDirection:'row'}}>
                 <View style={{flex:1,justifyContent:'center'}}><Image style={{width:40,height:40,marginLeft:8}} source={require('../../assets/StatisticalForm/Ima_4.png')}></Image></View>
                   <View style={{flex:2,flexDirection:'column',padding:10}}>
-                    <Text style={{fontSize:22}}>{this.state.piyueshiti}</Text>
+                    <Text style={{fontSize:25}}>{this.state.piyueshiti}</Text>
                     <Text style={{fontSize:18}}>批阅试题</Text>
                 </View>
             </View>

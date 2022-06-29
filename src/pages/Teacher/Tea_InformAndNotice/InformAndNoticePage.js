@@ -58,6 +58,7 @@ class InformAndNoticePage extends React.Component {
 
 
     componentWillUnmount() {
+        SearchText = "";
         this._unsubscribeNavigationFocusEvent();
     } 
 
