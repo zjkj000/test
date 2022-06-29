@@ -450,7 +450,7 @@ const styles = StyleSheet.create({
         opacity: 1,
     },
     searchBar: {
-        backgroundColor: "white",
+        backgroundColor: "#fff",
         borderRadius: 40,
         borderWidth: 0,
         fontSize: 15,

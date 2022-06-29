@@ -299,7 +299,7 @@ export default class MainNavigation extends Component {
                         name="LookCorrectDetails"
                         component={LookCorrectDetails}
                         options={{
-                            title: "查看报告",
+                            headerShown: false,
                         }}
                     />
                 </Stack.Group>

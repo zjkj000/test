@@ -43,8 +43,8 @@ class Paper_Submit extends Component {
     //页面加载在render之前
     UNSAFE_componentWillMount() {
         let bool =
-            this.props.isallObj.indexOf("104") > -1 ||     //判断是否存在104类型  若存在就有主观题
-            this.props.isallObj.indexOf("106") > -1        //判断是否存在106类型  若存在就有主观题  
+            (this.props.isallObj.indexOf("104") > -1 ||     //判断是否存在104类型  若存在就有主观题
+            this.props.isallObj.indexOf("106") > -1)      //判断是否存在106类型  若存在就有主观题  
                 ? false
                 : true;
         this.setState({
@@ -120,6 +120,7 @@ class Paper_Submit extends Component {
         if (noSubmitID == "未答" || noSubmitID == "") {
             noSubmitID = "-1";
         }
+
         var answerdate = 0;
         var nowdate = this.getDate();
         var startdatearr = this.props.startdate.split(":");
@@ -154,23 +155,6 @@ class Paper_Submit extends Component {
                         if(resJson.success){
                             WaitLoading.dismiss()
                             Toast.showSuccessToast('作业提交成功！',1000)
-                            // Alert.alert('','作业提交成功！',[{},
-                            //     {text:'ok',onPress:()=>this.props.navigation.navigate({
-                            //         name: "Home",
-                            //         params: {
-                            //             learnId: this.state.paperId,
-                            //             status: change_status,
-                            //         },
-                            //     })}
-                            //   ])
-                            // this.props.navigation.navigate({
-                            //     name: "Home",
-                            //     params: {
-                            //         learnId: this.state.paperId,
-                            //         status: change_status,
-                            //     },
-                            // })
-                            
                             this.props.navigation.navigate({
                                 name: "Home",
                                 params: {
@@ -198,9 +182,13 @@ class Paper_Submit extends Component {
                     this.props.navigation.navigate({
                         name: "Home",
                         params: {
-                            learnId: this.state.paperId,
-                            status: change_status,
-                        },
+                                screen: "首页",
+                                params: {
+                                    learnId: this.state.paperId,
+                                    status: change_status,
+                                },
+                            },
+                            merge: true,
                     })
                 }else{
                     WaitLoading.show_false()

@@ -401,18 +401,8 @@ class TodoList extends React.Component {
                                         },
                                         megre: true,
                                     });
-                                }
-                                // 做作业
+                                }// 做作业
                                 else {
-<<<<<<< HEAD
-                                    navigation.navigate("DoPaper", {
-                                        learnId: learnId,
-                                        status: statusUrl, //作业状态
-                                        selectedindex: 0,
-                                        papername: bottomTitle,
-                                        tab: '首页'
-                                    });
-=======
                                     //检查权限
                                     const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
                                     const params = {
@@ -434,7 +424,6 @@ class TodoList extends React.Component {
                                             Alert.alert(resJson.message)
                                         }
                                     })
->>>>>>> 992104e797b09d9b03323a50af4269fbcaa168f5
                                     //this.setState({ todos: todosList });
                                 }
                             } else if (
@@ -452,18 +441,8 @@ class TodoList extends React.Component {
                                         },
                                         megre: true,
                                     });
-                                }
-                                // 做导学案
+                                }          // 做导学案
                                 else {
-<<<<<<< HEAD
-                                    navigation.navigate("DoLearningGuide", {
-                                        learnId: learnId,
-                                        status: statusUrl, //导学案状态
-                                        selectedindex: 0,
-                                        papername: bottomTitle,
-                                        tab: '首页'
-                                    });
-=======
                                         //检查权限
                                         const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
                                         const params = {
@@ -485,7 +464,6 @@ class TodoList extends React.Component {
                                                 Alert.alert(resJson.message)
                                             }
                                         })
->>>>>>> 992104e797b09d9b03323a50af4269fbcaa168f5
                                 }
                             } else if (
                                 todoType == "通知" ||
