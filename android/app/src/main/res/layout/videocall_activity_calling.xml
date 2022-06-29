@@ -373,28 +373,30 @@
             app:layout_constraintEnd_toStartOf="@+id/hands"
             app:layout_constraintHeight_percent="0.1" />
 
-        <Button
-        android:id="@+id/hands"
+    <Button
+        android:id="@+id/hands_onplatform"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginLeft="30dp"
-        android:background="@drawable/btn_select_hand"
+        android:background="@mipmap/hand_onplatform"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="w,1:1"
         app:layout_constraintEnd_toStartOf="@+id/message"
         app:layout_constraintHeight_percent="0.1" />
 
         <Button
-        android:id="@+id/hands_onplatform"
+        android:id="@+id/hands"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginLeft="30dp"
-        android:visibility="invisible"
-        android:background="@mipmap/hand_onplatform"
+        android:visibility="visible"
+        android:background="@drawable/btn_select_hand"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintDimensionRatio="w,1:1"
         app:layout_constraintEnd_toStartOf="@+id/message"
         app:layout_constraintHeight_percent="0.1" />
+
+
 
         <Button
             android:id="@+id/message"
@@ -506,13 +508,13 @@
             <CheckBox
                 android:id="@+id/tfyes"
                 style="@style/select_style"
-                android:tag="1"
+                android:tag="对"
                 android:text="对" />
 
             <CheckBox
                 android:id="@+id/tfno"
                 style="@style/select_style"
-                android:tag="0"
+                android:tag="错"
                 android:text="错" />
 
             <Button
@@ -770,7 +772,7 @@
             android:visibility="invisible"
             app:layout_constraintBottom_toTopOf="@+id/chatroom_temp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHeight_percent="0.9"
+            app:layout_constraintHeight_percent="1.0"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintWidth_percent="1.0" />
 
