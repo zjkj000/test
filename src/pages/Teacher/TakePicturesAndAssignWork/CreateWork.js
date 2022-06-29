@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import http from "../../../utils/http/request";
 import {Avatar,Layout,Button,Divider,Input,OverflowMenu,MenuItem,} from "@ui-kitten/components";
 import { WebView } from 'react-native-webview';
-import Toast from "../../../utils/Toast/Toast";
+import Toast from '../../../utils/Toast/Toast'
 
 
 export default function CreateWorkContainer(props) {
@@ -122,7 +122,6 @@ class CreateWork extends React.Component {
               transparent={true}
               visible={knowledgeModelVisibility}
               onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
                 this.setState({ knowledgeModelVisibility: false });
               }}
             >

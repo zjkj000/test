@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import BasePicker from '../../../utils/datetimePickerUtils/BasePicker';
 import DateTime from '../../../utils/datetimePickerUtils/DateTime';
 import http from '../../../utils/http/request';
-import Toast from '../../../utils/Toast/Toast';
+import Toast from '../../../utils/Toast/Toast'
 import { WaitLoading,Waiting } from '../../../utils/WaitLoading/WaitLoading';
 export default function AssignPicturesWorkContainer(props) {
     const navigation = useNavigation();
@@ -403,20 +403,20 @@ class AssignPicturesWork extends Component {
     //布置页面点击布置
     SaveAssign(){
         if(this.state.beginstr==''){
-            Toast.showDangerToast('请设置开始时间')
-            Alert.alert('请设置开始时间')
+            // Toast.showWarningToast('请设置开始时间')
+            Alert.alert('','请设置开始时间',[{},{text:'确定',onPress:()=>{}}])
         }else if(this.state.endstr==''){
-            Toast.showDangerToast('请设置结束时间')
-            Alert.alert('请设置结束时间')
+            // Toast.showWarningToast('请设置结束时间')
+            Alert.alert('','请设置结束时间',[{},{text:'确定',onPress:()=>{}}])
         }else if(this.state.assigntoWho=='0'&&this.state.studentsList.length==0){
-            Toast.showDangerToast('请先选择布置对象')
-            Alert.alert('请先选择布置对象')
+            // Toast.showWarningToast('请先选择布置对象')
+            Alert.alert('','请先选择布置对象',[{},{text:'确定',onPress:()=>{}}])
         }else if(this.state.assigntoWho=='1'&&this.state.groupSelected.length==0){
-            Toast.showDangerToast('请先选择布置对象')
-            Alert.alert('请先选择布置对象')
+            // Toast.showWarningToast('请先选择布置对象')
+            Alert.alert('','请先选择布置对象',[{},{text:'确定',onPress:()=>{}}])
         }else if(this.state.assigntoWho=='2'&&this.state.studentSelected.length==0){
-            Toast.showDangerToast('请先选择布置对象')
-            Alert.alert('请先选择布置对象')
+            // Toast.showWarningToast('请先选择布置对象')
+            Alert.alert('','请先选择布置对象',[{},{text:'确定',onPress:()=>{}}])
         }else{
             WaitLoading.show('布置中...',-1)
             //拼接提交保存的参数
@@ -475,7 +475,7 @@ class AssignPicturesWork extends Component {
                 // console.log('布置页面保存：',resJson)
                 if(resJson.success){
                     Alert.alert('','作业布置成功！',[{},
-                        {text:'ok',onPress:()=>{
+                        {text:'确定',onPress:()=>{
                             WaitLoading.dismiss()
                             this.props.navigation.navigate({
                                 name:'Teacher_Home',

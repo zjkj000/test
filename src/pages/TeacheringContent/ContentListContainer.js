@@ -472,8 +472,6 @@ class ContentList extends React.Component {
                 transparent={true}
                 visible={PropertyModelVisiblity}
                 onRequestClose={() => {
-                    console.log('----------------Modal has been closed.---------------------');
-                    Alert.alert("Modal has been closed.");
                     this.setModalVisible(!PropertyModelVisiblity);
                 }}
             >

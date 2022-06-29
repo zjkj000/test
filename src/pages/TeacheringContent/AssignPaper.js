@@ -513,7 +513,7 @@ class AssignPaper extends Component {
                         ])   
                     }else{
                         WaitLoading.show_false()
-                        Alert.alert(resJson.message);
+                        Alert.alert('',resJson.message,[{},{text:'确定',onPress:()=>{}}])
                         Toast.showDangerToast('布置失败！',1000)
                     }
                 })
