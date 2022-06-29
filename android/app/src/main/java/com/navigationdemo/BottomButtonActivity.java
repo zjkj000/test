@@ -1,5 +1,7 @@
 package com.navigationdemo;
 
+import static com.navigationdemo.LaunchActivity.TRTCCloudImplListener.refreshRemoteVideoViews;
+
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -64,10 +66,10 @@ public class BottomButtonActivity extends LaunchActivity implements View.OnClick
     public static void muteAudio() {
         boolean isSelected = mButtonMuteAudio.isSelected();
         if (!isSelected) {
-            //mTRTCCloud.startLocalAudio(16);
+            mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
             mTRTCCloud.muteLocalAudio(true);
         } else {
-            //mTRTCCloud.stopLocalAudio();
+            mTRTCCloud.stopLocalAudio();
             mTRTCCloud.muteLocalAudio(false);
         }
         mButtonMuteAudio.setSelected(!isSelected);
@@ -150,37 +152,6 @@ public class BottomButtonActivity extends LaunchActivity implements View.OnClick
     //刷新
     public static void remoteRefresh() {
         System.out.println("remoteRefresh");
-
-        stu_index = 0;
-        for (int i = 0; i < mRemoteViewList.size(); i++) {
-            if (i < mRemoteUidList.size()) {
-                System.out.println("mRemoteViewList["+i+"]"+mRemoteViewList.get(i));
-                System.out.println("mRemoteUidList["+i+"]"+mRemoteUidList.get(i));
-                String remoteUid = mRemoteUidList.get(i);
-
-                //teacher-share
-                if(remoteUid.contains("share")){
-                    //mTeacherShare.setVisibility(View.VISIBLE);
-                    mTRTCCloud.startRemoteView(remoteUid, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SMALL,mTeacherShare);
-                }
-
-                //teacher-camera
-                else if(remoteUid.contains("_camera")){
-                    //mTeacherCamera.setVisibility(View.VISIBLE);
-                    mTRTCCloud.startRemoteView(remoteUid, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SMALL,mTeacherCamera);
-                }
-
-                //student_1/2/3/4/5/6
-                else{
-                    TXCloudVideoView temp =stu_map.get(stu_index++);
-                    //temp.setVisibility(View.VISIBLE);
-                    mTRTCCloud.startRemoteView(remoteUid, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SMALL,temp);
-                }
-            }
-//            else {
-//                mRemoteViewList.get(i).setVisibility(View.GONE);
-//            }
-        }
     }
 
     //全屏
