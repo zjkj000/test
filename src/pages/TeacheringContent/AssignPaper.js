@@ -301,7 +301,6 @@ class AssignPaper extends Component {
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log('测试',resJson)
                 this.setState({ groupList: resJson.data.groupList , studentsList: resJson.data.classList });
             })
     }

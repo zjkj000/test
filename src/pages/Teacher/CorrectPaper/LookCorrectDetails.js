@@ -54,13 +54,12 @@ class LookCorrectDetailsContent extends Component {
             taskId:this.props.taskId,           //作业id或者导学案id
             userName:global.constants.userName,              //  老师登录名
           };
-    //     http.get(url, params).then((resStr) => {
-    //       let resJson = JSON.parse(resStr);
-    //       if(resJson.success){
-    //         Toast.showSuccessToast('答案公布成功！',1000)
-    //       }
-
-    // })
+        http.get(url, params).then((resStr) => {
+          let resJson = JSON.parse(resStr);
+          if(resJson.success){
+            Toast.showSuccessToast('答案公布成功！',1000)
+          }
+    })
   }
 
 

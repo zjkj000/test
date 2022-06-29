@@ -409,9 +409,6 @@ class ContentList extends React.Component {
             .then((resStr) => {
                 isFetchProperty = true;
                 let resJson = JSON.parse(resStr);
-                console.log('==============saveProperty=========================');
-                console.log(resJson);
-                console.log('====================================================');
                 if(resJson.success){
                     Alert.alert('','属性保存成功', [{} ,
                         {text: '关闭', onPress: ()=>{
