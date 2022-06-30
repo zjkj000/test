@@ -8,7 +8,7 @@ import "../../utils/global/constants";
 import {
     Button,
 } from "@ui-kitten/components";
-import {WaitLoading,Waiting} from '../../utils/WaitLoading/WaitLoading' 
+import {WaitLoang,Waiting} from '../../utils/WaitLoading/WaitLoading' 
 let pageNo = 1; //当前第几页
 let itemNo = 0; //item的个数
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
@@ -618,6 +618,13 @@ class ContentList extends React.Component {
                                 })
                                 // Alert.alert('选题布置作业布置还未开发');
                             }
+                                // this.props.navigation.navigate({
+                                //     name:'AssignPicturePaperWork',
+                                //     params:{
+                                //         paperName:name,
+                                //         paperId:id
+                                //     }
+                                // })
                         }}>
                             布置
                         </Text>

@@ -61,7 +61,7 @@ class AssignLearnPlan extends Component {
         
     }
     setBeginDateTime(str){
-        this.setState({beginstr:str,endstr:str})
+        this.setState({beginstr:str})
     }
     setEndDateTime(str){
         this.setState({endstr:str})
@@ -86,11 +86,12 @@ class AssignLearnPlan extends Component {
         const { classNameList } = this.state;
         const content = classNameList.map((item, index) => {
             return(
-                <View style={{flexDirection: 'column',justifyContent:'center',alignItems:'center'}}>
                     <View key={index} 
                         style={this.state.className == item.keTangName ? styles.classNameViewSelected : styles.classNameView}
                     >
                         <Text style={styles.classNameText}
+                            numberOfLines={1}
+                            ellipsizeMode={"tail"}
                             onPress={()=>{
                                 if(this.state.className != item.keTangName){
                                     this.setState({ 
@@ -109,11 +110,21 @@ class AssignLearnPlan extends Component {
                             {item.keTangName}
                         </Text>
                     </View>
-                    <View style={{height: 5}}></View>
-                </View>
             );
         })
-        return content;
+        return (
+            <View
+                style={{
+                    flexDirection: "row",
+                    flexWrap: "wrap", //自动换行
+                    backgroundColor: "#fff",
+                    left: screenWidth * 0.025,
+                    marginBottom: 10,
+                }}
+            >
+                {content}
+            </View>
+        );
     }
 
     //布置对象列表
@@ -167,24 +178,35 @@ class AssignLearnPlan extends Component {
                 if(this.state.groupList.length > 0){
                     content = this.state.groupList.map((item , index)=>{
                         return(
-                            <View style={{flexDirection: 'column',justifyContent:'center',alignItems:'center'}}>
-                                <View key={index} 
-                                    style={ this.IsInGroupSelected(item) ? styles.groupViewSelected : styles.groupView }
+                            <View key={index} 
+                                style={ this.IsInGroupSelected(item) ? styles.groupViewSelected : styles.groupView }
+                            >
+                                <Text style={styles.groupItem}
+                                    numberOfLines={1}
+                                    ellipsizeMode={"tail"}
+                                    onPress={()=>{this.updateGroupSelected(item)}}
                                 >
-                                    <Text style={styles.groupItem}
-                                        onPress={()=>{this.updateGroupSelected(item)}}
-                                    >
-                                        {item.value}
-                                    </Text>
-                                </View>
-                                <View style={{height: 5}}></View>
+                                    {item.value}
+                                </Text>
                             </View>
                         )
                     })
                 }
                 return(
                     this.state.groupList.length > 0
-                    ? content
+                    ? (
+                        <View
+                            style={{
+                                flexDirection: "row",
+                                flexWrap: "wrap", //自动换行
+                                backgroundColor: "#fff",
+                                left: screenWidth * 0.025,
+                                marginBottom: 10,
+                            }}
+                        >
+                            {content}
+                        </View>
+                    )
                     : <View style={{justifyContent:'center', alignItems: 'center'}}>
                         <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>
                         您还没有创建小组，可以前往电脑端进行创建</Text>
@@ -207,7 +229,7 @@ class AssignLearnPlan extends Component {
                         return(
                                 <View key={index} 
                                     style={ this.IsInStudentSelected(item) ? {
-                                            width: screenWidth * 0.3,
+                                            width: screenWidth * 0.22,
                                             height: 40,
                                             fontSize: 15,
                                             color: 'black',
@@ -219,7 +241,7 @@ class AssignLearnPlan extends Component {
                                             textAlign: 'center',
                                         }
                                         : {
-                                            width: screenWidth * 0.3,
+                                            width: screenWidth * 0.22,
                                             height: 40,
                                             fontSize: 15,
                                             color: 'black',
@@ -487,7 +509,7 @@ class AssignLearnPlan extends Component {
                         ])   
                     }else{
                         WaitLoading.show_false()
-                        Alert.alert('',resJson.message, [{} , {text: '关闭', onPress: ()=>{  }}]);
+                        Alert.alert('',resJson.message, [{} , {text: '关闭', onPress: ()=>{}}]);
                         Toast.showDangerToast('布置失败！',1000)
                     }
                 })
@@ -596,15 +618,15 @@ class AssignLearnPlan extends Component {
 }
 
 const styles = StyleSheet.create({
-classNameView: {
-        width: screenWidth * 0.5,
+    classNameView: {
+        width: screenWidth * 0.4,
         height: 40,
         backgroundColor: '#DCDCDC',
         borderWidth: 2,
         borderColor: '#fff',
     },
     classNameViewSelected: {
-        width: screenWidth * 0.5,
+        width: screenWidth * 0.4,
         height: 40,
         backgroundColor: '#fff',
         borderWidth: 2,
@@ -615,8 +637,9 @@ classNameView: {
         fontWeight: '300',
         paddingTop: 8,
         textAlign: 'center',
-    }, groupView: {
-        width: screenWidth * 0.5,
+    }, 
+    groupView: {
+        width: screenWidth * 0.48,
         height: 40,
         backgroundColor: '#DCDCDC',
         marginTop:3,
@@ -624,7 +647,7 @@ classNameView: {
         borderColor: '#fff',
     },
     groupViewSelected: {
-        width: screenWidth * 0.5,
+        width: screenWidth * 0.48,
         height: 40,
         backgroundColor: '#fff',
         marginTop:3,

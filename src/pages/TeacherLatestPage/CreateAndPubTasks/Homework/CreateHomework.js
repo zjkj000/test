@@ -2301,7 +2301,7 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: 'black',
         fontWeight: '500',
-        width: screenWidth * 0.2,
+        width: screenWidth * 0.3,
         paddingTop: 10,
         paddingBottom: 10,
         paddingLeft: 15,
