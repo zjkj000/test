@@ -244,9 +244,9 @@ export default class PicturesWorkContent extends Component {
     
     //拍照调用的函数
     handleCamera(type){
-      WaitLoading.show('提交中...',-1)
       ImageHandler.handleCamera().then((res) => {
-          if (res) {
+          if (res!=null) {
+                  WaitLoading.show('提交中...',-1)
                   const url = global.constants.baseUrl+"teacherApp_saveBase64Image.do";
                   const params = {
                       baseCode: res.base64,
@@ -285,16 +285,15 @@ export default class PicturesWorkContent extends Component {
 
   //从本地选择照片需要的函数
     handleLibrary(type){
-      WaitLoading.show('提交中...',-1)
         ImageHandler.handleLibrary().then((res) => {
-            if (res) {
+            if (res!=null) {
+              WaitLoading.show('提交中...',-1)
               const url = global.constants.baseUrl+"teacherApp_saveBase64Image.do";
               const params = {
                   baseCode: res.base64,
                   questionId: this.state.questionId,
                   type:type,
-                  userName: global.constants.userName};    
-                  
+                  userName: global.constants.userName};   
                 http.post(url,params,false).then((resStr)=>{
                     let resJson = resStr;
                     if(resJson.success){

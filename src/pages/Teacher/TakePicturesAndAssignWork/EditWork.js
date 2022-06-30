@@ -282,11 +282,12 @@ class EditWork extends Component{
                       }
                     }
                   }>
-                    <View key={index} style={{backgroundColor:'#D3D3D3',
-                                    height:35,margin:8,borderColor:'red',padding:5,paddingLeft:10,paddingRight:10,
+                    <View key={index} style={{backgroundColor:'#D3D3D3',borderRadius:5,
+                                    width:screenWidth*0.25,alignItems:'center',
+                                    height:32,margin:8,borderColor:'red',padding:5,paddingLeft:0,paddingRight:0,
                                     borderWidth:this.state.typeId==item.typeId?1:0
                                     }}>
-                            <Text style={{fontSize:16}}>{item.typeName}</Text>
+                            <Text style={{fontSize:15}}>{String(item.typeName).length>5?(String(item.typeName).substring(0,5)+'..'):item.typeName}</Text>
                     </View>
                   </TouchableOpacity>
                     
@@ -459,11 +460,11 @@ class EditWork extends Component{
       if(!this.checkTimuAndAnswerisnull(item.TimuContentList,item.AnswerContentList)){
         if(item.TimuContentList.length==0){
           const str= '请设置第'+(index+1)+'题题面'
-          Alert.alert(str)
+          Alert.alert('',str,[{},{text:'确定',onPress:()=>{}}])
           Toast.showWarningToast(str,1000)
         }else{
           const str= '请设置第'+(index+1)+'题答案'
-          Alert.alert(str)
+          Alert.alert('',str,[{},{text:'确定',onPress:()=>{}}])
           Toast.showWarningToast(str,1000)
         }
         //else 是判断过了  题面  答案是否设置
@@ -516,7 +517,6 @@ class EditWork extends Component{
                               gradeLevelName:this.props.gradeLevelName,        //教材Name
                               pointName:this.props.pointName,                  //知识点Name
                             };
-                        // console.log('提交了.....')
                           WaitLoading.show('保存中...',-1)
                           http.get(url, params).then((resStr) => {
                             let resJson = JSON.parse(resStr);
@@ -657,7 +657,7 @@ class EditWork extends Component{
                                       this.state.baseTypeId,
                                       this.state.questionScore)
                                   }else{
-                                    Alert.alert('分值必须为5的倍数!')
+                                    Alert.alert('','分值必须为5的倍数!',[{},{text:'确定',onPress:()=>{}}])
                                   }
                                 }else{
                                   TiMuTypeList.map((item,index)=>{
@@ -716,7 +716,7 @@ class EditWork extends Component{
           <View style={{flexDirection:'row',justifyContent:'space-around'}}>
               <Button onPress={()=>{
                     if(this.state.data.length==0){
-                      Alert.alert('请先添加试题！')
+                      Alert.alert('','请先添加试题！',[{},{text:'确定',onPress:()=>{}}])
                       Toast.showWarningToast('请先添加试题！',1000)
                     }else{
                       this.savepaper(false)
@@ -725,7 +725,7 @@ class EditWork extends Component{
                 } style={{width:'40%',backgroundColor:'#1E90FF'}}>保存</Button>
               <Button onPress={()=>{
                 if(this.state.data.length==0){
-                  Alert.alert('请先添加试题！')
+                  Alert.alert('','请先添加试题！',[{},{text:'确定',onPress:()=>{}}])
                   Toast.showWarningToast('请先添加试题！',1000)
                 }else{
                   if(this.state.updateFlag=='0'){

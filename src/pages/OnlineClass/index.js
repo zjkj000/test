@@ -1,6 +1,6 @@
 import { useNavigation, useRoute } from "@react-navigation/native";
 import React, { Component, useState } from "react";
-import { View, Text, Image, BackHandler } from "react-native";
+import { View, Text, Image, BackHandler, ScrollView } from "react-native";
 import Orientation from "react-native-orientation";
 import { styles } from "./styles";
 import http from "../../utils/http/request";
@@ -17,6 +17,10 @@ import HTML from "react-native-render-html";
 import ShareStuAnswer from "./ClassPages/ShareStuAnswer";
 import AnonymousCorrecting from "./ClassPages/AnonymousCorrecting";
 import RushPage from "./ClassPages/RushPage";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import theme from "../../theme/custom-theme.json";
+import { Layout } from "@ui-kitten/components";
+import { ScreenHeight, ScreenWidth } from "react-native-elements/dist/helpers";
 
 export default function OnlineClassTempPage() {
     const navigation = useNavigation();
@@ -232,14 +236,52 @@ class OnlineClassTemp extends Component {
         const routeParams = this.props.route.params;
         // const { courseName, introduction, teacherName } = routeParams.learnPlan;
         return (
-            <View style={{ backgroundColor: "#fff" }}>
-                <Image
-                    source={require("../../assets/classImg/ready.jpg")}
-                ></Image>
-                <Text>课堂:{routeParams.learnPlan.courseName}</Text>
-                <Text>教师:{routeParams.learnPlan.teacherName}</Text>
-                <Text>学生:{routeParams.learnPlan.introduction}</Text>
-            </View>
+            <ScrollView
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    backgroundColor: "#fff",
+                }}
+            >
+                <View
+                    style={{
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <Image
+                        source={require("../../assets/classImg/ready.jpg")}
+                    ></Image>
+                    <Text style={styles.infoText}>
+                        课堂:{routeParams.learnPlan.courseName}
+                    </Text>
+                    <Text style={styles.infoText}>
+                        教师:{routeParams.learnPlan.teacherName}
+                    </Text>
+                    <Text style={styles.infoText}>
+                        学生:{routeParams.learnPlan.introduction}
+                    </Text>
+                    <TouchableOpacity
+                        style={{ marginTop: 10 }}
+                        onPress={() => {
+                            this.props.navigation.navigate({
+                                name: "Home",
+                                params: { screen: "线上课程" },
+                                merge: true,
+                            });
+                        }}
+                    >
+                        <Text
+                            style={{
+                                color: theme["color-primary-600"],
+                                fontSize: 20,
+                            }}
+                        >
+                            退出课堂
+                        </Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         );
     }
 

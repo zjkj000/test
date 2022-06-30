@@ -19,6 +19,7 @@ import http from "../../utils/http/request";
 import Loading from "../../utils/loading/Loading"; //Loading组件使用export {Loading}或者export default Loading;
 //import {Loading} from "../../utils/loading/Loading"; //Loading组件使用export {Loading},此时import必须加{}导入
 //import global from "../../utils/global/constants";
+import {WaitLoading , Waiting} from "../../utils/WaitLoading/WaitLoading";
 
 let pageNo = 1; //当前第几页
 let itemNo = 0; //item的个数
@@ -169,9 +170,11 @@ class PackagesPage extends React.Component {
             //console.log('resJson' , resJson.data);
             let url = resJson.data.url;
             if(url == '预览文件不存在'){
+                WaitLoading.show_false('文件正在转换，请稍后查看',1000);
                 Alert.alert('','文件正在转换，请稍后查看',
                     [{},{},{text:'确定',onPress:()=>{}}])
             }else{
+                WaitLoading.show_success('进入详情页面',1000);
                 console.log('======imgUrl=====',imgUrl)
                 console.log(resJson.data)
                 console.log(url)
@@ -236,7 +239,7 @@ class PackagesPage extends React.Component {
                     ? require("../../assets/LatestTaskImages/mp4.png")
                     : imgUrl == "pdf.png"
                     ? require("../../assets/LatestTaskImages/pdf.png")
-                    : imgUrl == "ppt.png"
+                    : (imgUrl == "ppt.png" || imgUrl == "pptx.png")
                     ? require("../../assets/LatestTaskImages/ppt.png")
                     : require("../../assets/LatestTaskImages/word.png"); 
 
@@ -245,36 +248,7 @@ class PackagesPage extends React.Component {
                     <TouchableOpacity
                         onPress={() => {
                             this.showPackage(imgUrl,id,type,'PHONE');
-                            // if(imgUrl == "mp3.png"){
-                            //     navigation.navigate("音频", 
-                            //     {
-                            //         id: id,
-                            //         type: type,
-                            //         deviceType: 'PHONE',
-                            //     });
-                            // }else if(imgUrl == "mp4.png"){
-                            //     navigation.navigate("视频", 
-                            //     {
-                            //         id: id,
-                            //         type: type,
-                            //         deviceType: 'PHONE',
-                            //     });
-                            // }else if(imgUrl == "doc.png" || imgUrl == "pdf.png"){
-                            //     navigation.navigate("文档" , 
-                            //     {
-                            //         id: id,
-                            //         type: type,
-                            //         deviceType: 'PHONE',
-                            //     });
-                            //     //Alert.alert('文档类型的组件还未实现');
-                            // }else if(imgUrl == "ppt.png"){    
-                            //     navigation.navigate("PPT" , 
-                            //     {
-                            //         id: id,
-                            //         type: type,
-                            //         deviceType: 'PHONE',
-                            //     });
-                            // }                                       
+                            WaitLoading.show('请求资源中',-1);                                      
                         }}
                         style={{
                             //borderWidth: 0.5,
@@ -329,7 +303,8 @@ class PackagesPage extends React.Component {
 
     renderData(){
         return(
-            <View style={{backgroundColor: '#fff'}}>
+            <View style={{backgroundColor: '#fff',flex:1}}>
+                <Waiting/>
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
                 <FlatList
                     //定义数据显示效果

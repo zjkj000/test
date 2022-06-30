@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import BasePicker from '../../../utils/datetimePickerUtils/BasePicker';
 import DateTime from '../../../utils/datetimePickerUtils/DateTime';
 import http from '../../../utils/http/request';
-import Toast from '../../../utils/Toast/Toast';
+import Toast from '../../../utils/Toast/Toast'
 import { WaitLoading,Waiting } from '../../../utils/WaitLoading/WaitLoading';
 export default function AssignPicturesWorkContainer(props) {
     const navigation = useNavigation();
@@ -122,7 +122,6 @@ class AssignPicturesWork extends Component {
         const { classNameList } = this.state;
         const content = classNameList.map((item, index) => {
             return(
-                <View style={{flexDirection: 'column',justifyContent:'center',alignItems:'center'}}>
                     <View key={index} 
                         style={this.state.className == item.keTangName ? styles.classNameViewSelected : styles.classNameView}
                     >
@@ -145,8 +144,6 @@ class AssignPicturesWork extends Component {
                             {item.keTangName}
                         </Text>
                     </View>
-                    <View style={{height: 5}}></View>
-                </View>
             );
         })
         return content;
@@ -167,12 +164,12 @@ class AssignPicturesWork extends Component {
                 return(
                     <View 
                         style={this.state.classFlag == false ?
-                            {width: screenWidth*0.4,  height: 35, marginTop: 10, marginLeft: 20, backgroundColor: '#DCDCDC'}
-                            : {width: screenWidth*0.4,  height: 35, marginTop: 10, marginLeft: 20, backgroundColor: '#fff', borderWidth: 1, borderColor: 'red'}
+                            {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5, backgroundColor: '#DCDCDC',justifyContent:'center'}
+                            : {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 1, borderColor: 'red'}
                         }
                     >
                         <Text 
-                            style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 5, textAlign: 'center'}}
+                            style={{fontSize: 16, color: 'black', fontWeight: '400', textAlign: 'center'}}
                             onPress={()=>{
                                 if(this.state.groupList.length <= 0 && this.state.studentsList.length <= 0){
                                     if(this.state.class != null){ //已选择课堂且小组和个人信息都为空时请求一次小组和个人信息
@@ -213,7 +210,6 @@ class AssignPicturesWork extends Component {
                                         {item.value}
                                     </Text>
                                 </View>
-                                <View style={{height: 5}}></View>
                             </View>
                         )
                     })
@@ -243,8 +239,9 @@ class AssignPicturesWork extends Component {
                         return(
                                 <View key={index} 
                                     style={ this.IsInStudentSelected(item) ? {
-                                            width: screenWidth * 0.3,
+                                            width: screenWidth * 0.22,
                                             height: 40,
+                                            borderRadius:5,
                                             fontSize: 15,
                                             color: 'black',
                                             backgroundColor: '#fff',
@@ -255,8 +252,9 @@ class AssignPicturesWork extends Component {
                                             textAlign: 'center',
                                         }
                                         : {
-                                            width: screenWidth * 0.3,
+                                            width: screenWidth * 0.22,
                                             height: 40,
+                                            borderRadius:5,
                                             fontSize: 15,
                                             color: 'black',
                                             backgroundColor: '#DCDCDC',
@@ -403,37 +401,39 @@ class AssignPicturesWork extends Component {
     //布置页面点击布置
     SaveAssign(){
         if(this.state.beginstr==''){
-            Toast.showDangerToast('请设置开始时间')
-            Alert.alert('请设置开始时间')
+            // Toast.showWarningToast('请设置开始时间')
+            Alert.alert('','请设置开始时间',[{},{text:'确定',onPress:()=>{}}])
         }else if(this.state.endstr==''){
-            Toast.showDangerToast('请设置结束时间')
-            Alert.alert('请设置结束时间')
+            // Toast.showWarningToast('请设置结束时间')
+            Alert.alert('','请设置结束时间',[{},{text:'确定',onPress:()=>{}}])
         }else if(this.state.assigntoWho=='0'&&this.state.studentsList.length==0){
-            Toast.showDangerToast('请先选择布置对象')
-            Alert.alert('请先选择布置对象')
+            // Toast.showWarningToast('请先选择布置对象')
+            Alert.alert('','请先选择布置对象',[{},{text:'确定',onPress:()=>{}}])
         }else if(this.state.assigntoWho=='1'&&this.state.groupSelected.length==0){
-            Toast.showDangerToast('请先选择布置对象')
-            Alert.alert('请先选择布置对象')
+            // Toast.showWarningToast('请先选择布置对象')
+            Alert.alert('','请先选择布置对象',[{},{text:'确定',onPress:()=>{}}])
         }else if(this.state.assigntoWho=='2'&&this.state.studentSelected.length==0){
-            Toast.showDangerToast('请先选择布置对象')
-            Alert.alert('请先选择布置对象')
+            // Toast.showWarningToast('请先选择布置对象')
+            Alert.alert('','请先选择布置对象',[{},{text:'确定',onPress:()=>{}}])
         }else{
-            WaitLoading.show('布置中...',-1)
+            
             //拼接提交保存的参数
             var stuIds ='';
             var stuNames ='';
             var learnType ='';
             var classIdOrGroupId = '';
             var classOrGroupName = '';
-            if(this.state.assigntoWho=='0'){
+            if(this.state.assigntoWho=='0'){  //班级
                 learnType = '70'
                 stuIds = this.state.studentsList[0].ids
                 stuNames = this.state.studentsList[0].name
+                classOrGroupName=this.state.className
+                classIdOrGroupId=this.state.keTangId
             }else if(this.state.assigntoWho=='1'){
                 learnType = '50'
                 for(let i=0;i<this.state.groupSelected.length;i++){
-                    classIdOrGroupId = classIdOrGroupId+ ','+ this.state.groupSelected[i].id
-                    classOrGroupName = classOrGroupName+ ','+  this.state.groupSelected[i].value
+                    classIdOrGroupId = classIdOrGroupId+ ';'+ this.state.groupSelected[i].id
+                    classOrGroupName = classOrGroupName+ ';'+  this.state.groupSelected[i].value
                     stuIds =stuIds +','+this.state.groupSelected[i].ids
                     stuNames =stuNames +','+this.state.groupSelected[i].name
                 }
@@ -443,8 +443,10 @@ class AssignPicturesWork extends Component {
                     classIdOrGroupId=classIdOrGroupId.substring(1)
                     classOrGroupName = classOrGroupName.substring(1)
                 }
-            }else if(this.state.assigntoWho=='2'){
+            }else if(this.state.assigntoWho=='2'){    //个人
                 learnType = '70'
+                classOrGroupName=this.state.className
+                classIdOrGroupId=this.state.keTangId
                 for(let i=0;i<this.state.studentSelected.length;i++){
                     stuIds =stuIds +','+this.state.studentSelected[i].id
                     stuNames =stuNames +','+this.state.studentSelected[i].name
@@ -465,17 +467,17 @@ class AssignPicturesWork extends Component {
                 keTangId:this.state.keTangId,	        //课堂id
                 classOrGroupId:classIdOrGroupId,	    //班级或小组id
                 stuIds:stuIds,	                    //学生id串
-                stuNames:stuNames,               //含中文，前端加码	学生姓名串
+                stuNames:stuNames,                  //含中文，前端加码	学生姓名串
                 learnType:learnType,		        //作业布置方式：班级70/小组50/个人70
                 keTangName:this.state.className,           //含中文，前端加码	课堂名
                 classOrGroupName:classOrGroupName,	    //含中文，前端加码	班级或小组名  
                 };
+            WaitLoading.show('布置中...',-1)
             http.get(url, params).then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                // console.log('布置页面保存：',resJson)
                 if(resJson.success){
                     Alert.alert('','作业布置成功！',[{},
-                        {text:'ok',onPress:()=>{
+                        {text:'确定',onPress:()=>{
                             WaitLoading.dismiss()
                             this.props.navigation.navigate({
                                 name:'Teacher_Home',
@@ -538,7 +540,7 @@ class AssignPicturesWork extends Component {
                 </View>
             
             {this.state.SelectKeTangStatus?
-                        (<View style={{marginTop:20}}>
+                        (<View style={{marginTop:20,flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start'}}>
                             {
                                 this.state.classNameList.length <= 0
                                     ? this.fetchClassNameList()
@@ -554,15 +556,26 @@ class AssignPicturesWork extends Component {
         </View>
 
         <View style={{flexDirection:'row',height:60,alignItems:'center'}}>
-            <Text style={{fontSize:15,marginRight:40,marginLeft:30}}>布置给</Text>
-            <Button onPress={()=>{this.updateAssignToWho('0');this.setState({SelectKeTangStatus:false})}} style={{marginRight:20}} appearance={this.state.assigntoWho=='0'?'filled':'ghost'}>班级</Button>
-            <Button onPress={()=>{this.updateAssignToWho('1');this.setState({SelectKeTangStatus:false})}} style={{marginRight:20}} appearance={this.state.assigntoWho=='1'?'filled':'ghost'}>小组</Button>
-            <Button onPress={()=>{this.updateAssignToWho('2');this.setState({SelectKeTangStatus:false})}} appearance={this.state.assigntoWho=='2'?'filled':'ghost'}>个人</Button>
-            
+            <Text style={{fontSize:15,marginRight:40,marginLeft:30}}>布置给:</Text>
+            <TouchableOpacity style={{marginRight:30}} onPress={()=>{this.updateAssignToWho('0');this.setState({SelectKeTangStatus:false})}}>
+                <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='0'?'#4DC7F8':'#fff'}}>
+                    <Text style={{fontSize:15}}>班级</Text>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssignToWho('1');this.setState({SelectKeTangStatus:false})}}>
+                <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='1'?'#4DC7F8':'#fff'}}>
+                    <Text>小组</Text>
+                </View>
+            </TouchableOpacity>
+            <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssignToWho('2');this.setState({SelectKeTangStatus:false})}}>
+                <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='2'?'#4DC7F8':'#fff'}}>
+                    <Text>个人</Text>
+                </View>
+            </TouchableOpacity>
         </View>
 
         <ScrollView>
-            <View style={{alignItems:'center',marginTop:15}}>
+            <View style={{alignItems:'flex-start',marginTop:15,marginBottom:50,flexDirection:'row',flexWrap:'wrap',justifyContent:'center'}}>
                 {this.showAssignToWho()}
             </View>
                 
@@ -602,16 +615,22 @@ class AssignPicturesWork extends Component {
 }
 
 const styles = StyleSheet.create({
-classNameView: {
-        width: screenWidth * 0.5,
+    classNameView: {
+        borderRadius:5,
+        width: screenWidth * 0.4,
         height: 40,
+        marginLeft:10,
+        marginBottom:5,  
         backgroundColor: '#DCDCDC',
         borderWidth: 2,
         borderColor: '#fff',
     },
     classNameViewSelected: {
-        width: screenWidth * 0.5,
+        borderRadius:5,
+        width: screenWidth * 0.4,
         height: 40,
+        marginLeft:10,
+        marginBottom:5,  
         backgroundColor: '#fff',
         borderWidth: 2,
         borderColor: 'red',
@@ -622,18 +641,24 @@ classNameView: {
         paddingTop: 8,
         textAlign: 'center',
     }, groupView: {
-        width: screenWidth * 0.5,
+        borderRadius:5,
+        width: screenWidth * 0.4,
         height: 40,
         backgroundColor: '#DCDCDC',
         marginTop:3,
+        marginBottom:5,  
+        marginLeft:20,
         borderWidth: 2,
         borderColor: '#fff',
     },
     groupViewSelected: {
-        width: screenWidth * 0.5,
+        borderRadius:5,
+        width: screenWidth * 0.4,
         height: 40,
         backgroundColor: '#fff',
         marginTop:3,
+        marginBottom:5,  
+        marginLeft:20,
         borderWidth: 2,
         borderColor: 'red',
     },

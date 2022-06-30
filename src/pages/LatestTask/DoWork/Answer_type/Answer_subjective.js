@@ -7,7 +7,7 @@ import ImageViewer from "react-native-image-zoom-viewer";
 import ImageHandler from "../../../../utils/Camera/Camera";
 import http from "../../../../utils/http/request";
 import { useNavigation } from "@react-navigation/native";
-import Toast from "../../../../utils/Toast/Toast";
+import Toast from '../../../../utils/Toast/Toast';
 import { Waiting, WaitLoading } from "../../../../utils/WaitLoading/WaitLoading";
 export default function Answer_subjectiveContainer(props) {
     const navigation = useNavigation();
@@ -198,7 +198,7 @@ class Answer_subjective extends Component {
     //拍照调用的函数
     handleCamera = () => {
         ImageHandler.handleCamera().then((res) => {
-            if (res) {
+            if (res!=null) {
                 const url = global.constants.baseUrl+"studentApp_saveBase64Image.do";
                 const params = {
                     baseCode: res.base64,
@@ -237,7 +237,7 @@ class Answer_subjective extends Component {
     //从本地选择照片需要的函数
     handleLibrary = () => {
         ImageHandler.handleLibrary().then((res) => {
-            if (res) {
+            if (res!=null) {
                 WaitLoading.show('照片提交中...',-1)
                 const url = global.constants.baseUrl+"studentApp_saveBase64Image.do";
                 const params = {
@@ -245,7 +245,6 @@ class Answer_subjective extends Component {
                     learnPlanId: this.state.paperId,
                     userId: global.constants.userName,
                 };
-
                 http.post(url, params,false).then((resStr) => {
                     let resJson = resStr
                     // let resJson = JSON.parse(resStr);

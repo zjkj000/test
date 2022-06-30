@@ -4,7 +4,7 @@ import http from "../../../utils/http/request";
 import RenderHtml from "react-native-render-html";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../../utils/loading/Loading";
-import Toast from "../../../utils/Toast/Toast";
+import Toast from "../../../utils/Toast/Toast"
 import { Waiting, WaitLoading } from '../../../utils/WaitLoading/WaitLoading'
 // 提交作业页面
 export default function Paper_SubmitContainer(props) {

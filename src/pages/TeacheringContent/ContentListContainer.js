@@ -472,8 +472,6 @@ class ContentList extends React.Component {
                 transparent={true}
                 visible={PropertyModelVisiblity}
                 onRequestClose={() => {
-                    console.log('----------------Modal has been closed.---------------------');
-                    Alert.alert("Modal has been closed.");
                     this.setModalVisible(!PropertyModelVisiblity);
                 }}
             >
@@ -597,7 +595,7 @@ class ContentList extends React.Component {
                 >
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
-                            if(todo.paperType == '6'){ //拍照布置作业布置
+                            
                                 this.props.navigation.navigate({
                                     name:'AssignPicturePaperWork',
                                     params:{
@@ -605,16 +603,7 @@ class ContentList extends React.Component {
                                         paperId:id
                                     }
                                 })
-                            }else{
-                                this.props.navigation.navigate({
-                                    name:'AssignPaper',
-                                    params:{
-                                        paperId: todo.id,
-                                        paperName: todo.name,
-                                    }
-                                })
-                                // Alert.alert('选题布置作业布置还未开发');
-                            }
+                            
                         }}>
                             布置
                         </Text>

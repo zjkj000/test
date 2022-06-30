@@ -125,7 +125,7 @@ class Tea_Informcontent extends Component {
   render() {
     return (
       <View style={{backgroundColor:'#fff',height:'100%'}}>
-            <ScrollView style={{width:screenWidth,borderTopWidth:0.5,height:screenHeight-50}}>
+            <ScrollView style={{width:screenWidth,borderTopWidth:0.5,height:screenHeight*0.95}}>
                 {/* *未读的通知或公告将调用Api修改状态 */}
                 {/* {(status == 5)? (this.updateStatus(status , type , learnId)) : null} */}
                 <View style={{paddingBottom:20,borderBottomWidth:0.5}}>

@@ -13,7 +13,7 @@ import http from "../../../utils/http/request";
 import RenderHtml from "react-native-render-html";
 import { useNavigation } from "@react-navigation/native";
 import Loading from "../../../utils/loading/Loading";
-import Toast from "../../../utils/Toast/Toast";
+import Toast from '../../../utils/Toast/Toast'
 import { Waiting, WaitLoading } from "../../../utils/WaitLoading/WaitLoading";
 // 提交导学案页面
 export default function Learningguide_SubmitContainer(props) {
@@ -224,10 +224,6 @@ class Learningguide_Submit extends Component {
                                 },
                                 megre: true,
                             });
-                        // }
-                        // else{
-                        //     Alert.alert('需要跳转')
-                        // }
                     }}
                 >
                     <View key={result_Item} style={styles.result}>

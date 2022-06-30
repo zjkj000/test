@@ -2,7 +2,7 @@ import { Text, View,Image,Alert} from 'react-native'
 import React, { Component } from 'react'
 import { Radio, RadioGroup,Button} from '@ui-kitten/components';
 import http from '../../utils/http/request';
-import { Toast } from '../../utils/Toast/Toast';
+import Toast from '../../utils/Toast/Toast';
 import { useNavigation } from "@react-navigation/native";
 
 export default function Select_Subject_SubmitContainer(props) {
@@ -87,7 +87,7 @@ class Select_Subject_Submit extends Component {
                 })
         }else{
             // Toast.showInfoToast('你的选科结果未改变',3000)
-            Alert.alert('结果未改变')
+            Alert.alert('','结果未改变',[{},{text:'确定',onPress:()=>{}}])
         }
     }
 
@@ -135,7 +135,7 @@ class Select_Subject_Submit extends Component {
                 <View style={{alignItems:'center',marginTop:20}}>
                     <Button style={{width:200}} onPress={() => {
                         if(this.state.selectedIndex=='-1'){
-                            Alert.alert('请先选择科目')
+                            Alert.alert('','请先选择科目',[{},{text:'确定',onPress:()=>{}}])
                         }else{ 
                             this.sub_select() 
                         }                       

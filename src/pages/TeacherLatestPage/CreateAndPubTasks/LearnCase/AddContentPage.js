@@ -337,9 +337,9 @@ class AddContentPage extends React.Component {
                     selectContentNum: this.state.selectContentNum - 1,
                     selectContentList: selectContentListCopy
                 },()=>{
-                    this.props.setSelectContentNum(this.state.selectContentList.length);
-                    this.props.setSelectContentList(this.state.selectContentList);
-                    this.props.setLearnPlanId(this.state.learnPlanId);
+                    // this.props.setSelectContentNum(this.state.selectContentList.length);
+                    // this.props.setSelectContentList(this.state.selectContentList);
+                    // this.props.setLearnPlanId(this.state.learnPlanId);
                 })
             }
         }else{ //添加内容
@@ -349,9 +349,9 @@ class AddContentPage extends React.Component {
                 selectContentNum: this.state.selectContentNum + 1,
                 selectContentList: selectContentListCopy
             },()=>{
-                this.props.setSelectContentNum(this.state.selectContentList.length);
-                this.props.setSelectContentList(this.state.selectContentList);
-                this.props.setLearnPlanId(this.state.learnPlanId);
+                // this.props.setSelectContentNum(this.state.selectContentList.length);
+                // this.props.setSelectContentList(this.state.selectContentList);
+                // this.props.setLearnPlanId(this.state.learnPlanId);
             })
         }
     }

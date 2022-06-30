@@ -68,8 +68,8 @@ export const styles = StyleSheet.create({
         height: 128,
     },
     smallImg: {
-        width: 30,
-        height: 30,
+        width: 20,
+        height: 20,
     },
     bigImg: {
         width: 128,
@@ -89,7 +89,7 @@ export const styles = StyleSheet.create({
     mainContainer: {
         width: "100%",
         height: "100%",
-        flex: 4,
+        flex: 6,
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
@@ -131,6 +131,7 @@ export const styles = StyleSheet.create({
         flex: 1,
         height: "100%",
         textAlign: "center",
+        alignItems: "center",
     },
     header_middle: {
         flex: 2,
@@ -141,7 +142,8 @@ export const styles = StyleSheet.create({
     },
     body: {
         width: screenHeight,
-        flex: 10,
+        flex: 14,
+        padding: 0,
         flexDirection: "row",
         textAlign: "center",
         justifyContent: "center",
@@ -184,9 +186,11 @@ export const styles = StyleSheet.create({
         flex: 2,
         flexDirection: "row",
         textAlign: "center",
+        width: "100%",
         justifyContent: "space-evenly",
         alignItems: "center",
-        padding: 5,
+        borderTopColor: "gray",
+        borderTopWidth: 1,
     },
     bottomLeft: {
         flex: 1,
@@ -203,16 +207,16 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
     QRCode: {
-        width: screenWidth / 4,
-        height: screenWidth / 4,
+        height: screenWidth * 0.6,
+        width: screenWidth * 0.6,
     },
     inputArea: {
-        // width: "100%",
+        width: "100%",
         flex: 2,
         height: "100%",
         flexDirection: "row",
         justifyContent: "space-evenly",
-        // backgroundColor: "#E6DDD6",
+        backgroundColor: "#E6DDD6",
         alignItems: "center",
     },
     PPT_area: { alignItems: "center", height: "100%", paddingTop: "35%" },
@@ -262,5 +266,8 @@ export const styles = StyleSheet.create({
         right: -6,
         zIndex: 2,
         color: "#DB4E30",
+    },
+    infoText: {
+        fontSize: 18,
     },
 });

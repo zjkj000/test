@@ -4,6 +4,7 @@ import RenderHTML from 'react-native-render-html'
 import SelectScore from './SelectScore'
 import { Button } from '@ui-kitten/components';
 import { screenWidth } from '../../../utils/Screen/GetSize';
+import { CheckBox } from '@ui-kitten/components';
 export default class PaperContent extends Component {
     constructor(props){
         super(props)
@@ -108,35 +109,37 @@ export default class PaperContent extends Component {
                   </View>
 
                 <RenderHTML contentWidth={width} source={{html:this.state.data.shitiShow}}></RenderHTML>
-                <View style={{flexDirection:'row'}}>
+                <View style={{flexDirection:'row',alignItems:'center'}}>
                   <Text style={styles.Titletext}>[得分]   {this.state.data.status==4&&CorrectResultList[i].hand==0?'':this.state.CorrectResultList[i].stuscore}</Text>
                   {/* //多选和主观题  加上0.5 分值选项 */}
                   {((this.props.data.questionType=='102'||this.props.data.questionType=='104'||this.props.data.questionType=='106')&&(this.props.correctingstatus!='5'))?(
-                    <Button onPress={()=>{
-                      if(this.state.halfistrue){
-                        var newCorrectResultList=this.state.CorrectResultList
-                        newCorrectResultList[parseInt(this.state.data.order)-1].hand= 1
-                        this.props.setCorrected(newCorrectResultList)
-                        newCorrectResultList[i].stuscore=(newCorrectResultList[i].stuscore-0.5)<0?0:(newCorrectResultList[i].stuscore-0.5)
-                        this.setState({
-                            halfistrue:false,
-                            CorrectResultList:newCorrectResultList
-                          })
-                      }else{
-                        if(this.state.CorrectResultList[i].stuscore==selectScore[selectScore.length-1]){
-                          Alert.alert('该题目已经满分')
-                        }else{
-                          var newCorrectResultList=this.state.CorrectResultList
-                          newCorrectResultList[parseInt(this.state.data.order)-1].hand= 1
-                          this.props.setCorrected(newCorrectResultList)
-                          newCorrectResultList[i].stuscore=(newCorrectResultList[i].stuscore+0.5)>selectScore[selectScore.length-1]?selectScore[selectScore.length-1]:(parseFloat(newCorrectResultList[i].stuscore)+0.5)
-                          this.setState({
-                            halfistrue:true,
-                            CorrectResultList:newCorrectResultList
-                          })
-                        }
-                      }
-                    }} style={{position:'absolute',left:screenWidth*0.4}} appearance={this.state.halfistrue?'filled':'outline'}>0.5</Button>
+                    <View style={{position:'absolute',left:screenWidth*0.4}}>
+                          <CheckBox  checked={this.state.halfistrue} onChange={()=>{
+                              if(this.state.halfistrue){
+                                var newCorrectResultList=this.state.CorrectResultList
+                                newCorrectResultList[parseInt(this.state.data.order)-1].hand= 1
+                                this.props.setCorrected(newCorrectResultList)
+                                newCorrectResultList[i].stuscore=(newCorrectResultList[i].stuscore-0.5)<0?0:(newCorrectResultList[i].stuscore-0.5)
+                                this.setState({
+                                    halfistrue:false,
+                                    CorrectResultList:newCorrectResultList
+                                  })
+                              }else{
+                                if(this.state.CorrectResultList[i].stuscore==selectScore[selectScore.length-1]){
+                                  Alert.alert('','该题目已经满分',[{},{text:'确定',onPress:()=>{}}])
+                                }else{
+                                  var newCorrectResultList=this.state.CorrectResultList
+                                  newCorrectResultList[parseInt(this.state.data.order)-1].hand= 1
+                                  this.props.setCorrected(newCorrectResultList)
+                                  newCorrectResultList[i].stuscore=(newCorrectResultList[i].stuscore+0.5)>selectScore[selectScore.length-1]?selectScore[selectScore.length-1]:(parseFloat(newCorrectResultList[i].stuscore)+0.5)
+                                  this.setState({
+                                    halfistrue:true,
+                                    CorrectResultList:newCorrectResultList
+                                  })
+                                }
+                              }
+                            }}><Text style={{fontSize:20}}>0.5</Text> </CheckBox>
+                    </View>
                   ):(<></>)}
                   
                 </View>

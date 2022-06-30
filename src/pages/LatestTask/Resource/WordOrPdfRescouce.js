@@ -11,16 +11,26 @@ import {
   StyleSheet,
   ScrollView
 } from 'react-native';
-
+import { useNavigation  , useRoute } from "@react-navigation/native";
 import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
 import http from "../../../utils/http/request";
 import Loading from "../../../utils/loading/Loading";
 
 import { WebView } from 'react-native-webview';
 
+export default function WordContainer(props) {
+  const navigation = useNavigation();
+  console.log('============video=================',props.route.params.resource.resourceName)
+  navigation.setOptions({title: props.route.params.resource.resourceName})
+  //将navigation传给TodoList组件，防止路由出错
+  return (
+      <Word
+          navigation={navigation}
+      ></Word>
+  );
+}
 
-
-export default class Videos extends Component {
+class Word extends Component {
   constructor(props) {
     super(props);
     this.state = {

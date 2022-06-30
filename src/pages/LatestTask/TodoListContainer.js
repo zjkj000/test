@@ -430,7 +430,7 @@ class TodoList extends React.Component {
                                                 papername: bottomTitle,
                                             });
                                         }else{
-                                            Alert.alert(resJson.message)
+                                            Alert.alert('',resJson.message,[{},{text:'确定',onPress:()=>{}}])
                                         }
                                     })
                                     //this.setState({ todos: todosList });
@@ -470,7 +470,7 @@ class TodoList extends React.Component {
                                                     papername: bottomTitle,
                                                 });
                                             }else{
-                                                Alert.alert(resJson.message)
+                                                Alert.alert('',resJson.message,[{},{text:'确定',onPress:()=>{}}])
                                             }
                                         })
                                 }

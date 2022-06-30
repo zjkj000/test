@@ -220,8 +220,6 @@ class CreateHomework extends React.Component {
                         transparent={true}
                         visible={filterModelVisiblity}
                         onRequestClose={() => {
-                            console.log('----------------Modal has been closed.---------------------');
-                            Alert.alert("Modal has been closed.");
                             this.setModalVisible(!filterModelVisiblity);
                         }}
                     >
@@ -264,8 +262,6 @@ class CreateHomework extends React.Component {
                     transparent={true}
                     visible={knowledgeModelVisibility}
                     onRequestClose={() => {
-                        console.log('----------------Modal has been closed.---------------------');
-                        Alert.alert("Modal has been closed.");
                         this.setState({knowledgeModelVisibility: !knowledgeModelVisibility});
                     }}
                 >

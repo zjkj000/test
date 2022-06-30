@@ -382,12 +382,10 @@ export default class FreePage extends Component {
                     backdropStyle={styles.backdrop}
                     onBackdropPress={() => this.setState({ visible: false })}
                 >
-                    <Card disabled={true}>
-                        <Image
-                            style={styles.QRCode}
-                            source={{ uri: imgURL }}
-                        ></Image>
-                    </Card>
+                    <Image
+                        style={styles.QRCode}
+                        source={{ uri: imgURL }}
+                    ></Image>
                 </Modal>
                 {/* 提交后的页面 */}
                 <Modal

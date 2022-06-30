@@ -33,8 +33,14 @@ export default class PPT extends Component {
             uri: "",
             pptList: [],
             selectedindex: 0, //记录当前选中的是哪张ppt
+            showDownloadProgress: -1,
         };
     }
+    setProgress = (num) => {
+        this.setState({
+            showDownloadProgress: num,
+        });
+    };
     getHTML = (period, ipAddress) => {
         let resURL = "http://" + ipAddress + ":8901" + "/html" + period.links;
         let patten = /(.pptx)|(.ppt)/;
@@ -52,7 +58,7 @@ export default class PPT extends Component {
         // console.log("====================================");
         // console.log(resURL);
         // console.log("====================================");
-        http.download(resURL);
+        http.download(resURL, "ppt", period.name, this.setProgress);
     };
     render() {
         return (
@@ -90,8 +96,11 @@ export default class PPT extends Component {
                             ></Image>
                         </TouchableOpacity>
                     </Layout>
-                    <Layout style={styles.inputArea}>
+                    <Layout
+                        style={{ ...styles.inputArea, backgroundColor: "#fff" }}
+                    >
                         <TouchableOpacity
+                            style={{ flexDirection: "row" }}
                             onPress={() => {
                                 this.handleDownload(
                                     this.props.periodNow,
@@ -99,6 +108,11 @@ export default class PPT extends Component {
                                 );
                             }}
                         >
+                            {/* {this.state.showDownloadProgress !== -1 ? (
+                                <Text>{this.state.showDownloadProgress} %</Text>
+                            ) : (
+                                <></>
+                            )} */}
                             <Image
                                 style={{ width: 100, height: 30 }}
                                 source={require("../../../../assets/classImg/downloadStudy.png")}

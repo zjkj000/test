@@ -30,26 +30,37 @@ export default class Document extends Component {
             questionChoiceList: "", //题目选项
             question: "", //题目内容
             uri: "",
+            showDownloadProgress: -1,
         };
     }
+    setProgress = (num) => {
+        this.setState({
+            showDownloadProgress: num,
+        });
+    };
     getHTML = (period, ipAddress) => {
         let resURL = "http://" + ipAddress + ":8901" + "/html" + period.links;
         let patten = /(.docx)|(.doc)/;
         if (patten.test(resURL)) {
             resURL = resURL.replace(patten, ".html");
-            // console.log("PPTGetHtml====================================");
-            // console.log(resURL);
-            // console.log("====================================");
             return resURL;
         }
         return null;
     };
     handleDownload = (period, ipAddress) => {
         let resURL = "http://" + ipAddress + ":8901" + "/html" + period.links;
+        let pattenDocx = /(.docx)/;
+        let pattenDoc = /(.doc)/;
         // console.log("====================================");
         // console.log(resURL);
         // console.log("====================================");
-        http.download(resURL);
+        let fileType = "pdf";
+        if (pattenDocx.test(period.links)) {
+            fileType = "docx";
+        } else if (pattenDoc.test(period.links)) {
+            fileType = "doc";
+        }
+        http.download(resURL, fileType, period.name, this.setProgress);
     };
     render() {
         return (
@@ -87,8 +98,11 @@ export default class Document extends Component {
                             ></Image>
                         </TouchableOpacity>
                     </Layout>
-                    <View style={styles.inputArea}>
+                    <View
+                        style={{ ...styles.inputArea, backgroundColor: "#fff" }}
+                    >
                         <TouchableOpacity
+                            style={{ flexDirection: "row" }}
                             onPress={() => {
                                 this.handleDownload(
                                     this.props.periodNow,
@@ -96,6 +110,11 @@ export default class Document extends Component {
                                 );
                             }}
                         >
+                            {/* {this.state.showDownloadProgress !== -1 ? (
+                                <Text>{this.state.showDownloadProgress} %</Text>
+                            ) : (
+                                <></>
+                            )} */}
                             <Image
                                 style={{ width: 100, height: 30 }}
                                 source={require("../../../../assets/classImg/downloadStudy.png")}

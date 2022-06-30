@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     TouchableWithoutFeedback,
     StyleSheet,
@@ -21,7 +21,6 @@ export default Login = () => {
     const [Password, setPassword] = React.useState("");
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
     const [showLoading, setShowLoading] = React.useState(false);
-
     const toggleSecureEntry = () => {
         setSecureTextEntry(!secureTextEntry);
     };
@@ -88,7 +87,7 @@ export default Login = () => {
                     global.constants.dcompany = res.data[property].dcompany;
                     global.constants.userName = res.data[property].userName;
                     global.constants.token = res.data.token;
-                    global.constants.userId = res.data[property].userId;
+                    global.constants.userId = res.data[property].userName;  //这里的userId  和 userName 都以后都要用UserName
                     global.constants.passWord = param.passWord;
                     global.constants.userPhoto = res.data[property].userPhoto;
                     global.constants.userCn = res.data[property].cn;

@@ -25,7 +25,7 @@ export default class Leijishiyong extends Component {
         yearTermEndTime:this.props.yearTermEndTime,
       }
     )
-    this.getanayGetSunNum(this.props.yearTermStartTime,this.props.yearTermEndTime)
+    this.getanayGetSunNum('','')
   }
   UNSAFE_componentWillReceiveProps(nextprops){
     if(nextprops.yearTermStartTime!=this.state.yearTermStartTime){
@@ -38,7 +38,7 @@ export default class Leijishiyong extends Component {
     const url = global.constants.baseUrl+"teacherApp_anayGetSunNum.do";
     const params = {
               unitId:global.constants.company,                   //单位id
-              userId:global.constants.userId,                   //教师id
+              userId:global.constants.userName,                   //教师id
               startTime:startTime,          //开始时间
               endTime:endTime,            //结束时间
             }

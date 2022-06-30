@@ -25,6 +25,7 @@ import {
 } from "@ui-kitten/components";
 
 import CreateListContainer from "./CreateListContainer";
+import { ScrollView } from "react-native-gesture-handler";
 
 let SearchText = "";
 
@@ -247,6 +248,7 @@ class LatestPage extends React.Component {
         return (
             <View>
                 <OverflowMenu
+                    ref={(ref)=>{this.overRef=ref}}
                     anchor={this.renderAvatarCreate}
                     //弹出项外部背景样式
                     backdropStyle={styles.backdrop}
@@ -254,8 +256,9 @@ class LatestPage extends React.Component {
                     onBackdropPress={() => {
                         this.setState({ createmoduleVisible: false });
                     }}
-                    style={{ width: screenWidth * 0.4 }}
+                    style={{ width: 150 , height: 900 }}
                 >
+                    {/* {console.log(this.overRef)} */}
                     <MenuItem
                         title="创建授课包"
                         onPress={() => {
@@ -295,6 +298,7 @@ class LatestPage extends React.Component {
                             this.setState({ createmoduleVisible: false });
                             this.createHomework();
                         }}
+                        style={{height:40}}
                     />
                     <MenuItem
                         title="选导学案布置"
@@ -371,6 +375,7 @@ class LatestPage extends React.Component {
                                     },
                                 });
                             }}
+                            style={{height:40}}
                         />
                     ) : (
                         <></>
@@ -458,6 +463,6 @@ const styles = StyleSheet.create({
         paddingLeft: 30,
     },
     backdrop: {
-        //backgroundColor: "purple",
+        // backgroundColor: "purple",
     },
 });

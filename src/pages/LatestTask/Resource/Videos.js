@@ -13,12 +13,22 @@ import {
 //import Slider from '@react-native-community/slider';  //进度图标需要拉动
 import Video from 'react-native-video';
 import Orientation from 'react-native-orientation';
-
+import { useNavigation  , useRoute } from "@react-navigation/native";
 import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
 import http from "../../../utils/http/request";
 import Loading from "../../../utils/loading/Loading";
 
-
+export default function VideosContainer(props) {
+  const navigation = useNavigation();
+  console.log('============video=================',props.route.params.resource.resourceName)
+  navigation.setOptions({title: props.route.params.resource.resourceName})
+  //将navigation传给TodoList组件，防止路由出错
+  return (
+      <Videos
+          navigation={navigation}
+      ></Videos>
+  );
+}
 
 function formatTime(second) {
   let h = 0, i = 0, s = parseInt(second);
@@ -33,7 +43,7 @@ function formatTime(second) {
   return [zero(h), zero(i), zero(s)].join(":");
 }
 
-export default class Videos extends Component {
+class Videos extends Component {
   
   static navigationOptions = {
     headerTitle: '测试视频播放'
@@ -110,7 +120,7 @@ export default class Videos extends Component {
     }else{
         return( //"http://www.cn901.com/res/91Content/resource/2021/01/22/video/46c31428-3fa2-47d2-ae51-be58a3f8aba0_mp4.mp4"
               <View style={styles.container} onLayout={this._onLayout}>
-                  <View style={{alignItems: "center"}}>
+                  {/* <View style={{alignItems: "center"}}>
                     <Text style={{
                         top: screenHeight*0.2,
                         fontSize: 20,
@@ -120,7 +130,7 @@ export default class Videos extends Component {
                     >
                         {resourceName}
                     </Text>
-                  </View>
+                  </View> */}
                   <View style={{
                       top: screenHeight*0.2,
                       width: this.state.videoWidth, 
