@@ -235,7 +235,7 @@ class AssignPaper extends Component {
                         return(
                                 <View key={index} 
                                     style={ this.IsInStudentSelected(item) ? {
-                                            width: screenWidth * 0.3,
+                                            width: screenWidth * 0.22,
                                             height: 40,
                                             fontSize: 15,
                                             color: 'black',
@@ -247,7 +247,7 @@ class AssignPaper extends Component {
                                             textAlign: 'center',
                                         }
                                         : {
-                                            width: screenWidth * 0.3,
+                                            width: screenWidth * 0.22,
                                             height: 40,
                                             fontSize: 15,
                                             color: 'black',
@@ -622,7 +622,7 @@ class AssignPaper extends Component {
 }
 
 const styles = StyleSheet.create({
-classNameView: {
+    classNameView: {
         width: screenWidth * 0.5,
         height: 40,
         backgroundColor: '#DCDCDC',
@@ -635,13 +635,15 @@ classNameView: {
         backgroundColor: '#fff',
         borderWidth: 2,
         borderColor: 'red',
-    },classNameText: {
+    },
+    classNameText: {
         fontSize: 15,
         color: 'black',
         fontWeight: '300',
         paddingTop: 8,
         textAlign: 'center',
-    }, groupView: {
+    }, 
+    groupView: {
         width: screenWidth * 0.5,
         height: 40,
         backgroundColor: '#DCDCDC',

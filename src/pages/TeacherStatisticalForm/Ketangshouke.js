@@ -10,8 +10,9 @@ export default function Ketangshouke(props) {
   const navigation = useNavigation()
   const yearTermStartTime = props.yearTermStartTime
   const yearTermEndTime = props.yearTermEndTime
+  const date =props.date
   return (
-    <KetangshoukeContent navigation={navigation} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
+    <KetangshoukeContent navigation={navigation} date={date} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
   )
 } 
 
@@ -33,15 +34,18 @@ class KetangshoukeContent extends Component {
             bsNum: 0 ,  //板书课次
             startTime:'',
             endTime:'',
+            KetangshoukeDateStr:""
         }
       }
 
       UNSAFE_componentWillMount(){
-        this.getanayGetKTNum(this.props.yearTermStartTime,this.props.yearTermEndTime)
+        this.setState({KetangshoukeDateStr:this.props.date})
+        this.getanayGetKTNum(new Date().toISOString().substring(0,10)+' 00:00:00',new Date().toISOString().substring(0,10)+' 23:59:59')
       }
       UNSAFE_componentWillReceiveProps(nextprops){
-        if(nextprops.yearTermStartTime!=this.state.yearTermStartTime){
-          this.getanayGetKTNum(nextprops.yearTermStartTime,nextprops.yearTermEndTime)
+        if(nextprops.date!=this.state.KetangshoukeDateStr){
+          this.setState({KetangshoukeDateStr:nextprops.date})
+          this.getanayGetKTNum(nextprops.date+' 00:00:00',nextprops.date+' 23:59:59')
         }
       }
 
@@ -50,7 +54,7 @@ class KetangshoukeContent extends Component {
       const url = global.constants.baseUrl+"teacherApp_anayGetKTNum.do";
       const params = {
                 unitId:global.constants.company,                   //单位id
-                userId:global.constants.userId,
+                userId:global.constants.userName,
                 startTime:startTime,
                 endTime:endTime,  
                 // unitId:'6105230000001',                   //单位id

@@ -11,14 +11,25 @@ import {
   StyleSheet,
   ScrollView
 } from 'react-native';
-
+import { useNavigation  , useRoute } from "@react-navigation/native";
 import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
 import http from "../../../utils/http/request";
 import Loading from "../../../utils/loading/Loading";
 
+export default function PPTContainer(props) {
+  const navigation = useNavigation();
+  console.log('============video=================',props.route.params.resource.resourceName)
+  navigation.setOptions({title: props.route.params.resource.resourceName})
+  //将navigation传给TodoList组件，防止路由出错
+  return (
+      <PPT
+          navigation={navigation}
+      ></PPT>
+  );
+}
 
 
-export default class Videos extends Component {
+class PPT extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -38,10 +49,13 @@ export default class Videos extends Component {
       // const type = paramsData.type;
       // const deviceType = paramsData.deviceType;
       // this.fetchData(id , type , deviceType);
+
       this.setState({ 
           resource: paramsData.resource , 
           pptList: paramsData.pptList ,
           uri: paramsData.uri
+      },()=>{
+          
       });
   }
 
@@ -88,7 +102,7 @@ export default class Videos extends Component {
         const resourceName = this.state.resource.resourceName;
         return(
             <View>
-                <View style={{alignItems: "center"}}>
+                {/* <View style={{alignItems: "center"}}>
                   <Text style={{
                       top: screenHeight*0.25,
                       fontSize: 20,
@@ -99,7 +113,7 @@ export default class Videos extends Component {
                   >
                       {resourceName}
                   </Text>
-                </View>
+                </View> */}
                 <View style={styles.area}>
                     <Text style={{fontSize:18,marginBottom:10}}>{this.state.resourceName}</Text>
                     <Image style={{width:'90%',height:250}} source={{uri: this.state.uri}}></Image>

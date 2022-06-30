@@ -58,7 +58,7 @@ export class Waiting extends React.Component {
                 transparent={true}
                 visible={this.state.isShow}
                 onRequestClose={() => {
-                    alert("Modal has been closed.")
+                    WaitLoading.dismiss();
                 }}>
                 <View style={styles.container}>
                     <View style={[styles.load_box, this.props.loadingStyle]}>

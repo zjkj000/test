@@ -14,7 +14,7 @@ import { Button } from "@ui-kitten/components";
 import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 import { useNavigation } from "@react-navigation/native";
 import http from "../../../../utils/http/request";
-import DateTime from "./DateTime";
+import DateTime from "../../../../utils/datetimePickerUtils/DateTime";
 
 import { WebView } from "react-native-webview";
 import RenderHtml from "react-native-render-html";
@@ -669,494 +669,288 @@ class PushOrSaveContentPage extends React.Component {
     showAssignToWho = () => {
         const { assigntoWho } = this.state;
         const assignList = [];
-        if (this.state.className == "") {
-            return (
-                <View
-                    style={{ justifyContent: "center", alignItems: "center" }}
-                >
-                    <Text
-                        style={{
-                            fontSize: 16,
-                            color: "black",
-                            fontWeight: "400",
-                            paddingTop: 10,
-                        }}
-                    >
-                        请先选择课堂
-                    </Text>
+        if(this.state.className == ''){
+            return(
+                <View style={{justifyContent:'center', alignItems: 'center'}}>
+                    <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>请先选择课堂</Text>
                 </View>
             );
-        } else {
-            if (assigntoWho == "0") {
-                //班级
-                return (
-                    <View
-                        style={
-                            this.state.classFlag == false
-                                ? {
-                                      width: screenWidth * 0.4,
-                                      height: 35,
-                                      marginTop: 10,
-                                      marginLeft: 20,
-                                      backgroundColor: "#DCDCDC",
-                                  }
-                                : {
-                                      width: screenWidth * 0.4,
-                                      height: 35,
-                                      marginTop: 10,
-                                      marginLeft: 20,
-                                      backgroundColor: "#fff",
-                                      borderWidth: 1,
-                                      borderColor: "red",
-                                  }
+        }else{
+            if(assigntoWho == '0'){ //班级
+                return(
+                    <View 
+                        style={this.state.classFlag == false ?
+                            {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5, backgroundColor: '#DCDCDC',justifyContent:'center'}
+                            : {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 1, borderColor: 'red'}
                         }
                     >
-                        <Text
-                            style={{
-                                fontSize: 16,
-                                color: "black",
-                                fontWeight: "400",
-                                paddingTop: 5,
-                                textAlign: "center",
-                            }}
-                            onPress={() => {
-                                if (
-                                    this.state.groupList.length <= 0 &&
-                                    this.state.studentsList.length <= 0
-                                ) {
-                                    // console.log('****class****',this.state.class.keTangId , this.state.class.keTangName);
-                                    if (this.state.class != null) {
-                                        //已选择课堂且小组和个人信息都为空时请求一次小组和个人信息
-                                        // console.log('---this.state.class.keTangId-----' , this.state.class.keTangId);
-                                        this.fetchGroupAndStudentList(
-                                            this.state.class.keTangId
-                                        );
-                                    }
+                        <Text 
+                            style={{fontSize: 16, color: 'black', fontWeight: '400', textAlign: 'center'}}
+                            onPress={()=>{
+                                if(this.state.groupList.length <= 0 && this.state.studentsList.length <= 0){
+                                    if(this.state.class != null){ //已选择课堂且小组和个人信息都为空时请求一次小组和个人信息
+                                        this.fetchGroupAndStudentList(this.state.class.keTangId);
+                                    }     
                                 }
                                 this.splitStudents(); //分割获取到的学生信息
-                                if (this.state.classFlag) {
-                                    this.setState({ classFlag: false });
-                                } else {
-                                    this.setState({ classFlag: true });
+                                if(this.state.classFlag){
+                                    this.setState({classFlag: false});
+                                }else{
+                                    this.setState({classFlag: true});
                                 }
                             }}
                         >
-                            {this.state.class.className.substring(
-                                0,
-                                this.state.class.className.length - 1
-                            )}
+                            {this.state.class.className.substring(0 , this.state.class.className.length - 1)}
                         </Text>
                     </View>
                 );
-            } else if (assigntoWho == "1") {
-                //小组
-                console.log(
-                    "***group**student**",
-                    this.state.groupList.length,
-                    this.state.studentsList.length
-                );
-                if (
-                    this.state.groupList.length <= 0 &&
-                    this.state.studentsList.length <= 0
-                ) {
-                    // console.log('****class****',this.state.class.keTangId , this.state.class.keTangName);
-                    if (this.state.class != null) {
-                        //已选择课堂且小组和个人信息都为空时请求一次小组和个人信息
-                        // console.log('---this.state.class.keTangId-----' , this.state.class.keTangId);
-                        this.fetchGroupAndStudentList(
-                            this.state.class.keTangId
-                        );
-                    }
+            }else if(assigntoWho == '1'){ //小组
+                if(this.state.groupList.length <= 0 && this.state.studentsList.length <= 0){
+                    if(this.state.class != null){ //已选择课堂且小组和个人信息都为空时请求一次小组和个人信息
+                        this.fetchGroupAndStudentList(this.state.class.keTangId);
+                    }     
                 }
                 this.splitStudents(); //分割获取到的学生信息
 
                 let content;
-                if (this.state.groupList.length > 0) {
-                    content = this.state.groupList.map((item, index) => {
-                        return (
-                            <View
-                                style={{
-                                    flexDirection: "column",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                }}
-                            >
-                                <View
-                                    key={index}
-                                    style={
-                                        this.IsInGroupSelected(item)
-                                            ? styles.groupViewSelected
-                                            : styles.groupView
-                                    }
+                if(this.state.groupList.length > 0){
+                    content = this.state.groupList.map((item , index)=>{
+                        return(
+                            <View style={{flexDirection: 'column',justifyContent:'center',alignItems:'center'}}>
+                                <View key={index} 
+                                    style={ this.IsInGroupSelected(item) ? styles.groupViewSelected : styles.groupView }
                                 >
-                                    <Text
-                                        style={styles.groupItem}
-                                        onPress={() => {
-                                            this.updateGroupSelected(item);
-                                        }}
+                                    <Text style={styles.groupItem}
+                                        onPress={()=>{this.updateGroupSelected(item)}}
                                     >
                                         {item.value}
                                     </Text>
                                 </View>
-                                <View style={{ height: 5 }}></View>
                             </View>
-                        );
-                    });
+                        )
+                    })
                 }
-                return this.state.groupList.length > 0 ? (
-                    content
-                ) : (
-                    <View
-                        style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 16,
-                                color: "black",
-                                fontWeight: "400",
-                                paddingTop: 10,
-                            }}
-                        >
-                            您还没有创建小组，可以前往电脑端进行创建
-                        </Text>
+                return(
+                    this.state.groupList.length > 0
+                    ? content
+                    : <View style={{justifyContent:'center', alignItems: 'center'}}>
+                        <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>
+                        您还没有创建小组，可以前往电脑端进行创建</Text>
                     </View>
                 );
-            } else {
-                //个人
-                if (
-                    this.state.groupList.length <= 0 &&
-                    this.state.studentsList.length <= 0
-                ) {
+            }else{ //个人
+                if(this.state.groupList.length <= 0 && this.state.studentsList.length <= 0){
                     // console.log('****class****',this.state.class.keTangId , this.state.class.keTangName);
-                    if (this.state.class != null) {
-                        //已选择课堂且小组和个人信息都为空时请求一次小组和个人信息
+                    if(this.state.class != null){ //已选择课堂且小组和个人信息都为空时请求一次小组和个人信息
                         // console.log('---this.state.class.keTangId-----' , this.state.class.keTangId);
-                        this.fetchGroupAndStudentList(
-                            this.state.class.keTangId
-                        );
-                    }
+                        this.fetchGroupAndStudentList(this.state.class.keTangId);
+                    }     
                 }
                 this.splitStudents(); //分割获取到的学生信息
 
                 let content;
-                const { studentsListTrans } = this.state;
-                if (studentsListTrans.length > 0) {
-                    content = studentsListTrans.map((item, index) => {
-                        return (
-                            <View
-                                key={index}
-                                style={
-                                    this.IsInStudentSelected(item)
-                                        ? {
-                                              width: screenWidth * 0.3,
-                                              height: 35,
-                                              fontSize: 15,
-                                              color: "black",
-                                              backgroundColor: "#fff",
-                                              fontWeight: "300",
-                                              margin: 3,
-                                              borderWidth: 2,
-                                              borderColor: "red",
-                                              textAlign: "center",
-                                          }
+                const { studentsListTrans } = this.state;     
+                if(studentsListTrans.length > 0){
+                    content = studentsListTrans.map((item , index)=>{
+                        return(
+                                <View key={index} 
+                                    style={ this.IsInStudentSelected(item) ? {
+                                            width: screenWidth * 0.22,
+                                            height: 40,
+                                            borderRadius:5,
+                                            fontSize: 15,
+                                            color: 'black',
+                                            backgroundColor: '#fff',
+                                            fontWeight: '300',
+                                            margin: 3,
+                                            borderWidth: 2,
+                                            borderColor: 'red',
+                                            textAlign: 'center',
+                                        }
                                         : {
-                                              width: screenWidth * 0.3,
-                                              height: 35,
-                                              fontSize: 15,
-                                              color: "black",
-                                              backgroundColor: "#DCDCDC",
-                                              fontWeight: "300",
-                                              margin: 3,
-                                              borderWidth: 2,
-                                              borderColor: "#fff",
-                                              textAlign: "center",
-                                          }
-                                }
-                            >
-                                <Text
-                                    style={styles.classNameText}
-                                    onPress={() => {
-                                        this.updateStudentSelected(item);
-                                    }}
+                                            width: screenWidth * 0.22,
+                                            height: 40,
+                                            borderRadius:5,
+                                            fontSize: 15,
+                                            color: 'black',
+                                            backgroundColor: '#DCDCDC',
+                                            fontWeight: '300',
+                                            margin: 3,
+                                            borderWidth: 2,
+                                            borderColor: '#fff',
+                                            textAlign: 'center',
+                                        }
+                                    }
                                 >
-                                    {item.name}
-                                </Text>
-                            </View>
-                        );
-                    });
+                                    <Text style={styles.classNameText}
+                                        onPress={()=>{this.updateStudentSelected(item)}}
+                                    >
+                                        {item.name}
+                                    </Text>
+                                </View>
+                                // <View style={{height: 5}}></View>
+                        )
+                    })
                 }
-                return studentsListTrans.length > 0 ? (
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            flexWrap: "wrap", //自动换行
-                            backgroundColor: "#fff",
-                            left: screenWidth * 0.025,
-                            marginBottom: 10,
-                        }}
+                return(
+                    studentsListTrans.length > 0
+                    ? <View style={{
+                                flexDirection: 'row',
+                                flexWrap: 'wrap',  //自动换行
+                                backgroundColor: '#fff',
+                                left: screenWidth * 0.025,
+                                marginBottom: 10,
+                            }}
                     >
                         {content}
                     </View>
-                ) : (
-                    <View
-                        style={{
-                            justifyContent: "center",
-                            alignItems: "center",
-                        }}
-                    >
-                        <Text
-                            style={{
-                                fontSize: 16,
-                                color: "black",
-                                fontWeight: "400",
-                                paddingTop: 10,
-                            }}
-                        >
-                            当前班级没有学生信息
-                        </Text>
+                    : <View style={{justifyContent:'center', alignItems: 'center'}}>
+                        <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>
+                            当前班级没有学生信息</Text>
                     </View>
                 );
             }
         }
-    };
+    }
 
     //布置或保存导学案页面
     showPushOrSaveContent = () => {
-        return (
-            <View style={{ ...styles.bodyView, height: "82%" }}>
+        return(
+            <View  style={{...styles.bodyView,height:'82%'}}>
                 {/**布置 保存 */}
-                <View
-                    style={{
-                        ...styles.paperSelectNumView,
-                        justifyContent: "space-around",
-                    }}
-                >
+                <View style={{...styles.paperSelectNumView,justifyContent: 'space-around'}}>
+                    <Text 
+                        style={{
+                            fontSize: 15,
+                            fontWeight: '500',
+                            color: '#4DC7F8',
+                            top: 10,
+                        }}
+                        onPress={()=>{Alert.alert('','点击下方确定按钮可布置', [{} , {text: '关闭', onPress: ()=>{}}])}}
+                    >布置</Text>
                     <Text
                         style={{
                             fontSize: 15,
-                            fontWeight: "500",
-                            color: "#4DC7F8",
+                            fontWeight: '500',
+                            color: 'black',
                             top: 10,
                         }}
-                        onPress={() => {
-                            Alert.alert('','点击下方确定按钮可布置', [{} , {text: '关闭', onPress: ()=>{}}]);
-                        }}
-                    >
-                        布置
-                    </Text>
-                    <Text
-                        style={{
-                            fontSize: 15,
-                            fontWeight: "500",
-                            color: "black",
-                            top: 10,
-                        }}
-                        onPress={() => {
-                            this.saveLearnPlan();
-                        }}
-                    >
-                        保存
-                    </Text>
+                        onPress={()=>{this.savePaper()}}
+                    >保存</Text>
                 </View>
-                <ScrollView style={{ height: "100%" }}>
+                <ScrollView style={{height:'100%'}}>
                     {/**开始时间 */}
-                    <View
-                        style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                        <Text style={styles.title}>开始时间:</Text>
-                        <Text
-                            style={{
-                                ...styles.title,
-                                width: screenWidth * 0.6,
-                            }}
-                        >
-                            {this.state.startTime}
-                        </Text>
-                        <View style={{ right: 10, position: "absolute" }}>
-                            <DateTime
-                                setDateTime={this.setStartTime}
-                                selectedDateTime={this.state.startTime}
-                            />
-                        </View>
+
+                    <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
+                        <Text style={{fontSize:15,marginRight:40}}>开始时间:</Text>
+                        <Text style={{fontSize:15,}}>{this.state.startTime}</Text>
+                        <TouchableOpacity style={{position:'absolute',right:20,flexDirection:'row'}} >
+                            <DateTime style={{position:'absolute',right:20,flexDirection:'row'}}  setDateTime={this.setStartTime} selectedDateTime={this.state.startTime}/>
+                        </TouchableOpacity>
                     </View>
 
+                    
+
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 1,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {/* <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} /> */}
 
                     {/**结束时间 */}
-                    <View
-                        style={{ flexDirection: "row", alignItems: "center" }}
-                    >
-                        <Text style={styles.title}>结束时间:</Text>
-                        <Text
-                            style={{
-                                ...styles.title,
-                                width: screenWidth * 0.6,
-                            }}
-                        >
-                            {this.state.endTime}
-                        </Text>
-                        <View style={{ right: 10, position: "absolute" }}>
-                            <DateTime
-                                setDateTime={this.setEndTime}
-                                selectedDateTime={this.state.endTime}
-                            />
-                        </View>
+                    <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}> 
+                        <Text style={{fontSize:15,marginRight:40}}>结束时间:</Text>
+                        <Text style={{fontSize:15}}>{this.state.endTime}</Text>
+                        <TouchableOpacity style={{position:'absolute',right:20,flexDirection:'row'}} >
+                            <DateTime setDateTime={this.setEndTime} selectedDateTime={this.state.endTime}/>
+                        </TouchableOpacity>
                     </View>
 
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 1,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
-
+                    {/* <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} /> */}
+                
                     {/**选择课堂 */}
-                    <View style={{ flexDirection: "row", width: screenWidth }}>
+                    {/* <View style={{flexDirection:'row',width:screenWidth}}>
                         <TouchableOpacity
-                            style={{ flexDirection: "row", width: screenWidth }}
+                            style={{flexDirection:'row',width:screenWidth}}
                             onPress={() => {
                                 this.updateClassNameVisibility();
                             }}
                         >
                             <Text style={styles.title}>选择课堂:</Text>
-                            <Text
-                                style={{
-                                    ...styles.title,
-                                    width: screenWidth * 0.6,
-                                }}
-                            >
-                                {this.state.className}
-                            </Text>
-                            <TouchableOpacity
-                                style={{
-                                    flexDirection: "row",
-                                    position: "absolute",
-                                    right: 20,
-                                }}
+                            <Text style={{...styles.title,width: screenWidth * 0.6,}}>{this.state.className}</Text>
+                            <TouchableOpacity style={{flexDirection:'row',position:'absolute',right:20,}} 
                                 onPress={() => {
                                     this.updateClassNameVisibility();
                                 }}
                             >
-                                <Image
-                                    style={{ top: 10, width: 20, height: 20 }}
+                                <Image style={{top:10,width:20,height:20}} 
                                     source={
-                                        this.state.classNameVisibility
-                                            ? require("../../../../assets/teacherLatestPage/top.png")
-                                            : require("../../../../assets/teacherLatestPage/bot.png")
+                                        this.state.classNameVisibility ?
+                                        require('../../../../assets/teacherLatestPage/top.png')
+                                        : require('../../../../assets/teacherLatestPage/bot.png')
                                     }
-                                ></Image>
+                                >
+                                </Image>
                             </TouchableOpacity>
                         </TouchableOpacity>
-                    </View>
-                    {/**可选课堂列表 */}
-                    {this.state.classNameVisibility ? (
-                        <View>
-                            {this.state.classNameList.length <= 0
-                                ? this.fetchClassNameList()
-                                : null}
-                            {this.state.classNameList.length > 0 ? (
-                                this.showClassNameList()
-                            ) : (
-                                <Text>课堂列表未获取到或者为空</Text>
-                            )}
+                    </View> */}
+                    <View style={{borderBottomWidth:1,padding:15,paddingLeft:20}}>
+                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                            <Text style={{fontSize:15,marginRight:40}}>选择课堂:</Text>
+                            <Text style={{fontSize:15,marginRight:20}}>{this.state.className}</Text>
+                            <TouchableOpacity onPress={()=>{this.setState({classNameVisibility:!this.state.classNameVisibility})}} style={{position:'absolute',right:10}}>
+                                <Image style={{width:20,height:20}} source={this.state.classNameVisibility?require('../../../../assets/image3/top.png'):require('../../../../assets/image3/bot.png')}></Image>
+                            </TouchableOpacity>
                         </View>
-                    ) : null}
+                        {/**可选课堂列表 */}
+                        {this.state.classNameVisibility ?
+                            (<View style={{marginTop:20,flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start'}}>
+                            {
+                                this.state.classNameList.length <= 0
+                                    ? this.fetchClassNameList()
+                                    : null
+                            }
+                            {
+                                this.state.classNameList.length > 0
+                                    ? this.showClassNameList()
+                                    : <Text>课堂列表未获取到或者为空</Text>
+                            }
+                            </View>
+                            ):(<View></View>)
+                        }
+                    </View>
 
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
-
+                    {/* <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} /> */}
+                
                     {/**布置 */}
-                    <View
-                        style={{
-                            flexDirection: "row",
-                            alignItems: "center",
-                            borderBottomWidth: 0.5,
-                        }}
-                    >
-                        <Text style={styles.title}>布置给:</Text>
+                    <View style={{flexDirection:'row',height:60,alignItems:'center'}}>
+                        <Text style={{fontSize:15,marginRight:40,marginLeft:30}}>布置给:</Text>
                         {/**班级 小组  个人 */}
-                        <View
-                            style={
-                                this.state.assigntoWho == "0"
-                                    ? styles.assignViewSelected
-                                    : styles.assignView
-                            }
-                        >
-                            <Text
-                                style={styles.assignText}
-                                onPress={() => {
-                                    this.updateAssign(0);
-                                }}
-                            >
-                                班级
-                            </Text>
-                        </View>
-                        <View
-                            style={
-                                this.state.assigntoWho == "1"
-                                    ? styles.assignViewSelected
-                                    : styles.assignView
-                            }
-                        >
-                            <Text
-                                style={styles.assignText}
-                                onPress={() => {
-                                    this.updateAssign(1);
-                                }}
-                            >
-                                小组
-                            </Text>
-                        </View>
-                        <View
-                            style={
-                                this.state.assigntoWho == "2"
-                                    ? styles.assignViewSelected
-                                    : styles.assignView
-                            }
-                        >
-                            <Text
-                                style={styles.assignText}
-                                onPress={() => {
-                                    this.updateAssign(2);
-                                }}
-                            >
-                                个人
-                            </Text>
-                        </View>
+                        <TouchableOpacity style={{marginRight:30}} onPress={()=>{this.updateAssign('0');this.setState({SelectKeTangStatus:false})}}>
+                            <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='0'?'#4DC7F8':'#fff'}}>
+                                <Text style={{fontSize:15}}>班级</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssign('1');this.setState({SelectKeTangStatus:false})}}>
+                            <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='1'?'#4DC7F8':'#fff'}}>
+                                <Text>小组</Text>
+                            </View>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssign('2');this.setState({SelectKeTangStatus:false})}}>
+                            <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='2'?'#4DC7F8':'#fff'}}>
+                                <Text>个人</Text>
+                            </View>
+                        </TouchableOpacity>
                     </View>
 
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 1,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {/* <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} /> */}
                     {/**布置对象列表 */}
-                    {this.showAssignToWho()}
+                    <ScrollView>
+                        <View style={{alignItems:'flex-start',marginTop:15,marginBottom:50,flexDirection:'row',flexWrap:'wrap',justifyContent:'center'}}>
+                            {this.showAssignToWho()}
+                        </View>
+                    </ScrollView>
+                    {/* {this.showAssignToWho()} */}
                 </ScrollView>
             </View>
         );
@@ -1271,32 +1065,11 @@ const styles = StyleSheet.create({
         fontSize: 15,
         color: "black",
         fontWeight: "500",
-        width: screenWidth * 0.2,
+        width: screenWidth * 0.3,
         paddingTop: 10,
         paddingBottom: 10,
         paddingLeft: 15,
         //height:'100%',
-    },
-    classNameView: {
-        width: screenWidth * 0.5,
-        height: 40,
-        backgroundColor: "#DCDCDC",
-        borderWidth: 2,
-        borderColor: "#fff",
-    },
-    classNameViewSelected: {
-        width: screenWidth * 0.5,
-        height: 40,
-        backgroundColor: "#fff",
-        borderWidth: 2,
-        borderColor: "red",
-    },
-    classNameText: {
-        fontSize: 15,
-        color: "black",
-        fontWeight: "300",
-        paddingTop: 8,
-        textAlign: "center",
     },
     assignView: {
         width: screenWidth * 0.15,
@@ -1316,27 +1089,58 @@ const styles = StyleSheet.create({
         textAlign: "center",
         paddingTop: 3,
     },
-    groupView: {
-        width: screenWidth * 0.5,
+    classNameView: {
+        borderRadius:5,
+        width: screenWidth * 0.4,
         height: 40,
-        backgroundColor: "#DCDCDC",
-        marginTop: 3,
+        marginLeft:10,
+        marginBottom:5,  
+        backgroundColor: '#DCDCDC',
         borderWidth: 2,
-        borderColor: "#fff",
+        borderColor: '#fff',
+    },
+    classNameViewSelected: {
+        borderRadius:5,
+        width: screenWidth * 0.4,
+        height: 40,
+        marginLeft:10,
+        marginBottom:5,  
+        backgroundColor: '#fff',
+        borderWidth: 2,
+        borderColor: 'red',
+    },classNameText: {
+        fontSize: 15,
+        color: 'black',
+        fontWeight: '300',
+        paddingTop: 8,
+        textAlign: 'center',
+    }, groupView: {
+        borderRadius:5,
+        width: screenWidth * 0.4,
+        height: 40,
+        backgroundColor: '#DCDCDC',
+        marginTop:3,
+        marginBottom:5,  
+        marginLeft:20,
+        borderWidth: 2,
+        borderColor: '#fff',
     },
     groupViewSelected: {
-        width: screenWidth * 0.5,
+        borderRadius:5,
+        width: screenWidth * 0.4,
         height: 40,
-        backgroundColor: "#fff",
-        marginTop: 3,
+        backgroundColor: '#fff',
+        marginTop:3,
+        marginBottom:5,  
+        marginLeft:20,
         borderWidth: 2,
-        borderColor: "red",
+        borderColor: 'red',
     },
     groupItem: {
         fontSize: 15,
-        color: "black",
-        fontWeight: "300",
+        color: 'black',
+        fontWeight: '300',
         paddingTop: 8,
-        textAlign: "center",
+        textAlign: 'center',
     },
 });
