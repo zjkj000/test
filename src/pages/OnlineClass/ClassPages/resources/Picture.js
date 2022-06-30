@@ -76,7 +76,9 @@ export default class Picture extends Component {
                             ></Image>
                         </TouchableOpacity>
                     </Layout>
-                    <Layout style={styles.inputArea}></Layout>
+                    <Layout
+                        style={{ ...styles.inputArea, backgroundColor: "#fff" }}
+                    ></Layout>
                     <Layout style={styles.bottomRight}>
                         <AskAndMark {...this.props} />
                     </Layout>

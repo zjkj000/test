@@ -1,3 +1,4 @@
+import { Layout } from "@ui-kitten/components";
 import React, { Component } from "react";
 import {
     View,
@@ -83,7 +84,7 @@ class ZoomPictureModel extends Component {
         console.log(currShowImgIndex);
         console.log("====================================");
         return (
-            <View style={styles.container}>
+            <Layout>
                 <Modal
                     visible={isShowImage}
                     animationType={"slide"}
@@ -107,17 +108,12 @@ class ZoomPictureModel extends Component {
                         onClick={() => this.handleZoomPicture(false)}
                     />
                 </Modal>
-            </View>
+            </Layout>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        width: screenHeight,
-        height: screenWidth,
-        flex: 1,
-    },
     zoom_pic_img: {
         // maxWidth: screenHeight,
     },

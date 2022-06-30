@@ -98,7 +98,9 @@ export default class Document extends Component {
                             ></Image>
                         </TouchableOpacity>
                     </Layout>
-                    <View style={styles.inputArea}>
+                    <View
+                        style={{ ...styles.inputArea, backgroundColor: "#fff" }}
+                    >
                         <TouchableOpacity
                             style={{ flexDirection: "row" }}
                             onPress={() => {
