@@ -835,7 +835,7 @@ class PushOrSaveContentPage extends React.Component {
                             color: 'black',
                             top: 10,
                         }}
-                        onPress={()=>{this.savePaper()}}
+                        onPress={()=>{this.saveLearnPlan()}}
                     >保存</Text>
                 </View>
                 <ScrollView style={{height:'100%'}}>
