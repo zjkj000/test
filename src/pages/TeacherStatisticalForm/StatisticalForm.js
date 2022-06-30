@@ -22,6 +22,7 @@ export default function StatisticalForm() {
         this.setKetangshoukeDate=this.setKetangshoukeDate.bind(this)
         this.setPiyueshitiDate=this.setPiyueshitiDate.bind(this)
         this.setselectYearTerm = this.setselectYearTerm.bind(this)
+        this.getTimeStr= this.getTimeStr.bind(this)
         this.state={
             KetangshoukeDateStr:'',
             BuzhizuoyeDateStr:'',
@@ -37,7 +38,17 @@ export default function StatisticalForm() {
     UNSAFE_componentWillMount(){
       this.getData()
     }
-    
+    getTimeStr(type){
+      var Str=new Date().toISOString().substring(0,10)
+      if(type=='Ketang'){
+        Str=this.state.KetangshoukeDateStr
+      }else if(type=='Buzhi'){
+        Str=this.state.BuzhizuoyeDateStr
+      }else if(type=='Piyue'){
+        Str=this.state.PiyueshitiDateStr
+      }
+      return Str
+    }
     getData(){
       const url = global.constants.baseUrl+"teacherApp_anayGetSchoolYearTerm.do";
       const params = {
@@ -160,7 +171,7 @@ export default function StatisticalForm() {
           </View>
           <ScrollView style={{backgroundColor:'#ECEEED',padding:10,flexDirection:'column',marginBottom:45}}>
             {/* 累计使用 */}
-            <Leijishiyong data={this.state.leijishiyonglist} setdatastr={this.setselectYearTerm} SchoolYearTerm={this.state.SchoolYearTerm} SchoolYearTermName={this.state.SchoolYearTermName}yearTermStartTime={this.state.yearTermStartTime}yearTermEndTime={this.state.yearTermEndTime}/>
+            <Leijishiyong data={this.state.leijishiyonglist}  setdatastr={this.setselectYearTerm} SchoolYearTerm={this.state.SchoolYearTerm} SchoolYearTermName={this.state.SchoolYearTermName}yearTermStartTime={this.state.yearTermStartTime}yearTermEndTime={this.state.yearTermEndTime} />
             {/* 课堂授课标题+日历 */}
             <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
               <View style={{flexDirection:'row'}}>
@@ -180,7 +191,7 @@ export default function StatisticalForm() {
               <BasePicker modle={'Date'} setDateOrTime={this.setKetangshoukeDate} selected={this.state.KetangshoukeDateStr}/>
             </View>
             {/* 课堂授课图表 */}
-            <Ketangshouke data={this.state.ketangshoukelist} date={this.state.KetangshoukeDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime} />
+            <Ketangshouke  data={this.state.ketangshoukelist} date={this.state.KetangshoukeDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime} />
             {/* 布置作业标题+日历 */}
             <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
               <View style={{flexDirection:'row'}}>

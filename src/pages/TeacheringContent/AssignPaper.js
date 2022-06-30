@@ -45,7 +45,12 @@ class AssignPaper extends Component {
     }
 
     UNSAFE_componentWillMount(){
-        
+        var _dateStr=new Date().toISOString().substring(0,10)+' '+new Date().toISOString().substring(11,16)
+        _dateStr = _dateStr.substring(0,11)+(parseInt(_dateStr.substring(12,13))+8)+_dateStr.substring(13,16)
+        this.setState({
+            beginstr:_dateStr,
+            endstr:this.nextDay(_dateStr.substring(0,10))
+        })
     }
 
   
@@ -56,8 +61,40 @@ class AssignPaper extends Component {
         
     }
     setBeginDateTime(str){
+<<<<<<< HEAD
         this.setState({beginstr:str})
+=======
+        this.setState({beginstr:str,endstr:this.nextDay(str.substring(0,10))})
+>>>>>>> fd10f6d4f43b1bd8b71d1109253af1ee7d0f411a
     }
+    nextDay(str){
+        var year = parseInt(str.substring(0,4))
+        var month = parseInt(str.substring(5,7))
+        var day = parseInt(str.substring(8,10))
+        if(month==2&&day==28&&year%100==0&&yaer%400!=0){
+           month=3
+           day=1
+        }else if(month==2&&day==28&&day%4!=0){
+          month=3
+          day=1
+        }else if(month==2&&day<28){
+          day+=1
+        }else if(day=='30'&&(month=='2'||month=='4'||month=='6'||month=='9'||month=='11')){
+          month+=1
+          day=1
+        }else if(day=='31'){
+          day = 1
+          if(month<12){
+            month=month+1
+          }else{
+            month=1
+            year+=1
+          }
+        }else{
+          day+=1
+        }
+        return year+'-'+ month.toString().padStart(2,'0')+'-'+day.toString().padStart(2,'0')+' 23:59'
+      }
     setEndDateTime(str){
         this.setState({endstr:str})
     }
@@ -268,7 +305,6 @@ class AssignPaper extends Component {
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log('测试',resJson)
                 this.setState({ groupList: resJson.data.groupList , studentsList: resJson.data.classList });
             })
     }
@@ -481,7 +517,7 @@ class AssignPaper extends Component {
                         ])   
                     }else{
                         WaitLoading.show_false()
-                        Alert.alert(resJson.message);
+                        Alert.alert('',resJson.message,[{},{text:'确定',onPress:()=>{}}])
                         Toast.showDangerToast('布置失败！',1000)
                     }
                 })

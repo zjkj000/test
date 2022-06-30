@@ -10,14 +10,16 @@ export default function Buzhizuoye(props) {
   const navigation = useNavigation()
   const yearTermStartTime = props.yearTermStartTime
   const yearTermEndTime = props.yearTermEndTime
+  const date =props.date
   return (
-    <BuzhizuoyeContent navigation={navigation} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
+    <BuzhizuoyeContent navigation={navigation} date={date} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
   )
 }
 class BuzhizuoyeContent extends Component {
   constructor(props){
     super(props)
     this.state={
+      BuzhizuoyeDateStr:'',
       BuzhizuoyeTableNum:3,
       startTime:'',
       effectiveKeciNum: '0',   //有效次数
@@ -49,20 +51,23 @@ class BuzhizuoyeContent extends Component {
   }
   
   UNSAFE_componentWillMount(){
-    this.getanayGetBZZYNum(this.props.yearTermStartTime,this.props.yearTermEndTime)
+    this.setState({BuzhizuoyeDateStr:this.props.date})
+    this.getanayGetBZZYNum(new Date().toISOString().substring(0,10)+' 00:00:00',new Date().toISOString().substring(0,10)+' 23:59:59')
   }
 
   UNSAFE_componentWillReceiveProps(nextprops){
-    if(nextprops.yearTermStartTime!=this.state.yearTermStartTime){
-      this.getanayGetBZZYNum(nextprops.yearTermStartTime,nextprops.yearTermEndTime)
+    if(this.state.BuzhizuoyeDateStr!=nextprops.BuzhizuoyeDateStr){
+      this.setState({BuzhizuoyeDateStr:nextprops.date})
+      this.getanayGetBZZYNum(nextprops.date+' 00:00:00',nextprops.date+' 23:59:59')
     }
+    
   }
   //第三模块数据
   getanayGetBZZYNum(startTime,endTime){
     const url = global.constants.baseUrl+"teacherApp_anayGetBZZYNum.do";
     const params = {
               unitId:global.constants.company,                   //单位id
-              userId:global.constants.userId,
+              userId:global.constants.userName,
               startTime:startTime,
               endTime:endTime,     
               // unitId:'6105230000001',                   //单位id

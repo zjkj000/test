@@ -7,7 +7,7 @@ import { useNavigation } from "@react-navigation/native";
 import http from "../../../utils/http/request";
 import {Avatar,Layout,Button,Divider,Input,OverflowMenu,MenuItem,} from "@ui-kitten/components";
 import { WebView } from 'react-native-webview';
-import Toast from "../../../utils/Toast/Toast";
+import Toast from '../../../utils/Toast/Toast'
 
 
 export default function CreateWorkContainer(props) {
@@ -44,6 +44,7 @@ class CreateWork extends React.Component {
             
             knowledge: '', //知识点
             knowledgeCode: '', //选中的知识点项的编码
+            Longknowledge:'',          //长知识点+（包括单元  教材  版本）
             knowledgeVisibility: false, //知识点选择列表是否显示     
             knowledgeModelVisibility: false, //知识点悬浮框model是否显示      
             knowledgeList: [], //从接口中返回的数据
@@ -111,6 +112,20 @@ class CreateWork extends React.Component {
         }
         
     }
+    getLongknowledge(id){
+        const url = global.constants.baseUrl+"teacherApp_getPointName.do";
+        const params = {
+            pointId:id}
+        http.get(url, params)
+        .then((resStr) => {
+            let resJson = JSON.parse(resStr);
+            if(resJson.success){
+                this.setState({
+                    Longknowledge:resJson.data
+                })
+            }
+        })
+    }
 
 
     //显示知识点覆盖框
@@ -122,7 +137,6 @@ class CreateWork extends React.Component {
               transparent={true}
               visible={knowledgeModelVisibility}
               onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
                 this.setState({ knowledgeModelVisibility: false });
               }}
             >
@@ -148,11 +162,17 @@ class CreateWork extends React.Component {
                       this.state.knowledgeList.length > 0 ? 
                                 // <View style={{height: this.state.webViewHeight}}>
                                 <WebView
-                                    onMessage={(event)=>{
+                                    onMessage={
+                                        (event)=>{
+                                        var id = JSON.parse(event.nativeEvent.data).id
                                         this.setState({ 
                                             knowledgeModelVisibility: false,
                                             knowledge:JSON.parse(event.nativeEvent.data).name,
-                                            knowledgeCode:JSON.parse(event.nativeEvent.data).id});}}
+                                            knowledgeCode:JSON.parse(event.nativeEvent.data).id});
+                                        
+                                        this.getLongknowledge(id)
+                                        
+                                        }}
                                     javaScriptEnabled={true}
                                     scalesPageToFit={Platform.OS === 'ios'? true : false}
                                     // style={{height: screenHeight , width : screenWidth}}
@@ -731,9 +751,11 @@ class CreateWork extends React.Component {
                     <Text style={{width: screenWidth*0.1}}></Text>
                     <Button style={styles.button}
                         onPress={()=>{
+
                             if(this.state.InputText==''){
                                 Toast.showInfoToast('请输入试卷名称',1000)
-                            }else if(this.state.knowledgeCode!=''){
+                            }else if(this.state.knowledgeCode!=''&&this.state.Longknowledge!=''){
+
                                 this.props.navigation.navigate({
                                     name:'EditPicturePaperWork',
                                     params:{
@@ -747,7 +769,7 @@ class CreateWork extends React.Component {
                                         gradeLevelCode:this.state.bookId,        //教材编码
                                         gradeLevelName:this.state.book,
                                         pointCode:this.state.knowledgeCode,                  //知识点码
-                                        pointName:this.state.knowledge,
+                                        pointName:this.state.Longknowledge,
                                     }
                                 })
                             }else{

@@ -3,7 +3,8 @@ import React, { Component, useState } from 'react'
 import RadioList from '../Utils/RadioList'
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
-import Toast from '../../../../utils/Toast/Toast';
+import Toast from '../../../../utils/Toast/Toast'
+import { ScreenWidth } from 'react-native-elements/dist/helpers';
 export default function Answer_readContainer(props) {
   const navigation = useNavigation();
   const paperId= props.paperId
@@ -104,7 +105,6 @@ class Answer_read extends Component {
       this.props.getStu_answer(newAnswer.toString());
       
       this.props.getischange(true);
-      console.log('阅读题的最终答案是：',newAnswer.toString())
      }
 
     UNSAFE_componentWillMount(){
@@ -157,21 +157,6 @@ class Answer_read extends Component {
                 <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
                 <Text>/{this.props.sum?this.props.sum:1}题 </Text>
                 <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
-                {/* <TouchableOpacity  style={{position:'absolute',right:20,top:10}}
-                                    onPress={
-                                      ()=>{
-                                          //导航跳转
-                                          this.props.navigation.navigate('SubmitPaper',
-                                          {   paperId:this.props.paperId,
-                                              submit_status:this.props.submit_status,
-                                              startdate:this.props.startdate,
-                                              papername:this.props.papername,
-                                              isallObj:this.props.isallObj})
-                                      }
-                                  }
-                >
-                    <Image source={require('../../../../assets/image3/look.png')}></Image>
-                </TouchableOpacity>  */}
             </View>
             
             {/* 题目展示区域 */}
@@ -185,14 +170,14 @@ class Answer_read extends Component {
             <View  style={this.state.closeopenstate?styles.answer_result_area:styles.answer_result_area_open}>
                     {/* 答案改变选项高度部分 */}
                     <TouchableOpacity onPress={()=>{this.setState({closeopenstate:!this.state.closeopenstate})}}>
-                        <Image style={{position:'relative',left:this.state.closeopenstate?'40%':'68%'}}  source={require('../../../../assets/image3/closeopen.png')}></Image>
+                        <Image style={{position:'relative',left:'40%'}}  source={require('../../../../assets/image3/closeopen.png')}></Image>
                     </TouchableOpacity>
                     
                     {/* 答案滑动选择部分 */}
                     <ScrollView style={{borderTopWidth:0.5,borderTopColor:'#000000',}}>
                       {this.state.closeopenstate?(
-                        <View style={{flexDirection:'row',height:60,borderTopWidth:0.5}}>
-                          <TouchableOpacity style={{position:'absolute',left:15,top:12}} onPress={()=>{
+                        <View style={{flexDirection:'row',height:60,borderTopWidth:0.5,justifyContent:'center'}}>
+                          <TouchableOpacity style={{position:'absolute',left:10,top:12}} onPress={()=>{
                             if(this.state.nowSelectedIndex>1){
                               this.setState({nowSelectedIndex:this.state.nowSelectedIndex-1})
                             }else{
@@ -201,17 +186,16 @@ class Answer_read extends Component {
                           }}>
                             <Image  source={require('../../../../assets/stuImg/lastquestion.png')}></Image>
                           </TouchableOpacity>
-                           
-                          <Text style={{marginLeft:70,marginTop:15,fontSize:17,color:'#59B9E0'}}>{this.state.nowSelectedIndex}</Text>
+                          <Text style={{marginTop:15,fontSize:17,color:'#59B9E0'}}>{this.state.nowSelectedIndex}</Text>
                           <Text style={{marginTop:15,fontSize:17}}>/{this.state.questionChoiceList}</Text>
                           <View>
                             <RadioList
-                                checkedindexID={this.state.stu_answer.split(',')[this.state.nowSelectedIndex-1]=='未答'?'':this.state.stu_answer.split(',')[this.state.nowSelectedIndex-1]}
-                                ChoiceList={this.state.questionList}
-                                getstuanswer={this.stuAnswer_single}
-                            />
+                                      checkedindexID={this.state.stu_answer.split(',')[this.state.nowSelectedIndex-1]=='未答'?'':this.state.stu_answer.split(',')[this.state.nowSelectedIndex-1]}
+                                      ChoiceList={this.state.questionList}
+                                      getstuanswer={this.stuAnswer_single}
+                                  />
                           </View>
-                          <TouchableOpacity style={{position:'absolute',right:15,top:12}} onPress={()=>{
+                          <TouchableOpacity style={{position:'absolute',right:10,top:12}} onPress={()=>{
                             if(this.state.nowSelectedIndex<this.state.questionChoiceList){
                               this.setState({nowSelectedIndex:this.state.nowSelectedIndex+1})
                             }else{

@@ -4,7 +4,7 @@ import { Button,Layout, ViewPager } from '@ui-kitten/components'
 import { useNavigation } from "@react-navigation/native";
 import http from '../../../utils/http/request'
 import PaperContent from './PaperContent'
-import  Toast  from '../../../utils/Toast/Toast';
+import Toast from '../../../utils/Toast/Toast';
 import Loading  from '../../../utils/loading/Loading';
 import CorrectSubmitContainer from './CorrectSubmit';
 import {WaitLoading,Waiting} from '../../../utils/WaitLoading/WaitLoading'

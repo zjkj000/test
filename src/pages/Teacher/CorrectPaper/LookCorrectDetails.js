@@ -1,8 +1,19 @@
-import { Button, Text, View,Image, ScrollView,TouchableOpacity } from 'react-native'
+import { Button, Text, View,Image, ScrollView,TouchableOpacity, Alert } from 'react-native'
 import React, { Component } from 'react'
 import http from '../../../utils/http/request'
+import { useNavigation } from '@react-navigation/native'
+import Toast from '../../../utils/Toast/Toast'
+import { ScreenHeight } from 'react-native-elements/dist/helpers'
 
-export default class LookCorrectDetails extends Component {
+
+export default function LookCorrectDetails(props) {
+  const taskId=props.route.params.taskId
+  const type = props.route.params.type
+  const navigation = useNavigation()
+  return (<LookCorrectDetailsContent navigation={navigation} taskId={taskId} type={type}/>)
+}
+
+class LookCorrectDetailsContent extends Component {
     constructor(props){
         super(props)
         this.state={
@@ -16,13 +27,13 @@ export default class LookCorrectDetails extends Component {
     
     UNSAFE_componentWillMount(){
       this.setState({
-        taskId:this.props.route.params.taskId, 
-        type:this.props.route.params.type
+        taskId:this.props.taskId, 
+        type:this.props.type
       })
       const url = global.constants.baseUrl+"teacherApp_lookPresentation.do";
       const params = {
-            taskId:this.props.route.params.taskId,           //作业id或者导学案id
-            type:this.props.route.params.type,               //  paper；learnPlan
+            taskId:this.props.taskId,           //作业id或者导学案id
+            type:this.props.type,               //  paper；learnPlan
             userName:global.constants.userName,              //  老师登录名
           };
       if(!this.state.success){
@@ -37,197 +48,234 @@ export default class LookCorrectDetails extends Component {
         
     }
 
+    PublishAnswer(){
+      const url = global.constants.baseUrl+"teacherApp_publishZYPaperAnwer.do";
+      const params = {
+            taskId:this.props.taskId,           //作业id或者导学案id
+            userName:global.constants.userName,              //  老师登录名
+          };
+        http.get(url, params).then((resStr) => {
+          let resJson = JSON.parse(resStr);
+          if(resJson.success){
+            Toast.showSuccessToast('答案公布成功！',1000)
+          }
+    })
+  }
+
 
     render() {
     return (
-        <ScrollView>
-
-          {/* 平均分 */}
-          <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
-              <View style={{flexDirection:'row',width:'100%'}}>
-                  <Text>平均分</Text>
-                  <Text style={{position:'absolute',right:50,}}>{this.state.data.avg}</Text>
-              </View>
-          </View>
-
-          {/* 最高分 */}
-          <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
+        <View>
+          <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:1}}>
+              <TouchableOpacity style={{position:'absolute',left:10}} onPress={()=>{this.props.navigation.goBack()}}>
+                  <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goback.png')}></Image>
+              </TouchableOpacity>
               
-              <View style={{flexDirection:'row',width:'100%'}}>
-                  <Text>最高分</Text>
-                  <Text style={{position:'absolute',right:50,}}>{this.state.data.max}</Text>
-                  <TouchableOpacity 
-                          style={{position:'absolute',right:10}}
-                          onPress={()=>{
-                            this.state.selectItem=='最高分'?this.setState({selectItem:''}):this.setState({selectItem:'最高分'})}}>
-                    <Image style={{width:25,height:20}} 
-                          source={this.state.selectItem=='最高分'
-                          ?require('../../../assets/teacherLatestPage/top.png')
-                          :require('../../../assets/teacherLatestPage/bot.png')}></Image>
-                  </TouchableOpacity>
-              </View>
-              
-              {/* 根据小箭头状态判断加载不加载 */}
-              {this.state.selectItem=='最高分'
-              ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap',}}>
-                {this.state.data.maxList.map(function(item){
-                          return(
-                            <View style={{width:80}}>
-                              <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
-                                  <Text>{item}</Text>
-                              </View> 
-                            </View>
-                          )
-                })}
-                   
-                </View>)
-              :(<View></View>)}
-              
-          </View>
+            <Text style={{color:'#59B9E0',fontSize:20}}>查看报告</Text>
+            <TouchableOpacity style={{position:"absolute",right:10}} onPress={()=>{
+              if(parseInt(this.state.data.noSubmit)/(parseInt(this.state.data.noCorrecting)+parseInt(this.state.data.correcting))<0.2){
+                this.PublishAnswer()
+              }else{
+                Alert.alert('','提交率不足80%,确定要公布答案吗？',[{},{text:'取消',onPress:()=>{}},{text:'确定',onPress:()=>{
+                  this.PublishAnswer()
+                }}])
+              }
+            }}>
+                <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/set.png')}></Image>
+            </TouchableOpacity>
 
-
-          {/* 最低分 */}
-          <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
-             
-              <View style={{flexDirection:'row',width:'100%'}}>
-                  <Text>最低分</Text>
-                  <Text style={{position:'absolute',right:50,}}>{this.state.data.min}</Text>
-                  <TouchableOpacity 
-                          style={{position:'absolute',right:10}}
-                          onPress={()=>{
-                            this.state.selectItem=='最低分'?this.setState({selectItem:''}):this.setState({selectItem:'最低分'})}}>
-                    <Image style={{width:25,height:20}}  
-                          source={this.state.selectItem=='最低分'
-                          ?require('../../../assets/teacherLatestPage/top.png')
-                          :require('../../../assets/teacherLatestPage/bot.png')}></Image></TouchableOpacity>
-              </View>
-             
-              {/* 根据小箭头判断加载不加载 */}
-              {this.state.selectItem=='最低分'
-              ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap'}}>
-                      {this.state.data.minList.map(function(item){
-                          return(
-                            <View style={{width:80}}>
-                              <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
-                                  <Text>{item}</Text>
-                              </View> 
-                            </View>
-                          )
-                })}
-                   
-                </View>)
-              :(<View></View>)}
-              
-          </View>
-
-
-          {/* 已批改 */}
-          <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
-              
-              <View style={{flexDirection:'row',width:'100%'}}>
-                  <Text>已批改</Text>
-                  <Text style={{position:'absolute',right:50,}}>{this.state.data.correcting}</Text>
-                  <TouchableOpacity 
-                          style={{position:'absolute',right:10}}
-                          onPress={()=>{
-                            this.state.selectItem=='已批改'?this.setState({selectItem:''}):this.setState({selectItem:'已批改'})}}>
-                    <Image style={{width:25,height:20}}  
-                          source={this.state.selectItem=='已批改'
-                          ?require('../../../assets/teacherLatestPage/top.png')
-                          :require('../../../assets/teacherLatestPage/bot.png')}></Image></TouchableOpacity>
-                 
-              </View>
-              
-              {/* 根据小箭头判断加载不加载 */}
-              {this.state.selectItem=='已批改'
-              ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap'}}>
             
-                     {this.state.data.correctingList.map(function(item){
-                          return(
-                            <View style={{width:80}}>
-                              <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
-                                  <Text>{item}</Text>
+          </View>
+            <ScrollView style={{height:ScreenHeight-50}}>
+
+            {/* 平均分 */}
+            <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
+                <View style={{flexDirection:'row',width:'100%'}}>
+                    <Text>平均分</Text>
+                    <Text style={{position:'absolute',right:50,}}>{this.state.data.avg}</Text>
+                </View>
+            </View>
+
+            {/* 最高分 */}
+            <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
+                
+                <View style={{flexDirection:'row',width:'100%'}}>
+                    <Text>最高分</Text>
+                    <Text style={{position:'absolute',right:50,}}>{this.state.data.max}</Text>
+                    <TouchableOpacity 
+                            style={{position:'absolute',right:10}}
+                            onPress={()=>{
+                              this.state.selectItem=='最高分'?this.setState({selectItem:''}):this.setState({selectItem:'最高分'})}}>
+                      <Image style={{width:25,height:20}} 
+                            source={this.state.selectItem=='最高分'
+                            ?require('../../../assets/teacherLatestPage/top.png')
+                            :require('../../../assets/teacherLatestPage/bot.png')}></Image>
+                    </TouchableOpacity>
+                </View>
+                
+                {/* 根据小箭头状态判断加载不加载 */}
+                {this.state.selectItem=='最高分'
+                ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap',}}>
+                  {this.state.data.maxList.map(function(item){
+                            return(
+                              <View style={{width:80}}>
+                                <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
+                                    <Text>{item}</Text>
+                                </View> 
                               </View>
-                            </View>
-                          )
-                })}
-                   
-                </View>)
-              :(<View></View>)}
+                            )
+                  })}
+                    
+                  </View>)
+                :(<View></View>)}
+                
+            </View>
+
+
+            {/* 最低分 */}
+            <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
               
-          </View>
-
-
-          {/* 未批改 */}
-          <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
-            
-              <View style={{flexDirection:'row',width:'100%'}}>
-                  <Text>未批改</Text>
-                  <Text style={{position:'absolute',right:50,}}>{this.state.data.noCorrecting}</Text>
-                  <TouchableOpacity 
-                          style={{position:'absolute',right:10}}
-                          onPress={()=>{
-                            this.state.selectItem=='未批改'?this.setState({selectItem:''}):this.setState({selectItem:'未批改'})}}>
-                    <Image style={{width:25,height:20}}  
-                          source={this.state.selectItem=='未批改'
-                          ?require('../../../assets/teacherLatestPage/top.png')
-                          :require('../../../assets/teacherLatestPage/bot.png')}></Image></TouchableOpacity>
-              </View>
-
-              {/* 根据小箭头判断加载不加载 */}
-              {this.state.selectItem=='未批改'
-              ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap'}}>
-                    {this.state.data.noCorrectingList.map(function(item){
-                          return(
-                            <View style={{width:80}}>
-                              <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
-                                  <Text>{item}</Text>
-                              </View> 
-                            </View>
-                          )
-                })}
+                <View style={{flexDirection:'row',width:'100%'}}>
+                    <Text>最低分</Text>
+                    <Text style={{position:'absolute',right:50,}}>{this.state.data.min}</Text>
+                    <TouchableOpacity 
+                            style={{position:'absolute',right:10}}
+                            onPress={()=>{
+                              this.state.selectItem=='最低分'?this.setState({selectItem:''}):this.setState({selectItem:'最低分'})}}>
+                      <Image style={{width:25,height:20}}  
+                            source={this.state.selectItem=='最低分'
+                            ?require('../../../assets/teacherLatestPage/top.png')
+                            :require('../../../assets/teacherLatestPage/bot.png')}></Image></TouchableOpacity>
+                </View>
               
-                </View>)
-              :(<View></View>)}
+                {/* 根据小箭头判断加载不加载 */}
+                {this.state.selectItem=='最低分'
+                ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap'}}>
+                        {this.state.data.minList.map(function(item){
+                            return(
+                              <View style={{width:80}}>
+                                <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
+                                    <Text>{item}</Text>
+                                </View> 
+                              </View>
+                            )
+                  })}
+                    
+                  </View>)
+                :(<View></View>)}
+                
+            </View>
+
+
+            {/* 已批改 */}
+            <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
+                
+                <View style={{flexDirection:'row',width:'100%'}}>
+                    <Text>已批改</Text>
+                    <Text style={{position:'absolute',right:50,}}>{this.state.data.correcting}</Text>
+                    <TouchableOpacity 
+                            style={{position:'absolute',right:10}}
+                            onPress={()=>{
+                              this.state.selectItem=='已批改'?this.setState({selectItem:''}):this.setState({selectItem:'已批改'})}}>
+                      <Image style={{width:25,height:20}}  
+                            source={this.state.selectItem=='已批改'
+                            ?require('../../../assets/teacherLatestPage/top.png')
+                            :require('../../../assets/teacherLatestPage/bot.png')}></Image></TouchableOpacity>
+                  
+                </View>
+                
+                {/* 根据小箭头判断加载不加载 */}
+                {this.state.selectItem=='已批改'
+                ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap'}}>
               
-          </View>
+                      {this.state.data.correctingList.map(function(item){
+                            return(
+                              <View style={{width:80}}>
+                                <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
+                                    <Text>{item}</Text>
+                                </View>
+                              </View>
+                            )
+                  })}
+                    
+                  </View>)
+                :(<View></View>)}
+                
+            </View>
 
 
-          {/* 未提交 */}
-          <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
+            {/* 未批改 */}
+            <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
               
-              <View style={{flexDirection:'row',width:'100%'}}>
-                  <Text>未提交</Text>
-                  <Text style={{position:'absolute',right:50,}}>{this.state.data.noSubmit}</Text>
-                  <TouchableOpacity 
-                          style={{position:'absolute',right:10}}
-                          onPress={()=>{
-                            this.state.selectItem=='未提交'?this.setState({selectItem:''}):this.setState({selectItem:'未提交'})}}>
-                    <Image style={{width:25,height:20}}  
-                        source={this.state.selectItem=='未提交'
-                              ?require('../../../assets/teacherLatestPage/top.png')
-                              :require('../../../assets/teacherLatestPage/bot.png')}></Image> 
-                  </TouchableOpacity>
-              </View>
+                <View style={{flexDirection:'row',width:'100%'}}>
+                    <Text>未批改</Text>
+                    <Text style={{position:'absolute',right:50,}}>{this.state.data.noCorrecting}</Text>
+                    <TouchableOpacity 
+                            style={{position:'absolute',right:10}}
+                            onPress={()=>{
+                              this.state.selectItem=='未批改'?this.setState({selectItem:''}):this.setState({selectItem:'未批改'})}}>
+                      <Image style={{width:25,height:20}}  
+                            source={this.state.selectItem=='未批改'
+                            ?require('../../../assets/teacherLatestPage/top.png')
+                            :require('../../../assets/teacherLatestPage/bot.png')}></Image></TouchableOpacity>
+                </View>
 
-              {/* 根据小箭头判断加载不加载 */}
-              {this.state.selectItem=='未提交'
-              ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap',}}>
-                    {this.state.data.noSubmitList.map(function(item){
-                          return(
-                            <View style={{width:80}}>
-                              <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
-                                  <Text>{item}</Text>
-                              </View> 
-                            </View>
-                          )
-                })}
-                </View>)
-              :(<View></View>)}
+                {/* 根据小箭头判断加载不加载 */}
+                {this.state.selectItem=='未批改'
+                ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap'}}>
+                      {this.state.data.noCorrectingList.map(function(item){
+                            return(
+                              <View style={{width:80}}>
+                                <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
+                                    <Text>{item}</Text>
+                                </View> 
+                              </View>
+                            )
+                  })}
+                
+                  </View>)
+                :(<View></View>)}
+                
+            </View>
 
-          </View>
 
-        </ScrollView>
+            {/* 未提交 */}
+            <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
+                
+                <View style={{flexDirection:'row',width:'100%'}}>
+                    <Text>未提交</Text>
+                    <Text style={{position:'absolute',right:50,}}>{this.state.data.noSubmit}</Text>
+                    <TouchableOpacity 
+                            style={{position:'absolute',right:10}}
+                            onPress={()=>{
+                              this.state.selectItem=='未提交'?this.setState({selectItem:''}):this.setState({selectItem:'未提交'})}}>
+                      <Image style={{width:25,height:20}}  
+                          source={this.state.selectItem=='未提交'
+                                ?require('../../../assets/teacherLatestPage/top.png')
+                                :require('../../../assets/teacherLatestPage/bot.png')}></Image> 
+                    </TouchableOpacity>
+                </View>
+
+                {/* 根据小箭头判断加载不加载 */}
+                {this.state.selectItem=='未提交'
+                ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap',}}>
+                      {this.state.data.noSubmitList.map(function(item){
+                            return(
+                              <View style={{width:80}}>
+                                <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
+                                    <Text>{item}</Text>
+                                </View> 
+                              </View>
+                            )
+                  })}
+                  </View>)
+                :(<View></View>)}
+
+            </View>
+
+            </ScrollView>
+        </View>
+        
      
     )
   }

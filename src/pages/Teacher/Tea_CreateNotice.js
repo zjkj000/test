@@ -66,7 +66,7 @@ class Tea_CreateNoticeContent extends Component {
             AllTea:(this.props.data.type=='1'||this.props.data.type=='0')?true:false,
         })
     }
-    //type  是  save  或  update
+    //  是  save  或  update
     saveOrUpdateNotice(){
         const url = global.constants.baseUrl+"teacherApp_saveManageNotice.do";
         const params = {

@@ -199,7 +199,7 @@ export default class RadioList extends PureComponent {
                         flexDirection: "row",
                         justifyContent: "space-around",
                     }} //整个组件的样式----这样可以垂直和水平
-                    conTainStyle={{ height: 44, width: 60 }} //图片和文字的容器样式
+                    conTainStyle={{ height: 44, width:55 }} //图片和文字的容器样式
                     imageStyle={{ width: 35, height: 35 }} //图片样式
                     textStyle={{ color: "black" }} //文字样式
                     selectIndex={incheckedindex} //空字符串,表示不选中,数组索引表示默认选中

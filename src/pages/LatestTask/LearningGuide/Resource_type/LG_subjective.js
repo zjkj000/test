@@ -7,6 +7,7 @@ import ImageViewer from 'react-native-image-zoom-viewer';
 import ImageHandler from '../../../../utils/Camera/Camera';
 import http from '../../../../utils/http/request';
 import { useNavigation } from "@react-navigation/native";
+import Toase from '../../../../utils/Toast/Toast'
 import {Waiting,WaitLoading} from '../../../../utils/WaitLoading/WaitLoading'
 export default function LG_subjectiveContainer(props) {
     const navigation = useNavigation();

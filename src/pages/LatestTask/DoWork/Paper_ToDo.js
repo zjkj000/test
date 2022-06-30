@@ -10,7 +10,7 @@ import Loading from '../../../utils/loading/Loading'
 import { useNavigation } from "@react-navigation/native";
 import Menu from './Utils/Menu';
 import Answer_singleContainer from './Answer_type/Answer_single';
-import Toast from '../../../utils/Toast/Toast';
+import Toast from '../../../utils/Toast/Toast'
 import { screenHeight,screenWidth } from '../../../utils/Screen/GetSize';
 //这个页面是 获取题目的页面
 export default function Paper_ToDo(props) {

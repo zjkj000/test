@@ -18,7 +18,8 @@ export default class DateTime extends Component {
 
     UNSAFE_componentWillMount() {
         if (this.props.selectedDateTime == null || this.props.selectedDateTime == '') {
-            var _dateStr = new Date().toISOString().substring(0, 10) + ' ' + new Date().toISOString().substring(11, 19)
+            var _dateStr = new Date().toISOString().substring(0, 10) + ' ' + new Date().toISOString().substring(11, 16)
+            _dateStr = _dateStr.substring(0,11)+(parseInt(_dateStr.substring(12,13))+8)+_dateStr.substring(13,16)
             this.setState({ selectedDatetime: _dateStr })
         } else {
             this.setState({ selectedDatetime: this.props.selectedDateTime })
@@ -31,7 +32,8 @@ export default class DateTime extends Component {
 
     UNSAFE_componentWillReceiveProps(nextprops) {
         if (nextprops.selectedDateTime == null || nextprops.selectedDateTime == '') {
-            var _dateStr = new Date().toISOString().substring(0, 10) + ' ' + new Date().toISOString().substring(11, 19)
+            var _dateStr = new Date().toISOString().substring(0, 10) + ' ' + new Date().toISOString().substring(11, 16)
+            _dateStr = _dateStr.substring(0,11)+(parseInt(_dateStr.substring(12,13))+8)+_dateStr.substring(13,16)
             this.setState({ selectedDatetime: _dateStr })
         } else {
             this.setState({ selectedDatetime: nextprops.selectedDateTime })
@@ -41,10 +43,6 @@ export default class DateTime extends Component {
     //组装时间数据
     _createTimeData() {
         let time = []
-        let ss = [];
-        for (let l = 0; l < 60; l++) {
-            ss.push(l + '秒');
-        }
         let mm = [];
         for (let y = 0; y < 60; y++) {
             mm.push(y + '分');
@@ -55,37 +53,32 @@ export default class DateTime extends Component {
         }
         time.push(hh)
         time.push(mm)
-        time.push(ss)
         return time
 
     }
     _showTimePicker() {
         var hh = ''
         var mm = ''
-        var ss = ''
-        var dateStr = this.state.selectedDatetime.substring(11, 19)
-        hh = parseInt(dateStr.substring(0, 2))+8
+        var dateStr = this.state.selectedDatetime.substring(11, 16)
+        hh = parseInt(dateStr.substring(0, 2))
         mm = parseInt(dateStr.substring(3, 5))
-        ss = dateStr.substring(6, 8)
         Picker.init({
             pickerTitleText: '时间选择',
             pickerCancelBtnText: '取消',
             pickerConfirmBtnText: '确定',
             pickerTextEllipsisLen: 6,
             pickerData: this._createTimeData(),
-            selectedValue: [hh + '时', mm + '分', ss + '秒'],
+            selectedValue: [hh + '时', mm + '分'],
             onPickerCancel: () => {
                 Picker.hide();
             },
             onPickerConfirm: (pickedValue, pickedIndex) => {
                 var hh = pickedValue[0].substring(0, pickedValue[0].length - 1)
                 var mm = pickedValue[1].substring(0, pickedValue[1].length - 1)
-                var ss = pickedValue[2].substring(0, pickedValue[2].length - 1)
                 hh = hh.padStart(2, '0')
                 mm = mm.padStart(2, '0')
-                ss = ss.padStart(2, '0')
-                let str = hh + ':' + mm + ':' + ss
-                let date = this.state.selectedDatetime.substring(0, 11)
+                let str = hh + ':' + mm
+                let date = this.state.selectedDatetime.substring(0,10)+' '
                 this.props.setDateTime(date + str)
                 this.setState({ selectedDatetime: date + str })
             },

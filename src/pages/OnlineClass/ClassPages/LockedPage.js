@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Image,
     ScrollView,
-    TextInput,
+    TextInput,Keyboard
 } from "react-native";
 import http from "../../../utils/http/request";
 import RadioList from "../../LatestTask/DoWork/Utils/RadioList";
@@ -304,6 +304,8 @@ export default class LockedPage extends Component {
                         删除
                     </Text>
                     <TextInput
+                        ref={(ref) => this.mytextinput = ref}
+                        onBlur={()=>{}}
                         placeholder="请输入答案！"
                         multiline
                         style={{
@@ -337,7 +339,9 @@ export default class LockedPage extends Component {
                     <Button
                         onPress={() => {
                             this.setAnswer(this.state.msg);
-                            this.setState({ msg: "" });
+                            this.setState({ msg: "" }); 
+                            this.mytextinput.onBlur
+                            Keyboard.dismiss()
                         }}
                         style={{
                             width: 100,

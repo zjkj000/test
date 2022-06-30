@@ -12,9 +12,9 @@ import { WaitLoading,Waiting } from '../../utils/WaitLoading/WaitLoading';
 export default function AssignLearnPlanContainer(props) {
     const navigation = useNavigation();
     // navigation.setOptions({title:'布置作业'});
-    console.log('================AssignPicturesWorkContainer=======================');
-    console.log(props.route.params);
-    console.log('==================================================================');
+    // console.log('================AssignPicturesWorkContainer=======================');
+    // console.log(props.route.params);
+    // console.log('==================================================================');
     return <AssignLearnPlan navigation={navigation} paramsData={props.route.params} />;
 }
 
@@ -50,7 +50,12 @@ class AssignLearnPlan extends Component {
     }
 
     UNSAFE_componentWillMount(){
-        
+        var _dateStr=new Date().toISOString().substring(0,10)+' '+new Date().toISOString().substring(11,16)
+        _dateStr = _dateStr.substring(0,11)+(parseInt(_dateStr.substring(12,13))+8)+_dateStr.substring(13,16)
+        this.setState({
+            beginstr:_dateStr,
+            endstr:this.nextDay(_dateStr.substring(0,10))
+        })
     }
 
   
@@ -61,8 +66,41 @@ class AssignLearnPlan extends Component {
         
     }
     setBeginDateTime(str){
+<<<<<<< HEAD
         this.setState({beginstr:str})
+=======
+        this.setState({beginstr:str,
+            endstr:this.nextDay(str.substring(0,10))})
+>>>>>>> fd10f6d4f43b1bd8b71d1109253af1ee7d0f411a
     }
+    nextDay(str){
+        var year = parseInt(str.substring(0,4))
+        var month = parseInt(str.substring(5,7))
+        var day = parseInt(str.substring(8,10))
+        if(month==2&&day==28&&year%100==0&&yaer%400!=0){
+           month=3
+           day=1
+        }else if(month==2&&day==28&&day%4!=0){
+          month=3
+          day=1
+        }else if(month==2&&day<28){
+          day+=1
+        }else if(day=='30'&&(month=='2'||month=='4'||month=='6'||month=='9'||month=='11')){
+          month+=1
+          day=1
+        }else if(day=='31'){
+          day = 1
+          if(month<12){
+            month=month+1
+          }else{
+            month=1
+            year+=1
+          }
+        }else{
+          day+=1
+        }
+        return year+'-'+ month.toString().padStart(2,'0')+'-'+day.toString().padStart(2,'0')+' 23:59'
+      }
     setEndDateTime(str){
         this.setState({endstr:str})
     }
@@ -295,7 +333,6 @@ class AssignLearnPlan extends Component {
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log('测试',resJson)
                 this.setState({ groupList: resJson.data.groupList , studentsList: resJson.data.classList });
             })
     }
@@ -407,9 +444,6 @@ class AssignLearnPlan extends Component {
             learnType = '50';
             stuIds = studentsList[0].ids;
             stuNames = studentsList[0].name;
-            // console.log('**********studentsList******',stuIds);
-            // console.log('**********studentsList.length******',studentsList.length);
-            // return;
         }else if(assigntoWho == '1'){ //布置给小组 拼装小组id、小组名 学生id、学生姓名
             learnType = '70';
             classIdOrGroupId = '';

@@ -153,6 +153,7 @@ class MyPageComponent extends Component {
             });
     };
     handleCamera = () => {
+        this.setState({ moduleVisible: false });
         ImageHandler.handleCamera().then((res) => {
             if (res) {
                 // console.log("ImageHandler====================================");
@@ -170,6 +171,7 @@ class MyPageComponent extends Component {
         });
     };
     handleLibrary = () => {
+        this.setState({ moduleVisible: false });
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
                 // console.log("ImageHandler====================================");

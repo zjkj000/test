@@ -409,9 +409,6 @@ class ContentList extends React.Component {
             .then((resStr) => {
                 isFetchProperty = true;
                 let resJson = JSON.parse(resStr);
-                console.log('==============saveProperty=========================');
-                console.log(resJson);
-                console.log('====================================================');
                 if(resJson.success){
                     Alert.alert('','属性保存成功', [{} ,
                         {text: '关闭', onPress: ()=>{
@@ -475,8 +472,6 @@ class ContentList extends React.Component {
                 transparent={true}
                 visible={PropertyModelVisiblity}
                 onRequestClose={() => {
-                    console.log('----------------Modal has been closed.---------------------');
-                    Alert.alert("Modal has been closed.");
                     this.setModalVisible(!PropertyModelVisiblity);
                 }}
             >
@@ -600,7 +595,7 @@ class ContentList extends React.Component {
                 >
                     <View style={styles.select}>
                         <Text style={styles.selectContent} onPress={() => {
-                            if(todo.paperType == '6'){ //拍照布置作业布置
+                            
                                 this.props.navigation.navigate({
                                     name:'AssignPicturePaperWork',
                                     params:{
@@ -608,6 +603,7 @@ class ContentList extends React.Component {
                                         paperId:id
                                     }
                                 })
+<<<<<<< HEAD
                             }else{
                                 this.props.navigation.navigate({
                                     name:'AssignPaper',
@@ -625,6 +621,9 @@ class ContentList extends React.Component {
                                 //         paperId:id
                                 //     }
                                 // })
+=======
+                            
+>>>>>>> fd10f6d4f43b1bd8b71d1109253af1ee7d0f411a
                         }}>
                             布置
                         </Text>
