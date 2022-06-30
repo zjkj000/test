@@ -11,13 +11,15 @@ export default function Piyueshiti(props) {
   const navigation = useNavigation()
   const yearTermStartTime = props.yearTermStartTime
   const yearTermEndTime = props.yearTermEndTime
+  const date =props.date
   return (
-    <PiyueshitiContent navigation={navigation} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
+    <PiyueshitiContent navigation={navigation} date={date} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
   )
 }class PiyueshitiContent extends Component {
   constructor(props){
     super(props)
     this.state={
+      PiuyueshitiDateStr:'',
       PiuyueshitiTableNum:3,
       startTime:'',
       piyuzongshu:0,
@@ -39,12 +41,13 @@ export default function Piyueshiti(props) {
     }
   }
   UNSAFE_componentWillMount(){
-    // this.setState({startTime:this.props.date})
-    this.getanayGetPGQueNum(this.props.yearTermStartTime,this.props.yearTermEndTime)
+    this.setState({PiuyueshitiDateStr:this.props.date})
+    this.getanayGetPGQueNum(new Date().toISOString().substring(0,10)+' 00:00:00',new Date().toISOString().substring(0,10)+' 23:59:59')
   }
   UNSAFE_componentWillReceiveProps(nextprops){
-    if(nextprops.yearTermStartTime!=this.state.yearTermStartTime){
-      this.getanayGetPGQueNum(nextprops.yearTermStartTime,nextprops.yearTermEndTime)
+    if(this.state.PiuyueshitiDateStr!=nextprops.PiuyueshitiDateStr){
+      this.setState({PiuyueshitiDateStr:nextprops.date})
+      this.getanayGetPGQueNum(nextprops.date+' 00:00:00',nextprops.date+' 23:59:59')
     }
   }
 
@@ -53,7 +56,7 @@ export default function Piyueshiti(props) {
       const url = global.constants.baseUrl+"teacherApp_anayGetPGQueNum.do";
       const params = {
                 unitId:global.constants.company,                   //单位id
-                userId:global.constants.userId,
+                userId:global.constants.userName,
                 startTime:startTime,
                 endTime:endTime,    
                 // unitId:'6105230000001',                   //单位id

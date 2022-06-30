@@ -282,11 +282,12 @@ class EditWork extends Component{
                       }
                     }
                   }>
-                    <View key={index} style={{backgroundColor:'#D3D3D3',
-                                    height:35,margin:8,borderColor:'red',padding:5,paddingLeft:10,paddingRight:10,
+                    <View key={index} style={{backgroundColor:'#D3D3D3',borderRadius:5,
+                                    width:screenWidth*0.25,alignItems:'center',
+                                    height:32,margin:8,borderColor:'red',padding:5,paddingLeft:0,paddingRight:0,
                                     borderWidth:this.state.typeId==item.typeId?1:0
                                     }}>
-                            <Text style={{fontSize:16}}>{item.typeName}</Text>
+                            <Text style={{fontSize:15}}>{String(item.typeName).length>5?(String(item.typeName).substring(0,5)+'..'):item.typeName}</Text>
                     </View>
                   </TouchableOpacity>
                     
@@ -516,7 +517,6 @@ class EditWork extends Component{
                               gradeLevelName:this.props.gradeLevelName,        //教材Name
                               pointName:this.props.pointName,                  //知识点Name
                             };
-                        // console.log('提交了.....')
                           WaitLoading.show('保存中...',-1)
                           http.get(url, params).then((resStr) => {
                             let resJson = JSON.parse(resStr);

@@ -418,9 +418,6 @@ class AssignLearnPlan extends Component {
             learnType = '50';
             stuIds = studentsList[0].ids;
             stuNames = studentsList[0].name;
-            // console.log('**********studentsList******',stuIds);
-            // console.log('**********studentsList.length******',studentsList.length);
-            // return;
         }else if(assigntoWho == '1'){ //布置给小组 拼装小组id、小组名 学生id、学生姓名
             learnType = '70';
             classIdOrGroupId = '';

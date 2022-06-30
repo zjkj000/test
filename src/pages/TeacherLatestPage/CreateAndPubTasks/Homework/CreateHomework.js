@@ -45,9 +45,8 @@ let clickBack = false;
 let clickNext = false;
 
 export default function CreateHomeworkContainer(props) {
-    console.log('------函数式props----',props.route.params);
+    console.log('------函数式props----',props.route.params.knowledgeCode);
     const paramsData = props.route.params;
-
     const navigation = useNavigation();
 
     //将navigation传给HomeworkProperty组件，防止路由出错
@@ -137,8 +136,8 @@ class CreateHomework extends React.Component {
 
     UNSAFE_componentWillMount(){
         console.log('------componentWillMount--------');
-        console.log(this.state.paramsDataProps);
-        console.log('-------------------------------');
+        // console.log(this.state.paramsDataProps);
+        // console.log('-------------------------------');
         // if(this.state.paperId == ''){ //调接口，获取paperId
         //     this.fetchPaperId();
         // }
@@ -362,9 +361,6 @@ class CreateHomework extends React.Component {
                                 ?
                                     <WebView
                                         onMessage={(event) => {
-                                            console.log('---------------------------------');
-                                            console.log(JSON.parse(event.nativeEvent.data).name , JSON.parse(event.nativeEvent.data).id);
-                                            console.log('---------------------------------');
                                             this.setState({ 
                                                 filterModelVisiblity: true,
                                                 knowledgeModelVisibility: false, 
@@ -399,9 +395,6 @@ class CreateHomework extends React.Component {
         bookList
     ) => {
         //重新修改state有关试题请求的参数，重新请求试题
-        console.log('-------设置属性悬浮框返回参数-------');
-        console.log(studyRank, studyRankId, studyClass, studyClassId, edition, editionId, book, bookId);
-        console.log('-----------------------------------');
         this.setState({ 
             filterModelVisiblity: false , 
             knowledgeModelVisibility: true ,
@@ -587,8 +580,6 @@ class CreateHomework extends React.Component {
         let j = 0;
         let bigId = 1;
         let smallId = 0;
-        console.log('*******createPaperObject**************',selectPaperList.length);
-        console.log('*************baseTypeIdLists********************',baseTypeIdLists)
         //console.log('**********createPaperObject********', Date.parse(new Date()));
         for(let i = 0 ; i < baseTypeIdLists.length ; i++){ //baseTypeIdLists和selectPaperList中的baseTypeId顺序一致
             // console.log('****baseTypeIdLists**i*',baseTypeIdLists[i] , i);
@@ -694,9 +685,6 @@ class CreateHomework extends React.Component {
         const paramsData = this.state.paramsDataProps;
         const { paperObject } = this.state;
         var papersJsonStr = JSON.stringify(paperObject); //js对象转化为json字符串
-        console.log('*********papersJsonStr*********',typeof(papersJsonStr));
-        console.log(papersJsonStr);
-        console.log('*******************************')
         return(
             {
                 jsonStr: papersJsonStr,
@@ -709,7 +697,7 @@ class CreateHomework extends React.Component {
                 gradeLevelCode: paramsData.bookId,
                 gradeLevelName: paramsData.book,
                 pointCode: paramsData.knowledgeCode,
-                // pointName: paramsData.knowledge,
+                pointName: paramsData.knowledge,
                 paperName: paramsData.name,
                 introduction: paramsData.introduction,
             }
@@ -795,9 +783,6 @@ class CreateHomework extends React.Component {
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                // console.log('****************resJson.success*********', resJson , typeof(resJson));
-                // console.log('*************************');
-                // console.log('****************resJson.success***Type******', resJson.success);
                 
                 if(resJson.success){
                     Alert.alert(this.props.paramsData.name , '作业保存成功' , [{} ,
