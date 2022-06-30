@@ -66,12 +66,8 @@ class AssignLearnPlan extends Component {
         
     }
     setBeginDateTime(str){
-<<<<<<< HEAD
-        this.setState({beginstr:str})
-=======
         this.setState({beginstr:str,
             endstr:this.nextDay(str.substring(0,10))})
->>>>>>> fd10f6d4f43b1bd8b71d1109253af1ee7d0f411a
     }
     nextDay(str){
         var year = parseInt(str.substring(0,4))
@@ -180,12 +176,12 @@ class AssignLearnPlan extends Component {
                 return(
                     <View 
                         style={this.state.classFlag == false ?
-                            {width: screenWidth*0.4,  height: 35, marginTop: 10, marginLeft: 20, backgroundColor: '#DCDCDC'}
-                            : {width: screenWidth*0.4,  height: 35, marginTop: 10, marginLeft: 20, backgroundColor: '#fff', borderWidth: 1, borderColor: 'red'}
+                            {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5, backgroundColor: '#DCDCDC',justifyContent:'center'}
+                            : {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 1, borderColor: 'red'}
                         }
                     >
                         <Text 
-                            style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 5, textAlign: 'center'}}
+                            style={{fontSize: 16, color: 'black', fontWeight: '400', textAlign: 'center'}}
                             onPress={()=>{
                                 if(this.state.groupList.length <= 0 && this.state.studentsList.length <= 0){
                                     if(this.state.class != null){ //已选择课堂且小组和个人信息都为空时请求一次小组和个人信息
@@ -232,19 +228,7 @@ class AssignLearnPlan extends Component {
                 }
                 return(
                     this.state.groupList.length > 0
-                    ? (
-                        <View
-                            style={{
-                                flexDirection: "row",
-                                flexWrap: "wrap", //自动换行
-                                backgroundColor: "#fff",
-                                left: screenWidth * 0.025,
-                                marginBottom: 10,
-                            }}
-                        >
-                            {content}
-                        </View>
-                    )
+                    ? content
                     : <View style={{justifyContent:'center', alignItems: 'center'}}>
                         <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>
                         您还没有创建小组，可以前往电脑端进行创建</Text>
@@ -552,100 +536,110 @@ class AssignLearnPlan extends Component {
 
     render() {
         return (
-        <View style={{borderTopWidth:1,backgroundColor:'#FFFFFF'}}>
-        
-        <ScrollView style={{height:'93%',}}>
-            <Waiting/>
-            <View style={{flexDirection:'row',paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
-                    <Text style={{fontSize:15,marginRight:40}}>作业名称:</Text>
-                    <TextInput value={this.props.paramsData.learnPlanName} placeholder='传过来的值'></TextInput>
-            </View>
-            
-            <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
-                <Text style={{fontSize:15,marginRight:40}}>开始时间:</Text>
-                <Text style={{fontSize:15,}}>{this.state.beginstr}</Text>
-                <TouchableOpacity style={{position:'absolute',right:20,flexDirection:'row'}} >
-                    <DateTime style={{position:'absolute',right:20,flexDirection:'row'}}  setDateTime={this.setBeginDateTime} selectedDateTime={this.state.beginstr}/>
-                </TouchableOpacity>
-            </View>
-
-            <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}> 
-                <Text style={{fontSize:15,marginRight:40}}>结束时间:</Text>
-                <Text style={{fontSize:15}}>{this.state.endstr}</Text>
-                <TouchableOpacity style={{position:'absolute',right:20,flexDirection:'row'}} >
-                    <DateTime setDateTime={this.setEndDateTime} selectedDateTime={this.state.endstr}/>
-                </TouchableOpacity>
-                
-            </View>
-
-            <View style={{borderBottomWidth:1,padding:15,paddingLeft:20}}>
-                    <View style={{flexDirection:'row',alignItems:'center'}}>
-                        <Text style={{fontSize:15,marginRight:40}}>选择课堂:</Text>
-                        <Text style={{fontSize:15,marginRight:20}}>{this.state.className}</Text>
-                        <TouchableOpacity onPress={()=>{this.setState({SelectKeTangStatus:!this.state.SelectKeTangStatus})}} style={{position:'absolute',right:10}}>
-                            <Image style={{width:20,height:20}} source={this.state.SelectKeTangStatus?require('../../assets/image3/top.png'):require('../../assets/image3/bot.png')}></Image>
-                        </TouchableOpacity>
-                    </View>
-                
-                {this.state.SelectKeTangStatus?
-                            (<View style={{marginTop:20}}>
-                                {
-                                    this.state.classNameList.length <= 0
-                                        ? this.fetchClassNameList()
-                                        : null
-                                }
-                                {
-                                    this.state.classNameList.length > 0
-                                        ? this.showClassNameList()
-                                        : <Text>课堂列表未获取到或者为空</Text>
-                                }
-                            </View>
-                            ):(<View></View>)}
-            </View>
-
-            <View style={{flexDirection:'row',height:60,alignItems:'center'}}>
-                <Text style={{fontSize:15,marginRight:40,marginLeft:30}}>布置给</Text>
-                <Button onPress={()=>{this.updateAssignToWho('0');this.setState({SelectKeTangStatus:false})}} style={{marginRight:20}} appearance={this.state.assigntoWho=='0'?'filled':'ghost'}>班级</Button>
-                <Button onPress={()=>{this.updateAssignToWho('1');this.setState({SelectKeTangStatus:false})}} style={{marginRight:20}} appearance={this.state.assigntoWho=='1'?'filled':'ghost'}>小组</Button>
-                <Button onPress={()=>{this.updateAssignToWho('2');this.setState({SelectKeTangStatus:false})}} appearance={this.state.assigntoWho=='2'?'filled':'ghost'}>个人</Button>
-                
-            </View>
-
-            <ScrollView>
-                <View style={{alignItems:'center',marginTop:15}}>
-                    {this.showAssignToWho()}
+        <View style={{borderTopWidth:1,backgroundColor:'#FFFFFF',flex:1}}>
+            <ScrollView style={{height:'91%',backgroundColor: '#fff'}}>
+                <Waiting/>
+                <View style={{flexDirection:'row',paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
+                        <Text style={{fontSize:15,marginRight:40}}>作业名称:</Text>
+                        <TextInput value={this.props.paramsData.learnPlanName} placeholder='传过来的值'></TextInput>
                 </View>
-                    
-            </ScrollView>
-        </ScrollView>
+                
+                <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
+                    <Text style={{fontSize:15,marginRight:40}}>开始时间:</Text>
+                    <Text style={{fontSize:15,}}>{this.state.beginstr}</Text>
+                    <TouchableOpacity style={{position:'absolute',right:20,flexDirection:'row'}} >
+                        <DateTime style={{position:'absolute',right:20,flexDirection:'row'}}  setDateTime={this.setBeginDateTime} selectedDateTime={this.state.beginstr}/>
+                    </TouchableOpacity>
+                </View>
 
-        {/* 按钮区域 */}
-        <View style={{flexDirection:'row',justifyContent:'space-around'}}>
-                <Button onPress={()=>{
-                                this.setState({
-                                    beginstr: '',
-                                    endstr: '',
-                                    className: '', //选择课堂
-                                    SelectKeTangStatus: false, //是否显示课堂列表
-                                    beginstr:'',
-                                    endstr:'',
-                                    assigntoWho: '0', //布置作业对象 0:班级 1：小组 2:个人
-                                    class: {}, //所选中的课堂对应的班级信息
-                                    classFlag: false, //是否选中班级
-                                    groupSelected: [], //被选中的小组
-                                    // studentsList: [], //个人列表（接口返回的classList、学生信息由字符串拼接）
-                                    //studentsListTrans: [], //studentsList中拼接的学生信息挨个提取出
-                                    studentSelected: [], //被选中的学生
-                                    keTangId:'',
-                                    classOrGroupId:'',
-                                    // studentsListTrans: [], //studentsList中拼接的学生信息挨个提取出
-                                })
-                            }}
-                style={{width:'40%'}} >重置</Button>
-                <Button onPress={()=>{
-                    this.SaveAssign()
-                }} style={{width:'40%'}}>确定</Button>
-        </View>
+                <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}> 
+                    <Text style={{fontSize:15,marginRight:40}}>结束时间:</Text>
+                    <Text style={{fontSize:15}}>{this.state.endstr}</Text>
+                    <TouchableOpacity style={{position:'absolute',right:20,flexDirection:'row'}} >
+                        <DateTime setDateTime={this.setEndDateTime} selectedDateTime={this.state.endstr}/>
+                    </TouchableOpacity>
+                    
+                </View>
+
+                <View style={{borderBottomWidth:1,padding:15,paddingLeft:20}}>
+                        <View style={{flexDirection:'row',alignItems:'center'}}>
+                            <Text style={{fontSize:15,marginRight:40}}>选择课堂:</Text>
+                            <Text style={{fontSize:15,marginRight:20}}>{this.state.className}</Text>
+                            <TouchableOpacity onPress={()=>{this.setState({SelectKeTangStatus:!this.state.SelectKeTangStatus})}} style={{position:'absolute',right:10}}>
+                                <Image style={{width:20,height:20}} source={this.state.SelectKeTangStatus?require('../../assets/image3/top.png'):require('../../assets/image3/bot.png')}></Image>
+                            </TouchableOpacity>
+                        </View>
+                    
+                    {this.state.SelectKeTangStatus?
+                                (<View style={{marginTop:20}}>
+                                    {
+                                        this.state.classNameList.length <= 0
+                                            ? this.fetchClassNameList()
+                                            : null
+                                    }
+                                    {
+                                        this.state.classNameList.length > 0
+                                            ? this.showClassNameList()
+                                            : <Text>课堂列表未获取到或者为空</Text>
+                                    }
+                                </View>
+                                ):(<View></View>)}
+                </View>
+
+                <View style={{flexDirection:'row',height:60,alignItems:'center'}}>
+                    <Text style={{fontSize:15,marginRight:40,marginLeft:30}}>布置给</Text>
+                    <TouchableOpacity style={{marginRight:30}} onPress={()=>{this.updateAssignToWho('0');this.setState({SelectKeTangStatus:false})}}>
+                        <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='0'?'#4DC7F8':'#fff'}}>
+                            <Text style={{fontSize:15}}>班级</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssignToWho('1');this.setState({SelectKeTangStatus:false})}}>
+                        <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='1'?'#4DC7F8':'#fff'}}>
+                            <Text>小组</Text>
+                        </View>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssignToWho('2');this.setState({SelectKeTangStatus:false})}}>
+                        <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='2'?'#4DC7F8':'#fff'}}>
+                            <Text>个人</Text>
+                        </View>
+                    </TouchableOpacity>
+                </View>
+
+                <ScrollView>
+                    <View style={{alignItems:'flex-start',marginTop:15,marginBottom:50,flexDirection:'row',flexWrap:'wrap',justifyContent:'center'}}>
+                        {this.showAssignToWho()}
+                    </View>
+                        
+                </ScrollView>
+            </ScrollView>
+
+            {/* 按钮区域 */}
+            <View style={{flexDirection:'row',justifyContent:'space-around'}}>
+                    <Button onPress={()=>{
+                                    this.setState({
+                                        beginstr: '',
+                                        endstr: '',
+                                        className: '', //选择课堂
+                                        SelectKeTangStatus: false, //是否显示课堂列表
+                                        beginstr:'',
+                                        endstr:'',
+                                        assigntoWho: '0', //布置作业对象 0:班级 1：小组 2:个人
+                                        class: {}, //所选中的课堂对应的班级信息
+                                        classFlag: false, //是否选中班级
+                                        groupSelected: [], //被选中的小组
+                                        // studentsList: [], //个人列表（接口返回的classList、学生信息由字符串拼接）
+                                        //studentsListTrans: [], //studentsList中拼接的学生信息挨个提取出
+                                        studentSelected: [], //被选中的学生
+                                        keTangId:'',
+                                        classOrGroupId:'',
+                                        // studentsListTrans: [], //studentsList中拼接的学生信息挨个提取出
+                                    })
+                                }}
+                    style={{width:'40%'}} >重置</Button>
+                    <Button onPress={()=>{
+                        this.SaveAssign()
+                    }} style={{width:'40%'}}>确定</Button>
+            </View>
         </View>
         )
     }
@@ -653,15 +647,21 @@ class AssignLearnPlan extends Component {
 
 const styles = StyleSheet.create({
     classNameView: {
+        borderRadius:5,
         width: screenWidth * 0.4,
         height: 40,
+        marginLeft:10,
+        marginBottom:5,  
         backgroundColor: '#DCDCDC',
         borderWidth: 2,
         borderColor: '#fff',
     },
     classNameViewSelected: {
+        borderRadius:5,
         width: screenWidth * 0.4,
         height: 40,
+        marginLeft:10,
+        marginBottom:5,  
         backgroundColor: '#fff',
         borderWidth: 2,
         borderColor: 'red',
@@ -671,20 +671,25 @@ const styles = StyleSheet.create({
         fontWeight: '300',
         paddingTop: 8,
         textAlign: 'center',
-    }, 
-    groupView: {
-        width: screenWidth * 0.48,
+    }, groupView: {
+        borderRadius:5,
+        width: screenWidth * 0.4,
         height: 40,
         backgroundColor: '#DCDCDC',
         marginTop:3,
+        marginBottom:5,  
+        marginLeft:20,
         borderWidth: 2,
         borderColor: '#fff',
     },
     groupViewSelected: {
-        width: screenWidth * 0.48,
+        borderRadius:5,
+        width: screenWidth * 0.4,
         height: 40,
         backgroundColor: '#fff',
         marginTop:3,
+        marginBottom:5,  
+        marginLeft:20,
         borderWidth: 2,
         borderColor: 'red',
     },

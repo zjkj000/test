@@ -61,11 +61,7 @@ class AssignPaper extends Component {
         
     }
     setBeginDateTime(str){
-<<<<<<< HEAD
-        this.setState({beginstr:str})
-=======
         this.setState({beginstr:str,endstr:this.nextDay(str.substring(0,10))})
->>>>>>> fd10f6d4f43b1bd8b71d1109253af1ee7d0f411a
     }
     nextDay(str){
         var year = parseInt(str.substring(0,4))

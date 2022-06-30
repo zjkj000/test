@@ -8,7 +8,7 @@ import "../../utils/global/constants";
 import {
     Button,
 } from "@ui-kitten/components";
-import {WaitLoang,Waiting} from '../../utils/WaitLoading/WaitLoading' 
+import {WaitLoading,Waiting} from '../../utils/WaitLoading/WaitLoading' 
 let pageNo = 1; //当前第几页
 let itemNo = 0; //item的个数
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
@@ -603,27 +603,7 @@ class ContentList extends React.Component {
                                         paperId:id
                                     }
                                 })
-<<<<<<< HEAD
-                            }else{
-                                this.props.navigation.navigate({
-                                    name:'AssignPaper',
-                                    params:{
-                                        paperId: todo.id,
-                                        paperName: todo.name,
-                                    }
-                                })
-                                // Alert.alert('选题布置作业布置还未开发');
-                            }
-                                // this.props.navigation.navigate({
-                                //     name:'AssignPicturePaperWork',
-                                //     params:{
-                                //         paperName:name,
-                                //         paperId:id
-                                //     }
-                                // })
-=======
                             
->>>>>>> fd10f6d4f43b1bd8b71d1109253af1ee7d0f411a
                         }}>
                             布置
                         </Text>
