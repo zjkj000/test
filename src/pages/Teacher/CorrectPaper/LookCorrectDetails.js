@@ -4,6 +4,7 @@ import http from '../../../utils/http/request'
 import { useNavigation } from '@react-navigation/native'
 import Toast from '../../../utils/Toast/Toast'
 import { ScreenHeight } from 'react-native-elements/dist/helpers'
+import { screenWidth } from '../../../utils/Screen/GetSize'
 
 
 export default function LookCorrectDetails(props) {
@@ -115,14 +116,12 @@ class LookCorrectDetailsContent extends Component {
                 
                 {/* 根据小箭头状态判断加载不加载 */}
                 {this.state.selectItem=='最高分'
-                ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap',}}>
+                ?(<View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start',paddingBottom:20,paddingTop:10}}>
                   {this.state.data.maxList.map(function(item){
                             return(
-                              <View style={{width:80}}>
-                                <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
+                              <View style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
                                     <Text>{item}</Text>
-                                </View> 
-                              </View>
+                                </View>
                             )
                   })}
                     
@@ -150,14 +149,12 @@ class LookCorrectDetailsContent extends Component {
               
                 {/* 根据小箭头判断加载不加载 */}
                 {this.state.selectItem=='最低分'
-                ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap'}}>
+                ?(<View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start',paddingBottom:20,paddingTop:10}}>
                         {this.state.data.minList.map(function(item){
                             return(
-                              <View style={{width:80}}>
-                                <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
+                              <View style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
                                     <Text>{item}</Text>
-                                </View> 
-                              </View>
+                                </View>
                             )
                   })}
                     
@@ -186,15 +183,12 @@ class LookCorrectDetailsContent extends Component {
                 
                 {/* 根据小箭头判断加载不加载 */}
                 {this.state.selectItem=='已批改'
-                ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap'}}>
-              
+                ?(<View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start',paddingBottom:20,paddingTop:10}}>
                       {this.state.data.correctingList.map(function(item){
                             return(
-                              <View style={{width:80}}>
-                                <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
+                              <View style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
                                     <Text>{item}</Text>
                                 </View>
-                              </View>
                             )
                   })}
                     
@@ -222,14 +216,12 @@ class LookCorrectDetailsContent extends Component {
 
                 {/* 根据小箭头判断加载不加载 */}
                 {this.state.selectItem=='未批改'
-                ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap'}}>
+                ?(<View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start',paddingBottom:20,paddingTop:10}}>
                       {this.state.data.noCorrectingList.map(function(item){
                             return(
-                              <View style={{width:80}}>
-                                <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
+                              <View style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
                                     <Text>{item}</Text>
-                                </View> 
-                              </View>
+                                </View>
                             )
                   })}
                 
@@ -258,14 +250,12 @@ class LookCorrectDetailsContent extends Component {
 
                 {/* 根据小箭头判断加载不加载 */}
                 {this.state.selectItem=='未提交'
-                ?(<View style={{flexDirection:'row',padding:15,flexWrap:'wrap',}}>
+                ?(<View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start',paddingBottom:20,paddingTop:10}}>
                       {this.state.data.noSubmitList.map(function(item){
                             return(
-                              <View style={{width:80}}>
-                                <View style={{margin:10,padding:8,backgroundColor:'#C0C0C0'}}>
+                                <View style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
                                     <Text>{item}</Text>
-                                </View> 
-                              </View>
+                                </View>
                             )
                   })}
                   </View>)

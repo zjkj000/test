@@ -74,6 +74,7 @@ class HomeworkProperty extends React.Component {
             bookList: [], //教材列表（接口数据）
 
             knowledge: '', //知识点(选中的)
+            Longknowledge:'',
             knowledgeCode: '', //选中的知识点项的编码
             knowledgeVisibility: false, //知识点选择列表是否显示     
             knowledgeModelVisibility: false, //知识点悬浮框model是否显示      
@@ -86,6 +87,20 @@ class HomeworkProperty extends React.Component {
             error: false,
             errorInfo: "",
         };
+    }
+    getLongknowledge(id){
+        const url = global.constants.baseUrl+"teacherApp_getPointName.do";
+        const params = {
+            pointId:id}
+        http.get(url, params)
+        .then((resStr) => {
+            let resJson = JSON.parse(resStr);
+            if(resJson.success){
+                this.setState({
+                    Longknowledge:resJson.data
+                })
+            }
+        })
     }
 
     //更新是否显示状态
@@ -198,11 +213,13 @@ class HomeworkProperty extends React.Component {
                                 ?
                                     <WebView
                                         onMessage={(event) => {
+                                            var id = JSON.parse(event.nativeEvent.data).id
                                             this.setState({ 
                                                 knowledgeModelVisibility: false, 
                                                 knowledge: JSON.parse(event.nativeEvent.data).name ,
                                                 knowledgeCode: JSON.parse(event.nativeEvent.data).id,
                                             });
+                                            this.getLongknowledge(id)
                                         }}
                                         javaScriptEnabled={true}
                                         scalesPageToFit={Platform.OS === 'ios' ? true : false}
@@ -996,7 +1013,8 @@ class HomeworkProperty extends React.Component {
                                             bookId: this.state.bookId,
                                             book: this.state.book,
                                             knowledgeCode: this.state.knowledgeCode,
-                                            knowledge: this.state.knowledge,
+                                            // knowledge: this.state.knowledge,
+                                            knowledge: this.state.Longknowledge,  //新的长知识点
 
                                             channelNameList: this.state.channelNameList, //学段名列表（接口数据）
                                             studyClassList: this.state.studyClassList, //学科列表（接口数据）
