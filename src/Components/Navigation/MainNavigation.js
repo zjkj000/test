@@ -52,6 +52,7 @@ import AssignLearnPlanContainer from "../../pages/TeacheringContent/AssignLearnP
 import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin";
 import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
 import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
+import TestPage from "../../TestPage/TestPage";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -344,6 +345,14 @@ export default class MainNavigation extends Component {
                         name="ControllerSharePhoto"
                         component={ControllerSharePhoto}
                     />
+                </Stack.Group>
+
+                {/* 测试 */}
+                <Stack.Group>
+                    <Stack.Screen
+                        name="TestPage"
+                        component={TestPage}
+                    ></Stack.Screen>
                 </Stack.Group>
             </Stack.Navigator>
         );

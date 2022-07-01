@@ -29,6 +29,7 @@ import Picture from "./resources/Picture";
 import Document from "./resources/Document";
 import StorageUtil from "../../../utils/Storage/Storage";
 import { ScrollView } from "react-native-gesture-handler";
+import VideoPlayer from "./resources/Video";
 
 export default class FreePage extends Component {
     constructor(props) {
@@ -187,6 +188,9 @@ export default class FreePage extends Component {
         const { periodList, pageNow, pageLength } = this.state;
         const { ipAddress } = this.props;
         let periodNow = periodList[pageNow];
+        // console.log("RenderBody====================================");
+        // console.log(periodNow);
+        // console.log("====================================");
         let bodyContent = <></>;
         switch (periodNow.type) {
             case "question":
@@ -221,7 +225,10 @@ export default class FreePage extends Component {
                     />
                 );
                 break;
+            case "video":
+            case "voice":
             case "picture":
+            default:
                 bodyContent = (
                     <Picture
                         periodNow={periodNow}
@@ -230,8 +237,6 @@ export default class FreePage extends Component {
                         {...this.props}
                     />
                 );
-                break;
-            default:
                 break;
         }
         return <>{bodyContent}</>;

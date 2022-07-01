@@ -25,6 +25,12 @@ export default function HistoryInput(props) {
             let res = await StorageUtil.get("historyListRemote");
             res = res ? res : [];
             setData(res);
+            // console.log(
+            //     "HistoryInputInitData===================================="
+            // );
+            // console.log(res);
+            // console.log("====================================");
+            setValue(res[res.length - 1].title);
             return res;
         } catch (e) {
             Toast.showDangerToast(e.toString());
