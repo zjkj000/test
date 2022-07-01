@@ -15,15 +15,12 @@ import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 import { useNavigation } from "@react-navigation/native";
 import http from "../../../../utils/http/request";
 import DateTime from "../../../../utils/datetimePickerUtils/DateTime";
+import { Waiting, WaitLoading } from "../../../../utils/WaitLoading/WaitLoading";
 
 import { WebView } from "react-native-webview";
 import RenderHtml from "react-native-render-html";
 
 import Toast from "../../../../utils/Toast/Toast";
-import {
-    Waiting,
-    WaitLoading,
-} from "../../../../utils/WaitLoading/WaitLoading";
 
 let saveCount = 1;
 
@@ -196,8 +193,8 @@ class PushOrSaveContentPage extends React.Component {
             }
         }
         return {
-            startTime: startTime,
-            endTime: endTime,
+            startTime: startTime + ':00',
+            endTime: endTime + ':00',
             keTangId: keTangId,
             classIds: classIdOrGroupId,
             stuIds: stuIds,
@@ -283,7 +280,7 @@ class PushOrSaveContentPage extends React.Component {
         // console.log(url , params)
         // console.log('***********************************************')
         // console.log('-----pushAndSaveLearnPlan-----', Date.parse(new Date()))
-        // WaitLoading.show("保存中...", -1);
+        WaitLoading.show("保存中...", -1);
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
@@ -305,7 +302,7 @@ class PushOrSaveContentPage extends React.Component {
                         }}       
                     ]);
                 } else {
-                    // WaitLoading.show_false();
+                    WaitLoading.show_false();
                     // Alert.alert(resJson.message);
                 }
             })
@@ -340,7 +337,7 @@ class PushOrSaveContentPage extends React.Component {
             //callback:'ha',
         };
         console.log("-----saveLearnPlan-----", Date.parse(new Date()));
-        // WaitLoading.show("保存中...", -1);
+        WaitLoading.show("保存中...", -1);
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
@@ -370,7 +367,8 @@ class PushOrSaveContentPage extends React.Component {
                         }}       
                     ]);
                 }else{
-                    Alert.alert('',resJson.message, [{} , {text: '关闭', onPress: ()=>{}}]);
+                    WaitLoading.show_false();
+                    // Alert.alert('',resJson.message, [{} , {text: '关闭', onPress: ()=>{}}]);
                 }
             })
             .catch((error) => {
@@ -835,7 +833,7 @@ class PushOrSaveContentPage extends React.Component {
                             color: 'black',
                             top: 10,
                         }}
-                        onPress={()=>{this.savePaper()}}
+                        onPress={()=>{this.saveLearnPlan()}}
                     >保存</Text>
                 </View>
                 <ScrollView style={{height:'100%'}}>
@@ -1043,6 +1041,7 @@ class PushOrSaveContentPage extends React.Component {
         } else {
             return (
                 <View style={styles.bodyView}>
+                    <Waiting/>
                     {this.showPushOrSaveContent()}
                     {this.showPushOrSaveContentBottom()}
                 </View>

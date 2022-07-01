@@ -294,6 +294,17 @@ class AddContentPage extends React.Component {
                 }else if(resJson.data.esmodelList.length == 0){
                     isLastPage = true;
                     Alert.alert('','没有请求到导学案数据', [{} , {text: '关闭', onPress: ()=>{}}]);
+                    this.setState({ 
+                        contentList: [],
+                        selectContentIndex: 0,
+                        pptList: [],
+                        selectPptIndex: 0,
+                        showVideoControl: false, // 是否显示视频控制组件
+                        isPlaying: false,        // 视频是否正在播放
+                        currentTime: 0,        // 视频当前播放的时间
+                        duration: 0,           // 视频的总时长
+                        playFromBeginning: false, // 是否从头开始播放
+                    })
                 } 
 
                 if(resJson.data.esmodelList.length < 5){

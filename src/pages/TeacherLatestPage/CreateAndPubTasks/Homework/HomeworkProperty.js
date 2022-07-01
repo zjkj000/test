@@ -742,6 +742,9 @@ class HomeworkProperty extends React.Component {
                         ></TextInput>
                     </View>
 
+                    {/**分割线 */}
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+
                     {/**学段 */}
                     <TouchableOpacity
                         onPress={() => {
