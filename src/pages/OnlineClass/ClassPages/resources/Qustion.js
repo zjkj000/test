@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Image,
     TextInput,
-    ScrollView,
+    ScrollView,Keyboard
 } from "react-native";
 import http from "../../../../utils/http/request";
 import RadioList from "../../../LatestTask/DoWork/Utils/RadioList";
@@ -130,6 +130,7 @@ export default class Question extends Component {
                     删除
                 </Text>
                 <TextInput
+                    ref={(ref) => this.mytextinput = ref}
                     multiline
                     style={{
                         width: 150,
@@ -158,6 +159,8 @@ export default class Question extends Component {
                     onPress={() => {
                         this.setAnswer(this.state.msg);
                         this.setState({ msg: "" });
+                        this.mytextinput.onBlur
+                                Keyboard.dismiss()
                     }}
                     style={{
                         width: 100,

@@ -67,10 +67,10 @@ public class BottomButtonActivity extends LaunchActivity implements View.OnClick
         boolean isSelected = mButtonMuteAudio.isSelected();
         if (!isSelected) {
             mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
-            mTRTCCloud.muteLocalAudio(true);
+            mTRTCCloud.muteLocalAudio(false);
         } else {
             mTRTCCloud.stopLocalAudio();
-            mTRTCCloud.muteLocalAudio(false);
+            mTRTCCloud.muteLocalAudio(true);
         }
         mButtonMuteAudio.setSelected(!isSelected);
     }
