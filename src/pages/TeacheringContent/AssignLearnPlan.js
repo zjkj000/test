@@ -527,6 +527,7 @@ class AssignLearnPlan extends Component {
                         ])   
                     }else{
                         WaitLoading.show_false()
+                        
                         Alert.alert('',resJson.message, [{} , {text: '关闭', onPress: ()=>{}}]);
                         Toast.showDangerToast('布置失败！',1000)
                     }

@@ -105,21 +105,25 @@ export default function Paper_ShowCorrected(props) {
                         {Item.analysis==''?(<Text >略</Text>):(<RenderHTML source={{html:Item.analysis}}></RenderHTML>)}
                         <Text style={styles.Titletext}>[你的答案]</Text>
                         {Item.stuAnswer==''?(<Text >未答</Text>):(<RenderHTML source={{html:Item.stuAnswer}}></RenderHTML>)}
-                        <View style={{flexDirection:'row',marginTop:20}}>
-                           <View style={{flexDirection:'row'}}>
+                        {(Item.standardAnswer!='******'&&Item.analysis!='******')?(
+                          <View style={{flexDirection:'row',marginTop:20}}>
+                            <View style={{flexDirection:'row'}}>
                               <Image source={require('../../../assets/stuImg/score.png')}></Image>
                               <Text style={{fontSize:20}}>满分:{Item.fullScore}</Text>
-                           </View>
-                           <View style={{flexDirection:'row',marginLeft:30}}>
+                            </View>
+                            <View style={{flexDirection:'row',marginLeft:30}}>
                               <Image source={require('../../../assets/stuImg/avr.png')}></Image>
                               <Text style={{fontSize:20}}>得分:{Item.score}</Text>
-                           </View>
-                           <View style={{flexDirection:'row',marginLeft:30}}>
+                            </View>
+                            <View style={{flexDirection:'row',marginLeft:30}}>
                               {Item.statusImage=='right.png'?(<Image source={require('../../../assets/stuImg/right.png')}></Image>):
-                               Item.statusImage=='errorright.png'?(<Image source={require('../../../assets/stuImg/errorright.png')}></Image>):
-                               Item.statusImage=='error.png'?(<Image source={require('../../../assets/stuImg/error.png')}></Image>):<></>}
-                           </View>
+                                Item.statusImage=='errorright.png'?(<Image source={require('../../../assets/stuImg/errorright.png')}></Image>):
+                                Item.statusImage=='error.png'?(<Image source={require('../../../assets/stuImg/error.png')}></Image>):<></>}
+                            </View>
                         </View>
+                        ):(<></>)}
+                        
+
                         <View style={{height:50}}></View>
 
                     </ScrollView>

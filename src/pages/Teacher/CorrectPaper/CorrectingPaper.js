@@ -30,7 +30,7 @@ export default function CorrectingPaper(props) {
 
       props.route.params.CorrectResultList?setCorrectResultList(props.route.params.CorrectResultList):setCorrectResultList([])
       getData()
-
+      
       // console.log('props.route.params.correctingstatus',props.route.params.correctingstatus)
       if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){
           Alert.alert('','该学生已批改！是否直接查看批改结果？',[{},{text:'否',onPress:()=>setSelectedIndex(0)},{text:'是',onPress:()=>
@@ -101,10 +101,7 @@ export default function CorrectingPaper(props) {
 
           setSuccess(resJson.success)
         // 如果autoMark值为yes  则跳转到结果页面，也给他批改结果数组
-        if(resJson.data.autoMark=='yes'){
           setData(Allquestion)
-         }
-          
           });                                                   
         }
     }

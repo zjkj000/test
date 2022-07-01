@@ -505,7 +505,7 @@ export default function Paper_ToDo(props) {
               
             </View>
             <ViewPager
-                style={{ backgroundColor: "#FFFFFF", borderTopWidth: 0.5,height:screenHeight-50 }}
+                style={{ backgroundColor: "#FFFFFF", borderTopWidth: 0.5,height:screenHeight-50,paddingBottom:5}}
                 swipeEnabled={false}
                 shouldLoadComponent={shouldLoadComponent}
                 selectedIndex={selectedIndex}

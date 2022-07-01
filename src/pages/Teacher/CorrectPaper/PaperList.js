@@ -292,7 +292,7 @@ export default function PaperList(props) {
                         })
                       }
                       else{
-                        Alert.alert(resJson.message)
+                        Alert.alert('',resJson.message,[{},{},{text:'确定',onPress:()=>{}}])
                       }
                   })
 
