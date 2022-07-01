@@ -51,12 +51,10 @@ export default class TempPage extends Component {
                     backdropStyle={styles.backdrop}
                     onBackdropPress={() => this.setState({ visible: false })}
                 >
-                    <Card disabled={true}>
-                        <Image
-                            style={styles.QRCode}
-                            source={{ uri: imgURL }}
-                        ></Image>
-                    </Card>
+                    <Image
+                        style={styles.QRCode}
+                        source={{ uri: imgURL }}
+                    ></Image>
                 </Modal>
             </View>
         );

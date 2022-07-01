@@ -31,7 +31,7 @@ export default ControllerLogin = () => {
         navigation.navigate("ControllerHome", {
             // ...resJson,
             ipAddress: ipAddress,
-            userName: "mingming",
+            userName: global.constants.userName,
             // imgURL: imgResJson.url,
         });
         // const url =

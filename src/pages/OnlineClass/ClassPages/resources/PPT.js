@@ -96,7 +96,9 @@ export default class PPT extends Component {
                             ></Image>
                         </TouchableOpacity>
                     </Layout>
-                    <Layout style={styles.inputArea}>
+                    <Layout
+                        style={{ ...styles.inputArea, backgroundColor: "#fff" }}
+                    >
                         <TouchableOpacity
                             style={{ flexDirection: "row" }}
                             onPress={() => {

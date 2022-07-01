@@ -5,7 +5,7 @@ import {
     TouchableOpacity,
     Image,
     TextInput,
-    ScrollView,
+    ScrollView,Keyboard
 } from "react-native";
 import http from "../../../../utils/http/request";
 import RadioList from "../../../LatestTask/DoWork/Utils/RadioList";
@@ -25,6 +25,7 @@ import { styles } from "../../styles";
 import { deepEqual } from "../../../../utils/Compare/Compare";
 import StorageUtil from "../../../../utils/Storage/Storage";
 import ZoomPictureModel from "../../../../utils/ZoomPictureModel/ZoomPictureModel";
+import theme from "../../../../theme/custom-theme.json";
 
 export default class Question extends Component {
     constructor(props) {
@@ -129,49 +130,49 @@ export default class Question extends Component {
                     删除
                 </Text>
                 <TextInput
-                    placeholder="请输入答案！"
+                    ref={(ref) => this.mytextinput = ref}
                     multiline
                     style={{
-                        width: 200,
-                        backgroundColor: "#FFFFFF",
-                        height: 40,
+                        width: 150,
+                        backgroundColor: "#fff",
+                        height: "80%",
+                        borderRadius: 5,
                     }}
                     value={this.state.msg}
                     onChangeText={(text) => this.setState({ msg: text })}
                 ></TextInput>
                 {/* 拍照答题功能弹窗 */}
-                <OverflowMenu
-                    anchor={this.renderAvatar}
-                    visible={this.state.moduleVisible}
-                    onBackdropPress={() => {
-                        this.setState({ moduleVisible: false });
-                    }}
-                >
-                    <MenuItem title="拍照" onPress={this.handleCamera} />
-                    <MenuItem
-                        title="从相册中选择"
-                        onPress={this.handleLibrary}
-                    />
-                    <MenuItem
-                        title="取消"
-                        onPress={() => {
-                            this.setState({ moduleVisible: false });
-                        }}
-                    />
-                </OverflowMenu>
-                <Button
+                <TouchableOpacity onPress={this.handleCamera}>
+                    <Image
+                        style={styles.smallImg}
+                        source={require("../../../../assets/image3/camera.png")}
+                    ></Image>
+                </TouchableOpacity>
+                <TouchableOpacity onPress={this.handleLibrary}>
+                    <Image
+                        style={styles.smallImg}
+                        source={require("../../../../assets/image3/photoalbum.png")}
+                    ></Image>
+                </TouchableOpacity>
+
+                <TouchableOpacity
                     onPress={() => {
                         this.setAnswer(this.state.msg);
                         this.setState({ msg: "" });
+                        this.mytextinput.onBlur
+                                Keyboard.dismiss()
                     }}
                     style={{
-                        width: 80,
-                        height: "100%",
+                        width: 100,
+                        height: "80%",
+                        justifyContent: "center",
+                        alignItems: "center",
                         backgroundColor: "#59B9E0",
+                        borderRadius: 5,
                     }}
                 >
-                    保存
-                </Button>
+                    <Text style={{ color: "#fff" }}>保存</Text>
+                </TouchableOpacity>
             </View>
         );
     };
@@ -449,12 +450,27 @@ export default class Question extends Component {
                     </Layout>
                     {this.renderOption()}
                     <Layout style={styles.bottomRight}>
-                        <Button
-                            style={{ width: 80, height: "100%" }}
+                        <TouchableOpacity
+                            style={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                            // appearance="ghost"
+                            // size="tiny"
                             onPress={this.handleSubmit}
+                            disabled={this.props.buttonDisable}
                         >
-                            提交
-                        </Button>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    color: this.props.buttonDisable
+                                        ? "gray"
+                                        : theme["color-primary-600"],
+                                }}
+                            >
+                                提交
+                            </Text>
+                        </TouchableOpacity>
                     </Layout>
                 </Layout>
                 <ZoomPictureModel

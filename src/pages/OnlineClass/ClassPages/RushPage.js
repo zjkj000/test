@@ -1,4 +1,4 @@
-import { Layout, Button } from "@ui-kitten/components";
+import { Layout, Button, Modal } from "@ui-kitten/components";
 import React, { Component } from "react";
 import { Image, Text, View, TouchableOpacity } from "react-native";
 import { styles } from "../styles";
@@ -6,6 +6,12 @@ import http from "../../../utils/http/request";
 import Toast from "../../../utils/Toast/Toast";
 
 export default class RushPage extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            visible: false,
+        };
+    }
     handlePress = () => {
         const { ipAddress, userName } = this.props;
 
@@ -35,7 +41,7 @@ export default class RushPage extends Component {
             });
     };
     render() {
-        const { userName, introduction } = this.props;
+        const { userName, introduction, imgURL } = this.props;
         // console.log("RushPage====================================");
         // console.log(this.props);
         // console.log("====================================");
@@ -86,6 +92,16 @@ export default class RushPage extends Component {
                         source={require("../../../assets/stuImg/qing.png")}
                     />{" "} */}
                 </Layout>
+                <Modal
+                    visible={this.state.visible}
+                    backdropStyle={styles.backdrop}
+                    onBackdropPress={() => this.setState({ visible: false })}
+                >
+                    <Image
+                        style={styles.QRCode}
+                        source={{ uri: imgURL }}
+                    ></Image>
+                </Modal>
             </View>
         );
     }

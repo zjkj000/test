@@ -162,9 +162,6 @@ export default ConnectClass = () => {
             <Button onPress={handleLogin} style={styles.Button}>
                 连接
             </Button>
-            <Button onPress={handleLiveClass} style={styles.Button}>
-                直播课程
-            </Button>
             <Loading show={showLoading}></Loading>
         </View>
     );

@@ -88,6 +88,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static String                          mRoomId;
     public static String                          mUserId;
     public static String                          mUserCn;
+    public static String                          mTeacherId;
     public static String                          mTeacherCn;
     public static String                          mUserPhoto;
 
@@ -110,7 +111,6 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static TXCloudVideoView                mStudent_6;
     public static HashMap<Integer,TXCloudVideoView>       stu_map;
     public static int                             stu_index;
-    public static boolean                         teacher_inclass;
     public static ScrollView                      mstroll;
 
     public static TextView                        mTeacherCamera_name;
@@ -182,6 +182,10 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static TRTCCloudDef.TRTCParams trtcParams = new TRTCCloudDef.TRTCParams();
     public static TRTCCloudDef.TRTCRenderParams trtcRenderParams = new TRTCCloudDef.TRTCRenderParams();
 
+    //进房间逻辑
+    public static Boolean teacher_enable=true;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -221,6 +225,11 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             @Override
             public void run() {
                 handler.post(runnableUi);
+                if(!teacher_enable){
+                    exitRoom();
+                    finish();
+                    teacher_enable=true;
+                }
             }
         },300,300);
     }
@@ -531,15 +540,17 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         Intent intent = getIntent();
         String params = intent.getStringExtra("params");
         System.out.println("LaunchActivity-params:"+params);
-        String[] strArr = params.split("-", 5);
+        String[] strArr = params.split("-", 6);
         LaunchActivity.mUserId = strArr[0];
         LaunchActivity.mUserCn = strArr[1];
         LaunchActivity.mRoomId = strArr[2];
-        LaunchActivity.mTeacherCn = strArr[3];
-        LaunchActivity.mUserPhoto = strArr[4];
+        LaunchActivity.mTeacherId = strArr[3];
+        LaunchActivity.mTeacherCn = strArr[4];
+        LaunchActivity.mUserPhoto = strArr[5];
         System.out.println("LaunchActivity-userinit:"+LaunchActivity.mUserId);
         System.out.println("LaunchActivity-usercninit:"+LaunchActivity.mUserCn);
         System.out.println("LaunchActivity-roominit:"+LaunchActivity.mRoomId);
+        System.out.println("LaunchActivity-mTeacherId:"+LaunchActivity.mTeacherId);
         System.out.println("LaunchActivity-mTeacherCn:"+LaunchActivity.mTeacherCn);
         System.out.println("LaunchActivity-mUserPhoto:"+LaunchActivity.mUserPhoto);
 
@@ -875,6 +886,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
         //进入房间
         mTRTCCloud.enterRoom(trtcParams, TRTCCloudDef.TRTC_APP_SCENE_VIDEOCALL);
+
 
         //接通自己的视频流（可以本地看到自己
         mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVLocalPreviewView);
@@ -1236,6 +1248,11 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             System.out.println("onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
             int index = mRemoteUidList.indexOf(userId);
             System.out.println("onUserVideoAvailable:"+userId);
+            if (userId.equals(mTeacherId+"_camera")&&!available){
+                System.out.println("mingming_camera exit room");
+                exitRoom();
+                teacher_enable=false;
+            }
             if (available) {
                 if (index != -1) {
                     return;
@@ -1246,7 +1263,6 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 if (index == -1) {
                     return;
                 }
-                //mTRTCCloud.stopRemoteView(userId);
                 mRemoteUidList.remove(index);
                 refreshRemoteVideoViews();
             }
@@ -1322,6 +1338,8 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
         public static void refreshRemoteVideoViews() {
             System.out.println("refreshRemoteVideoViews:"+AnswerActivity.platformUserId);
+
+
             String[] ids = null;
             mCamera_name.setText(mUserCn);
             mCamera_name.bringToFront();
@@ -1356,7 +1374,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             }
 
             stu_index = 0;
-            teacher_inclass = false;
+
             for (int i = 0; i < mRemoteViewList.size(); i++) {
                 if (i < mRemoteUidList.size()) {
                     System.out.println("mRemoteViewList["+i+"]"+mRemoteViewList.get(i));
@@ -1364,26 +1382,21 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                     String remoteUid = mRemoteUidList.get(i);
 
                     //teacher-share  "xxx_share" "share_xxx"
-                    if(remoteUid.contains("share")){
+                    if(remoteUid.contains("_share")){
                         mTeacherShare.setVisibility(View.VISIBLE);
                         mTRTCCloud.setRemoteRenderParams(remoteUid,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
                         mTRTCCloud.startRemoteView(remoteUid, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTeacherShare);
-                        teacher_inclass = true;
                     }
 
                     //teacher-camera
                     else if(remoteUid.contains("_camera")){
                         //mTeacherCamera_name.setText(id_name_map.get(remoteUid));
                         mTeacherCamera_name.setText(mTeacherCn);
-
                         mTeacherCamera.setVisibility(View.VISIBLE);
                         mTRTCCloud.startRemoteView(remoteUid, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SMALL,mTeacherCamera);
                         mTRTCCloud.muteRemoteAudio(remoteUid, false);
                         mTeacherCamera.bringToFront();
                         mTeacherCamera_name.bringToFront();
-                        teacher_inclass = true;
-
-
                     }
 
                     //student_1/2/3/4/5/6
@@ -1432,9 +1445,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
                 }
             }
-            if(!teacher_inclass){
-                exitRoom();
-            }
+
 
 
 

@@ -5,7 +5,8 @@ import {
     TouchableOpacity,
     Image,
     ScrollView,
-    TextInput,Keyboard
+    TextInput,
+    Keyboard,
 } from "react-native";
 import http from "../../../utils/http/request";
 import RadioList from "../../LatestTask/DoWork/Utils/RadioList";
@@ -24,6 +25,7 @@ import { Icon } from "react-native-elements";
 import ImageHandler from "../../../utils/Camera/Camera";
 import WebView from "react-native-webview";
 import ZoomPictureModel from "../../../utils/ZoomPictureModel/ZoomPictureModel";
+import theme from "../../../theme/custom-theme.json";
 
 export default class LockedPage extends Component {
     constructor(props) {
@@ -282,13 +284,6 @@ export default class LockedPage extends Component {
     renderInputArea = () => {
         return (
             <View>
-                <View
-                    style={{
-                        backgroundColor: "#000000",
-                        height: 1,
-                        width: "100%",
-                    }}
-                ></View>
                 <View style={styles.inputArea}>
                     <Text
                         onPress={() =>
@@ -304,53 +299,50 @@ export default class LockedPage extends Component {
                         删除
                     </Text>
                     <TextInput
-                        ref={(ref) => this.mytextinput = ref}
-                        onBlur={()=>{}}
+                        ref={(ref) => (this.mytextinput = ref)}
+                        onBlur={() => {}}
                         placeholder="请输入答案！"
                         multiline
                         style={{
-                            width: 500,
-                            backgroundColor: "#FFFFFF",
-                            height: 40,
+                            width: 350,
+                            backgroundColor: "#fff",
+                            height: "80%",
+                            borderRadius: 5,
                         }}
                         value={this.state.msg}
                         onChangeText={(text) => this.setState({ msg: text })}
                     ></TextInput>
                     {/* 拍照答题功能弹窗 */}
-                    <OverflowMenu
-                        anchor={this.renderAvatar}
-                        visible={this.state.moduleVisible}
-                        onBackdropPress={() => {
-                            this.setState({ moduleVisible: false });
-                        }}
-                    >
-                        <MenuItem title="拍照" onPress={this.handleCamera} />
-                        <MenuItem
-                            title="从相册中选择"
-                            onPress={this.handleLibrary}
-                        />
-                        <MenuItem
-                            title="取消"
-                            onPress={() => {
-                                this.setState({ moduleVisible: false });
-                            }}
-                        />
-                    </OverflowMenu>
-                    <Button
+                    <TouchableOpacity onPress={this.handleCamera}>
+                        <Image
+                            style={styles.smallImg}
+                            source={require("../../../assets/image3/camera.png")}
+                        ></Image>
+                    </TouchableOpacity>
+                    <TouchableOpacity onPress={this.handleLibrary}>
+                        <Image
+                            style={styles.smallImg}
+                            source={require("../../../assets/image3/photoalbum.png")}
+                        ></Image>
+                    </TouchableOpacity>
+                    <TouchableOpacity
                         onPress={() => {
                             this.setAnswer(this.state.msg);
-                            this.setState({ msg: "" }); 
-                            this.mytextinput.onBlur
-                            Keyboard.dismiss()
+                            this.setState({ msg: "" });
+                            this.mytextinput.onBlur;
+                            Keyboard.dismiss();
                         }}
                         style={{
                             width: 100,
-                            height: "100%",
+                            height: "80%",
+                            justifyContent: "center",
+                            alignItems: "center",
                             backgroundColor: "#59B9E0",
+                            borderRadius: 5,
                         }}
                     >
-                        保存
-                    </Button>
+                        <Text style={{ color: "#fff" }}>保存</Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         );
@@ -404,17 +396,38 @@ export default class LockedPage extends Component {
                         <Text>{introduction + "(" + userName + ")"}</Text>
                     </Layout>
                     <Layout style={styles.header_right}>
-                        <Button
-                            appearance="ghost"
-                            size="medium"
+                        <TouchableOpacity
+                            style={{
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
+                            // appearance="ghost"
+                            // size="tiny"
                             onPress={this.handleSubmit}
                             disabled={this.props.buttonDisable}
                         >
-                            提交
-                        </Button>
+                            <Text
+                                style={{
+                                    fontSize: 20,
+                                    color: this.props.buttonDisable
+                                        ? "gray"
+                                        : theme["color-primary-600"],
+                                }}
+                            >
+                                提交
+                            </Text>
+                        </TouchableOpacity>
                     </Layout>
                 </Layout>
                 <Layout style={styles.body}>
+                    <ZoomPictureModel
+                        isShowImage={showImageLayer}
+                        zoomImages={zoomImages}
+                        currShowImgIndex={zoomImageIndexNow}
+                        callBack={() => {
+                            this.setState({ showImageLayer: false });
+                        }}
+                    />
                     <Layout style={styles.body_webview}>
                         <WebView source={{ uri: this.state.htmlURL }} />
                     </Layout>
@@ -426,21 +439,11 @@ export default class LockedPage extends Component {
                     backdropStyle={styles.backdrop}
                     onBackdropPress={() => this.setState({ visible: false })}
                 >
-                    <Card disabled={true}>
-                        <Image
-                            style={styles.QRCode}
-                            source={{ uri: imgURL }}
-                        ></Image>
-                    </Card>
+                    <Image
+                        style={styles.QRCode}
+                        source={{ uri: imgURL }}
+                    ></Image>
                 </Modal>
-                <ZoomPictureModel
-                    isShowImage={showImageLayer}
-                    zoomImages={zoomImages}
-                    currShowImgIndex={zoomImageIndexNow}
-                    callBack={() => {
-                        this.setState({ showImageLayer: false });
-                    }}
-                />
             </Layout>
         );
     };
