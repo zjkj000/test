@@ -71,7 +71,7 @@ class CreateLearnCase extends React.Component {
 
             learnPlanId: this.props.paramsData.actionType == 'create' ? '' : this.props.paramsData.learnPlanId, 
 
-            type: 0,
+            type: 'resource',
             typeValue: '',
 
             addPaperFlag: this.props.paramsData.actionType == 'create' ? true : false, //导航“添加试题”是否被选中
@@ -174,9 +174,10 @@ class CreateLearnCase extends React.Component {
                         animationType="none"
                         transparent={true}
                         visible={filterModelVisiblity}
+                        //监听物理返回键
                         onRequestClose={() => {
                             console.log('----------------Modal has been closed.---------------------');
-                            Alert.alert("Modal has been closed.");
+                            Alert.alert('','关闭悬浮框', [{} , {text: '确定', onPress: ()=>{}}]);
                             this.setModalVisible(!filterModelVisiblity);
                         }}
                     >

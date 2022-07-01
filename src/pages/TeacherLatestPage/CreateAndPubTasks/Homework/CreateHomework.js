@@ -175,7 +175,13 @@ class CreateHomework extends React.Component {
                 console.log('--------试卷id------');
                 console.log(resJson.data);
                 console.log('------------------------');
-                this.setState({ paperId: resJson.data });
+                this.setState({ paperId: resJson.data },()=>{
+                    if(this.state.baseTypeIdLists.length <= 0){
+                        this.sortSelectPaperList();
+                        // this.createPaperObject(); //生成试卷对象
+                        // console.log('-------排序并生成试题-----',this.state.paperObject , this.state.selectPaperList.length);
+                    }
+                });
             })
             .catch((error) => {
                 console.log('******catch***error**', error);
@@ -268,7 +274,7 @@ class CreateHomework extends React.Component {
                         visible={filterModelVisiblity}
                         onRequestClose={() => {
                             console.log('----------------Modal has been closed.---------------------');
-                            Alert.alert("Modal has been closed.");
+                            Alert.alert('','关闭悬浮框', [{} , {text: '确定', onPress: ()=>{}}]);
                             this.setModalVisible(!filterModelVisiblity);
                         }}
                     >
@@ -312,7 +318,7 @@ class CreateHomework extends React.Component {
                     visible={knowledgeModelVisibility}
                     onRequestClose={() => {
                         console.log('----------------Modal has been closed.---------------------');
-                        Alert.alert("Modal has been closed.");
+                        Alert.alert('','关闭悬浮框', [{} , {text: '确定', onPress: ()=>{}}]);
                         this.setState({knowledgeModelVisibility: !knowledgeModelVisibility});
                     }}
                 >
@@ -554,12 +560,14 @@ class CreateHomework extends React.Component {
                     if(this.state.paperId == ''){ //调接口，获取paperId
                         this.fetchPaperId();
                     }
-                    if(this.state.baseTypeIdLists.length <= 0){
-                        this.sortSelectPaperList();
-                        this.createPaperObject(); //生成试卷对象
-                    }else{
-                        this.createPaperObject();
-                    }
+                    // if(this.state.baseTypeIdLists.length <= 0){
+                    //     this.sortSelectPaperList();
+                    //     // this.createPaperObject(); //生成试卷对象
+                    //     // console.log('-------排序并生成试题-----',this.state.paperObject , this.state.selectPaperList.length);
+                    // }else{
+                    //     // this.createPaperObject();
+                    //     // console.log('-------生成试题-----',this.state.paperObject , this.state.selectPaperList.length);
+                    // }
                     
                     this.setState({ 
                         addPaperFlag: false,
@@ -668,8 +676,8 @@ class CreateHomework extends React.Component {
         }
         return(
             {
-                startTime: startTime,
-                endTime: endTime,
+                startTime: startTime + ':00',
+                endTime: endTime + ':00',
                 keTangId: keTangId,
                 classIdOrGroupId: classIdOrGroupId,
                 stuIds: stuIds,
@@ -864,6 +872,10 @@ class CreateHomework extends React.Component {
         this.setState({
             selectPaperList: tempPaperList,
             baseTypeIdLists: baseTypeIdList.length > 0 ? baseTypeIdList : [],
+        },()=>{
+            if(this.state.pushPaperFlag){
+                this.createPaperObject();
+            }
         })
     }
 

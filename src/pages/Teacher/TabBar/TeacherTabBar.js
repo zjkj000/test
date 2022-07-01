@@ -63,9 +63,9 @@ class TeacherTabBarComponent extends React.Component {
             }
         );
         // 轮询
-        // this.timerId = setInterval(() => {
-        //     this.getClassStatus();
-        // }, 500);
+        this.timerId = setInterval(() => {
+            this.getClassStatus();
+        }, 500);
     }
 
     componentDidUpdate() {
@@ -89,6 +89,9 @@ class TeacherTabBarComponent extends React.Component {
         };
         http.get(url, params)
             .then((resStr) => {
+                // console.log("ClassStatus====================================");
+                // console.log(resStr);
+                // console.log("====================================");
                 // Toast.showDangerToast(resStr);
                 let resJson = JSON.parse(resStr);
                 this.setState({
