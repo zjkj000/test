@@ -30,7 +30,9 @@ export default function HistoryInput(props) {
             // );
             // console.log(res);
             // console.log("====================================");
-            setValue(res[res.length - 1].title);
+            if (res.length !== 0) {
+                setValue(res[res.length - 1].title);
+            }
             return res;
         } catch (e) {
             Toast.showDangerToast(e.toString());

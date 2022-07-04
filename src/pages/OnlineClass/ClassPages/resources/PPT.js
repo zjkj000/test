@@ -100,7 +100,11 @@ export default class PPT extends Component {
                         style={{ ...styles.inputArea, backgroundColor: "#fff" }}
                     >
                         <TouchableOpacity
-                            style={{ flexDirection: "row" }}
+                            style={{
+                                flexDirection: "row",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}
                             onPress={() => {
                                 this.handleDownload(
                                     this.props.periodNow,
@@ -108,11 +112,18 @@ export default class PPT extends Component {
                                 );
                             }}
                         >
-                            {/* {this.state.showDownloadProgress !== -1 ? (
-                                <Text>{this.state.showDownloadProgress} %</Text>
+                            {this.state.showDownloadProgress !== -1 ? (
+                                <Text
+                                    style={{
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                    }}
+                                >
+                                    {parseInt(this.state.showDownloadProgress)}%
+                                </Text>
                             ) : (
                                 <></>
-                            )} */}
+                            )}
                             <Image
                                 style={{ width: 100, height: 30 }}
                                 source={require("../../../../assets/classImg/downloadStudy.png")}
