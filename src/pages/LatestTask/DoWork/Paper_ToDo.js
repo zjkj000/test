@@ -40,9 +40,7 @@ export default function Paper_ToDo(props) {
       // headerRight:()=>()})
       setSelectedIndex(props.route.params.selectedindex)
       getData();
-      BackHandler.addEventListener("hardwareBackPress",changestatus)
       return ()=>{
-        BackHandler.removeEventListener("hardwareBackPress",changestatus)
         changestatus()
       }
       
@@ -53,10 +51,12 @@ export default function Paper_ToDo(props) {
      
    
     function changestatus(){
-      
-      const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
-      const params = {studentID:global.constants.userName};
+      const url = global.constants.baseUrl+"studentApp_deleteAccessControl.do"
+      const params = {
+        studentID:global.constants.userName
+      };
         http.get(url, params).then((resStr) => {
+          console.log('学生清除了个人操作！')
         })
       
     }
@@ -213,7 +213,7 @@ export default function Paper_ToDo(props) {
 
 
   return (
-    <View>
+    <View style={{height:screenHeight}}>
       <View style={{height:50,flexDirection:'row',alignItems:"center",backgroundColor:'#fff',width:screenWidth,justifyContent:'center'}}>
                 <TouchableOpacity style={{position:'absolute',left:0}} onPress={()=>{props.navigation.goBack()}}>
                      <Image style={{width:30,height:30}} source={require('../../../assets/TakePicturesAndAssignWork/goback.png')}></Image>

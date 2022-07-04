@@ -25,6 +25,7 @@ import {
     Waiting,
     WaitLoading,
 } from "../../../../utils/WaitLoading/WaitLoading";
+import { screenHeight } from "../../../../utils/Screen/GetSize";
 export default function LG_subjectiveContainer(props) {
     const navigation = useNavigation();
     const learnPlanId = props.learnPlanId;
@@ -490,19 +491,21 @@ class LG_subjective extends Component {
 }
 
 const styles = StyleSheet.create({
-    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row" },
-    answer_area: { height: "65%", padding: 20 },
+    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row",height:40},
+    answer_area: { height: (screenHeight-300), padding: 10 },
     answer_preview: {
         borderTopWidth: 1,
         borderTopColor: "#000000",
         height: "20%",
+        height:140,
         backgroundColor: "#FFFFFF",
     },
-    answer_area_Long: { height: "2%", padding: 20 },
+    answer_area_Long: {height:(screenHeight-700), padding: 10 },
     answer_preview_Long: {
         borderTopWidth: 1,
         borderTopColor: "#000000",
         height: "78%",
+        height:540,
         backgroundColor: "#FFFFFF",
     },
     backdrop: {
@@ -516,6 +519,8 @@ const styles = StyleSheet.create({
         justifyContent: "space-around",
         backgroundColor: "#E6DDD6",
         padding: 10,
+        paddingTop:5,
+        height:70,
         alignItems: "center",
     },
 });

@@ -39,18 +39,18 @@ export default function CorrectingPaper(props) {
       }else{
         setSelectedIndex(props.route.params.selectedindex)
       }
-      BackHandler.addEventListener("hardwareBackPress",changestatus)
       return ()=>{
-        BackHandler.removeEventListener("hardwareBackPress",changestatus)
         changestatus()
       }
     },[props.route.params.selectedindex])
     
     function changestatus(){
-      const url = global.constants.baseUrl+"studentApp_ deleteAccessControl.do"
-      const params = {teacherID:global.constants.userName};
+      const url = global.constants.baseUrl+"teacherApp_deleteAccessControl.do"
+      const params = {
+        teacherID:global.constants.userName
+      };
       http.get(url, params).then((resStr) => {
-
+        console.log('老师清除了个人操作！')
       })
     }
 

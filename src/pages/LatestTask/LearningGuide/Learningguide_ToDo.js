@@ -50,10 +50,7 @@ export default function Paper_ToDo(props) {
     useEffect(() => {
         setSelectedIndex(props.route.params.selectedindex);
         getData();
-
-        BackHandler.addEventListener("hardwareBackPress",changestatus)
       return ()=>{
-        BackHandler.removeEventListener("hardwareBackPress",changestatus)
         changestatus()
       }
         // var date = getDate()
@@ -62,9 +59,10 @@ export default function Paper_ToDo(props) {
     }, [props.route.params.selectedindex]);
 
     function changestatus(){
-        const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
+        const url = global.constants.baseUrl+"studentApp_deleteAccessControl.do"
         const params = {studentID:global.constants.userName};
           http.get(url, params).then((resStr) => {
+          console.log('学生清除了个人操作！')
           })
         
       }

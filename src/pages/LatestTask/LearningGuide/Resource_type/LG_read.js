@@ -274,12 +274,12 @@ class LG_7S5 extends Component {
 }
 
 const styles = StyleSheet.create({
-    answer_title:{padding:10,paddingLeft:30,flexDirection:'row'},
-    answer_area:{height:'66%',padding:20},
-    answer_result_area:{height:'27%'},
-    answer_area_7S5:{height:'57%',padding:20},
-    answer_result_area_7S5:{height:'35%'},
-    answer_area_open:{height:'45%',padding:20},
+    answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
+    answer_area:{height:50,padding:20,paddingTop:0,},
+    answer_result_area:{height:90},
+    answer_area_7S5:{height:'58%',padding:20,paddingTop:0},
+    answer_result_area_7S5:{},
+    answer_area_open:{height:'45%',padding:20,paddingTop:0},
     answer_result_area_open:{height:'48%'},
     answer_result:{flexDirection:'row',justifyContent:'center',paddingLeft:20,alignItems:'center'}
 })
