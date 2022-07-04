@@ -334,6 +334,9 @@ class AddContentPage extends React.Component {
         if(i >= selectContentList.length){
             return false;
         }
+        // i = selectContentList.indexOf(contentList[selectContentIndex]);
+        // console.log('================导学案是否被选择=========================' , selectContentList.includes(contentList[selectContentIndex]));
+        // return (selectContentList.includes(contentList[selectContentIndex])); 
     }
 
     ////修改选中题目数(添加试题小页面)
