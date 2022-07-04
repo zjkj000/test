@@ -651,7 +651,7 @@ class UpdateContentPage extends React.Component {
                                                 paddingTop: 40,
                                                 textAlign: 'center'
                                             }}
-                                        >请重新添加导学案</Text>
+                                        >正在获取导学案中的内容，请耐心等待</Text>
                                     </View>
                                 </View>
                     }

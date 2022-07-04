@@ -67,6 +67,7 @@ class LearnCaseProperty extends React.Component {
             bookList: [], //教材列表（接口数据）
 
             knowledge: '', //知识点(选中的)
+            Longknowledge:'',
             knowledgeCode: '', //选中的知识点项的编码
             knowledgeVisibility: false, //知识点选择列表是否显示     
             knowledgeModelVisibility: false, //知识点悬浮框model是否显示      
@@ -137,6 +138,25 @@ class LearnCaseProperty extends React.Component {
 
     }
 
+    getLongknowledge(id , name){
+        const url = global.constants.baseUrl+"teacherApp_getPointName.do";
+        const params = {
+            pointId:id
+        }
+        http.get(url, params)
+        .then((resStr) => {
+            let resJson = JSON.parse(resStr);
+            if(resJson.success){
+                this.setState({
+                    knowledgeModelVisibility: false,
+                    knowledgeCode: id,
+                    knowledge: name,
+                    Longknowledge:resJson.data
+                })
+            }
+        })
+    }
+
     //显示知识点覆盖框
     showKnowledgeModal = () => {
         const { knowledgeModelVisibility } = this.state;
@@ -190,11 +210,9 @@ class LearnCaseProperty extends React.Component {
                                 ?
                                     <WebView
                                         onMessage={(event) => {
-                                            this.setState({ 
-                                                knowledgeModelVisibility: false, 
-                                                knowledge: JSON.parse(event.nativeEvent.data).name ,
-                                                knowledgeCode: JSON.parse(event.nativeEvent.data).id,
-                                            });
+                                            var id = JSON.parse(event.nativeEvent.data).id;
+                                            var name = JSON.parse(event.nativeEvent.data).name;
+                                            this.getLongknowledge(id , name);
                                         }}
                                         javaScriptEnabled={true}
                                         scalesPageToFit={Platform.OS === 'ios' ? true : false}
@@ -1023,7 +1041,7 @@ class LearnCaseProperty extends React.Component {
                                             bookId: this.state.bookId,
                                             book: this.state.book,
                                             knowledgeCode: this.state.knowledgeCode,
-                                            knowledge: this.state.knowledge,
+                                            knowledge: this.state.Longknowledge,
 
                                             channelNameList: this.state.channelNameList, //学段名列表（接口数据）
                                             studyClassList: this.state.studyClassList, //学科列表（接口数据）

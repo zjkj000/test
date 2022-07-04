@@ -414,8 +414,8 @@ class AssignLearnPlan extends Component {
         const classSecleted = this.state.class;
         var keTangId = classSecleted.keTangId; //课堂id
         var keTangName = classSecleted.keTangName; //课堂名
-        var classIdOrGroupId = classSecleted.classId;  //班级id
-        var classOrGroupName = classSecleted.className; //班级名(接口返回的班级名后面自带一个逗号,)
+        var classIdOrGroupId = classSecleted.classId.substring(0 , (classSecleted.classId).length - 1) //班级id
+        var classOrGroupName = classSecleted.className.substring(0 , (classSecleted.className).length - 1); //班级名(接口返回的班级名后面自带一个逗号,)
         var learnType = ''; //作业布置方式 班级、个人50、小组70
 
         var stuIds = '';
@@ -425,28 +425,34 @@ class AssignLearnPlan extends Component {
         var endTime = this.state.endstr;
 
         if(assigntoWho == '0'){ //布置给班级 （有对应的学生信息需要拼装吗，接口传空值？）
-            learnType = '50';
+            learnType = '70';
             stuIds = studentsList[0].ids;
             stuNames = studentsList[0].name;
         }else if(assigntoWho == '1'){ //布置给小组 拼装小组id、小组名 学生id、学生姓名
-            learnType = '70';
+            learnType = '50';
             classIdOrGroupId = '';
             classOrGroupName = '';
 
             for(let i = 0 ; i < groupSelected.length ; i++){
-                classIdOrGroupId = classIdOrGroupId + ';' + groupSelected[i].id;
-                classOrGroupName = classOrGroupName + ';' + groupSelected[i].value;
+                classIdOrGroupId = classIdOrGroupId  + groupSelected[i].id + ';';
+                classOrGroupName = classOrGroupName  + groupSelected[i].value + ';';
                 
-                stuIds = stuIds + ',' + groupSelected[i].ids;
-                stuNames = stuNames + ',' + groupSelected[i].name;
+                stuIds = stuIds + groupSelected[i].ids + ';' ;
+                stuNames = stuNames  + groupSelected[i].name + ';';
             }
+            classIdOrGroupId = classIdOrGroupId.substring(0 , classIdOrGroupId.length - 1);
+            classOrGroupName = classOrGroupName.substring(0 , classOrGroupName.length - 1);
+            stuIds = stuIds.substring(0 , stuIds.length - 1);
+            stuNames = stuNames.substring(0 , stuNames.length - 1);
         }else{ //布置给个人
-            learnType = '50';
+            learnType = '70';
             
             for(let i = 0 ; i < studentSelected.length ; i++){
-                stuIds = stuIds + ',' + studentSelected[i].id;
-                stuNames = stuNames + ',' + studentSelected[i].name;
+                stuIds = stuIds + studentSelected[i].id + ',' ;
+                stuNames = stuNames  + studentSelected[i].name + ',';
             }
+            stuIds = stuIds.substring(0 , stuIds.length - 1);
+            stuNames = stuNames.substring(0 , stuNames.length - 1);
         }
         return(
             {

@@ -143,8 +143,8 @@ class PushOrSaveContentPage extends React.Component {
         const classSecleted = this.state.class;
         var keTangId = classSecleted.keTangId; //课堂id
         var keTangName = classSecleted.keTangName; //课堂名
-        var classIdOrGroupId = classSecleted.classId; //班级id
-        var classOrGroupName = classSecleted.className; //班级名(接口返回的班级名后面自带一个逗号,)
+        var classIdOrGroupId = classSecleted.classId.substring(0 , (classSecleted.classId).length - 1) //班级id
+        var classOrGroupName = classSecleted.className.substring(0 , (classSecleted.className).length - 1); //班级名(接口返回的班级名后面自带一个逗号,)
         var roomType = ""; //作业布置方式 班级、个人50、小组70
 
         var stuIds = "";
@@ -155,7 +155,7 @@ class PushOrSaveContentPage extends React.Component {
 
         if (assigntoWho == "0") {
             //布置给班级 （有对应的学生信息需要拼装吗，接口传空值？）
-            roomType = "50";
+            roomType = "70";
             stuIds = studentsList[0].ids;
             stuNames = studentsList[0].name;
             console.log("**********studentsList******", stuIds);
@@ -166,31 +166,37 @@ class PushOrSaveContentPage extends React.Component {
             );
         } else if (assigntoWho == "1") {
             //布置给小组 拼装小组id、小组名 学生id、学生姓名
-            roomType = "70";
-            // classIdOrGroupId = groupSelected[0].id;
-            // classOrGroupName = groupSelected[0].value;
-
-            // stuIds = groupSelected[0].ids;
-            // stuNames = groupSelected[0].name;
+            roomType = "50";
+            classIdOrGroupId = '';
+            classOrGroupName = '';
 
             for (let i = 0; i < groupSelected.length; i++) {
-                classIdOrGroupId = classIdOrGroupId + ";" + groupSelected[i].id;
-                classOrGroupName =
-                    classOrGroupName + ";" + groupSelected[i].value;
-
-                stuIds = stuIds + "," + groupSelected[i].ids;
-                stuNames = stuNames + "," + groupSelected[i].name;
+                console.log('***小组*******groupSelected**id****',groupSelected[i].id );
+                console.log('****小组******groupSelected**value****',groupSelected[i].value );
+                console.log('****小组******stuId**id****',groupSelected[i].ids );
+                console.log('****小组******stuNames**name****',groupSelected[i].name );
+                classIdOrGroupId = classIdOrGroupId  + groupSelected[i].id + ';';
+                classOrGroupName = classOrGroupName  + groupSelected[i].value + ';';
+                
+                stuIds = stuIds + groupSelected[i].ids + ';' ;
+                stuNames = stuNames  + groupSelected[i].name + ';';
             }
+            classIdOrGroupId = classIdOrGroupId.substring(0 , classIdOrGroupId.length - 1);
+            classOrGroupName = classOrGroupName.substring(0 , classOrGroupName.length - 1);
+            stuIds = stuIds.substring(0 , stuIds.length - 1);
+            stuNames = stuNames.substring(0 , stuNames.length - 1);
         } else {
             //布置给个人
-            roomType = "50";
-            // stuIds = groupSelected[0].ids;
-            // stuNames = groupSelected[0].name;
+            roomType = "70";
 
             for (let i = 0; i < studentSelected.length; i++) {
-                stuIds = stuIds + "," + studentSelected[i].id;
-                stuNames = stuNames + "," + studentSelected[i].name;
+                console.log('****个人******stuId**id****',studentSelected[i].id );
+                console.log('****个人******stuNames**name****',studentSelected[i].name );
+                stuIds = stuIds + studentSelected[i].id + ',' ;
+                stuNames = stuNames  + studentSelected[i].name + ',';
             }
+            stuIds = stuIds.substring(0 , stuIds.length - 1);
+            stuNames = stuNames.substring(0 , stuNames.length - 1);
         }
         return {
             startTime: startTime + ':00',
@@ -482,6 +488,7 @@ class PushOrSaveContentPage extends React.Component {
                                     //更新选择的课堂以及布置对象
                                     this.setState({
                                         className: item.keTangName,
+                                        
                                         class: item,
                                         classFlag: false,
                                         groupList: [],

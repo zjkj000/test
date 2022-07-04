@@ -6,6 +6,7 @@ import {
     Image,
     TouchableOpacity,
     Alert,
+    Modal
 } from "react-native";
 import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
@@ -385,6 +386,174 @@ class LatestPage extends React.Component {
         );
     };
 
+    //显示创建create
+    showCreate1 = () => {
+        return (
+            <Modal
+                animationType="none"
+                transparent={true}
+                visible={true}
+                //监听物理返回键
+                onRequestClose={() => {
+                    console.log('----------------Modal has been closed.---------------------');
+                    Alert.alert('','关闭悬浮框', [{} , {text: '确定', onPress: ()=>{}}]);
+                    this.setState({ createmoduleVisible: false });
+                }}
+            >
+                <View>
+                    <Text
+                        style={{height: 70, width: 50, right: 0, position: 'absolute'}}
+                        onPress={()=>{
+                            this.setState({ createmoduleVisible: false });
+                    }}></Text>
+                </View>
+                <View style={styles.modalView}>
+                    <MenuItem
+                        title="创建授课包"
+                        onPress={() => {
+                            this.setState({ createmoduleVisible: false });
+                            this.createTeachingPackages();
+                        }}
+                        style={{height:40}}
+                    />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.4, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <MenuItem
+                        title="我的授课包"
+                        onPress={() => {
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate({
+                                name: "教学内容",
+                                params: {
+                                    resourceType: "package",
+                                },
+                            });
+                        }}
+                        style={{height:40}}
+                    />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <MenuItem
+                        title="创建导学案+布置"
+                        onPress={() => {
+                            this.setState({ createmoduleVisible: false });
+                            this.createLearnCase();
+                        }}
+                        style={{height:40}}
+                    />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <MenuItem
+                        title="创建微课+布置"
+                        onPress={() => {
+                            this.setState({ createmoduleVisible: false });
+                            this.createWeiKe();
+                        }}
+                        style={{height:40}}
+                    />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <MenuItem
+                        title="创建作业+布置"
+                        onPress={() => {
+                            this.setState({ createmoduleVisible: false });
+                            this.createHomework();
+                        }}
+                        style={{height:40}}
+                    />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <MenuItem
+                        title="选导学案布置"
+                        onPress={() => {
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate({
+                                name: "教学内容",
+                                params: {
+                                    resourceType: "learnPlan",
+                                },
+                            });
+                        }}
+                        style={{height:40}}
+                    />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <MenuItem
+                        title="选微课布置"
+                        onPress={() => {
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate({
+                                name: "教学内容",
+                                params: {
+                                    resourceType: "weike",
+                                },
+                            });
+                        }}
+                        style={{height:40}}
+                    />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <MenuItem
+                        title="选卷布置作业"
+                        onPress={() => {
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate({
+                                name: "Teacher_Home",
+                                params: {
+                                    screen: "最新",
+                                    params: {
+                                            isRefresh: true, 
+                                        },
+                                },
+                                merge:true
+                            });
+                        }}
+                        style={{height:40}}
+                    />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <MenuItem
+                        title="拍照布置作业"
+                        onPress={() => {
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate({
+                                name: "CreatePicturePaperWork",
+                            });
+                        }}
+                        style={{height:40}}
+                    />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <MenuItem
+                        title="发布通知"
+                        onPress={() => {
+                            this.setState({ createmoduleVisible: false });
+                            this.props.navigation.navigate({
+                                name: "CreateInform",
+                                params: {
+                                    noticeId: "",
+                                    type: "",
+                                },
+                            });
+                        }}
+                        style={{height:40}}
+                    />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    {global.constants.isadmin == "2" ? (
+                        <MenuItem
+                            title="发布公告"
+                            onPress={() => {
+                                this.setState({ createmoduleVisible: false });
+                                this.props.navigation.navigate({
+                                    name: "CreateNotice",
+                                    params: {
+                                        noticeId: "",
+                                        type: "",
+                                    },
+                                });
+                            }}
+                            style={{height:40}}
+                        />
+                    ) : (
+                        <></>
+                    )}
+                    {/* <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} /> */}
+                </View>
+            </Modal>
+        );
+    };
+
     render() {
         return (
             <View  style={{backgroundColor:'#fff'}}>
@@ -411,9 +580,28 @@ class LatestPage extends React.Component {
                         </View>
                         <Flex style={{ width: screenWidth * 0.12 }}>
                             {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
-                            <TouchableOpacity style={styles.filterView}>
+                            {/* <TouchableOpacity style={styles.filterView}>
                                 {this.showCreate()}
+                            </TouchableOpacity> */}
+                            <TouchableOpacity
+                                style={styles.filterView}
+                                onPress={() => {
+                                    this.setState({ createmoduleVisible: true });
+                                }}
+                            >
+                                <Avatar
+                                    size={"tiny"}
+                                    shape={"square"}
+                                    source={require("../../assets/teacherLatestPage/create1.png")}
+                                />
                             </TouchableOpacity>
+                            {
+                                this.state.createmoduleVisible
+                                ? (
+                                    this.showCreate1()
+                                )
+                                : null
+                            }
                         </Flex>
                     </Flex>
                 </View>
@@ -464,5 +652,19 @@ const styles = StyleSheet.create({
     },
     backdrop: {
         // backgroundColor: "purple",
+    },
+    modalView: {
+        marginTop: 50, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
+        flexDirection: 'column', 
+        backgroundColor: '#fff' , 
+        right: 20 , 
+        borderRadius: 6,
+        borderWidth: 1, 
+        borderColor: '#DCDCDC' ,
+        height: 457,
+        width: screenWidth*0.35,
+        position: 'absolute',
+        //justifyContent: "center",
+        //alignItems: "center",
     },
 });
