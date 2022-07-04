@@ -434,8 +434,8 @@ class AssignPicturesWork extends Component {
                 for(let i=0;i<this.state.groupSelected.length;i++){
                     classIdOrGroupId = classIdOrGroupId+ ';'+ this.state.groupSelected[i].id
                     classOrGroupName = classOrGroupName+ ';'+  this.state.groupSelected[i].value
-                    stuIds =stuIds +','+this.state.groupSelected[i].ids
-                    stuNames =stuNames +','+this.state.groupSelected[i].name
+                    stuIds =stuIds +';'+this.state.groupSelected[i].ids
+                    stuNames =stuNames +';'+this.state.groupSelected[i].name
                 }
                 if(this.state.groupSelected.length>0){
                     stuIds=  stuIds.substring(1)

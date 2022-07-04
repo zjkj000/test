@@ -88,15 +88,19 @@ class HomeworkProperty extends React.Component {
             errorInfo: "",
         };
     }
-    getLongknowledge(id){
+    getLongknowledge(id , name){
         const url = global.constants.baseUrl+"teacherApp_getPointName.do";
         const params = {
-            pointId:id}
+            pointId:id
+        }
         http.get(url, params)
         .then((resStr) => {
             let resJson = JSON.parse(resStr);
             if(resJson.success){
                 this.setState({
+                    knowledgeModelVisibility: false,
+                    knowledgeCode: id,
+                    knowledge: name,
                     Longknowledge:resJson.data
                 })
             }
@@ -213,13 +217,14 @@ class HomeworkProperty extends React.Component {
                                 ?
                                     <WebView
                                         onMessage={(event) => {
-                                            var id = JSON.parse(event.nativeEvent.data).id
-                                            this.setState({ 
-                                                knowledgeModelVisibility: false, 
-                                                knowledge: JSON.parse(event.nativeEvent.data).name ,
-                                                knowledgeCode: JSON.parse(event.nativeEvent.data).id,
-                                            });
-                                            this.getLongknowledge(id)
+                                            var id = JSON.parse(event.nativeEvent.data).id;
+                                            var name = JSON.parse(event.nativeEvent.data).name;
+                                            // this.setState({ 
+                                            //     knowledgeModelVisibility: false, 
+                                            //     knowledge: JSON.parse(event.nativeEvent.data).name ,
+                                            //     knowledgeCode: JSON.parse(event.nativeEvent.data).id,
+                                            // });
+                                            this.getLongknowledge(id , name);
                                         }}
                                         javaScriptEnabled={true}
                                         scalesPageToFit={Platform.OS === 'ios' ? true : false}
@@ -741,6 +746,9 @@ class HomeworkProperty extends React.Component {
                             onChangeText={(text)=>{ textInputName = text }}
                         ></TextInput>
                     </View>
+
+                    {/**分割线 */}
+                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
 
                     {/**学段 */}
                     <TouchableOpacity

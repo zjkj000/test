@@ -175,7 +175,15 @@ class CreateHomework extends React.Component {
                 console.log('--------试卷id------');
                 console.log(resJson.data);
                 console.log('------------------------');
-                this.setState({ paperId: resJson.data });
+                this.setState({ paperId: resJson.data },()=>{
+                    if(this.state.baseTypeIdLists.length <= 0){
+                        this.sortSelectPaperList();
+                        // this.createPaperObject(); //生成试卷对象
+                        // console.log('-------排序并生成试题-----',this.state.paperObject , this.state.selectPaperList.length);
+                    }else{
+                        this.createPaperObject(); //生成试卷对象
+                    }
+                });
             })
             .catch((error) => {
                 console.log('******catch***error**', error);
@@ -257,6 +265,25 @@ class CreateHomework extends React.Component {
         this.setState({ filterModelVisiblity: visible ,  });   
     }
 
+    getLongknowledge(id){
+        const url = global.constants.baseUrl+"teacherApp_getPointName.do";
+        const params = {
+            pointId:id
+        }
+        http.get(url, params)
+        .then((resStr) => {
+            let resJson = JSON.parse(resStr);
+            if(resJson.success){
+                this.setState({
+                    filterModelVisiblity: true,
+                    knowledgeModelVisibility: false, 
+                    knowledgeCode: id,
+                    knowledge:resJson.data
+                })
+            }
+        })
+    }
+
     //显示设置属性悬浮框
     showFilter = () => {
         const { filterModelVisiblity , knowledgeModelVisibility } = this.state;
@@ -268,7 +295,7 @@ class CreateHomework extends React.Component {
                         visible={filterModelVisiblity}
                         onRequestClose={() => {
                             console.log('----------------Modal has been closed.---------------------');
-                            Alert.alert("Modal has been closed.");
+                            Alert.alert('','关闭悬浮框', [{} , {text: '确定', onPress: ()=>{}}]);
                             this.setModalVisible(!filterModelVisiblity);
                         }}
                     >
@@ -312,7 +339,7 @@ class CreateHomework extends React.Component {
                     visible={knowledgeModelVisibility}
                     onRequestClose={() => {
                         console.log('----------------Modal has been closed.---------------------');
-                        Alert.alert("Modal has been closed.");
+                        Alert.alert('','关闭悬浮框', [{} , {text: '确定', onPress: ()=>{}}]);
                         this.setState({knowledgeModelVisibility: !knowledgeModelVisibility});
                     }}
                 >
@@ -362,12 +389,9 @@ class CreateHomework extends React.Component {
                                 ?
                                     <WebView
                                         onMessage={(event) => {
-                                            this.setState({ 
-                                                filterModelVisiblity: true,
-                                                knowledgeModelVisibility: false, 
-                                                knowledge: JSON.parse(event.nativeEvent.data).name ,
-                                                knowledgeCode: JSON.parse(event.nativeEvent.data).id,
-                                            });
+                                            var id = JSON.parse(event.nativeEvent.data).id;
+                                            // var name = JSON.parse(event.nativeEvent.data).name;
+                                            this.getLongknowledge(id);
                                         }}
                                         javaScriptEnabled={true}
                                         scalesPageToFit={Platform.OS === 'ios' ? true : false}
@@ -554,11 +578,20 @@ class CreateHomework extends React.Component {
                     if(this.state.paperId == ''){ //调接口，获取paperId
                         this.fetchPaperId();
                     }
-                    if(this.state.baseTypeIdLists.length <= 0){
-                        this.sortSelectPaperList();
-                        this.createPaperObject(); //生成试卷对象
-                    }else{
-                        this.createPaperObject();
+                    // if(this.state.baseTypeIdLists.length <= 0){
+                    //     this.sortSelectPaperList();
+                    //     // this.createPaperObject(); //生成试卷对象
+                    //     // console.log('-------排序并生成试题-----',this.state.paperObject , this.state.selectPaperList.length);
+                    // }else{
+                    //     // this.createPaperObject();
+                    //     // console.log('-------生成试题-----',this.state.paperObject , this.state.selectPaperList.length);
+                    // }
+                    if(this.props.paramsData.type == 'update'){
+                        if(this.state.baseTypeIdLists.length <= 0){
+                            this.sortSelectPaperList();
+                        }else{
+                            this.createPaperObject();
+                        }
                     }
                     
                     this.setState({ 
@@ -629,8 +662,8 @@ class CreateHomework extends React.Component {
         const classSecleted = this.state.class;
         var keTangId = classSecleted.keTangId; //课堂id
         var keTangName = classSecleted.keTangName; //课堂名
-        var classIdOrGroupId = classSecleted.classId;  //班级id
-        var classOrGroupName = classSecleted.className; //班级名(接口返回的班级名后面自带一个逗号,)
+        var classIdOrGroupId = (classSecleted.classId).substring(0 , (classSecleted.classId).length - 1);  //班级id
+        var classOrGroupName = (classSecleted.className).substring(0 , (classSecleted.className).length - 1); //班级名(接口返回的班级名后面自带一个逗号,)
         var learnType = ''; //作业布置方式 班级、个人70、小组50
 
         var stuIds = '';
@@ -643,7 +676,8 @@ class CreateHomework extends React.Component {
             learnType = '70';
             stuIds = studentsList[0].ids;
             stuNames = studentsList[0].name;
-            // console.log('**********studentsList******',stuIds);
+            console.log('****班级******studentsList******',stuIds);
+            console.log('*****班级*****studentsList******',stuNames);
             // console.log('**********studentsList.length******',studentsList.length);
             // return;
         }else if(assigntoWho == '1'){ //布置给小组 拼装小组id、小组名 学生id、学生姓名
@@ -652,26 +686,47 @@ class CreateHomework extends React.Component {
             classOrGroupName = '';
 
             for(let i = 0 ; i < groupSelected.length ; i++){
-                classIdOrGroupId = classIdOrGroupId + ';' + groupSelected[i].id;
-                classOrGroupName = classOrGroupName + ';' + groupSelected[i].value;
+                console.log('***小组*******groupSelected**id****',groupSelected[i].id );
+                console.log('****小组******groupSelected**value****',groupSelected[i].value );
+                console.log('****小组******stuId**id****',groupSelected[i].ids );
+                console.log('****小组******stuNames**name****',groupSelected[i].name );
+                classIdOrGroupId = classIdOrGroupId  + groupSelected[i].id + ';';
+                classOrGroupName = classOrGroupName  + groupSelected[i].value + ';';
                 
-                stuIds = stuIds + ',' + groupSelected[i].ids;
-                stuNames = stuNames + ',' + groupSelected[i].name;
+                stuIds = stuIds + groupSelected[i].ids + ';' ;
+                stuNames = stuNames  + groupSelected[i].name + ';';
             }
+            classIdOrGroupId = classIdOrGroupId.substring(0 , classIdOrGroupId.length - 1);
+            classOrGroupName = classOrGroupName.substring(0 , classOrGroupName.length - 1);
+            stuIds = stuIds.substring(0 , stuIds.length - 1);
+            stuNames = stuNames.substring(0 , stuNames.length - 1);
         }else{ //布置给个人
             learnType = '70';
             
             for(let i = 0 ; i < studentSelected.length ; i++){
-                stuIds = stuIds + ',' + studentSelected[i].id;
-                stuNames = stuNames + ',' + studentSelected[i].name;
+                console.log('****个人******stuId**id****',studentSelected[i].id );
+                console.log('****个人******stuNames**name****',studentSelected[i].name );
+                stuIds = stuIds + studentSelected[i].id + ',' ;
+                stuNames = stuNames  + studentSelected[i].name + ',';
             }
+            stuIds = stuIds.substring(0 , stuIds.length - 1);
+            stuNames = stuNames.substring(0 , stuNames.length - 1);
         }
+        console.log('====================布置作业参数设置========================')
+        console.log('learnType: ' , learnType);
+        console.log('keTangId: ' , keTangId);
+        console.log('keTangName: ' , keTangName);
+        console.log('classIdOrGroupId: ' , classIdOrGroupId);
+        console.log('classOrGroupName: ' , classOrGroupName);
+        console.log('stuIds: ' , stuIds);
+        console.log('stuNames: ' , stuNames);
+        console.log('===========================================================')
         return(
             {
-                startTime: startTime,
-                endTime: endTime,
+                startTime: startTime + ':00',
+                endTime: endTime + ':00',
                 keTangId: keTangId,
-                classIdOrGroupId: classIdOrGroupId,
+                classOrGroupId: classIdOrGroupId,
                 stuIds: stuIds,
                 stuNames: stuNames,
                 learnType: learnType,
@@ -749,6 +804,7 @@ class CreateHomework extends React.Component {
                     ]);
                 }else{
                     WaitLoading.show_false()
+                    console.log(resJson.message);
                     // Alert.alert(resJson.message);
                 }
             })
@@ -802,6 +858,7 @@ class CreateHomework extends React.Component {
                     ]);
                 }else{
                     WaitLoading.show_false()
+                    console.log(resJson.message);
                     // Alert.alert(resJson.message);
                 }
             })
@@ -817,7 +874,7 @@ class CreateHomework extends React.Component {
     //当前页面显示的题目是否添加到试题中(添加试题小页面)
     ifSelected = () => {
         const { selectPaperIndex , selectPaperList , paperList } = this.state;
-        let i = 0 ;
+        let i = false ;
         for(i = 0 ; i < selectPaperList.length ; i++){
             if(selectPaperList[i].questionId == paperList[selectPaperIndex].questionId){
                 return true;
@@ -826,6 +883,8 @@ class CreateHomework extends React.Component {
         if(i >= selectPaperList.length){
             return false;
         }
+        // console.log('================试题是否被选择=========================' , selectPaperList.includes(paperList[selectPaperIndex]));
+        // return (selectPaperList.includes(paperList[selectPaperIndex])); 
     }
 
     //将已选择的试题进行排序(调整顺序小页面)
@@ -864,6 +923,10 @@ class CreateHomework extends React.Component {
         this.setState({
             selectPaperList: tempPaperList,
             baseTypeIdLists: baseTypeIdList.length > 0 ? baseTypeIdList : [],
+        },()=>{
+            if(this.state.pushPaperFlag){
+                this.createPaperObject();
+            }
         })
     }
 
@@ -871,6 +934,7 @@ class CreateHomework extends React.Component {
     updateSlectNum = (flag) => {
         const { selectPaperIndex , selectPaperList , paperList  } = this.state;
         if(flag == true){ //删除试题
+            console.log('=======================删除试题============================');
             var index = selectPaperList.indexOf(paperList[selectPaperIndex]); //查询要删除元素的位置
             var selectPaperListCopy = selectPaperList;
             if(index >= 0){
@@ -879,15 +943,20 @@ class CreateHomework extends React.Component {
                 this.setState({
                     selectPaperNum: this.state.selectPaperNum - 1,
                     selectPaperList: selectPaperListCopy,
+                },()=>{
+                    console.log('=======================删除试题=========成功===================');
                 })
             } 
         }else{  //添加试题
+            console.log('=======================添加试题============================');
             var selectPaperListCopy = selectPaperList;
             selectPaperListCopy.push(paperList[selectPaperIndex]);
  
             this.setState({
                 selectPaperNum: this.state.selectPaperNum + 1,
                 selectPaperList: selectPaperListCopy,  
+            },()=>{
+                console.log('=======================添加试题=========成功===================');
             })
         }
     }
@@ -1592,7 +1661,8 @@ class CreateHomework extends React.Component {
                         <Text style={styles.classNameText}
                             onPress={()=>{
                                 if(this.state.className != item.keTangName){
-                                    this.setState({ 
+                                    this.setState({
+                                        classFlag: false, 
                                         className: item.keTangName ,
                                         keTangId:item.keTangId,
                                         class: item , 

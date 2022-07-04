@@ -71,7 +71,7 @@ class CreateLearnCase extends React.Component {
 
             learnPlanId: this.props.paramsData.actionType == 'create' ? '' : this.props.paramsData.learnPlanId, 
 
-            type: 0,
+            type: 'resource',
             typeValue: '',
 
             addPaperFlag: this.props.paramsData.actionType == 'create' ? true : false, //导航“添加试题”是否被选中
@@ -165,6 +165,25 @@ class CreateLearnCase extends React.Component {
         this.setState({ filterModelVisiblity: visible ,  });   
     }
 
+    getLongknowledge(id){
+        const url = global.constants.baseUrl+"teacherApp_getPointName.do";
+        const params = {
+            pointId:id
+        }
+        http.get(url, params)
+        .then((resStr) => {
+            let resJson = JSON.parse(resStr);
+            if(resJson.success){
+                this.setState({
+                    filterModelVisiblity: true,
+                    knowledgeModelVisibility: false, 
+                    knowledgeCode: id,
+                    knowledge:resJson.data
+                })
+            }
+        })
+    }
+
     //显示设置属性悬浮框
     showFilter = () => {
         const { filterModelVisiblity , knowledgeModelVisibility } = this.state;
@@ -174,9 +193,10 @@ class CreateLearnCase extends React.Component {
                         animationType="none"
                         transparent={true}
                         visible={filterModelVisiblity}
+                        //监听物理返回键
                         onRequestClose={() => {
                             console.log('----------------Modal has been closed.---------------------');
-                            Alert.alert("Modal has been closed.");
+                            Alert.alert('','关闭悬浮框', [{} , {text: '确定', onPress: ()=>{}}]);
                             this.setModalVisible(!filterModelVisiblity);
                         }}
                     >
@@ -218,7 +238,7 @@ class CreateLearnCase extends React.Component {
                     visible={knowledgeModelVisibility}
                     onRequestClose={() => {
                         console.log('----------------Modal has been closed.---------------------');
-                        Alert.alert("Modal has been closed.");
+                        Alert.alert('','关闭悬浮框', [{} , {text: '确定', onPress: ()=>{}}]);
                         this.setState({knowledgeModelVisibility: !knowledgeModelVisibility});
                     }}
                 >
@@ -266,12 +286,8 @@ class CreateLearnCase extends React.Component {
                                             console.log('---------------------------------');
                                             console.log(JSON.parse(event.nativeEvent.data).name , JSON.parse(event.nativeEvent.data).id);
                                             console.log('---------------------------------');
-                                            this.setState({ 
-                                                filterModelVisiblity: true,
-                                                knowledgeModelVisibility: false, 
-                                                knowledge: JSON.parse(event.nativeEvent.data).name ,
-                                                knowledgeCode: JSON.parse(event.nativeEvent.data).id,
-                                            });
+                                            var id = JSON.parse(event.nativeEvent.data).id;
+                                            this.getLongknowledge(id);
                                         }}
                                         javaScriptEnabled={true}
                                         scalesPageToFit={Platform.OS === 'ios' ? true : false}

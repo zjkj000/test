@@ -74,6 +74,7 @@ class HomeworkPropertyModel extends React.Component {
             bookList: this.props.bookList, //教材列表（接口数据）
 
             knowledge: this.props.knowledge, //知识点(选中的)
+            shortKnowledge: '',
             knowledgeCode: this.props.knowledgeCode, //选中的知识点项的编码
             knowledgeVisibility: false, //知识点选择列表是否显示     
             paperTypeVisibility: false, //试题类型列表是否显示
@@ -109,6 +110,12 @@ class HomeworkPropertyModel extends React.Component {
 
     UNSAFE_componentWillMount(){
         console.log('----------设置属性------WillMount------');
+        const { knowledge } = this.state;
+        var knowledgeSplit = knowledge.split('/');
+        var length = knowledgeSplit.length;
+        this.setState({
+            shortKnowledge: knowledgeSplit[length - 2],
+        })
         this.fetchPaperType();
     }
 
@@ -959,7 +966,7 @@ class HomeworkPropertyModel extends React.Component {
                                     <Text style={styles.studyRank}
                                         numberOfLines={1}
                                         ellipsizeMode={"tail"}
-                                    >{this.state.knowledge}</Text>
+                                    >{this.state.shortKnowledge}</Text>
                                 </View>
                             </TouchableOpacity>
                         : null
