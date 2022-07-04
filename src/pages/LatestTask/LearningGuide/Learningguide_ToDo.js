@@ -62,7 +62,6 @@ export default function Paper_ToDo(props) {
         const url = global.constants.baseUrl+"studentApp_deleteAccessControl.do"
         const params = {studentID:global.constants.userName};
           http.get(url, params).then((resStr) => {
-          console.log('学生清除了个人操作！')
           })
         
       }

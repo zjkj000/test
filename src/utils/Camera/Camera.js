@@ -1,4 +1,4 @@
-import { launchCamera, launchImageLibrary } from "  ";
+import { launchCamera, launchImageLibrary } from "react-native-image-picker";
 import { PermissionsAndroid } from "react-native";
 
 export default class ImageHandler {

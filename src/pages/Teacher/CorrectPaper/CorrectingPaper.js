@@ -50,7 +50,6 @@ export default function CorrectingPaper(props) {
         teacherID:global.constants.userName
       };
       http.get(url, params).then((resStr) => {
-        console.log('老师清除了个人操作！')
       })
     }
 
