@@ -181,7 +181,7 @@ class HomeComponent extends Component {
         };
         // params = { messageJson: JSON.stringify(params) };
         this.setState({ showLoading: true });
-        http.post(url, params)
+        http.post(url, params, false, false)
             .then((res) => {
                 console.log(
                     "ControllerSender===================================="

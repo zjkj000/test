@@ -299,7 +299,7 @@ export default class Info extends Component {
             desc: desc,
         };
         // params = { messageJson: JSON.stringify(params) };
-        http.post(url, params)
+        http.post(url, params, false, false)
             .then((res) => {
                 console.log(
                     "ControllerSender===================================="
