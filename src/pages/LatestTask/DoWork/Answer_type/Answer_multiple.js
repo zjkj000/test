@@ -11,6 +11,7 @@ import React, { Component, useState } from "react";
 import Checkbox from "../Utils/Checkbox";
 import RenderHtml from "react-native-render-html";
 import { useNavigation } from "@react-navigation/native";
+import { screenHeight } from "../../../../utils/Screen/GetSize";
 
 export default function Answer_multipleContainer(props) {
     const navigation = useNavigation();
@@ -104,23 +105,7 @@ class Answer_multiple extends Component {
                     <Text style={{ marginLeft: 20 }}>
                         {this.state.questionTypeName}
                     </Text>
-                    {/* <TouchableOpacity
-                        style={{ position: "absolute", right: 20 }}
-                        onPress={() => {
-                            //导航跳转
-                            this.props.navigation.navigate("SubmitPaper", {
-                                paperId: this.props.paperId,
-                                submit_status: this.props.submit_status,
-                                startdate: this.props.startdate,
-                                papername: this.props.papername,
-                                isallObj: this.props.isallObj,
-                            });
-                        }}
-                    >
-                        <Image
-                            source={require("../../../../assets/image3/look.png")}
-                        ></Image>
-                    </TouchableOpacity> */}
+                   
                 </View>
 
                 {/* 题目展示区域 */}
@@ -143,14 +128,13 @@ class Answer_multiple extends Component {
 }
 
 const styles = StyleSheet.create({
-    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row" },
-    answer_area: { height: "85%", padding: 20 },
+    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row",height:40,paddingBottom:0},
+    answer_area: { height:screenHeight-150, padding: 20 },
     answer_result: {
+        height:60,
         borderTopWidth: 0.5,
         borderTopColor: "#000000",
         paddingLeft: 30,
-        paddingTop: 5,
-        paddingBottom: 5,
         paddingRight: 30,
         flexDirection: "row",
         justifyContent: "space-around",

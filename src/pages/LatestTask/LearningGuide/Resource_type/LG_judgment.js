@@ -3,6 +3,7 @@ import React, { Component, useState } from 'react'
 import RadioList from '../../DoWork/Utils/RadioList'        
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
+import { screenHeight } from '../../../../utils/Screen/GetSize';
 
 export default function LG_judgmentContainer(props) {
     const navigation = useNavigation();
@@ -102,7 +103,7 @@ class LG_judgment extends Component {
 }
 
 const styles = StyleSheet.create({
-    answer_title:{padding:10,paddingLeft:30,flexDirection:'row'},
-    answer_area:{height:"85%",padding:20},
-    answer_result:{borderTopWidth:0.8,borderTopColor:'#000000',paddingLeft:30,paddingTop:5,paddingBottom:5,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
+    answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
+    answer_area:{height:screenHeight-150,padding:20,paddingTop:0},
+    answer_result:{borderTopWidth:0.8,borderTopColor:'#000000',paddingLeft:30,height:60,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
 })
