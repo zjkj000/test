@@ -38,6 +38,7 @@ class HomeComponent extends Component {
             buttonType: "default",
             infoButtonType: "default",
             actionType: "",
+            action: "",
             event: {},
             exitModalVisible: false,
             classListVisible: false,
@@ -49,7 +50,7 @@ class HomeComponent extends Component {
         // 开启轮询任务
         this.timerId = setInterval(() => {
             this.handleMessageQueue();
-        }, 200);
+        }, 500);
     }
     componentWillUnmount() {
         // 结束轮询任务
@@ -78,10 +79,13 @@ class HomeComponent extends Component {
     handleMessageQueue() {
         this.getMessage();
         const { resJson } = this.state;
+        // console.log("handleMessageQueue====================================");
+        // console.log(resJson);
+        // console.log("====================================");
         if (resJson.hasOwnProperty("messageList")) {
             let messageList = resJson.messageList;
             if (messageList.length !== 0) {
-                let event = messageList[0];
+                let event = messageList[messageList.length - 1];
                 console.log("messageList===========================");
                 for (let i = 0; i < messageList.length; i++) {
                     console.log(messageList[i]);
@@ -120,6 +124,7 @@ class HomeComponent extends Component {
                     default:
                         switch (actionType) {
                             case "questionAnswer":
+                                this.setState({ action: action });
                                 break;
                             case "toScan":
                                 this.props.navigation.navigate("Login");
@@ -219,7 +224,7 @@ class HomeComponent extends Component {
 
     render() {
         const { ipAddress, userName } = this.props.route.params;
-        const { learnPlanId } = this.state.event;
+        const { learnPlanId, action } = this.state.event;
         return (
             <Layout style={styles.mainContainer}>
                 <Loading show={this.state.showLoading} />
@@ -242,7 +247,7 @@ class HomeComponent extends Component {
                         setInfoButtonType={this.setInfoButtonType}
                     />
                     <Info
-                        {...this.state.event}
+                        action={action}
                         ipAddress={ipAddress}
                         actionType={this.state.actionType}
                         userName={userName}

@@ -53,6 +53,7 @@ import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin"
 import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
 import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
 import TestPage from "../../TestPage/TestPage";
+import CreateHomeworkFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomeworkFrame";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -201,11 +202,18 @@ export default class MainNavigation extends Component {
                     />
                     <Stack.Screen
                         name="创建作业"
-                        component={CreateHomework}
+                        component={CreateHomeworkFrame}
                         options={{
                             headerShown: false,
                         }}
                     />
+                    {/* <Stack.Screen
+                        name="创建作业"
+                        component={CreateHomework}
+                        options={{
+                            headerShown: false,
+                        }}
+                    /> */}
                     <Stack.Screen
                         name="AssignPaper"
                         component={AssignPaperContainer}

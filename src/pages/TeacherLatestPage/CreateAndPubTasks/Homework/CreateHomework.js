@@ -142,6 +142,8 @@ class CreateHomework extends React.Component {
 
             paperObject: {}, //生成的试卷对象
 
+            imgState: 1,
+
             //网络请求状态
             error: false,
             errorInfo: "",
@@ -1071,6 +1073,9 @@ class CreateHomework extends React.Component {
 
     //修改选中题目数(添加试题小页面)
     updateSlectNum = (flag) => {
+        console.log(
+            "=======================修改选中题目数============================"
+        );
         const { selectPaperIndex, selectPaperList, paperList } = this.state;
         if (flag == true) {
             //删除试题
@@ -1101,6 +1106,7 @@ class CreateHomework extends React.Component {
             );
             var selectPaperListCopy = selectPaperList;
             selectPaperListCopy.push(paperList[selectPaperIndex]);
+
             this.setState(
                 {
                     selectPaperNum: this.state.selectPaperNum + 1,
@@ -1244,55 +1250,97 @@ class CreateHomework extends React.Component {
             return (
                 <View style={styles.bodyView}>
                     {/**选中题目数 添加此试题或删除此试题 */}
-                    <View style={styles.paperSelectNumView}>
+                    <View style={{ ...styles.paperSelectNumView, height: 40 }}>
+                        {console.log(
+                            "=============view高度==================",
+                            styles.paperSelectNumView.height
+                        )}
                         <Text style={styles.selectPaperNum}>
                             (已选中{this.state.selectPaperNum})
                         </Text>
                         <TouchableOpacity
                             onPress={() => {
                                 console.log("我被点了");
-                                this.updateSlectNum(true);
+                                let { selectPaperNum, imgState } = this.state;
+                                this.setState({
+                                    imgState: !imgState,
+                                    selectPaperNum: selectPaperNum + 1,
+                                });
+                                // this.updateSlectNum(false);
                             }}
                         >
-                            {this.state.paperList.length > 0 &&
-                            this.ifSelected() ? (
-                                <Image
-                                    style={{
-                                        width: 26,
-                                        height: 26,
-                                        top: 7,
-                                        left: screenWidth * 0.652,
-                                        position: "absolute",
-                                    }}
-                                    source={require("../../../../assets/teacherLatestPage/shanchu.png")}
-                                />
-                            ) : (
-                                <Image
-                                    style={{
-                                        width: 30,
-                                        height: 30,
-                                        top: 5,
-                                        left: screenWidth * 0.65,
-                                        position: "absolute",
-                                    }}
-                                    source={require("../../../../assets/teacherLatestPage/tianjia.png")}
-                                />
-                            )}
+                            <Image
+                                style={{
+                                    width: 30,
+                                    height: 30,
+                                    top: 5,
+                                    left: screenWidth * 0.65,
+                                    position: "absolute",
+                                }}
+                                source={
+                                    this.state.imgState === 0
+                                        ? require("../../../../assets/teacherLatestPage/shanchu.png")
+                                        : require("../../../../assets/teacherLatestPage/tianjia.png")
+                                }
+                            />
                         </TouchableOpacity>
+                        {
+                            // this.state.paperList.length > 0 && this.ifSelected() ?
+                            // this.state.imgState == 0 ?
+                            //     <TouchableOpacity
+                            //         onPress={() => {
+                            //             console.log("我被点");
+                            //             const { selectPaperNum } = this.state;
+                            //             this.setState({ imgState: 1 , selectPaperNum:selectPaperNum + 1 })
+                            //             // this.updateSlectNum(true);
+                            //         }}
+                            //     >
+                            //         <Image
+                            //             style={{
+                            //                 width: 26,
+                            //                 height: 26,
+                            //                 top: 7,
+                            //                 left: screenWidth * 0.652,
+                            //                 position: 'absolute',
+                            //             }}
+                            //             source={require('../../../../assets/teacherLatestPage/shanchu.png')}
+                            //         />
+                            //     </TouchableOpacity>
+                            //     :
+                            //     <TouchableOpacity
+                            //         onPress={() => {
+                            //             console.log("我被点了");
+                            //             const { selectPaperNum } = this.state;
+                            //             this.setState({ imgState: 0  , selectPaperNum:selectPaperNum + 1 })
+                            //             // this.updateSlectNum(false);
+                            //         }}
+                            //     >
+                            //         <Image
+                            //             style={{
+                            //                 width: 30,
+                            //                 height: 30,
+                            //                 top: 5,
+                            //                 left: screenWidth * 0.65,
+                            //                 position: 'absolute',
+                            //             }}
+                            //             source={require('../../../../assets/teacherLatestPage/tianjia.png')}
+                            //         />
+                            //     </TouchableOpacity>
+                        }
                     </View>
 
                     {/**题目展示 */}
-                    <View style={styles.showPaper}>
-                        {/* {
+                    {/* <View style={styles.showPaper}> */}
+                    {/* {
                                 this.state.paperList.length <= 0
                                 ? this.fetchData(pageNo , this.state.paperTypeName , this.state.shareTag , false)
                                 : null
                             } */}
-                        {/**题目 答案 解析*/}
-                        {this.state.paperList.length > 0
-                            ? this.showAllPaperTitle()
-                            : null}
-                    </View>
+                    {/**题目 答案 解析*/}
+                    {
+                        // this.state.paperList.length > 0 ? this.showAllPaperTitle() : null
+                    }
+                    {/* </View> */}
                 </View>
             );
         }
@@ -2974,20 +3022,23 @@ class CreateHomework extends React.Component {
                         ? this.showFilter()
                         : null}
                 </View>
-                <Waiting />
+                {/* <Waiting /> */}
                 {/**试题展示、调整顺序、布置作业展示区 */}
-                {this.state.addPaperFlag
+                {this.showAddPaper()}
+                {/* {this.state.addPaperFlag
                     ? this.showAddPaper()
                     : this.state.updatePaperFlag
                     ? this.showUpdatePaper()
-                    : this.showPushPaper()}
+                    : this.showPushPaper()} */}
 
                 {/**底部展示区 */}
-                {this.state.addPaperFlag
-                    ? this.showAddPaperBottom()
-                    : this.state.updatePaperFlag
-                    ? this.showUpdatePaperBottom()
-                    : this.showPushPaperBottom()}
+                {/* {
+                    this.state.addPaperFlag
+                        ? this.showAddPaperBottom()
+                        : this.state.updatePaperFlag
+                            ? this.showUpdatePaperBottom()
+                            : this.showPushPaperBottom()
+                } */}
             </View>
         );
     }

@@ -1,6 +1,6 @@
 import { Icon, Layout, Modal, Button } from "@ui-kitten/components";
 import React, { Component } from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Dimensions, StatusBar } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "./styles";
 import http from "../../../utils/http/request";
@@ -25,6 +25,12 @@ export default class Info extends Component {
             questionAnalysisVisible: false,
         };
     }
+    // componentDidMount = () => {
+    //     const width = Dimensions.get("window").height;
+    //     const width2 = Dimensions.get("screen").height;
+    //     const width3 = StatusBar.currentHeight;
+    //     console.log("屏幕高度", width, width2, width3);
+    // };
     setInfoButton = (row, col, touchable = 1, status = "") => {
         let { infoButtonTouchable } = this.state;
         infoButtonTouchable[row][col].touchable = touchable;
