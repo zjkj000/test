@@ -467,7 +467,7 @@ export default function Paper_ToDo(props) {
     }
 
     return (
-        <View>
+        <View style={{height:'100%'}}>
             <View style={{height:50,flexDirection:'row',alignItems:"center",backgroundColor:'#fff',width:screenWidth,justifyContent:'center'}}>
                 <TouchableOpacity style={{position:'absolute',left:0}} onPress={()=>{props.navigation.goBack()}}>
                      <Image style={{width:30,height:30}} source={require('../../../assets/TakePicturesAndAssignWork/goback.png')}></Image>
@@ -502,7 +502,7 @@ export default function Paper_ToDo(props) {
               
             </View>
             <ViewPager
-                style={{ backgroundColor: "#FFFFFF", borderTopWidth: 0.5,height:screenHeight-50,paddingBottom:5}}
+                style={{ backgroundColor: "#FFFFFF", borderTopWidth: 0.5,height:screenHeight-52}}
                 swipeEnabled={false}
                 shouldLoadComponent={shouldLoadComponent}
                 selectedIndex={selectedIndex}

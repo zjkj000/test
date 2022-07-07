@@ -6,7 +6,7 @@ import {
     Image,
     TouchableOpacity,
     Alert,
-    Dimensions,
+    Dimensions,StatusBar
 } from "react-native";
 import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 import React, { Component, useState } from "react";
@@ -96,7 +96,10 @@ class Answer_single extends Component {
     render() {
         const HTML = this.state.questionContent;
         const questionChoiceList = this.state.questionChoiceList;
-        const width = Dimensions.get("window").width;
+        const width = Dimensions.get("window").height;
+        const width2 = Dimensions.get("screen").height;
+        const width3 = StatusBar.currentHeight;
+        console.log("屏幕高度",width,width2,width3,Dimensions.get("screen").width)
         return (
             <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'100%'}}  >
                 {/* 第一行显示 第几题  题目类型 */}
@@ -130,7 +133,11 @@ class Answer_single extends Component {
 
                 {/* 题目展示区域 */}
                 <ScrollView style={styles.answer_area}>
-                    <RenderHtml contentWidth={width} source={{ html: HTML }} />
+                    <RenderHtml contentWidth={width} source={{ html: HTML }} tagsStyles={{
+                        img:{
+                            flexDirection:'row'
+                        }
+                    }}/>
                     <Text style={{ height: 50 }}></Text>
                 </ScrollView>
 
@@ -140,7 +147,6 @@ class Answer_single extends Component {
                     ChoiceList选项列表   
                     getstuanswer用于获取学生作答记录  这个函数自己写  名称是  stuAnswer
                     type区分单选还是阅读:不传默认是单选 */}
-
                     <RadioList
                         checkedindexID={this.state.stu_answer}
                         ChoiceList={questionChoiceList}
@@ -148,20 +154,20 @@ class Answer_single extends Component {
                         type="single"
                     />
                 </View>
+
             </View>
         );
     }
 }
 
 const styles = StyleSheet.create({
-    answer_title: { paddingTop:10, paddingLeft: 30, flexDirection: "row" ,height:40},
-    answer_area: {padding: 20,paddingTop:0,height:screenHeight-150},
+    answer_title: { paddingTop:10, paddingLeft: 30, flexDirection: "row",height:40},
+    answer_area: {padding: 20,paddingTop:0},
     answer_result: {
         height:60,
         borderTopWidth: 0.5,
         borderTopColor: "#000000",
         paddingLeft: 30,
-        paddingBottom: 10,
         paddingRight: 30,
         flexDirection: "row",
         justifyContent:'space-around'

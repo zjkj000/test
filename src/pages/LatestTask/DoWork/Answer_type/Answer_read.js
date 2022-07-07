@@ -175,8 +175,9 @@ class Answer_read extends Component {
                     
                     {/* 答案滑动选择部分 */}
                     <ScrollView style={{borderTopWidth:0.5,borderTopColor:'#000000',}}>
+
                       {this.state.closeopenstate?(
-                        <View style={{flexDirection:'row',height:60,borderTopWidth:0.5,justifyContent:'center'}}>
+                        <View style={{flexDirection:'row',height:60,borderTopWidth:0.5,justifyContent:'space-around',alignContent:"center"}}>
                           <TouchableOpacity style={{position:'absolute',left:10,top:12}} onPress={()=>{
                             if(this.state.nowSelectedIndex>1){
                               this.setState({nowSelectedIndex:this.state.nowSelectedIndex-1})
@@ -186,9 +187,10 @@ class Answer_read extends Component {
                           }}>
                             <Image  source={require('../../../../assets/stuImg/lastquestion.png')}></Image>
                           </TouchableOpacity>
-                          <Text style={{marginTop:15,fontSize:17,color:'#59B9E0'}}>{this.state.nowSelectedIndex}</Text>
-                          <Text style={{marginTop:15,fontSize:17}}>/{this.state.questionChoiceList}</Text>
-                          <View>
+                          <View style={{width:ScreenWidth*0.7,flexDirection:'row'}}>
+                            <Text style={{marginTop:15,fontSize:17,color:'#59B9E0'}}>{this.state.nowSelectedIndex}</Text>
+                            <Text style={{marginTop:15,fontSize:17}}>/{this.state.questionChoiceList}</Text>
+                            
                             <RadioList
                                       checkedindexID={this.state.stu_answer.split(',')[this.state.nowSelectedIndex-1]=='未答'?'':this.state.stu_answer.split(',')[this.state.nowSelectedIndex-1]}
                                       ChoiceList={this.state.questionList}
@@ -288,7 +290,7 @@ class Answer_7S5 extends Component {
           </View>);
     }
     return (
-      <View style={{borderTopColor:'#000000',borderTopWidth:0.5,backgroundColor:'#FFFFFF'}}>
+      <View style={{borderTopColor:'#000000',borderTopWidth:0.5,backgroundColor:'#FFFFFF',height:"100%"}}>
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
@@ -339,14 +341,14 @@ const styles = StyleSheet.create({
   
     answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
 
-    answer_area:{padding:20,paddingTop:0,height:50},
+    answer_area:{padding:20,paddingTop:0},
     answer_result_area:{height:90},
 
-    answer_area_7S5:{height:'58%',padding:20,paddingTop:0},
-    answer_result_area_7S5:{},
+    answer_area_7S5:{padding:20,paddingTop:0},
+    answer_result_area_7S5:{height:260},
 
-    answer_area_open:{height:'45%',padding:20,paddingTop:0},
-    answer_result_area_open:{height:'48%'},
+    answer_area_open:{padding:20,paddingTop:0},
+    answer_result_area_open:{height:300,paddingBottom:15},
 
     answer_result:{flexDirection:'row',justifyContent:'center',paddingLeft:20,alignItems:'center'}
 })

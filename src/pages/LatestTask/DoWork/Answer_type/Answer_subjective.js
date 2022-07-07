@@ -413,7 +413,7 @@ class Answer_subjective extends Component {
                             }}
                             onBlur={()=>{}}
                             style={{
-                                width: 200,
+                                width: screenWidth*0.6,
                                 backgroundColor: "#FFFFFF",
                                 height: 40,
                             }}
@@ -470,19 +470,19 @@ class Answer_subjective extends Component {
 
 const styles = StyleSheet.create({
     answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row" ,height:40},
+    answer_area: { padding: 10},
 
-    answer_area: { padding: 10,height:(screenHeight-300)},
     answer_preview: {
         borderTopWidth: 1,
         borderTopColor: "#000000",
-        height:140,
+        height:'20%',
         backgroundColor: "#FFFFFF",
     },
-    answer_area_Long: { padding: 10,height:(screenHeight-700) },
+    answer_area_Long: { padding: 10},
     answer_preview_Long: {
         borderTopWidth: 1,
         borderTopColor: "#000000",
-        height: 540,
+        height:'75%',
         backgroundColor: "#FFFFFF",
     },
 

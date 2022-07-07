@@ -1,4 +1,4 @@
-import {Button,ScrollView,Text,View,StyleSheet,Alert,TouchableOpacity,Dimensions,} from "react-native";
+import {Button,ScrollView,Text,View,StyleSheet,Alert,TouchableOpacity,Dimensions} from "react-native";
 import React, { Component, useState } from "react";
 import http from "../../../utils/http/request";
 import RenderHtml from "react-native-render-html";

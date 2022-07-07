@@ -95,7 +95,7 @@ class Answer_multiple extends Component {
         const questionChoiceList = this.state.questionChoiceList;
         const width = Dimensions.get("window").width;
         return (
-            <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}  >
+            <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'100%'}}  >
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.answer_title}>
                     <Text style={{ color: "#59B9E0" }}>
@@ -129,7 +129,7 @@ class Answer_multiple extends Component {
 
 const styles = StyleSheet.create({
     answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row",height:40,paddingBottom:0},
-    answer_area: { height:screenHeight-150, padding: 20 },
+    answer_area: {  padding: 20 },
     answer_result: {
         height:60,
         borderTopWidth: 0.5,
