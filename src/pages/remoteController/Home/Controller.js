@@ -6,12 +6,16 @@ import { styles } from "./styles";
 import http from "../../../utils/http/request";
 import Toast from "../../../utils/Toast/Toast";
 import Img_arr from "./Img_arr";
+import { screenHeight, screenWidth } from "../../../utils/Screen/GetSize";
 
 export default class Controller extends Component {
     constructor(props) {
         super(props);
-        const scaleSize = 0.51;
-        const scaleSizeBig = 0.54;
+        console.log("Constructor====================================");
+        console.log(screenHeight, screenWidth);
+        console.log("====================================");
+        const scaleSize = 0.66;
+        const scaleSizeBig = 0.66;
 
         this.state = {
             buttonArray: [
@@ -22,6 +26,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 justifyContent: "flex-start",
+                                alignItems: "flex-start",
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -34,7 +39,8 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 flex: 1,
-                                justifyContent: "flex-end",
+                                justifyContent: "flex-start",
+                                alignItems: "center",
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -50,6 +56,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 justifyContent: "flex-start",
+                                alignItems: "flex-end",
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -123,7 +130,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 justifyContent: "flex-end",
-                                alignItems: "center",
+                                alignItems: "flex-start",
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -136,7 +143,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 flex: 1,
-                                justifyContent: "flex-start",
+                                justifyContent: "flex-end",
                                 alignItems: "center",
                             },
                             styles: {
@@ -150,7 +157,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 justifyContent: "flex-end",
-                                alignItems: "center",
+                                alignItems: "flex-end",
                             },
                             styles: {
                                 ...styles.controllerImg,

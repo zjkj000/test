@@ -352,6 +352,7 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="ControllerSharePhoto"
                         component={ControllerSharePhoto}
+                        options={{ headerShown: false }}
                     />
                 </Stack.Group>
 
