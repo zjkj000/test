@@ -22,18 +22,20 @@ let allPageNo = 0; //总数
 export default function AddContentPageContainer(props) {
     const navigation = useNavigation();
     //将navigation传给HomeworkProperty组件，防止路由出错
-    return <AddContentPage 
-        navigation={navigation}  
-        channelCode={props.channelCode}
-        subjectCode={props.subjectCode}
-        textBookCode={props.textBookCode}
-        gradeLevelCode={props.gradeLevelCode}
-        pointCode={props.pointCode}
-        questionTypeName={props.questionTypeName}
-        shareTag={props.shareTag}
-        isFetchAgain={props.isFetchAgain}
-        setIsFetchAgain={props.setIsFetchAgain}
-    />;
+    return (
+        <AddContentPage
+            navigation={navigation}
+            channelCode={props.channelCode}
+            subjectCode={props.subjectCode}
+            textBookCode={props.textBookCode}
+            gradeLevelCode={props.gradeLevelCode}
+            pointCode={props.pointCode}
+            questionTypeName={props.questionTypeName}
+            shareTag={props.shareTag}
+            isFetchAgain={props.isFetchAgain}
+            setIsFetchAgain={props.setIsFetchAgain}
+        />
+    );
 }
 
 class AddContentPage extends React.Component {
@@ -62,14 +64,16 @@ class AddContentPage extends React.Component {
     UNSAFE_componentWillMount(){
     }
 
-    UNSAFE_componentWillUpdate(nextProps){
-        console.log('-------add-----------componentWillUpdate-----------------------------');
-        console.log('---------nextProps----------',nextProps.isFetchAgain);
+    UNSAFE_componentWillUpdate(nextProps) {
+        console.log(
+            "-------add-----------componentWillUpdate-----------------------------"
+        );
+        console.log("---------nextProps----------", nextProps.isFetchAgain);
         // console.log(nextProps.isFetchAgain);
-        console.log('---------Props----------',this.props.isFetchAgain);
+        console.log("---------Props----------", this.props.isFetchAgain);
         // console.log(this.props.isFetchAgain);
         //重新筛选导学案属性
-        if(
+        if (
             // (this.props.channelCode != nextProps.channelCode
             // || this.props.subjectCode != nextProps.subjectCode
             // || this.props.textBookCode != nextProps.textBookCode
@@ -78,25 +82,30 @@ class AddContentPage extends React.Component {
             // || this.props.questionTypeName != nextProps.questionTypeName
             // || this.props.shareTag!= nextProps.shareTag)
             // && nextProps.isFetchAgain
-            nextProps.isFetchAgain != this.props.isFetchAgain
-            && nextProps.isFetchAgain
-        ){
-            console.log('===================props发生变化=======================');
+            nextProps.isFetchAgain != this.props.isFetchAgain &&
+            nextProps.isFetchAgain
+        ) {
+            console.log(
+                "===================props发生变化======================="
+            );
             pageNo = 1; //当前第几页
             dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
             allPageNo = 0; //总数
-            this.setState({
-                channelCode: nextProps.channelCode,
-                subjectCode: nextProps.subjectCode,
-                textBookCode: nextProps.textBookCode,
-                gradeLevelCode: nextProps.gradeLevelCode,
-                pointCode: nextProps.pointCode,
-                questionTypeName: nextProps.questionTypeName,
-                shareTag: nextProps.shareTag,
-            },()=>{
-                this.props.setIsFetchAgain(false);
-                this.fetchData();
-            })
+            this.setState(
+                {
+                    channelCode: nextProps.channelCode,
+                    subjectCode: nextProps.subjectCode,
+                    textBookCode: nextProps.textBookCode,
+                    gradeLevelCode: nextProps.gradeLevelCode,
+                    pointCode: nextProps.pointCode,
+                    questionTypeName: nextProps.questionTypeName,
+                    shareTag: nextProps.shareTag,
+                },
+                () => {
+                    this.props.setIsFetchAgain(false);
+                    this.fetchData();
+                }
+            );
         }
     }
 
@@ -150,7 +159,10 @@ class AddContentPage extends React.Component {
                 if(paperLength < 5){
                     allPageNo = pageNo;
                     dataFlag = false; //数据加载完了
-                    console.log('==================所有试题都加载完了===========================', Date.parse(new Date()));
+                    console.log(
+                        "==================所有试题都加载完了===========================",
+                        Date.parse(new Date())
+                    );
                     // Alert.alert('', '已经是最后一页试题了' , [{}, { text: '关闭', onPress: () => { } }]);
                 }
 
@@ -192,15 +204,41 @@ class AddContentPage extends React.Component {
         }
     }
 
+    getIndex = () => {
+        const { selectContentList, selectContentIndex, contentList } =
+            this.state;
+        let i = -1;
+        for (i = 0; i < selectContentList.length; i++) {
+            if (
+                selectContentList[i].questionId ==
+                contentList[selectContentIndex].questionId
+            ) {
+                return i;
+            }
+        }
+        if (i >= selectContentList.length) {
+            return -1;
+        }
+    };
+
     //修改选中题目数(添加试题小页面)
     updateSlectNum = (flag) => {
-        console.log('=======================修改选中题目数============================');
-        const { selectContentList , selectContentIndex , contentList } = this.state;
-        if (flag == true) { //删除试题
-            console.log('=======================删除试题============================');
+        console.log(
+            "=======================修改选中题目数============================"
+        );
+        const { selectContentList, selectContentIndex, contentList } =
+            this.state;
+        if (flag == true) {
+            //删除试题
+            console.log(
+                "=======================删除试题============================"
+            );
             // var index = selectContentList.indexOf(contentList[selectContentIndex]); //查询要删除元素的位置
             var index = this.getIndex();
-            console.log('=============删除试题index=====================',index);
+            console.log(
+                "=============删除试题index=====================",
+                index
+            );
             var selectPaperListCopy = selectContentList;
             if (index >= 0) {
                 selectPaperListCopy.splice(index, 1); //删除指定位置元素
@@ -236,6 +274,7 @@ class AddContentPage extends React.Component {
                             // let { selectContentNum , imgState } = this.state;
                             // this.setState({ imgState: !imgState  , selectContentNum:selectContentNum + 1 })
                             // this.updateSlectNum(false);
+                            Alert.alert('点击了图片！')
                             this.ifSelected()
                                 ? this.updateSlectNum(true)
                                 : this.updateSlectNum(false);

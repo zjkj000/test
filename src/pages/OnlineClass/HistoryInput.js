@@ -22,7 +22,8 @@ export default function HistoryInput(props) {
     };
     const initData = async () => {
         try {
-            let res = await StorageUtil.get("historyListRemote");
+            // let res = await StorageUtil.get("historyListRemote");
+            let res = await StorageUtil.get(props.storageName);
             res = res ? res : [];
             setData(res);
             // console.log(

@@ -1,21 +1,25 @@
 import { Layout } from "@ui-kitten/components";
 import React, { Component } from "react";
-import { View, Image } from "react-native";
+import { View, Image, PixelRatio } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "./styles";
 import http from "../../../utils/http/request";
 import Toast from "../../../utils/Toast/Toast";
 import Img_arr from "./Img_arr";
-import { screenHeight, screenWidth } from "../../../utils/Screen/GetSize";
 
 export default class Controller extends Component {
     constructor(props) {
         super(props);
-        console.log("Constructor====================================");
-        console.log(screenHeight, screenWidth);
+        let scaleSize = 0.5 * PixelRatio.get();
+        let scaleSizeBig = 0.51 * PixelRatio.get();
+        console.log("PixelRatio====================================");
+        console.log(scaleSize);
+        console.log(scaleSizeBig);
         console.log("====================================");
-        const scaleSize = 0.66;
-        const scaleSizeBig = 0.66;
+        // if (isPad()) {
+        //     scaleSize = 0.66;
+        //     scaleSizeBig = 0.66;
+        // }
 
         this.state = {
             buttonArray: [
