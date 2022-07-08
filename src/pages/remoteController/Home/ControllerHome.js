@@ -43,9 +43,15 @@ class HomeComponent extends Component {
             exitModalVisible: false,
             classListVisible: false,
             questionAnalysisVisible: false,
+            moduleButton: [0, 0, 0],
             // showLoading: false,
         };
     }
+    setModuleButton = (index, status) => {
+        let { moduleButton } = this.state;
+        moduleButton[index] = status;
+        this.setState({ moduleButton: [...moduleButton] });
+    };
     componentDidMount() {
         // 开启轮询任务
         this.timerId = setInterval(() => {
@@ -231,6 +237,7 @@ class HomeComponent extends Component {
     render() {
         const { ipAddress, userName } = this.props.route.params;
         const { learnPlanId, action } = this.state.event;
+        const { moduleButton } = this.state;
         return (
             <Layout style={styles.mainContainer}>
                 {/* <Loading show={this.state.showLoading} /> */}
@@ -247,17 +254,20 @@ class HomeComponent extends Component {
                 <Layout style={styles.infoContainer}>
                     <Module
                         {...this.state.event}
+                        moduleButton={moduleButton}
                         ipAddress={ipAddress}
                         actionType={this.state.actionType}
                         userName={userName}
                         setInfoButtonType={this.setInfoButtonType}
                     />
                     <Info
+                        resId={this.state.event.resId}
                         action={action}
                         ipAddress={ipAddress}
                         actionType={this.state.actionType}
                         userName={userName}
                         infoButtonType={this.state.infoButtonType}
+                        setInfoButtonType={this.setInfoButtonType}
                     />
                 </Layout>
                 <Controller
