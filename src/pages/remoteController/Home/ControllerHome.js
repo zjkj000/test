@@ -49,7 +49,10 @@ class HomeComponent extends Component {
     }
     setModuleButton = (index, status) => {
         let { moduleButton } = this.state;
-        moduleButton[index] = status;
+        moduleButton = [0, 0, 0];
+        if (index !== -1) {
+            moduleButton[index] = status;
+        }
         this.setState({ moduleButton: [...moduleButton] });
     };
     componentDidMount() {
@@ -66,15 +69,21 @@ class HomeComponent extends Component {
         switch (index) {
             case 0:
                 this.setState({ infoButtonType: "normalQuestion" });
+                this.setModuleButton(0, 1);
                 break;
             case 1:
                 this.setState({ infoButtonType: "randomQuestion" });
+                this.setModuleButton(1, 1);
                 break;
             case 2:
                 this.setState({ infoButtonType: "rushQuestion" });
+                this.setModuleButton(2, 1);
                 break;
             default:
-                this.setState({ infoButtonType: "default" });
+                this.setState({
+                    infoButtonType: "default",
+                    moduleButton: [0, 0, 0],
+                });
                 break;
         }
     };
