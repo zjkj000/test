@@ -98,7 +98,16 @@ export default function Paper_ShowCorrected(props) {
                               <Text style={{fontSize:15}}> / {dataNum}</Text>
                             </View>
                         </View>
-                        <RenderHTML source={{html:Item.tiMian}}></RenderHTML>
+                        <RenderHTML source={{html:Item.tiMian}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
                         <Text style={styles.Titletext}>[参考答案]</Text>
                         {Item.standardAnswer==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.standardAnswer}}></RenderHTML>)}
                         <Text style={styles.Titletext}>[解析]</Text>

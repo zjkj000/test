@@ -332,7 +332,16 @@ export default class PicturesWorkContent extends Component {
       //使用RenderHTML组件展示内容
       return(
         <View style={{paddingLeft:15}}>
-            <RenderHTML contentWidth={screenWidth} source={{html:HTML}}/>
+            <RenderHTML contentWidth={screenWidth} source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
         </View>
       ) ;
     }

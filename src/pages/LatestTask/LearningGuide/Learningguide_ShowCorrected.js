@@ -98,13 +98,49 @@ export default function Learningguide_ShowCorrected(props) {
                               <Text style={{fontSize:15}}> / {dataNum}</Text>
                             </View>
                         </View>
-                        <RenderHTML source={{html:Item.tiMian}}></RenderHTML>
+                        <RenderHTML source={{html:Item.tiMian}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
                         <Text style={styles.Titletext}>[参考答案]</Text>
-                        {Item.standardAnswer==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.standardAnswer}}></RenderHTML>)}
+                        {Item.standardAnswer==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.standardAnswer}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />)}
                         <Text style={styles.Titletext}>[解析]</Text>
-                        {Item.analysis==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.analysis}}></RenderHTML>)}
+                        {Item.analysis==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.analysis}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />)}
                         <Text style={styles.Titletext}>[你的答案]</Text>
-                         {Item.stuAnswer==''?(<Text>未答</Text>):(<RenderHTML source={{html:Item.stuAnswer}}></RenderHTML>)}
+                         {Item.stuAnswer==''?(<Text>未答</Text>):(<RenderHTML source={{html:Item.stuAnswer}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />)}
                         <View style={{flexDirection:'row',marginTop:20}}>
                            <View style={{flexDirection:'row'}}>
                               <Image source={require('../../../assets/stuImg/score.png')}></Image>

@@ -3,6 +3,7 @@ import React, { Component, useState } from 'react'
 import RadioList from '../../DoWork/Utils/RadioList'
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
+import { screenWidth } from '../../../../utils/Screen/GetSize';
 
 export default function LG_readContainer(props) {
   const navigation = useNavigation();
@@ -68,6 +69,7 @@ class LG_read extends Component {
   constructor(props) {
     super(props)
     this.LG_stuAnswer=this.LG_stuAnswer.bind(this);
+    this.stuAnswer_single=this.stuAnswer_single.bind(this)
     this.state = {
             closeopenstate:true,
             numid:'',
@@ -76,6 +78,7 @@ class LG_read extends Component {
             baseTypeId:'',
             questionName:'',        //题目名称
             questionChoiceList:0,  //选项个数
+            nowSelectedIndex:1,    //记录折叠模式下选中的题
             question:'',   //题目内容
             answer:'',
             stu_answer:'',
@@ -92,12 +95,11 @@ class LG_read extends Component {
         newAnswer=this.state.stu_answer.split(',');
       }else{
         for(var i=0;i<this.state.questionChoiceList;i++)
-        newAnswer[i] = '未答'
+        newAnswer[i] = '*'
       }
       newAnswer[TimuIndex]=str;
       this.setState({stu_answer:newAnswer.toString()});
       this.props.getStu_LG_answer(newAnswer.toString());
-      
       this.props.getLG_ischange(true);
       // console.log('导学案阅读题的最终答案是：',newAnswer.toString())
      }
@@ -108,7 +110,20 @@ class LG_read extends Component {
         oldStuAnswer:this.props.oldAnswer_data,
         numid:this.props.num?this.props.num:0,
         ...this.props.datasource});}
-   
+
+    stuAnswer_single(str) {
+          var newAnswer =  new Array();
+                  //阅读是要拼接未答,未答
+                  if(this.state.stu_answer!=''){
+                    newAnswer=this.state.stu_answer.split(',');
+                  }else{
+                    for(var i=0;i<this.state.questionChoiceList;i++)
+                    newAnswer[i] = '*'
+                  }
+        
+          newAnswer[this.state.nowSelectedIndex-1]=str;
+          this.setState({stu_answer:newAnswer.toString()});
+        }
     
     render() {
     const HTML = this.state.question;
@@ -128,7 +143,7 @@ class LG_read extends Component {
           </View>);
     }
     return (
-      <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}  >
+      <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'100%'}}  >
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
@@ -136,7 +151,16 @@ class LG_read extends Component {
             
             {/* 题目展示区域 */}
             <ScrollView  style={this.state.closeopenstate?styles.answer_area:styles.answer_area_open}>
-              <RenderHtml contentWidth={width}  source={{html:HTML}}/>
+              <RenderHtml contentWidth={width}  source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
               <Text style={{height:50}}></Text>
             </ScrollView>
             
@@ -145,15 +169,45 @@ class LG_read extends Component {
             <View  style={this.state.closeopenstate?styles.answer_result_area:styles.answer_result_area_open}>
                     {/* 答案改变选项高度部分 */}
                     <TouchableOpacity onPress={()=>{this.setState({closeopenstate:!this.state.closeopenstate})}}>
-                        <Image style={{position:'relative',left:'65%'}}  source={require('../../../../assets/image3/closeopen.png')}></Image>
+                        <Image style={{position:'relative',left:'40%',height:25}}  source={require('../../../../assets/image3/closeopen.png')}></Image>
                     </TouchableOpacity>
                     
                     {/* 答案滑动选择部分 */}
                     <ScrollView style={{borderTopWidth:0.8,borderTopColor:'#000000',}}>
-                        {/* item是根据题目中小题个数，动态加载的 */}
-                        {items}
-                        {/* 下面这个view是为了解决选项在最低端加载显示不全的问题，写个空白的区域，将最下面的顶上来 */}
-                        <View style={{height:30}}></View>
+                      {this.state.closeopenstate?(
+                        <View style={{flexDirection:'row',height:60,borderTopWidth:0.5,justifyContent:'center'}}>
+                        <TouchableOpacity style={{position:'absolute',left:10,top:12}} onPress={()=>{
+                          if(this.state.nowSelectedIndex>1){
+                            this.setState({nowSelectedIndex:this.state.nowSelectedIndex-1})
+                          }else{
+                            Toast.showInfoToast('已经是第一道小题',500)
+                          }
+                        }}>
+                          <Image  source={require('../../../../assets/stuImg/lastquestion.png')}></Image>
+                        </TouchableOpacity>
+                        <Text style={{marginTop:15,fontSize:17,color:'#59B9E0'}}>{this.state.nowSelectedIndex}</Text>
+                        <Text style={{marginTop:15,fontSize:17}}>/{this.state.questionChoiceList}</Text>
+                        <View>
+                          <RadioList
+                                    checkedindexID={this.state.stu_answer.split(',')[this.state.nowSelectedIndex-1]=='未答'?'':this.state.stu_answer.split(',')[this.state.nowSelectedIndex-1]}
+                                    ChoiceList={this.state.questionList}
+                                    getstuanswer={this.stuAnswer_single}
+                                />
+                        </View>
+                        <TouchableOpacity style={{position:'absolute',right:10,top:12}} onPress={()=>{
+                          if(this.state.nowSelectedIndex<this.state.questionChoiceList){
+                            this.setState({nowSelectedIndex:this.state.nowSelectedIndex+1})
+                          }else{
+                            Toast.showInfoToast('已经是最后一道小题',500)
+                          }
+                        }}>
+                          <Image  source={require('../../../../assets/stuImg/nextquestion.png')}></Image>
+                        </TouchableOpacity>
+                        
+                      </View>
+                      ):(<>{items}</>)
+                      }
+
                     </ScrollView>
             </View>
       </View>
@@ -225,7 +279,7 @@ class LG_7S5 extends Component {
           </View>);
     }
     return (
-      <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}  >
+      <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'100%'}}  >
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
@@ -252,7 +306,16 @@ class LG_7S5 extends Component {
             
             {/* 题目展示区域 */}
             <ScrollView  style={styles.answer_area_7S5}>
-              <RenderHtml contentWidth={width}  source={{html:HTML}}/>
+              <RenderHtml contentWidth={width}  source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
               <Text style={{height:50}}></Text>
             </ScrollView>
             
@@ -275,11 +338,15 @@ class LG_7S5 extends Component {
 
 const styles = StyleSheet.create({
     answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
-    answer_area:{height:50,padding:20,paddingTop:0,},
-    answer_result_area:{height:90},
-    answer_area_7S5:{height:'58%',padding:20,paddingTop:0},
-    answer_result_area_7S5:{},
-    answer_area_open:{height:'45%',padding:20,paddingTop:0},
-    answer_result_area_open:{height:'48%'},
+
+    answer_area:{padding:20,paddingTop:0,},
+    answer_result_area:{height:105},
+
+    answer_area_7S5:{padding:20,paddingTop:0},
+    answer_result_area_7S5:{height:275},
+
+    answer_area_open:{padding:20,paddingTop:0},
+    answer_result_area_open:{height:300,paddingBottom:15,paddingLeft:screenWidth*0.05},
+    
     answer_result:{flexDirection:'row',justifyContent:'center',paddingLeft:20,alignItems:'center'}
 })

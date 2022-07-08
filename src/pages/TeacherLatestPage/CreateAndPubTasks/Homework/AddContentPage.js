@@ -11,8 +11,9 @@ import {
 import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 import { useNavigation } from "@react-navigation/native";
 import http from "../../../../utils/http/request";
-import Loading from "../../../../utils/loading/Loading";
-import RenderHtml from "react-native-render-html";
+import Loading from "../../../../utils/loading/Loading"; 
+import RenderHtml from 'react-native-render-html';
+
 
 let pageNo = 1; //当前第几页
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
@@ -56,11 +57,12 @@ class AddContentPage extends React.Component {
             imgState: true,
 
             error: false,
-            errorInfo: "",
-        };
+            errorInfo: '',
+        }
     }
 
-    UNSAFE_componentWillMount() {}
+    UNSAFE_componentWillMount(){
+    }
 
     UNSAFE_componentWillUpdate(nextProps) {
         console.log(
@@ -107,7 +109,8 @@ class AddContentPage extends React.Component {
         }
     }
 
-    componentWillUnmount() {}
+    componentWillUnmount(){
+    }
 
     //请求试题
     fetchData = () => {
@@ -129,12 +132,7 @@ class AddContentPage extends React.Component {
             //callback:'ha',
         };
 
-        console.log(
-            "-----fetchData---pageNo---试题类型---",
-            pageNo,
-            this.props.questionTypeName,
-            Date.parse(new Date())
-        );
+        console.log('-----fetchData---pageNo---试题类型---', pageNo, this.props.questionTypeName, Date.parse(new Date()))
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
@@ -144,32 +142,21 @@ class AddContentPage extends React.Component {
                 if (paperListOne == null) {
                     //console.log('!!!!!params!!!!resJson!!!' , params , resJson);
                     //参数存在问题token失效等
-                    Alert.alert("", resJson, [
-                        {},
-                        { text: "关闭", onPress: () => {} },
-                    ]);
+                    Alert.alert('', resJson, [{}, { text: '关闭', onPress: () => { } }]);
                     return;
                 } else {
-                    paperLength = paperListOne != "" ? paperListOne.length : 0;
+                    paperLength = paperListOne != '' ? paperListOne.length : 0;
                 }
-                console.log(
-                    "***pageNo**currentFecthLength***",
-                    pageNo,
-                    paperLength,
-                    Date.parse(new Date())
-                );
+                console.log('***pageNo**currentFecthLength***', pageNo, paperLength, Date.parse(new Date()));
                 //试题请求接口每次最多返回5个数据
-                if (paperLength != 0) {
-                    this.setState({
-                        contentList: paperListOne,
-                        selectContentIndex: 0,
-                    });
-                } else {
+                if(paperLength != 0){
+                    this.setState({ contentList: paperListOne , selectContentIndex: 0 });
+                }else{
                     allPageNo = pageNo - 1;
                     pageNo--;
                     // Alert.alert('', '未请求到试题', [{}, { text: '关闭', onPress: () => { } }]);
                 }
-                if (paperLength < 5) {
+                if(paperLength < 5){
                     allPageNo = pageNo;
                     dataFlag = false; //数据加载完了
                     console.log(
@@ -182,31 +169,40 @@ class AddContentPage extends React.Component {
                 paperListOne = [];
             })
             .catch((error) => {
-                console.log("******catch***error**", error);
+                console.log('******catch***error**', error);
                 this.setState({
                     error: true,
                     errorInfo: error,
                 });
             });
-    };
+    }
 
     //当前试题是否在已选择试题列表中
     ifSelected = () => {
-        const { selectContentList, selectContentIndex, contentList } =
-            this.state;
+        const { selectContentList , selectContentIndex , contentList } = this.state;
         let i = false;
         for (i = 0; i < selectContentList.length; i++) {
-            if (
-                selectContentList[i].questionId ==
-                contentList[selectContentIndex].questionId
-            ) {
+            if (selectContentList[i].questionId == contentList[selectContentIndex].questionId) {
                 return true;
             }
         }
         if (i >= selectContentList.length) {
             return false;
         }
-    };
+    }
+
+    getIndex = () => {
+        const { selectContentList , selectContentIndex , contentList } = this.state;
+        let i = -1;
+        for (i = 0; i < selectContentList.length; i++) {
+            if (selectContentList[i].questionId == contentList[selectContentIndex].questionId) {
+                return i;
+            }
+        }
+        if (i >= selectContentList.length) {
+            return -1;
+        }
+    }
 
     getIndex = () => {
         const { selectContentList, selectContentIndex, contentList } =
@@ -247,76 +243,62 @@ class AddContentPage extends React.Component {
             if (index >= 0) {
                 selectPaperListCopy.splice(index, 1); //删除指定位置元素
 
-                this.setState(
-                    {
-                        selectContentNum: this.state.selectContentNum - 1,
-                        selectContentList: selectPaperListCopy,
-                    },
-                    () => {
-                        console.log(
-                            "=======================删除试题=========成功==================="
-                        );
-                    }
-                );
+                this.setState({
+                    selectContentNum: this.state.selectContentNum - 1,
+                    selectContentList: selectPaperListCopy,
+                }, () => {
+                    console.log('=======================删除试题=========成功===================');
+                })
             }
-        } else {
-            //添加试题
-            console.log(
-                "=======================添加试题============================"
-            );
+        } else {  //添加试题
+            console.log('=======================添加试题============================');
             var selectPaperListCopy = selectContentList;
             selectPaperListCopy.push(contentList[selectContentIndex]);
 
-            this.setState(
-                {
-                    selectContentNum: this.state.selectContentNum + 1,
-                    selectContentList: selectPaperListCopy,
-                },
-                () => {
-                    console.log(
-                        "=======================添加试题=========成功==================="
-                    );
-                }
-            );
+            this.setState({
+                selectContentNum: this.state.selectContentNum + 1,
+                selectContentList: selectPaperListCopy,
+            }, () => {
+                console.log('=======================添加试题=========成功===================');
+            })
         }
-    };
+    }
 
     //顶部（已选数目+添加+删除）
     showTitle = () => {
-        return (
+        return(
             <View style={styles.paperSelectNumView}>
-                <Text style={styles.selectPaperNum}>
-                    (已选中{this.state.selectContentNum})
-                </Text>
-                <TouchableOpacity
-                    onPress={() => {
-                        // let { selectContentNum , imgState } = this.state;
-                        // this.setState({ imgState: !imgState  , selectContentNum:selectContentNum + 1 })
-                        // this.updateSlectNum(false);
-                        this.ifSelected()
-                            ? this.updateSlectNum(true)
-                            : this.updateSlectNum(false);
-                    }}
-                >
-                    <Image
-                        style={{
-                            width: 30,
-                            height: 30,
-                            top: 5,
-                            // left: screenWidth * 0.65,
-                            position: "absolute",
-                        }}
-                        source={
-                            // !this.state.imgState
+                <Text style={styles.selectPaperNum}>(已选中{this.state.selectContentNum})</Text>
+                <TouchableOpacity 
+                        onPress={() => {
+                            // let { selectContentNum , imgState } = this.state;
+                            // this.setState({ imgState: !imgState  , selectContentNum:selectContentNum + 1 })
+                            // this.updateSlectNum(false);
+                            Alert.alert('点击了图片！')
                             this.ifSelected()
-                                ? require("../../../../assets/teacherLatestPage/shanchu.png")
-                                : require("../../../../assets/teacherLatestPage/tianjia.png")
-                        }
-                    />
-                </TouchableOpacity>
+                                ? this.updateSlectNum(true)
+                                : this.updateSlectNum(false);
+                        }}
+                    >
+                        <Image
+                            style={{
+                                width: 30,
+                                height: 30,
+                                top: 5,
+                                // left: screenWidth * 0.65,
+                                position: 'absolute',
+                            }}
+                            source={
+                                // !this.state.imgState 
+                                this.ifSelected()
+                                    ? require('../../../../assets/teacherLatestPage/shanchu.png')
+                                    : require('../../../../assets/teacherLatestPage/tianjia.png')
+                            }
+                        />
+                    </TouchableOpacity>
             </View>
         );
-    };
+    }
 
     //试题展示区
     showContent = () => {
@@ -327,41 +309,28 @@ class AddContentPage extends React.Component {
                 {/* {console.log('---题目-----' ,paperList[selectPaperIndex].tiMian)} */}
                 <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{ padding: 5 }}>
-                    <RenderHtml
-                        contentWidth={screenWidth}
-                        source={{
-                            html: contentList[selectContentIndex].tiMian,
-                        }}
-                    ></RenderHtml>
+                    <RenderHtml contentWidth={screenWidth} source={{ html: contentList[selectContentIndex].tiMian }}></RenderHtml>
                 </View>
+
 
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
 
                 {/**答案 */}
                 <Text style={styles.paperContent}>[答案]</Text>
                 <View style={{ padding: 5 }}>
-                    <RenderHtml
-                        contentWidth={screenWidth}
-                        source={{
-                            html: contentList[selectContentIndex].answer,
-                        }}
-                    ></RenderHtml>
+                    <RenderHtml contentWidth={screenWidth} source={{ html: contentList[selectContentIndex].answer }}></RenderHtml>
                 </View>
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
 
                 {/**解析 */}
                 <Text style={styles.paperContent}>[解析]</Text>
                 <View style={{ padding: 5 }}>
-                    <RenderHtml
-                        contentWidth={screenWidth}
-                        source={{
-                            html: contentList[selectContentIndex].analysis,
-                        }}
-                    ></RenderHtml>
+                    <RenderHtml contentWidth={screenWidth} source={{ html: contentList[selectContentIndex].analysis }}></RenderHtml>
                 </View>
             </ScrollView>
         );
-    };
+    }
+
 
     //底部题面展示区
     showAddPaperBottom = () => {
@@ -370,160 +339,149 @@ class AddContentPage extends React.Component {
                 <TouchableOpacity
                     style={{ width: screenWidth * 0.1, paddingLeft: 5 }}
                     onPress={() => {
-                        if (pageNo == 1) {
-                            Alert.alert("", "已经是第一页试题了", [
-                                {},
-                                { text: "关闭", onPress: () => {} },
-                            ]);
-                        } else {
+                        if(pageNo == 1){
+                            Alert.alert('', '已经是第一页试题了', [{}, { text: '关闭', onPress: () => { } }]);
+                        }else{
                             pageNo--;
                             this.fetchData();
                         }
                     }}
                 >
                     <Image
-                        style={{ width: 25, height: 25 }}
-                        source={require("../../../../assets/teacherLatestPage/back.png")}
+                        style={{ width: 25, height: 25, }}
+                        source={require('../../../../assets/teacherLatestPage/back.png')}
                     ></Image>
                 </TouchableOpacity>
                 {/**显示底部试题类型图标 */}
-                <View
-                    style={{
-                        width: screenWidth * 0.8,
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}
-                >
+                <View style={{ width: screenWidth * 0.8, flexDirection: 'row', alignItems: 'center' }}>
                     {this.showPaperTypeImg()}
                 </View>
                 <TouchableOpacity
                     style={{ width: screenWidth * 0.1, paddingLeft: 11 }}
                     onPress={() => {
-                        if (pageNo != allPageNo) {
+                        if(pageNo != allPageNo){
                             pageNo++;
                             this.fetchData();
-                        } else {
-                            Alert.alert("", "已经是最后一页试题了", [
-                                {},
-                                { text: "关闭", onPress: () => {} },
-                            ]);
+                        }else{
+                            Alert.alert('', '已经是最后一页试题了', [{}, { text: '关闭', onPress: () => { } }]);
                         }
                     }}
                 >
                     <Image
-                        style={{ width: 25, height: 25 }}
-                        source={require("../../../../assets/teacherLatestPage/next.png")}
+                        style={{ width: 25, height: 25, }}
+                        source={require('../../../../assets/teacherLatestPage/next.png')}
                     ></Image>
                 </TouchableOpacity>
             </View>
         );
-    };
+    }
 
     //试题类型图标
     showPaperTypeImg = () => {
-        const { contentList, selectContentIndex } = this.state;
+        const { contentList , selectContentIndex } = this.state;   
         let content = [];
         for (let i = 0; i < contentList.length; i++) {
             let paperTypeImg;
-            if (contentList[i].baseTypeId == "101") {
-                paperTypeImg = require("../../../../assets/teacherLatestPage/101.png");
-            } else if (contentList[i].baseTypeId == "102") {
-                paperTypeImg = require("../../../../assets/teacherLatestPage/102.png");
-            } else if (contentList[i].baseTypeId == "103") {
-                paperTypeImg = require("../../../../assets/teacherLatestPage/103.png");
-            } else if (contentList[i].baseTypeId == "104") {
-                paperTypeImg = require("../../../../assets/teacherLatestPage/104.png");
-            } else if (contentList[i].baseTypeId == "106") {
-                paperTypeImg = require("../../../../assets/teacherLatestPage/106.png");
-            } else if (contentList[i].baseTypeId == "108") {
-                if (contentList[i].typeName.indexOf("填空")) {
-                    paperTypeImg = require("../../../../assets/teacherLatestPage/109.png");
+            if (contentList[i].baseTypeId == '101') {
+                paperTypeImg = require('../../../../assets/teacherLatestPage/101.png');
+            } else if (contentList[i].baseTypeId == '102') {
+                paperTypeImg = require('../../../../assets/teacherLatestPage/102.png');
+            } else if (contentList[i].baseTypeId == '103') {
+                paperTypeImg = require('../../../../assets/teacherLatestPage/103.png');
+            } else if (contentList[i].baseTypeId == '104') {
+                paperTypeImg = require('../../../../assets/teacherLatestPage/104.png');
+            } else if (contentList[i].baseTypeId == '106') {
+                paperTypeImg = require('../../../../assets/teacherLatestPage/106.png');
+            } else if (contentList[i].baseTypeId == '108') {
+                if (contentList[i].typeName.indexOf('填空')) {
+                    paperTypeImg = require('../../../../assets/teacherLatestPage/109.png');
                 } else {
-                    paperTypeImg = require("../../../../assets/teacherLatestPage/108.png");
+                    paperTypeImg = require('../../../../assets/teacherLatestPage/108.png');
                 }
             } else {
-                paperTypeImg = require("../../../../assets/teacherLatestPage/107.png");
+                paperTypeImg = require('../../../../assets/teacherLatestPage/107.png');
             }
             content.push(
                 <TouchableOpacity
                     key={i}
                     onPress={() => {
-                        if (selectContentIndex != i) {
-                            console.log("-----------select----i---", i);
+                        if (selectContentIndex!= i) {
+                            console.log('-----------select----i---', i);
                             this.setState({
                                 selectContentIndex: i,
-                            });
+                            })
                         }
                     }}
                 >
                     <Image
                         source={paperTypeImg}
-                        style={
-                            selectContentIndex == i
-                                ? styles.checked
-                                : styles.little_image
-                        }
+                        style={selectContentIndex == i ? styles.checked : styles.little_image}
                     />
                 </TouchableOpacity>
             );
         }
         return content;
-    };
+    }
 
-    render() {
-        return (
+
+    render(){
+        return(
             <View style={styles.bodyView}>
-                {this.showTitle()}
-                <ScrollView
+                {
+                    this.showTitle()
+                }
+                <ScrollView   
                     showsVerticalScrollIndicator={false}
                     style={styles.contentView}
                     keyboardShouldPersistTaps={true}
                 >
-                    {this.state.contentList.length <= 0
-                        ? this.fetchData()
-                        : null}
-                    {this.state.contentList.length > 0 ? (
-                        this.showContent()
-                    ) : (
-                        <Loading show={true} />
-                    )}
+                    {
+                        this.state.contentList.length <= 0
+                            ? this.fetchData()
+                            : null
+                    }
+                    {
+                        this.state.contentList.length > 0 
+                            ? this.showContent() 
+                            : <Loading show={true} />
+                    }
                 </ScrollView>
-                {this.state.contentList.length > 0 ? (
-                    this.showAddPaperBottom()
-                ) : (
-                    <Loading show={true} />
-                )}
+                {
+                    this.state.contentList.length > 0 
+                        ? this.showAddPaperBottom() 
+                        : <Loading show={true} />
+                }
             </View>
-        );
+        )
     }
 }
 
 const styles = StyleSheet.create({
     bodyView: {
         height: screenHeight - 55,
-        flexDirection: "column",
+        flexDirection: 'column',
     },
-    contentView: {
+    contentView:{
         height: screenHeight - 205,
-        flexDirection: "column",
+        flexDirection: 'column',
     },
     paperSelectNumView: {
         height: 40,
-        flexDirection: "row",
-        backgroundColor: "#EBEDEC",
-        width: screenWidth,
+        flexDirection: 'row',
+        backgroundColor: '#EBEDEC',
+        width: screenWidth
     },
     selectPaperNum: {
         fontSize: 18,
-        color: "#8B8B7A",
+        color: '#8B8B7A',
         paddingLeft: 20,
         paddingTop: 7,
-        width: 350,
+        width: 350
     },
     paperContent: {
         fontSize: 15,
-        color: "black",
-        fontWeight: "500",
+        color: 'black',
+        fontWeight: '500',
         paddingTop: 5,
         paddingLeft: 5,
         paddingBottom: 5,
@@ -533,22 +491,22 @@ const styles = StyleSheet.create({
         marginBottom: 5,
         // paddingTop: 20,
         // paddingBottom: 10,
-        backgroundColor: "#fff",
-        flexDirection: "row",
-        alignItems: "center",
+        backgroundColor: '#fff',
+        flexDirection: 'row', 
+        alignItems: 'center',
     },
     little_image: {
         height: 60,
         width: screenWidth * 0.15,
         marginTop: 5,
-        marginLeft: 3,
+        marginLeft: 3
     },
     checked: {
         height: 65,
         width: screenWidth * 0.16,
         marginLeft: 5,
-        borderColor: "#FFA500",
+        borderColor: '#FFA500',
         borderRadius: 5,
         borderWidth: 5,
     },
-});
+})

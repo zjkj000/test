@@ -9,8 +9,6 @@ import {
     Dimensions,
 } from "react-native";
 import React, { Component, useState } from "react";
-import RadioList from "../../DoWork/Utils/RadioList";
-import RenderHtml from "react-native-render-html";
 import { useNavigation } from "@react-navigation/native";
 
 export default function PPTContainer(props) {
