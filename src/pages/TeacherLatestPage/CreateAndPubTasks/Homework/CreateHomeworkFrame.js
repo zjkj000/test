@@ -461,10 +461,10 @@ class CreateLearnCase extends React.Component {
                     ) : (
                         <View style={{ width: 20, height: 20 }} />
                     )}
-                    {this.state.filterModelVisiblity ||
+                    {/* {this.state.filterModelVisiblity ||
                     this.state.knowledgeModelVisibility
                         ? this.showFilter()
-                        : null}
+                        : null} */}
                 </View>
             
                 {/**内容展示、调整顺序、布置或保存展示区 */}

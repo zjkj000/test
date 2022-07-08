@@ -98,8 +98,8 @@ class Answer_single extends Component {
         const questionChoiceList = this.state.questionChoiceList;
         const width = Dimensions.get("window").height;
         // const width2 = Dimensions.get("screen").height;
-        // const width3 = StatusBar.currentHeight;
-        // console.log("屏幕高度",width,width2,width3,Dimensions.get("screen").width)
+        const width3 = StatusBar.currentHeight;
+        // console.log("屏幕高度",width3)
         return (
             <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'100%',justifyContent:'space-between'}}  >
                 {/* 第一行显示 第几题  题目类型 */}
@@ -174,12 +174,12 @@ const styles = StyleSheet.create({
 
     // 答题部分区域
     answer_result: {
-        height:60,
+        height:80,
         borderTopWidth: 0.5,
         borderTopColor: "#000000",
         paddingLeft: 30,
         paddingRight: 30,
         flexDirection: "row",
-        justifyContent:'space-around'
+        justifyContent:"space-around"
     },
 });
