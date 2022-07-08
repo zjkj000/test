@@ -1,7 +1,5 @@
 import { Text, StyleSheet, View, ScrollView,Image,TouchableOpacity,Alert,Dimensions } from 'react-native'
 import React, { Component, useState } from 'react'
-import RadioList from '../../DoWork/Utils/RadioList';
-import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
 import { WebView } from 'react-native-webview';
 export default function PaperContainer(props) {

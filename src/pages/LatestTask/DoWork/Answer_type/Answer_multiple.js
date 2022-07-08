@@ -110,7 +110,16 @@ class Answer_multiple extends Component {
 
                 {/* 题目展示区域 */}
                 <ScrollView style={styles.answer_area}>
-                    <RenderHtml contentWidth={width} source={{ html: HTML }} />
+                    <RenderHtml contentWidth={width} source={{ html: HTML }} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
                 </ScrollView>
 
                 {/* 答案区域 */}
@@ -131,6 +140,7 @@ const styles = StyleSheet.create({
     answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row",height:40,paddingBottom:0},
     answer_area: {  padding: 20 },
     answer_result: {
+        paddingBottom:'10%',
         height:60,
         borderTopWidth: 0.5,
         borderTopColor: "#000000",

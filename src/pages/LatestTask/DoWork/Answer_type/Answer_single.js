@@ -97,11 +97,11 @@ class Answer_single extends Component {
         const HTML = this.state.questionContent;
         const questionChoiceList = this.state.questionChoiceList;
         const width = Dimensions.get("window").height;
-        const width2 = Dimensions.get("screen").height;
-        const width3 = StatusBar.currentHeight;
-        console.log("屏幕高度",width,width2,width3,Dimensions.get("screen").width)
+        // const width2 = Dimensions.get("screen").height;
+        // const width3 = StatusBar.currentHeight;
+        // console.log("屏幕高度",width,width2,width3,Dimensions.get("screen").width)
         return (
-            <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'100%'}}  >
+            <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'100%',justifyContent:'space-between'}}  >
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.answer_title}>
                     <Text style={{ color: "#59B9E0" }}>
@@ -133,11 +133,16 @@ class Answer_single extends Component {
 
                 {/* 题目展示区域 */}
                 <ScrollView style={styles.answer_area}>
-                    <RenderHtml contentWidth={width} source={{ html: HTML }} tagsStyles={{
-                        img:{
-                            flexDirection:'row'
-                        }
-                    }}/>
+                    <RenderHtml contentWidth={width} source={{ html: HTML }} 
+                            tagsStyles={{
+                                img:{
+                                    flexDirection:'row'
+                                },
+                                p:{
+                                    flexDirection:'row'
+                                }
+                            }}
+                    />
                     <Text style={{ height: 50 }}></Text>
                 </ScrollView>
 
@@ -161,9 +166,15 @@ class Answer_single extends Component {
 }
 
 const styles = StyleSheet.create({
+    // 题目模板标题
     answer_title: { paddingTop:10, paddingLeft: 30, flexDirection: "row",height:40},
+
+    // 题目内容区域
     answer_area: {padding: 20,paddingTop:0},
+
+    // 答题部分区域
     answer_result: {
+        paddingBottom:'10%',
         height:60,
         borderTopWidth: 0.5,
         borderTopColor: "#000000",

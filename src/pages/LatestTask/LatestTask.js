@@ -323,7 +323,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#6CC5CB",
     },
     todoList: {
-        height: screenHeight * 0.8,
+        height: screenHeight * 0.81,
         backgroundColor: '#fff'
     },
     flexNew: {

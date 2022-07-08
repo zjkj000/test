@@ -90,7 +90,16 @@ class Answer_judgment extends Component {
 
         {/* 题目展示区域 */}
           <ScrollView style={styles.answer_area}>  
-              <RenderHtml contentWidth={width}  source={{html:HTML}}/>
+              <RenderHtml contentWidth={width}  source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
               <Text style={{height:50}}></Text>
           </ScrollView>
 
@@ -107,7 +116,7 @@ const styles = StyleSheet.create({
     answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
     answer_area:{padding:20},
     answer_result:{
-      borderTopWidth:0.5,
+      borderTopWidth:0.5,paddingBottom:'10%',
       borderTopColor:'#000000',
       paddingLeft:30,
       height:60,

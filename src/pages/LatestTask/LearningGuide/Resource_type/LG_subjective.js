@@ -327,7 +327,16 @@ class LG_subjective extends Component {
                     }
                 >
                     <Waiting />
-                    <RenderHtml contentWidth={width} source={{ html: HTML }} />
+                    <RenderHtml contentWidth={width} source={{ html: HTML }}  
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
                     <Text style={{ height: 50 }}></Text>
                 </ScrollView>
 
@@ -424,6 +433,7 @@ class LG_subjective extends Component {
                             borderColor: "#000000",
                             borderWidth: 1,
                             flexDirection: "row",
+                            borderRadius:3
                         }}
                     >
                         <TextInput
@@ -439,6 +449,7 @@ class LG_subjective extends Component {
                                 width: screenWidth*0.6,
                                 backgroundColor: "#FFFFFF",
                                 height: 40,
+                                borderRadius:5
                             }}
                         ></TextInput>
                         {/* 保存按钮将文本输入框的内容传到学生作答答案里面 */}
@@ -454,7 +465,7 @@ class LG_subjective extends Component {
                             }}
                             style={{
                                 width: 100,
-                                height: 35,
+                                height: 30,
                                 backgroundColor: "#59B9E0",
                             }}
                         ></Button>
@@ -511,13 +522,13 @@ const styles = StyleSheet.create({
         backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
     content: {
-        borderTopWidth: 0.5,
+        borderTopWidth: 0.5,paddingBottom:'3%',
         borderTopColor: "#000000",
         width: "100%",
         flexDirection: "row",
         justifyContent: "space-around",
         backgroundColor: "#E6DDD6",
-        height:70,
-        alignItems: "center",
+        height:80,
+        alignItems:'center',
     },
 });

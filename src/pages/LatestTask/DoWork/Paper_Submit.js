@@ -236,8 +236,16 @@ class Paper_Submit extends Component {
                                 source={{
                                     html: this.state.data[result_Item]
                                         .stuAnswer,
-                                }}
-                            />
+                                }} 
+                                tagsStyles={{
+                                            img:{
+                                                flexDirection:'row'
+                                            },
+                                            p:{
+                                                flexDirection:'row'
+                                            }
+                                        }}
+                                />
                         ) : (
                             <Text style={{ color: "red" }}>未答</Text>
                         )}

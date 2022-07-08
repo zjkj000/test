@@ -3,6 +3,7 @@ import React, { Component, useState } from 'react'
 import RadioList from '../../DoWork/Utils/RadioList'
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
+import { screenWidth } from '../../../../utils/Screen/GetSize';
 
 export default function LG_readContainer(props) {
   const navigation = useNavigation();
@@ -150,7 +151,16 @@ class LG_read extends Component {
             
             {/* 题目展示区域 */}
             <ScrollView  style={this.state.closeopenstate?styles.answer_area:styles.answer_area_open}>
-              <RenderHtml contentWidth={width}  source={{html:HTML}}/>
+              <RenderHtml contentWidth={width}  source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
               <Text style={{height:50}}></Text>
             </ScrollView>
             
@@ -159,7 +169,7 @@ class LG_read extends Component {
             <View  style={this.state.closeopenstate?styles.answer_result_area:styles.answer_result_area_open}>
                     {/* 答案改变选项高度部分 */}
                     <TouchableOpacity onPress={()=>{this.setState({closeopenstate:!this.state.closeopenstate})}}>
-                        <Image style={{position:'relative',left:'40%'}}  source={require('../../../../assets/image3/closeopen.png')}></Image>
+                        <Image style={{position:'relative',left:'40%',height:25}}  source={require('../../../../assets/image3/closeopen.png')}></Image>
                     </TouchableOpacity>
                     
                     {/* 答案滑动选择部分 */}
@@ -296,7 +306,16 @@ class LG_7S5 extends Component {
             
             {/* 题目展示区域 */}
             <ScrollView  style={styles.answer_area_7S5}>
-              <RenderHtml contentWidth={width}  source={{html:HTML}}/>
+              <RenderHtml contentWidth={width}  source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
               <Text style={{height:50}}></Text>
             </ScrollView>
             
@@ -321,13 +340,13 @@ const styles = StyleSheet.create({
     answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
 
     answer_area:{padding:20,paddingTop:0,},
-    answer_result_area:{height:90},
+    answer_result_area:{height:105},
 
     answer_area_7S5:{padding:20,paddingTop:0},
-    answer_result_area_7S5:{height:260},
+    answer_result_area_7S5:{height:275},
 
     answer_area_open:{padding:20,paddingTop:0},
-    answer_result_area_open:{height:300,paddingBottom:15},
+    answer_result_area_open:{height:300,paddingBottom:15,paddingLeft:screenWidth*0.05},
     
     answer_result:{flexDirection:'row',justifyContent:'center',paddingLeft:20,alignItems:'center'}
 })

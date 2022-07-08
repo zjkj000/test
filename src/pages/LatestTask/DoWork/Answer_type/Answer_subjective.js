@@ -303,7 +303,16 @@ class Answer_subjective extends Component {
                             : styles.answer_area
                     }
                 >
-                    <RenderHtml contentWidth={width} source={{ html: HTML }} />
+                    <RenderHtml contentWidth={width} source={{ html: HTML }} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
                     <Text style={{ height: 50 }}></Text>
                 </ScrollView>
 
@@ -401,6 +410,7 @@ class Answer_subjective extends Component {
                             borderColor: "#000000",
                             borderWidth: 1,
                             flexDirection: "row",
+                            borderRadius:3
                         }}
                     >
                         <TextInput
@@ -416,6 +426,7 @@ class Answer_subjective extends Component {
                                 width: screenWidth*0.6,
                                 backgroundColor: "#FFFFFF",
                                 height: 40,
+                                borderRadius:5
                             }}
                         ></TextInput>
                         {/* 保存按钮将文本输入框的内容传到学生作答答案里面 */}
@@ -485,20 +496,18 @@ const styles = StyleSheet.create({
         height:'75%',
         backgroundColor: "#FFFFFF",
     },
-
     backdrop: {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
     content: {
         borderTopWidth: 0.5,
+        paddingBottom:'3%',
         borderTopColor: "#000000",
         width: "100%",
-        height:70,
+        height:80,
         flexDirection: "row",
         justifyContent: "space-around",
         backgroundColor: "#E6DDD6",
-        padding: 10,
-        paddingTop:5,
         alignItems: "center",
     },
 });

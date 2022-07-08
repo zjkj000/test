@@ -5,6 +5,7 @@ import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
 import Toast from '../../../../utils/Toast/Toast'
 import { ScreenWidth } from 'react-native-elements/dist/helpers';
+import { screenWidth } from '../../../../utils/Screen/GetSize';
 export default function Answer_readContainer(props) {
   const navigation = useNavigation();
   const paperId= props.paperId
@@ -161,7 +162,16 @@ class Answer_read extends Component {
             
             {/* 题目展示区域 */}
             <ScrollView  style={this.state.closeopenstate?styles.answer_area:styles.answer_area_open}>
-              <RenderHtml contentWidth={width}  source={{html:HTML}}/>
+              <RenderHtml contentWidth={width}  source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
               <Text style={{height:50}}></Text>
             </ScrollView>
             
@@ -170,7 +180,7 @@ class Answer_read extends Component {
             <View  style={this.state.closeopenstate?styles.answer_result_area:styles.answer_result_area_open}>
                     {/* 答案改变选项高度部分 */}
                     <TouchableOpacity onPress={()=>{this.setState({closeopenstate:!this.state.closeopenstate})}}>
-                        <Image style={{position:'relative',left:'40%'}}  source={require('../../../../assets/image3/closeopen.png')}></Image>
+                        <Image style={{position:'relative',left:'40%',height:25}}  source={require('../../../../assets/image3/closeopen.png')}></Image>
                     </TouchableOpacity>
                     
                     {/* 答案滑动选择部分 */}
@@ -296,26 +306,21 @@ class Answer_7S5 extends Component {
                 <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
                 <Text>/{this.props.sum?this.props.sum:1}题 </Text>
                 <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
-                {/* <TouchableOpacity  style={{position:'absolute',right:20}}
-                                    onPress={
-                                      ()=>{
-                                          //导航跳转
-                                          this.props.navigation.navigate('SubmitPaper',
-                                          {   paperId:this.props.paperId,
-                                              submit_status:this.props.submit_status,
-                                              startdate:this.props.startdate,
-                                              papername:this.props.papername,
-                                              isallObj:this.props.isallObj})
-                                      }
-                                  }
-                >
-                    <Image source={require('../../../../assets/image3/look.png')}></Image>
-                </TouchableOpacity>  */}
+               
             </View>
             
             {/* 题目展示区域 */}
             <ScrollView  style={styles.answer_area_7S5}>
-              <RenderHtml contentWidth={width}  source={{html:HTML}}/>
+              <RenderHtml contentWidth={width}  source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
               <Text style={{height:50}}></Text>
             </ScrollView>
             
@@ -342,13 +347,13 @@ const styles = StyleSheet.create({
     answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
 
     answer_area:{padding:20,paddingTop:0},
-    answer_result_area:{height:90},
+    answer_result_area:{height:98,},
 
     answer_area_7S5:{padding:20,paddingTop:0},
-    answer_result_area_7S5:{height:260},
+    answer_result_area_7S5:{height:275},
 
     answer_area_open:{padding:20,paddingTop:0},
-    answer_result_area_open:{height:300,paddingBottom:15},
+    answer_result_area_open:{height:300,paddingBottom:15,paddingLeft:screenWidth*0.05},
 
     answer_result:{flexDirection:'row',justifyContent:'center',paddingLeft:20,alignItems:'center'}
 })

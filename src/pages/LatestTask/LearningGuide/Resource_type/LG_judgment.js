@@ -89,7 +89,16 @@ class LG_judgment extends Component {
 
         {/* 题目展示区域 */}
           <ScrollView style={styles.answer_area}>  
-              <RenderHtml contentWidth={width}  source={{html:HTML}}/>
+              <RenderHtml contentWidth={width}  source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
               <Text style={{height:50}}></Text>
           </ScrollView>
 
@@ -105,5 +114,5 @@ class LG_judgment extends Component {
 const styles = StyleSheet.create({
     answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
     answer_area:{padding:20,paddingTop:0},
-    answer_result:{borderTopWidth:0.8,borderTopColor:'#000000',paddingLeft:30,height:60,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
+    answer_result:{borderTopWidth:0.8,paddingBottom:'10%',borderTopColor:'#000000',paddingLeft:30,height:60,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
 })
