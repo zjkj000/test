@@ -220,7 +220,7 @@ class HomeComponent extends Component {
     };
     handleExit = () => {
         this.remoteControl("toScan", "toScan");
-        this.props.navigation.navigate("Login");
+        this.props.navigation.navigate("ControllerLogin");
     };
     handleClassOver = () => {};
     handleQuestionAnalysis = () => {
