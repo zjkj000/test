@@ -124,7 +124,6 @@ const styles = StyleSheet.create({
     answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
     answer_area:{padding:20,paddingTop:0},
     answer_result:{
-        paddingBottom:'10%',
         borderTopWidth:0.8,borderTopColor:'#000000',paddingLeft:30,
         height:60,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
 })

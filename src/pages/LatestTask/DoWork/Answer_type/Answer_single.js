@@ -174,7 +174,6 @@ const styles = StyleSheet.create({
 
     // 答题部分区域
     answer_result: {
-        paddingBottom:'10%',
         height:60,
         borderTopWidth: 0.5,
         borderTopColor: "#000000",

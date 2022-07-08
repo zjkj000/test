@@ -140,7 +140,6 @@ const styles = StyleSheet.create({
     answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row",height:40,paddingBottom:0},
     answer_area: {  padding: 20 },
     answer_result: {
-        paddingBottom:'10%',
         height:60,
         borderTopWidth: 0.5,
         borderTopColor: "#000000",

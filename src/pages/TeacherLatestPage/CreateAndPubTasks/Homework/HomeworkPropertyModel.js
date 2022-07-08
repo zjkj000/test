@@ -120,7 +120,7 @@ class HomeworkPropertyModel extends React.Component {
     }
 
     UNSAFE_componentWillUpdate(nextProps){
-        console.log('----------componentWillUpdate------');
+        console.log('-----设置属性-----componentWillUpdate------');
     }
 
     //请求试题类型
@@ -380,6 +380,7 @@ class HomeworkPropertyModel extends React.Component {
                                     //知识点信息修改
                                     knowledgeList: [],
                                     knowledge: '',
+                                    shortKnowledge: '',
                                     knowledgeCode: '',
                                     //类型信息修改:
                                     paperType: '',
@@ -461,6 +462,7 @@ class HomeworkPropertyModel extends React.Component {
                                     //知识点信息修改
                                     knowledgeList: [],
                                     knowledge: '',
+                                    shortKnowledge: '',
                                     knowledgeCode: '',
                                     //类型信息修改:
                                     paperType: '',
@@ -539,6 +541,7 @@ class HomeworkPropertyModel extends React.Component {
                                     //知识点信息修改
                                     knowledgeList: [],
                                     knowledge: '',
+                                    shortKnowledge: '',
                                     knowledgeCode: '',
                                     //类型信息修改:
                                     paperType: '',
@@ -614,6 +617,7 @@ class HomeworkPropertyModel extends React.Component {
                                     //知识点信息修改
                                     knowledgeList: [],
                                     knowledge: '',
+                                    shortKnowledge: '',
                                     knowledgeCode: '',
                                     //类型信息修改:
                                     paperType: '',
@@ -1166,7 +1170,7 @@ const styles = StyleSheet.create({
     model: {
         flexDirection: 'column', 
         backgroundColor: '#fff' , 
-        top: 70 , 
+        top: 55 , 
         right: 0 , 
         height: screenHeight*0.6,
         width: screenWidth*0.7,

@@ -116,7 +116,7 @@ class AddContentPage extends React.Component {
 
             learnPlanId: this.props.learnPlanId,
 
-            imgState: 1,
+            imgState: true,
 
             //网络请求状态
             error: false,
@@ -125,7 +125,7 @@ class AddContentPage extends React.Component {
     }
 
     UNSAFE_componentWillMount(){
-        // console.log('-------add-----------componentWillMount-----------------------------');
+        console.log('-------add-----------componentWillMount-----------------------------');
         this.setState({
             channelCode: this.props.channelCode,
             subjectCode: this.props.subjectCode,
@@ -137,13 +137,13 @@ class AddContentPage extends React.Component {
             selectContentNum: this.props.selectContentNum,
             selectContentList: this.props.selectContentList,
         })
-        // console.log(this.state.selectContentNum , this.state.selectContentList.length)
-        // console.log('--------------------------------------------------------------------');
+        console.log(this.state.selectContentNum , this.state.selectContentList.length)
+        console.log('--------------------------------------------------------------------');
         this.fetchData(this.state.type , this.state.typeValue , 'PHONE'); //type typeValue deviveType
     }
 
     UNSAFE_componentWillUpdate(nextProps){
-        // console.log('-------add-----------componentWillUpdate-----------------------------');
+        console.log('-------add-----------componentWillUpdate-----------------------------');
         // console.log('---------nextProps----------');
         // console.log(nextProps);
         // console.log('---------Props----------');
@@ -180,8 +180,8 @@ class AddContentPage extends React.Component {
     }
 
     componentWillUnmount(){
-        // console.log('---------add---------componentWillUnmount----------------------------');
-        // console.log('----------add----learnPlanId-----WillUnmount-----', this.state.learnPlanId );
+        console.log('---------add---------componentWillUnmount----------------------------');
+        console.log('----------add----learnPlanId-----WillUnmount-----', this.state.learnPlanId );
         //组件卸载时将已选中导学案数目以及导学案列表传给父组件CreateLearnFrame
         this.props.setSelectContentNum(this.state.selectContentList.length);
         this.props.setSelectContentList(this.state.selectContentList);
@@ -219,21 +219,21 @@ class AddContentPage extends React.Component {
             // callback: 'ha',
         };
 
-        // console.log('-----fetchData---pageFlag--currentPage--searchPage-', 
-                // pageFlag , currentPage , searchPage);
+        console.log('-----fetchData---pageFlag--currentPage--searchPage-', 
+                pageFlag , currentPage , searchPage);
         // console.log(url , params);
         http.get(url, params)
             .then((resStr) => {
                 fetchNum++;
                 let resJson = JSON.parse(resStr);
-                // console.log('--------导学案内容--length----',resJson.data.esmodelList.length);
+                console.log('--------导学案内容--length----',resJson.data.esmodelList.length);
                 // console.log((resJson.data.esmodelList)[0]);
                 if(this.state.shareTag != '50'){
-                    // console.log('--------导学案Page------');
-                    // console.log('pageFlag' , resJson.data.pageFlag);
-                    // console.log('currentPage', resJson.data.currentPage);
-                    // console.log('searchPage', resJson.data.searchPage);
-                    // console.log('----------add----learnPlanId----------', resJson.data.learnPlanId );
+                    console.log('--------导学案Page------');
+                    console.log('pageFlag' , resJson.data.pageFlag);
+                    console.log('currentPage', resJson.data.currentPage);
+                    console.log('searchPage', resJson.data.searchPage);
+                    console.log('----------add----learnPlanId----------', resJson.data.learnPlanId );
                 }
 
                 if(this.state.shareTag != '50'){
@@ -247,7 +247,7 @@ class AddContentPage extends React.Component {
                 //第一次请求数据 第一个数据的id 
                 if(fetchNum == 1 && resJson.data.esmodelList.length > 0){  
                     firstContentId = (resJson.data.esmodelList)[0].id;
-                    // console.log('*******firstContentId**************', firstContentId);
+                    console.log('*******firstContentId**************', firstContentId);
                 }
                 
                 //更新当前请求的数据是否是第一页数据的标志(currentPage == 1 && pageFlag == 0) ||(searchPage == 1 && pageFlag == 1)
@@ -255,12 +255,12 @@ class AddContentPage extends React.Component {
                     resJson.data.esmodelList.length > 0
                     && (resJson.data.esmodelList)[0].id == firstContentId
                 ){
-                    // console.log('*******firstContentId******resJsonId********', firstContentId , (resJson.data.esmodelList)[0].id);
+                    console.log('*******firstContentId******resJsonId********', firstContentId , (resJson.data.esmodelList)[0].id);
                     isFirstPage = true;
                 }else{
                     isFirstPage = false;
                 }
-                // console.log('---------isFirstPage----',isFirstPage);
+                console.log('---------isFirstPage----',isFirstPage);
                 
                 if(resJson.data.esmodelList.length > 0){
                     if(this.state.shareTag != '50'){
@@ -275,6 +275,9 @@ class AddContentPage extends React.Component {
                             currentTime: 0,        // 视频当前播放的时间
                             duration: 0,           // 视频的总时长
                             playFromBeginning: false, // 是否从头开始播放
+                        },()=>{
+                            console.log('=======add===props===learnPlanId=============', this.props.learnPlanId);
+                            console.log('=======add===state===learnPlanId=============', this.state.learnPlanId);
                         });
                     }else{
                         this.setState({ 
@@ -309,10 +312,10 @@ class AddContentPage extends React.Component {
                     isLastPage = true;
                     // Alert.alert('没有更多导学案内容了');
                 }
-                // console.log('---------isLastPage----',isLastPage);
+                console.log('---------isLastPage----',isLastPage);
             })
             .catch((error) => {
-                // console.log('******catch***error**', error);
+                console.log('******catch***error**', error);
                 this.setState({
                     error: true,
                     errorInfo: error,
@@ -348,6 +351,10 @@ class AddContentPage extends React.Component {
                 this.setState({
                     selectContentNum: this.state.selectContentNum - 1,
                     selectContentList: selectContentListCopy
+                },()=>{
+                    // this.props.setSelectContentNum(this.state.selectContentList.length);
+                    // this.props.setSelectContentList(this.state.selectContentList);
+                    // this.props.setLearnPlanId(this.state.learnPlanId);
                 })
             }
         }else{ //添加内容
@@ -356,6 +363,10 @@ class AddContentPage extends React.Component {
             this.setState({
                 selectContentNum: this.state.selectContentNum + 1,
                 selectContentList: selectContentListCopy
+            },()=>{
+                // this.props.setSelectContentNum(this.state.selectContentList.length);
+                // this.props.setSelectContentList(this.state.selectContentList);
+                // this.props.setLearnPlanId(this.state.learnPlanId);
             })
         }
     }
@@ -382,7 +393,7 @@ class AddContentPage extends React.Component {
                                     position: 'absolute',
                                 }}
                                 source={
-                                    this.state.imgState == 0 
+                                    !this.state.imgState 
                                     ? require('../../../../assets/teacherLatestPage/shanchu.png')
                                     : require('../../../../assets/teacherLatestPage/tianjia.png')
                                 }
@@ -840,7 +851,7 @@ class AddContentPage extends React.Component {
                     key={i}
                     onPress={() => {
                         if(selectContentIndex != i){
-                            // console.log('-----------select----i---' ,i);
+                            console.log('-----------select----i---' ,i);
                             this.setState({ 
                                 selectContentIndex: i,
                                 pptList: [],
@@ -867,13 +878,14 @@ class AddContentPage extends React.Component {
     render(){
         return(
             <View style={styles.bodyView}>
+                {
+                    this.showTitle()
+                }
                 <ScrollView   
                     showsVerticalScrollIndicator={false}
                     style={styles.contentView}
+                    keyboardShouldPersistTaps={true}
                 >
-                    {
-                        this.showTitle()
-                    }
                     {/* {
                         this.state.contentList.length > 0 
                                 ? this.showTitle() 

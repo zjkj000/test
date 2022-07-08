@@ -38,18 +38,19 @@ class HomeComponent extends Component {
             buttonType: "default",
             infoButtonType: "default",
             actionType: "",
+            action: "",
             event: {},
             exitModalVisible: false,
             classListVisible: false,
             questionAnalysisVisible: false,
-            showLoading: false,
+            // showLoading: false,
         };
     }
     componentDidMount() {
         // 开启轮询任务
         this.timerId = setInterval(() => {
-            this.handleMessageQueue();
-        }, 200);
+            this.getMessage();
+        }, 500);
     }
     componentWillUnmount() {
         // 结束轮询任务
@@ -75,59 +76,69 @@ class HomeComponent extends Component {
         console.log("====================setButton=====================");
         this.setState({ buttonType: str });
     };
-    handleMessageQueue() {
-        this.getMessage();
-        const { resJson } = this.state;
-        if (resJson.hasOwnProperty("messageList")) {
+    handleMessageQueue(resJson) {
+        // console.log("轮询====================================");
+        // console.log(resJson);
+        // console.log("====================================");
+        // const { resJson } = this.state;
+        if (
+            resJson !== null &&
+            resJson.hasOwnProperty("messageList") &&
+            resJson.messageList.length !== 0
+        ) {
+            console.log(
+                "handleMessageQueue===================================="
+            );
+            console.log(resJson);
+            console.log("====================================");
             let messageList = resJson.messageList;
-            if (messageList.length !== 0) {
-                let event = messageList[0];
-                console.log("messageList===========================");
-                for (let i = 0; i < messageList.length; i++) {
-                    console.log(messageList[i]);
-                }
-                console.log("===========================");
-                console.log(event);
-                const { actionType, action } = event;
-                this.setState({ actionType, event });
-                switch (action) {
-                    case "closeRes":
-                        this.setButton("default");
-                        this.setInfoButtonType("default");
-                        break;
-                    case "openSign":
-                        console.log("openSign");
-                        this.setState({
-                            signModalVisible: true,
-                        });
-                        break;
-                    case "closeSign":
-                        console.log("closeSign");
-                        this.setState({
-                            signModalVisible: false,
-                        });
-                        break;
-                    case "openAllAnalysis":
-                        this.setState({ questionAnalysisVisible: true });
-                        // this.setButton("default");
-                        // this.setInfoButtonType("default");
-                        break;
-                    case "closeAllAnalysis":
-                        this.setState({ questionAnalysisVisible: false });
-                        // this.setButton("default");
-                        // this.setInfoButtonType("default");
-                        break;
-                    default:
-                        switch (actionType) {
-                            case "questionAnswer":
-                                break;
-                            case "toScan":
-                                this.props.navigation.navigate("Login");
-                                break;
-                            default:
-                                this.setState({ buttonType: action });
-                        }
-                }
+            let event = messageList[messageList.length - 1];
+            console.log("messageList===========================");
+            for (let i = 0; i < messageList.length; i++) {
+                console.log(messageList[i]);
+            }
+            console.log("===========================");
+            console.log(event);
+            const { actionType, action } = event;
+            this.setState({ actionType, event });
+            switch (action) {
+                case "closeRes":
+                    this.setButton("default");
+                    this.setInfoButtonType("default");
+                    break;
+                case "openSign":
+                    console.log("openSign");
+                    this.setState({
+                        signModalVisible: true,
+                    });
+                    break;
+                case "closeSign":
+                    console.log("closeSign");
+                    this.setState({
+                        signModalVisible: false,
+                    });
+                    break;
+                case "openAllAnalysis":
+                    this.setState({ questionAnalysisVisible: true });
+                    // this.setButton("default");
+                    // this.setInfoButtonType("default");
+                    break;
+                case "closeAllAnalysis":
+                    this.setState({ questionAnalysisVisible: false });
+                    // this.setButton("default");
+                    // this.setInfoButtonType("default");
+                    break;
+                default:
+                    switch (actionType) {
+                        case "questionAnswer":
+                            this.setState({ action: action });
+                            break;
+                        case "toScan":
+                            this.props.navigation.navigate("Login");
+                            break;
+                        default:
+                            this.setState({ buttonType: action });
+                    }
             }
         }
     }
@@ -141,14 +152,14 @@ class HomeComponent extends Component {
         const params = {
             userId: userName,
         };
-        this.setState({ showLoading: true });
+        // this.setState({ showLoading: true });
         http.get(url, params)
             .then((resStr) => {
                 resJson = JSON.parse(resStr);
-                this.setState({
-                    showLoading: false,
-                    resJson,
-                });
+                // console.log("GetMessage====================================");
+                // console.log(resJson);
+                // console.log("====================================");
+                this.handleMessageQueue(resJson);
             })
             .catch((error) => {
                 Toast.showDangerToast(error.toString());
@@ -180,8 +191,8 @@ class HomeComponent extends Component {
             desc: desc,
         };
         // params = { messageJson: JSON.stringify(params) };
-        this.setState({ showLoading: true });
-        http.post(url, params)
+        // this.setState({ showLoading: true });
+        http.post(url, params, false, false)
             .then((res) => {
                 console.log(
                     "ControllerSender===================================="
@@ -193,7 +204,7 @@ class HomeComponent extends Component {
                 console.log("action: " + action);
                 console.log(res);
                 console.log("Success!");
-                this.setState({ showLoading: false });
+                // this.setState({ showLoading: false });
                 console.log("====================================");
             })
             .catch((error) => {
@@ -219,10 +230,10 @@ class HomeComponent extends Component {
 
     render() {
         const { ipAddress, userName } = this.props.route.params;
-        const { learnPlanId } = this.state.event;
+        const { learnPlanId, action } = this.state.event;
         return (
             <Layout style={styles.mainContainer}>
-                <Loading show={this.state.showLoading} />
+                {/* <Loading show={this.state.showLoading} /> */}
                 <Layout style={styles.header}>
                     <TouchableOpacity
                         onPress={() => {
@@ -242,7 +253,7 @@ class HomeComponent extends Component {
                         setInfoButtonType={this.setInfoButtonType}
                     />
                     <Info
-                        {...this.state.event}
+                        action={action}
                         ipAddress={ipAddress}
                         actionType={this.state.actionType}
                         userName={userName}
