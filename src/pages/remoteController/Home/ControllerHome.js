@@ -255,6 +255,7 @@ class HomeComponent extends Component {
                     <Module
                         {...this.state.event}
                         moduleButton={moduleButton}
+                        setModuleButton={this.setModuleButton}
                         ipAddress={ipAddress}
                         actionType={this.state.actionType}
                         userName={userName}
