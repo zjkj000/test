@@ -52,7 +52,7 @@ class LookCorrectDetailsContent extends Component {
     PublishAnswer(){
       const url = global.constants.baseUrl+"teacherApp_publishZYPaperAnwer.do";
       const params = {
-            taskId:this.props.taskId,           //作业id或者导学案id
+            paperId:this.props.taskId,           //作业id或者导学案id
             userName:global.constants.userName,              //  老师登录名
           };
         http.get(url, params).then((resStr) => {
@@ -74,13 +74,18 @@ class LookCorrectDetailsContent extends Component {
               
             <Text style={{color:'#59B9E0',fontSize:20}}>查看报告</Text>
             <TouchableOpacity style={{position:"absolute",right:10}} onPress={()=>{
-              if(parseInt(this.state.data.noSubmit)/(parseInt(this.state.data.noCorrecting)+parseInt(this.state.data.correcting))<0.2){
-                this.PublishAnswer()
+              if(this.state.data.status=='show'){
+                Alert.alert('','答案已经公布',[{},{},{text:'确定',onPress:()=>{}}])
               }else{
-                Alert.alert('','提交率不足80%,确定要公布答案吗？',[{},{text:'取消',onPress:()=>{}},{text:'确定',onPress:()=>{
+                if(parseInt(this.state.data.noSubmit)/(parseInt(this.state.data.noCorrecting)+parseInt(this.state.data.correcting))<0.2){
                   this.PublishAnswer()
-                }}])
+                }else{
+                  Alert.alert('','提交率不足80%,确定要公布答案吗？',[{},{text:'取消',onPress:()=>{}},{text:'确定',onPress:()=>{
+                    this.PublishAnswer()
+                  }}])
+                }
               }
+             
             }}>
                 <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/set.png')}></Image>
             </TouchableOpacity>

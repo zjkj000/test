@@ -35,14 +35,9 @@ export default function Paper_ToDo(props) {
 
     //当learnPlanId改变时候，就要重新加载getData
     useEffect(() => {
-      // console.log(props.route.params.papername,props.route.params.learnId);
-      // navigation.setOptions({title:props.route.params.papername,
-      // headerRight:()=>()})
       setSelectedIndex(props.route.params.selectedindex)
       getData();
-      BackHandler.addEventListener("hardwareBackPress",changestatus)
       return ()=>{
-        BackHandler.removeEventListener("hardwareBackPress",changestatus)
         changestatus()
       }
       
@@ -53,9 +48,10 @@ export default function Paper_ToDo(props) {
      
    
     function changestatus(){
-      
-      const url = global.constants.baseUrl+"studentApp_checkTaskStatus.do"
-      const params = {studentID:global.constants.userName};
+      const url = global.constants.baseUrl+"studentApp_deleteAccessControl.do"
+      const params = {
+        studentID:global.constants.userName
+      };
         http.get(url, params).then((resStr) => {
         })
       
@@ -213,8 +209,18 @@ export default function Paper_ToDo(props) {
 
 
   return (
-    <View>
-      <View style={{height:50,flexDirection:'row',alignItems:"center",backgroundColor:'#fff',width:screenWidth,justifyContent:'center'}}>
+    //整个 做作业页面高度
+    <View style={{height:screenHeight}}>
+      {/* 页面自定义导航部分的高度 */}
+      <View style={{
+                          flex:1,
+                          flexDirection:'row',
+                          alignItems:"center",
+                          backgroundColor:'#fff',
+                          width:screenWidth,
+                          justifyContent:'center'
+                  }}
+            >
                 <TouchableOpacity style={{position:'absolute',left:0}} onPress={()=>{props.navigation.goBack()}}>
                      <Image style={{width:30,height:30}} source={require('../../../assets/TakePicturesAndAssignWork/goback.png')}></Image>
                 </TouchableOpacity>
@@ -234,8 +240,16 @@ export default function Paper_ToDo(props) {
                     <Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId} Sub_stu_Ans={Submit_Stu_answer} selectedIndex={selectedIndex}/>
                 </View>
       </View>
-      <ViewPager style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:screenHeight-50}} shouldLoadComponent={shouldLoadComponent} selectedIndex={selectedIndex} 
-                  onSelect={index => Submit_Stu_answer(index,selectedIndex)}>  
+      {/* 试题页面   各类题型的模板高度 */}
+      <ViewPager 
+            style={{
+                  flex:15,backgroundColor:'#FFFFFF',
+                  borderTopColor:'#000000',
+                  alignContent:"stretch",
+                  borderTopWidth:0.5}} 
+            shouldLoadComponent={shouldLoadComponent} 
+            selectedIndex={selectedIndex} 
+            onSelect={index => Submit_Stu_answer(index,selectedIndex)}>  
   
           {/* 根据这套题的data使用map遍历加载 */}
           {

@@ -260,17 +260,17 @@ export default class PicturesWorkContent extends Component {
                           WaitLoading.dismiss()
                           if(type=='Show'){
                             var newTimuContentList= this.state.TimuContentList
-                            newTimuContentList.push('<p><img style=\"max-width:100px\" src="'+resJson.data+'"></p>')
+                            newTimuContentList.push('<p><img style=\"max-width:100%\" src="'+resJson.data+'"></p>')
                             this.props.addContentList(this.state.order,'Show',newTimuContentList)
                             this._scrollView_Timu.scrollToEnd()
                           }else if(type=='Answer'){
                             var newAnswerContentList= this.state.AnswerContentList
-                            newAnswerContentList.push('<p><img style=\"max-width:100px\" src="'+resJson.data+'"></p>')
+                            newAnswerContentList.push('<p><img style=\"max-width:100%\" src="'+resJson.data+'"></p>')
                             this.props.addContentList(this.state.order,'Answer',newAnswerContentList)
                             this._scrollView_Answer.scrollToEnd()
                           }else if(type=='Analysis'){
                             var newAnalysisContentList= this.state.AnalysisContentList
-                            newAnalysisContentList.push('<p><img style=\"max-width:100px\" src="'+resJson.data+'"></p>')
+                            newAnalysisContentList.push('<p><img style=\"max-width:100%\" src="'+resJson.data+'"></p>')
                             this.props.addContentList(this.state.order,'Analysis',newAnalysisContentList)
                             this._scrollView_Analysis.scrollToEnd()
                           }
@@ -300,18 +300,18 @@ export default class PicturesWorkContent extends Component {
                       WaitLoading.dismiss()
                         if(type=='Show'){
                           var newTimuContentList= this.state.TimuContentList
-                          newTimuContentList.push('<p><img style=\"max-width:100px\" src="'+resJson.data+'"></p>')
+                          newTimuContentList.push('<p><img style=\"max-width:100%\" src="'+resJson.data+'"></p>')
                           this.props.addContentList(this.state.order,'Show',newTimuContentList)
                           this._scrollView_Timu.scrollToEnd()
                         }else if(type=='Answer'){
                           var newAnswerContentList= this.state.AnswerContentList
-                          newAnswerContentList.push('<p><img style=\"max-width:100px\" src="'+resJson.data+'"></p>')
+                          newAnswerContentList.push('<p><img style=\"max-width:100%\" src="'+resJson.data+'"></p>')
 
                           this.props.addContentList(this.state.order,'Answer',newAnswerContentList)
                           this._scrollView_Answer.scrollToEnd()
                         }else if(type=='Analysis'){
                           var newAnalysisContentList= this.state.AnalysisContentList
-                          newAnalysisContentList.push('<p><img style=\"max-width:100px\" src="'+resJson.data+'"></p>')
+                          newAnalysisContentList.push('<p><img style=\"max-width:100%\" src="'+resJson.data+'"></p>')
                           this.props.addContentList(this.state.order,'Analysis',newAnalysisContentList)
                           this._scrollView_Analysis.scrollToEnd()
                         }
@@ -332,7 +332,16 @@ export default class PicturesWorkContent extends Component {
       //使用RenderHTML组件展示内容
       return(
         <View style={{paddingLeft:15}}>
-            <RenderHTML contentWidth={screenWidth} source={{html:HTML}}/>
+            <RenderHTML contentWidth={screenWidth} source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
         </View>
       ) ;
     }
@@ -361,12 +370,14 @@ export default class PicturesWorkContent extends Component {
     }
 
     loadingTiMu(){
-      return(
-        <>
-                    <View style={{flexDirection:'row',padding:20,paddingBottom:0,justifyContent:'space-between',}}> 
-                      <Text style={{fontSize:20}}>题目</Text>
+      return( 
+        <View style={{justifyContent:'center'}}>  
+                    <View style={{flexDirection:'row',padding:20,paddingBottom:0,paddingTop:10,justifyContent:'space-between',alignItems:'center'}}> 
+                      <View style={{height:30,justifyContent:'center',alignItems:'center',paddingBottom:5}}>
+                        <Text style={{fontSize:20}}>题目</Text>
+                      </View>
                       {(this.state.TimuContentStatus||(this.state.TimuContentList.length>0)?(
-                      <View style={{flexDirection:'row',position:'absolute',width:'35%',justifyContent:'space-between',right:20,top:10}}> 
+                      <View style={{flexDirection:'row',position:'absolute',width:'35%',justifyContent:'space-between',right:20,alignItems:'center'}}> 
                           <TouchableOpacity onPress={()=>{
                             this.props.setLookAnswerAndAnalysisStatus(this.state.order)
                             this.handleLibrary('Show')
@@ -438,7 +449,7 @@ export default class PicturesWorkContent extends Component {
                               }
                     </ScrollView>
                     </View>
-        </>)
+        </View>)
     }
 
     setmultiple = (index,nextChecked) => {
@@ -479,7 +490,7 @@ export default class PicturesWorkContent extends Component {
       if(baseTypeId=='101'){
         return(
           <>
-          <View style={{padding:10,paddingBottom:0}}>
+          <View style={{padding:20,paddingBottom:0,paddingTop:10}}>
               <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                 <Text style={{fontSize:20}}>答案</Text>
                 <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
@@ -533,7 +544,7 @@ export default class PicturesWorkContent extends Component {
       }else if(baseTypeId=='102'){
         return(
           <>
-          <View style={{padding:20,paddingBottom:0}}>
+          <View style={{padding:20,paddingBottom:0,paddingTop:10}}>
               <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                 <Text style={{fontSize:20}}>答案</Text>
                 <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
@@ -582,7 +593,7 @@ export default class PicturesWorkContent extends Component {
       }else if(baseTypeId=='103'){
         return(
           <>
-          <View style={{padding:20,paddingBottom:0}}>
+          <View style={{padding:20,paddingBottom:0,paddingTop:10}}>
               <View style={{flexDirection:'row',justifyContent:'space-between'}}>
                 <Text style={{fontSize:20,marginTop:10}}>答案</Text>
               </View>
@@ -611,7 +622,7 @@ export default class PicturesWorkContent extends Component {
         if(this.state.questionName=='阅读理解题'||this.state.questionName=='阅读题(选择形式)'){
           return(
             <>
-            <View style={{padding:10,paddingBottom:0}}>
+            <View style={{padding:10,paddingBottom:0,paddingTop:10}}>
                 <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                   <Text style={{fontSize:20,marginLeft:10}}>答案</Text>
                   <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
@@ -643,7 +654,7 @@ export default class PicturesWorkContent extends Component {
         }else if(this.state.questionName=='完形填空题'){
           return(
             <>
-            <View style={{padding:10,paddingBottom:0}}>
+            <View style={{padding:10,paddingBottom:0,paddingTop:10}}>
                 <View style={{flexDirection:'row',justifyContent:'space-between',alignItems:'center'}}>
                   <Text style={{fontSize:20,marginLeft:10}}>答案</Text>
                   <View style={{flexDirection:'row',justifyContent:'center',alignItems:'center'}}>
@@ -675,7 +686,7 @@ export default class PicturesWorkContent extends Component {
         }else if(this.state.questionName=='七选五'){
           return(
           <>
-          <View style={{padding:10,paddingBottom:0}}>
+          <View style={{padding:10,paddingBottom:0,paddingTop:10}}>
               <View style={{flexDirection:'row',justifyContent:'space-between',marginTop:10}}>
                 <Text style={{fontSize:20,marginLeft:10}}>答案</Text>
               </View>
@@ -692,10 +703,13 @@ export default class PicturesWorkContent extends Component {
         // 一律主观题格式
         return(
           <>
-                      <View style={{flexDirection:'row',padding:20,paddingBottom:0,justifyContent:'space-between',}}> 
-                        <Text style={{fontSize:20}}>答案</Text>
+                      <View style={{flexDirection:'row',padding:20,paddingBottom:0,paddingTop:10,justifyContent:'space-between',alignItems:'center'}}> 
+                        <View style={{height:30,alignItems:'center',justifyContent:'center',paddingBottom:5}}>
+                            <Text style={{fontSize:20}}>答案</Text>
+                        </View>
+                        
                         {(this.state.AnswerContentStatus||(this.state.AnswerContentList.length>0)?(
-                        <View style={{flexDirection:'row',position:'absolute',width:'35%',justifyContent:'space-between',right:20,top:10}}> 
+                        <View style={{flexDirection:'row',position:'absolute',width:'35%',justifyContent:'space-between',right:20,alignItems:'center'}}> 
                             <TouchableOpacity onPress={()=>{
                               this.handleLibrary('Answer')
                             }}>
@@ -790,10 +804,12 @@ export default class PicturesWorkContent extends Component {
     loadingAnalysis(){
       return(
         <>
-                    <View style={{flexDirection:'row',padding:20,paddingBottom:0,justifyContent:'space-between',}}> 
-                      <Text style={{fontSize:20}}>解析</Text>
+                    <View style={{flexDirection:'row',padding:20,paddingBottom:0,paddingTop:10,justifyContent:'space-between',alignItems:'center'}}> 
+                      <View style={{height:30,justifyContent:'center',alignItems:'center',paddingBottom:5}}>
+                        <Text style={{fontSize:20}}>解析</Text>
+                      </View>
                       {(this.state.AnalysisContentStatus||(this.state.AnalysisContentList.length>0)?(
-                      <View style={{flexDirection:'row',position:'absolute',width:'35%',justifyContent:'space-between',right:20,top:10}}> 
+                      <View style={{flexDirection:'row',position:'absolute',width:'35%',justifyContent:'space-between',right:20,alignItems:'center'}}> 
                           <TouchableOpacity onPress={()=>{
                             this.handleLibrary('Analysis')
                           }}>
@@ -897,9 +913,6 @@ export default class PicturesWorkContent extends Component {
                   <View >
                       {this.loadingAnswer(this.state.baseTypeId)}
                       {this.loadingAnalysis()}
-
-                      
-
                   </View>
         )
       }

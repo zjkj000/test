@@ -191,12 +191,12 @@ class UpdateContentPage extends React.Component {
                         //（同类型试题之间）移动试题 下移
                         <TouchableOpacity 
                             onPress={()=>{this.moveDownPaper()}}
-                            style={{width: 30,height: 40,left: 20,}}
+                            style={{width: 31,height: 40,left: 20,}}
                         >
                             <Image
                                 style={{
-                                    width: 30,
-                                    height: 30,
+                                    width: 31,
+                                    height: 31,
                                     top: 7,
                                     // left: screenWidth*0.53,
                                     // position: 'absolute',

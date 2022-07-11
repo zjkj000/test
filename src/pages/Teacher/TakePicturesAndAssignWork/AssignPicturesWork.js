@@ -510,7 +510,10 @@ class AssignPicturesWork extends Component {
           <Waiting/>
         <View style={{flexDirection:'row',paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
                 <Text style={{fontSize:15,marginRight:40}}>作业名称:</Text>
-                <TextInput value={this.state.paperName} placeholder='传过来的值'></TextInput>
+                <TextInput value={this.state.paperName}
+                 onChangeText={(text)=>{
+                    this.setState({paperName:text})
+                 }}></TextInput>
         </View>
         
         <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>

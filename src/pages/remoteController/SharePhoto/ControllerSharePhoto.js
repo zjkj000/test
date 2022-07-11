@@ -147,13 +147,13 @@ class SharePhotoComponent extends Component {
     handleShare = () => {
         this.remoteControl("open", "shareImage", this.state.imgURL);
         this.setState({ buttonDisable2: false });
-        // this.remoteControl("open", "shareImage", this.state.imgURL);
+        this.remoteControl("open", "shareImage", this.state.imgURL);
         this.setState({ buttonDisable1: true });
     };
     handleCloseShare = () => {
         this.remoteControl("close", "shareImage");
         this.setState({ buttonDisable1: false });
-        // this.remoteControl("close", "shareImage");
+        this.remoteControl("close", "shareImage");
         this.setState({ buttonDisable2: true });
     };
     render() {
@@ -168,7 +168,7 @@ class SharePhotoComponent extends Component {
                             alignItems: "center",
                         }}
                         onPress={() => {
-                            this.props.navigation.navigate("Home");
+                            this.props.navigation.goBack();
                         }}
                     >
                         <Icon

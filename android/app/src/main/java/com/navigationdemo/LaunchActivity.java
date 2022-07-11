@@ -2,6 +2,8 @@ package com.navigationdemo;
 
 import static android.view.View.GONE;
 
+import static com.navigationdemo.AnswerActivity.base64url;
+
 import android.Manifest;
 import android.content.ContentUris;
 import android.content.Context;
@@ -12,6 +14,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -149,6 +152,8 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static List<CheckBox> radios_multi;
     public static ConstraintLayout group_tfanswer,group_singleanswer,group_multianswer,group_subjectiveanswer;
     public static EditText subjective_answer;
+    public static TextView subjective_save,subjective_echo;
+    public static ScrollView subjective_scroll;
     public static Button tf_submit,single_submit,multi_submit,subjective_submit;
     public static Button mQiangda;
     public static Button xiangce,paizhao,luru,qingkong;
@@ -173,6 +178,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static String last_platformUserId = "";
     public static String last_actiontime_startqd = "";
     public static String last_actiontime_stopqd = "";
+    public static int base64_index = 0;
 
 
     //聊天
@@ -793,14 +799,25 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         xiangce.setOnClickListener(this);
         paizhao = findViewById(R.id.paizhao);
         paizhao.setOnClickListener(this);
-        luru = findViewById(R.id.luru);
-        luru.setOnClickListener(this);
+//        luru = findViewById(R.id.luru);
+//        luru.setOnClickListener(this);
 
         qingkong = findViewById(R.id.qingkong);
         qingkong.setOnClickListener(this);
 
+        //主观题输入框
         subjective_answer = findViewById(R.id.tiankong);
         subjective_answer.setOnClickListener(this);
+        //主观题回显textview
+        subjective_echo = findViewById(R.id.tiankong_echo);
+        subjective_echo.setOnClickListener(this);
+        //主观题保存textview
+        subjective_save = findViewById(R.id.tiankong_save);
+        subjective_save.setOnClickListener(this);
+
+        subjective_scroll = findViewById(R.id.stroll_tiankong);
+        subjective_scroll.setOnClickListener(this);
+
         subjective_answer.setImeOptions(EditorInfo.IME_ACTION_DONE);
         subjective_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
             public boolean onEditorAction(TextView v, int actionId,                   KeyEvent event)  {
@@ -817,6 +834,8 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 return false;
             }
         });
+
+
     }
 
     private CharSequence getDrawableStr(Uri picPath) {
@@ -955,6 +974,19 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             exitRoom();
             finish();
 
+        }
+
+        else if(id == R.id.tiankong_save){
+            if(subjective_answer.getText().length()>0){
+                System.out.println("echo"+subjective_answer.getText());
+                subjective_scroll.setVisibility(View.VISIBLE);
+                subjective_scroll.bringToFront();
+                //subjective_echo.setText(subjective_answer.getText());
+                subjective_echo.append(subjective_answer.getText());
+                subjective_answer.setText("");
+
+
+            }
         }
 
         else if(id==R.id.qiangda){
@@ -1099,22 +1131,46 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         //主观_填空�?
         else if(id == R.id.subjectivesubmit){
             // 显示选中项�?
-            EditText editone = findViewById(R.id.tiankong);
+            TextView editone = findViewById(R.id.tiankong_echo);
             String editoneValue = editone.getText().toString();
-            System.out.println("填空的内容:"+editoneValue);
-            HttpActivity.stuSaveAnswer(editoneValue);
+            System.out.println("主观题答案的内容:"+editoneValue);
 
-            if(AnswerActivity.questionAction.equals("startAnswerSuiji")
-                    ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
-                current_answer = null;
-                LaunchActivity.group_tfanswer.setVisibility(GONE);
-                LaunchActivity.group_singleanswer.setVisibility(GONE);
-                LaunchActivity.group_multianswer.setVisibility(GONE);
-                LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
-
-                LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
-                System.out.println("answer over");
+            if(editoneValue.length()==0||editoneValue.equals("消息不允许为空")){
+                System.out.println("主观题答案不允许为空");
+                subjective_answer.setEnabled(false);
+                subjective_answer.setText("主观题答案不允许为空");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        subjective_answer.setEnabled(true);
+                        subjective_answer.setText("");
+                    }
+                }, 1000);
             }
+            else{
+                HttpActivity.stuSaveAnswer(editoneValue);
+
+                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+                    current_answer = null;
+                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+                    LaunchActivity.group_multianswer.setVisibility(GONE);
+                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+
+                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+                    System.out.println("answer over");
+                }
+
+                subjective_answer.setText("");
+                subjective_echo.setText("");
+                subjective_scroll.setVisibility(GONE);
+            }
+
+        }
+
+        else if(id == R.id.qingkong){
+            subjective_echo.setText("");
         }
 
         //相册�?
@@ -1176,13 +1232,13 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         }
 
         //录入�?
-        else if(id == R.id.luru){
-            // 显示选中项�?
-            EditText editone = findViewById(R.id.tiankong);
-            String editoneValue = editone.getText().toString();
-            System.out.println("填空的内�?:"+editoneValue);
-            HttpActivity.stuSaveAnswer(editoneValue);
-        }
+//        else if(id == R.id.luru){
+//            // 显示选中项�?
+//            EditText editone = findViewById(R.id.tiankong);
+//            String editoneValue = editone.getText().toString();
+//            System.out.println("填空的内�?:"+editoneValue);
+//            HttpActivity.stuSaveAnswer(editoneValue);
+//        }
 
 
         //消息�?
@@ -1201,7 +1257,6 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                         mMessageInput.setText("");
                     }
                 }, 1000);
-
             }
             else{
                 HttpActivity.saveChatRoomMessage(editoneValue);
@@ -1573,23 +1628,69 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
 
     //拍照主观题
-
     protected void editpic(Bitmap bitmap){
+
         try {
 //                Field field = R.drawable.class.getDeclaredField("google_earth");
 //                int resourceId = Integer.parseInt(field.get(null).toString());
 //                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
 //                        resourceId);
+            subjective_scroll.setVisibility(View.VISIBLE);
+            subjective_scroll.bringToFront();
             ImageSpan imageSpan = new ImageSpan(bitmap);
-            SpannableString spannableString = new SpannableString("a");
-                spannableString.setSpan(imageSpan, 0, 1,
-                    Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            subjective_answer.append(spannableString);
+            SpannableString spannableString = new SpannableString("'"+base64url+"'");
+            //SpannableString spannableString = new SpannableString("pic"+String.valueOf(base64_index));
+            base64_index++;
+            spannableString.setSpan(imageSpan, 0, base64url.length()+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //subjective_answer.append(spannableString);
+            subjective_echo.append(spannableString);
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
     /*****************************************************************************************************************/
+    private Bitmap transbase64(Bitmap bitmap){
+
+
+
+
+        int src_w = bitmap.getWidth();
+        int src_h = bitmap.getHeight();
+
+        int scroll_w = subjective_echo.getMeasuredWidth();
+        int scroll_h = subjective_echo.getMeasuredHeight();
+
+        float subjective_answer_height = subjective_answer.getMeasuredHeight()/2;
+        float wh = src_w/src_h;
+
+        float new_src_w;
+        float new_src_h;
+
+        if(src_w>scroll_w){
+            new_src_w = (float) 0.3;
+            new_src_h = (float) 0.3;
+        }
+        else if(src_h>scroll_h){
+            new_src_w = (float) 0.3;
+            new_src_h = (float) 0.3;
+        }
+        else{
+            new_src_w = (float) 1.0;
+            new_src_h = (float) 1.0;
+        }
+
+//        float new_src_w = (float) 0.1;
+//        float new_src_h = (float) 0.1;
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(new_src_w, new_src_h);
+
+        Bitmap bihuanbmp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,true);
+
+        HttpActivity.saveBase64Image(bitmap);
+
+        return bihuanbmp;
+    }
     protected void onActivityResult(int requestCode,int resultCode,Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
@@ -1599,7 +1700,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                         //将拍摄的图片显示出来
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().
                                 openInputStream(imageUri));
-                        editpic(bitmap);
+                        editpic(transbase64(bitmap));
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1671,7 +1772,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             imgP=imagePath;
             editor.apply();
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-            editpic(bitmap);
+            editpic(transbase64(bitmap));
 
         }else {
             Toast.makeText(this,"fail to get image",Toast.LENGTH_SHORT).show();

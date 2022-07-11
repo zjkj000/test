@@ -12,7 +12,7 @@ import { SearchBar } from "@ant-design/react-native";
 //import { SearchBar } from 'react-native-elements';
 import { Flex } from "@ant-design/react-native";
 import { screenWidth, screenHeight } from "../../utils/Screen/GetSize";
-import { useNavigation , useRoute } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 //import { Container , Header , Item , Input , Icon , Button } from 'native-base';
 import http from "../../utils/http/request";
 import {
@@ -34,7 +34,7 @@ export default function LatestPageContainer() {
     const navigation = useNavigation();
     const route = useRoute();
     //将navigation传给LatestTask组件，防止路由出错
-    return <LatestPage navigation={navigation}  route={route}></LatestPage>;
+    return <LatestPage navigation={navigation} route={route}></LatestPage>;
 }
 
 class LatestPage extends React.Component {
@@ -47,7 +47,7 @@ class LatestPage extends React.Component {
             createmoduleVisible: false, //创建作业等弹出框是否显示
             filtermoduleVisible: false, //筛选作业等弹出框是否显示
 
-            searchPoint: ''
+            searchPoint: "",
         };
     }
 
@@ -56,26 +56,28 @@ class LatestPage extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log("LatestPageFocused====================================");
+                console.log(
+                    "LatestPageFocused===================================="
+                );
                 console.log(this.props.route);
-                if (this.props.route.params !== undefined && 
-                    this.props.route.params.isRefresh !== undefined && 
+                if (
+                    this.props.route.params !== undefined &&
+                    this.props.route.params.isRefresh !== undefined &&
                     this.props.route.params.isRefresh
-                ) { 
-                        this.props.navigation.setParams({ isRefresh: false }); 
-                        // console.log("刷新====================================",this.props.route);
-                } 
+                ) {
+                    this.props.navigation.setParams({ isRefresh: false });
+                    // console.log("刷新====================================",this.props.route);
+                }
                 console.log("====================================");
                 // bindBackExitApp();
             }
         );
     }
 
-
     componentWillUnmount() {
         SearchText = "";
         this._unsubscribeNavigationFocusEvent();
-    } 
+    }
 
     //搜索框内容改变时触发，更新value
     onChange = (value) => {
@@ -85,7 +87,7 @@ class LatestPage extends React.Component {
     onSearch = () => {
         // console.log('*******');
         this.setState({
-            searchPoint: SearchText
+            searchPoint: SearchText,
         });
     };
 
@@ -93,7 +95,7 @@ class LatestPage extends React.Component {
     onBlur = () => {
         console.log("点击了键盘中的提交按钮");
         this.setState({
-            searchPoint: SearchText
+            searchPoint: SearchText,
         });
     };
 
@@ -249,7 +251,9 @@ class LatestPage extends React.Component {
         return (
             <View>
                 <OverflowMenu
-                    ref={(ref)=>{this.overRef=ref}}
+                    ref={(ref) => {
+                        this.overRef = ref;
+                    }}
                     anchor={this.renderAvatarCreate}
                     //弹出项外部背景样式
                     backdropStyle={styles.backdrop}
@@ -257,7 +261,7 @@ class LatestPage extends React.Component {
                     onBackdropPress={() => {
                         this.setState({ createmoduleVisible: false });
                     }}
-                    style={{ width: 150 , height: 900 }}
+                    style={{ height: 1000 }}
                 >
                     {/* {console.log(this.overRef)} */}
                     <MenuItem
@@ -299,7 +303,7 @@ class LatestPage extends React.Component {
                             this.setState({ createmoduleVisible: false });
                             this.createHomework();
                         }}
-                        style={{height:40}}
+                        style={{ height: 40 }}
                     />
                     <MenuItem
                         title="选导学案布置"
@@ -334,10 +338,10 @@ class LatestPage extends React.Component {
                                 params: {
                                     screen: "最新",
                                     params: {
-                                            isRefresh: true, 
-                                        },
+                                        isRefresh: true,
+                                    },
                                 },
-                                merge:true
+                                merge: true,
                             });
                         }}
                     />
@@ -376,7 +380,7 @@ class LatestPage extends React.Component {
                                     },
                                 });
                             }}
-                            style={{height:40}}
+                            style={{ height: 40 }}
                         />
                     ) : (
                         <></>
@@ -565,7 +569,7 @@ class LatestPage extends React.Component {
 
     render() {
         return (
-            <View  style={{backgroundColor:'#fff'}}>
+            <View style={{ backgroundColor: "#fff" }}>
                 <View style={styles.header}>
                     <Flex style={styles.flexNew}>
                         <Flex style={{ width: screenWidth * 0.12 }}>
@@ -616,16 +620,16 @@ class LatestPage extends React.Component {
                 </View>
                 <View style={styles.todoList}>
                     {/* {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)} */}
-                    <CreateListContainer 
-                        resourceType={this.state.resourceType} 
-                        searchStr={this.state.searchPoint} 
-                        isRefresh= {
-                            this.props.route.params !== undefined && 
-                            this.props.route.params.isRefresh !== undefined 
-                            ? this.props.route.params.isRefresh
-                            : ''
+                    <CreateListContainer
+                        resourceType={this.state.resourceType}
+                        searchStr={this.state.searchPoint}
+                        isRefresh={
+                            this.props.route.params !== undefined &&
+                            this.props.route.params.isRefresh !== undefined
+                                ? this.props.route.params.isRefresh
+                                : ""
                         }
-                    />                   
+                    />
                 </View>
             </View>
         );
@@ -638,8 +642,8 @@ const styles = StyleSheet.create({
         backgroundColor: "#4DC7F8",
     },
     todoList: {
-        height: screenHeight*0.85,
-        backgroundColor: '#fff'
+        // height: screenHeight * 0.85,
+        backgroundColor: "#fff",
     },
     flexNew: {
         paddingTop: screenHeight * 0.02,

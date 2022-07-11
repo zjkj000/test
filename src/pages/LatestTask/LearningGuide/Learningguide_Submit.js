@@ -238,8 +238,16 @@ class Learningguide_Submit extends Component {
                                 source={{
                                     html: this.state.data[result_Item]
                                         .stuAnswer,
-                                }}
-                            />
+                                }} 
+                                tagsStyles={{
+                                            img:{
+                                                flexDirection:'row'
+                                            },
+                                            p:{
+                                                flexDirection:'row'
+                                            }
+                                        }}
+                                />
                         ) :this.state.data[result_Item].type=='01'? (
                             <Text style={{ color: "red" }}>未答</Text>
                         ):(<Text style={{ color: "red" }}>未学</Text>)}

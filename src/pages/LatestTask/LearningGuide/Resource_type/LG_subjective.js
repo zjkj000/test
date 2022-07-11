@@ -25,6 +25,7 @@ import {
     Waiting,
     WaitLoading,
 } from "../../../../utils/WaitLoading/WaitLoading";
+import { screenHeight, screenWidth } from "../../../../utils/Screen/GetSize";
 export default function LG_subjectiveContainer(props) {
     const navigation = useNavigation();
     const learnPlanId = props.learnPlanId;
@@ -300,6 +301,7 @@ class LG_subjective extends Component {
                     backgroundColor: "#FFFFFF",
                     borderTopColor: "#000000",
                     borderTopWidth: 0.5,
+                    height:'100%'
                 }}
             >
                 {/* 第一行显示 第几题  题目类型 */}
@@ -325,7 +327,16 @@ class LG_subjective extends Component {
                     }
                 >
                     <Waiting />
-                    <RenderHtml contentWidth={width} source={{ html: HTML }} />
+                    <RenderHtml contentWidth={width} source={{ html: HTML }}  
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
                     <Text style={{ height: 50 }}></Text>
                 </ScrollView>
 
@@ -422,6 +433,7 @@ class LG_subjective extends Component {
                             borderColor: "#000000",
                             borderWidth: 1,
                             flexDirection: "row",
+                            borderRadius:3
                         }}
                     >
                         <TextInput
@@ -434,9 +446,10 @@ class LG_subjective extends Component {
                                 this.setState({ textinputAnswer: text });
                             }}
                             style={{
-                                width: 200,
+                                width: screenWidth*0.6,
                                 backgroundColor: "#FFFFFF",
                                 height: 40,
+                                borderRadius:5
                             }}
                         ></TextInput>
                         {/* 保存按钮将文本输入框的内容传到学生作答答案里面 */}
@@ -452,7 +465,7 @@ class LG_subjective extends Component {
                             }}
                             style={{
                                 width: 100,
-                                height: 35,
+                                height: 30,
                                 backgroundColor: "#59B9E0",
                             }}
                         ></Button>
@@ -490,32 +503,32 @@ class LG_subjective extends Component {
 }
 
 const styles = StyleSheet.create({
-    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row" },
-    answer_area: { height: "65%", padding: 20 },
+    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row",height:40},
+    answer_area: {  padding: 10 },
     answer_preview: {
         borderTopWidth: 1,
         borderTopColor: "#000000",
-        height: "20%",
+        height:'20%',
         backgroundColor: "#FFFFFF",
     },
-    answer_area_Long: { height: "2%", padding: 20 },
+    answer_area_Long: { padding: 10 },
     answer_preview_Long: {
         borderTopWidth: 1,
         borderTopColor: "#000000",
-        height: "78%",
+        height:'75%',
         backgroundColor: "#FFFFFF",
     },
     backdrop: {
         backgroundColor: "rgba(0, 0, 0, 0.5)",
     },
     content: {
-        borderTopWidth: 0.5,
+        borderTopWidth: 0.5,paddingBottom:'3%',
         borderTopColor: "#000000",
         width: "100%",
         flexDirection: "row",
         justifyContent: "space-around",
         backgroundColor: "#E6DDD6",
-        padding: 10,
-        alignItems: "center",
+        height:80,
+        alignItems:'center',
     },
 });

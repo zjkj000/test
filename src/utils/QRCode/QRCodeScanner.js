@@ -4,6 +4,7 @@ import { StyleSheet, View, Animated, Text, Button, Easing } from "react-native";
 import Toast from "../Toast/Toast";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { styles } from "./styles";
+import { screenHeight, screenWidth } from "../../utils/Screen/GetSize";
 /**
  * hook 写法
  */
@@ -94,21 +95,26 @@ class QRCodeScannerPage extends Component {
                     </View> */}
                     <View
                         style={{
-                            width: 500,
-                            height: 220,
+                            width: screenWidth,
+                            height: (screenHeight - 200) * 0.5,
                             backgroundColor: "rgba(0,0,0,0.5)",
                         }}
                     />
-
-                    <View style={[{ flexDirection: "row" }]}>
+                    <View style={{ flexDirection: "row" }}>
                         <View
                             style={{
                                 backgroundColor: "rgba(0,0,0,0.5)",
                                 height: 200,
-                                width: 200,
+                                width: (screenWidth - 200) * 0.5,
                             }}
                         />
-                        <View style={{ flexDirection: "column" }}>
+                        <View
+                            style={{
+                                flexDirection: "column",
+                                width: 200,
+                                height: 200,
+                            }}
+                        >
                             <View style={styles.rectangle} />
                             <Animated.View
                                 style={[
@@ -125,16 +131,16 @@ class QRCodeScannerPage extends Component {
                             style={{
                                 backgroundColor: "rgba(0,0,0,0.5)",
                                 height: 200,
-                                width: 200,
+                                width: (screenWidth - 200) * 0.5,
                             }}
                         />
                     </View>
 
                     <View
                         style={{
-                            flex: 1,
+                            height: (screenHeight - 200) * 0.5,
                             backgroundColor: "rgba(0, 0, 0, 0.5)",
-                            width: 500,
+                            width: screenWidth,
                             alignItems: "center",
                         }}
                     >

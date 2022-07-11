@@ -1,4 +1,4 @@
-import {Button,ScrollView,Text,View,StyleSheet,Alert,TouchableOpacity,Dimensions,} from "react-native";
+import {Button,ScrollView,Text,View,StyleSheet,Alert,TouchableOpacity,Dimensions} from "react-native";
 import React, { Component, useState } from "react";
 import http from "../../../utils/http/request";
 import RenderHtml from "react-native-render-html";
@@ -236,8 +236,16 @@ class Paper_Submit extends Component {
                                 source={{
                                     html: this.state.data[result_Item]
                                         .stuAnswer,
-                                }}
-                            />
+                                }} 
+                                tagsStyles={{
+                                            img:{
+                                                flexDirection:'row'
+                                            },
+                                            p:{
+                                                flexDirection:'row'
+                                            }
+                                        }}
+                                />
                         ) : (
                             <Text style={{ color: "red" }}>未答</Text>
                         )}

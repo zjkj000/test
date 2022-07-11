@@ -448,7 +448,7 @@ class AddContentPage extends React.Component {
                                             source={require('../../../../assets/teacherLatestPage/tianjia.png')}
                                         />
                                     </TouchableOpacity>
-                    }
+                    } 
                 </View>
             </View>
         );
@@ -908,11 +908,6 @@ class AddContentPage extends React.Component {
                     style={styles.contentView}
                     keyboardShouldPersistTaps={true}
                 >
-                    {/* {
-                        this.state.contentList.length > 0 
-                                ? this.showTitle() 
-                                : <Loading show={true} />
-                    } */}
                     {
                         this.state.contentList.length > 0 
                                 ? this.showContent() 

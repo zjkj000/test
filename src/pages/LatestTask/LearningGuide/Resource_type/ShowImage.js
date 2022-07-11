@@ -1,7 +1,5 @@
 import { Text, StyleSheet, View, ScrollView,Image,TouchableOpacity,Alert,Dimensions } from 'react-native'
 import React, { Component, useState } from 'react'
-import RadioList from '../../DoWork/Utils/RadioList';
-import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
 //这个是展示导学案里面资源为图片类型的数据
 export default function ShowImageContainer(props) {

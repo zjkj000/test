@@ -53,6 +53,24 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintWidth_percent="0." />
 
+    <ScrollView
+        android:id="@+id/stroll_tiankong_temp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_gravity="top"
+        android:background="@color/white"
+        android:fadingEdge="vertical"
+        android:gravity="top"
+        android:padding="2dp"
+        android:scrollbars="vertical"
+        android:visibility="invisible"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHeight_percent="0.2"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintWidth_percent="0.2">
+    </ScrollView>
+
+
 
     <ScrollView
         android:id="@+id/stroll"
@@ -70,9 +88,38 @@
         app:layout_constraintWidth_percent="0.2">
 
 
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
+
+            <ScrollView
+                android:id="@+id/stroll_tiankong"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_gravity="top"
+                android:background="@color/white"
+                android:fadingEdge="vertical"
+                android:gravity="right"
+                android:padding="10dp"
+                android:scrollbars="vertical"
+                android:visibility="invisible"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHeight_percent="0.75"
+                app:layout_constraintTop_toBottomOf="@+id/teacher_camera"
+                app:layout_constraintWidth_percent="1.0">
+
+                <TextView
+                    android:id="@+id/tiankong_echo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:padding="2dp"
+                    android:layout_marginLeft="15dp"
+                    android:layout_marginRight="15dp"
+                    android:text="" />
+
+            </ScrollView>
+
 
 
             <!--教师端摄像头流 teacher_camera-->
@@ -114,7 +161,6 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
 
-
             <!--学生端摄像头 txcvv_main-->
             <TextView
                 android:id="@+id/myself_camera_name"
@@ -129,7 +175,6 @@
                 app:layout_constraintBottom_toBottomOf="@+id/myself_camera"
                 app:layout_constraintStart_toStartOf="@+id/myself_camera"
                 />
-
             <ImageView
                 android:id="@+id/myself_platform"
                 android:layout_width="8dp"
@@ -141,7 +186,7 @@
                 android:layout_marginEnd="5dp"
                 app:layout_constraintBottom_toBottomOf="@+id/myself_background"
                 app:layout_constraintEnd_toEndOf="@+id/myself_background"
-            />
+                />
             <com.tencent.rtmp.ui.TXCloudVideoView
                 android:id="@+id/myself_camera"
                 android:layout_width="0dp"
@@ -152,7 +197,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/teacher_background" />
-
 
             <!--学生端摄像头 txcvv_main-->
             <com.tencent.rtmp.ui.TXCloudVideoView
@@ -190,8 +234,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/myself_background" />
-
-
 
             <com.tencent.rtmp.ui.TXCloudVideoView
                 android:id="@+id/student_2"
@@ -309,8 +351,14 @@
                 />
 
 
+
+
+
         </androidx.constraintlayout.widget.ConstraintLayout>
     </ScrollView>
+
+
+
 
     <Button
         android:id="@+id/qiangda"
@@ -359,8 +407,6 @@
         app:layout_constraintHeight_percent="0.1"
         app:layout_constraintStart_toStartOf="parent" />
 
-
-
         <Button
             android:id="@+id/submit_mess"
             android:layout_width="0dp"
@@ -373,16 +419,16 @@
             app:layout_constraintEnd_toStartOf="@+id/hands"
             app:layout_constraintHeight_percent="0.1" />
 
-    <Button
-        android:id="@+id/hands_onplatform"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@mipmap/hand_onplatform"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintDimensionRatio="w,1:1"
-        app:layout_constraintEnd_toStartOf="@+id/message"
-        app:layout_constraintHeight_percent="0.1" />
+        <Button
+            android:id="@+id/hands_onplatform"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:background="@mipmap/hand_onplatform"
+            android:visibility="invisible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintDimensionRatio="w,1:1"
+            app:layout_constraintEnd_toStartOf="@+id/message"
+            app:layout_constraintHeight_percent="0.1" />
 
         <Button
         android:id="@+id/hands"
@@ -396,8 +442,6 @@
         app:layout_constraintEnd_toStartOf="@+id/message"
         app:layout_constraintHeight_percent="0.1" />
 
-
-
         <Button
             android:id="@+id/message"
             android:layout_width="0dp"
@@ -408,7 +452,6 @@
             app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintEnd_toStartOf="@+id/btn_mute_audio"
             app:layout_constraintHeight_percent="0.1" />
-
 
         <Button
             android:id="@+id/btn_mute_audio"
@@ -421,7 +464,6 @@
             app:layout_constraintEnd_toStartOf="@+id/btn_mute_video"
             app:layout_constraintHeight_percent="0.1" />
 
-
         <Button
             android:id="@+id/btn_mute_video"
             android:layout_width="0dp"
@@ -433,7 +475,6 @@
             app:layout_constraintEnd_toStartOf="@+id/btn_switch_camera"
             app:layout_constraintHeight_percent="0.1" />
 
-
         <Button
             android:id="@+id/btn_switch_camera"
             android:layout_width="0dp"
@@ -444,7 +485,6 @@
             app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintEnd_toStartOf="@+id/refresh"
             app:layout_constraintHeight_percent="0.1" />
-
 
         <Button
             android:id="@+id/refresh"
@@ -468,7 +508,6 @@
             app:layout_constraintEnd_toStartOf="@+id/fullscreen"
             app:layout_constraintHeight_percent="0.1" />
 
-
         <Button
             android:id="@+id/fullscreen"
             android:layout_width="0dp"
@@ -479,8 +518,6 @@
             app:layout_constraintDimensionRatio="w,1:1"
             app:layout_constraintEnd_toEndOf="@+id/group_buttons"
             app:layout_constraintHeight_percent="0." />
-
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -701,6 +738,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -720,22 +758,26 @@
                 android:layout_height="30dp"
                 android:layout_width="30dp"/>
 
-            <Button
-                android:id="@+id/luru"
-                android:background="@mipmap/luru"
-                android:layout_marginLeft="10dp"
-                android:layout_height="30dp"
-                android:layout_width="30dp" />
-
             <EditText
                 android:id="@+id/tiankong"
+
                 android:layout_marginLeft="10dp"
                 android:layout_width="300dp"
                 android:layout_height="50dp"
                 android:imeOptions="actionDone"
-                android:singleLine="true"
+
+                android:text=""
+                android:textColor="@color/black"
+                android:textSize="12dp"
      />
-<!--            style="@style/select_style"-->
+
+            <TextView
+                android:id="@+id/tiankong_save"
+                android:layout_width="match_parent"
+                android:layout_height="15dp"
+                android:layout_gravity="center"
+                android:text="保存"
+                />
 
             <Button
                 android:id="@+id/qingkong"

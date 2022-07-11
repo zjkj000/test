@@ -208,6 +208,13 @@ export default class MainNavigation extends Component {
                             headerShown: false,
                         }}
                     />
+                    {/* <Stack.Screen
+                        name="创建作业"
+                        component={CreateHomework}
+                        options={{
+                            headerShown: false,
+                        }}
+                    /> */}
                     <Stack.Screen
                         name="AssignPaper"
                         component={AssignPaperContainer}
@@ -346,6 +353,7 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="ControllerSharePhoto"
                         component={ControllerSharePhoto}
+                        options={{ headerShown: false }}
                     />
                 </Stack.Group>
 
