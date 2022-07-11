@@ -998,14 +998,14 @@ class HomeworkProperty extends React.Component {
                     <Button style={styles.button}
                         onPress={() => { 
                             //console.log('----------',textInputName , textInputPaper); 
-                            if(
-                                textInputName != ''
-                                && this.state.studyRank != ''
-                                && this.state.studyClass != ''
-                                && this.state.edition != ''
-                                && this.state.book != ''
-                                && this.state.knowledge != ''
-                            )(
+                            // if(
+                            //     textInputName != ''
+                            //     && this.state.studyRank != ''
+                            //     && this.state.studyClass != ''
+                            //     && this.state.edition != ''
+                            //     && this.state.book != ''
+                            //     && this.state.knowledge != ''
+                            // )(
                                     this.props.navigation.navigate({
                                         name: '创建作业',
                                         params: {
@@ -1031,17 +1031,17 @@ class HomeworkProperty extends React.Component {
                                             knowledgeList: this.state.knowledgeList, //从接口中返回的数据
                                         }
                                     })
-                            )
-                            else{
-                                Alert.alert(
-                                    '',
-                                    '必填项不完整',
-                                    [
-                                        {} ,
-                                        {text: '关闭',onPress: ()=>{}}
-                                    ]
-                                );
-                            }
+                            // )
+                            // else{
+                            //     Alert.alert(
+                            //         '',
+                            //         '必填项不完整',
+                            //         [
+                            //             {} ,
+                            //             {text: '关闭',onPress: ()=>{}}
+                            //         ]
+                            //     );
+                            // }
                         }}
                     >
                         确定

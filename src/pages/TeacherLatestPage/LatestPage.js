@@ -407,7 +407,11 @@ class LatestPage extends React.Component {
                             this.setState({ createmoduleVisible: false });
                     }}></Text>
                 </View>
-                <View style={styles.modalView}>
+                <View style={
+                    global.constants.isadmin == "2"
+                    ? styles.modalView
+                    : styles.modalView1
+                }>
                     <MenuItem
                         title="创建授课包"
                         onPress={() => {
@@ -529,7 +533,12 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    {
+                        global.constants.isadmin == "2"
+                        ? <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
+                    
                     {global.constants.isadmin == "2" ? (
                         <MenuItem
                             title="发布公告"
@@ -661,7 +670,21 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         borderWidth: 1, 
         borderColor: '#DCDCDC' ,
-        height: 457,
+        height: 455,
+        width: screenWidth*0.35,
+        position: 'absolute',
+        //justifyContent: "center",
+        //alignItems: "center",
+    },
+    modalView1: {
+        marginTop: 50, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
+        flexDirection: 'column', 
+        backgroundColor: '#fff' , 
+        right: 20 , 
+        borderRadius: 6,
+        borderWidth: 1, 
+        borderColor: '#DCDCDC' ,
+        height: 412,
         width: screenWidth*0.35,
         position: 'absolute',
         //justifyContent: "center",

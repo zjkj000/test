@@ -116,6 +116,7 @@ class AddContentPage extends React.Component {
 
             learnPlanId: this.props.learnPlanId,
 
+            imgState: 1,
 
             //网络请求状态
             error: false,
@@ -339,11 +340,25 @@ class AddContentPage extends React.Component {
         // return (selectContentList.includes(contentList[selectContentIndex])); 
     }
 
+    getIndex = () => {
+        const { selectContentIndex , selectContentList , contentList } = this.state;
+        let i = -1 ;
+        for(i = 0 ; i < selectContentList.length ; i++){
+            if(selectContentList[i].id == contentList[selectContentIndex].id){
+                return i;
+            }
+        }
+        if(i >= selectContentList.length){
+            return -1;
+        }
+    }
+
     ////修改选中题目数(添加试题小页面)
     updateSlectNum = (flag) => {
         const { selectContentIndex , selectContentList , contentList } = this.state;
         if(flag){ //删除内容
-            var index = selectContentList.indexOf(contentList[selectContentIndex]);
+            // var index = selectContentList.indexOf(contentList[selectContentIndex]);
+            var index = this.getIndex();
             var selectContentListCopy = selectContentList;
             if(index >= 0){
                 selectContentListCopy.splice(index , 1);
@@ -376,31 +391,61 @@ class AddContentPage extends React.Component {
             <View>
                 <View style={styles.paperSelectNumView}>
                     <Text style={styles.selectPaperNum}>(已选中{this.state.selectContentNum})</Text>
+                    {/* <TouchableOpacity 
+                        onPress={() => {
+                            Alert.alert('-----')
+                            console.log('*************************添加删除试题********************************')
+                            let { selectContentNum , imgState } = this.state;
+                            this.setState({ imgState: !imgState  , selectContentNum:selectContentNum + 1 })
+                            // this.updateSlectNum(false);
+                        }}
+                    >
+                        <Image
+                            style={{
+                                width: 30,
+                                height: 30,
+                                top: 5,
+                                left: screenWidth * 0.65,
+                                position: 'absolute',
+                            }}
+                            source={
+                                this.state.imgState == 0
+                                ? require('../../../../assets/teacherLatestPage/shanchu.png')
+                                : require('../../../../assets/teacherLatestPage/tianjia.png')
+                            }
+                        />
+                    </TouchableOpacity> */}
                     {
                         this.state.contentList.length > 0 && this.ifSelected() ?
-                                    <TouchableOpacity onPress={()=>{this.updateSlectNum(true)}}>
+                                    <TouchableOpacity 
+                                        onPress={()=>{this.updateSlectNum(true)}}
+                                        style={{width: 30,height: 40}}
+                                    >
                                         <Image
                                             style={{
-                                                width: 26, 
-                                                height: 26,
-                                                top: 7,
-                                                left: screenWidth*0.652,
-                                                position: 'absolute',
+                                                width: 30, 
+                                                height: 30,
+                                                top: 5,
+                                                // left: screenWidth*0.5,
+                                                // position: 'absolute',
                                             }} 
                                             source={require('../../../../assets/teacherLatestPage/shanchu.png')}
                                         />
                                     </TouchableOpacity>
                                     : 
-                                    <TouchableOpacity onPress={()=>{this.updateSlectNum(false)}}>
+                                    <TouchableOpacity 
+                                        onPress={()=>{this.updateSlectNum(false)}}
+                                        style={{width: 30,height: 40}}
+                                    >
                                         <Image
-                                                style={{
-                                                    width: 30, 
-                                                    height: 30,
-                                                    top: 5,
-                                                    left: screenWidth*0.65,
-                                                    position: 'absolute',
-                                                }} 
-                                                source={require('../../../../assets/teacherLatestPage/tianjia.png')}
+                                            style={{
+                                                width: 30, 
+                                                height: 30,
+                                                top: 5,
+                                                // left: screenWidth*0.5,
+                                                // position: 'absolute',
+                                            }} 
+                                            source={require('../../../../assets/teacherLatestPage/tianjia.png')}
                                         />
                                     </TouchableOpacity>
                     }
@@ -855,15 +900,19 @@ class AddContentPage extends React.Component {
     render(){
         return(
             <View style={styles.bodyView}>
+                {
+                    this.showTitle()
+                }
                 <ScrollView   
                     showsVerticalScrollIndicator={false}
                     style={styles.contentView}
+                    keyboardShouldPersistTaps={true}
                 >
-                    {
+                    {/* {
                         this.state.contentList.length > 0 
                                 ? this.showTitle() 
                                 : <Loading show={true} />
-                    }
+                    } */}
                     {
                         this.state.contentList.length > 0 
                                 ? this.showContent() 
@@ -1017,7 +1066,7 @@ const styles = StyleSheet.create({
         borderWidth:5,
     },
     paperSelectNumView: {
-        height: screenHeight*0.06,
+        height: 40,
         flexDirection: 'row',
         backgroundColor: '#EBEDEC',
     },
@@ -1026,6 +1075,7 @@ const styles = StyleSheet.create({
         color: '#8B8B7A',
         paddingLeft: 20,
         paddingTop: 7,
+        width: 350,
     },
     pptlittle_image:{
         height:50,

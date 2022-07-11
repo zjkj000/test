@@ -1007,16 +1007,16 @@ class LearnCaseProperty extends React.Component {
                         onPress={() => { 
                             // Alert.alert('该功能还未开发');
                             //console.log('----------',textInputName , textInputPaper); 
-                            if(
-                                textInputName != ''
-                                && this.state.studyRank != ''
-                                && this.state.studyClass != ''
-                                && this.state.edition != ''
-                                && this.state.book != ''
-                                && this.state.knowledge != ''
-                                && textLearnSumTime != ''
-                                && textStudyTime != ''
-                            )(
+                            // if(
+                            //     textInputName != ''
+                            //     && this.state.studyRank != ''
+                            //     && this.state.studyClass != ''
+                            //     && this.state.edition != ''
+                            //     && this.state.book != ''
+                            //     && this.state.knowledge != ''
+                            //     && textLearnSumTime != ''
+                            //     && textStudyTime != ''
+                            // )(
                                     this.props.navigation.navigate({
                                         name: '创建导学案',
                                         params: {
@@ -1050,10 +1050,10 @@ class LearnCaseProperty extends React.Component {
                                             knowledgeList: this.state.knowledgeList, //从接口中返回的数据
                                         }
                                     })
-                            )
-                            else{
-                                Alert.alert('','必填项不完整', [{} , {text: '关闭', onPress: ()=>{}}]);
-                            }
+                            // )
+                            // else{
+                            //     Alert.alert('','必填项不完整', [{} , {text: '关闭', onPress: ()=>{}}]);
+                            // }
                         }}
                     >
                         确定
