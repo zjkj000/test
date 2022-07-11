@@ -116,6 +116,7 @@ class AddContentPage extends React.Component {
 
             learnPlanId: this.props.learnPlanId,
 
+            imgState: true,
 
             //网络请求状态
             error: false,
@@ -294,6 +295,17 @@ class AddContentPage extends React.Component {
                 }else if(resJson.data.esmodelList.length == 0){
                     isLastPage = true;
                     Alert.alert('','没有请求到导学案数据', [{} , {text: '关闭', onPress: ()=>{}}]);
+                    this.setState({ 
+                        contentList: [],
+                        selectContentIndex: 0,
+                        pptList: [],
+                        selectPptIndex: 0,
+                        showVideoControl: false, // 是否显示视频控制组件
+                        isPlaying: false,        // 视频是否正在播放
+                        currentTime: 0,        // 视频当前播放的时间
+                        duration: 0,           // 视频的总时长
+                        playFromBeginning: false, // 是否从头开始播放
+                    })
                 } 
 
                 if(resJson.data.esmodelList.length < 5){
@@ -323,6 +335,9 @@ class AddContentPage extends React.Component {
         if(i >= selectContentList.length){
             return false;
         }
+        // i = selectContentList.indexOf(contentList[selectContentIndex]);
+        // console.log('================导学案是否被选择=========================' , selectContentList.includes(contentList[selectContentIndex]));
+        // return (selectContentList.includes(contentList[selectContentIndex])); 
     }
 
     ////修改选中题目数(添加试题小页面)
@@ -362,7 +377,29 @@ class AddContentPage extends React.Component {
             <View>
                 <View style={styles.paperSelectNumView}>
                     <Text style={styles.selectPaperNum}>(已选中{this.state.selectContentNum})</Text>
-                    {
+                    <TouchableOpacity 
+                            onPress={() => {
+                                let { selectContentNum , imgState } = this.state;
+                                this.setState({ imgState: !imgState  , selectContentNum:selectContentNum + 1 })
+                                // this.updateSlectNum(false);
+                            }}
+                        >
+                            <Image
+                                style={{
+                                    width: 30,
+                                    height: 30,
+                                    top: 5,
+                                    left: screenWidth * 0.65,
+                                    position: 'absolute',
+                                }}
+                                source={
+                                    !this.state.imgState 
+                                    ? require('../../../../assets/teacherLatestPage/shanchu.png')
+                                    : require('../../../../assets/teacherLatestPage/tianjia.png')
+                                }
+                            />
+                        </TouchableOpacity>
+                    {/* {
                         this.state.contentList.length > 0 && this.ifSelected() ?
                                     <TouchableOpacity onPress={()=>{this.updateSlectNum(true)}}>
                                         <Image
@@ -389,7 +426,7 @@ class AddContentPage extends React.Component {
                                                 source={require('../../../../assets/teacherLatestPage/tianjia.png')}
                                         />
                                     </TouchableOpacity>
-                    }
+                    } */}
                 </View>
             </View>
         );
@@ -841,26 +878,30 @@ class AddContentPage extends React.Component {
     render(){
         return(
             <View style={styles.bodyView}>
+                {
+                    this.showTitle()
+                }
                 <ScrollView   
                     showsVerticalScrollIndicator={false}
                     style={styles.contentView}
+                    keyboardShouldPersistTaps={true}
                 >
-                    {
+                    {/* {
                         this.state.contentList.length > 0 
                                 ? this.showTitle() 
                                 : <Loading show={true} />
-                    }
-                    {
+                    } */}
+                    {/* {
                         this.state.contentList.length > 0 
                                 ? this.showContent() 
                                 : <Loading show={true} />
-                    }
+                    } */}
                 </ScrollView>
-                {
+                {/* {
                     this.state.contentList.length > 0 
                             ? this.showAddPaperBottom() 
                             : <Loading show={true} />
-                }
+                } */}
             </View>
         )
     }

@@ -20,25 +20,42 @@ export default class ImageHandler {
             },
         };
         try {
-            const granted = await PermissionsAndroid.request(
+            const grantedCamera = await PermissionsAndroid.request(
                 PermissionsAndroid.PERMISSIONS.CAMERA,
                 {
-                    title: "Cool Photo App Camera Permission",
-                    message:
-                        "Cool Photo App needs access to your camera " +
-                        "so you can take awesome pictures.",
-                    buttonNeutral: "Ask Me Later",
-                    buttonNegative: "Cancel",
-                    buttonPositive: "OK",
+                    title: "学习一点通请求访问您的摄像头权限",
+                    message: "学习一点通需要获得摄像头权限以拍摄照片",
+                    buttonNeutral: "稍后询问",
+                    buttonNegative: "不允许",
+                    buttonPositive: "允许",
                 }
             );
-            if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+            const grantedStorage = await PermissionsAndroid.request(
+                PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
+                {
+                    title: "学习一点通请求访问您的读写文件",
+                    message:
+                        "学习一点通需要获取读写文件权限以保存拍摄得到的照片",
+                    buttonNeutral: "稍后询问",
+                    buttonNegative: "不允许",
+                    buttonPositive: "允许",
+                }
+            );
+            if (
+                grantedCamera === PermissionsAndroid.RESULTS.GRANTED &&
+                grantedStorage === PermissionsAndroid.RESULTS.GRANTED
+            ) {
                 console.log("You have the permission of camera");
                 let resImg = null;
                 await launchCamera(option, (response) => {
                     if (response.didCancel) {
                         return;
                     }
+                    console.log(
+                        "CameraPermission===================================="
+                    );
+                    console.log(response);
+                    console.log("====================================");
                     resImg = response.assets[0];
                 });
                 return resImg;
@@ -77,6 +94,11 @@ export default class ImageHandler {
             if (response.didCancel) {
                 return;
             }
+            console.log(
+                "LibraryPermission===================================="
+            );
+            console.log(response);
+            console.log("====================================");
             resImg = response.assets[0];
         });
         return resImg;

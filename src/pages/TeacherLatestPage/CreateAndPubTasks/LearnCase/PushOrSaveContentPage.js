@@ -15,15 +15,12 @@ import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 import { useNavigation } from "@react-navigation/native";
 import http from "../../../../utils/http/request";
 import DateTime from "../../../../utils/datetimePickerUtils/DateTime";
+import { Waiting, WaitLoading } from "../../../../utils/WaitLoading/WaitLoading";
 
 import { WebView } from "react-native-webview";
 import RenderHtml from "react-native-render-html";
 
 import Toast from "../../../../utils/Toast/Toast";
-import {
-    Waiting,
-    WaitLoading,
-} from "../../../../utils/WaitLoading/WaitLoading";
 
 let saveCount = 1;
 
@@ -146,8 +143,8 @@ class PushOrSaveContentPage extends React.Component {
         const classSecleted = this.state.class;
         var keTangId = classSecleted.keTangId; //课堂id
         var keTangName = classSecleted.keTangName; //课堂名
-        var classIdOrGroupId = classSecleted.classId; //班级id
-        var classOrGroupName = classSecleted.className; //班级名(接口返回的班级名后面自带一个逗号,)
+        var classIdOrGroupId = classSecleted.classId.substring(0 , (classSecleted.classId).length - 1) //班级id
+        var classOrGroupName = classSecleted.className.substring(0 , (classSecleted.className).length - 1); //班级名(接口返回的班级名后面自带一个逗号,)
         var roomType = ""; //作业布置方式 班级、个人50、小组70
 
         var stuIds = "";
@@ -158,7 +155,7 @@ class PushOrSaveContentPage extends React.Component {
 
         if (assigntoWho == "0") {
             //布置给班级 （有对应的学生信息需要拼装吗，接口传空值？）
-            roomType = "50";
+            roomType = "70";
             stuIds = studentsList[0].ids;
             stuNames = studentsList[0].name;
             console.log("**********studentsList******", stuIds);
@@ -169,35 +166,41 @@ class PushOrSaveContentPage extends React.Component {
             );
         } else if (assigntoWho == "1") {
             //布置给小组 拼装小组id、小组名 学生id、学生姓名
-            roomType = "70";
-            // classIdOrGroupId = groupSelected[0].id;
-            // classOrGroupName = groupSelected[0].value;
-
-            // stuIds = groupSelected[0].ids;
-            // stuNames = groupSelected[0].name;
+            roomType = "50";
+            classIdOrGroupId = '';
+            classOrGroupName = '';
 
             for (let i = 0; i < groupSelected.length; i++) {
-                classIdOrGroupId = classIdOrGroupId + ";" + groupSelected[i].id;
-                classOrGroupName =
-                    classOrGroupName + ";" + groupSelected[i].value;
-
-                stuIds = stuIds + "," + groupSelected[i].ids;
-                stuNames = stuNames + "," + groupSelected[i].name;
+                console.log('***小组*******groupSelected**id****',groupSelected[i].id );
+                console.log('****小组******groupSelected**value****',groupSelected[i].value );
+                console.log('****小组******stuId**id****',groupSelected[i].ids );
+                console.log('****小组******stuNames**name****',groupSelected[i].name );
+                classIdOrGroupId = classIdOrGroupId  + groupSelected[i].id + ';';
+                classOrGroupName = classOrGroupName  + groupSelected[i].value + ';';
+                
+                stuIds = stuIds + groupSelected[i].ids + ';' ;
+                stuNames = stuNames  + groupSelected[i].name + ';';
             }
+            classIdOrGroupId = classIdOrGroupId.substring(0 , classIdOrGroupId.length - 1);
+            classOrGroupName = classOrGroupName.substring(0 , classOrGroupName.length - 1);
+            stuIds = stuIds.substring(0 , stuIds.length - 1);
+            stuNames = stuNames.substring(0 , stuNames.length - 1);
         } else {
             //布置给个人
-            roomType = "50";
-            // stuIds = groupSelected[0].ids;
-            // stuNames = groupSelected[0].name;
+            roomType = "70";
 
             for (let i = 0; i < studentSelected.length; i++) {
-                stuIds = stuIds + "," + studentSelected[i].id;
-                stuNames = stuNames + "," + studentSelected[i].name;
+                console.log('****个人******stuId**id****',studentSelected[i].id );
+                console.log('****个人******stuNames**name****',studentSelected[i].name );
+                stuIds = stuIds + studentSelected[i].id + ',' ;
+                stuNames = stuNames  + studentSelected[i].name + ',';
             }
+            stuIds = stuIds.substring(0 , stuIds.length - 1);
+            stuNames = stuNames.substring(0 , stuNames.length - 1);
         }
         return {
-            startTime: startTime,
-            endTime: endTime,
+            startTime: startTime + ':00',
+            endTime: endTime + ':00',
             keTangId: keTangId,
             classIds: classIdOrGroupId,
             stuIds: stuIds,
@@ -283,7 +286,7 @@ class PushOrSaveContentPage extends React.Component {
         // console.log(url , params)
         // console.log('***********************************************')
         // console.log('-----pushAndSaveLearnPlan-----', Date.parse(new Date()))
-        // WaitLoading.show("保存中...", -1);
+        WaitLoading.show("保存中...", -1);
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
@@ -305,7 +308,7 @@ class PushOrSaveContentPage extends React.Component {
                         }}       
                     ]);
                 } else {
-                    // WaitLoading.show_false();
+                    WaitLoading.show_false();
                     // Alert.alert(resJson.message);
                 }
             })
@@ -340,7 +343,7 @@ class PushOrSaveContentPage extends React.Component {
             //callback:'ha',
         };
         console.log("-----saveLearnPlan-----", Date.parse(new Date()));
-        // WaitLoading.show("保存中...", -1);
+        WaitLoading.show("保存中...", -1);
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
@@ -370,7 +373,8 @@ class PushOrSaveContentPage extends React.Component {
                         }}       
                     ]);
                 }else{
-                    Alert.alert('',resJson.message, [{} , {text: '关闭', onPress: ()=>{}}]);
+                    WaitLoading.show_false();
+                    // Alert.alert('',resJson.message, [{} , {text: '关闭', onPress: ()=>{}}]);
                 }
             })
             .catch((error) => {
@@ -484,6 +488,7 @@ class PushOrSaveContentPage extends React.Component {
                                     //更新选择的课堂以及布置对象
                                     this.setState({
                                         className: item.keTangName,
+                                        
                                         class: item,
                                         classFlag: false,
                                         groupList: [],
@@ -835,7 +840,7 @@ class PushOrSaveContentPage extends React.Component {
                             color: 'black',
                             top: 10,
                         }}
-                        onPress={()=>{this.savePaper()}}
+                        onPress={()=>{this.saveLearnPlan()}}
                     >保存</Text>
                 </View>
                 <ScrollView style={{height:'100%'}}>
@@ -1043,6 +1048,7 @@ class PushOrSaveContentPage extends React.Component {
         } else {
             return (
                 <View style={styles.bodyView}>
+                    <Waiting/>
                     {this.showPushOrSaveContent()}
                     {this.showPushOrSaveContentBottom()}
                 </View>

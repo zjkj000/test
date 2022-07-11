@@ -1,6 +1,6 @@
 import { Icon, Layout, Modal, Button } from "@ui-kitten/components";
 import React, { Component } from "react";
-import { View, Text, Image } from "react-native";
+import { View, Text, Image, Dimensions, StatusBar } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "./styles";
 import http from "../../../utils/http/request";
@@ -25,17 +25,26 @@ export default class Info extends Component {
             questionAnalysisVisible: false,
         };
     }
+    // componentDidMount = () => {
+    //     const width = Dimensions.get("window").height;
+    //     const width2 = Dimensions.get("screen").height;
+    //     const width3 = StatusBar.currentHeight;
+    //     console.log("屏幕高度", width, width2, width3);
+    // };
     setInfoButton = (row, col, touchable = 1, status = "") => {
         let { infoButtonTouchable } = this.state;
         infoButtonTouchable[row][col].touchable = touchable;
         infoButtonTouchable[row][col].status = status;
+        console.log("SetInfoButton====================================");
+        console.log(infoButtonTouchable);
+        console.log("====================================");
         this.setState({ infoButtonTouchable });
     };
     setInfoMessage = (str) => {
         this.setState({ infoMessage: str });
     };
     componentDidUpdate(preProps, preState) {
-        if (preProps.action != this.props.action) {
+        if (preProps.action !== this.props.action) {
             switch (this.props.action) {
                 case "AnswerTogetherStartObjective":
                     switch (this.props.resId) {
@@ -47,6 +56,7 @@ export default class Info extends Component {
                             this.setInfoMessage("正在作答中");
                             break;
                     }
+                    this.props.setInfoButtonType(0);
                     break;
                 case "AnswerTogetherStopObjective":
                     switch (this.props.resId) {
@@ -58,6 +68,7 @@ export default class Info extends Component {
                             this.setInfoMessage("作答结束");
                             break;
                     }
+                    this.props.setInfoButtonType(0);
                     break;
                 case "AnswerTogetherStartHand":
                 case "AnswerTogetherStartSubjective":
@@ -70,6 +81,7 @@ export default class Info extends Component {
                             this.setInfoMessage("正在作答中");
                             break;
                     }
+                    this.props.setInfoButtonType(0);
                     break;
                 case "AnswerTogetherStopHand":
                 case "AnswerTogetherStopSubjective":
@@ -82,6 +94,7 @@ export default class Info extends Component {
                             this.setInfoMessage("作答结束");
                             break;
                     }
+                    this.props.setInfoButtonType(0);
                     break;
                 case "RandomObjective":
                     switch (this.props.resId) {
@@ -93,6 +106,7 @@ export default class Info extends Component {
                             this.setInfoMessage("正在随机...");
                             break;
                     }
+                    this.props.setInfoButtonType(1);
                     break;
                 case "RandomPeopleObjective":
                     switch (this.props.resId) {
@@ -104,6 +118,7 @@ export default class Info extends Component {
                             this.setInfoMessage(`${this.props.desc}`);
                             break;
                     }
+                    this.props.setInfoButtonType(1);
                     break;
                 case "RandomAnswerObjective":
                     switch (this.props.resId) {
@@ -117,6 +132,7 @@ export default class Info extends Component {
                             );
                             break;
                     }
+                    this.props.setInfoButtonType(1);
                     break;
                 case "RandomHand":
                 case "RandomSubjective":
@@ -129,6 +145,7 @@ export default class Info extends Component {
                             this.setInfoMessage("正在随机...");
                             break;
                     }
+                    this.props.setInfoButtonType(1);
                     break;
                 case "RandomPeopleHand":
                 case "RandomPeopleSubjective":
@@ -141,6 +158,7 @@ export default class Info extends Component {
                             this.setInfoMessage(`${this.props.desc}`);
                             break;
                     }
+                    this.props.setInfoButtonType(1);
                     break;
                 case "RandomAnswerSubjective":
                     switch (this.props.resId) {
@@ -152,6 +170,7 @@ export default class Info extends Component {
                             this.setInfoMessage("学生答案以提交");
                             break;
                     }
+                    this.props.setInfoButtonType(1);
                     break;
                 case "RandomPeopleHandShowStuAnswer":
                 case "RandomAnswerSubjectiveShowStuAnswer":
@@ -164,6 +183,7 @@ export default class Info extends Component {
                             this.setInfoMessage("学生答案以提交");
                             break;
                     }
+                    this.props.setInfoButtonType(1);
                     break;
                 case "ResponderReadyObjective":
                     switch (this.props.resId) {
@@ -175,6 +195,7 @@ export default class Info extends Component {
                             this.setInfoMessage("正在抢答...");
                             break;
                     }
+                    this.props.setInfoButtonType(2);
                     break;
                 case "ResponderObjective":
                     switch (this.props.resId) {
@@ -186,6 +207,7 @@ export default class Info extends Component {
                             this.setInfoMessage("正在抢答...");
                             break;
                     }
+                    this.props.setInfoButtonType(2);
                     break;
                 case "ResponderPeopleObjective":
                     switch (this.props.resId) {
@@ -197,6 +219,7 @@ export default class Info extends Component {
                             this.setInfoMessage(`${this.props.desc}`);
                             break;
                     }
+                    this.props.setInfoButtonType(2);
                     break;
                 case "ResponderAnswerObjective":
                     switch (this.props.resId) {
@@ -210,6 +233,7 @@ export default class Info extends Component {
                             );
                             break;
                     }
+                    this.props.setInfoButtonType(2);
                     break;
                 case "ResponderReadyHand":
                 case "ResponderReadySubjective":
@@ -222,6 +246,7 @@ export default class Info extends Component {
                             this.setInfoMessage("正在抢答...");
                             break;
                     }
+                    this.props.setInfoButtonType(2);
                     break;
                 case "ResponderHand":
                 case "ResponderSubjective":
@@ -234,6 +259,7 @@ export default class Info extends Component {
                             this.setInfoMessage("正在抢答...");
                             break;
                     }
+                    this.props.setInfoButtonType(2);
                     break;
                 case "ResponderPeopleHand":
                 case "ResponderPeopleSubjective":
@@ -246,6 +272,7 @@ export default class Info extends Component {
                             this.setInfoMessage(`${this.props.desc}`);
                             break;
                     }
+                    this.props.setInfoButtonType(2);
                     break;
                 case "ResponderAnswerSubjective":
                     switch (this.props.resId) {
@@ -257,6 +284,7 @@ export default class Info extends Component {
                             this.setInfoMessage("学生答案以提交");
                             break;
                     }
+                    this.props.setInfoButtonType(2);
                     break;
                 case "ResponderPeopleHandShowStuAnswer":
                 case "ResponderAnswerSubjectiveShowStuAnswer":
@@ -269,6 +297,7 @@ export default class Info extends Component {
                             this.setInfoMessage("学生答案以提交");
                             break;
                     }
+                    this.props.setInfoButtonType(2);
                     break;
             }
         }
@@ -299,7 +328,7 @@ export default class Info extends Component {
             desc: desc,
         };
         // params = { messageJson: JSON.stringify(params) };
-        http.post(url, params)
+        http.post(url, params, false, false)
             .then((res) => {
                 console.log(
                     "ControllerSender===================================="

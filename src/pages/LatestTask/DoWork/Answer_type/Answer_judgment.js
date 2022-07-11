@@ -62,7 +62,6 @@ class Answer_judgment extends Component {
     }
  }  
  stuAnswer(str){
-  //  console.log('判断题',str)
   this.setState({stu_answer:str})
   this.props.getStu_answer(str)
   this.props.getischange(true);
@@ -80,35 +79,27 @@ class Answer_judgment extends Component {
       const questionChoiceList = this.state.questionChoiceList;
       const  width = Dimensions.get('window').width;
   return (  
-    <View style={{backgroundColor:'#FFFFFF'}}  >
+    <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'100%'}}  >
         {/* 第一行显示 第几题  题目类型 */}
           <View  style={styles.answer_title}>
               
               <Text style={{color:'#59B9E0'}}>{(this.state.numid?this.state.numid:0)+1}</Text>
               <Text>/{this.props.sum?this.props.sum:1}题 </Text>
               <Text style={{marginLeft:20}}>{this.state.questionTypeName}</Text>
-              {/* <TouchableOpacity style={{position:'absolute',right:20}}
-                    // 小眼睛 先提交本题目，在跳转到提交页面
-                    onPress={
-                      ()=>{
-                        
-                          //导航跳转
-                          this.props.navigation.navigate('SubmitPaper',
-                          {   paperId:this.props.paperId,
-                              submit_status:this.props.submit_status,
-                              startdate:this.props.startdate,
-                              papername:this.props.papername,
-                              isallObj:this.props.isallObj})
-                      }
-                  }
-                >
-                    <Image source={require('../../../../assets/image3/look.png')}></Image>
-                </TouchableOpacity> */}
           </View>
 
         {/* 题目展示区域 */}
           <ScrollView style={styles.answer_area}>  
-              <RenderHtml contentWidth={width}  source={{html:HTML}}/>
+              <RenderHtml contentWidth={width}  source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
               <Text style={{height:50}}></Text>
           </ScrollView>
 
@@ -122,7 +113,14 @@ class Answer_judgment extends Component {
 }
 
 const styles = StyleSheet.create({
-    answer_title:{padding:10,paddingLeft:30,flexDirection:'row'},
-    answer_area:{height:'85%',padding:20},
-    answer_result:{borderTopWidth:0.5,borderTopColor:'#000000',paddingLeft:30,paddingTop:5,paddingBottom:5,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
+    answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
+    answer_area:{padding:20},
+    answer_result:{
+      borderTopWidth:0.5,
+      borderTopColor:'#000000',
+      paddingLeft:30,
+      height:60,
+      paddingRight:30,
+      flexDirection:'row',
+      justifyContent:'space-around'}
 })

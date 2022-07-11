@@ -8,6 +8,7 @@ import ImageHandler from "../../../../utils/Camera/Camera";
 import http from "../../../../utils/http/request";
 import { useNavigation } from "@react-navigation/native";
 import Toast from '../../../../utils/Toast/Toast';
+import { screenWidth, screenHeight } from "../../../../utils/Screen/GetSize";
 import { Waiting, WaitLoading } from "../../../../utils/WaitLoading/WaitLoading";
 export default function Answer_subjectiveContainer(props) {
     const navigation = useNavigation();
@@ -282,13 +283,7 @@ class Answer_subjective extends Component {
         questionHTML = this.showStuAnswer();
         // console.log('答案要显示的内容：',questionHTML)
         return (
-            <View
-                style={{
-                    backgroundColor: "#FFFFFF",
-                    borderTopColor: "#000000",
-                    borderTopWidth: 0.5,
-                }}
-            >
+            <View style={{backgroundColor: "#FFFFFF",borderTopColor: "#000000",borderTopWidth: 0.5,height:'100%'}}>
                 {/* 第一行显示 第几题  题目类型 */}
                 <View style={styles.answer_title}>
                     <Text style={{ color: "#59B9E0" }}>
@@ -298,23 +293,6 @@ class Answer_subjective extends Component {
                     <Text style={{ marginLeft: 20 }}>
                         {this.state.questionTypeName}
                     </Text>
-                    {/* <TouchableOpacity
-                        style={{ position: "absolute", right: 20, top: 10 }}
-                        onPress={() => {
-                            //导航跳转
-                            this.props.navigation.navigate("SubmitPaper", {
-                                paperId: this.props.paperId,
-                                submit_status: this.props.submit_status,
-                                startdate: this.props.startdate,
-                                papername: this.props.papername,
-                                isallObj: this.props.isallObj,
-                            });
-                        }}
-                    >
-                        <Image
-                            source={require("../../../../assets/image3/look.png")}
-                        ></Image>
-                    </TouchableOpacity> */}
                 </View>
 
                 {/* 题目展示区域 */}
@@ -325,7 +303,16 @@ class Answer_subjective extends Component {
                             : styles.answer_area
                     }
                 >
-                    <RenderHtml contentWidth={width} source={{ html: HTML }} />
+                    <RenderHtml contentWidth={width} source={{ html: HTML }} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
                     <Text style={{ height: 50 }}></Text>
                 </ScrollView>
 
@@ -423,6 +410,7 @@ class Answer_subjective extends Component {
                             borderColor: "#000000",
                             borderWidth: 1,
                             flexDirection: "row",
+                            borderRadius:3
                         }}
                     >
                         <TextInput
@@ -435,9 +423,10 @@ class Answer_subjective extends Component {
                             }}
                             onBlur={()=>{}}
                             style={{
-                                width: 200,
+                                width: screenWidth*0.6,
                                 backgroundColor: "#FFFFFF",
                                 height: 40,
+                                borderRadius:5
                             }}
                         ></TextInput>
                         {/* 保存按钮将文本输入框的内容传到学生作答答案里面 */}
@@ -491,19 +480,20 @@ class Answer_subjective extends Component {
 }
 
 const styles = StyleSheet.create({
-    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row" },
-    answer_area: { height: "65%", padding: 20 },
+    answer_title: { padding: 10, paddingLeft: 30, flexDirection: "row" ,height:40},
+    answer_area: { padding: 10},
+
     answer_preview: {
         borderTopWidth: 1,
         borderTopColor: "#000000",
-        height: "20%",
+        height:'20%',
         backgroundColor: "#FFFFFF",
     },
-    answer_area_Long: { height: "2%", padding: 20 },
+    answer_area_Long: { padding: 10},
     answer_preview_Long: {
         borderTopWidth: 1,
         borderTopColor: "#000000",
-        height: "78%",
+        height:'75%',
         backgroundColor: "#FFFFFF",
     },
     backdrop: {
@@ -511,12 +501,13 @@ const styles = StyleSheet.create({
     },
     content: {
         borderTopWidth: 0.5,
+        paddingBottom:'3%',
         borderTopColor: "#000000",
         width: "100%",
+        height:80,
         flexDirection: "row",
         justifyContent: "space-around",
         backgroundColor: "#E6DDD6",
-        padding: 10,
         alignItems: "center",
     },
 });

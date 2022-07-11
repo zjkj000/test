@@ -17,7 +17,7 @@ export const styles = StyleSheet.create({
         backgroundColor: "transparent",
     },
     rectangle: {
-        height: 198,
+        height: 200,
         width: 200,
         borderWidth: 1,
         borderColor: "#fcb602",
@@ -31,7 +31,7 @@ export const styles = StyleSheet.create({
     border: {
         flex: 0,
         width: 196,
-        height: 2,
+        height: 0,
         backgroundColor: "#fcb602",
     },
 });

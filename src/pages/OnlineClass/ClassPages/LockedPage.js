@@ -325,7 +325,6 @@ export default class LockedPage extends Component {
                             source={require("../../../assets/image3/photoalbum.png")}
                         ></Image>
                     </TouchableOpacity>
-
                     <TouchableOpacity
                         onPress={() => {
                             this.setAnswer(this.state.msg);

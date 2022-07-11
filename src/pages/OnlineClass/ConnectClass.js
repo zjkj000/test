@@ -139,6 +139,7 @@ export default ConnectClass = () => {
                 style={styles.Input}
                 value={ipAddress}
                 setValue={setIpAddress}
+                storageName="historyListRemote"
             ></HistoryInput>
             {/* <HistoryInput
                 icon={<Icon name="person" />}

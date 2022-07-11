@@ -155,7 +155,7 @@ class AssignPicturesWork extends Component {
         const assignList = [];
         if(this.state.className == ''){
             return(
-                <View style={{justifyContent:'center', alignItems: 'center'}}>
+                <View style={{justifyContent:'center', alignItems: 'center',width:'100%'}}>
                     <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>请先选择课堂</Text>
                 </View>
             );
@@ -217,7 +217,7 @@ class AssignPicturesWork extends Component {
                 return(
                     this.state.groupList.length > 0
                     ? content
-                    : <View style={{justifyContent:'center', alignItems: 'center'}}>
+                    : <View style={{justifyContent:'center', alignItems: 'center',width:'100%'}}>
                         <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>
                         您还没有创建小组，可以前往电脑端进行创建</Text>
                     </View>
@@ -434,8 +434,8 @@ class AssignPicturesWork extends Component {
                 for(let i=0;i<this.state.groupSelected.length;i++){
                     classIdOrGroupId = classIdOrGroupId+ ';'+ this.state.groupSelected[i].id
                     classOrGroupName = classOrGroupName+ ';'+  this.state.groupSelected[i].value
-                    stuIds =stuIds +','+this.state.groupSelected[i].ids
-                    stuNames =stuNames +','+this.state.groupSelected[i].name
+                    stuIds =stuIds +';'+this.state.groupSelected[i].ids
+                    stuNames =stuNames +';'+this.state.groupSelected[i].name
                 }
                 if(this.state.groupSelected.length>0){
                     stuIds=  stuIds.substring(1)
@@ -510,7 +510,10 @@ class AssignPicturesWork extends Component {
           <Waiting/>
         <View style={{flexDirection:'row',paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
                 <Text style={{fontSize:15,marginRight:40}}>作业名称:</Text>
-                <TextInput value={this.state.paperName} placeholder='传过来的值'></TextInput>
+                <TextInput value={this.state.paperName}
+                 onChangeText={(text)=>{
+                    this.setState({paperName:text})
+                 }}></TextInput>
         </View>
         
         <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
@@ -575,7 +578,7 @@ class AssignPicturesWork extends Component {
         </View>
 
         <ScrollView>
-            <View style={{alignItems:'flex-start',marginTop:15,marginBottom:50,flexDirection:'row',flexWrap:'wrap',justifyContent:'center'}}>
+            <View style={{alignItems:'flex-start',marginTop:5,marginBottom:30,flexDirection:'row',flexWrap:'wrap'}}>
                 {this.showAssignToWho()}
             </View>
                 

@@ -1,6 +1,6 @@
 import { Layout } from "@ui-kitten/components";
 import React, { Component } from "react";
-import { View, Image } from "react-native";
+import { View, Image, PixelRatio } from "react-native";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { styles } from "./styles";
 import http from "../../../utils/http/request";
@@ -10,8 +10,16 @@ import Img_arr from "./Img_arr";
 export default class Controller extends Component {
     constructor(props) {
         super(props);
-        const scaleSize = 0.51;
-        const scaleSizeBig = 0.54;
+        let scaleSize = 0.5 * PixelRatio.get();
+        let scaleSizeBig = 0.51 * PixelRatio.get();
+        console.log("PixelRatio====================================");
+        console.log(scaleSize);
+        console.log(scaleSizeBig);
+        console.log("====================================");
+        // if (isPad()) {
+        //     scaleSize = 0.66;
+        //     scaleSizeBig = 0.66;
+        // }
 
         this.state = {
             buttonArray: [
@@ -22,6 +30,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 justifyContent: "flex-start",
+                                alignItems: "flex-start",
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -34,7 +43,8 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 flex: 1,
-                                justifyContent: "flex-end",
+                                justifyContent: "flex-start",
+                                alignItems: "center",
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -50,6 +60,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 justifyContent: "flex-start",
+                                alignItems: "flex-end",
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -123,7 +134,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 justifyContent: "flex-end",
-                                alignItems: "center",
+                                alignItems: "flex-start",
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -136,7 +147,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 flex: 1,
-                                justifyContent: "flex-start",
+                                justifyContent: "flex-end",
                                 alignItems: "center",
                             },
                             styles: {
@@ -150,7 +161,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 justifyContent: "flex-end",
-                                alignItems: "center",
+                                alignItems: "flex-end",
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -190,7 +201,7 @@ export default class Controller extends Component {
             desc: desc,
         };
         // params = { messageJson: JSON.stringify(params) };
-        http.post(url, params)
+        http.post(url, params, false, false)
             .then((res) => {
                 console.log(
                     "ControllerSender===================================="

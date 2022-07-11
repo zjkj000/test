@@ -3,6 +3,7 @@ import React, { Component, useState } from 'react'
 import Checkbox from '../../DoWork/Utils/Checkbox'
 import RenderHtml from 'react-native-render-html';
 import { useNavigation } from "@react-navigation/native";
+import { screenHeight } from '../../../../utils/Screen/GetSize';
 
 export default function LG_multipleContainer(props) {
     const navigation = useNavigation();
@@ -83,7 +84,7 @@ class LG_multiple extends Component {
     const questionChoiceList =this.state.questionChoiceList;
     const  width = Dimensions.get('window').width;
     return (
-      <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5}}  >
+      <View style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'100%'}}  >
             {/* 第一行显示 第几题  题目类型 */}
             <View  style={styles.answer_title}>
                 <Text style={{fontWeight:'600',color:	'#000000',fontSize:17,width:'65%'}}>{this.state.resourceName}</Text>
@@ -91,7 +92,16 @@ class LG_multiple extends Component {
             
             {/* 题目展示区域 */}
             <ScrollView style={styles.answer_area}>
-              <RenderHtml contentWidth={width}  source={{html:HTML}}/>
+              <RenderHtml contentWidth={width}  source={{html:HTML}} 
+                                    tagsStyles={{
+                                                img:{
+                                                    flexDirection:'row'
+                                                },
+                                                p:{
+                                                    flexDirection:'row'
+                                                }
+                                            }}
+                                    />
             </ScrollView>
             
            
@@ -106,7 +116,7 @@ class LG_multiple extends Component {
 }
 
 const styles = StyleSheet.create({
-    answer_title:{padding:10,paddingLeft:30,flexDirection:'row'},
-    answer_area:{height:"85%",padding:20},
-    answer_result:{borderTopWidth:0.8,borderTopColor:'#000000',paddingLeft:30,paddingTop:5,paddingBottom:5,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
+    answer_title:{padding:10,paddingLeft:30,flexDirection:'row',height:40},
+    answer_area:{padding:20,paddingTop:0},
+    answer_result:{borderTopWidth:0.8,borderTopColor:'#000000',paddingLeft:30,height:60,paddingRight:30,flexDirection:'row',justifyContent:'space-around'}
 })
