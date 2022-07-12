@@ -12,7 +12,6 @@ export default class Module extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            moduleButton: [0, 0, 0],
             questionModalVisible: false,
             singleQuestionNum: 4,
             mulQuestionNum: 4,
@@ -25,10 +24,9 @@ export default class Module extends Component {
         };
     }
     handlePress = (index) => {
-        let { moduleButton } = this.state;
-        moduleButton = [0, 0, 0];
-        moduleButton[index] = 1;
-        this.setState({ moduleButton: [...moduleButton] });
+        // moduleButton = [0, 0, 0];
+        // moduleButton[index] = 1;
+        this.props.setModuleButton(index, 1);
         this.setState({ pressIndex: index });
         this.setState({ questionModalVisible: true });
     };
@@ -255,8 +253,8 @@ export default class Module extends Component {
                                             theme["color-danger-600"],
                                     }}
                                     onPress={() => {
+                                        this.props.setModuleButton(-1);
                                         this.setState({
-                                            moduleButton: [0, 0, 0],
                                             questionModalVisible: false,
                                             pressIndex: -1,
                                         });
@@ -285,7 +283,7 @@ export default class Module extends Component {
         });
     };
     renderModuleButton = () => {
-        const { moduleButton } = this.state;
+        const { moduleButton } = this.props;
         return (
             <Layout style={styles.buttonZone}>
                 {moduleButton.map((item, index) => {

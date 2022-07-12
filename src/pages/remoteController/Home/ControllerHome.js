@@ -43,9 +43,18 @@ class HomeComponent extends Component {
             exitModalVisible: false,
             classListVisible: false,
             questionAnalysisVisible: false,
+            moduleButton: [0, 0, 0],
             // showLoading: false,
         };
     }
+    setModuleButton = (index, status) => {
+        let { moduleButton } = this.state;
+        moduleButton = [0, 0, 0];
+        if (index !== -1) {
+            moduleButton[index] = status;
+        }
+        this.setState({ moduleButton: [...moduleButton] });
+    };
     componentDidMount() {
         // 开启轮询任务
         this.timerId = setInterval(() => {
@@ -60,15 +69,21 @@ class HomeComponent extends Component {
         switch (index) {
             case 0:
                 this.setState({ infoButtonType: "normalQuestion" });
+                this.setModuleButton(0, 1);
                 break;
             case 1:
                 this.setState({ infoButtonType: "randomQuestion" });
+                this.setModuleButton(1, 1);
                 break;
             case 2:
                 this.setState({ infoButtonType: "rushQuestion" });
+                this.setModuleButton(2, 1);
                 break;
             default:
-                this.setState({ infoButtonType: "default" });
+                this.setState({
+                    infoButtonType: "default",
+                    moduleButton: [0, 0, 0],
+                });
                 break;
         }
     };
@@ -231,6 +246,7 @@ class HomeComponent extends Component {
     render() {
         const { ipAddress, userName } = this.props.route.params;
         const { learnPlanId, action } = this.state.event;
+        const { moduleButton } = this.state;
         return (
             <Layout style={styles.mainContainer}>
                 {/* <Loading show={this.state.showLoading} /> */}
@@ -247,17 +263,21 @@ class HomeComponent extends Component {
                 <Layout style={styles.infoContainer}>
                     <Module
                         {...this.state.event}
+                        moduleButton={moduleButton}
+                        setModuleButton={this.setModuleButton}
                         ipAddress={ipAddress}
                         actionType={this.state.actionType}
                         userName={userName}
                         setInfoButtonType={this.setInfoButtonType}
                     />
                     <Info
+                        resId={this.state.event.resId}
                         action={action}
                         ipAddress={ipAddress}
                         actionType={this.state.actionType}
                         userName={userName}
                         infoButtonType={this.state.infoButtonType}
+                        setInfoButtonType={this.setInfoButtonType}
                     />
                 </Layout>
                 <Controller

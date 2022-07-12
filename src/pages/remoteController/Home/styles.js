@@ -101,8 +101,8 @@ export const styles = StyleSheet.create({
     },
     controllerBlock: {
         flex: 2,
-        borderColor: "blue",
-        borderWidth: 1,
+        // borderColor: "blue",
+        // borderWidth: 1,
         height: "100%",
         alignItems: "center",
         justifyContent: "center",

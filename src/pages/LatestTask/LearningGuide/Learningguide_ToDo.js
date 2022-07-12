@@ -518,8 +518,7 @@ export default function Paper_ToDo(props) {
                                 style={{
                                     position: "absolute",
                                     left: 10,
-                                    top: "45%",
-                                    zIndex: 99,
+                                    top: "45%",zIndex:2,width:50,height:50
                                 }}
                                 onPress={() => {
                                     const newindex = selectedIndex - 1;
@@ -544,8 +543,7 @@ export default function Paper_ToDo(props) {
                                 style={{
                                     position: "absolute",
                                     right: 10,
-                                    top: "45%",
-                                    zIndex: 99,
+                                    top: "45%",zIndex:2,width:50,height:50
                                 }}
                                 onPress={() => {
                                     const newindex = selectedIndex + 1;

@@ -280,7 +280,7 @@ class MyPageComponent extends Component {
                 >
                     <Divider />
                     <View style={styles.alternativeContainer}>
-                        <Text style={styles.textLeft}>test</Text>
+                        <Text style={styles.textLeft}>绘图测试</Text>
                         <Text style={styles.textRight}>
                             <Icon
                                 style={styles.icon}
@@ -290,6 +290,25 @@ class MyPageComponent extends Component {
                         </Text>
                     </View>
                 </TouchableOpacity>
+
+                <TouchableOpacity
+                    onPress={() => {
+                        this.props.navigation.navigate({ name: "TestPage_move" });
+                    }}
+                >
+                    <Divider />
+                    <View style={styles.alternativeContainer}>
+                        <Text style={styles.textLeft}>缩放平移测试</Text>
+                        <Text style={styles.textRight}>
+                            <Icon
+                                style={styles.icon}
+                                fill="#8F9BB3"
+                                name="arrow-ios-forward-outline"
+                            />
+                        </Text>
+                    </View>
+                </TouchableOpacity>
+
                 {global.constants.userType === "STUDENT" ? (
                     <>
                         <TouchableOpacity>
