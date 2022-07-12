@@ -1525,6 +1525,7 @@ class LearnCasePropertyModal extends React.Component {
                                 knowledge: '', //知识点(选中的)
                                 knowledgeCode: '', //选中的知识点项的编码
                                 knowledgeVisibility: false, //知识点选择列表是否显示 
+                                shortKnowledge: '',
 
                                 learnPlanType1: '全部',
                                 learnPlanType2: '全部',

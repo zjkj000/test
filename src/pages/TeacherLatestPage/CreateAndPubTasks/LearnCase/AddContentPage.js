@@ -472,7 +472,18 @@ class AddContentPage extends React.Component {
                     {/**题面 */}
                     <Text style={styles.paperContent}>[题面]</Text>
                     <View style={{padding: 10}}>
-                        <RenderHtml contentWidth={screenWidth} source={{html: contentList[selectContentIndex].shitiShow}}></RenderHtml>
+                        <RenderHtml 
+                            contentWidth={screenWidth} 
+                            source={{html: contentList[selectContentIndex].shitiShow}}
+                            tagsStyles={{
+                                img: {
+                                  flexDirection: 'row',
+                                },
+                                p: {
+                                  flexDirection: 'row',
+                                },
+                            }}
+                        ></RenderHtml>
                     </View>
                     
                     <View style={{ height: 1, backgroundColor: "#999999" }} />
@@ -480,14 +491,36 @@ class AddContentPage extends React.Component {
                     {/**答案 */}
                     <Text style={styles.paperContent}>[答案]</Text>
                     <View style={{padding: 10}}>
-                        <RenderHtml contentWidth={screenWidth} source={{html: contentList[selectContentIndex].shitiAnswer}}></RenderHtml>
+                        <RenderHtml 
+                            contentWidth={screenWidth} 
+                            source={{html: contentList[selectContentIndex].shitiAnswer}}
+                            tagsStyles={{
+                                img: {
+                                  flexDirection: 'row',
+                                },
+                                p: {
+                                  flexDirection: 'row',
+                                },
+                            }}
+                        ></RenderHtml>
                     </View>
                     <View style={{ height: 1, backgroundColor: "#999999" }} />
                     
                     {/**解析 */}
                     <Text style={styles.paperContent}>[解析]</Text>
                     <View style={{padding: 10}}>
-                        <RenderHtml contentWidth={screenWidth} source={{html: contentList[selectContentIndex].shitiAnalysis}}></RenderHtml>
+                        <RenderHtml 
+                            contentWidth={screenWidth} 
+                            source={{html: contentList[selectContentIndex].shitiAnalysis}}
+                            tagsStyles={{
+                                img: {
+                                  flexDirection: 'row',
+                                },
+                                p: {
+                                  flexDirection: 'row',
+                                },
+                            }}
+                        ></RenderHtml>
                     </View>
                 </ScrollView>
             );

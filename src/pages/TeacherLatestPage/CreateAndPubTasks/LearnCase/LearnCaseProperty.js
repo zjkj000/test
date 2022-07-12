@@ -989,75 +989,87 @@ class LearnCaseProperty extends React.Component {
                         flexDirection: 'row',
                         backgroundColor: '#fff',
                         top: '100%',
-                        //height: '8%',
+                        height: '9%',
                         position: 'absolute',
                     }}
                 >
                     <Text style={{ width: screenWidth * 0.05 , backgroundColor: '#fff'}}></Text>
-                    <Button style={styles.button}
-                        onPress={() => {
-                            //Alert.alert('取消功能还未写！！！')
-                            this.props.navigation.goBack();
-                        }}
-                    >
-                        取消
-                    </Button>
+                    <View style={{
+                        height: screenHeight*0.08,
+                        width: screenWidth * 0.4,
+                        backgroundColor: '#fff',
+                    }}>
+                        <Button style={styles.button}
+                            onPress={() => {
+                                //Alert.alert('取消功能还未写！！！')
+                                this.props.navigation.goBack();
+                            }}
+                        >
+                            取消
+                        </Button>
+                    </View>
                     <Text style={{ width: screenWidth * 0.1 }}></Text>
-                    <Button style={styles.button}
-                        onPress={() => { 
-                            // Alert.alert('该功能还未开发');
-                            //console.log('----------',textInputName , textInputPaper); 
-                            // if(
-                            //     textInputName != ''
-                            //     && this.state.studyRank != ''
-                            //     && this.state.studyClass != ''
-                            //     && this.state.edition != ''
-                            //     && this.state.book != ''
-                            //     && this.state.knowledge != ''
-                            //     && textLearnSumTime != ''
-                            //     && textStudyTime != ''
-                            // )(
-                                    this.props.navigation.navigate({
-                                        name: '创建导学案',
-                                        params: {
-                                            createType: this.props.createType,
-                                            actionType: 'create',
-                                            name: textInputName,
-                                            introduction: textInputPaper,
-                                            useAim: this.state.useAim,
-                                            learnSumTime: textLearnSumTime,
-                                            studyTime: textStudyTime,
-                                            learnAim: textLearnAim,
-                                            learnPoint: textLearnAim,
-                                            learnDiff: textLearnDiff,
-                                            courseSummary: textCourseSummary,
-                                            courseExpansion: textCourseExpansion,
-                                            studyRankId: this.state.studyRankId,
-                                            studyRank: this.state.studyRank,
-                                            studyClassId: this.state.studyClassId,
-                                            studyClass: this.state.studyClass,
-                                            editionId: this.state.editionId,
-                                            edition: this.state.edition,
-                                            bookId: this.state.bookId,
-                                            book: this.state.book,
-                                            knowledgeCode: this.state.knowledgeCode,
-                                            knowledge: this.state.Longknowledge,
+                    <View style={{
+                        height: screenHeight*0.08,
+                        width: screenWidth * 0.4,
+                        backgroundColor: '#fff',
+                    }}>
+                        <Button style={styles.button}
+                            onPress={() => { 
+                                // Alert.alert('该功能还未开发');
+                                //console.log('----------',textInputName , textInputPaper); 
+                                if(
+                                    textInputName != ''
+                                    && this.state.studyRank != ''
+                                    && this.state.studyClass != ''
+                                    && this.state.edition != ''
+                                    && this.state.book != ''
+                                    && this.state.knowledge != ''
+                                    && textLearnSumTime != ''
+                                    && textStudyTime != ''
+                                )(
+                                        this.props.navigation.navigate({
+                                            name: '创建导学案',
+                                            params: {
+                                                createType: this.props.createType,
+                                                actionType: 'create',
+                                                name: textInputName,
+                                                introduction: textInputPaper,
+                                                useAim: this.state.useAim,
+                                                learnSumTime: textLearnSumTime,
+                                                studyTime: textStudyTime,
+                                                learnAim: textLearnAim,
+                                                learnPoint: textLearnAim,
+                                                learnDiff: textLearnDiff,
+                                                courseSummary: textCourseSummary,
+                                                courseExpansion: textCourseExpansion,
+                                                studyRankId: this.state.studyRankId,
+                                                studyRank: this.state.studyRank,
+                                                studyClassId: this.state.studyClassId,
+                                                studyClass: this.state.studyClass,
+                                                editionId: this.state.editionId,
+                                                edition: this.state.edition,
+                                                bookId: this.state.bookId,
+                                                book: this.state.book,
+                                                knowledgeCode: this.state.knowledgeCode,
+                                                knowledge: this.state.Longknowledge,
 
-                                            channelNameList: this.state.channelNameList, //学段名列表（接口数据）
-                                            studyClassList: this.state.studyClassList, //学科列表（接口数据）
-                                            editionList: this.state.editionList, //版本列表（接口数据）
-                                            bookList: this.state.bookList, //教材列表（接口数据）  
-                                            knowledgeList: this.state.knowledgeList, //从接口中返回的数据
-                                        }
-                                    })
-                            // )
-                            // else{
-                            //     Alert.alert('','必填项不完整', [{} , {text: '关闭', onPress: ()=>{}}]);
-                            // }
-                        }}
-                    >
-                        确定
-                    </Button>
+                                                channelNameList: this.state.channelNameList, //学段名列表（接口数据）
+                                                studyClassList: this.state.studyClassList, //学科列表（接口数据）
+                                                editionList: this.state.editionList, //版本列表（接口数据）
+                                                bookList: this.state.bookList, //教材列表（接口数据）  
+                                                knowledgeList: this.state.knowledgeList, //从接口中返回的数据
+                                            }
+                                        })
+                                )
+                                else{
+                                    Alert.alert('','必填项不完整', [{} , {text: '关闭', onPress: ()=>{}}]);
+                                }
+                            }}
+                        >
+                            确定
+                        </Button>
+                    </View>
                     <Text style={{ width: screenWidth * 0.05 }}></Text>
                 </View>
             </View>
@@ -1182,6 +1194,8 @@ const styles = StyleSheet.create({
     },
     button: {
         width: screenWidth * 0.4,
+        height: screenHeight * 0.05,
+        top: 9,
         color: 'white',
         backgroundColor: '#4DC7F8',
     },

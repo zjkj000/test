@@ -1122,7 +1122,18 @@ class CreateHomework extends React.Component {
                 {/* {console.log('---题目-----' ,paperList[selectPaperIndex].tiMian)} */}
                 <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: paperList[selectPaperIndex].tiMian }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: paperList[selectPaperIndex].tiMian }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
 
 
@@ -1130,15 +1141,40 @@ class CreateHomework extends React.Component {
 
                 {/**答案 */}
                 <Text style={styles.paperContent}>[答案]</Text>
+                <Text>答案：{paperList[selectPaperIndex].answer}</Text>
+                {console.log(paperList[selectPaperIndex].answer)}
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: paperList[selectPaperIndex].answer }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: paperList[selectPaperIndex].answer }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
 
                 {/**解析 */}
                 <Text style={styles.paperContent}>[解析]</Text>
+                <Text>解析：{paperList[selectPaperIndex].analysis}</Text>
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: paperList[selectPaperIndex].analysis }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: paperList[selectPaperIndex].analysis }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
             </ScrollView>
         );
@@ -1462,7 +1498,18 @@ class CreateHomework extends React.Component {
                 {/* {console.log('---题目-----' ,selectPaperList[updatePaperIndex].tiMian)} */}
                 <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: selectPaperList[updatePaperIndex].tiMian }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: selectPaperList[updatePaperIndex].tiMian }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
 
 
@@ -1471,14 +1518,36 @@ class CreateHomework extends React.Component {
                 {/**答案 */}
                 <Text style={styles.paperContent}>[答案]</Text>
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: selectPaperList[updatePaperIndex].answer }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: selectPaperList[updatePaperIndex].answer }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
 
                 {/**解析 */}
                 <Text style={styles.paperContent}>[解析]</Text>
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: selectPaperList[updatePaperIndex].analysis }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: selectPaperList[updatePaperIndex].analysis }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
             </ScrollView>
         );
