@@ -2,8 +2,33 @@ package com.navigationdemo;
 
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.os.FileUtils;
+import android.text.Spannable;
+import android.text.SpannableString;
+import android.text.style.ImageSpan;
 import android.util.Base64;
 import android.util.Log;
+
+//import org.apache.http.HttpEntity;
+//import org.apache.http.NameValuePair;
+//import org.apache.http.client.ClientProtocolException;
+//import org.apache.http.client.entity.UrlEncodedFormEntity;
+//import org.apache.http.client.methods.CloseableHttpResponse;
+//import org.apache.http.client.methods.HttpPost;
+//import org.apache.http.impl.client.CloseableHttpClient;
+//import org.apache.http.impl.client.HttpClients;
+//import org.apache.http.message.BasicNameValuePair;
+//import org.apache.http.util.EntityUtils;
+//import cz.msebera.android.httpclient.HttpEntity;
+//import cz.msebera.android.httpclient.NameValuePair;
+//import cz.msebera.android.httpclient.client.ClientProtocolException;
+//import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+//import cz.msebera.android.httpclient.client.methods.CloseableHttpResponse;
+//import cz.msebera.android.httpclient.client.methods.HttpPost;
+//import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
+//import cz.msebera.android.httpclient.impl.client.HttpClients;
+//import cz.msebera.android.httpclient.message.BasicNameValuePair;
+//import cz.msebera.android.httpclient.util.EntityUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,12 +36,20 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.ProtocolException;
 import java.net.URL;
+import java.net.URLEncoder;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -600,6 +633,36 @@ public class HttpActivity extends AnswerActivity {
         }).start();
     }
 
+    public static String bitmapToBase64(Bitmap bitmap) {
+
+        String result = null;
+        ByteArrayOutputStream baos = null;
+        try {
+            if (bitmap != null) {
+                baos = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, baos);
+
+                baos.flush();
+                baos.close();
+
+                byte[] bitmapBytes = baos.toByteArray();
+                result = Base64.encodeToString(bitmapBytes, Base64.NO_WRAP);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (baos != null) {
+                    baos.flush();
+                    baos.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+
     //学生上传图片
     public static void saveBase64Image(Bitmap bitmap) {
         new Thread(new Runnable(){
@@ -609,29 +672,21 @@ public class HttpActivity extends AnswerActivity {
                     String roomId = LaunchActivity.mRoomId;
                     String userId = LaunchActivity.mUserId;
 
-                    /**
-                     *bitmap转为base64
-                     */
-                    //先将bitmap转为byte[]
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.JPEG,50,baos);
-                    byte[] bytes = baos.toByteArray();
-
-                    //将byte[]转为base64
-                    String baseCode = Base64.encodeToString(bytes,Base64.NO_WRAP);
+                    String baseCode = bitmapToBase64(bitmap);
                     System.out.println("base64:"+baseCode);
 
-                    URL url = new URL("http://www.cn901.net:8111/AppServer/ajax/studentApp_saveBase64Image.do?baseCode="+baseCode+"&&learnPlanId==test111&userId=ming6002&callback=ha");
+                    //URL url = new URL("http://www.cn901.net:8111/AppServer/ajax/studentApp_saveBase64Image.do?learnPlanId=test111&userId=ming6002&baseCode="+baseCode);
 
-//                    URL  url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_saveBase64Image.do?"
-//                            + "roomId="+roomId
-//                            + "&userId="+userId
-//                            + "&questionId="+questionId
-//                            + "&baseCode="+baseCode);
+                    URL  url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_saveBase64Image.do?"
+                            + "roomId="+roomId
+                            + "&userId="+userId
+                            + "&questionId="+questionId
+                            + "&baseCode="+baseCode);
                     System.out.println(url);
                     HttpURLConnection ansConnection = (HttpURLConnection) url.openConnection();
-                    ansConnection.setRequestMethod("GET");
-                    System.out.println("ansConnection"+ansConnection);
+                    ansConnection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+                    ansConnection.setRequestMethod("POST");
+                    //System.out.println("ansConnection"+ansConnection);
                     ansConnection.setConnectTimeout(8000);
                     ansConnection.setReadTimeout(8000);
                     InputStream inputStream = ansConnection.getInputStream();
@@ -673,4 +728,152 @@ public class HttpActivity extends AnswerActivity {
             }
         }).start();
     }
+
+//    public static String testUploadImageBase64(Bitmap bitmap) {
+//        String baseCode = bitmapToBase64(bitmap);
+//        //String serverUrl = "http://www.cn901.com/ShopGoods/ajax/studentApp_saveBase64Image.do";
+//        String serverUrl = "http://www.cn901.net:8111/AppServer/ajax/studentApp_saveBase64Image.do";
+//        String str = null;
+//        CloseableHttpClient httpclient = HttpClients.createDefault();
+//        HttpPost httppost = new HttpPost(serverUrl);
+//        List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+//        formparams.add(new BasicNameValuePair("baseCode", baseCode));
+//        formparams.add(new BasicNameValuePair("learnPlanId", "1111"));
+//        formparams.add(new BasicNameValuePair("userId", "ming6010"));
+//        UrlEncodedFormEntity uefEntity;
+//        try {
+//            uefEntity = new UrlEncodedFormEntity(formparams, "GBK");
+//            httppost.setEntity(uefEntity);
+//            CloseableHttpResponse response = httpclient.execute(httppost);
+//            try {
+//                HttpEntity entity = response.getEntity();
+//                if (entity != null) {
+//                    str = EntityUtils.toString(entity);
+//                    return str;
+//                }
+//            } finally {
+//                response.close();
+//            }
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+//        } catch (UnsupportedEncodingException e1) {
+//            e1.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                httpclient.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return "";
+//    }
+
+    public static String readContentFromPost(Bitmap bitmap){
+        final String[] ans = {""};
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                try {
+                    String baseCode = bitmapToBase64(bitmap);
+                    System.out.println("basecode:"+baseCode);
+
+
+//                    URL  postUrl = new URL("http://www.cn901.net:8111/AppServer/ajax/studentApp_saveBase64Image.do?"
+//                    + "roomId="+LaunchActivity.mRoomId
+//                    + "&userId="+LaunchActivity.mUserId
+//                    + "&questionId="+questionId
+//                    + "&baseCode="+baseCode);
+
+                    // Post请求的url，与get不同的是不需要带参数
+                    //URL postUrl = new URL("http://www.cn901.net:8111/AppServer/ajax/studentApp_saveBase64Image.do");
+                    URL postUrl = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_saveBase64Image.do");
+                    // 打开连接
+                    HttpURLConnection connection = (HttpURLConnection) postUrl.openConnection();
+                    // 设置是否向connection输出，因为这个是post请求，参数要放在
+                    // http正文内，因此需要设为true
+                    connection.setDoOutput(true);
+                    // Read from the connection. Default is true.
+                    connection.setDoInput(true);
+                    // 默认是 GET方式
+                    connection.setRequestMethod("POST");
+                    // Post 请求不能使用缓存
+                    connection.setUseCaches(false);
+                    connection.setInstanceFollowRedirects(true);
+                    // 配置本次连接的Content-type，配置为application/x-www-form-urlencoded的
+                    // 意思是正文是urlencoded编码过的form参数，下面我们可以看到我们对正文内容使用URLEncoder.encode
+                    // 进行编码
+                    connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+                    // 连接，从postUrl.openConnection()至此的配置必须要在connect之前完成，
+                    // 要注意的是connection.getOutputStream会隐含的进行connect。
+                    connection.connect();
+                    DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+                    // The URL-encoded contend
+                    // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致
+                    baseCode = URLEncoder.encode(baseCode,"utf-8");
+                    String content = "learnPlanId=1111&userId=mingming&baseCode="+baseCode;
+                    // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
+                    out.writeBytes(content);
+                    out.flush();
+                    out.close();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String line;
+                    StringBuffer buffer = new StringBuffer();
+                    while ((line = reader.readLine()) != null){
+                        System.out.println(line);
+                        buffer.append(line);
+                    }
+                    try{
+                        // 从服务器端获取Json字符串
+                        String backlogJsonStr = buffer.toString();
+                        backlogJsonStr = backlogJsonStr.substring(backlogJsonStr.indexOf("{"), backlogJsonStr.lastIndexOf("}") + 1);
+                        backlogJsonStr = backlogJsonStr.replace("\\\"","'");
+                        JSONObject jsonObject = new JSONObject(backlogJsonStr);
+                        String data = jsonObject.getString("status");
+                        System.out.println("base64 success==>"+data);
+
+                        base64url = jsonObject.getString("url");
+                        //System.out.println("base64 url==>"+base64url.replaceFirst("/html",""));
+                        System.out.println("base64 url==>"+base64url.replaceFirst("/html",""));
+                        ans[0] = base64url;
+                        base64id_url.put(base64_index,base64url);
+                        base64_index++;
+
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                        System.out.println("base64 wrong1==>");
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("readContent wrong:");
+                }
+
+            }
+
+        }).start();
+        try {
+            Thread.sleep(60);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return ans[0];
+    }
+
+    public static String txt2String(File file){
+        StringBuilder result = new StringBuilder();
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
+            String s = null;
+            while((s = br.readLine())!=null){//使用readLine方法，一次读一行
+                result.append(System.lineSeparator()+s);
+            }
+            br.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return result.toString();
+    }
+
 }

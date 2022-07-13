@@ -95,28 +95,32 @@
 
             <ScrollView
                 android:id="@+id/stroll_tiankong"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
                 android:background="@color/white"
                 android:fadingEdge="vertical"
                 android:gravity="right"
-                android:padding="10dp"
+                android:padding="2dp"
+                android:layout_marginLeft="2dp"
+                android:layout_marginRight="2dp"
                 android:scrollbars="vertical"
                 android:visibility="invisible"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHeight_percent="0.75"
+                app:layout_constraintHeight_percent="0.74"
                 app:layout_constraintTop_toBottomOf="@+id/teacher_camera"
-                app:layout_constraintWidth_percent="1.0">
+                >
 
                 <TextView
                     android:id="@+id/tiankong_echo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="2dp"
-                    android:layout_marginLeft="15dp"
-                    android:layout_marginRight="15dp"
-                    android:text="" />
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:text=""
+                    android:textColor="@color/black"
+                    android:textSize="12dp"/>
 
             </ScrollView>
 
@@ -734,64 +738,87 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintWidth_percent="1.0">
 
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:orientation="horizontal"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
+        <Button
+            android:id="@+id/xiangce"
+            android:background="@mipmap/xiangce"
+            android:layout_marginLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.05"
+            app:layout_constraintHeight_percent="0.6"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <Button
-                android:id="@+id/xiangce"
-                android:background="@mipmap/xiangce"
-                android:layout_marginLeft="10dp"
-                android:layout_height="30dp"
-                android:layout_width="30dp"/>
+        <Button
+            android:id="@+id/paizhao"
+            android:background="@mipmap/paizhao"
+            android:layout_marginLeft="10dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.05"
+            app:layout_constraintHeight_percent="0.6"
+            app:layout_constraintStart_toEndOf="@+id/xiangce"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
-            <Button
-                android:id="@+id/paizhao"
-                android:background="@mipmap/paizhao"
-                android:layout_marginLeft="10dp"
-                android:layout_height="30dp"
-                android:layout_width="30dp"/>
-
-            <EditText
-                android:id="@+id/tiankong"
-
-                android:layout_marginLeft="10dp"
-                android:layout_width="300dp"
-                android:layout_height="50dp"
-                android:imeOptions="actionDone"
-
-                android:text=""
-                android:textColor="@color/black"
-                android:textSize="12dp"
-     />
+        <EditText
+            android:id="@+id/tiankong"
+            android:layout_marginLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintWidth_percent="0.55"
+            app:layout_constraintHeight_percent="0.8"
+            android:imeOptions="actionDone"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="12dp"
+            app:layout_constraintStart_toEndOf="@+id/paizhao"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"/>
 
             <TextView
                 android:id="@+id/tiankong_save"
-                android:layout_width="match_parent"
-                android:layout_height="15dp"
                 android:layout_gravity="center"
                 android:text="保存"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintWidth_percent="0.05"
+                app:layout_constraintHeight_percent="0.3"
+                app:layout_constraintStart_toEndOf="@+id/tiankong"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
                 />
 
             <Button
                 android:id="@+id/qingkong"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="10dp"
                 style="@style/submit_style"
                 android:tag="0"
-                android:text="清空"/>
+                android:text="清空"
+                app:layout_constraintWidth_percent="0.08"
+                app:layout_constraintHeight_percent="0.5"
+                app:layout_constraintEnd_toStartOf="@+id/subjectivesubmit"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
             <Button
                 android:id="@+id/subjectivesubmit"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="10dp"
                 style="@style/submit_style"
                 android:tag="0"
-                android:text="提交" />
+                android:text="提交"
+                app:layout_constraintWidth_percent="0.08"
+                app:layout_constraintHeight_percent="0.5"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"/>
 
-        </LinearLayout>
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
