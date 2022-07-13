@@ -19,6 +19,7 @@ public class AnswerActivity extends LaunchActivity {
     public static String allHandAction;
     public static String success;
     public static String message;
+    public static String base64url;
 
     public static String chatTime;
 //    static class MessageItem{

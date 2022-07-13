@@ -15,7 +15,10 @@ import { useNavigation } from "@react-navigation/native";
 import AddContentPageContainer from "./AddContentPage";
 import HomeworkPropertyModelContainer from "./HomeworkPropertyModel";
 import http from "../../../../utils/http/request";
-import { WebView } from "react-native-webview";
+import { WebView } from 'react-native-webview';
+
+
+
 
 export default function CreateLearnCaseContainer(props) {
     // console.log('------函数式props----',props.route.params);
@@ -126,40 +129,28 @@ class CreateLearnCase extends React.Component {
     //显示设置属性悬浮框
     showFilter = () => {
         const { filterModelVisiblity, knowledgeModelVisibility } = this.state;
-        if (filterModelVisiblity) {
-            //显示设置属性覆盖框
+        if (filterModelVisiblity) { //显示设置属性覆盖框
             return (
                 <Modal
                     animationType="none"
                     transparent={true}
                     visible={filterModelVisiblity}
                     onRequestClose={() => {
-                        console.log(
-                            "----------------Modal has been closed.---------------------"
-                        );
-                        Alert.alert("", "关闭悬浮框", [
-                            {},
-                            { text: "确定", onPress: () => {} },
-                        ]);
+                        console.log('----------------Modal has been closed.---------------------');
+                        Alert.alert('', '关闭悬浮框', [{}, { text: '确定', onPress: () => { } }]);
                         this.setState({
-                            filterModelVisiblity: !filterModelVisiblity,
+                            filterModelVisiblity: !filterModelVisiblity
                         });
                     }}
                 >
                     <View>
                         <Text
-                            style={{
-                                height: 70,
-                                width: 40,
-                                right: 0,
-                                position: "absolute",
-                            }}
+                            style={{ height: 70, width: 40, right: 0, position: 'absolute' }}
                             onPress={() => {
                                 this.setState({
-                                    filterModelVisiblity: !filterModelVisiblity,
+                                    filterModelVisiblity: !filterModelVisiblity
                                 });
-                            }}
-                        ></Text>
+                            }}></Text>
                     </View>
                     {/**设置属性悬浮框组件   父子结点传参(传方法！！！！) */}
                     <HomeworkPropertyModelContainer
@@ -173,34 +164,28 @@ class CreateLearnCase extends React.Component {
                         bookId={this.state.bookId}
                         knowledge={this.state.knowledge}
                         knowledgeCode={this.state.knowledgeCode}
+
                         channelNameList={this.state.channelNameList} //学段名列表（接口数据）
                         studyClassList={this.state.studyClassList} //学科列表（接口数据）
                         editionList={this.state.editionList} //版本列表（接口数据）
-                        bookList={this.state.bookList} //教材列表（接口数据）
+                        bookList={this.state.bookList} //教材列表（接口数据）  
                         knowledgeList={this.state.knowledgeList} //从接口中返回的数据
+
                         setAllProperty={this.setAllProperty}
                         setFetchAgainProperty={this.setFetchAgainProperty}
                     />
                 </Modal>
             );
-        } else if (knowledgeModelVisibility) {
-            //显示知识点覆盖框
+        } else if (knowledgeModelVisibility) { //显示知识点覆盖框
             return (
                 <Modal
                     animationType="none"
                     transparent={true}
                     visible={knowledgeModelVisibility}
                     onRequestClose={() => {
-                        console.log(
-                            "----------------Modal has been closed.---------------------"
-                        );
-                        Alert.alert("", "关闭悬浮框", [
-                            {},
-                            { text: "确定", onPress: () => {} },
-                        ]);
-                        this.setState({
-                            knowledgeModelVisibility: !knowledgeModelVisibility,
-                        });
+                        console.log('----------------Modal has been closed.---------------------');
+                        Alert.alert('', '关闭悬浮框', [{}, { text: '确定', onPress: () => { } }]);
+                        this.setState({ knowledgeModelVisibility: !knowledgeModelVisibility });
                     }}
                 >
                     <View style={styles.modalView}>
@@ -209,7 +194,7 @@ class CreateLearnCase extends React.Component {
                                 height: 20,
                                 width: screenWidth,
                                 paddingRight: screenWidth * 0.9,
-                                position: "absolute",
+                                position: 'absolute',
                             }}
                             onPress={() => {
                                 this.setState({
@@ -221,51 +206,49 @@ class CreateLearnCase extends React.Component {
                             <Image
                                 style={{
                                     top: 0,
-                                    height: "80%",
-                                    width: "80%",
+                                    height: '80%',
+                                    width: '80%',
                                     resizeMode: "center",
                                 }}
-                                source={require("../../../../assets/teacherLatestPage/close.png")}
+                                source={require('../../../../assets/teacherLatestPage/close.png')}
                             />
                         </TouchableOpacity>
-                        {console.log(
-                            "-----knowledgeList--!!!!!!!!-",
-                            this.state.knowledgeList
-                        )}
+                        {console.log('-----knowledgeList--!!!!!!!!-', this.state.knowledgeList)}
                         {/**知识点数据为空时请求数据 */}
-                        {this.state.knowledgeList == "" &&
-                        this.state.studyRank != "" &&
-                        this.state.studyClass != "" &&
-                        this.state.edition != "" &&
-                        this.state.book != ""
-                            ? this.showKnowledgeList()
-                            : null}
-                        {this.state.knowledgeList != ""
-                            ? console.log(this.state.knowledgeList)
-                            : null}
-                        {this.state.knowledgeList != "" ? (
-                            <WebView
-                                onMessage={(event) => {
-                                    var id = JSON.parse(
-                                        event.nativeEvent.data
-                                    ).id;
-                                    // var name = JSON.parse(event.nativeEvent.data).name;
-                                    this.getLongknowledge(id);
-                                }}
-                                javaScriptEnabled={true}
-                                scalesPageToFit={
-                                    Platform.OS === "ios" ? true : false
-                                }
-                                source={{ html: this.state.knowledgeList }}
-                            ></WebView>
-                        ) : (
-                            <Text>知识点数据为请求到或没有数据</Text>
-                        )}
+                        {
+                            this.state.knowledgeList == ''
+                                && this.state.studyRank != ''
+                                && this.state.studyClass != ''
+                                && this.state.edition != ''
+                                && this.state.book != ''
+                                ? this.showKnowledgeList()
+                                : null
+                        }
+                        {
+                            this.state.knowledgeList != ''
+                                ? console.log(this.state.knowledgeList)
+                                : null
+                        }
+                        {
+                            this.state.knowledgeList != ''
+                                ?
+                                <WebView
+                                    onMessage={(event) => {
+                                        var id = JSON.parse(event.nativeEvent.data).id;
+                                        // var name = JSON.parse(event.nativeEvent.data).name;
+                                        this.getLongknowledge(id);
+                                    }}
+                                    javaScriptEnabled={true}
+                                    scalesPageToFit={Platform.OS === 'ios' ? true : false}
+                                    source={{ html: this.state.knowledgeList }}
+                                ></WebView>
+                                : <Text>知识点数据为请求到或没有数据</Text>
+                        }
                     </View>
                 </Modal>
             );
         }
-    };
+    }
 
     //设置属性悬浮框组件 传递的props方法，用来修改
     setAllProperty = (
@@ -298,26 +281,26 @@ class CreateLearnCase extends React.Component {
             book: book,
             bookId: bookId,
             bookList: bookList,
-            knowledge: "",
-            knowledgeCode: "",
-            knowledgeList: "",
+            knowledge: '',
+            knowledgeCode: '',
+            knowledgeList: '',
             isFetchAgain: false,
         });
-    };
+    }
 
     //设置属性悬浮框点击“确定”按钮，需要重新请求试题
     setFetchAgainProperty = (paramsObj) => {
-        console.log("---------setFetchAgainProperty---------");
+        console.log('---------setFetchAgainProperty---------');
         console.log(paramsObj);
-        console.log("---------------------------------------");
+        console.log('---------------------------------------');
 
-        let paperTypeTtem = "";
-        if (paramsObj.paperType == "全部") {
-            paperTypeTtem = "all";
+        let paperTypeTtem = '';
+        if (paramsObj.paperType == '全部') {
+            paperTypeTtem = 'all';
         } else {
             paperTypeTtem = paramsObj.paperType;
         }
-        console.log("-----试题类型----", paperTypeTtem);
+        console.log('-----试题类型----', paperTypeTtem);
         this.setState({
             filterModelVisiblity: false,
             knowledgeModelVisibility: false,
@@ -336,7 +319,7 @@ class CreateLearnCase extends React.Component {
             knowledgeCode: paramsObj.knowledgeCode,
             isFetchAgain: true,
         });
-    };
+    }
 
     //从接口中获取知识点内容
     showKnowledgeList = () => {
@@ -350,59 +333,57 @@ class CreateLearnCase extends React.Component {
             //callback:'ha',
         };
 
-        console.log("-----showKnowledgeList-----", Date.parse(new Date()));
+        console.log('-----showKnowledgeList-----', Date.parse(new Date()))
         http.get(url, params)
             .then((resStr) => {
                 let resJson = JSON.parse(resStr);
-                console.log("--------知识点数据------", typeof resJson.data);
+                console.log('--------知识点数据------', typeof (resJson.data));
                 console.log(resJson.data);
-                console.log("------------------------");
-                if (resJson.data != null || resJson.data != "") {
+                console.log('------------------------');
+                if (resJson.data != null || resJson.data != '') {
                     this.setState({ knowledgeList: resJson.data });
                 } else {
-                    Alert.alert("", "没有相关知识点", [
-                        {},
-                        { text: "关闭", onPress: () => {} },
-                    ]);
+                    Alert.alert('', '没有相关知识点', [{}, { text: '关闭', onPress: () => { } }]);
                     // this.setState({ knowledgeList: '' });
                 }
             })
             .catch((error) => {
-                console.log("******catch***error**", error);
+                console.log('******catch***error**', error);
                 this.setState({
                     error: true,
                     errorInfo: error,
                 });
             });
-    };
+    }
 
     getLongknowledge(id) {
         const url = global.constants.baseUrl + "teacherApp_getPointName.do";
         const params = {
-            pointId: id,
-        };
-        http.get(url, params).then((resStr) => {
-            let resJson = JSON.parse(resStr);
-            if (resJson.success) {
-                this.setState({
-                    filterModelVisiblity: true,
-                    knowledgeModelVisibility: false,
-                    knowledgeCode: id,
-                    knowledge: resJson.data,
-                });
-            }
-        });
+            pointId: id
+        }
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                if (resJson.success) {
+                    this.setState({
+                        filterModelVisiblity: true,
+                        knowledgeModelVisibility: false,
+                        knowledgeCode: id,
+                        knowledge: resJson.data
+                    })
+                }
+            })
     }
 
     setIsFetchAgain = (flag) => {
         this.setState({
             isFetchAgain: flag,
-        });
-    };
+        })
+    }
 
-    render() {
-        return (
-            <View style={{ flexDirection: "column", backgroundColor: "#fff" }}>
+    render(){
+        return(
+            <View style={{ flexDirection: 'column', backgroundColor: '#fff' }}>
                 {/**导航项 */}
                 <View style={styles.routeView}>
                     {/**返回按钮 */}
@@ -443,52 +424,46 @@ class CreateLearnCase extends React.Component {
                         >保存或布置</Text>
                     </View>
                     {/**筛选按钮 */}
-                    {this.state.addPaperFlag ? (
-                        <TouchableOpacity
-                            onPress={() => {
-                                // Alert.alert('设置属性悬浮框');
-                                this.setState({
-                                    filterModelVisiblity:
-                                        !this.state.filterModelVisiblity,
-                                });
-                            }}
-                        >
-                            <Image
-                                style={{ width: 20, height: 20 }}
-                                source={require("../../../../assets/teacherLatestPage/filter2.png")}
-                            ></Image>
-                        </TouchableOpacity>
-                    ) : (
-                        <View style={{ width: 20, height: 20 }} />
-                    )}
-                    {/* {this.state.filterModelVisiblity ||
-                    this.state.knowledgeModelVisibility
-                        ? this.showFilter()
-                        : null} */}
+                    {
+                        this.state.addPaperFlag ?
+                            <TouchableOpacity
+                                onPress={()=>{
+                                    // Alert.alert('设置属性悬浮框');
+                                    this.setState({ filterModelVisiblity: !this.state.filterModelVisiblity })
+                                }}
+                            >
+                                <Image style={{width: 20, height: 20}} source={require('../../../../assets/teacherLatestPage/filter2.png')}></Image>
+                            </TouchableOpacity>
+                            : <View style={{width: 20, height: 20}}/>
+                    }
+                    {
+                        this.state.filterModelVisiblity || 
+                        this.state.knowledgeModelVisibility 
+                            ? this.showFilter() 
+                            : null
+                    }
                 </View>
             
                 {/**内容展示、调整顺序、布置或保存展示区 */}
                 {
-                    this.state.addPaperFlag ? (
-                        <AddContentPageContainer
-                            channelCode={this.state.studyRankId}
-                            subjectCode={this.state.studyClassId}
-                            textBookCode={this.state.editionId}
-                            gradeLevelCode={this.state.bookId}
-                            pointCode={this.state.knowledgeCode}
-                            questionTypeName={this.state.paperTypeName}
-                            shareTag={this.state.shareTag}
-                            isFetchAgain={this.state.isFetchAgain}
-                            setIsFetchAgain={this.setIsFetchAgain}
-                        />
-                    ) : this.state.updatePaperFlag ? (
-                        Alert.alert("跳转顺序页面")
-                    ) : (
-                        Alert.alert("布置作业页面")
-                    )
+                    this.state.addPaperFlag 
+                    ? <AddContentPageContainer 
+                        channelCode={this.state.studyRankId}
+                        subjectCode={this.state.studyClassId}
+                        textBookCode={this.state.editionId}
+                        gradeLevelCode={this.state.bookId}
+                        pointCode={this.state.knowledgeCode}
+                        questionTypeName={this.state.paperTypeName}
+                        shareTag={this.state.shareTag}
+                        isFetchAgain={this.state.isFetchAgain}
+                        setIsFetchAgain={this.setIsFetchAgain}
+                    />
+                    : this.state.updatePaperFlag
+                    ? Alert.alert('跳转顺序页面')
+                    : Alert.alert('布置作业页面')
                     // ? <UpdateContentPageContainer />
                     // : <PushOrSaveContentPageContainer />
-                }
+                }   
                 {/* <AddContentPageContainer 
                     channelCode={this.state.studyRankId}
                     subjectCode={this.state.studyClassId}
@@ -571,4 +546,4 @@ const styles = StyleSheet.create({
         padding: 30,
         paddingBottom: 80,
     },
-});
+})

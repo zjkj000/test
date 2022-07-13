@@ -404,7 +404,7 @@ export default class PicturesWorkContent extends Component {
                     </View>
 
                     {/* 要根据试题的类型来动态显示加载什么样的题目编辑区域 */}
-                    <View style={{borderWidth:0.8,borderColor:'#000000',height:150,margin:20,marginTop:10,marginBottom:0}}> 
+                    <View style={{borderWidth:0.8,borderColor:'#000000',height:150,margin:20,marginTop:5,marginBottom:0}}> 
                     <ScrollView style={{paddingTop:10}} 
                                 ref={ref => this._scrollView_Timu = ref}
                                 nestedScrollEnabled={true}>
@@ -436,7 +436,7 @@ export default class PicturesWorkContent extends Component {
                           </View>):(this.getContent(this.state.TimuContentList))}
 
                           {this.state.TimuContentTextInputStatus?(<TextInput
-                                style={{borderWidth:1,margin:10,height:40,width:250}}
+                                style={{borderWidth:1,margin:5,height:40,width:250}}
                                 onLayout={event=>{this.layout_Timu = event.nativeEvent.layout}}
                                 onChangeText={(text)=>{this.setState({TimuContentTextInput:text})}}
                                 value={this.state.TimuContentTextInput}
@@ -731,7 +731,7 @@ export default class PicturesWorkContent extends Component {
                       </View>
 
                       {/* 要根据试题的类型来动态显示加载什么样的答案编辑区域 */}
-                      <View style={{borderWidth:0.8,borderColor:'#000000',height:150,margin:20,marginTop:10,marginBottom:0}}> 
+                      <View style={{borderWidth:0.8,borderColor:'#000000',height:150,margin:20,marginTop:5,marginBottom:0}}> 
                       <ScrollView style={{paddingTop:10}} 
                                   ref={ref => this._scrollView_Answer = ref}
                                   nestedScrollEnabled={true}>
@@ -768,7 +768,7 @@ export default class PicturesWorkContent extends Component {
                       {this.state.AnswerContentTextInputStatus?
                               (
                               <TextInput
-                                  style={{borderWidth:1,margin:10,height:40,width:250}}
+                                  style={{borderWidth:1,margin:5,height:40,width:250}}
                                   onLayout={event=>{this.layout_Answer = event.nativeEvent.layout}}
                                   onChangeText={(text)=>{this.setState({AnswerContentTextInput:text})}}
                                   onBlur={()=>{
@@ -831,7 +831,7 @@ export default class PicturesWorkContent extends Component {
                     </View>
 
                     {/* 要根据试题的类型来动态显示加载什么样的答案编辑区域 */}
-                    <View style={{borderWidth:0.8,borderColor:'#000000',height:150,margin:20,marginTop:10,marginBottom:0}}> 
+                    <View style={{borderWidth:0.8,borderColor:'#000000',height:150,margin:20,marginTop:5,marginBottom:0}}> 
                     <ScrollView style={{paddingTop:10}} 
                                 ref={ref => this._scrollView_Analysis = ref}
                                 nestedScrollEnabled={true}>
@@ -863,7 +863,7 @@ export default class PicturesWorkContent extends Component {
                     {this.state.AnalysisContentTextInputStatus?
                             (
                             <TextInput
-                                style={{borderWidth:1,margin:10,height:40,width:250}}
+                                style={{borderWidth:1,margin:5,height:40,width:250}}
                                 onLayout={event=>{this.layout_Analysis = event.nativeEvent.layout}}
                                 onChangeText={(text)=>{this.setState({AnalysisContentTextInput:text})}}
                                 onBlur={()=>{

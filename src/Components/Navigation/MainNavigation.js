@@ -31,9 +31,8 @@ import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
 import { Icon } from "react-native-elements";
 import HomeworkPropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/HomeworkProperty";
-
 import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomework";
-import CreateHomeworkFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomeworkFrame";
+import CreateHomeworkFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomeworkFrame"
 import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
 import CreateLearnCaseFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/CreateLearnCaseFrame";
 
@@ -242,28 +241,28 @@ export default class MainNavigation extends Component {
                         name="CreateInform"
                         component={Tea_CreateInform}
                         options={{
-                            title: "发布通知",
+                            headerShown: false,
                         }}
                     />
                     <Stack.Screen
                         name="CreateNotice"
                         component={Tea_CreateNotice}
                         options={{
-                            title: "发布公告",
+                            headerShown: false,
                         }}
                     />
                     <Stack.Screen
                         name="LookInform"
                         component={Tea_Inform}
                         options={{
-                            title: "通知",
+                            headerShown: false
                         }}
                     />
                     <Stack.Screen
                         name="LookNotice"
                         component={Tea_Notice}
                         options={{
-                            title: "公告",
+                            headerShown: false
                         }}
                     />
                     <Stack.Screen
@@ -368,6 +367,9 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="TestPage_move"
                         component={TestPage_move}
+                        options={{
+                            headerShown: false,
+                        }}
                     ></Stack.Screen>
                 </Stack.Group>
             </Stack.Navigator>

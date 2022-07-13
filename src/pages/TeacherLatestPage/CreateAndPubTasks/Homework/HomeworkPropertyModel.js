@@ -118,8 +118,8 @@ class HomeworkPropertyModel extends React.Component {
         this.fetchPaperType();
     }
 
-    UNSAFE_componentWillUpdate(nextProps) {
-        console.log("-----设置属性-----componentWillUpdate------");
+    UNSAFE_componentWillUpdate(nextProps){
+        console.log('-----设置属性-----componentWillUpdate------');
     }
 
     //请求试题类型
@@ -1218,6 +1218,7 @@ class HomeworkPropertyModel extends React.Component {
                                 knowledge: "", //知识点(选中的)
                                 knowledgeCode: "", //选中的知识点项的编码
                                 knowledgeVisibility: false, //知识点选择列表是否显示
+                                shortKnowledge: "",
 
                                 paperTypeVisibility: false, //试题类型列表是否显示
 
@@ -1277,13 +1278,13 @@ class HomeworkPropertyModel extends React.Component {
 
 const styles = StyleSheet.create({
     model: {
-        flexDirection: "column",
-        backgroundColor: "#fff",
-        top: 55,
-        right: 0,
-        height: screenHeight * 0.6,
-        width: screenWidth * 0.7,
-        position: "absolute",
+        flexDirection: 'column', 
+        backgroundColor: '#fff' , 
+        top: 55 , 
+        right: 0 , 
+        height: screenHeight*0.6,
+        width: screenWidth*0.7,
+        position: 'absolute',
     },
     content: {
         width: screenWidth * 0.2,

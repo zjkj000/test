@@ -273,23 +273,7 @@ class MyPageComponent extends Component {
                         </Text>
                     </View>
                 </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={() => {
-                        this.props.navigation.navigate({ name: "TestPage" });
-                    }}
-                >
-                    <Divider />
-                    <View style={styles.alternativeContainer}>
-                        <Text style={styles.textLeft}>绘图测试</Text>
-                        <Text style={styles.textRight}>
-                            <Icon
-                                style={styles.icon}
-                                fill="#8F9BB3"
-                                name="arrow-ios-forward-outline"
-                            />
-                        </Text>
-                    </View>
-                </TouchableOpacity>
+                
 
                 <TouchableOpacity
                     onPress={() => {
@@ -298,7 +282,7 @@ class MyPageComponent extends Component {
                 >
                     <Divider />
                     <View style={styles.alternativeContainer}>
-                        <Text style={styles.textLeft}>缩放平移测试</Text>
+                        <Text style={styles.textLeft}>批改作业测试</Text>
                         <Text style={styles.textRight}>
                             <Icon
                                 style={styles.icon}

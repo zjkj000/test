@@ -25,25 +25,9 @@ import Toast from '../../../../utils/Toast/Toast';
 import HomeworkPropertyModelContainer from "./HomeworkPropertyModel";
 import { Waiting, WaitLoading } from "../../../../utils/WaitLoading/WaitLoading";
 
-
-//暂存请求到的试题(定义为二维数组，每一维存放相同类型的试题)
-//试题都请求完之后，依次将数据按维存放到state中试题list
-var paperListOne = [];  //一维
-
-//typeAll==count时，调用setState，将paperListCopy赋值给state中的paperList
-let typeAll = 0; //试题类型总数
-let count = 0; //目前已请求完成多少个类型的试题
-
 let pageNo = 1; //当前第几页
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
-
-let fetchNum = 0; //请求试题次数
-
-let currentBottomPage = 0; //添加试题页面 当前底部显示试题对应类型页数
-let currentBeginPaperIndex = 0; //当前底部显示第一个试题对应的index
-let currentLastPaperIndex = 0; //当前底部显示最后一个试题对应的index
-let clickBack = false;
-let clickNext = false;
+let allPageNo = 0; //总数
 
 export default function CreateHomeworkContainer(props) {
     console.log('------函数式props----', props.route.params.knowledgeCode);
@@ -249,17 +233,9 @@ class CreateHomework extends React.Component {
     }
 
     componentWillUnmount() {
-        paperListOne = [];
-        typeAll = 0;
-        count = 0;
-
         pageNo = 1; //当前第几页
         dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
-
-        currentBottomPage = 0; //添加试题页面 当前底部显示试题对应类型页数
-        currentBeginPaperIndex = 0; //当前底部显示第一个试题对应的index
-        currentLastPaperIndex = 0; //当前底部显示最后一个试题对应的index
-        fetchNum = 0;
+        allPageNo = 0; //总数
     }
 
     setModalVisible = (visible) => {
@@ -445,14 +421,9 @@ class CreateHomework extends React.Component {
 
     //设置属性悬浮框点击“确定”按钮，需要重新请求试题
     setFetchAgainProperty = (paramsObj) => {
-        paperListOne = [];  //一维
-        count = 0; //目前已请求完成多少个类型的试题
         pageNo = 1; //当前第几页
         dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
-        fetchNum = 0; //请求试题次数
-        currentBottomPage = 0; //添加试题页面 当前底部显示试题对应类型页数
-        currentBeginPaperIndex = 0; //当前底部显示第一个试题对应的index
-        currentLastPaperIndex = 0; //当前底部显示最后一个试题对应的index
+        allPageNo = 0; //总数
 
         console.log('---------setFetchAgainProperty---------');
         console.log(paramsObj);
@@ -1059,7 +1030,7 @@ class CreateHomework extends React.Component {
     //展示添加试题页面
     showAddPaper = () => {
         this.state.paperList.length <= 0
-            ? this.fetchData(pageNo, this.state.paperTypeName, this.state.shareTag, false)
+            ? this.fetchData()
             : null
         if (this.state.paperList.length <= 0) {
             console.log('======================this.state.paperList.length <= 0============================');
@@ -1089,89 +1060,10 @@ class CreateHomework extends React.Component {
                         <Text style={styles.selectPaperNum}>
                             (已选中{this.state.selectPaperNum})
                         </Text>
-                        {/* <TouchableOpacity 
-                            onPress={() => {
-                                // Alert.alert('添加')
-                                this.updateSlectNum(false);
-                                // this.ifSelected()
-                                //     ? this.updateSlectNum(true)
-                                //     : this.updateSlectNum(false);
-                            }}
-                        >
-                            <Image
-                                style={{
-                                    width: 30,
-                                    height: 30,
-                                    top: 5,
-                                    // left: screenWidth * 0.65,
-                                    // position: 'absolute',
-                                }}
-                                source={
-                                    require('../../../../assets/teacherLatestPage/tianjia.png')
-                                    // !this.state.imgState 
-                                    // this.ifSelected()
-                                    //     ? require('../../../../assets/teacherLatestPage/shanchu.png')
-                                    //     : require('../../../../assets/teacherLatestPage/tianjia.png')
-                                }
-                            />
-                        </TouchableOpacity>
-                        <TouchableOpacity 
-                            onPress={() => {
-                                // Alert.alert('删除')
-                                this.updateSlectNum(true)
-                                // this.ifSelected()
-                                //     ? this.updateSlectNum(true)
-                                //     : this.updateSlectNum(false);
-                            }}
-                        >
-                            <Image
-                                style={{
-                                    width: 28,
-                                    height: 28,
-                                    top: 5,
-                                    left:20
-                                    // left: screenWidth * 0.65,
-                                    // position: 'absolute',
-                                }}
-                                source={
-                                    require('../../../../assets/teacherLatestPage/shanchu.png')
-                                    // !this.state.imgState 
-                                    // this.ifSelected()
-                                    //     ? require('../../../../assets/teacherLatestPage/shanchu.png')
-                                    //     : require('../../../../assets/teacherLatestPage/tianjia.png')
-                                }
-                            />
-                        </TouchableOpacity> */}
-                        {/* <TouchableOpacity 
-                            onPress={() => {
-                                let { selectPaperNum , imgState } = this.state;
-                                this.setState({ imgState: !imgState  , selectPaperNum:selectPaperNum + 1 })
-                                // this.updateSlectNum(false);
-                            }}
-                        >
-                            <Image
-                                // style={{
-                                //     width: 30,
-                                //     height: 30,
-                                //     top: 5,
-                                //     left: screenWidth * 0.65,
-                                //     position: 'absolute',
-                                // }}
-                                source={
-                                    this.state.imgState == 0 
-                                    ? require('../../../../assets/teacherLatestPage/shanchu.png')
-                                    : require('../../../../assets/teacherLatestPage/tianjia.png')
-                                }
-                            />
-                        </TouchableOpacity> */}
                         {
                             this.state.paperList.length > 0 && this.ifSelected() ?
-                            // this.state.imgState == 0 ?
                                 <TouchableOpacity 
                                     onPress={() => { 
-                                        console.log("我被点");
-                                        const { selectPaperNum } = this.state;
-                                        // this.setState({ imgState: 1 , selectPaperNum:selectPaperNum + 1 })
                                         this.updateSlectNum(true);
                                     }}
                                     style={{width: 30,height: 40,}}
@@ -1190,9 +1082,6 @@ class CreateHomework extends React.Component {
                                 :
                                 <TouchableOpacity 
                                     onPress={() => {
-                                        console.log("我被点了");
-                                        const { selectPaperNum } = this.state;
-                                        // this.setState({ imgState: 0  , selectPaperNum:selectPaperNum + 1 })
                                         this.updateSlectNum(false);
                                     }}
                                     style={{width: 30,height: 40,}}
@@ -1213,11 +1102,6 @@ class CreateHomework extends React.Component {
 
                     {/**题目展示 */}
                     <View style={styles.showPaper}>
-                        {/* {
-                                this.state.paperList.length <= 0
-                                ? this.fetchData(pageNo , this.state.paperTypeName , this.state.shareTag , false)
-                                : null
-                            } */}
                         {/**题目 答案 解析*/}
                         {
                             this.state.paperList.length > 0 ? this.showAllPaperTitle() : null
@@ -1238,7 +1122,18 @@ class CreateHomework extends React.Component {
                 {/* {console.log('---题目-----' ,paperList[selectPaperIndex].tiMian)} */}
                 <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: paperList[selectPaperIndex].tiMian }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: paperList[selectPaperIndex].tiMian }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
 
 
@@ -1246,15 +1141,40 @@ class CreateHomework extends React.Component {
 
                 {/**答案 */}
                 <Text style={styles.paperContent}>[答案]</Text>
+                <Text>答案：{paperList[selectPaperIndex].answer}</Text>
+                {console.log(paperList[selectPaperIndex].answer)}
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: paperList[selectPaperIndex].answer }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: paperList[selectPaperIndex].answer }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
 
                 {/**解析 */}
                 <Text style={styles.paperContent}>[解析]</Text>
+                <Text>解析：{paperList[selectPaperIndex].analysis}</Text>
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: paperList[selectPaperIndex].analysis }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: paperList[selectPaperIndex].analysis }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
             </ScrollView>
         );
@@ -1269,23 +1189,11 @@ class CreateHomework extends React.Component {
                     <TouchableOpacity
                         style={{ width: screenWidth * 0.1, paddingLeft: 5 }}
                         onPress={() => {
-                            clickBack = true;
-                            clickNext = false;
-                            if (currentBeginPaperIndex == 0 || currentBottomPage == 0) {
+                            if(pageNo == 1){
                                 Alert.alert('', '已经是第一页试题了', [{}, { text: '关闭', onPress: () => { } }]);
-                            } else if (currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == false) {
-                                currentBottomPage = currentBottomPage - 2;
-                                // this.setState({ selectPaperIndex: currentBeginPaperIndex - 5 });
-                                if (currentBottomPage >= 0) {
-                                    this.setState({ selectPaperIndex: currentBottomPage * 5 });
-                                } else {
-                                    currentBottomPage = currentBottomPage + 1;
-                                    this.setState({ selectPaperIndex: currentBottomPage * 5 });
-                                }
-                            } else {
-                                currentBottomPage = currentBottomPage - 1;
-                                // this.setState({ selectPaperIndex: currentBeginPaperIndex - 5 });
-                                this.setState({ selectPaperIndex: currentBottomPage * 5 });
+                            }else{
+                                pageNo--;
+                                this.fetchData();
                             }
                         }}
                     >
@@ -1294,7 +1202,6 @@ class CreateHomework extends React.Component {
                             source={require('../../../../assets/teacherLatestPage/back.png')}
                         ></Image>
                     </TouchableOpacity>
-                    {clickNext ? this.updateSelectPaperIndex() : null}
                     {/**显示底部试题类型图标 */}
                     <View style={{ width: screenWidth * 0.8, flexDirection: 'row', alignItems: 'center' }}>
                         {this.showPaperTypeImg()}
@@ -1302,28 +1209,11 @@ class CreateHomework extends React.Component {
                     <TouchableOpacity
                         style={{ width: screenWidth * 0.1, paddingLeft: 11 }}
                         onPress={() => {
-                            clickBack = false;
-                            clickNext = true;
-                            currentBottomPage++;
-                            console.log('####################################', (currentBottomPage + 1) * 5, this.state.paperList.length);
-                            if (currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == false) {
-                                if (this.state.paperList.length % 5 == 0) {
-                                    Alert.alert('', '没有更多试题了', [{}, { text: '关闭', onPress: () => { } }]);
-                                } else {
-                                    Alert.alert('', '已经是最后一页试题了', [{}, { text: '关闭', onPress: () => { } }]);
-                                }
-                            } else if (currentLastPaperIndex + 1 == this.state.paperList.length && dataFlag == true) { //试题还未请求完
-                                //currentBottomPage++;
-                                console.log('#################11111111###################');
+                            if(pageNo != allPageNo){
                                 pageNo++;
-                                this.fetchData(pageNo, this.state.paperTypeName, this.state.shareTag, false);
-                            }
-
-                            //当前展示的试题并不是最后一页数据
-                            if (currentLastPaperIndex + 1 != this.state.paperList.length) {
-                                console.log('#################33333333###################');
-                                //currentBottomPage++;
-                                this.setState({ selectPaperIndex: currentBeginPaperIndex + 5 });
+                                this.fetchData();
+                            }else{
+                                Alert.alert('', '已经是最后一页试题了', [{}, { text: '关闭', onPress: () => { } }]);
                             }
                         }}
                     >
@@ -1337,45 +1227,13 @@ class CreateHomework extends React.Component {
         }
     }
 
-    //更新selectPaperIndex
-    updateSelectPaperIndex = () => {
-        const { paperList, selectPaperIndex } = this.state;
-        let tempIndex = currentBottomPage * 5;
-        // if(paperList.length % 5 == 0){
-        //     tempIndex = (Math.floor(this.state.paperList.length / 5) - 1) * 5;
-        // }else{
-        //     tempIndex = Math.floor(this.state.paperList.length / 5) * 5;
-        // }
-        console.log('===========tempIndex========length===========', tempIndex, paperList.length);
-        if (tempIndex < paperList.length
-            && selectPaperIndex != tempIndex
-            && paperList.length != 0
-        ) {
-            console.log('===============需要更新selectPaperIndex======================');
-            this.setState({ selectPaperIndex: tempIndex },
-                () => {
-                    console.log('=================clickNext = false====================');
-                    // clickNext = false;
-                }
-            );
-        }
-        clickNext = false;
-    }
 
     //显示底部试题类型图标
     showPaperTypeImg = () => {
-        //clickNext ? this.updateSelectPaperIndex() : null;
         const { paperList, selectPaperIndex } = this.state;
         // console.log('&&&&&&&&&&selectPaperIndex&&Math&&&', selectPaperIndex , (Math.floor(paperList.length / 5) - 1) * 5);
-        console.log('&&&&&&&&&&currentBottomPage&&alllength&&&', currentBottomPage, paperList.length);
         let content = [];
-        let index = currentBottomPage * 5;
-        // let index = paperList.length % 5 != 0 
-        //                 ? Math.floor(paperList.length / 5) * 5
-        //                 : (paperList.length / 5 - 1) * 5 ;
-        //console.log('&&&&&&&&&&index&&&', index);
-        let iCopy = 0;
-        for (let i = index; i < index + 5 && i >= 0 && i < paperList.length; i++) {
+        for (let i = 0; i < paperList.length; i++) {
             let paperTypeImg;
             if (paperList[i].baseTypeId == '101') {
                 paperTypeImg = require('../../../../assets/teacherLatestPage/101.png');
@@ -1414,24 +1272,13 @@ class CreateHomework extends React.Component {
                     />
                 </TouchableOpacity>
             );
-            iCopy = i;
         }
-        if (iCopy != 0) {
-            currentBeginPaperIndex = index;
-            currentLastPaperIndex = iCopy;
-        } else {
-            currentBottomPage--;
-            this.setState({});
-        }
-
-        console.log('&&&&&&&&&&currentBeginPaperIndex&&currentLastPaperIndex&&&', currentBeginPaperIndex, currentLastPaperIndex);
-        //this.setState({ selectPaperIndex: currentBottomPage })
         return content;
     }
 
 
     //请求试题
-    fetchData = (paperNum, paperType, shareTag, isRefresh) => {
+    fetchData = () => {
         const paramsData = this.state.paramsDataProps;
         const userName = global.constants.userName;
         const token = global.constants.token;
@@ -1439,68 +1286,58 @@ class CreateHomework extends React.Component {
         const url = ip + "teacherApp_getAllQuestions.do";
         const params = {
             teacherId: userName,
-            currentpage: paperNum,
+            currentpage: pageNo,
             channelCode: paramsData.studyRankId,
             subjectCode: paramsData.studyClassId,
             textBookCode: paramsData.editionId,
             gradeLevelCode: paramsData.bookId,
             pointCode: paramsData.knowledgeCode,
-            questionTypeName: paperType,
-            shareTag: shareTag,
+            questionTypeName: this.state.paperTypeName,
+            shareTag: this.state.shareTag,
             token: token,
             //callback:'ha',
         };
 
-        console.log('-----fetchData---pageNo---试题类型---', pageNo, paperType, Date.parse(new Date()))
-        if (dataFlag) {
-            http.get(url, params)
-                .then((resStr) => {
-                    fetchNum++; //请求次数增加
-                    let resJson = JSON.parse(resStr);
-                    paperListOne = resJson.data;
-                    // console.log('----paperListOne-----', paperListOne);
-                    let paperLength; //当前请求页试题数目
-                    if (paperListOne == null) {
-                        //console.log('!!!!!params!!!!resJson!!!' , params , resJson);
-                        //参数存在问题token失效等
-                        Alert.alert('', resJson, [{}, { text: '关闭', onPress: () => { } }]);
-                        return;
-                    } else {
-                        paperLength = paperListOne != '' ? paperListOne.length : 0;
-                    }
-                    console.log('***pageNo**currentFecthLength***', paperNum, paperLength, Date.parse(new Date()));
+        console.log('-----fetchData---pageNo---试题类型---', pageNo, this.state.paperTypeName, Date.parse(new Date()))
+        http.get(url, params)
+            .then((resStr) => {
+                let resJson = JSON.parse(resStr);
+                let paperListOne = resJson.data;
+                // console.log('----paperListOne-----', paperListOne);
+                let paperLength; //当前请求页试题数目
+                if (paperListOne == null) {
+                    //console.log('!!!!!params!!!!resJson!!!' , params , resJson);
+                    //参数存在问题token失效等
+                    Alert.alert('', resJson, [{}, { text: '关闭', onPress: () => { } }]);
+                    return;
+                } else {
+                    paperLength = paperListOne != '' ? paperListOne.length : 0;
+                }
+                console.log('***pageNo**currentFecthLength***', pageNo, paperLength, Date.parse(new Date()));
+                //试题请求接口每次最多返回5个数据
+                if(paperLength != 0){
+                    this.setState({ paperList: paperListOne , selectPaperIndex: 0 });
+                }else{
+                    allPageNo = pageNo - 1;
+                    pageNo--;
+                    // Alert.alert('', '未请求到试题', [{}, { text: '关闭', onPress: () => { } }]);
+                }
+                if(paperLength < 5){
+                    allPageNo = pageNo;
+                    dataFlag = false; //数据加载完了
+                    console.log('==================所有试题都加载完了===========================', Date.parse(new Date()));
+                    // Alert.alert('', '已经是最后一页试题了' , [{}, { text: '关闭', onPress: () => { } }]);
+                }
 
-                    // if(fetchNum != 2){
-                    let foot = 0;
-                    //试题请求接口每次最多返回5个数据
-                    if (paperLength < 5) { //当前类型试题请求完
-                        // pageNo = 0; //点击右箭头，若需要请求数据，pageNo会加1
-
-                        foot = 1; //未请求到数据，数据加载完了
-                        dataFlag = false; //数据加载完了
-                        console.log('==================所有试题都加载完了===========================', this.state.paperList.length + paperLength, Date.parse(new Date()));
-                    }
-                    //paperList: isRefresh || fetchNum == 1 || fetchNum == 2 ? paperListOne : this.state.paperList.concat(paperListOne),
-                    this.setState({
-                        paperList: isRefresh ? paperListOne : this.state.paperList.concat(paperListOne),
-                        showFoot: foot,
-                    }, () => {
-                        // console.log('++++++++++++setState试题已保存++++++++++++++++++');
-                        console.log('*******allLength**', this.state.paperList.length, Date.parse(new Date()));
-                    });
-                    // console.log('++++++++++++setState试题++++++++++++++++++');
-                    // }
-
-                    paperListOne = [];
-                })
-                .catch((error) => {
-                    console.log('******catch***error**', error);
-                    this.setState({
-                        error: true,
-                        errorInfo: error,
-                    });
+                paperListOne = [];
+            })
+            .catch((error) => {
+                console.log('******catch***error**', error);
+                this.setState({
+                    error: true,
+                    errorInfo: error,
                 });
-        }
+            });
     }
 
     //向上（前）移动试卷题目（同类型之间移动）
@@ -1532,7 +1369,7 @@ class CreateHomework extends React.Component {
     moveDownPaper = () => {
         const { updatePaperIndex, selectPaperList } = this.state;
         if (updatePaperIndex == (selectPaperList.length - 1)) {
-            Alert.alert('', '已经是第一道题了', [{}, { text: '关闭', onPress: () => { } }]);
+            Alert.alert('', '已经是最后一道题了', [{}, { text: '关闭', onPress: () => { } }]);
             Toast.showInfoToast('已经是最后一道题了', 1000);
         } else {
             const baseTypeId1 = selectPaperList[updatePaperIndex].baseTypeId;
@@ -1590,12 +1427,12 @@ class CreateHomework extends React.Component {
                             //（同类型试题之间）移动试题 下移
                             <TouchableOpacity 
                                 onPress={() => { this.moveDownPaper() }}
-                                style={{width: 30,height: 40,left: 20}}
+                                style={{width: 31,height: 40,left: 20}}
                             >
                                 <Image
                                     style={{
-                                        width: 30,
-                                        height: 30,
+                                        width: 31,
+                                        height: 31,
                                         top: 5,
                                         // left: screenWidth * 0.53,
                                         // position: 'absolute',
@@ -1661,7 +1498,18 @@ class CreateHomework extends React.Component {
                 {/* {console.log('---题目-----' ,selectPaperList[updatePaperIndex].tiMian)} */}
                 <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: selectPaperList[updatePaperIndex].tiMian }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: selectPaperList[updatePaperIndex].tiMian }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
 
 
@@ -1670,14 +1518,36 @@ class CreateHomework extends React.Component {
                 {/**答案 */}
                 <Text style={styles.paperContent}>[答案]</Text>
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: selectPaperList[updatePaperIndex].answer }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: selectPaperList[updatePaperIndex].answer }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
 
                 {/**解析 */}
                 <Text style={styles.paperContent}>[解析]</Text>
                 <View style={{ padding: 10 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: selectPaperList[updatePaperIndex].analysis }}></RenderHtml>
+                    <RenderHtml 
+                        contentWidth={screenWidth} 
+                        source={{ html: selectPaperList[updatePaperIndex].analysis }}
+                        tagsStyles={{
+                            img: {
+                              flexDirection: 'row',
+                            },
+                            p: {
+                              flexDirection: 'row',
+                            },
+                        }}
+                    ></RenderHtml>
                 </View>
             </ScrollView>
         );

@@ -1,6 +1,8 @@
 package com.navigationdemo;
 
+import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.util.Log;
 
 import org.json.JSONArray;
@@ -8,6 +10,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -592,6 +595,80 @@ public class HttpActivity extends AnswerActivity {
                     e.printStackTrace();
                 } catch (IOException e) {
                     e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    //学生上传图片
+    public static void saveBase64Image(Bitmap bitmap) {
+        new Thread(new Runnable(){
+            @Override
+            public void run() {
+                try {
+                    String roomId = LaunchActivity.mRoomId;
+                    String userId = LaunchActivity.mUserId;
+
+                    /**
+                     *bitmap转为base64
+                     */
+                    //先将bitmap转为byte[]
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.JPEG,50,baos);
+                    byte[] bytes = baos.toByteArray();
+
+                    //将byte[]转为base64
+                    String baseCode = Base64.encodeToString(bytes,Base64.NO_WRAP);
+                    System.out.println("base64:"+baseCode);
+
+                    URL url = new URL("http://www.cn901.net:8111/AppServer/ajax/studentApp_saveBase64Image.do?baseCode="+baseCode+"&&learnPlanId==test111&userId=ming6002&callback=ha");
+
+//                    URL  url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_saveBase64Image.do?"
+//                            + "roomId="+roomId
+//                            + "&userId="+userId
+//                            + "&questionId="+questionId
+//                            + "&baseCode="+baseCode);
+                    System.out.println(url);
+                    HttpURLConnection ansConnection = (HttpURLConnection) url.openConnection();
+                    ansConnection.setRequestMethod("GET");
+                    System.out.println("ansConnection"+ansConnection);
+                    ansConnection.setConnectTimeout(8000);
+                    ansConnection.setReadTimeout(8000);
+                    InputStream inputStream = ansConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+
+                    while ((temp = bufferedReader.readLine()) != null) {
+                        buffer.append(temp);
+                    }
+                    bufferedReader.close();//记得关闭
+                    reader.close();
+                    inputStream.close();
+                    System.out.println("MAIN-testRaiseHandAction"+ buffer.toString());//打印结果
+                    try{
+                        // 从服务器端获取Json字符串
+                        String backlogJsonStr = buffer.toString();
+                        backlogJsonStr = backlogJsonStr.substring(backlogJsonStr.indexOf("{"), backlogJsonStr.lastIndexOf("}") + 1);
+                        backlogJsonStr = backlogJsonStr.replace("\\\"","'");
+                        JSONObject jsonObject = new JSONObject(backlogJsonStr);
+                        String data = jsonObject.getString("success");
+                        System.out.println("base64 success==>"+data);
+
+                        base64url = jsonObject.getString("data");
+                        System.out.println("base64 url==>"+base64url.replaceFirst("/html",""));
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                        System.out.println("base64 wrong1==>");
+                    }
+                } catch (MalformedURLException e) {
+                    e.printStackTrace();
+                    System.out.println("base64 wron2==>");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("base64 wrong3==>");
                 }
             }
         }).start();

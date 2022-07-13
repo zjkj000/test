@@ -108,22 +108,7 @@
     var t = "     灯笼";
     ctx.fillText(t, 100, 40);
 
-
-
-
-
-
-
-
-
-        // function createBlock(a, b, r) {
-        //   ctx.beginPath();
-        //   ctx.fillStyle = 'red';
-        //   ctx.arc(a, b, r, 0, Math.PI * 2);
-        //   ctx.fill();
-        // }
-
-
+    
         c.onmousedown = function(ev) {
           var e = ev || event;
           var x = e.clientX;
@@ -174,7 +159,10 @@
        function longPress() {
           timeOutEvent = 0;
         }
-      })();
+      }
+      )(
+        
+      );
     </script>
 
 
@@ -271,10 +259,6 @@
            scrollEnabled={false}
            originWhitelist={['*']}
            />
-
-           <TouchableOpacity style={{height:30,justifyContent:'center',alignItems:"center",width:"100%"}}>
-             <Text>缩放查看</Text>
-           </TouchableOpacity>
        </View>
      );
    }
