@@ -198,21 +198,6 @@ android {
 
         }
     }
-
-    packagingOptions {
-        exclude 'META-INF/DEPENDENCIES'
-        exclude 'META-INF/LICENSE'
-        exclude 'META-INF/LICENSE.txt'
-        exclude 'META-INF/license.txt'
-        exclude 'META-INF/LICENSE.md'
-        exclude 'META-INF/NOTICE'
-        exclude 'META-INF/NOTICE.txt'
-        exclude 'META-INF/notice.txt'
-        exclude 'META-INF/NOTICE.md'
-        exclude 'META-INF/ASL2.0'
-        exclude("META-INF/*.kotlin_module")
-        exclude("mozilla/public-suffix-list.txt")
-    }
 }
 
 dependencies {
@@ -243,16 +228,6 @@ dependencies {
     implementation project(':Debug')
     //implementation project(':Cameralibrary')
 
-    implementation files('libs/httpclient-4.5.2.jar')
-    implementation files('libs/httpclient-cache-4.2.5.jar')
-    implementation files('libs/httpcore-4.4.4.jar')
-    implementation files('libs/httpmime-4.2.5.jar')
-    implementation files('libs/commons-httpclient.jar')
-    implementation files('libs/commons-logging-1.2.jar')
-    api 'com.github.ok2c.hc5.android:httpclient-android:0.1.0'
-    //noinspection DuplicatePlatformClasses
-    implementation 'cz.msebera.android:httpclient:4.5.8'
-
 
     // react-native-video依赖
     implementation project(':react-native-video')
@@ -260,7 +235,6 @@ dependencies {
     implementation('com.google.android.exoplayer:exoplayer:2.13.3') {
         exclude group: 'com.android.support'
     }
-    implementation 'androidx.databinding:databinding-compiler-common:4.2.2'
 
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}") {
         exclude group:'com.facebook.fbjni'
