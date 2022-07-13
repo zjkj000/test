@@ -19,16 +19,16 @@ import android.util.Log;
 //import org.apache.http.impl.client.HttpClients;
 //import org.apache.http.message.BasicNameValuePair;
 //import org.apache.http.util.EntityUtils;
-import cz.msebera.android.httpclient.HttpEntity;
-import cz.msebera.android.httpclient.NameValuePair;
-import cz.msebera.android.httpclient.client.ClientProtocolException;
-import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
-import cz.msebera.android.httpclient.client.methods.CloseableHttpResponse;
-import cz.msebera.android.httpclient.client.methods.HttpPost;
-import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
-import cz.msebera.android.httpclient.impl.client.HttpClients;
-import cz.msebera.android.httpclient.message.BasicNameValuePair;
-import cz.msebera.android.httpclient.util.EntityUtils;
+//import cz.msebera.android.httpclient.HttpEntity;
+//import cz.msebera.android.httpclient.NameValuePair;
+//import cz.msebera.android.httpclient.client.ClientProtocolException;
+//import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+//import cz.msebera.android.httpclient.client.methods.CloseableHttpResponse;
+//import cz.msebera.android.httpclient.client.methods.HttpPost;
+//import cz.msebera.android.httpclient.impl.client.CloseableHttpClient;
+//import cz.msebera.android.httpclient.impl.client.HttpClients;
+//import cz.msebera.android.httpclient.message.BasicNameValuePair;
+//import cz.msebera.android.httpclient.util.EntityUtils;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -729,46 +729,46 @@ public class HttpActivity extends AnswerActivity {
         }).start();
     }
 
-    public static String testUploadImageBase64(Bitmap bitmap) {
-        String baseCode = bitmapToBase64(bitmap);
-        //String serverUrl = "http://www.cn901.com/ShopGoods/ajax/studentApp_saveBase64Image.do";
-        String serverUrl = "http://www.cn901.net:8111/AppServer/ajax/studentApp_saveBase64Image.do";
-        String str = null;
-        CloseableHttpClient httpclient = HttpClients.createDefault();
-        HttpPost httppost = new HttpPost(serverUrl);
-        List<NameValuePair> formparams = new ArrayList<NameValuePair>();
-        formparams.add(new BasicNameValuePair("baseCode", baseCode));
-        formparams.add(new BasicNameValuePair("learnPlanId", "1111"));
-        formparams.add(new BasicNameValuePair("userId", "ming6010"));
-        UrlEncodedFormEntity uefEntity;
-        try {
-            uefEntity = new UrlEncodedFormEntity(formparams, "GBK");
-            httppost.setEntity(uefEntity);
-            CloseableHttpResponse response = httpclient.execute(httppost);
-            try {
-                HttpEntity entity = response.getEntity();
-                if (entity != null) {
-                    str = EntityUtils.toString(entity);
-                    return str;
-                }
-            } finally {
-                response.close();
-            }
-        } catch (ClientProtocolException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e1) {
-            e1.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                httpclient.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return "";
-    }
+//    public static String testUploadImageBase64(Bitmap bitmap) {
+//        String baseCode = bitmapToBase64(bitmap);
+//        //String serverUrl = "http://www.cn901.com/ShopGoods/ajax/studentApp_saveBase64Image.do";
+//        String serverUrl = "http://www.cn901.net:8111/AppServer/ajax/studentApp_saveBase64Image.do";
+//        String str = null;
+//        CloseableHttpClient httpclient = HttpClients.createDefault();
+//        HttpPost httppost = new HttpPost(serverUrl);
+//        List<NameValuePair> formparams = new ArrayList<NameValuePair>();
+//        formparams.add(new BasicNameValuePair("baseCode", baseCode));
+//        formparams.add(new BasicNameValuePair("learnPlanId", "1111"));
+//        formparams.add(new BasicNameValuePair("userId", "ming6010"));
+//        UrlEncodedFormEntity uefEntity;
+//        try {
+//            uefEntity = new UrlEncodedFormEntity(formparams, "GBK");
+//            httppost.setEntity(uefEntity);
+//            CloseableHttpResponse response = httpclient.execute(httppost);
+//            try {
+//                HttpEntity entity = response.getEntity();
+//                if (entity != null) {
+//                    str = EntityUtils.toString(entity);
+//                    return str;
+//                }
+//            } finally {
+//                response.close();
+//            }
+//        } catch (ClientProtocolException e) {
+//            e.printStackTrace();
+//        } catch (UnsupportedEncodingException e1) {
+//            e1.printStackTrace();
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } finally {
+//            try {
+//                httpclient.close();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//        }
+//        return "";
+//    }
 
     public static String readContentFromPost(Bitmap bitmap){
         final String[] ans = {""};
