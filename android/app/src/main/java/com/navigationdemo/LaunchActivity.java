@@ -20,7 +20,6 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.provider.DocumentsContract;
@@ -49,13 +48,12 @@ import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.core.content.FileProvider;
+//import androidx.databinding.tool.util.FileUtil;
 import androidx.recyclerview.widget.DefaultItemAnimator;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.preference.PreferenceManager;
 
 import com.example.basic.TRTCBaseActivity;
-import com.navigationdemo.Picture.*;
 import com.tencent.liteav.TXLiteAVCode;
 import com.tencent.liteav.device.TXDeviceManager;
 import com.tencent.rtmp.ui.TXCloudVideoView;
@@ -65,9 +63,11 @@ import com.tencent.trtc.TRTCCloudListener;
 import com.tencent.trtc.debug.Constant;
 import com.tencent.trtc.debug.GenerateTestUserSig;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.lang.ref.WeakReference;
@@ -157,6 +157,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static Button tf_submit,single_submit,multi_submit,subjective_submit;
     public static Button mQiangda;
     public static Button xiangce,paizhao,luru,qingkong;
+    public static HashMap<Integer,String>          base64id_url;
     public static SharedPreferences pref;
     public static SharedPreferences.Editor editor;
     public static ConstraintLayout current_answer;//当前答题界面
@@ -835,6 +836,8 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             }
         });
 
+        base64id_url = new HashMap<>();
+
 
     }
 
@@ -1148,6 +1151,11 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 }, 1000);
             }
             else{
+                for(int i=0;i<base64_index;i++){
+                    System.out.println("base64 i:"+i+" "+base64id_url.get(i));
+                    editoneValue = editoneValue.replace("'"+i+"'","'"+base64id_url.get(i)+"'");
+                }
+                System.out.println("editoneValue i:"+editoneValue);
                 HttpActivity.stuSaveAnswer(editoneValue);
 
                 if(AnswerActivity.questionAction.equals("startAnswerSuiji")
@@ -1165,12 +1173,18 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 subjective_answer.setText("");
                 subjective_echo.setText("");
                 subjective_scroll.setVisibility(GONE);
+
+                base64_index=0;
+                base64id_url=new HashMap<>();
             }
 
         }
 
         else if(id == R.id.qingkong){
             subjective_echo.setText("");
+
+            base64_index=0;
+            base64id_url=new HashMap<>();
         }
 
         //相册�?
@@ -1629,36 +1643,40 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
     //拍照主观题
     protected void editpic(Bitmap bitmap){
-
         try {
 //                Field field = R.drawable.class.getDeclaredField("google_earth");
 //                int resourceId = Integer.parseInt(field.get(null).toString());
 //                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
 //                        resourceId);
+            bitmap = transbase64(bitmap);
             subjective_scroll.setVisibility(View.VISIBLE);
             subjective_scroll.bringToFront();
             ImageSpan imageSpan = new ImageSpan(bitmap);
-            SpannableString spannableString = new SpannableString("'"+base64url+"'");
+            SpannableString spannableString = new SpannableString("'"+base64_index+"'");
+            //SpannableString spannableString = new SpannableString("a");
             //SpannableString spannableString = new SpannableString("pic"+String.valueOf(base64_index));
-            base64_index++;
-            spannableString.setSpan(imageSpan, 0, base64url.length()+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+            spannableString.setSpan(imageSpan, 0, String.valueOf(base64_index).length()+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //base64_index++;
+            //spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
             //subjective_answer.append(spannableString);
             subjective_echo.append(spannableString);
         } catch (Exception e) {
             e.printStackTrace();
         }
+
+
     }
     /*****************************************************************************************************************/
-    private Bitmap transbase64(Bitmap bitmap){
-
-
-
-
+    private Bitmap transbase64(Bitmap bitmap) {
         int src_w = bitmap.getWidth();
         int src_h = bitmap.getHeight();
 
         int scroll_w = subjective_echo.getMeasuredWidth();
         int scroll_h = subjective_echo.getMeasuredHeight();
+        //2160*1080 4608*3456
+        System.out.println("src_w:"+src_w);
+        System.out.println("src_h:"+src_h);
 
         float subjective_answer_height = subjective_answer.getMeasuredHeight()/2;
         float wh = src_w/src_h;
@@ -1675,22 +1693,45 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             new_src_h = (float) 0.3;
         }
         else{
-            new_src_w = (float) 1.0;
-            new_src_h = (float) 1.0;
+            new_src_w = (float) 1.2;
+            new_src_h = (float) 1.2;
         }
-
-//        float new_src_w = (float) 0.1;
-//        float new_src_h = (float) 0.1;
 
         Matrix matrix = new Matrix();
         matrix.postScale(new_src_w, new_src_h);
-
         Bitmap bihuanbmp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,true);
 
-        HttpActivity.saveBase64Image(bitmap);
+        if((src_w>2160)||(src_h>1080)){
+            System.out.println("readContent small :");
+            matrix = new Matrix();
+            matrix.postScale((float) 0.2, (float) 0.2);
+            Bitmap temp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,true);
+            bitmap = temp;
+            bihuanbmp = temp;
+        }
 
+        System.out.println("readContent:");
+        String httpreturn = HttpActivity.readContentFromPost(bitmap);
+
+        System.out.println("httpreturn:"+ httpreturn);
         return bihuanbmp;
     }
+
+    public static String txt2String(File file){
+        StringBuilder result = new StringBuilder();
+        try{
+            BufferedReader br = new BufferedReader(new FileReader(file));//构造一个BufferedReader类来读取文件
+            String s = null;
+            while((s = br.readLine())!=null){//使用readLine方法，一次读一行
+                result.append(System.lineSeparator()+s);
+            }
+            br.close();
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        return result.toString();
+    }
+
     protected void onActivityResult(int requestCode,int resultCode,Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
@@ -1700,7 +1741,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                         //将拍摄的图片显示出来
                         Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().
                                 openInputStream(imageUri));
-                        editpic(transbase64(bitmap));
+                        editpic(bitmap);
                     } catch (FileNotFoundException e) {
                         e.printStackTrace();
                     }
@@ -1725,7 +1766,11 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     private void handleImageBeforeKitKat(Intent data) {
         Uri uri=data.getData();
         String imagePath = getImagePath(uri,null);
-        displayImage(imagePath);
+        try {
+            displayImage(imagePath);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
     }
 
     private void handleImageOnKitKat(Intent data) {         //返回图片URL路径
@@ -1749,7 +1794,11 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 //如果是file类型的Uri，直接获取图片路径即可
                 imagePath = uri.getPath();
             }
-            displayImage(imagePath);//根据图片路径显示图片
+            try {
+                displayImage(imagePath);//根据图片路径显示图片
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
         }
     }
 
@@ -1765,14 +1814,14 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         }
         return path;
     }
-    private void displayImage(String imagePath) {
+    private void displayImage(String imagePath) throws InterruptedException {
         if(imagePath != null){
             editor=pref.edit();
             editor.putString("data",imagePath);
             imgP=imagePath;
             editor.apply();
             Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
-            editpic(transbase64(bitmap));
+            editpic(bitmap);
 
         }else {
             Toast.makeText(this,"fail to get image",Toast.LENGTH_SHORT).show();
