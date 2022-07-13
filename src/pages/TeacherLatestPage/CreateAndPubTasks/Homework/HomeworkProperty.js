@@ -726,271 +726,275 @@ class HomeworkProperty extends React.Component {
     render() {
 
         return (
-            <View style={{ flexDirection: 'column', backgroundColor: '#fff'}}>
-                <ScrollView horizontal={false} showsVerticalScrollIndicator={false}
-                    style={{ height: '93%', backgroundColor: '#fff' }}
-                >
-                    {/**名称 */}
-                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
-                        <Text style={styles.necessary}>*</Text>
-                        <Text style={styles.title}>名称:</Text>
-                        <TextInput
-                            style={{
-                                width: screenWidth * 0.8,
-                                backgroundColor: '#fff',
-                                borderColor: '#DCDCDC',
-                                borderWidth: 1,
-                                borderRadius: 5,
-                                paddingLeft: 20,
-                            }}
-                            onChangeText={(text)=>{ textInputName = text }}
-                        ></TextInput>
-                    </View>
-
-                    {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
-
-                    {/**学段 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(1, this.state.studyRankVisibility);
-                        }}
+            <View style={{ flexDirection: 'column', backgroundColor: '#fff' ,borderTopWidth:0.8 }}>
+                <View style={{height: screenHeight - 130}}>
+                    <ScrollView horizontal={false} showsVerticalScrollIndicator={false}
+                        style={{ 
+                            // height: '100%', 
+                            backgroundColor: '#fff' }}
                     >
+                        {/**名称 */}
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
                             <Text style={styles.necessary}>*</Text>
-                            <Text style={styles.title}>学段:</Text>
-                            <Text style={styles.studyRank}>{this.state.studyRank}</Text>
-                            {this.state.studyRankVisibility ?
-                                <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/top.png')}
-                                />
-                                : <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/bot.png')}
-                                />
-                            }
+                            <Text style={styles.title}>名称:</Text>
+                            <TextInput
+                                style={{
+                                    width: screenWidth * 0.8,
+                                    backgroundColor: '#fff',
+                                    borderColor: '#DCDCDC',
+                                    borderWidth: 1,
+                                    borderRadius: 5,
+                                    paddingLeft: 20,
+                                }}
+                                onChangeText={(text)=>{ textInputName = text }}
+                            ></TextInput>
                         </View>
-                    </TouchableOpacity>
-                    {/**学段列表 */}
-                    {this.state.studyRankVisibility ?
-                        <View style={styles.contentlistView}>
-                            {
-                                this.state.channelNameList.length <= 0
-                                    ? this.fetchChannelName()
-                                    : null
-                            }
-                            {
-                                this.state.channelNameList.length > 0
-                                    ? this.showChannelName()
-                                    : <Text>学段列表未获取到或者为空</Text>
-                            }
-                        </View>
-                        : null
-                    }
-                    {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
 
+                        {/**分割线 */}
+                        <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
 
-                    {/**学科 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(2, this.state.studyClassVisibility);
-                        }}
-                    >
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
-                            <Text style={styles.necessary}>*</Text>
-                            <Text style={styles.title}>学科:</Text>
-                            <Text style={styles.studyRank}>{this.state.studyClass}</Text>
-                            {this.state.studyClassVisibility ?
-                                <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/top.png')}
-                                />
-                                : <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/bot.png')}
-                                />
-                            }
-                        </View>
-                    </TouchableOpacity>
-                    {/**学科列表 */}
-                    {this.state.studyClassVisibility ?
-                        <View style={styles.contentlistView}>
-                            {
-                                this.state.studyClassList.length <= 0
-                                    && this.state.studyRank != ''
-                                    ? this.fetchStudyClass()
-                                    : null
-                            }
-                            {
-                                this.state.studyClassList.length > 0
-                                    ? this.showStudyClass()
-                                    : <Text>学科列表未获取到或者为空</Text>
-                            }
-                        </View>
-                        : null
-                    }
-                    {/**分割线 */}
-
-
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
-                    {/**版本 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(3, this.state.editionVisibility);
-                        }}
-                    >
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
-                            <Text style={styles.necessary}>*</Text>
-                            <Text style={styles.title}>版本:</Text>
-                            <Text style={styles.studyRank}>{this.state.edition}</Text>
-                            {this.state.editionVisibility ?
-                                <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/top.png')}
-                                />
-                                : <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/bot.png')}
-                                />
-                            }
-                        </View>
-                    </TouchableOpacity>
-                    {/**版本列表 */}
-                    {this.state.editionVisibility ?
-                        <View style={styles.contentlistView}>
-                            {
-                                this.state.editionList.length <= 0
-                                    && this.state.studyRank != ''
-                                    && this.state.studyClass != ''
-                                    ? this.fetchEdition()
-                                    : null
-                            }
-                            {
-                                this.state.editionList.length > 0
-                                    ? this.showEdition()
-                                    : <Text>版本列表未获取到或者为空</Text>
-                            }
-                        </View>
-                        : null
-                    }
-                    {/**分割线 */}
-
-
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
-                    {/**教材 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(4, this.state.bookVisibility);
-                        }}
-                    >
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
-                            <Text style={styles.necessary}>*</Text>
-                            <Text style={styles.title}>教材:</Text>
-                            <Text style={styles.studyRank}>{this.state.book}</Text>
-                            {this.state.bookVisibility ?
-                                <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/top.png')}
-                                />
-                                : <Image
-                                    style={styles.studyRankImg}
-                                    source={require('../../../../assets/teacherLatestPage/bot.png')}
-                                />
-                            }
-                        </View>
-                    </TouchableOpacity>
-                    {/**教材列表 */}
-                    {this.state.bookVisibility ?
-                        <View style={styles.contentlistView}>
-                            {
-                                this.state.bookList.length <= 0
-                                    && this.state.studyRank != ''
-                                    && this.state.studyClass != ''
-                                    && this.state.edition != ''
-                                    ? this.fetchBook()
-                                    : null
-                            }
-                            {
-                                this.state.bookList.length > 0
-                                    ? this.showBook()
-                                    : <Text>教材列表未获取到或者为空</Text>
-                            }
-                        </View>
-                        : null
-                    }
-                    {/**分割线 */}
-
-
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
-                    {/**知识点 */}
-                    <TouchableOpacity
-                        onPress={() => {
-                            this.updateVisibility(5, this.state.knowledgeVisibility);
-                        }}
-                    >
-                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
-                            <Text style={styles.necessary}>*</Text>
-                            <Text style={styles.longTitle}>知识点:</Text>
-                            <Text style={styles.studyRank}>{this.state.knowledge}</Text>
-                        </View>
-                    </TouchableOpacity>
-                    {/**知识点选择悬浮页面!!! */}
-                    {this.state.knowledgeVisibility ?
+                        {/**学段 */}
                         <TouchableOpacity
-                            style={styles.knowledge}
-                            onPress={() => { this.setState({ knowledgeModelVisibility: true }) }}
-                        >
-                            <Text style={styles.knowledgeText}>
-                                点击这里选择知识点
-                            </Text>
-                            {this.state.knowledgeModelVisibility ?
-                                this.showKnowledgeModal()
-                                : null
-                            }
-                        </TouchableOpacity>
-                        : null
-                    }
-                    {/**分割线 */}
-
-
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
-                    {/**试卷简介 */}
-                    <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
-                        <Text style={styles.longTitle}>试卷简介:</Text>
-                        <TextInput
-                            style={{
-                                width: screenWidth * 0.75,
-                                backgroundColor: '#fff',
-                                borderColor: '#DCDCDC',
-                                borderWidth: 1,
-                                borderRadius: 5,
-                                paddingLeft: 20,
+                            onPress={() => {
+                                this.updateVisibility(1, this.state.studyRankVisibility);
                             }}
-                            onChangeText={(text)=>{ textInputPaper = text }}
-                        ></TextInput>
-                    </View>
-                    {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                        >
+                            <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                                <Text style={styles.necessary}>*</Text>
+                                <Text style={styles.title}>学段:</Text>
+                                <Text style={styles.studyRank}>{this.state.studyRank}</Text>
+                                {this.state.studyRankVisibility ?
+                                    <Image
+                                        style={styles.studyRankImg}
+                                        source={require('../../../../assets/teacherLatestPage/top.png')}
+                                    />
+                                    : <Image
+                                        style={styles.studyRankImg}
+                                        source={require('../../../../assets/teacherLatestPage/bot.png')}
+                                    />
+                                }
+                            </View>
+                        </TouchableOpacity>
+                        {/**学段列表 */}
+                        {this.state.studyRankVisibility ?
+                            <View style={styles.contentlistView}>
+                                {
+                                    this.state.channelNameList.length <= 0
+                                        ? this.fetchChannelName()
+                                        : null
+                                }
+                                {
+                                    this.state.channelNameList.length > 0
+                                        ? this.showChannelName()
+                                        : <Text>学段列表未获取到或者为空</Text>
+                                }
+                            </View>
+                            : null
+                        }
+                        {/**分割线 */}
+                        <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
 
-                </ScrollView>
+
+                        {/**学科 */}
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.updateVisibility(2, this.state.studyClassVisibility);
+                            }}
+                        >
+                            <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                                <Text style={styles.necessary}>*</Text>
+                                <Text style={styles.title}>学科:</Text>
+                                <Text style={styles.studyRank}>{this.state.studyClass}</Text>
+                                {this.state.studyClassVisibility ?
+                                    <Image
+                                        style={styles.studyRankImg}
+                                        source={require('../../../../assets/teacherLatestPage/top.png')}
+                                    />
+                                    : <Image
+                                        style={styles.studyRankImg}
+                                        source={require('../../../../assets/teacherLatestPage/bot.png')}
+                                    />
+                                }
+                            </View>
+                        </TouchableOpacity>
+                        {/**学科列表 */}
+                        {this.state.studyClassVisibility ?
+                            <View style={styles.contentlistView}>
+                                {
+                                    this.state.studyClassList.length <= 0
+                                        && this.state.studyRank != ''
+                                        ? this.fetchStudyClass()
+                                        : null
+                                }
+                                {
+                                    this.state.studyClassList.length > 0
+                                        ? this.showStudyClass()
+                                        : <Text>学科列表未获取到或者为空</Text>
+                                }
+                            </View>
+                            : null
+                        }
+                        {/**分割线 */}
+
+
+                        <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                        {/**版本 */}
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.updateVisibility(3, this.state.editionVisibility);
+                            }}
+                        >
+                            <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                                <Text style={styles.necessary}>*</Text>
+                                <Text style={styles.title}>版本:</Text>
+                                <Text style={styles.studyRank}>{this.state.edition}</Text>
+                                {this.state.editionVisibility ?
+                                    <Image
+                                        style={styles.studyRankImg}
+                                        source={require('../../../../assets/teacherLatestPage/top.png')}
+                                    />
+                                    : <Image
+                                        style={styles.studyRankImg}
+                                        source={require('../../../../assets/teacherLatestPage/bot.png')}
+                                    />
+                                }
+                            </View>
+                        </TouchableOpacity>
+                        {/**版本列表 */}
+                        {this.state.editionVisibility ?
+                            <View style={styles.contentlistView}>
+                                {
+                                    this.state.editionList.length <= 0
+                                        && this.state.studyRank != ''
+                                        && this.state.studyClass != ''
+                                        ? this.fetchEdition()
+                                        : null
+                                }
+                                {
+                                    this.state.editionList.length > 0
+                                        ? this.showEdition()
+                                        : <Text>版本列表未获取到或者为空</Text>
+                                }
+                            </View>
+                            : null
+                        }
+                        {/**分割线 */}
+
+
+                        <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                        {/**教材 */}
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.updateVisibility(4, this.state.bookVisibility);
+                            }}
+                        >
+                            <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                                <Text style={styles.necessary}>*</Text>
+                                <Text style={styles.title}>教材:</Text>
+                                <Text style={styles.studyRank}>{this.state.book}</Text>
+                                {this.state.bookVisibility ?
+                                    <Image
+                                        style={styles.studyRankImg}
+                                        source={require('../../../../assets/teacherLatestPage/top.png')}
+                                    />
+                                    : <Image
+                                        style={styles.studyRankImg}
+                                        source={require('../../../../assets/teacherLatestPage/bot.png')}
+                                    />
+                                }
+                            </View>
+                        </TouchableOpacity>
+                        {/**教材列表 */}
+                        {this.state.bookVisibility ?
+                            <View style={styles.contentlistView}>
+                                {
+                                    this.state.bookList.length <= 0
+                                        && this.state.studyRank != ''
+                                        && this.state.studyClass != ''
+                                        && this.state.edition != ''
+                                        ? this.fetchBook()
+                                        : null
+                                }
+                                {
+                                    this.state.bookList.length > 0
+                                        ? this.showBook()
+                                        : <Text>教材列表未获取到或者为空</Text>
+                                }
+                            </View>
+                            : null
+                        }
+                        {/**分割线 */}
+
+
+                        <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                        {/**知识点 */}
+                        <TouchableOpacity
+                            onPress={() => {
+                                this.updateVisibility(5, this.state.knowledgeVisibility);
+                            }}
+                        >
+                            <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                                <Text style={styles.necessary}>*</Text>
+                                <Text style={styles.longTitle}>知识点:</Text>
+                                <Text style={styles.studyRank}>{this.state.knowledge}</Text>
+                            </View>
+                        </TouchableOpacity>
+                        {/**知识点选择悬浮页面!!! */}
+                        {this.state.knowledgeVisibility ?
+                            <TouchableOpacity
+                                style={styles.knowledge}
+                                onPress={() => { this.setState({ knowledgeModelVisibility: true }) }}
+                            >
+                                <Text style={styles.knowledgeText}>
+                                    点击这里选择知识点
+                                </Text>
+                                {this.state.knowledgeModelVisibility ?
+                                    this.showKnowledgeModal()
+                                    : null
+                                }
+                            </TouchableOpacity>
+                            : null
+                        }
+                        {/**分割线 */}
+
+
+                        <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+                        {/**试卷简介 */}
+                        <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 10 }}>
+                            <Text style={styles.longTitle}>试卷简介:</Text>
+                            <TextInput
+                                style={{
+                                    width: screenWidth * 0.75,
+                                    backgroundColor: '#fff',
+                                    borderColor: '#DCDCDC',
+                                    borderWidth: 1,
+                                    borderRadius: 5,
+                                    paddingLeft: 20,
+                                }}
+                                onChangeText={(text)=>{ textInputPaper = text }}
+                            ></TextInput>
+                        </View>
+                        {/**分割线 */}
+                        <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} />
+
+                    </ScrollView>
+                </View> 
 
                 {/**取消 确定按钮 */}
                 <View
                     style={{
                         flexDirection: 'row',
                         bacgroundColor: '#fff',
-                        top: '100%',
-                        position: 'absolute',
-                        height: '8%',
+                        height: 50,
+                        // backgroundColor: 'red'
                     }}
                 >
                     <Text style={{ width: screenWidth * 0.05, backgroundColor: '#fff' }}></Text>
                     <View style={{
-                        height: screenHeight*0.08,
+                        height: 50,
                         width: screenWidth * 0.4,
                         backgroundColor: '#fff',
+                        alignItems: 'center'
                     }}>
                         <Button style={styles.button}
                             onPress={() => {
@@ -1003,9 +1007,10 @@ class HomeworkProperty extends React.Component {
                     </View>
                     <Text style={{ width: screenWidth * 0.1 , backgroundColor: '#fff'  }}></Text>
                     <View style={{
-                        height: screenHeight*0.08,
+                        height: 50,
                         width: screenWidth * 0.4,
                         backgroundColor: '#fff',
+                        alignItems: 'center'
                     }}>
                         <Button style={styles.button}
                             onPress={() => { 
@@ -1154,8 +1159,7 @@ const styles = StyleSheet.create({
     },
     button: {
         width: screenWidth * 0.4,
-        height: screenHeight * 0.05,
-        top: 5,
+        height: 45,
         color: 'white',
         backgroundColor: '#4DC7F8',
     },
