@@ -31,9 +31,8 @@ import WrongRecycle from "../../pages/Wrongbook/WrongRecycle";
 import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
 import { Icon } from "react-native-elements";
 import HomeworkPropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/HomeworkProperty";
-
-// import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomework";
-import CreateHomeworkFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomeworkFrame";
+import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomework";
+import CreateHomeworkFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomeworkFrame"
 import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
 import CreateLearnCaseFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/CreateLearnCaseFrame";
 
@@ -203,7 +202,8 @@ export default class MainNavigation extends Component {
                     />
                     <Stack.Screen
                         name="创建作业"
-                        component={CreateHomeworkFrame}
+                        component={CreateHomework}
+                        // component={CreateHomeworkFrame}
                         options={{
                             headerShown: false,
                         }}

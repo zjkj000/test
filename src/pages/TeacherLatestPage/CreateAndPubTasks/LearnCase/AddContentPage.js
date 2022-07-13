@@ -116,7 +116,7 @@ class AddContentPage extends React.Component {
 
             learnPlanId: this.props.learnPlanId,
 
-            imgState: true,
+            imgState: 1,
 
             //网络请求状态
             error: false,
@@ -340,11 +340,25 @@ class AddContentPage extends React.Component {
         // return (selectContentList.includes(contentList[selectContentIndex])); 
     }
 
+    getIndex = () => {
+        const { selectContentIndex , selectContentList , contentList } = this.state;
+        let i = -1 ;
+        for(i = 0 ; i < selectContentList.length ; i++){
+            if(selectContentList[i].id == contentList[selectContentIndex].id){
+                return i;
+            }
+        }
+        if(i >= selectContentList.length){
+            return -1;
+        }
+    }
+
     ////修改选中题目数(添加试题小页面)
     updateSlectNum = (flag) => {
         const { selectContentIndex , selectContentList , contentList } = this.state;
         if(flag){ //删除内容
-            var index = selectContentList.indexOf(contentList[selectContentIndex]);
+            // var index = selectContentList.indexOf(contentList[selectContentIndex]);
+            var index = this.getIndex();
             var selectContentListCopy = selectContentList;
             if(index >= 0){
                 selectContentListCopy.splice(index , 1);
@@ -377,56 +391,64 @@ class AddContentPage extends React.Component {
             <View>
                 <View style={styles.paperSelectNumView}>
                     <Text style={styles.selectPaperNum}>(已选中{this.state.selectContentNum})</Text>
-                    <TouchableOpacity 
-                            onPress={() => {
-                                let { selectContentNum , imgState } = this.state;
-                                this.setState({ imgState: !imgState  , selectContentNum:selectContentNum + 1 })
-                                // this.updateSlectNum(false);
+                    {/* <TouchableOpacity 
+                        onPress={() => {
+                            Alert.alert('-----')
+                            console.log('*************************添加删除试题********************************')
+                            let { selectContentNum , imgState } = this.state;
+                            this.setState({ imgState: !imgState  , selectContentNum:selectContentNum + 1 })
+                            // this.updateSlectNum(false);
+                        }}
+                    >
+                        <Image
+                            style={{
+                                width: 30,
+                                height: 30,
+                                top: 5,
+                                left: screenWidth * 0.65,
+                                position: 'absolute',
                             }}
-                        >
-                            <Image
-                                style={{
-                                    width: 30,
-                                    height: 30,
-                                    top: 5,
-                                    left: screenWidth * 0.65,
-                                    position: 'absolute',
-                                }}
-                                source={
-                                    !this.state.imgState 
-                                    ? require('../../../../assets/teacherLatestPage/shanchu.png')
-                                    : require('../../../../assets/teacherLatestPage/tianjia.png')
-                                }
-                            />
-                        </TouchableOpacity>
-                    {/* {
+                            source={
+                                this.state.imgState == 0
+                                ? require('../../../../assets/teacherLatestPage/shanchu.png')
+                                : require('../../../../assets/teacherLatestPage/tianjia.png')
+                            }
+                        />
+                    </TouchableOpacity> */}
+                    {
                         this.state.contentList.length > 0 && this.ifSelected() ?
-                                    <TouchableOpacity onPress={()=>{this.updateSlectNum(true)}}>
+                                    <TouchableOpacity 
+                                        onPress={()=>{this.updateSlectNum(true)}}
+                                        style={{width: 30,height: 40}}
+                                    >
                                         <Image
                                             style={{
-                                                width: 26, 
-                                                height: 26,
-                                                top: 7,
-                                                left: screenWidth*0.652,
-                                                position: 'absolute',
+                                                width: 30, 
+                                                height: 30,
+                                                top: 5,
+                                                // left: screenWidth*0.5,
+                                                // position: 'absolute',
                                             }} 
                                             source={require('../../../../assets/teacherLatestPage/shanchu.png')}
                                         />
                                     </TouchableOpacity>
                                     : 
-                                    <TouchableOpacity onPress={()=>{this.updateSlectNum(false)}}>
+                                    <TouchableOpacity 
+                                        onPress={()=>{this.updateSlectNum(false)}}
+                                        style={{width: 30,height: 40}}
+                                    >
                                         <Image
-                                                style={{
-                                                    width: 30, 
-                                                    height: 30,
-                                                    top: 5,
-                                                    left: screenWidth*0.65,
-                                                    position: 'absolute',
-                                                }} 
-                                                source={require('../../../../assets/teacherLatestPage/tianjia.png')}
+                                            style={{
+                                                width: 30, 
+                                                height: 30,
+                                                top: 5,
+                                                // left: screenWidth*0.5,
+                                                // position: 'absolute',
+                                            }} 
+                                            source={require('../../../../assets/teacherLatestPage/tianjia.png')}
                                         />
                                     </TouchableOpacity>
-                    } */}
+                    } 
                 </View>
             </View>
         );
@@ -450,7 +472,18 @@ class AddContentPage extends React.Component {
                     {/**题面 */}
                     <Text style={styles.paperContent}>[题面]</Text>
                     <View style={{padding: 10}}>
-                        <RenderHtml contentWidth={screenWidth} source={{html: contentList[selectContentIndex].shitiShow}}></RenderHtml>
+                        <RenderHtml 
+                            contentWidth={screenWidth} 
+                            source={{html: contentList[selectContentIndex].shitiShow}}
+                            tagsStyles={{
+                                img: {
+                                  flexDirection: 'row',
+                                },
+                                p: {
+                                  flexDirection: 'row',
+                                },
+                            }}
+                        ></RenderHtml>
                     </View>
                     
                     <View style={{ height: 1, backgroundColor: "#999999" }} />
@@ -458,14 +491,36 @@ class AddContentPage extends React.Component {
                     {/**答案 */}
                     <Text style={styles.paperContent}>[答案]</Text>
                     <View style={{padding: 10}}>
-                        <RenderHtml contentWidth={screenWidth} source={{html: contentList[selectContentIndex].shitiAnswer}}></RenderHtml>
+                        <RenderHtml 
+                            contentWidth={screenWidth} 
+                            source={{html: contentList[selectContentIndex].shitiAnswer}}
+                            tagsStyles={{
+                                img: {
+                                  flexDirection: 'row',
+                                },
+                                p: {
+                                  flexDirection: 'row',
+                                },
+                            }}
+                        ></RenderHtml>
                     </View>
                     <View style={{ height: 1, backgroundColor: "#999999" }} />
                     
                     {/**解析 */}
                     <Text style={styles.paperContent}>[解析]</Text>
                     <View style={{padding: 10}}>
-                        <RenderHtml contentWidth={screenWidth} source={{html: contentList[selectContentIndex].shitiAnalysis}}></RenderHtml>
+                        <RenderHtml 
+                            contentWidth={screenWidth} 
+                            source={{html: contentList[selectContentIndex].shitiAnalysis}}
+                            tagsStyles={{
+                                img: {
+                                  flexDirection: 'row',
+                                },
+                                p: {
+                                  flexDirection: 'row',
+                                },
+                            }}
+                        ></RenderHtml>
                     </View>
                 </ScrollView>
             );
@@ -886,22 +941,17 @@ class AddContentPage extends React.Component {
                     style={styles.contentView}
                     keyboardShouldPersistTaps={true}
                 >
-                    {/* {
-                        this.state.contentList.length > 0 
-                                ? this.showTitle() 
-                                : <Loading show={true} />
-                    } */}
-                    {/* {
+                    {
                         this.state.contentList.length > 0 
                                 ? this.showContent() 
                                 : <Loading show={true} />
-                    } */}
+                    }
                 </ScrollView>
-                {/* {
+                {
                     this.state.contentList.length > 0 
                             ? this.showAddPaperBottom() 
                             : <Loading show={true} />
-                } */}
+                }
             </View>
         )
     }
@@ -1044,7 +1094,7 @@ const styles = StyleSheet.create({
         borderWidth:5,
     },
     paperSelectNumView: {
-        height: screenHeight*0.06,
+        height: 40,
         flexDirection: 'row',
         backgroundColor: '#EBEDEC',
     },
@@ -1053,6 +1103,7 @@ const styles = StyleSheet.create({
         color: '#8B8B7A',
         paddingLeft: 20,
         paddingTop: 7,
+        width: 350,
     },
     pptlittle_image:{
         height:50,

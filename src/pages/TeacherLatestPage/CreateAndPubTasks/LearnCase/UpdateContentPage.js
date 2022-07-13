@@ -164,17 +164,24 @@ class UpdateContentPage extends React.Component {
         return(
             <View>
                 <View style={styles.paperSelectNumView}>
-                    <Text style={styles.selectPaperNum}>(已选中{this.state.selectContentList.length})</Text>
+                    <Text style={styles.selectPaperNum}>
+                        {this.state.updateContentIndex + 1}
+                        {'/'}
+                        {this.state.selectContentList.length}
+                    </Text>
                     {
                         //（同类型试题之间）移动试题 上移
-                        <TouchableOpacity onPress={()=>{this.moveUpPaper()}}>
+                        <TouchableOpacity 
+                            onPress={()=>{this.moveUpPaper()}}
+                            style={{width: 30,height: 40,}}
+                        >
                             <Image
                                 style={{
-                                    width: 27, 
-                                    height: 27,
+                                    width: 30,
+                                    height: 30,
                                     top: 7,
-                                    left: screenWidth*0.4,
-                                    position: 'absolute',
+                                    // left: screenWidth*0.4,
+                                    // position: 'absolute',
                                 }} 
                                 source={require('../../../../assets/teacherLatestPage/shangyi.png')}
                             />
@@ -182,28 +189,34 @@ class UpdateContentPage extends React.Component {
                     }
                     {
                         //（同类型试题之间）移动试题 下移
-                        <TouchableOpacity onPress={()=>{this.moveDownPaper()}}>
+                        <TouchableOpacity 
+                            onPress={()=>{this.moveDownPaper()}}
+                            style={{width: 31,height: 40,left: 20,}}
+                        >
                             <Image
                                 style={{
-                                    width: 27, 
-                                    height: 27,
+                                    width: 31,
+                                    height: 31,
                                     top: 7,
-                                    left: screenWidth*0.53,
-                                    position: 'absolute',
+                                    // left: screenWidth*0.53,
+                                    // position: 'absolute',
                                 }} 
                                 source={require('../../../../assets/teacherLatestPage/xiayi.png')}
                             />
                         </TouchableOpacity>
                     }
                     {
-                        <TouchableOpacity onPress={()=>{this.updateSlectNum()}}>
+                        <TouchableOpacity 
+                            onPress={()=>{this.updateSlectNum()}}
+                            style={{width: 30,height: 40,left: 40,}}
+                        >
                             <Image
                                 style={{
-                                    width: 27, 
-                                    height: 27,
+                                    width: 30,
+                                    height: 30,
                                     top: 7,
-                                    left: screenWidth*0.652,
-                                    position: 'absolute',
+                                    // left: screenWidth*0.652,
+                                    // position: 'absolute',
                                 }} 
                                 source={require('../../../../assets/teacherLatestPage/shanchu.png')}
                             />
@@ -232,7 +245,18 @@ class UpdateContentPage extends React.Component {
                     {/**题面 */}
                     <Text style={styles.paperContent}>[题面]</Text>
                     <View style={{padding: 10}}>
-                        <RenderHtml contentWidth={screenWidth} source={{html: selectContentList[updateContentIndex].shitiShow}}></RenderHtml>
+                        <RenderHtml 
+                            contentWidth={screenWidth} 
+                            source={{html: selectContentList[updateContentIndex].shitiShow}}
+                            tagsStyles={{
+                                img: {
+                                  flexDirection: 'row',
+                                },
+                                p: {
+                                  flexDirection: 'row',
+                                },
+                            }}
+                        ></RenderHtml>
                     </View>
                     
                     <View style={{ height: 1, backgroundColor: "#999999" }} />
@@ -240,14 +264,36 @@ class UpdateContentPage extends React.Component {
                     {/**答案 */}
                     <Text style={styles.paperContent}>[答案]</Text>
                     <View style={{padding: 10}}>
-                        <RenderHtml contentWidth={screenWidth} source={{html: selectContentList[updateContentIndex].shitiAnswer}}></RenderHtml>
+                        <RenderHtml 
+                            contentWidth={screenWidth} 
+                            source={{html: selectContentList[updateContentIndex].shitiAnswer}}
+                            tagsStyles={{
+                                img: {
+                                  flexDirection: 'row',
+                                },
+                                p: {
+                                  flexDirection: 'row',
+                                },
+                            }}
+                        ></RenderHtml>
                     </View>
                     <View style={{ height: 1, backgroundColor: "#999999" }} />
                     
                     {/**解析 */}
                     <Text style={styles.paperContent}>[解析]</Text>
                     <View style={{padding: 10}}>
-                        <RenderHtml contentWidth={screenWidth} source={{html: selectContentList[updateContentIndex].shitiAnalysis}}></RenderHtml>
+                        <RenderHtml 
+                            contentWidth={screenWidth} 
+                            source={{html: selectContentList[updateContentIndex].shitiAnalysis}}
+                            tagsStyles={{
+                                img: {
+                                  flexDirection: 'row',
+                                },
+                                p: {
+                                  flexDirection: 'row',
+                                },
+                            }}
+                        ></RenderHtml>
                     </View>
                 </ScrollView>
             );
@@ -808,7 +854,7 @@ const styles = StyleSheet.create({
         borderWidth:5,
     },
     paperSelectNumView: {
-        height: screenHeight*0.06,
+        height: 40,
         flexDirection: 'row',
         backgroundColor: '#EBEDEC',
     },
@@ -817,6 +863,7 @@ const styles = StyleSheet.create({
         color: '#8B8B7A',
         paddingLeft: 20,
         paddingTop: 7,
+        width: 350
     },
     pptlittle_image:{
         height:50,
