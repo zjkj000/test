@@ -51,11 +51,11 @@ export default class ImageHandler {
                     if (response.didCancel) {
                         return;
                     }
-                    console.log(
-                        "CameraPermission===================================="
-                    );
-                    console.log(response);
-                    console.log("====================================");
+                    // console.log(
+                    //     "CameraPermission===================================="
+                    // );
+                    // console.log(response);
+                    // console.log("====================================");
                     resImg = response.assets[0];
                 });
                 return resImg;
@@ -94,11 +94,11 @@ export default class ImageHandler {
             if (response.didCancel) {
                 return;
             }
-            console.log(
-                "LibraryPermission===================================="
-            );
-            console.log(response);
-            console.log("====================================");
+            // console.log(
+            //     "LibraryPermission===================================="
+            // );
+            // console.log(response);
+            // console.log("====================================");
             resImg = response.assets[0];
         });
         return resImg;

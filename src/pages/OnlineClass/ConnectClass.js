@@ -61,7 +61,6 @@ export default ConnectClass = () => {
                             res.push({ title: ipAddress });
                             StorageUtil.save("historyListRemote", res);
                         }
-                        1;
                     });
                     let imgURL =
                         "http://" +

@@ -63,9 +63,9 @@ class TeacherTabBarComponent extends React.Component {
             }
         );
         // 轮询
-        // this.timerId = setInterval(() => {
-        //     this.getClassStatus();
-        // }, 500);
+        this.timerId = setInterval(() => {
+            this.getClassStatus();
+        }, 500);
     }
 
     componentDidUpdate() {
@@ -81,6 +81,7 @@ class TeacherTabBarComponent extends React.Component {
     }
     getClassStatus = () => {
         const { userName } = this.props.route.params;
+        const { showBubble } = this.state;
         const url =
             global.constants.baseUrl +
             "/AppServer/ajax/teacherApp_getSkydtStatus.do";
@@ -98,7 +99,8 @@ class TeacherTabBarComponent extends React.Component {
                     resJson,
                 });
                 if (resJson.success) {
-                    this.setState({ showBubble: resJson.data });
+                    if (resJson.data !== showBubble)
+                        this.setState({ showBubble: resJson.data });
                 }
                 // console.log("====================================");
             })
