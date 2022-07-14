@@ -1186,9 +1186,9 @@ class CreateHomework extends React.Component {
     showAddPaperBottom = () => {
         if (this.state.paperList.length > 0) {
             return (
-                <View style={{ flexDirection: 'row', alignItems: 'center', ...styles.bottomView, }}>
+                <View style={{ flexDirection: 'row', alignItems: 'center', ...styles.bottomView, width: screenWidth}}>
                     <TouchableOpacity
-                        style={{ width: screenWidth * 0.1, paddingLeft: 5 }}
+                        style={{ height: 100, width: 40, paddingLeft: 5 , alignItems: 'center'}}
                         onPress={() => {
                             if(pageNo == 1){
                                 Alert.alert('', '已经是第一页试题了', [{}, { text: '关闭', onPress: () => { } }]);
@@ -1199,16 +1199,16 @@ class CreateHomework extends React.Component {
                         }}
                     >
                         <Image
-                            style={{ width: 25, height: 25, }}
+                            style={{ width: 25, height: 25, top: 37}}
                             source={require('../../../../assets/teacherLatestPage/back.png')}
                         ></Image>
                     </TouchableOpacity>
                     {/**显示底部试题类型图标 */}
-                    <View style={{ width: screenWidth * 0.8, flexDirection: 'row', alignItems: 'center' }}>
+                    <View style={{ width: screenWidth - 80, flexDirection: 'row', alignItems: 'center'}}>
                         {this.showPaperTypeImg()}
                     </View>
                     <TouchableOpacity
-                        style={{ width: screenWidth * 0.1, paddingLeft: 11 }}
+                        style={{ height: 100, width: 40, paddingRight: 5 , alignItems: 'center'}}
                         onPress={() => {
                             if(pageNo != allPageNo){
                                 pageNo++;
@@ -1219,7 +1219,7 @@ class CreateHomework extends React.Component {
                         }}
                     >
                         <Image
-                            style={{ width: 25, height: 25, }}
+                            style={{ width: 25, height: 25,  top: 37}}
                             source={require('../../../../assets/teacherLatestPage/next.png')}
                         ></Image>
                     </TouchableOpacity>
@@ -1265,6 +1265,13 @@ class CreateHomework extends React.Component {
                                 selectPaperIndex: i,
                             })
                         }
+                    }}
+                    style={{
+                        top: 5,
+                        // height: 90,
+                        height: (screenWidth - 80) * 0.2,
+                        width: (screenWidth - 80) * 0.2 ,
+                        alignItems: 'center'
                     }}
                 >
                     <Image
@@ -1401,7 +1408,7 @@ class CreateHomework extends React.Component {
                 <View style={styles.bodyView}>
                     {/**选中题目数 删除此试题 */}
                     <View style={styles.paperSelectNumView}>
-                        <Text style={styles.selectPaperNum}>
+                        <Text style={{...styles.selectPaperNum , width: screenWidth * 0.67}}>
                             {this.state.updatePaperIndex + 1}
                             {'/'}
                             {this.state.selectPaperNum}
@@ -1474,7 +1481,7 @@ class CreateHomework extends React.Component {
             );
         } else if (this.props.paramsData.type == 'update') {
             return (
-                <View style={styles.bodyView}>
+                <View style={{...styles.bodyView,height: screenHeight - 50}}>
                     <View>
                         <Text
                             style={{
@@ -1594,6 +1601,13 @@ class CreateHomework extends React.Component {
                             })
                         }
                     }}
+                    style={{
+                        top: 5,
+                        height: (screenWidth - 80) * 0.2,
+                        width: (screenWidth - 80) * 0.2 ,
+                        alignItems: 'center',
+                        // backgroundColor: 'red',
+                    }}
                 >
                     <Image
                         source={paperTypeImg}
@@ -1603,13 +1617,26 @@ class CreateHomework extends React.Component {
             );
         }
         return (
-            <ScrollView
-                horizontal={true}
-                showsHorizontalScrollIndicator={false}
-                style={styles.bottomView}
-            >
-                {paperItems}
-            </ScrollView>
+            <View style={{ 
+                flexDirection: 'row', 
+                alignItems: 'center', 
+                height: 105,
+                position: 'absolute',
+                bottom: 1,
+                width: screenWidth - 20,
+                marginLeft: 10,
+                marginRight: 10,
+                // backgroundColor: 'red',
+            }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <ScrollView
+                        horizontal={true}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {paperItems}
+                    </ScrollView>
+                </View>
+            </View>
         );
     }
 
@@ -1832,7 +1859,7 @@ class CreateHomework extends React.Component {
                     <View
                         style={this.state.classFlag == false ?
                             { width: screenWidth * 0.4, height: 40, marginTop: 10, marginLeft: 20, borderRadius: 5, backgroundColor: '#DCDCDC', justifyContent: 'center' }
-                            : { width: screenWidth * 0.4, height: 40, marginTop: 10, marginLeft: 20, borderRadius: 5, backgroundColor: '#fff', justifyContent: 'center', borderWidth: 1, borderColor: 'red' }
+                            : { width: screenWidth * 0.4, height: 40, marginTop: 10, marginLeft: 20, borderRadius: 5, backgroundColor: '#fff', justifyContent: 'center', borderWidth: 2, borderColor: 'red' }
                         }
                     >
                         <Text
@@ -2006,7 +2033,7 @@ class CreateHomework extends React.Component {
     //布置作业页面
     showPushPaper = () => {
         return (
-            <View style={{ ...styles.bodyView, height: '82%' }}>
+            <View style={{ ...styles.bodyView, height: screenHeight - 130}}>
                 {/**布置 保存 */}
                 <View style={{ ...styles.paperSelectNumView, justifyContent: 'space-around' }}>
                     <Text
@@ -2028,7 +2055,7 @@ class CreateHomework extends React.Component {
                         onPress={() => { this.savePaper() }}
                     >保存</Text>
                 </View>
-                <ScrollView style={{ height: '100%' }}>
+                <ScrollView>
                     {/**开始时间 */}
 
                     <View style={{ flexDirection: 'row', padding: 15, paddingLeft: 20, alignItems: 'center', borderBottomWidth: 0.5 }}>
@@ -2117,17 +2144,17 @@ class CreateHomework extends React.Component {
                         {/**班级 小组  个人 */}
                         <TouchableOpacity style={{ marginRight: 30 }} onPress={() => { this.updateAssign('0'); this.setState({ SelectKeTangStatus: false }) }}>
                             <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '0' ? '#4DC7F8' : '#fff' }}>
-                                <Text style={{ fontSize: 15 }}>班级</Text>
+                                <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '0' ? '#fff' : 'gray' }}>班级</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={{ marginRight: 20 }} onPress={() => { this.updateAssign('1'); this.setState({ SelectKeTangStatus: false }) }}>
                             <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '1' ? '#4DC7F8' : '#fff' }}>
-                                <Text>小组</Text>
+                                <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '1' ? '#fff' : 'gray' }}>小组</Text>
                             </View>
                         </TouchableOpacity>
                         <TouchableOpacity style={{ marginRight: 20 }} onPress={() => { this.updateAssign('2'); this.setState({ SelectKeTangStatus: false }) }}>
                             <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '2' ? '#4DC7F8' : '#fff' }}>
-                                <Text>个人</Text>
+                                <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '2' ? '#fff' : 'gray' }}>个人</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -2149,8 +2176,14 @@ class CreateHomework extends React.Component {
     //布置作业页面底部按钮
     showPushPaperBottom = () => {
         return (
-            <View style={{ flexDirection: 'row', justifyContent: 'space-around', backgroundColor: '#fff' }}>
-                <Button style={{ width: '40%' }}
+            <View style={{ 
+                height: 50,
+                flexDirection: 'row', 
+                alignItems: 'center',
+                justifyContent: 'space-around', 
+                backgroundColor: '#fff' 
+            }}>
+                <Button style={{ width: '40%'  }}
                     onPress={() => {
                         this.setState({
                             startTime: undefined,
@@ -2301,14 +2334,14 @@ const styles = StyleSheet.create({
     bodyView: {
         height: screenHeight - 220,
         flexDirection: 'column',
-        backgroundColor: 'red'
+        backgroundColor: '#fff'
     },
     bottomView: {
         // top: '100%', 
         height: 100,
         position: 'absolute',
         bottom: 1,
-        backgroundColor: 'pink',
+        backgroundColor: '#fff',
     },
     addPaper: {
         // borderBottomWidth: 1,
@@ -2366,27 +2399,32 @@ const styles = StyleSheet.create({
         height: 40,
         flexDirection: 'row',
         backgroundColor: '#EBEDEC',
+        width: screenWidth
     },
     selectPaperNum: {
         fontSize: 18,
         color: '#8B8B7A',
         paddingLeft: 20,
         paddingTop: 7,
-        width: 350
+        width: screenWidth * 0.9,
     },
     showPaper: {
         flexDirection: 'column',
     },
     little_image: {
-        height: 60,
-        width: screenWidth * 0.15,
-        marginTop: 5,
-        marginLeft: 3
+        bottom: 3,
+        // height: 85,
+        height: (screenWidth - 80) * 0.18,
+        width: (screenWidth - 80) * 0.18,
+        // marginTop: 5,
+        // marginLeft: 3
     },
     checked: {
-        height: 65,
-        width: screenWidth * 0.16,
-        marginLeft: 5,
+        // height: 90,
+        height: (screenWidth - 80) * 0.19,
+        width: (screenWidth - 80) * 0.19,
+        // marginLeft: 5,
+        bottom: 5,
         borderColor: '#FFA500',
         borderRadius: 5,
         borderWidth: 5,

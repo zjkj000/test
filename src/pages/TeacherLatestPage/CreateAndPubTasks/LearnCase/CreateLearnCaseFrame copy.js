@@ -420,7 +420,7 @@ class CreateLearnCase extends React.Component {
 
     render(){
         return(
-            <View style={{ flexDirection: 'column', backgroundColor: '#fff' , flex: 1  }}>
+            <View style={{ flexDirection: 'column', backgroundColor: '#fff' }}>
                 {/**导航项 */}
                 <View style={styles.routeView}>
                     {/**返回按钮 */}
@@ -540,7 +540,7 @@ class CreateLearnCase extends React.Component {
 
 const styles = StyleSheet.create({
     routeView: {
-        height: 50, 
+        height: screenHeight*0.1, 
         flexDirection: 'row', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
@@ -548,55 +548,55 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
     },
     addPaper: {
-        // borderBottomWidth: 1,
-        // borderBottomColor: '#4DC7F8',
-        // borderRadius: 5,
-        height: 38,
+        borderBottomWidth: 1,
+        borderBottomColor: '#4DC7F8',
+        borderRadius: 5,
+        height: 40,
         width: screenWidth * 0.25,
         fontSize: 15,
         color: '#4DC7F8',
         backgroundColor: '#fff',
         fontWeight: '300',
-        padding: 8,
+        padding: 10,
         textAlign: 'center',
     },
     addPaperSelect: {
         borderWidth: 1,
-        borderRadius: 3,
+        borderRadius: 5,
         borderColor: '#4DC7F8',
-        height: 38,
+        height: 40,
         width: screenWidth * 0.25,
         fontSize: 15,
         color: 'white',
         backgroundColor: '#4DC7F8',
         fontWeight: '300',
-        padding: 8,
+        padding: 10,
         textAlign: 'center',
     },
     updatePaper: {
-        // borderBottomWidth: 1,
-        // borderBottomColor: '#4DC7F8',
-        // borderRadius: 0.5,
-        height: 38,
+        borderBottomWidth: 1,
+        borderBottomColor: '#4DC7F8',
+        borderRadius: 0.5,
+        height: 40,
         width: screenWidth * 0.25,
         fontSize: 15,
         color: '#4DC7F8',
         backgroundColor: '#fff',
         fontWeight: '300',
-        padding: 8,
+        padding: 10,
         textAlign: 'center',
     },
     pushPaper: {
-        // borderBottomWidth: 1,
-        // borderBottomColor: '#4DC7F8',
-        // borderRadius: 5,
-        height: 38,
+        borderBottomWidth: 1,
+        borderBottomColor: '#4DC7F8',
+        borderRadius: 5,
+        height: 40,
         width: screenWidth * 0.25,
         fontSize: 15,
         color: '#4DC7F8',
         backgroundColor: '#fff',
         fontWeight: '300',
-        padding: 8,
+        padding: 10,
         textAlign: 'center',
     },
     modalView: {

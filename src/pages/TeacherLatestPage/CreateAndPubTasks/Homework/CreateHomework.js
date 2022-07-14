@@ -17,6 +17,7 @@ import http from "../../../../utils/http/request";
 import DateTime from "../../../../utils/datetimePickerUtils/DateTime";
 
 
+
 import { WebView } from 'react-native-webview';
 import RenderHtml from 'react-native-render-html';
 
@@ -131,8 +132,10 @@ class CreateHomework extends React.Component {
         if (this.props.paramsData.type == 'update') {
             this.fetchPaperEditContent();
         }
+        //开始、截止时间
         var _dateStr = new Date().toISOString().substring(0, 10) + ' ' + new Date().toISOString().substring(11, 16)
         _dateStr = _dateStr.substring(0, 11) + (parseInt(_dateStr.substring(12, 13)) + 8) + _dateStr.substring(13, 16)
+        
         this.setState({
             startTime: _dateStr,
             endTime: this.nextDay(_dateStr.substring(0, 10)), //结束时间
