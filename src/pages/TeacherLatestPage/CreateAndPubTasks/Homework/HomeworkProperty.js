@@ -92,6 +92,8 @@ class HomeworkProperty extends React.Component {
 
     UNSAFE_componentWillMount() {
         console.log('--property----componentWillMount--------');
+        textInputName = '';
+        textInputPaper = '';
         StorageUtil.get("historyProperty").then((res) => { 
             if (res) {
                 this.setState({ 

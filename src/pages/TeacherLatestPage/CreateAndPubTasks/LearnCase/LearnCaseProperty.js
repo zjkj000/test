@@ -84,7 +84,15 @@ class LearnCaseProperty extends React.Component {
 
     UNSAFE_componentWillMount() {
         console.log('--property----componentWillMount--------');
-
+        textInputName = ''; //设置属性---名称
+        textInputPaper = ''; //设置属性---试卷简介
+        textLearnSumTime = ''; //设置属性---学时总数
+        textStudyTime = ''; //设置属性---研读学时
+        textLearnAim = ''; //设置属性---学习目标
+        textLearnPoint = ''; //设置属性---学习重点
+        textLearnDiff = ''; //设置属性---学习难点
+        textCourseSummary = ''; //设置属性---课堂总结
+        textCourseExpansion = ''; //设置属性---课外扩展
         StorageUtil.get("historyProperty").then((res) => { 
             if (res) {
                 this.setState({ 
