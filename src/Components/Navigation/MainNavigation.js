@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MyTabBar from "./TabBar";
 import Login from "../../pages/Login/Login";
@@ -54,7 +55,15 @@ import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin"
 import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
 import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
 import TestPage from "../../TestPage/TestPage";
+<<<<<<< HEAD
 import TestPage_move from "../../TestPage/TestPage_move";
+=======
+import {
+    Alert,
+    Image,
+    TouchableOpacity,
+} from "react-native";
+>>>>>>> 5294555d43a6dd25da04489ea51ddd921ffb26f8
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -198,7 +207,28 @@ export default class MainNavigation extends Component {
                         name="设置作业属性"
                         component={HomeworkPropertyContainer}
                         options={{
-                            headerShown: true,
+                            // headerShown: true,
+                            headerLeft: () => {
+                                const navigation = useNavigation();
+                                return(
+                                    <TouchableOpacity
+                                        onPress={()=>{
+                                            navigation.canGoBack() 
+                                                ? navigation.goBack() 
+                                                : Alert.alert('', '返回失败', [{}, { text: '关闭', onPress: () => { } }]);
+                                        }}
+                                    >
+                                        <Image
+                                            style={{
+                                                height: 30,
+                                                width: 30,
+                                                left: 10
+                                            }}
+                                            source={require('../../assets/teacherLatestPage/goback.png')}
+                                        />
+                                    </TouchableOpacity>
+                                )
+                            }
                         }}
                     />
                     <Stack.Screen
@@ -227,7 +257,28 @@ export default class MainNavigation extends Component {
                         name="设置导学案属性"
                         component={LearnCasePropertyContainer}
                         options={{
-                            headerShown: true,
+                            // headerShown: true,
+                            headerLeft: () => {
+                                const navigation = useNavigation();
+                                return(
+                                    <TouchableOpacity
+                                        onPress={()=>{
+                                            navigation.canGoBack() 
+                                                ? navigation.goBack() 
+                                                : Alert.alert('', '返回失败', [{}, { text: '关闭', onPress: () => { } }]);
+                                        }}
+                                    >
+                                        <Image
+                                            style={{
+                                                height: 30,
+                                                width: 30,
+                                                left: 10,
+                                            }}
+                                            source={require('../../assets/teacherLatestPage/goback.png')}
+                                        />
+                                    </TouchableOpacity>
+                                )
+                            }
                         }}
                     />
                     <Stack.Screen

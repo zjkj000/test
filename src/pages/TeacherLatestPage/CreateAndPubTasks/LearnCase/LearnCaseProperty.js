@@ -18,6 +18,7 @@ import {
     Button,
 } from "@ui-kitten/components";
 import { WebView } from 'react-native-webview';
+import StorageUtil from "../../../../utils/Storage/Storage";
 
 let textInputName = ''; //设置属性---名称
 let textInputPaper = ''; //设置属性---试卷简介
@@ -79,6 +80,45 @@ class LearnCaseProperty extends React.Component {
             error: false,
             errorInfo: "",
         };
+    }
+
+    UNSAFE_componentWillMount() {
+        console.log('--property----componentWillMount--------');
+        textInputName = ''; //设置属性---名称
+        textInputPaper = ''; //设置属性---试卷简介
+        textLearnSumTime = ''; //设置属性---学时总数
+        textStudyTime = ''; //设置属性---研读学时
+        textLearnAim = ''; //设置属性---学习目标
+        textLearnPoint = ''; //设置属性---学习重点
+        textLearnDiff = ''; //设置属性---学习难点
+        textCourseSummary = ''; //设置属性---课堂总结
+        textCourseExpansion = ''; //设置属性---课外扩展
+        StorageUtil.get("historyProperty").then((res) => { 
+            if (res) {
+                this.setState({ 
+                    studyRank: res.studyRank ?  res.studyRank : '',
+                    studyRankId: res.studyRankId ?  res.studyRankId : '', 
+                    channelNameList: res.channelNameList ?  res.channelNameList : [], 
+
+                    studyClass: res.studyClass ?  res.studyClass : '', 
+                    studyClassId: res.studyClassId ?  res.studyClassId : '', 
+                    studyClassList: res.studyClassList ?  res.studyClassList : [], 
+
+                    edition: res.edition ?  res.edition : '', 
+                    editionId: res.editionId ?  res.editionId : '', 
+                    editionList: res.editionList ?  res.editionList : [], 
+
+                    book: res.book ?  res.book : '', 
+                    bookId: res.bookId ?  res.bookId : '', 
+                    bookList: res.bookList ?  res.bookList : [], 
+
+                    knowledge: res.knowledge ?  res.knowledge : '', 
+                    Longknowledge: res.Longknowledge ?  res.Longknowledge : '',
+                    knowledgeCode: res.knowledgeCode ?  res.knowledgeCode : '', 
+                    knowledgeList: res.knowledgeList ?  res.knowledgeList : [], 
+                });
+            }
+        });
     }
 
     //更新是否显示状态
@@ -581,6 +621,69 @@ class LearnCaseProperty extends React.Component {
         return content;
     }
 
+    //更新缓存
+    setPropertys = () => {
+        let propertys = {
+            studyRank: this.state.studyRank ?  this.state.studyRank : '',
+            studyRankId: this.state.studyRankId ?  this.state.studyRankId : '', 
+            channelNameList: this.state.channelNameList ?  this.state.channelNameList : [], 
+
+            studyClass: this.state.studyClass ?  this.state.studyClass : '', 
+            studyClassId: this.state.studyClassId ?  this.state.studyClassId : '', 
+            studyClassList: this.state.studyClassList ?  this.state.studyClassList : [], 
+
+            edition: this.state.edition ?  this.state.edition : '', 
+            editionId: this.state.editionId ?  this.state.editionId : '', 
+            editionList: this.state.editionList ?  this.state.editionList : [], 
+
+            book: this.state.book ?  this.state.book : '', 
+            bookId: this.state.bookId ?  this.state.bookId : '', 
+            bookList: this.state.bookList ?  this.state.bookList : [], 
+
+            knowledge: this.state.knowledge ?  this.state.knowledge : '', 
+            Longknowledge: this.state.Longknowledge ?  this.state.Longknowledge : '',
+            knowledgeCode: this.state.knowledgeCode ?  this.state.knowledgeCode : '', 
+            knowledgeList: this.state.knowledgeList ?  this.state.knowledgeList : [], 
+        };
+        StorageUtil.save("historyProperty", propertys);
+        this.enterNextPage();
+    }
+
+    enterNextPage = () => {
+        this.props.navigation.navigate({
+            name: '创建导学案',
+            params: {
+                createType: this.props.createType,
+                actionType: 'create',
+                name: textInputName,
+                introduction: textInputPaper,
+                useAim: this.state.useAim,
+                learnSumTime: textLearnSumTime,
+                studyTime: textStudyTime,
+                learnAim: textLearnAim,
+                learnPoint: textLearnAim,
+                learnDiff: textLearnDiff,
+                courseSummary: textCourseSummary,
+                courseExpansion: textCourseExpansion,
+                studyRankId: this.state.studyRankId,
+                studyRank: this.state.studyRank,
+                studyClassId: this.state.studyClassId,
+                studyClass: this.state.studyClass,
+                editionId: this.state.editionId,
+                edition: this.state.edition,
+                bookId: this.state.bookId,
+                book: this.state.book,
+                knowledgeCode: this.state.knowledgeCode,
+                knowledge: this.state.Longknowledge,
+
+                channelNameList: this.state.channelNameList, //学段名列表（接口数据）
+                studyClassList: this.state.studyClassList, //学科列表（接口数据）
+                editionList: this.state.editionList, //版本列表（接口数据）
+                bookList: this.state.bookList, //教材列表（接口数据）  
+                knowledgeList: this.state.knowledgeList, //从接口中返回的数据
+            }
+        })
+    }
 
 
     render() {
@@ -1021,7 +1124,7 @@ class LearnCaseProperty extends React.Component {
                         <Button style={styles.button}
                             onPress={() => { 
                                 // Alert.alert('该功能还未开发');
-                                //console.log('----------',textInputName , textInputPaper); 
+                                //console.log('----------',textInputName , textInputPaper);
                                 if(
                                     textInputName != ''
                                     && this.state.studyRank != ''
@@ -1031,43 +1134,17 @@ class LearnCaseProperty extends React.Component {
                                     && this.state.knowledge != ''
                                     && textLearnSumTime != ''
                                     && textStudyTime != ''
-                                )(
-                                        this.props.navigation.navigate({
-                                            name: '创建导学案',
-                                            params: {
-                                                createType: this.props.createType,
-                                                actionType: 'create',
-                                                name: textInputName,
-                                                introduction: textInputPaper,
-                                                useAim: this.state.useAim,
-                                                learnSumTime: textLearnSumTime,
-                                                studyTime: textStudyTime,
-                                                learnAim: textLearnAim,
-                                                learnPoint: textLearnAim,
-                                                learnDiff: textLearnDiff,
-                                                courseSummary: textCourseSummary,
-                                                courseExpansion: textCourseExpansion,
-                                                studyRankId: this.state.studyRankId,
-                                                studyRank: this.state.studyRank,
-                                                studyClassId: this.state.studyClassId,
-                                                studyClass: this.state.studyClass,
-                                                editionId: this.state.editionId,
-                                                edition: this.state.edition,
-                                                bookId: this.state.bookId,
-                                                book: this.state.book,
-                                                knowledgeCode: this.state.knowledgeCode,
-                                                knowledge: this.state.Longknowledge,
-
-                                                channelNameList: this.state.channelNameList, //学段名列表（接口数据）
-                                                studyClassList: this.state.studyClassList, //学科列表（接口数据）
-                                                editionList: this.state.editionList, //版本列表（接口数据）
-                                                bookList: this.state.bookList, //教材列表（接口数据）  
-                                                knowledgeList: this.state.knowledgeList, //从接口中返回的数据
-                                            }
-                                        })
-                                )
-                                else{
-                                    Alert.alert('','必填项不完整', [{} , {text: '关闭', onPress: ()=>{}}]);
+                                ){
+                                    this.setPropertys()
+                                }else{
+                                    Alert.alert(
+                                        '',
+                                        '必填项不完整',
+                                        [
+                                            {} ,
+                                            {text: '关闭',onPress: ()=>{}}
+                                        ]
+                                    );
                                 }
                             }}
                         >

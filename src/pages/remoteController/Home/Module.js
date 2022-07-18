@@ -188,7 +188,8 @@ export default class Module extends Component {
                                     style={styles.questionButton}
                                     accessoryLeft={
                                         <Icon
-                                            fill={theme["color-primary-500"]}
+                                            style={{ height: 32, width: 32 }}
+                                            fill={theme["color-primary-700"]}
                                             name={"minus"}
                                         />
                                     }
@@ -204,7 +205,8 @@ export default class Module extends Component {
                                     style={styles.questionButton}
                                     accessoryLeft={
                                         <Icon
-                                            fill={theme["color-primary-500"]}
+                                            style={{ height: 32, width: 32 }}
+                                            fill={theme["color-primary-700"]}
                                             name={"plus"}
                                         />
                                     }
@@ -220,7 +222,8 @@ export default class Module extends Component {
                                     style={styles.questionButton}
                                     accessoryLeft={
                                         <Icon
-                                            fill={theme["color-primary-500"]}
+                                            style={{ height: 32, width: 32 }}
+                                            fill={theme["color-primary-700"]}
                                             name={"minus"}
                                         />
                                     }
@@ -235,7 +238,8 @@ export default class Module extends Component {
                                     style={styles.questionButton}
                                     accessoryLeft={
                                         <Icon
-                                            fill={theme["color-primary-500"]}
+                                            style={{ height: 32, width: 32 }}
+                                            fill={theme["color-primary-700"]}
                                             name={"plus"}
                                         />
                                     }
@@ -249,8 +253,8 @@ export default class Module extends Component {
                                     size={"small"}
                                     style={{
                                         borderRadius: 15,
-                                        backgroundColor:
-                                            theme["color-danger-600"],
+                                        borderWidth: 0,
+                                        backgroundColor: "gray",
                                     }}
                                     onPress={() => {
                                         this.props.setModuleButton(-1);
@@ -266,14 +270,15 @@ export default class Module extends Component {
                                     size={"small"}
                                     style={{
                                         borderRadius: 15,
+                                        borderWidth: 0,
                                         backgroundColor:
-                                            theme["color-primary-600"],
+                                            theme["color-primary-700"],
                                     }}
                                     onPress={() => {
                                         this.handleConfirm();
                                     }}
                                 >
-                                    确认
+                                    开始作答
                                 </Button>
                             </View>
                         </View>

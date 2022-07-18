@@ -31,6 +31,7 @@ import {
 //import { ScrollView } from "react-native-gesture-handler";
 import { WebView } from 'react-native-webview';
 import HTMLView from 'react-native-htmlview';
+import StorageUtil from "../../../../utils/Storage/Storage";
 
 
 let textInputName = ''; //设置属性---名称
@@ -44,7 +45,7 @@ export default function HomeworkPropertyContainer(props) {
 
     const navigation = useNavigation();
     //路由标题
-    navigation.setOptions({ title: '设置属性' });
+    // navigation.setOptions({ title: '设置属性' });
     //将navigation传给HomeworkProperty组件，防止路由出错
     return <HomeworkProperty navigation={navigation} />;
 }
@@ -88,6 +89,39 @@ class HomeworkProperty extends React.Component {
             errorInfo: "",
         };
     }
+
+    UNSAFE_componentWillMount() {
+        console.log('--property----componentWillMount--------');
+        textInputName = '';
+        textInputPaper = '';
+        StorageUtil.get("historyProperty").then((res) => { 
+            if (res) {
+                this.setState({ 
+                    studyRank: res.studyRank ?  res.studyRank : '',
+                    studyRankId: res.studyRankId ?  res.studyRankId : '', 
+                    channelNameList: res.channelNameList ?  res.channelNameList : [], 
+
+                    studyClass: res.studyClass ?  res.studyClass : '', 
+                    studyClassId: res.studyClassId ?  res.studyClassId : '', 
+                    studyClassList: res.studyClassList ?  res.studyClassList : [], 
+
+                    edition: res.edition ?  res.edition : '', 
+                    editionId: res.editionId ?  res.editionId : '', 
+                    editionList: res.editionList ?  res.editionList : [], 
+
+                    book: res.book ?  res.book : '', 
+                    bookId: res.bookId ?  res.bookId : '', 
+                    bookList: res.bookList ?  res.bookList : [], 
+
+                    knowledge: res.knowledge ?  res.knowledge : '', 
+                    Longknowledge: res.Longknowledge ?  res.Longknowledge : '',
+                    knowledgeCode: res.knowledgeCode ?  res.knowledgeCode : '', 
+                    knowledgeList: res.knowledgeList ?  res.knowledgeList : [], 
+                });
+            }
+        });
+    }
+
     getLongknowledge(id , name){
         const url = global.constants.baseUrl+"teacherApp_getPointName.do";
         const params = {
@@ -106,6 +140,7 @@ class HomeworkProperty extends React.Component {
             }
         })
     }
+
 
     //更新是否显示状态
     updateVisibility = (flag, visibility) => {
@@ -721,6 +756,61 @@ class HomeworkProperty extends React.Component {
         return content;
     }
 
+    //更新缓存
+    setPropertys = () => {
+        let propertys = {
+            studyRank: this.state.studyRank ?  this.state.studyRank : '',
+            studyRankId: this.state.studyRankId ?  this.state.studyRankId : '', 
+            channelNameList: this.state.channelNameList ?  this.state.channelNameList : [], 
+
+            studyClass: this.state.studyClass ?  this.state.studyClass : '', 
+            studyClassId: this.state.studyClassId ?  this.state.studyClassId : '', 
+            studyClassList: this.state.studyClassList ?  this.state.studyClassList : [], 
+
+            edition: this.state.edition ?  this.state.edition : '', 
+            editionId: this.state.editionId ?  this.state.editionId : '', 
+            editionList: this.state.editionList ?  this.state.editionList : [], 
+
+            book: this.state.book ?  this.state.book : '', 
+            bookId: this.state.bookId ?  this.state.bookId : '', 
+            bookList: this.state.bookList ?  this.state.bookList : [], 
+
+            knowledge: this.state.knowledge ?  this.state.knowledge : '', 
+            Longknowledge: this.state.Longknowledge ?  this.state.Longknowledge : '',
+            knowledgeCode: this.state.knowledgeCode ?  this.state.knowledgeCode : '', 
+            knowledgeList: this.state.knowledgeList ?  this.state.knowledgeList : [], 
+        };
+        StorageUtil.save("historyProperty", propertys);
+        this.enterNextPage();
+    }
+
+    enterNextPage = () => {
+        this.props.navigation.navigate({
+            name: '创建作业',
+            params: {
+                type: 'create',
+                name: textInputName,
+                introduction: textInputPaper,
+                studyRankId: this.state.studyRankId,
+                studyRank: this.state.studyRank,
+                studyClassId: this.state.studyClassId,
+                studyClass: this.state.studyClass,
+                editionId: this.state.editionId,
+                edition: this.state.edition,
+                bookId: this.state.bookId,
+                book: this.state.book,
+                knowledgeCode: this.state.knowledgeCode,
+                // knowledge: this.state.knowledge,
+                knowledge: this.state.Longknowledge,  //新的长知识点
+
+                channelNameList: this.state.channelNameList, //学段名列表（接口数据）
+                studyClassList: this.state.studyClassList, //学科列表（接口数据）
+                editionList: this.state.editionList, //版本列表（接口数据）
+                bookList: this.state.bookList, //教材列表（接口数据）  
+                knowledgeList: this.state.knowledgeList, //从接口中返回的数据
+            }
+        })
+    }
 
 
     render() {
@@ -1015,6 +1105,7 @@ class HomeworkProperty extends React.Component {
                         <Button style={styles.button}
                             onPress={() => { 
                                 //console.log('----------',textInputName , textInputPaper); 
+                                // this.enterNextPage();
                                 if(
                                     textInputName != ''
                                     && this.state.studyRank != ''
@@ -1023,31 +1114,7 @@ class HomeworkProperty extends React.Component {
                                     && this.state.book != ''
                                     && this.state.knowledge != ''
                                 )(
-                                        this.props.navigation.navigate({
-                                            name: '创建作业',
-                                            params: {
-                                                type: 'create',
-                                                name: textInputName,
-                                                introduction: textInputPaper,
-                                                studyRankId: this.state.studyRankId,
-                                                studyRank: this.state.studyRank,
-                                                studyClassId: this.state.studyClassId,
-                                                studyClass: this.state.studyClass,
-                                                editionId: this.state.editionId,
-                                                edition: this.state.edition,
-                                                bookId: this.state.bookId,
-                                                book: this.state.book,
-                                                knowledgeCode: this.state.knowledgeCode,
-                                                // knowledge: this.state.knowledge,
-                                                knowledge: this.state.Longknowledge,  //新的长知识点
-
-                                                channelNameList: this.state.channelNameList, //学段名列表（接口数据）
-                                                studyClassList: this.state.studyClassList, //学科列表（接口数据）
-                                                editionList: this.state.editionList, //版本列表（接口数据）
-                                                bookList: this.state.bookList, //教材列表（接口数据）  
-                                                knowledgeList: this.state.knowledgeList, //从接口中返回的数据
-                                            }
-                                        })
+                                    this.setPropertys()
                                 )
                                 else{
                                     Alert.alert(

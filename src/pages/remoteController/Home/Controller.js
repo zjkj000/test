@@ -6,20 +6,11 @@ import { styles } from "./styles";
 import http from "../../../utils/http/request";
 import Toast from "../../../utils/Toast/Toast";
 import Img_arr from "./Img_arr";
+import { GetSize } from "../../../utils/Screen/GetSize";
 
 export default class Controller extends Component {
     constructor(props) {
         super(props);
-        let scaleSize = 0.5 * PixelRatio.get();
-        let scaleSizeBig = 0.51 * PixelRatio.get();
-        console.log("PixelRatio====================================");
-        console.log(scaleSize);
-        console.log(scaleSizeBig);
-        console.log("====================================");
-        // if (isPad()) {
-        //     scaleSize = 0.66;
-        //     scaleSizeBig = 0.66;
-        // }
 
         this.state = {
             buttonArray: [
@@ -34,8 +25,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: 295 * scaleSizeBig,
-                                height: 165 * scaleSizeBig,
+                                width: GetSize(295),
+                                height: GetSize(165),
                             },
                         },
                         {
@@ -43,13 +34,13 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 flex: 1,
-                                justifyContent: "flex-start",
+                                justifyContent: "flex-end",
                                 alignItems: "center",
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: 376 * scaleSize,
-                                height: 177 * scaleSize,
+                                width: GetSize(376),
+                                height: GetSize(177),
                             },
                         },
                         {
@@ -64,8 +55,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: 295 * scaleSizeBig,
-                                height: 255 * scaleSizeBig,
+                                width: GetSize(295),
+                                height: GetSize(255),
                             },
                         },
                     ],
@@ -81,8 +72,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: 93 * scaleSizeBig,
-                                height: 236 * scaleSizeBig,
+                                width: GetSize(93),
+                                height: GetSize(236),
                             },
                         },
                         {
@@ -94,8 +85,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: 177 * scaleSize,
-                                height: 376 * scaleSize,
+                                width: GetSize(177),
+                                height: GetSize(376),
                             },
                         },
                         {
@@ -107,8 +98,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: 242 * scaleSize,
-                                height: 242 * scaleSize,
+                                width: GetSize(242),
+                                height: GetSize(242),
                             },
                         },
                         {
@@ -120,8 +111,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: 177 * scaleSize,
-                                height: 376 * scaleSize,
+                                width: GetSize(177),
+                                height: GetSize(376),
                             },
                         },
                     ],
@@ -138,8 +129,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: 295 * scaleSizeBig,
-                                height: 165 * scaleSizeBig,
+                                width: GetSize(295),
+                                height: GetSize(165),
                             },
                         },
                         {
@@ -147,13 +138,13 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 flex: 1,
-                                justifyContent: "flex-end",
+                                justifyContent: "flex-start",
                                 alignItems: "center",
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: 376 * scaleSize,
-                                height: 177 * scaleSize,
+                                width: GetSize(376),
+                                height: GetSize(177),
                             },
                         },
                         {
@@ -165,8 +156,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: 295 * scaleSizeBig,
-                                height: 255 * scaleSizeBig,
+                                width: GetSize(295),
+                                height: GetSize(255),
                             },
                         },
                     ],

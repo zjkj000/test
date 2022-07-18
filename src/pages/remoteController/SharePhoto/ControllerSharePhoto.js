@@ -30,9 +30,9 @@ class SharePhotoComponent extends Component {
     }
     componentDidUpdate(preProps, preState) {
         if (preState.imgURL !== this.state.imgURL) {
-            console.log("imgURLUpdate====================================");
-            console.log(this.state.imgURL);
-            console.log("====================================");
+            // console.log("imgURLUpdate====================================");
+            // console.log(this.state.imgURL);
+            // console.log("====================================");
             if (this.state.imgURL !== "") {
                 this.setState({ buttonDisable1: false });
             }
@@ -119,29 +119,33 @@ class SharePhotoComponent extends Component {
             learnPlanId,
             userId: userName,
         };
+        console.log("SaveImageAPI====================================");
+        console.log(url);
+        console.log(params);
+        console.log("====================================");
         this.setState({ showLoading: true });
         http.post(url, params)
             .then((res) => {
-                console.log("saveImage====================================");
-                console.log(res);
-                console.log("====================================");
+                // console.log("saveImage====================================");
+                // console.log(res);
+                // console.log("====================================");
                 if (res.status === "success") {
                     this.setState({ imgURL: res.url, showLoading: false });
                 } else {
-                    console.log(
-                        "saveImageError===================================="
-                    );
-                    console.log(res);
-                    console.log("====================================");
+                    // console.log(
+                    //     "saveImageError===================================="
+                    // );
+                    // console.log(res);
+                    // console.log("====================================");
                 }
                 // this.setState({ imgURL: res });
             })
             .catch((error) => {
-                console.log(
-                    "saveImageServiceError===================================="
-                );
-                console.log(error);
-                console.log("====================================");
+                // console.log(
+                //     "saveImageServiceError===================================="
+                // );
+                // console.log(error);
+                // console.log("====================================");
             });
     };
     handleShare = () => {

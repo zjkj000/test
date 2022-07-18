@@ -1280,7 +1280,7 @@ const styles = StyleSheet.create({
     model: {
         flexDirection: 'column', 
         backgroundColor: '#fff' , 
-        top: 55 , 
+        top: 50 , 
         right: 0 , 
         height: screenHeight*0.6,
         width: screenWidth*0.7,
