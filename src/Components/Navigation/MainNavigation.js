@@ -363,6 +363,9 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="TestPage"
                         component={TestPage}
+                        options={{
+                            headerShown: false,
+                        }}
                     ></Stack.Screen>
                     <Stack.Screen
                         name="TestPage_move"

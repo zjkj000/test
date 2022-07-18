@@ -108,7 +108,6 @@
     var t = "     灯笼";
     ctx.fillText(t, 100, 40);
 
-    
         c.onmousedown = function(ev) {
           var e = ev || event;
           var x = e.clientX;
@@ -226,7 +225,6 @@
    webviewload(){
      // alert('加载成功！')
      this.webview.injectJavaScript('init_canvas('+this.props.width+', '+this.props.height+');');
- 
      if (this.props.onLoad){
        this.props.onLoad();
      }
