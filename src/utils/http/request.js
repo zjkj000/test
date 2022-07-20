@@ -121,9 +121,9 @@ export default class http {
                 let regex = /\((.+?)\)/g;
                 res = res.match(regex)[0].replace("(", "").replace(")", "");
             }
-            // console.log("post====================================");
-            // console.log(res);
-            // console.log("====================================");
+            console.log("post====================================");
+            console.log(res);
+            console.log("====================================");
             return JSON.parse(res);
         } catch (error) {
             return error;

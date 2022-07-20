@@ -1,13 +1,7 @@
- import React, { Component } from 'react';
- import {
-   StyleSheet,
-   View,
-   Text,
-   TouchableOpacity
- } from 'react-native';
- import WebView from 'react-native-webview'
- var html = 
- `<html>
+import React, { Component } from "react";
+import { StyleSheet, View, Text, TouchableOpacity } from "react-native";
+import WebView from "react-native-webview";
+var html = `<html>
  <head>
    <title>canvas</title>
    <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -215,105 +209,115 @@
  </body>
  </html>
  `;
- 
- var _width,_height;
- export default class WebCanvas extends Component {
-   webview = {};
-   constructor(props) {
-     super(props);
-     this.state = {
-       height: this.props.height,
-       width: this.props.width
-     }
-   }
-   // 铅笔
-   _pen(){
-     this.post({action: 1})
-   }
-   // 橡皮
-   _clean(){
-     this.post({action: 2})
-   }
-   // 初始化画板
-   _init(){
-     this.post({action:'-1'})
-   }
-   _destoryDraw(){
-    this.post({action:'6'})
-   }
- 
-   // 以url的形式添加背景
-   _addImageUrl(data){
-    this._init()
-    this.post({action: 4, data: data})
-   }
- 
-   // 以base64的形式添加背景
-   _addImageBase64(data){
-    this._init()
-     this.post({action: 5, data: data})
-   }
- 
-   _addImage(data){
-     this.post({action: 4, data: data})
-   }
- 
-   // 得到图片的base64形式
-   _getBase64(){
-     this.post({action: 0})
-   }
-   // 图片右转
-   _rotateRight(){
-     this.post({action: 3})
-   }
- 
-   post(obj){
-     this.webview.postMessage(JSON.stringify(obj));
-   }
- 
-   webviewload(){
-     // alert('加载成功！')
-     this.webview.injectJavaScript('init_canvas('+this.props.width+', '+this.props.height+')');
-      this._addImageUrl(this.props.url)
-     if (this.props.onLoad){
-       this.props.onLoad();
-     }
-   }
- 
-   messageHandler(e){
-     var obj = JSON.parse(e.nativeEvent.data);
-     if (obj.action == 0){
-       this.props.handleBase64(obj.data);
-     }
-   } 
- 
-   render() {
-     return (
-       <View style={[styles.container, {width:this.state.width, height:this.state.height}]}>  
-         <WebView 
-          androidHardwareAccelerationDisabled
-           style={{width:this.state.width, height:this.state.height}}
-           ref = {(w) => {this.webview = w}}
-           onLoad={this.webviewload.bind(this)}
-           source={{html: html}}
-           onMessage={
-            this.messageHandler.bind(this)}
-           javaScriptEnabled={true}
-           domStorageEnabled={false}
-           automaticallyAdjustContentInsets={true}
-           scalesPageToFit={Platform.OS === 'android' ? true : false}
-           scrollEnabled={false}
-           originWhitelist={['*']}
-           />
-       </View>
-     );
-   }
- }
- 
- const styles = StyleSheet.create({ 
-     container: {  
-         alignItems: 'flex-start',  
-         backgroundColor: 'green',
- 
-     }
- }); 
+
+var _width, _height;
+export default class WebCanvas extends Component {
+    webview = {};
+    constructor(props) {
+        super(props);
+        this.state = {
+            height: this.props.height,
+            width: this.props.width,
+        };
+    }
+    // 铅笔
+    _pen() {
+        this.post({ action: 1 });
+    }
+    // 橡皮
+    _clean() {
+        this.post({ action: 2 });
+    }
+    // 初始化画板
+    _init() {
+        this.post({ action: "-1" });
+    }
+    _destoryDraw() {
+        this.post({ action: "6" });
+    }
+
+    // 以url的形式添加背景
+    _addImageUrl(data) {
+        this._init();
+        this.post({ action: 4, data: data });
+    }
+
+    // 以base64的形式添加背景
+    _addImageBase64(data) {
+        this._init();
+        this.post({ action: 5, data: data });
+    }
+
+    _addImage(data) {
+        this.post({ action: 4, data: data });
+    }
+
+    // 得到图片的base64形式
+    _getBase64() {
+        this.post({ action: 0 });
+    }
+    // 图片右转
+    _rotateRight() {
+        this.post({ action: 3 });
+    }
+
+    post(obj) {
+        this.webview.postMessage(JSON.stringify(obj));
+    }
+
+    webviewload() {
+        // alert('加载成功！')
+        this.webview.injectJavaScript(
+            "init_canvas(" + this.props.width + ", " + this.props.height + ")"
+        );
+        this._addImageUrl(this.props.url);
+        if (this.props.onLoad) {
+            this.props.onLoad();
+        }
+    }
+
+    messageHandler(e) {
+        var obj = JSON.parse(e.nativeEvent.data);
+        if (obj.action == 0) {
+            this.props.handleBase64(obj.data);
+        }
+    }
+
+    render() {
+        return (
+            <View
+                style={[
+                    styles.container,
+                    { width: this.state.width, height: this.state.height },
+                ]}
+            >
+                <WebView
+                    androidHardwareAccelerationDisabled
+                    style={{
+                        width: this.state.width,
+                        height: this.state.height,
+                    }}
+                    ref={(w) => {
+                        this.webview = w;
+                    }}
+                    onLoad={this.webviewload.bind(this)}
+                    source={{ html: html }}
+                    onMessage={this.messageHandler.bind(this)}
+                    javaScriptEnabled={true}
+                    domStorageEnabled={false}
+                    automaticallyAdjustContentInsets={true}
+                    scalesPageToFit={Platform.OS === "android" ? true : false}
+                    scrollEnabled={false}
+                    originWhitelist={["*"]}
+                />
+            </View>
+        );
+    }
+}
+
+const styles = StyleSheet.create({
+    container: {
+        alignItems: "flex-start",
+        backgroundColor: "green",
+    },
+});
