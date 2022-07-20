@@ -467,7 +467,7 @@ class CreateLearnCase extends React.Component {
                                     onPress={()=>{
                                         this.updateFlag(3 , this.state.pushPaperFlag);
                                     }}
-                                >保存或布置</Text>
+                                >保存布置</Text>
                         }
                     </View>
                     {/**筛选按钮 */}
