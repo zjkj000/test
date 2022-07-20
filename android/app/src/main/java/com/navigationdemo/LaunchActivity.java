@@ -262,7 +262,9 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 mButtonHand.setSelected(false);
             }
             else{
-                mButtonHand.setEnabled(true);
+                if(mButtonHand!=null){
+                    mButtonHand.setEnabled(true);
+                }
                 //mButtonHand.setSelected(false);
             }
         }
@@ -1427,8 +1429,12 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 }
                 if(flagp==0){
                     mPlatform.setVisibility(View.GONE);
-                    mButtonHandOnPlatform.setVisibility(View.GONE);
-                    mButtonHand.setSelected(true);
+                    if(mButtonHandOnPlatform!=null){
+                        mButtonHandOnPlatform.setVisibility(View.GONE);
+                    }
+                    if(mButtonHand!=null){
+                        mButtonHand.setSelected(true);
+                    }
                     BottomButtonActivity.muteHand();
                 }
                 else{

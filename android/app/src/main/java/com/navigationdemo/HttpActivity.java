@@ -812,7 +812,7 @@ public class HttpActivity extends AnswerActivity {
                     // The URL-encoded contend
                     // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致
                     baseCode = URLEncoder.encode(baseCode,"utf-8");
-                    String content = "learnPlanId=1111&userId=mingming&baseCode="+baseCode;
+                    String content = "questionId="+questionId+ "&userId="+ mUserId + "roomId=" + mRoomId + "&baseCode="+baseCode;
                     // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
                     out.writeBytes(content);
                     out.flush();
