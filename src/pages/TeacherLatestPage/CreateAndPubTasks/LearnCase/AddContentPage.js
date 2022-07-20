@@ -457,9 +457,22 @@ class AddContentPage extends React.Component {
     //导学案内容展示区
     showContent = () => {
         const {contentList , selectContentIndex} = this.state;
+        console.log('====================导学案类型=======================',contentList[selectContentIndex].type)
+        {console.log('导学案' , contentList[selectContentIndex].url)}
         if(contentList[selectContentIndex].type == 'paper'){
-            return(
-                <View style={{padding: 10,height: screenHeight*0.8}}>
+            return( //style={{height: screenHeight - 190}}
+                <View style={styles.contentView}> 
+                    <View style={{alignItems: "center",height:40,top:5}}>
+                        <Text style={{
+                                fontSize: 20,
+                                fontWeight:'600',
+                            }}
+                            numberOfLines={1}
+                            ellipsizeMode={"tail"}
+                        >
+                            {contentList[selectContentIndex].name}
+                        </Text>
+                    </View>
                     <WebView  
                         scalesPageToFit={Platform.OS === 'ios'? true : false}
                         source={{ uri: contentList[selectContentIndex].url }} 
@@ -468,72 +481,76 @@ class AddContentPage extends React.Component {
             );
         }else if(contentList[selectContentIndex].type == 'question'){
             return(
-                <ScrollView  showsVerticalScrollIndicator={false}>
-                    {/**题面 */}
-                    <Text style={styles.paperContent}>[题面]</Text>
-                    <View style={{padding: 10}}>
-                        <RenderHtml 
-                            contentWidth={screenWidth} 
-                            source={{html: contentList[selectContentIndex].shitiShow}}
-                            tagsStyles={{
-                                img: {
-                                  flexDirection: 'row',
-                                },
-                                p: {
-                                  flexDirection: 'row',
-                                },
-                            }}
-                        ></RenderHtml>
-                    </View>
-                    
-                    <View style={{ height: 1, backgroundColor: "#999999" }} />
+                <View style={styles.contentView}>
+                    <ScrollView  showsVerticalScrollIndicator={false}>
+                        {/**题面 */}
+                        <Text style={styles.paperContent}>[题面]</Text>
+                        <View style={{padding: 10}}>
+                            <RenderHtml 
+                                contentWidth={screenWidth} 
+                                source={{html: contentList[selectContentIndex].shitiShow}}
+                                tagsStyles={{
+                                    img: {
+                                    flexDirection: 'row',
+                                    },
+                                    p: {
+                                    flexDirection: 'row',
+                                    },
+                                }}
+                            ></RenderHtml>
+                        </View>
+                        
+                        <View style={{ height: 1, backgroundColor: "#999999" }} />
 
-                    {/**答案 */}
-                    <Text style={styles.paperContent}>[答案]</Text>
-                    <View style={{padding: 10}}>
-                        <RenderHtml 
-                            contentWidth={screenWidth} 
-                            source={{html: contentList[selectContentIndex].shitiAnswer}}
-                            tagsStyles={{
-                                img: {
-                                  flexDirection: 'row',
-                                },
-                                p: {
-                                  flexDirection: 'row',
-                                },
-                            }}
-                        ></RenderHtml>
-                    </View>
-                    <View style={{ height: 1, backgroundColor: "#999999" }} />
-                    
-                    {/**解析 */}
-                    <Text style={styles.paperContent}>[解析]</Text>
-                    <View style={{padding: 10}}>
-                        <RenderHtml 
-                            contentWidth={screenWidth} 
-                            source={{html: contentList[selectContentIndex].shitiAnalysis}}
-                            tagsStyles={{
-                                img: {
-                                  flexDirection: 'row',
-                                },
-                                p: {
-                                  flexDirection: 'row',
-                                },
-                            }}
-                        ></RenderHtml>
-                    </View>
-                </ScrollView>
+                        {/**答案 */}
+                        <Text style={styles.paperContent}>[答案]</Text>
+                        <View style={{padding: 10}}>
+                            <RenderHtml 
+                                contentWidth={screenWidth} 
+                                source={{html: contentList[selectContentIndex].shitiAnswer}}
+                                tagsStyles={{
+                                    img: {
+                                    flexDirection: 'row',
+                                    },
+                                    p: {
+                                    flexDirection: 'row',
+                                    },
+                                }}
+                            ></RenderHtml>
+                        </View>
+                        <View style={{ height: 1, backgroundColor: "#999999" }} />
+                        
+                        {/**解析 */}
+                        <Text style={styles.paperContent}>[解析]</Text>
+                        <View style={{padding: 10}}>
+                            <RenderHtml 
+                                contentWidth={screenWidth} 
+                                source={{html: contentList[selectContentIndex].shitiAnalysis}}
+                                tagsStyles={{
+                                    img: {
+                                    flexDirection: 'row',
+                                    },
+                                    p: {
+                                    flexDirection: 'row',
+                                    },
+                                }}
+                            ></RenderHtml>
+                        </View>
+                    </ScrollView>
+                </View>
             );
         }else if(contentList[selectContentIndex].type == 'resource'){
             return(
-                <ScrollView  showsVerticalScrollIndicator={false}>
+                // <ScrollView  showsVerticalScrollIndicator={false}>
+                <View style={styles.contentView}>
                     {
                         contentList[selectContentIndex].format == 'ppt' && this.state.pptList.length <= 0
                             ? this.setState({ pptList: contentList[selectContentIndex].pptList })
                             : null
                     }
                     {this.showResourceType(contentList[selectContentIndex])}
-                </ScrollView>
+                </View>
+                // </ScrollView>
             );
         }
     }
@@ -541,21 +558,10 @@ class AddContentPage extends React.Component {
     //当导学案类型为resource时，根据format返回对应格式的内容
     showResourceType = (contentTemp) => {
         if(contentTemp.format == 'word'){
-            return(
-                <View style={{padding: 10,height: screenHeight*0.8}}>
-                    <WebView  
-                        scalesPageToFit={Platform.OS === 'ios'? true : false}
-                        source={{ uri: contentTemp.url }} 
-                    />
-                </View>
-            );
-        }else if(contentTemp.format == 'ppt'){
-            const { pptList , selectPptIndex } = this.state;
-            return(
-                <View>
-                    <View style={{alignItems: "center"}}>
+            return( //style={{padding: 10,height: screenHeight*0.8}}
+                <View style={{height:'100%'}}>
+                    <View style={{alignItems: "center",height:40,top:5}}>
                         <Text style={{
-                                top: screenHeight*0.05,
                                 fontSize: 20,
                                 fontWeight:'600',
                             }}
@@ -565,13 +571,41 @@ class AddContentPage extends React.Component {
                             {contentTemp.name}
                         </Text>
                     </View>
-                    <View style={{alignItems:'center',height:'100%',paddingTop:'15%'}}>
-                        <Image style={{width:'90%',height:250}} source={{uri: pptList[selectPptIndex]}}></Image>
-                        <ScrollView horizontal={true} style={{marginTop:30}}>
-                            {this.getPPT(pptList)}
-                        </ScrollView>
+                    <WebView  
+                        scalesPageToFit={Platform.OS === 'ios'? true : false}
+                        source={{ uri: contentTemp.url }} 
+                    />
+                </View>
+            );
+        }else if(contentTemp.format == 'ppt'){
+            const { pptList , selectPptIndex } = this.state;
+            return(
+                <ScrollView 
+                    showsVerticalScrollIndicator={false}
+                    style={{flexDirection: 'column'}}
+                >
+                    <View style={{alignItems: "center",height:40,top:5}}>
+                        <Text style={{
+                                fontSize: 20,
+                                fontWeight:'600',
+                            }}
+                            numberOfLines={1}
+                            ellipsizeMode={"tail"}
+                        >
+                            {contentTemp.name}
+                        </Text>
                     </View>
-                </View> 
+                    <View style={{alignItems:'center', marginTop: screenHeight*0.1,}}>
+                        <Image style={{width:350,height:280}} source={{uri: pptList[selectPptIndex]}}></Image>
+                    </View>
+                    <ScrollView 
+                        horizontal={true} 
+                        style={{height: 100, marginTop: 30,marginTop: screenHeight*0.1}}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {this.getPPT(pptList)}
+                    </ScrollView>
+                </ScrollView> 
             );
         }else if(contentTemp.format == 'image'){
             return(
@@ -775,78 +809,78 @@ class AddContentPage extends React.Component {
     //底部展示区
     showAddPaperBottom = () => {
         return(
-                <View style={{ flexDirection:'row', alignItems: 'center' , ...styles.bottomView ,}}>
-                    <TouchableOpacity
-                        style={{ width: screenWidth*0.1, paddingLeft: 5}}
-                        onPress={()=>{
-                            // Alert.alert('上翻');
-                            isLastPage = false;
-                            if(this.state.shareTag != '50'){ //非私有内容
-                                if(pageFlag == 1 && (searchPage == 0 || searchPage == 1)){
-                                    //从完全匹配到推荐，currentPage还是加了1
-                                    currentPage = currentPage - 1;
-                                    this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
-                                }
-                                if(!isFirstPage){
-                                    if(pageFlag == 0){
-                                        currentPage = currentPage - 1;
-                                    }else{
-                                        searchPage = searchPage - 1;
-                                    }
-                                    this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
-                                }else{
-                                    Alert.alert('','已经是第一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
-                                }
-                            }else{ //私有内容
-                                if(!isFirstPage){
-                                    currentPage = currentPage - 1;
-                                    this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
-                                }else{
-                                    Alert.alert('','已经是第一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
-                                }
+            <View style={{ flexDirection:'row', alignItems: 'center' , ...styles.bottomView ,}}>
+                <TouchableOpacity
+                    style={{ height: 100, width: 40, paddingLeft: 5 , alignItems: 'center'}}
+                    onPress={()=>{
+                        // Alert.alert('上翻');
+                        isLastPage = false;
+                        if(this.state.shareTag != '50'){ //非私有内容
+                            if(pageFlag == 1 && (searchPage == 0 || searchPage == 1)){
+                                //从完全匹配到推荐，currentPage还是加了1
+                                currentPage = currentPage - 1;
+                                this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
                             }
-                        }}
-                    >
-                        <Image
-                            style={{ width: 25, height: 25 ,}}
-                            source={require('../../../../assets/teacherLatestPage/back.png')}
-                        ></Image>
-                    </TouchableOpacity>
-                    {/**显示底部试题类型图标 */}
-                    <View style={{ width: screenWidth*0.8, flexDirection:'row', alignItems: 'center' }}>
-                        {this.showLearnCaseTypeImg()}
-                    </View>
-                    <TouchableOpacity
-                        style={{  width: screenWidth*0.1, paddingLeft: 11}}
-                        onPress={()=>{
-                            // Alert.alert('下翻');
-                            isFirstPage = false;
-                            if(this.state.shareTag != '50'){ //非私有内容
-                                if(!isLastPage){
-                                    if(pageFlag == 0){
-                                        currentPage = currentPage + 1;
-                                    }else{
-                                        searchPage = searchPage + 1;
-                                    }
-                                    this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
+                            if(!isFirstPage){
+                                if(pageFlag == 0){
+                                    currentPage = currentPage - 1;
                                 }else{
-                                    Alert.alert('','已经是最后一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
-                                }  
+                                    searchPage = searchPage - 1;
+                                }
+                                this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
                             }else{
-                                if(!isLastPage){
-                                    currentPage = currentPage + 1;
-                                    this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
-                                }else{
-                                    Alert.alert('','已经是最后一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
-                                } 
+                                Alert.alert('','已经是第一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
                             }
-                        }}
-                    >
-                        <Image
-                            style={{ width: 25, height: 25, }}   
-                            source={require('../../../../assets/teacherLatestPage/next.png')}
-                        ></Image>
-                    </TouchableOpacity>
+                        }else{ //私有内容
+                            if(!isFirstPage){
+                                currentPage = currentPage - 1;
+                                this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
+                            }else{
+                                Alert.alert('','已经是第一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
+                            }
+                        }
+                    }}
+                >
+                    <Image
+                        style={{ width: 25, height: 25, top: 37}}
+                        source={require('../../../../assets/teacherLatestPage/back.png')}
+                    ></Image>
+                </TouchableOpacity>
+                {/**显示底部试题类型图标 */}
+                <View style={{ width: screenWidth - 80, flexDirection: 'row', alignItems: 'center'}}>
+                    {this.showLearnCaseTypeImg()}
+                </View>
+                <TouchableOpacity
+                    style={{ height: 100, width: 40, paddingRight: 5 , alignItems: 'center'}}
+                    onPress={()=>{
+                        // Alert.alert('下翻');
+                        isFirstPage = false;
+                        if(this.state.shareTag != '50'){ //非私有内容
+                            if(!isLastPage){
+                                if(pageFlag == 0){
+                                    currentPage = currentPage + 1;
+                                }else{
+                                    searchPage = searchPage + 1;
+                                }
+                                this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
+                            }else{
+                                Alert.alert('','已经是最后一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
+                            }  
+                        }else{
+                            if(!isLastPage){
+                                currentPage = currentPage + 1;
+                                this.fetchData(this.state.type , this.state.typeValue , 'PHONE');
+                            }else{
+                                Alert.alert('','已经是最后一页数据了', [{} , {text: '关闭', onPress: ()=>{}}]);
+                            } 
+                        }
+                    }}
+                >
+                    <Image
+                        style={{ width: 25, height: 25, top: 37}}   
+                        source={require('../../../../assets/teacherLatestPage/next.png')}
+                    ></Image>
+                </TouchableOpacity>
             </View>
         );
     }
@@ -919,6 +953,13 @@ class AddContentPage extends React.Component {
                             })
                         }
                     }}
+                    style={{
+                        top: 5,
+                        // height: 90,
+                        height: (screenWidth - 80) * 0.2,
+                        width: (screenWidth - 80) * 0.2 ,
+                        alignItems: 'center'
+                    }}
                 >
                     <Image 
                         source={contentTypeImg} 
@@ -931,26 +972,30 @@ class AddContentPage extends React.Component {
     }
 
     render(){
-        return(
-            <View style={styles.bodyView}>
-                {
-                    this.showTitle()
-                }
-                <ScrollView   
-                    showsVerticalScrollIndicator={false}
-                    style={styles.contentView}
-                    keyboardShouldPersistTaps={true}
-                >
+        return( //style={styles.bodyView}
+            <View  style={{ flexDirection: 'column', backgroundColor: '#fff' , flex: 1 }}>  
+                <View style={styles.bodyView}>
                     {
-                        this.state.contentList.length > 0 
-                                ? this.showContent() 
-                                : <Loading show={true} />
+                        this.showTitle()
                     }
-                </ScrollView>
+                    {/* <ScrollView   
+                        showsVerticalScrollIndicator={false}
+                        style={styles.contentView}
+                        keyboardShouldPersistTaps={true}
+                    > */}
+                    {/* <View style={styles.contentView}> */}
+                        {
+                            this.state.contentList.length > 0 
+                                    ? this.showContent() 
+                                    : <Loading show={true} />
+                        }
+                    {/* </View> */}
+                </View>
+                {/* </ScrollView> */}
                 {
                     this.state.contentList.length > 0 
                             ? this.showAddPaperBottom() 
-                            : <Loading show={true} />
+                            : null
                 }
             </View>
         )
@@ -1058,20 +1103,22 @@ class AddContentPage extends React.Component {
 
 const styles = StyleSheet.create({
     bodyView: {
-        height: screenHeight*0.9,
+        height: screenHeight - 220,
         flexDirection: 'column',
+        backgroundColor: '#fff'
     },
     contentView:{
-        height: '90%',
+        height: screenHeight - 220,
         flexDirection: 'column',
+        backgroundColor: '#fff'
     },
     bottomView: {
-        height: screenHeight*0.2,
-        paddingTop: 20,
-        paddingBottom: 20,
+        height: 100,
+        bottom: 1,
+        position: 'absolute',
         backgroundColor: '#fff',       
-   },
-   paperContent: {
+    },
+    paperContent: {
         fontSize: 15,
         color: 'black',
         fontWeight: '500',
@@ -1080,18 +1127,17 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     little_image:{
-        height:60,
-        width:screenWidth*0.15,
-        marginTop: 5,
-        marginLeft:3
+        bottom: 3,
+        height: (screenWidth - 80) * 0.18,
+        width: (screenWidth - 80) * 0.18,
     },
     checked:{
-        height:65,
-        width:screenWidth*0.16,
-        marginLeft:5,
-        borderColor:'#FFA500',
+        height: (screenWidth - 80) * 0.19,
+        width: (screenWidth - 80) * 0.19,
+        bottom: 5,
+        borderColor: '#FFA500',
         borderRadius: 5,
-        borderWidth:5,
+        borderWidth: 5,
     },
     paperSelectNumView: {
         height: 40,
@@ -1103,16 +1149,16 @@ const styles = StyleSheet.create({
         color: '#8B8B7A',
         paddingLeft: 20,
         paddingTop: 7,
-        width: 350,
+        width: screenWidth*0.9,
     },
     pptlittle_image:{
-        height:50,
-        width:80,
+        height:75,
+        width:95,
         marginLeft:5,
     },
     pptchecked:{
-        height:50,
-        width:80,
+        height:75,
+        width:95,
         marginLeft:5,
         borderColor:'#FFA500',
         borderWidth:2,

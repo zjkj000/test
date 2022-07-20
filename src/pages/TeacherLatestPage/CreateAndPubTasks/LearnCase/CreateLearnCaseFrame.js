@@ -437,7 +437,7 @@ class CreateLearnCase extends React.Component {
                             flexDirection: 'row',
                             height: 40,
                             borderWidth: 1,
-                            borderRadius: 5,
+                            borderRadius: 3,
                             borderColor: '#4DC7F8',
                         }}
                     >
@@ -601,7 +601,7 @@ const styles = StyleSheet.create({
     },
     modalView: {
         height: '95%',
-        marginTop: 60, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
+        marginTop: 50, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
         backgroundColor: "white",
         padding: 30,
         paddingBottom: 80,
