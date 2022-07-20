@@ -223,11 +223,16 @@ class StudyComponent extends React.Component {
 
     render() {
         return ( //<View style={{...styles.header,paddingTop: 12}}>
-            <View>
+            <View style={{backgroundColor:'#fff' , height: screenHeight - 77}}>
                 <View style={styles.header}>
-                    <Flex style={styles.flexNew}>
+                    <View style={{ width: screenWidth * 0.125 , flexDirection: 'row' }}>
                         <TouchableOpacity
-                            style={styles.packagesView}
+                            style={{
+                                paddingTop: 15,
+                                width: 25,
+                                // backgroundColor:'pink',
+                                marginLeft: screenWidth * 0.025,
+                            }}
                             onPress={this.packagesPage}
                         >
                             <Image
@@ -236,27 +241,31 @@ class StudyComponent extends React.Component {
                             />
                         </TouchableOpacity>
                         {this.showPackagesStatus()}
-                        {/* <View style={styles.packagesView}></View> */}
-                        <View style={styles.searchView}>
-                            <SearchBar
-                                style={styles.searchBar}
-                                value={{ SearchText }}
-                                placeholder="学案/作业"
-                                ref={(ref) => (this.searchText = ref)}
-                                onCancel={this.onSearch}
-                                onChange={this.onChange}
-                                onBlur={this.onBlur}
-                                cancelText="搜索"
-                                showCancelButton
-                            />
-                        </View>
-                        <Flex style={{ width: screenWidth * 0.12 }}>
-                            <View style={{ width: screenWidth * 0.04 }}></View>
-                            <TouchableOpacity style={styles.filterView}>
-                                {this.showFilter()}
-                            </TouchableOpacity>
-                        </Flex>
-                    </Flex>
+                    </View>
+                    <View style={styles.searchView}>
+                        {console.log('+++++++++++++++++++++++++++++++++++++++++++++++++++++',SearchText,typeof(SearchText))}
+                        <SearchBar
+                            style={styles.searchBar}
+                            value={{SearchText}}
+                            placeholder="学案/作业"
+                            ref={(ref) => (this.searchText = ref)}
+                            onCancel={this.onSearch}
+                            onChange={this.onChange}
+                            onBlur={this.onBlur}
+                            cancelText="搜索"
+                            showCancelButton
+                        />
+                    </View>
+                    <View style={{ width: screenWidth * 0.125 }}>
+                        <TouchableOpacity style={{
+                            ...styles.filterView,
+                            right: screenWidth * 0.03,
+                            position: 'absolute',
+                            // backgroundColor:'pink'
+                        }}>
+                            {this.showFilter()}
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.todoList}>
                     {console.log(
@@ -290,65 +299,59 @@ class StudyComponent extends React.Component {
 
 const styles = StyleSheet.create({
     header: {
-        height: screenHeight * 0.1,
+        height: 55,
         backgroundColor: "#6CC5CB",
+        flexDirection: 'row',
     },
     todoList: {
-        height: screenHeight * 0.8,
-        backgroundColor: '#fff'
-    },
-    flexNew: {
-        paddingTop: 0,
-        paddingLeft: screenWidth * 0.01,
+        // height: screenHeight - 132,
+        height: '95%',
+        backgroundColor: "#fff",
     },
     packagesView: {
         width: screenWidth * 0.1,
     },
     packagesImg: {
-        height: "100%",
-        width: "50%",
-        resizeMode: "contain",
-        top: 2,
-        left: 18,
+        height: 22,
+        width: 22,
     },
     rightNumView: {
         width: screenWidth * 0.05,
     },
     rightNumImg: {
-        height: "100%",
-        width: "40%",
-        resizeMode: "contain",
+        height: 22,
+        width: 22,
         //top:0,
         //left:0,
         //marginLeft:0,
     },
     filterImg: {
-        height: "100%",
-        width: "90%",
-        resizeMode: "contain",
+        height: 22,
+        width: 22,
     },
     filterView: {
-        width: screenWidth * 0.08,
+        height: '100%',
+        paddingTop: 15,
+        width: 25,
     },
     searchView: {
-        width: screenWidth * 0.7,
-        //backgroundColor:'red',
-        //borderWidth: 0,
-        //borderColor: 'red',
+        width: screenWidth * 0.75,
         opacity: 1,
+        height: 55,
+        paddingTop: 5,
+        backgroundColor: '#6CC5CB'
+    },
+    searchBar: {
+        backgroundColor: "#fff",
+        borderRadius: 40,
+        borderWidth: 0,
+        fontSize: 15,
+        paddingLeft: 30,
+        height: 38
     },
     showSearch: {
         fontSize: 15,
         color: "white",
-    },
-    searchBar: {
-        backgroundColor: "white",
-        borderRadius: 40,
-        //height: screenHeight * 0.07,
-        borderWidth: 0,
-        //paddingTop: 0,
-        fontSize: 15,
-        paddingLeft: 30,
     },
     backdrop: {
         //backgroundColor: "purple",

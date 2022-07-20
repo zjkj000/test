@@ -897,7 +897,7 @@ const styles = StyleSheet.create({
         color: '#8B8B7A',
         paddingLeft: 20,
         paddingTop: 7,
-        width: screenWidth * 0.67
+        width: screenWidth * 0.63
     },
     pptlittle_image:{
         height:75,

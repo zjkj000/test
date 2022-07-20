@@ -1410,7 +1410,7 @@ class CreateHomework extends React.Component {
                 <View style={styles.bodyView}>
                     {/**选中题目数 删除此试题 */}
                     <View style={styles.paperSelectNumView}>
-                        <Text style={{...styles.selectPaperNum , width: screenWidth * 0.67}}>
+                        <Text style={{...styles.selectPaperNum , width: screenWidth * 0.63}}>
                             {this.state.updatePaperIndex + 1}
                             {'/'}
                             {this.state.selectPaperNum}

@@ -424,7 +424,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.4, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="我的授课包"
                         onPress={() => {
@@ -438,7 +438,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="创建导学案+布置"
                         onPress={() => {
@@ -447,7 +447,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="创建微课+布置"
                         onPress={() => {
@@ -456,7 +456,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="创建作业+布置"
                         onPress={() => {
@@ -465,7 +465,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="选导学案布置"
                         onPress={() => {
@@ -479,7 +479,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="选微课布置"
                         onPress={() => {
@@ -493,7 +493,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="选卷布置作业"
                         onPress={() => {
@@ -511,7 +511,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="拍照布置作业"
                         onPress={() => {
@@ -522,7 +522,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="发布通知"
                         onPress={() => {
@@ -539,7 +539,7 @@ class LatestPage extends React.Component {
                     />
                     {
                         global.constants.isadmin == "2"
-                        ? <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                        ? <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                         : null
                     }
                     
@@ -694,7 +694,7 @@ const styles = StyleSheet.create({
         borderWidth: 1, 
         borderColor: '#DCDCDC' ,
         height: 455,
-        width: screenWidth*0.35,
+        width: screenWidth*0.38,
         position: 'absolute',
         //justifyContent: "center",
         //alignItems: "center",
@@ -708,7 +708,7 @@ const styles = StyleSheet.create({
         borderWidth: 1, 
         borderColor: '#DCDCDC' ,
         height: 412,
-        width: screenWidth*0.35,
+        width: screenWidth*0.38,
         position: 'absolute',
         //justifyContent: "center",
         //alignItems: "center",
