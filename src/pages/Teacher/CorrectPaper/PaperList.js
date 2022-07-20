@@ -229,7 +229,7 @@ export default function PaperList(props) {
                   appearance={data.length>0?'filled':'outline'}
                   onPress={()=>{
                           data.length>0?(
-                            props.navigation.navigate({
+                            navigation.navigate({
                               name: 'LookCorrectDetails',
                               params:{
                                 taskId:props.route.params.taskId,

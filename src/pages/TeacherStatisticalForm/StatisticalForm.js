@@ -8,7 +8,7 @@ import BasePicker from '../../utils/datetimePickerUtils/BasePicker'
 import http from '../../utils/http/request'
 import Loading from '../../utils/loading/Loading'
 import { useNavigation } from '@react-navigation/native';
-import { screenWidth } from '../../utils/Screen/GetSize';
+import { screenHeight, screenWidth } from '../../utils/Screen/GetSize';
 export default function StatisticalForm() {
   const navigation = useNavigation()
   return (
@@ -169,7 +169,7 @@ export default function StatisticalForm() {
               </TouchableOpacity>
             </View>
           </View>
-          <ScrollView style={{backgroundColor:'#ECEEED',padding:10,flexDirection:'column',marginBottom:45}}>
+          <ScrollView style={{backgroundColor:'#ECEEED',padding:10}}>
             {/* 累计使用 */}
             <Leijishiyong data={this.state.leijishiyonglist}  setdatastr={this.setselectYearTerm} SchoolYearTerm={this.state.SchoolYearTerm} SchoolYearTermName={this.state.SchoolYearTermName}yearTermStartTime={this.state.yearTermStartTime}yearTermEndTime={this.state.yearTermEndTime} />
             {/* 课堂授课标题+日历 */}

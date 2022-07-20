@@ -86,25 +86,32 @@ class CreateWork extends React.Component {
             }
         });
     }
-    componentWillUnmount(){
-            var newres=this.state.res
-            newres.studyRank=this.state.studyRank
-            newres.studyRankId=this.state.studyRankId
-            newres.channelNameList=this.state.channelNameList
-            newres.studyClass=this.state.studyClass
-            newres.studyClassId=this.state.studyClassId
-            newres.studyClassList=this.state.studyClassList
-            newres.edition=this.state.edition
-            newres.editionId=this.state.editionId
-            newres.editionList=this.state.editionList
-            newres.book=this.state.book
-            newres.bookId=this.state.bookId
-            newres.bookList=this.state.bookList
-            newres.knowledge=this.state.knowledge
-            newres.Longknowledge=this.state.Longknowledge
-            newres.knowledgeCode=this.state.knowledgeCode
-            newres.knowledgeList=this.state.knowledgeList
-            StorageUtil.save('historyProperty',res)
+
+    //更新缓存
+    setPropertys = () => {
+        let propertys = {
+            studyRank: this.state.studyRank ?  this.state.studyRank : '',
+            studyRankId: this.state.studyRankId ?  this.state.studyRankId : '', 
+            channelNameList: this.state.channelNameList ?  this.state.channelNameList : [], 
+
+            studyClass: this.state.studyClass ?  this.state.studyClass : '', 
+            studyClassId: this.state.studyClassId ?  this.state.studyClassId : '', 
+            studyClassList: this.state.studyClassList ?  this.state.studyClassList : [], 
+
+            edition: this.state.edition ?  this.state.edition : '', 
+            editionId: this.state.editionId ?  this.state.editionId : '', 
+            editionList: this.state.editionList ?  this.state.editionList : [], 
+
+            book: this.state.book ?  this.state.book : '', 
+            bookId: this.state.bookId ?  this.state.bookId : '', 
+            bookList: this.state.bookList ?  this.state.bookList : [], 
+
+            knowledge: this.state.knowledge ?  this.state.knowledge : '', 
+            Longknowledge: this.state.Longknowledge ?  this.state.Longknowledge : '',
+            knowledgeCode: this.state.knowledgeCode ?  this.state.knowledgeCode : '', 
+            knowledgeList: this.state.knowledgeList ?  this.state.knowledgeList : [], 
+        };
+        StorageUtil.save("historyProperty", propertys);
     }
     //更新是否显示状态
     updateVisibility = (flag , visibility) => {
@@ -803,9 +810,10 @@ class CreateWork extends React.Component {
                         onPress={()=>{
 
                             if(this.state.InputText==''){
+                                Alert.alert('','请输入试卷名称',[{},{},{text:'确定',onPress:()=>{}}])
                                 Toast.showInfoToast('请输入试卷名称',1000)
                             }else if(this.state.knowledgeCode!=''&&this.state.Longknowledge!=''){
-
+                                this.setPropertys()
                                 this.props.navigation.navigate({
                                     name:'EditPicturePaperWork',
                                     params:{
@@ -823,6 +831,7 @@ class CreateWork extends React.Component {
                                     }
                                 })
                             }else{
+                                Alert.alert('','请先选择知识点',[{},{},{text:'确定',onPress:()=>{}}])
                                 Toast.showInfoToast('请先选择知识点',1000)
                             }
                             

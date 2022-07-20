@@ -56,10 +56,10 @@ class LatestPage extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                console.log(
-                    "LatestPageFocused===================================="
-                );
-                console.log(this.props.route);
+                // console.log(
+                //     "LatestPageFocused===================================="
+                // );
+                // console.log(this.props.route);
                 if (
                     this.props.route.params !== undefined &&
                     this.props.route.params.isRefresh !== undefined &&

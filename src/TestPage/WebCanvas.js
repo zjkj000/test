@@ -24,14 +24,21 @@
      您的浏览器不支持canvas
    </canvas>
    <script>
+
+   var canvasHistory=new Array()
+   var step=0;
+
+   var canvas=null,context=null;
+
    var $can = $('#can'),isclean=false,drawState=false,lastX,lastY,ctx;
    ctx = $can[0].getContext("2d");
+   
     var _width,_height;
     window.document.addEventListener('message', function (e){
         var obj = JSON.parse(e.data);
         switch (parseInt(obj.action)){
           case 1:
-              /* 铅笔 */
+              /* 画笔 */
               isclean=false;
               registDraw();
               break;
@@ -44,11 +51,11 @@
               rotateRight();
               break;
           case 4:
-              /* url */
+              /* url加载图片 */
               createImg(obj.data);
               break;
           case 5:
-              /* case64 */
+              /* case64加载图片 */
               createImg(obj.data);
               break;
           case '6':
@@ -65,19 +72,43 @@
               break;
         }
     });
+
+    function resetCanvas(){
+      can=document.getElementById('simple');
+      c=canvas.getContext('2d');
+    }
+
     function init_canvas(width,height){
       _width = width;
       _height = height;
       $can.attr('width', width);
       $can.attr('height', height);
-      // registDraw();
     }
 
     //点击了移动  应该把监听的函数销毁   这里有问题  销毁不掉
     function destoryDraw(){
-      $can.on("touchstart",false)
-      $can.on("touchmove",false)
-      $(document).on("touchend", false)
+      $can.on("touchstart", function (e){
+        return false;
+      })
+      $can.on("touchmove", function (ev){
+        return false;
+      })
+      $(document).on("touchend", function (e){
+        return false;
+      })
+    }
+    function canvasUndo(canvasId){
+      if (step > 0) {
+        step--;
+         // alert(canvasHistory[step]);
+          var canvasPic = new Image();
+          canvasPic.src=canvasHistory[step];
+          canvasPic.onload = function(e) {
+            context.clearRect(0, 0, context.width, context.height);
+            context.drawImage(canvasPic, 0, 0);
+            canvasHistory.splice(step,1); 
+        }
+      }
     }
 
     function registDraw(){
@@ -296,8 +327,7 @@
            ref = {(w) => {this.webview = w}}
            onLoad={this.webviewload.bind(this)}
            source={{html: html}}
-           onMessage={
-            this.messageHandler.bind(this)}
+           onMessage={this.messageHandler.bind(this)}
            javaScriptEnabled={true}
            domStorageEnabled={false}
            automaticallyAdjustContentInsets={true}

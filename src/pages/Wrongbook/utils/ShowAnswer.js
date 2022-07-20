@@ -39,7 +39,7 @@ class ShowAnswer extends Component {
 
     }
     //随时更新键盘输入值
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState({
             stuAnswer: nextProps.stuAnswer
         });

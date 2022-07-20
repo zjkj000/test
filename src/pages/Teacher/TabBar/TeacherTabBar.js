@@ -119,7 +119,11 @@ class TeacherTabBarComponent extends React.Component {
         );
     };
     renderStatistic = () => {
-        return <StatisticalForm />;
+
+        return (
+            <View style={{paddingBottom:45}}>
+                <StatisticalForm />
+            </View>);
     };
     renderStudyTask = () => {
         return (
