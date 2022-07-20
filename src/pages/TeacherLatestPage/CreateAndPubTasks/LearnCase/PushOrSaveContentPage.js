@@ -686,7 +686,7 @@ class PushOrSaveContentPage extends React.Component {
                     <View 
                         style={this.state.classFlag == false ?
                             {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5, backgroundColor: '#DCDCDC',justifyContent:'center'}
-                            : {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 1, borderColor: 'red'}
+                            : {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 2, borderColor: 'red'}
                         }
                     >
                         <Text 
@@ -930,19 +930,19 @@ class PushOrSaveContentPage extends React.Component {
                     <View style={{flexDirection:'row',height:60,alignItems:'center'}}>
                         <Text style={{fontSize:15,marginRight:40,marginLeft:30}}>布置给:</Text>
                         {/**班级 小组  个人 */}
-                        <TouchableOpacity style={{marginRight:30}} onPress={()=>{this.updateAssign('0');this.setState({SelectKeTangStatus:false})}}>
-                            <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='0'?'#4DC7F8':'#fff'}}>
-                                <Text style={{fontSize:15}}>班级</Text>
+                        <TouchableOpacity style={{ marginRight: 30 }} onPress={() => { this.updateAssign('0'); this.setState({ SelectKeTangStatus: false }) }}>
+                            <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '0' ? '#4DC7F8' : '#fff' }}>
+                                <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '0' ? '#fff' : 'gray' }}>班级</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssign('1');this.setState({SelectKeTangStatus:false})}}>
-                            <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='1'?'#4DC7F8':'#fff'}}>
-                                <Text>小组</Text>
+                        <TouchableOpacity style={{ marginRight: 20 }} onPress={() => { this.updateAssign('1'); this.setState({ SelectKeTangStatus: false }) }}>
+                            <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '1' ? '#4DC7F8' : '#fff' }}>
+                                <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '1' ? '#fff' : 'gray' }}>小组</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssign('2');this.setState({SelectKeTangStatus:false})}}>
-                            <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='2'?'#4DC7F8':'#fff'}}>
-                                <Text>个人</Text>
+                        <TouchableOpacity style={{ marginRight: 20 }} onPress={() => { this.updateAssign('2'); this.setState({ SelectKeTangStatus: false }) }}>
+                            <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '2' ? '#4DC7F8' : '#fff' }}>
+                                <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '2' ? '#fff' : 'gray' }}>个人</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -966,9 +966,14 @@ class PushOrSaveContentPage extends React.Component {
         return (
             <View
                 style={{
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    backgroundColor: "#fff",
+                    height: 50,
+                    width: screenWidth,
+                    bottom: 1,
+                    position: 'absolute',
+                    flexDirection: 'row', 
+                    alignItems: 'center',
+                    justifyContent: 'space-around', 
+                    backgroundColor: '#fff' 
                 }}
             >
                 <Button
@@ -1047,9 +1052,11 @@ class PushOrSaveContentPage extends React.Component {
             );
         } else {
             return (
-                <View style={styles.bodyView}>
-                    <Waiting/>
-                    {this.showPushOrSaveContent()}
+                <View  style={{ flexDirection: 'column', backgroundColor: '#fff' , flex: 1 }}> 
+                    <View style={styles.bodyView}>
+                        <Waiting/>
+                        {this.showPushOrSaveContent()}
+                    </View>
                     {this.showPushOrSaveContentBottom()}
                 </View>
             );
@@ -1059,11 +1066,12 @@ class PushOrSaveContentPage extends React.Component {
 
 const styles = StyleSheet.create({
     bodyView: {
-        height: screenHeight * 0.9,
+        height: screenHeight - 220,
         flexDirection: "column",
+        backgroundColor: '#fff'
     },
     paperSelectNumView: {
-        height: screenHeight * 0.06,
+        height: 40,
         flexDirection: "row",
         backgroundColor: "#EBEDEC",
     },

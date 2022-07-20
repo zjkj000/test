@@ -75,9 +75,9 @@ export default class http {
             if (ret != "") {
                 url = url + "?" + ret;
             }
-            // console.log("====================================");
-            // console.log(url);
-            // console.log("====================================");
+            console.log("====================================");
+            console.log(url);
+            console.log("====================================");
             res = await axios.get(url);
             return res;
         } catch (error) {
@@ -121,9 +121,9 @@ export default class http {
                 let regex = /\((.+?)\)/g;
                 res = res.match(regex)[0].replace("(", "").replace(")", "");
             }
-            // console.log("post====================================");
-            // console.log(res);
-            // console.log("====================================");
+            console.log("post====================================");
+            console.log(res);
+            console.log("====================================");
             return JSON.parse(res);
         } catch (error) {
             return error;

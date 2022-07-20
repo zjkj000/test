@@ -57,8 +57,9 @@ class PackagesPage extends React.Component {
 
     
     UNSAFE_componentWillMount(){  //初始挂载执行一遍
-        //oldtype = this.props.resourceType;
-        //this.fetchData(pageNo);
+        pageNo = 1; //当前第几页
+        itemNo = 0; //item的个数
+        dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
     }
 
     componentDidMount(){   //初始挂载执行一遍
