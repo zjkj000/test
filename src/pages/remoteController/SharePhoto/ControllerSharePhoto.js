@@ -42,7 +42,7 @@ class SharePhotoComponent extends Component {
         ImageHandler.handleCamera().then((res) => {
             if (res) {
                 // this.setState({ imgURL: res.uri });
-                this.saveImage(res.uri);
+                this.saveImage(res.base64);
             } else {
                 // TODO: 获取图像失败
             }
@@ -52,7 +52,7 @@ class SharePhotoComponent extends Component {
         ImageHandler.handleLibrary().then((res) => {
             if (res) {
                 this.setState({
-                    imgURL: res.uri,
+                    imgURL: res.base64,
                 });
             } else {
                 // TODO: 获取图像失败
@@ -60,7 +60,8 @@ class SharePhotoComponent extends Component {
         });
     };
     remoteControl = (action, actionType, resId = "", desc = "") => {
-        const { ipAddress, resPath, learnPlanId, resRootPath } = this.props;
+        const { learnPlanId, ipAddress, resPath, resRootPath, userName } =
+            this.props.route.params;
         const url =
             "http://" +
             ipAddress +
@@ -70,7 +71,7 @@ class SharePhotoComponent extends Component {
             type: 0,
             userType: "teacher",
             userNum: "one",
-            source: this.props.userName,
+            source: userName,
             target: 0,
             messageType: 0,
             action,
@@ -85,7 +86,7 @@ class SharePhotoComponent extends Component {
         };
         this.setState({ showLoading: true });
         // params = { messageJson: JSON.stringify(params) };
-        http.post(url, params)
+        http.post(url, params, false, false)
             .then((res) => {
                 console.log("ModuleSender====================================");
                 console.log(url);
@@ -108,7 +109,7 @@ class SharePhotoComponent extends Component {
             });
     };
     saveImage = (baseCode) => {
-        const { ipAddress, userName, learnPlanId } = this.props.route.params;
+        const { ipAddress, learnPlanId } = this.props.route.params;
         const url =
             "http://" +
             ipAddress +
@@ -117,26 +118,26 @@ class SharePhotoComponent extends Component {
         const params = {
             baseCode,
             learnPlanId,
-            userId: userName,
+            userId: "share",
         };
         console.log("SaveImageAPI====================================");
         console.log(url);
         console.log(params);
         console.log("====================================");
         this.setState({ showLoading: true });
-        http.post(url, params)
+        http.post(url, params, false)
             .then((res) => {
                 // console.log("saveImage====================================");
                 // console.log(res);
-                // console.log("====================================");
+                // console.log("=============================  =======");
                 if (res.status === "success") {
                     this.setState({ imgURL: res.url, showLoading: false });
                 } else {
-                    // console.log(
-                    //     "saveImageError===================================="
-                    // );
-                    // console.log(res);
-                    // console.log("====================================");
+                    console.log(
+                        "saveImageError===================================="
+                    );
+                    console.log(res);
+                    console.log("====================================");
                 }
                 // this.setState({ imgURL: res });
             })
@@ -149,15 +150,17 @@ class SharePhotoComponent extends Component {
             });
     };
     handleShare = () => {
-        this.remoteControl("open", "shareImage", this.state.imgURL);
+        const sendTag = `<img src="${this.state.imgURL}">`;
+        const sendTagEncode = encodeURIComponent(sendTag);
+        this.remoteControl("do:ShareStuAnswer", "", sendTagEncode);
         this.setState({ buttonDisable2: false });
-        this.remoteControl("open", "shareImage", this.state.imgURL);
+        // this.remoteControl("open", "shareImage", this.state.imgURL);
         this.setState({ buttonDisable1: true });
     };
     handleCloseShare = () => {
-        this.remoteControl("close", "shareImage");
+        this.remoteControl("do:CloseStuAnswer", "");
         this.setState({ buttonDisable1: false });
-        this.remoteControl("close", "shareImage");
+        // this.remoteControl("close", "shareImage");
         this.setState({ buttonDisable2: true });
     };
     render() {

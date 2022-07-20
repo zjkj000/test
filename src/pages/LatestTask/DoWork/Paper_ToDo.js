@@ -258,51 +258,48 @@ export default function Paper_ToDo(props) {
                 // 每个题目都是一页，都需要一个layout
                 // 每一个layout里面都是有左右两张图片，绝对定位悬浮在页面上面，getTimu函数是加载题目数据。
                 <Layout key={index} style={styles.tab} level='2'>
-                  <TouchableOpacity   style={{position:'absolute',left:10,top:"45%",zIndex:99}}   onPress={()=>{
-              
-                      const newindex =selectedIndex-1;
-                      if(newindex==-1){
-                        Toast.showInfoToast('已经是第一题',1000)
-                          //提交一下答案
-                          Submit_Stu_answer(selectedIndex,selectedIndex);
-                        }else{ 
-                          Submit_Stu_answer(newindex,selectedIndex);
-                        }
-                        
+                  <TouchableOpacity   
+                      style={{position:'absolute',left:10,top:"45%",zIndex:2,width:50,height:50}}   
+                      onPress={()=>{
+                            const newindex =selectedIndex-1;
+                            if(newindex==-1){
+                              Toast.showInfoToast('已经是第一题',1000)
+                                //提交一下答案
+                                Submit_Stu_answer(selectedIndex,selectedIndex);
+                              }else{ 
+                                Submit_Stu_answer(newindex,selectedIndex);
+                              }
                   }}>
                     <Image source={require('../../../assets/image3/zuo_03.png')}></Image>
                   </TouchableOpacity>
 
-                  <TouchableOpacity  style={{position:'absolute',right:10,top:"45%",zIndex:99}} onPress={()=>{
-                      const newindex =selectedIndex+1;
-                      if(newindex==dataNum){
-                        //Toast.showInfoToast('已经是最后一题') 需要跳转到答题页面
-                        Submit_Stu_answer(selectedIndex,selectedIndex);
-                        Alert.alert('','已经最后一题，确定提交作业？',[{text:'取消',onPress:()=>{}},{},
-                            {text:'确定',onPress:()=>{
+                  <TouchableOpacity  style={{position:'absolute',right:10,top:"45%",zIndex:2,width:50,height:50}} 
+                                      onPress={()=>{
+                                                const newindex =selectedIndex+1;
+                                                if(newindex==dataNum){
+                                                  //Toast.showInfoToast('已经是最后一题') 需要跳转到答题页面
+                                                  Submit_Stu_answer(selectedIndex,selectedIndex);
+                                                  Alert.alert('','已经最后一题，确定提交作业？',[{text:'取消',onPress:()=>{}},{},
+                                                      {text:'确定',onPress:()=>{
 
-                              navigation.navigate(
-                                {
-                                  name:"SubmitPaper", 
-                                  params: {
-                                            paperId:learnPlanId,
-                                            submit_status:status,
-                                            startdate:startdate,
-                                            papername:props.route.params.papername,
-                                            isallObj:isallObj
-                                          },
-                                  megre:true
-                                });
-                            }}
-                          ])
-                        
-
-                       
-                      }else{
-                        Submit_Stu_answer(newindex,selectedIndex);
-                       
-                      }
-                  }}>
+                                                        navigation.navigate(
+                                                          {
+                                                            name:"SubmitPaper", 
+                                                            params: {
+                                                                      paperId:learnPlanId,
+                                                                      submit_status:status,
+                                                                      startdate:startdate,
+                                                                      papername:props.route.params.papername,
+                                                                      isallObj:isallObj
+                                                                    },
+                                                            megre:true
+                                                          });
+                                                      }}
+                                                    ])
+                                                }else{
+                                                  Submit_Stu_answer(newindex,selectedIndex);
+                                                }
+                                            }}>
                     <Image source={require('../../../assets/image3/you_03.png')}></Image>
                   </TouchableOpacity>
 

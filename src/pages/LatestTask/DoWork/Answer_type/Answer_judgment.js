@@ -119,7 +119,7 @@ const styles = StyleSheet.create({
       borderTopWidth:0.5,
       borderTopColor:'#000000',
       paddingLeft:30,
-      height:60,
+      height:80,
       paddingRight:30,
       flexDirection:'row',
       justifyContent:'space-around'}

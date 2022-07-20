@@ -1,4 +1,4 @@
-import {ScrollView, Text, TextInput, TouchableOpacity, View,Keyboard,Alert } from 'react-native'
+import {ScrollView, Text, TextInput, TouchableOpacity, View,Keyboard,Alert,Image} from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { Layout, Radio,Button } from '@ui-kitten/components';
 import http from '../../utils/http/request'
@@ -57,9 +57,7 @@ class Tea_CreateInformContent extends Component {
     }
 
     UNSAFE_componentWillMount(){
-        if(!this.state.success){
-            this.getStuClassList()
-        }
+        if(!this.state.success){this.getStuClassList()}
         this.setState({
             noticeId:this.props.noticeId,
             saveOrUpdate:this.props.data!=''?'update':'save',
@@ -69,10 +67,27 @@ class Tea_CreateInformContent extends Component {
             classId:this.props.data.classId,
             className:this.props.data.className
         })
+    }
 
+    UNSAFE_componentWillUpdate(nextProps){
+        if(this.state.content!=nextProps.data.content
+            &&this.state.setDate!=nextProps.data.setDate
+            &&this.state.title!=nextProps.data.title
+            &&this.state.classId!=nextProps.data.classId){
+            this.setState({
+                noticeId:nextProps.noticeId,
+                saveOrUpdate:nextProps.data!=''?'update':'save',
+                content:nextProps.data.content,
+                setDate:nextProps.data.setDate,
+                title:nextProps.data.title,
+                classId:nextProps.data.classId,
+                className:nextProps.data.className
+            })
+        }
+        
     }
     setDateStr(str){
-        this.setState({setDate:str})
+        this.setState({setDate:str+':00'})
     }
 
     //type  是  save  或  update
@@ -135,8 +150,8 @@ class Tea_CreateInformContent extends Component {
             <TouchableOpacity onPress={()=>{
                 this.setState({classId:item.id,className:item.name})
             }}>
-                <View style={{backgroundColor:'#dadada',borderWidth:1,borderColor:this.state.classId==item.id?'red':'#dadada',height:40,padding:10,marginTop:5,width:250,alignItems:'center'}}>
-                    <Text>{item.name}</Text>
+                <View style={{backgroundColor:this.state.classId==item.id?'#4DC7F8':'#dadada',borderWidth:1,borderColor:'#dadada',height:40,padding:10,marginTop:5,width:screenWidth-100,alignItems:'center'}}>
+                    <Text style={{color:this.state.classId==item.id?'#fff':'',fontSize:15}}>{item.name}</Text>
                 </View>
             </TouchableOpacity>
         )
@@ -144,14 +159,23 @@ class Tea_CreateInformContent extends Component {
     return (
       <View style={{backgroundColor:'#fff',height:'100%',borderTopWidth:0.5}}>
         <Waiting/>
-        <ScrollView style={{borderTopWidth:0.5,width:'100%'}}>
-            <View style={{flexDirection:'row',borderBottomWidth:0.5,padding:10}}>
-                <Text style={{marginTop:10}}>标题:</Text>
+        <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
+              <TouchableOpacity style={{position:'absolute',left:10}} 
+                                onPress={()=>{this.props.navigation.goBack()
+            }}>
+                <Image style={{width:30,height:30}} source={require('../../assets/teacherLatestPage/goback.png')} ></Image>
+              </TouchableOpacity>
+              <Text style={{color:'#59B9E0',fontSize:20}}>发布通知</Text>
+                
+        </View>
+        <ScrollView style={{paddingBottom:20}}>
+            <View style={{flexDirection:'row',borderBottomWidth:0.5,padding:10,borderColor:"#CBCBCB"}}>
+                <Text style={{marginTop:10,width:40}}>标题:</Text>
                 <TextInput
                         placeholder="请输入标题"
                         value={this.state.title}
                         style={{
-                            width: screenWidth*0.7 ,
+                            width: screenWidth-80 ,
                             height:40,
                             marginLeft:15,
                             backgroundColor: '#fff' , 
@@ -166,29 +190,30 @@ class Tea_CreateInformContent extends Component {
                 >
                 </TextInput>
             </View>
-            <View style={{padding:10,borderBottomWidth:0.5,width:'100%'}}>
+            <View style={{padding:10,borderBottomWidth:0.5,width:'100%',borderColor:"#CBCBCB"}}>
                 <View style={{flexDirection:'row'}}>
-                    <Text style={{marginTop:10}}>班级:</Text>
+                    <Text style={{marginTop:10,width:40}}>班级:</Text>
                     <TextInput
                             value={this.state.className}
                             onFocus={()=>Keyboard.dismiss()}
                             style={{
-                                width: screenWidth*0.7 ,
+                                width: screenWidth-80,
                                 height:40,
                                 marginLeft:15,
                                 backgroundColor: '#fff' , 
                                 borderColor: '#DCDCDC',
                                 borderWidth: 1,
-                                paddingLeft:20
+                                paddingLeft:20,
+                                borderRadius:5,
                             }}>
                         </TextInput>
                 </View>
-                <View style={{width:'100%',alignItems:'center'}}>
+                <View style={{width:'100%',alignItems:'center',paddingLeft:55}}>
                     {RenderStuList}
                 </View>
 
             </View>
-            <View style={{flexDirection:'row',padding:10,borderBottomWidth:0.5}}>
+            <View style={{flexDirection:'row',padding:10,borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
                 <Text style={{marginTop:25}}>设置:</Text>
                 <Layout style={{flexDirection:'column',paddingLeft:20}}>
                     <Radio style={{height:30}} checked={this.state.setDateFlag=='1'} onChange={()=>{
@@ -212,11 +237,12 @@ class Tea_CreateInformContent extends Component {
                                 this.mysetdate._showDatePicker()
                             }}
                             style={{
-                                    width: screenWidth*0.4 ,
+                                    width: screenWidth-180,
                                     height:35,
                                     backgroundColor: this.state.setDateFlag=='2'?'#fff':'#f2f4f6' , 
                                     borderColor: '#DCDCDC',
                                     borderWidth:1,
+                                    borderRadius:5
                             }}
                             ></TextInput>
                     </View>
@@ -247,7 +273,7 @@ class Tea_CreateInformContent extends Component {
                 ></TextInput>
             </View>
         </ScrollView>
-        <View style={{width:'100%',position:'absolute',bottom:10,flexDirection:'row',justifyContent:'space-around'}}>
+        <View style={{width:'100%',marginBottom:10,flexDirection:'row',justifyContent:'space-around'}}>
             <Button onPress={()=>{this.props.navigation.goBack()}} style={{width:'40%'}}>取消</Button>
             <Button onPress={()=>{
                 this.saveOrUpdateInform()

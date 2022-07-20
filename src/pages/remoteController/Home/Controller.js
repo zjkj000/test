@@ -11,7 +11,7 @@ import { GetSize } from "../../../utils/Screen/GetSize";
 export default class Controller extends Component {
     constructor(props) {
         super(props);
-
+        const zoom = 1.1;
         this.state = {
             buttonArray: [
                 {
@@ -39,8 +39,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: GetSize(376),
-                                height: GetSize(177),
+                                width: GetSize(376 * zoom),
+                                height: GetSize(177 * zoom),
                             },
                         },
                         {
@@ -85,8 +85,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: GetSize(177),
-                                height: GetSize(376),
+                                width: GetSize(177 * zoom),
+                                height: GetSize(376 * zoom),
                             },
                         },
                         {
@@ -98,8 +98,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: GetSize(242),
-                                height: GetSize(242),
+                                width: GetSize(242 * zoom),
+                                height: GetSize(242 * zoom),
                             },
                         },
                         {
@@ -111,8 +111,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: GetSize(177),
-                                height: GetSize(376),
+                                width: GetSize(177 * zoom),
+                                height: GetSize(376 * zoom),
                             },
                         },
                     ],
@@ -143,8 +143,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: GetSize(376),
-                                height: GetSize(177),
+                                width: GetSize(376 * zoom),
+                                height: GetSize(177 * zoom),
                             },
                         },
                         {

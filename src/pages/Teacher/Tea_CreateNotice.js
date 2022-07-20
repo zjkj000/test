@@ -1,4 +1,4 @@
-import { ScrollView, Text, TextInput, View,Image, Alert,Keyboard  } from 'react-native'
+import { ScrollView, Text, TextInput, View,Image, Alert,Keyboard,TouchableOpacity  } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { CheckBox,Layout,Radio,Button  } from '@ui-kitten/components'
 import http from '../../utils/http/request'
@@ -18,6 +18,7 @@ export default function Tea_CreateNotice(props) {
         }
     },[])
     function updateInform(){
+        console.log('金')
         const url = global.constants.baseUrl+"teacherApp_getNoticeInfo.do";
         const params = {
                 noticeId:noticeId,
@@ -32,9 +33,7 @@ export default function Tea_CreateNotice(props) {
           })
       }
 
-    return (
-        <Tea_CreateNoticeContent navigation={navigation} data={data} noticeId={noticeId}/>
-    )
+    return (<Tea_CreateNoticeContent navigation={navigation} data={data} noticeId={noticeId}/>)
 }
 
 class Tea_CreateNoticeContent extends Component {
@@ -65,6 +64,23 @@ class Tea_CreateNoticeContent extends Component {
             AllStu:(this.props.data.type=='2'||this.props.data.type=='0')?true:false,
             AllTea:(this.props.data.type=='1'||this.props.data.type=='0')?true:false,
         })
+    }
+    UNSAFE_componentWillUpdate(nextProps){
+        if(this.state.content!=nextProps.data.content
+            &&this.state.setDate!=nextProps.data.setDate
+            &&this.state.title!=nextProps.data.title
+            &&this.state.type!=nextProps.data.type){
+            this.setState({
+                noticeId:nextProps.noticeId,
+                saveOrUpdate:nextProps.data!=''?'update':'save',
+                content:nextProps.data.content,
+                setDate:nextProps.data.setDate,
+                title:nextProps.data.title,
+                AllStu:(nextProps.data.type=='2'||nextProps.data.type=='0')?true:false,
+                AllTea:(nextProps.data.type=='1'||nextProps.data.type=='0')?true:false,
+            })
+        }
+        
     }
     //  是  save  或  update
     saveOrUpdateNotice(){
@@ -106,21 +122,30 @@ class Tea_CreateNoticeContent extends Component {
     }
 
     setDateStr(str){
-        this.setState({setDate:str})
+        this.setState({setDate:str+':00'})
     }
 
   render() {
     return (
       <View style={{backgroundColor:'#fff',height:'100%',borderTopWidth:0.5}}>
         <Waiting/>
-        <ScrollView style={{borderTopWidth:0.5}}>
-            <View style={{flexDirection:'row',borderBottomWidth:0.5,padding:10}}>
-                <Text style={{marginTop:10}}>标题:</Text>
+        <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
+              <TouchableOpacity style={{position:'absolute',left:10}} 
+                                onPress={()=>{this.props.navigation.goBack()
+            }}>
+                <Image style={{width:30,height:30}} source={require('../../assets/teacherLatestPage/goback.png')} ></Image>
+              </TouchableOpacity>
+              <Text style={{color:'#59B9E0',fontSize:20}}>发布公告</Text>
+        </View>
+
+        <ScrollView style={{paddingBottom:20}}>
+            <View style={{flexDirection:'row',borderBottomWidth:0.5,padding:10,borderColor:"#CBCBCB",width:'100%'}}>
+                <Text style={{marginTop:10,width:40}}>标题:</Text>
                 <TextInput
                         placeholder="请输入标题"
                         value={this.state.title}
                         style={{
-                            width: screenWidth*0.7 ,
+                            width:screenWidth-80,
                             height:40,
                             marginLeft:15,
                             backgroundColor: '#fff' , 
@@ -135,14 +160,14 @@ class Tea_CreateNoticeContent extends Component {
                 >
                 </TextInput>
             </View>
-            <View style={{flexDirection:'row',padding:10,height:60,borderBottomWidth:0.5}}>
+            <View style={{flexDirection:'row',padding:10,height:60,borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
                 <Text style={{marginTop:5}}>对象:</Text>
                 <Layout style={{flexDirection:'row',paddingLeft:20}}>
                     <CheckBox checked={this.state.AllTea} onChange={()=>{this.setState({AllTea:!this.state.AllTea})}}>全体教师</CheckBox>
                     <CheckBox checked={this.state.AllStu} onChange={()=>{this.setState({AllStu:!this.state.AllStu})}}>全体学生</CheckBox>
                 </Layout>
             </View>
-            <View style={{flexDirection:'row',padding:10,borderBottomWidth:0.5}}>
+            <View style={{flexDirection:'row',padding:10,borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
                 <Text style={{marginTop:25}}>设置:</Text>
                 <Layout style={{flexDirection:'column',paddingLeft:20}}>
                     <Radio style={{height:30}} checked={this.state.setDateFlag=='1'} onChange={()=>{
@@ -165,11 +190,12 @@ class Tea_CreateNoticeContent extends Component {
                                 this.mysetdate._showDatePicker()
                             }}
                             style={{
-                                    width: screenWidth*0.4 ,
-                                    height:35,
+                                    width: screenWidth-180,
+                                    height:38,
                                     backgroundColor:this.state.setDateFlag=='2'?'#fff':'#f2f4f6', 
                                     borderColor: '#DCDCDC',
                                     borderWidth:1,
+                                    borderRadius:5
                             }}
                             ></TextInput>
                     </View>
@@ -202,7 +228,8 @@ class Tea_CreateNoticeContent extends Component {
                 ></TextInput>
             </View>
         </ScrollView>
-        <View style={{width:'100%',position:'absolute',bottom:10,flexDirection:'row',justifyContent:'space-around'}}>
+
+        <View style={{width:'100%',marginBottom:10,flexDirection:'row',justifyContent:'space-around'}}>
             <Button onPress={()=>{this.props.navigation.goBack()}} style={{width:'40%'}}>取消</Button>
             <Button onPress={()=>{
                 this.saveOrUpdateNotice()

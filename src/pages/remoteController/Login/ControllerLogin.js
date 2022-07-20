@@ -63,6 +63,7 @@ export default ControllerLogin = () => {
                         }
                         navigation.navigate("ControllerHome", {
                             // ...resJson,
+                            learnPlanId: resJson.learnPlanId,
                             ipAddress: ipAddress,
                             userName: resJson.teacherId,
                             // imgURL: imgResJson.url,

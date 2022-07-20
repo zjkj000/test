@@ -98,15 +98,9 @@ class Answer_single extends Component {
         const HTML = this.state.questionContent;
         const questionChoiceList = this.state.questionChoiceList;
         const width = Dimensions.get("window").height;
-        const width2 = Dimensions.get("screen").height;
+        // const width2 = Dimensions.get("screen").height;
         const width3 = StatusBar.currentHeight;
-        console.log(
-            "屏幕高度",
-            width,
-            width2,
-            width3,
-            Dimensions.get("screen").width
-        );
+        // console.log("屏幕高度",width3)
         return (
             <View
                 style={{
@@ -195,12 +189,12 @@ const styles = StyleSheet.create({
 
     // 答题部分区域
     answer_result: {
-        height: 80,
+        height:80,
         borderTopWidth: 0.5,
         borderTopColor: "#000000",
         paddingLeft: 30,
         paddingRight: 30,
         flexDirection: "row",
-        justifyContent: "space-around",
+        justifyContent:"space-around"
     },
 });

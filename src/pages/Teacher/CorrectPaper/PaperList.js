@@ -7,6 +7,7 @@ import {  Flex } from "@ant-design/react-native";
 import Toast from '../../../utils/Toast/Toast';
 import { SearchBar } from "@ant-design/react-native";
 import {OverflowMenu,MenuItem} from "@ui-kitten/components";
+import {screenHeight,screenWidth} from '../../../utils/Screen/GetSize'
 let SearchText = '';
 export default function PaperList(props) {
     const [data,setdata] =  useState([]);
@@ -114,8 +115,8 @@ export default function PaperList(props) {
 
     return (
       
-        <View style={{backgroundColor:'#FFFFFF',}}>
-          <View style={{height:60,flexDirection:'row',alignItems:'center'}}>
+        <View style={{backgroundColor:'#FFFFFF',height:"100%",flexDirection:'column'}}>
+          <View style={{height:60,flexDirection:'row',alignItems:'center',borderBottomWidth:0.5,borderColor:'#CBCBCB'}}>
               <TouchableOpacity style={{marginLeft:10,marginRight:10}} 
                                 onPress={()=>{navigation.goBack({
                                             name: 'CorrectPaperList',
@@ -127,9 +128,10 @@ export default function PaperList(props) {
             }}>
                 <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goback.png')} ></Image>
               </TouchableOpacity>
-              <View style={{width:'60%'}}>
+
+              <View style={{width:'62%'}}>
                 <SearchBar
-                                  style={{width:700}}
+                                  style={{width:'100%'}}
                                   value={{SearchText}}
                                   placeholder="学生姓名"
                                   // ref={(ref) => (setSearchText(ref))}
@@ -201,30 +203,40 @@ export default function PaperList(props) {
                                       setCorrectmoduleVisible(false);
                                     ;}}/>
               </OverflowMenu>
-                        
-              
-              <Image ></Image>
           </View>
-            <View style={{alignItems:'center',height:'85%',paddingBottom:10,backgroundColor:'#FFFFFF',borderColor:'#000000',borderTopWidth:0.5}}>
-                  <FlatList
-                     showsVerticalScrollIndicator={false}
-                      //定义数据显示效果
-                      data={data}
-                      renderItem={_renderItemView.bind(this)}
-                      //下拉刷新相关
-                      onRefresh={() => _onRefresh()}
-                      refreshing={isRefresh}
-                  />
+
+          {data.length>0?(
+            <View style={{alignItems:'center',paddingBottom:10,height:screenHeight-130,backgroundColor:'#FFFFFF',borderColor:'#000000',borderTopWidth:0.5}}>
+                <FlatList
+                  showsVerticalScrollIndicator={false}
+                    //定义数据显示效果
+                    data={data}
+                    renderItem={_renderItemView.bind(this)}
+                    //下拉刷新相关
+                    onRefresh={() => _onRefresh()}
+                    refreshing={isRefresh}
+                />
+          </View>):(
+            <View style={{width:'100%',alignItems:'center',height:screenHeight-130}}>
+              <Text style={{marginTop:20,fontSize:15}}>暂时没有学生提交答案</Text>
             </View>
-            <View style={{alignItems:'center',backgroundColor:'#FFFFFF'}}> 
-                  <Button onPress={()=>{
-                          props.navigation.navigate({
-                            name: 'LookCorrectDetails',
-                            params:{
-                              taskId:props.route.params.taskId,
-                              type:props.route.params.type,
-                            }
-                        })
+          )
+                }
+            
+
+            <View style={{alignItems:'center',backgroundColor:'#FFFFFF',height:60}}> 
+                <Button 
+                  appearance={data.length>0?'filled':'outline'}
+                  onPress={()=>{
+                          data.length>0?(
+                            props.navigation.navigate({
+                              name: 'LookCorrectDetails',
+                              params:{
+                                taskId:props.route.params.taskId,
+                                type:props.route.params.type,
+                              }
+                          })
+                          ):('')
                         }}
                         style={{position:'relative',width:'80%'}}>查看报告</Button>
             </View>
@@ -308,6 +320,7 @@ export default function PaperList(props) {
                 <View style={{paddingLeft:15,width:'90%',justifyContent:'center'}}>
                     <View style={{flexDirection:'row',marginBottom:8}}>
                         <Text style={{width:'27%'}}>{this.state.userCn}</Text>
+
                         {(this.state.status=='4'||this.state.status=='5')?
                         (<View style={{flexDirection:'row',width:'25%'}}>
                               <Text style={{color:'#FF0000'}}>已批改</Text>
