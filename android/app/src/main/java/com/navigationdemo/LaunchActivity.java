@@ -214,16 +214,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             enterRoom();
         }
 
-        //先进房间，才能进行举手请�?
-        HttpActivity.testJoinOrLeaveRoom("join");
 
-        //按时间间隔捕获教师端消息
-        HttpActivity.timer();
-
-        //按时间间隔刷新原生ui界面
-        getter();
-        //先固定一下聊天室信息内容
-        //getchatroom();
     }
 
     public void getter() {
@@ -245,12 +236,18 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     Runnable runnableUi = new Runnable() {
         @Override
         public void run(){
-            //更新上下讲台逻辑
-            getview();
-            //更新互动答题界面
-            getteacher();
-            //更新聊天室界�?
-            getchatroom();
+            try{
+                //更新上下讲台逻辑
+                getview();
+                //更新互动答题界面
+                getteacher();
+                //更新聊天室界�?
+                getchatroom();
+            }
+            catch(NullPointerException e){
+                System.out.println("item null");
+            }
+
         }
 
     };
@@ -262,9 +259,9 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 mButtonHand.setSelected(false);
             }
             else{
-                if(mButtonHand!=null){
-                    mButtonHand.setEnabled(true);
-                }
+
+                mButtonHand.setEnabled(true);
+
                 //mButtonHand.setSelected(false);
             }
         }
@@ -391,11 +388,15 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                         ||AnswerActivity.questionAction.equals("stopAnswerSuiji")
                         ||AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
                     current_answer = null;
+
                     LaunchActivity.group_tfanswer.setVisibility(GONE);
                     LaunchActivity.group_singleanswer.setVisibility(GONE);
                     LaunchActivity.group_multianswer.setVisibility(GONE);
                     LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
 
+                    subjective_answer.setText("");
+                    subjective_echo.setText("");
+                    subjective_scroll.setVisibility(GONE);
 
                     mQiangda.setSelected(false);
                     BottomButtonActivity.qiangDa();
@@ -930,6 +931,18 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 //            mTRTCCloud.stopLocalPreview();
 //            mTRTCCloud.stopLocalAudio();
 //        }
+
+        //先进房间，才能进行举手请�?
+        HttpActivity.testJoinOrLeaveRoom("join");
+
+        //按时间间隔捕获教师端消息
+        HttpActivity.timer();
+
+        //按时间间隔刷新原生ui界面
+        getter();
+        //先固定一下聊天室信息内容
+        //getchatroom();
+
     }
 
     @Override
@@ -1041,7 +1054,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
         //点击教师分享流隐藏顶部底部按�?
         else if(id == R.id.teacher_share){
-            BottomButtonActivity.touchTeachershare();
+            //BottomButtonActivity.touchTeachershare();
         }
 
         //判断
@@ -1053,17 +1066,17 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 System.out.println("判断选中了：" + checkedValues);
                 HttpActivity.stuSaveAnswer(checkedValues);
 
-                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
-                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
-                    current_answer = null;
-                    LaunchActivity.group_tfanswer.setVisibility(GONE);
-                    LaunchActivity.group_singleanswer.setVisibility(GONE);
-                    LaunchActivity.group_multianswer.setVisibility(GONE);
-                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
-
-                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
-                    System.out.println("answer over");
-                }
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
                 return;
             }
             System.out.println("this box:"+id);
@@ -1083,17 +1096,17 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 System.out.println("单选选中了：" + checkedValues+"id:"+HttpActivity.questionId);
                 HttpActivity.stuSaveAnswer(checkedValues);
 
-                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
-                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
-                    current_answer = null;
-                    LaunchActivity.group_tfanswer.setVisibility(GONE);
-                    LaunchActivity.group_singleanswer.setVisibility(GONE);
-                    LaunchActivity.group_multianswer.setVisibility(GONE);
-                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
-
-                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
-                    System.out.println("answer over");
-                }
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
                 return;
             }
             CheckBox thisbox =findViewById(id);
@@ -1111,17 +1124,17 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 System.out.println("多选选中�?:"+checkedValues);
                 HttpActivity.stuSaveAnswer(checkedValues);
 
-                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
-                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
-                    current_answer = null;
-                    LaunchActivity.group_tfanswer.setVisibility(GONE);
-                    LaunchActivity.group_singleanswer.setVisibility(GONE);
-                    LaunchActivity.group_multianswer.setVisibility(GONE);
-                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
-
-                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
-                    System.out.println("answer over");
-                }
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
                 return;
             }
             CheckBox thisbox =findViewById(id);
@@ -1155,26 +1168,26 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             else{
                 for(int i=0;i<base64_index;i++){
                     System.out.println("base64 i:"+i+" "+base64id_url.get(i));
-                    editoneValue = editoneValue.replace("'"+i+"'","'"+base64id_url.get(i)+"'");
+                    editoneValue = editoneValue.replace("'"+i+"'","< img src=\""+base64id_url.get(i)+"\">");
                 }
                 System.out.println("editoneValue i:"+editoneValue);
                 HttpActivity.stuSaveAnswer(editoneValue);
 
-                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
-                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
-                    current_answer = null;
-                    LaunchActivity.group_tfanswer.setVisibility(GONE);
-                    LaunchActivity.group_singleanswer.setVisibility(GONE);
-                    LaunchActivity.group_multianswer.setVisibility(GONE);
-                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
-
-                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
-                    System.out.println("answer over");
-                }
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    //LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    //LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
 
                 subjective_answer.setText("");
                 subjective_echo.setText("");
-                subjective_scroll.setVisibility(GONE);
+                //subjective_scroll.setVisibility(GONE);
 
                 base64_index=0;
                 base64id_url=new HashMap<>();
