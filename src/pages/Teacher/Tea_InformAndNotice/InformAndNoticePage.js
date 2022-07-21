@@ -213,7 +213,7 @@ class InformAndNoticePage extends React.Component {
 
     render() {
         return (
-            <View style={{backgroundColor:'#fff' , height: screenHeight - 77}}>
+            <View style={{backgroundColor:'#fff' , height: screenHeight - 50}}>
                 <View style={styles.header}>
                     <View style={{ width: screenWidth * 0.125 }}>
                         {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
@@ -276,8 +276,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     todoList: {
-        // height: screenHeight - 132,
-        height: '94%',
+        height: screenHeight - 105,
+        // height: '94%',
         backgroundColor: "#fff",
     },
     flexNew: {

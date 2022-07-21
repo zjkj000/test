@@ -144,8 +144,13 @@ class TeacherTabBarComponent extends React.Component {
     renderMy = () => {
         return <MyPage />;
     };
+    // render(){
+    //     return(
+    //         <LatestPage fresh={this.props.type} />
+    //     )
+    // }
     render() {
-        return (
+        return ( //View style={{height: 50,}}
             <>
                 <Tab.Navigator
                     screenOptions={({ route }) => ({

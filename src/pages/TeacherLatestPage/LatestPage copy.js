@@ -56,10 +56,10 @@ class LatestPage extends React.Component {
         this._unsubscribeNavigationFocusEvent = navigation.addListener(
             "focus",
             () => {
-                // console.log(
-                //     "LatestPageFocused===================================="
-                // );
-                // console.log(this.props.route);
+                console.log(
+                    "LatestPageFocused===================================="
+                );
+                console.log(this.props.route);
                 if (
                     this.props.route.params !== undefined &&
                     this.props.route.params.isRefresh !== undefined &&
@@ -569,7 +569,7 @@ class LatestPage extends React.Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: "#fff" , height: screenHeight - 50}}>
+            <View style={{ backgroundColor: "#fff" , height: screenHeight - 77}}>
                 <View style={styles.header}>
                     {/* <Flex style={styles.flexNew}> */}
                         <View style={{ width: screenWidth * 0.125 }}>
@@ -654,7 +654,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     todoList: {
-        height: screenHeight-105,
+        // height: screenHeight - 132,
+        height: '95%',
         backgroundColor: "#fff",
     },
     flexNew: {

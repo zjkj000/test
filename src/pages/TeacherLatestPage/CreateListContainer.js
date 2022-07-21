@@ -587,6 +587,7 @@ class CreateList extends React.Component {
                             height: 30,
                             alignItems: "center",
                             justifyContent: "flex-start",
+                            marginBottom: 15,
                         }}
                     >
                         <Text
@@ -644,7 +645,7 @@ const styles = StyleSheet.create({
         height: 24,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 10,
+        marginBottom: 20,
     },
     typeImg: {
         // height: "100%",
