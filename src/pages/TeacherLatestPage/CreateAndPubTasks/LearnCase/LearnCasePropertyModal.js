@@ -308,6 +308,7 @@ class LearnCasePropertyModal extends React.Component {
                                     knowledgeList: [],
                                     knowledge: '',
                                     knowledgeCode: '',
+                                    shortKnowledge: '',
                                     //类型信息修改:
                                     learnPlanType: '',
                                 })
@@ -388,6 +389,7 @@ class LearnCasePropertyModal extends React.Component {
                                     knowledgeList: [],
                                     knowledge: '',
                                     knowledgeCode: '',
+                                    shortKnowledge: '',
                                     //类型信息修改:
                                     learnPlanType: '',
                                 })
@@ -465,6 +467,7 @@ class LearnCasePropertyModal extends React.Component {
                                     knowledgeList: [],
                                     knowledge: '',
                                     knowledgeCode: '',
+                                    shortKnowledge: '',
                                     //类型信息修改:
                                     learnPlanType: '',
                                 })
@@ -539,6 +542,7 @@ class LearnCasePropertyModal extends React.Component {
                                     knowledgeList: [],
                                     knowledge: '',
                                     knowledgeCode: '',
+                                    shortKnowledge: '',
                                     //类型信息修改:
                                     learnPlanType: '',
                                 })
@@ -1593,7 +1597,7 @@ const styles = StyleSheet.create({
     model: {
         flexDirection: 'column', 
         backgroundColor: '#fff' , 
-        top: 70 , 
+        top: 50 , 
         right: 0 , 
         height: screenHeight*0.6,
         width: screenWidth*0.7,

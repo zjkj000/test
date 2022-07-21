@@ -424,7 +424,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.4, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="我的授课包"
                         onPress={() => {
@@ -438,7 +438,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="创建导学案+布置"
                         onPress={() => {
@@ -447,7 +447,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="创建微课+布置"
                         onPress={() => {
@@ -456,7 +456,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="创建作业+布置"
                         onPress={() => {
@@ -465,7 +465,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="选导学案布置"
                         onPress={() => {
@@ -479,7 +479,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="选微课布置"
                         onPress={() => {
@@ -493,7 +493,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="选卷布置作业"
                         onPress={() => {
@@ -511,7 +511,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="拍照布置作业"
                         onPress={() => {
@@ -522,7 +522,7 @@ class LatestPage extends React.Component {
                         }}
                         style={{height:40}}
                     />
-                    <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                    <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                     <MenuItem
                         title="发布通知"
                         onPress={() => {
@@ -539,7 +539,7 @@ class LatestPage extends React.Component {
                     />
                     {
                         global.constants.isadmin == "2"
-                        ? <View style={{ paddingLeft: 0, width: screenWidth*0.35, height: 1, backgroundColor: "#DCDCDC" }} />
+                        ? <View style={{ paddingLeft: 0, width: screenWidth*0.38, height: 1, backgroundColor: "#DCDCDC" }} />
                         : null
                     }
                     
@@ -569,15 +569,21 @@ class LatestPage extends React.Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: "#fff" }}>
+            <View style={{ backgroundColor: "#fff" , height: screenHeight - 77}}>
                 <View style={styles.header}>
-                    <Flex style={styles.flexNew}>
-                        <Flex style={{ width: screenWidth * 0.12 }}>
+                    {/* <Flex style={styles.flexNew}> */}
+                        <View style={{ width: screenWidth * 0.125 }}>
                             {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
-                            <TouchableOpacity style={styles.filterView}>
+                            <TouchableOpacity 
+                                style={{
+                                    ...styles.filterView,
+                                    // backgroundColor:'pink',
+                                    marginLeft: screenWidth * 0.03,
+                                }}
+                            >
                                 {this.showFilter()}
                             </TouchableOpacity>
-                        </Flex>
+                        </View>
                         <View style={styles.searchView}>
                             <SearchBar
                                 style={styles.searchBar}
@@ -591,13 +597,18 @@ class LatestPage extends React.Component {
                                 showCancelButton
                             />
                         </View>
-                        <Flex style={{ width: screenWidth * 0.12 }}>
+                        <View style={{ width: screenWidth * 0.125 }}>
                             {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
                             {/* <TouchableOpacity style={styles.filterView}>
                                 {this.showCreate()}
                             </TouchableOpacity> */}
                             <TouchableOpacity
-                                style={styles.filterView}
+                                style={{
+                                    ...styles.filterView,
+                                    right: screenWidth * 0.03,
+                                    position: 'absolute',
+                                    // backgroundColor:'pink'
+                                }}
                                 onPress={() => {
                                     this.setState({ createmoduleVisible: true });
                                 }}
@@ -615,8 +626,8 @@ class LatestPage extends React.Component {
                                 )
                                 : null
                             }
-                        </Flex>
-                    </Flex>
+                        </View>
+                    {/* </Flex> */}
                 </View>
                 <View style={styles.todoList}>
                     {/* {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , SearchText)} */}
@@ -638,11 +649,13 @@ class LatestPage extends React.Component {
 
 const styles = StyleSheet.create({
     header: {
-        height: screenHeight * 0.1,
+        height: 55,
         backgroundColor: "#4DC7F8",
+        flexDirection: 'row',
     },
     todoList: {
-        // height: screenHeight * 0.85,
+        // height: screenHeight - 132,
+        height: '95%',
         backgroundColor: "#fff",
     },
     flexNew: {
@@ -650,11 +663,16 @@ const styles = StyleSheet.create({
         paddingLeft: screenWidth * 0.03,
     },
     filterView: {
-        paddingLeft: screenWidth * 0.03,
+        height: '100%',
+        paddingTop: 15,
+        width: 25,
     },
     searchView: {
-        width: screenWidth * 0.7,
+        width: screenWidth * 0.75,
         opacity: 1,
+        height: 55,
+        paddingTop: 5,
+        backgroundColor: '#4DC7F8'
     },
     searchBar: {
         backgroundColor: "#fff",
@@ -662,6 +680,7 @@ const styles = StyleSheet.create({
         borderWidth: 0,
         fontSize: 15,
         paddingLeft: 30,
+        height: 38
     },
     backdrop: {
         // backgroundColor: "purple",
@@ -675,7 +694,7 @@ const styles = StyleSheet.create({
         borderWidth: 1, 
         borderColor: '#DCDCDC' ,
         height: 455,
-        width: screenWidth*0.35,
+        width: screenWidth*0.38,
         position: 'absolute',
         //justifyContent: "center",
         //alignItems: "center",
@@ -689,7 +708,7 @@ const styles = StyleSheet.create({
         borderWidth: 1, 
         borderColor: '#DCDCDC' ,
         height: 412,
-        width: screenWidth*0.35,
+        width: screenWidth*0.38,
         position: 'absolute',
         //justifyContent: "center",
         //alignItems: "center",

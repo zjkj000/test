@@ -120,7 +120,15 @@ class Tea_Noticecontent extends Component {
   render() {
     return (
       <View style={{backgroundColor:'#fff',height:'100%',borderTopWidth:0.5}}>
-          <ScrollView style={{width:screenWidth,height:screenHeight*0.95}}>
+          <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
+                  <TouchableOpacity style={{position:'absolute',left:10}} 
+                                    onPress={()=>{this.props.navigation.goBack()
+                }}>
+                    <Image style={{width:30,height:30}} source={require('../../assets/teacherLatestPage/goback.png')} ></Image>
+                  </TouchableOpacity>
+                  <Text style={{color:'#59B9E0',fontSize:20}}>公告</Text>
+            </View>
+          <ScrollView style={{width:screenWidth}}>
             
               {/**未读的通知或公告将调用Api修改状态   这部分没写*/}
               {/* {(status == 5)? (this.updateStatus(status , type , learnId)) : null} */}
@@ -196,7 +204,7 @@ class Tea_Noticecontent extends Component {
         
         {/* 是否显示两个按钮 */}
         {this.state.isAuthor?(
-          <View style={{width:'100%',position:'absolute',bottom:10,flexDirection:'row',justifyContent:'space-around',backgroundColor:'#fff',zIndex:2}}>
+          <View style={{width:'100%',paddingBottom:10,flexDirection:'row',justifyContent:'space-around',backgroundColor:'#fff',zIndex:2}}>
             <Button accessible={this.state.isUpdate}  onPress={()=>{
               if(this.state.isUpdate){
                 //可以修改

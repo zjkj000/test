@@ -420,7 +420,7 @@ class CreateLearnCase extends React.Component {
 
     render(){
         return(
-            <View style={{ flexDirection: 'column', backgroundColor: '#fff' }}>
+            <View style={{ flexDirection: 'column', backgroundColor: '#fff' , flex: 1  }}>
                 {/**导航项 */}
                 <View style={styles.routeView}>
                     {/**返回按钮 */}
@@ -437,7 +437,7 @@ class CreateLearnCase extends React.Component {
                             flexDirection: 'row',
                             height: 40,
                             borderWidth: 1,
-                            borderRadius: 5,
+                            borderRadius: 3,
                             borderColor: '#4DC7F8',
                         }}
                     >
@@ -467,7 +467,7 @@ class CreateLearnCase extends React.Component {
                                     onPress={()=>{
                                         this.updateFlag(3 , this.state.pushPaperFlag);
                                     }}
-                                >保存或布置</Text>
+                                >保存布置</Text>
                         }
                     </View>
                     {/**筛选按钮 */}
@@ -540,7 +540,7 @@ class CreateLearnCase extends React.Component {
 
 const styles = StyleSheet.create({
     routeView: {
-        height: screenHeight*0.1, 
+        height: 50, 
         flexDirection: 'row', 
         justifyContent: 'space-between', 
         alignItems: 'center', 
@@ -548,60 +548,60 @@ const styles = StyleSheet.create({
         paddingLeft: 10,
     },
     addPaper: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#4DC7F8',
-        borderRadius: 5,
-        height: 40,
+        // borderBottomWidth: 1,
+        // borderBottomColor: '#4DC7F8',
+        // borderRadius: 5,
+        height: 38,
         width: screenWidth * 0.25,
         fontSize: 15,
         color: '#4DC7F8',
         backgroundColor: '#fff',
         fontWeight: '300',
-        padding: 10,
+        padding: 8,
         textAlign: 'center',
     },
     addPaperSelect: {
         borderWidth: 1,
-        borderRadius: 5,
+        borderRadius: 3,
         borderColor: '#4DC7F8',
-        height: 40,
+        height: 38,
         width: screenWidth * 0.25,
         fontSize: 15,
         color: 'white',
         backgroundColor: '#4DC7F8',
         fontWeight: '300',
-        padding: 10,
+        padding: 8,
         textAlign: 'center',
     },
     updatePaper: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#4DC7F8',
-        borderRadius: 0.5,
-        height: 40,
+        // borderBottomWidth: 1,
+        // borderBottomColor: '#4DC7F8',
+        // borderRadius: 0.5,
+        height: 38,
         width: screenWidth * 0.25,
         fontSize: 15,
         color: '#4DC7F8',
         backgroundColor: '#fff',
         fontWeight: '300',
-        padding: 10,
+        padding: 8,
         textAlign: 'center',
     },
     pushPaper: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#4DC7F8',
-        borderRadius: 5,
-        height: 40,
+        // borderBottomWidth: 1,
+        // borderBottomColor: '#4DC7F8',
+        // borderRadius: 5,
+        height: 38,
         width: screenWidth * 0.25,
         fontSize: 15,
         color: '#4DC7F8',
         backgroundColor: '#fff',
         fontWeight: '300',
-        padding: 10,
+        padding: 8,
         textAlign: 'center',
     },
     modalView: {
         height: '95%',
-        marginTop: 60, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
+        marginTop: 50, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
         backgroundColor: "white",
         padding: 30,
         paddingBottom: 80,

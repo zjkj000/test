@@ -1,5 +1,9 @@
 import { StyleSheet } from "react-native";
-import { screenHeight, screenWidth } from "../../../utils/Screen/GetSize";
+import {
+    screenHeight,
+    screenWidth,
+    GetSize,
+} from "../../../utils/Screen/GetSize";
 
 export const styles = StyleSheet.create({
     mainContainer: {
@@ -24,8 +28,8 @@ export const styles = StyleSheet.create({
         fontSize: 20,
     },
     smallImg: {
-        width: 24,
-        height: 24,
+        width: GetSize(37),
+        height: GetSize(37),
     },
     infoContainer: {
         flexDirection: "row",
@@ -46,8 +50,8 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
     buttonImg: {
-        width: 105,
-        height: 50,
+        width: GetSize(233),
+        height: GetSize(110),
     },
     infoZone: {
         flex: 2,
@@ -69,8 +73,8 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
     infoZone_img: {
-        width: 93,
-        height: 74,
+        width: GetSize(124),
+        height: GetSize(98),
     },
     infoZone_text: {
         flex: 1,
@@ -85,8 +89,8 @@ export const styles = StyleSheet.create({
         backgroundColor: "white",
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 30,
-        marginTop: 50,
+        // marginBottom: 30,
+        // marginTop: 50,
         // alignContent: "space-around",
         // padding: 5,
     },
@@ -101,8 +105,8 @@ export const styles = StyleSheet.create({
     },
     controllerBlock: {
         flex: 2,
-        // borderColor: "blue",
-        // borderWidth: 1,
+        borderColor: "blue",
+        borderWidth: 1,
         height: "100%",
         alignItems: "center",
         justifyContent: "center",
@@ -123,8 +127,8 @@ export const styles = StyleSheet.create({
         padding: 10,
     },
     bottomImg: {
-        width: 50,
-        height: 50,
+        width: GetSize(118),
+        height: GetSize(118),
     },
     backdrop: {
         backgroundColor: "rgba(0,0,0,0.5)",
@@ -175,6 +179,7 @@ export const styles = StyleSheet.create({
     questionButton: {
         width: 25,
         height: 25,
+        backgroundColor: "white",
         borderColor: "gray",
         justifyContent: "center",
         alignItems: "center",
@@ -182,8 +187,8 @@ export const styles = StyleSheet.create({
         borderRadius: 50,
     },
     questionOptionImg: {
-        width: 80,
-        height: 80,
+        width: GetSize(85),
+        height: GetSize(85),
     },
     exitCard: {
         width: screenWidth * 0.9,

@@ -8,7 +8,7 @@ import http from "../../../utils/http/request";
 import {Avatar,Layout,Button,Divider,Input,OverflowMenu,MenuItem,} from "@ui-kitten/components";
 import { WebView } from 'react-native-webview';
 import Toast from '../../../utils/Toast/Toast'
-
+import StorageUtil from "../../../utils/Storage/Storage";
 
 export default function CreateWorkContainer(props) {
     const navigation = useNavigation();
@@ -53,9 +53,59 @@ class CreateWork extends React.Component {
             //网络请求状态
             error: false,
             errorInfo: "",
+            res:''   //historyProperty
         };
     }
 
+    UNSAFE_componentWillMount(){
+        StorageUtil.get("historyProperty").then((res) => { 
+            if (res) {
+                this.setState({ 
+                    res:res,
+                    studyRank: res.studyRank ?  res.studyRank : '',
+                    studyRankId: res.studyRankId ?  res.studyRankId : '', 
+                    channelNameList: res.channelNameList ?  res.channelNameList : [], 
+
+                    studyClass: res.studyClass ?  res.studyClass : '', 
+                    studyClassId: res.studyClassId ?  res.studyClassId : '', 
+                    studyClassList: res.studyClassList ?  res.studyClassList : [], 
+
+                    edition: res.edition ?  res.edition : '', 
+                    editionId: res.editionId ?  res.editionId : '', 
+                    editionList: res.editionList ?  res.editionList : [], 
+
+                    book: res.book ?  res.book : '', 
+                    bookId: res.bookId ?  res.bookId : '', 
+                    bookList: res.bookList ?  res.bookList : [], 
+
+                    knowledge: res.knowledge ?  res.knowledge : '', 
+                    Longknowledge: res.Longknowledge ?  res.Longknowledge : '',
+                    knowledgeCode: res.knowledgeCode ?  res.knowledgeCode : '', 
+                    knowledgeList: res.knowledgeList ?  res.knowledgeList : [], 
+                });
+            }
+        });
+    }
+    componentWillUnmount(){
+            var newres=this.state.res
+            newres.studyRank=this.state.studyRank
+            newres.studyRankId=this.state.studyRankId
+            newres.channelNameList=this.state.channelNameList
+            newres.studyClass=this.state.studyClass
+            newres.studyClassId=this.state.studyClassId
+            newres.studyClassList=this.state.studyClassList
+            newres.edition=this.state.edition
+            newres.editionId=this.state.editionId
+            newres.editionList=this.state.editionList
+            newres.book=this.state.book
+            newres.bookId=this.state.bookId
+            newres.bookList=this.state.bookList
+            newres.knowledge=this.state.knowledge
+            newres.Longknowledge=this.state.Longknowledge
+            newres.knowledgeCode=this.state.knowledgeCode
+            newres.knowledgeList=this.state.knowledgeList
+            StorageUtil.save('historyProperty',res)
+    }
     //更新是否显示状态
     updateVisibility = (flag , visibility) => {
         //如果当前列表状态为true，点击后需要把所有的列表都隐藏

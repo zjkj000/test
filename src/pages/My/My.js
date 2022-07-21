@@ -273,6 +273,8 @@ class MyPageComponent extends Component {
                         </Text>
                     </View>
                 </TouchableOpacity>
+                
+
                 <TouchableOpacity
                     onPress={() => {
                         this.props.navigation.navigate({ name: "TestPage" });
@@ -280,7 +282,7 @@ class MyPageComponent extends Component {
                 >
                     <Divider />
                     <View style={styles.alternativeContainer}>
-                        <Text style={styles.textLeft}>test</Text>
+                        <Text style={styles.textLeft}>批改作业测试</Text>
                         <Text style={styles.textRight}>
                             <Icon
                                 style={styles.icon}
@@ -290,6 +292,7 @@ class MyPageComponent extends Component {
                         </Text>
                     </View>
                 </TouchableOpacity>
+
                 {global.constants.userType === "STUDENT" ? (
                     <>
                         <TouchableOpacity>

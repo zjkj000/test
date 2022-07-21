@@ -244,8 +244,8 @@ class HomeComponent extends Component {
     };
 
     render() {
-        const { ipAddress, userName } = this.props.route.params;
-        const { learnPlanId, action } = this.state.event;
+        const { ipAddress, userName, learnPlanId } = this.props.route.params;
+        const { action } = this.state.event;
         const { moduleButton } = this.state;
         return (
             <Layout style={styles.mainContainer}>

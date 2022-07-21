@@ -273,13 +273,13 @@ class Inform_NoticeList extends React.Component {
                         style={{
                             flexDirection: "row",
                             backgroundColor: "#fff",
-                            padding: 10,
+                            padding: 5,
                         }}
                     >
                         <View
                             style={{
                                 flexDirection: "row",
-                                width: "20%",
+                                width: 75,
                                 height: "100%",
                             }}
                         >
@@ -289,8 +289,9 @@ class Inform_NoticeList extends React.Component {
                         <View
                             style={{
                                 flexDirection: "column",
-                                width: "80%",
+                                width: screenWidth - 90,
                                 height: "100%",
+                                backgroundColor: '#fff'
                             }}
                         >
                             <Text
@@ -305,28 +306,31 @@ class Inform_NoticeList extends React.Component {
                                 {todo.fName}
                             </Text>
                             <View>
-                                <Text style={{ height: 10 }}></Text>
+                                <Text style={{ height: 5 }}></Text>
                             </View>
                             <View style={{ flexDirection: "row" }}>
-                                <Text
-                                    numberOfLines={1}
-                                    ellipsizeMode={"tail"}
-                                    style={{
-                                        width: screenWidth * 0.55,
-                                        fontWeight: "400",
-                                    }}
-                                >
-                                    {todo.fDescription}
-                                </Text>
-                                <Text
-                                    style={{
-                                        paddingLeft: screenWidth * 0.6,
-                                        position: "absolute",
-                                        color: "#DCDCDC",
-                                    }}
-                                >
-                                    {todo.fTime}
-                                </Text>
+                                <View style={{width: '75%',}}>
+                                    <Text
+                                        numberOfLines={1}
+                                        ellipsizeMode={"tail"}
+                                        style={{
+                                            width: screenWidth * 0.55,
+                                            fontWeight: "400",
+                                        }}
+                                    >
+                                        {todo.fDescription}
+                                    </Text>
+                                </View>
+                                <View style={{width: '25%'}}>
+                                    <Text
+                                        style={{
+                                            color: "#DCDCDC",
+                                            // paddingLeft: 10,
+                                        }}
+                                    >
+                                        {todo.fTime}
+                                    </Text>
+                                </View>
                             </View>
                             <View style={{ flexDirection: "row" }}>
                                 <Text style={{ fontWeight: "400" }}>
@@ -340,12 +344,6 @@ class Inform_NoticeList extends React.Component {
                                 <Text style={{ fontWeight: "400" }}>
                                     {todo.fNum3}
                                 </Text>
-
-                                {this.showTaskProgress(
-                                    todo.fType,
-                                    todo.fNum4,
-                                    todo.fNum5
-                                )}
                             </View>
                         </View>
                     </View>
@@ -362,10 +360,30 @@ class Inform_NoticeList extends React.Component {
 
     //显示任务图标
     showTaskImg(fType) {
-        if (fType == 3) {
+        if (fType == 1) {
+            //导学案
+            return (
+                <View style={styles.taskImg}>
+                    <Image
+                        source={require("../../../assets/teacherLatestPage/learnPlan.png")}
+                        style={styles.typeImg}
+                    />
+                </View>
+            );
+        } else if (fType == 2) {
+            //作业
+            return (
+                <View style={styles.taskImg}>
+                    <Image
+                        source={require("../../../assets/teacherLatestPage/homework.png")}
+                        style={styles.typeImg}
+                    />
+                </View>
+            );
+        } else if (fType == 3) {
             //通知
             return (
-                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                <View style={styles.taskImg}>
                     <Image
                         source={require("../../../assets/teacherLatestPage/notice.png")}
                         style={styles.typeImg}
@@ -375,9 +393,19 @@ class Inform_NoticeList extends React.Component {
         } else if (fType == 4) {
             //公告
             return (
-                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                <View style={styles.taskImg}>
                     <Image
                         source={require("../../../assets/teacherLatestPage/article.png")}
+                        style={styles.typeImg}
+                    />
+                </View>
+            );
+        } else if (fType == 7) {
+            //微课
+            return (
+                <View style={styles.taskImg}>
+                    <Image
+                        source={require("../../../assets/teacherLatestPage/weike.png")}
                         style={styles.typeImg}
                     />
                 </View>
@@ -392,9 +420,10 @@ class Inform_NoticeList extends React.Component {
                 <ImageBackground
                     source={require("../../../assets/teacherLatestPage/rightNum.png")}
                     style={{
-                        height: "42%",
-                        width: "42%",
+                        height: 15,
+                        width: 15,
                         resizeMode: "contain",
+                        marginTop: 6,
                     }}
                 >
                     <Text
@@ -415,9 +444,10 @@ class Inform_NoticeList extends React.Component {
                 <ImageBackground
                     source={require("../../../assets/teacherLatestPage/rightNum.png")}
                     style={{
-                        height: "42%",
-                        width: "42%",
+                        height: 15,
+                        width: 15,
                         resizeMode: "contain",
+                        marginTop: 6,
                     }}
                 >
                     <Text
@@ -426,38 +456,6 @@ class Inform_NoticeList extends React.Component {
                         {fNumber}
                     </Text>
                 </ImageBackground>
-            );
-        } else {
-            return null;
-        }
-    }
-
-    //显示任务进度
-    showTaskProgress(fType, fNum4, fNum5) {
-        if (fType == 1 || fType == 7) {
-            return (
-                <View
-                    style={{
-                        flexDirection: "row",
-                        paddingLeft: screenWidth * 0.48,
-                        position: "absolute",
-                    }}
-                >
-                    <Text style={{ width: 20 }}></Text>
-                    <Image
-                        source={require("../../../assets/teacherLatestPage/progress.png")}
-                        // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
-                        style={{ width: 20, height: 20 }}
-                    />
-                    <Text>{fNum4}</Text>
-                    <Text style={{ width: 20 }}></Text>
-                    <Image
-                        source={require("../../../assets/teacherLatestPage/resourceSum.png")}
-                        // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
-                        style={{ width: 20, height: 20 }}
-                    />
-                    <Text>{fNum5}</Text>
-                </View>
             );
         } else {
             return null;
@@ -539,7 +537,7 @@ class Inform_NoticeList extends React.Component {
                             style={{
                                 color: "#999999",
                                 fontSize: 14,
-                                marginTop: 5,
+                                marginTop: 1,
                                 marginBottom: 5,
                             }}
                         >
@@ -599,5 +597,11 @@ const styles = StyleSheet.create({
         height: 60,
         width: 60,
         alignContent: "center",
+        // backgroundColor: 'pink'
+    },
+    taskImg: { 
+        alignItems: "center", 
+        paddingTop: 5 ,
+        backgroundColor: '#fff'
     },
 });

@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { useNavigation } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import MyTabBar from "./TabBar";
 import Login from "../../pages/Login/Login";
@@ -32,7 +33,7 @@ import TeacherTabBar from "../../pages/Teacher/TabBar/TeacherTabBar";
 import { Icon } from "react-native-elements";
 import HomeworkPropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/HomeworkProperty";
 import CreateHomework from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomework";
-import CreateHomeworkFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomeworkFrame"
+import CreateHomeworkFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/Homework/CreateHomeworkFrame";
 import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
 import CreateLearnCaseFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/CreateLearnCaseFrame";
 
@@ -54,6 +55,8 @@ import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin"
 import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
 import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
 import TestPage from "../../TestPage/TestPage";
+import TestPage_move from "../../TestPage/TestPage_move";
+import { Alert, Image, TouchableOpacity } from "react-native";
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -197,7 +200,34 @@ export default class MainNavigation extends Component {
                         name="设置作业属性"
                         component={HomeworkPropertyContainer}
                         options={{
-                            headerShown: true,
+                            // headerShown: true,
+                            headerLeft: () => {
+                                const navigation = useNavigation();
+                                return (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            navigation.canGoBack()
+                                                ? navigation.goBack()
+                                                : Alert.alert("", "返回失败", [
+                                                      {},
+                                                      {
+                                                          text: "关闭",
+                                                          onPress: () => {},
+                                                      },
+                                                  ]);
+                                        }}
+                                    >
+                                        <Image
+                                            style={{
+                                                height: 30,
+                                                width: 30,
+                                                left: 10,
+                                            }}
+                                            source={require("../../assets/teacherLatestPage/goback.png")}
+                                        />
+                                    </TouchableOpacity>
+                                );
+                            },
                         }}
                     />
                     <Stack.Screen
@@ -226,7 +256,34 @@ export default class MainNavigation extends Component {
                         name="设置导学案属性"
                         component={LearnCasePropertyContainer}
                         options={{
-                            headerShown: true,
+                            // headerShown: true,
+                            headerLeft: () => {
+                                const navigation = useNavigation();
+                                return (
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            navigation.canGoBack()
+                                                ? navigation.goBack()
+                                                : Alert.alert("", "返回失败", [
+                                                      {},
+                                                      {
+                                                          text: "关闭",
+                                                          onPress: () => {},
+                                                      },
+                                                  ]);
+                                        }}
+                                    >
+                                        <Image
+                                            style={{
+                                                height: 30,
+                                                width: 30,
+                                                left: 10,
+                                            }}
+                                            source={require("../../assets/teacherLatestPage/goback.png")}
+                                        />
+                                    </TouchableOpacity>
+                                );
+                            },
                         }}
                     />
                     <Stack.Screen
@@ -240,28 +297,28 @@ export default class MainNavigation extends Component {
                         name="CreateInform"
                         component={Tea_CreateInform}
                         options={{
-                            title: "发布通知",
+                            headerShown: false,
                         }}
                     />
                     <Stack.Screen
                         name="CreateNotice"
                         component={Tea_CreateNotice}
                         options={{
-                            title: "发布公告",
+                            headerShown: false,
                         }}
                     />
                     <Stack.Screen
                         name="LookInform"
                         component={Tea_Inform}
                         options={{
-                            title: "通知",
+                            headerShown: false,
                         }}
                     />
                     <Stack.Screen
                         name="LookNotice"
                         component={Tea_Notice}
                         options={{
-                            title: "公告",
+                            headerShown: false,
                         }}
                     />
                     <Stack.Screen
@@ -362,6 +419,16 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="TestPage"
                         component={TestPage}
+                        options={{
+                            headerShown: false,
+                        }}
+                    ></Stack.Screen>
+                    <Stack.Screen
+                        name="TestPage_move"
+                        component={TestPage_move}
+                        options={{
+                            headerShown: false,
+                        }}
                     ></Stack.Screen>
                 </Stack.Group>
             </Stack.Navigator>
