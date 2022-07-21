@@ -20,12 +20,12 @@ import {
     screenHeight,
     userId,
     token,
-} from "../../../utils/Screen/GetSize";
-import http from "../../../utils/http/request";
-import Loading from "../../../utils/loading/Loading"; //Loading组件使用export {Loading}或者export default Loading;
+} from "../../utils/Screen/GetSize";
+import http from "../../utils/http/request";
+import Loading from "../../utils/loading/Loading"; //Loading组件使用export {Loading}或者export default Loading;
 //import {Loading} from "../../utils/loading/Loading"; //Loading组件使用export {Loading},此时import必须加{}导入
 
-import "../../../utils/global/constants";
+import "../../utils/global/constants";
 
 let pageNo = 0; //当前第几页
 let itemNo = 0; //item的个数
@@ -36,7 +36,7 @@ let oldsearchStr = ""; //保存上一次搜索框内容
 
 let todosList = []; //复制一份api请求得到的数据
 
-export default function Inform_NoticeListContainer(props) {
+export default function CreateListContainer(props) {
     const navigation = useNavigation();
 
     const rsType = props.resourceType;
@@ -46,16 +46,16 @@ export default function Inform_NoticeListContainer(props) {
 
     //将navigation传给TodoList组件，防止路由出错
     return (
-        <Inform_NoticeList
+        <CreateList
             navigation={navigation}
             resourceType={rsType}
             searchStr={searchStr1}
             isRefresh={props.isRefresh}
-        ></Inform_NoticeList>
+        ></CreateList>
     );
 }
 
-class Inform_NoticeList extends React.Component {
+class CreateList extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -76,6 +76,9 @@ class Inform_NoticeList extends React.Component {
         //初始挂载执行一遍
         oldtype = this.props.resourceType;
         oldsearchStr = this.props.searchStr;
+
+
+        console.log("componentWillMount**********isRefresh****" , this.props.isRefresh);
         this.fetchData(pageNo , oldtype , oldsearchStr , true);
     }
 
@@ -85,6 +88,7 @@ class Inform_NoticeList extends React.Component {
     }
 
     UNSAFE_componentWillUpdate(nextProps) {
+        console.log("componentWillUpdate******首页****isRefresh****" , nextProps.isRefresh); 
         if (
             oldtype != nextProps.resourceType ||
             oldsearchStr != nextProps.searchStr ||
@@ -116,6 +120,7 @@ class Inform_NoticeList extends React.Component {
         pageNo = 0; //当前第几页
         itemNo = 0; //item的个数
         dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
+        
         oldtype = ""; //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
         oldsearchStr = ""; //保存上一次搜索框内容
         todosList = []; //复制一份api请求得到的数据
@@ -123,16 +128,21 @@ class Inform_NoticeList extends React.Component {
 
     //通过fetch请求数据
     fetchData(pageNo, type, search, onRefresh = false) {
+        // console.log("fetchData*********", Date.parse(new Date()));
+
         const token = global.constants.token;
         const userId = global.constants.userName;
-        
+        // const ip = global.constants.baseUrl;
+        // const url = ip + "studentApp_getStudentPlan.do";
+        // const token = 'ZBPXffGR9o+CZwXhPLMS/5C6LwePziASE+TYVIv9MPI6BsEOZoIziHIuzoz+tFmNm8wUHFo9QvZvfmy+6OWcDQVfO8g7nfju';
+        // const userId = 'gege';
         const ip = global.constants.baseUrl;
         const url = ip + "teacherApp_getAllNews.do";
         const params = {
             currentPage: pageNo,
             userID: userId,
             resourceType: type,
-            type: "notice",
+            type: "new",
             searchStr: search,
             //callback:'ha',
             token: token,
@@ -187,7 +197,7 @@ class Inform_NoticeList extends React.Component {
                 dataBlob = null;
             })
             .catch((error) => {
-                // console.log("******catch***error**", error);
+                console.log("******catch***error**", error);
                 this.setState({
                     error: true,
                     errorInfo: error,
@@ -266,6 +276,17 @@ class Inform_NoticeList extends React.Component {
                                     fNumber: todo.fNumber, // 0 已读   1  未读
                                 },
                             });
+                        } else {
+                            this.props.navigation.navigate({
+                                name: "CorrectPaperList",
+                                params: {
+                                    taskId: todo.fId,
+                                    type:
+                                        todo.fType == "2"
+                                            ? "paper"
+                                            : "learnPlan",
+                                },
+                            });
                         }
                     }}
                 >
@@ -333,17 +354,22 @@ class Inform_NoticeList extends React.Component {
                                 </View>
                             </View>
                             <View style={{ flexDirection: "row" }}>
-                                <Text style={{ fontWeight: "400" }}>
-                                    {todo.fNum1}
-                                </Text>
-                                <Text style={{ width: 5 }}></Text>
-                                <Text style={{ fontWeight: "400" }}>
-                                    {todo.fNum2}
-                                </Text>
-                                <Text style={{ width: 5 }}></Text>
-                                <Text style={{ fontWeight: "400" }}>
-                                    {todo.fNum3}
-                                </Text>
+                                <View  style={{width: '72%',flexDirection: 'row'}}>
+                                    <Text style={{ fontWeight: "400" }}>
+                                        {todo.fNum1}
+                                    </Text>
+                                    <Text style={{ width: 5 }}></Text>
+                                    <Text style={{ fontWeight: "400" }}>
+                                        {todo.fNum2}
+                                    </Text>
+                                    <Text style={{ width: 5 }}></Text>
+                                    <Text style={{ fontWeight: "400" }}>
+                                        {todo.fNum3}
+                                    </Text>
+                                </View>
+                                
+
+                                {this.showTaskProgress(todo.fType,todo.fNum4,todo.fNum5)}
                             </View>
                         </View>
                     </View>
@@ -365,7 +391,7 @@ class Inform_NoticeList extends React.Component {
             return (
                 <View style={styles.taskImg}>
                     <Image
-                        source={require("../../../assets/teacherLatestPage/learnPlan.png")}
+                        source={require("../../assets/teacherLatestPage/learnPlan.png")}
                         style={styles.typeImg}
                     />
                 </View>
@@ -375,7 +401,7 @@ class Inform_NoticeList extends React.Component {
             return (
                 <View style={styles.taskImg}>
                     <Image
-                        source={require("../../../assets/teacherLatestPage/homework.png")}
+                        source={require("../../assets/teacherLatestPage/homework.png")}
                         style={styles.typeImg}
                     />
                 </View>
@@ -385,7 +411,7 @@ class Inform_NoticeList extends React.Component {
             return (
                 <View style={styles.taskImg}>
                     <Image
-                        source={require("../../../assets/teacherLatestPage/notice.png")}
+                        source={require("../../assets/teacherLatestPage/notice.png")}
                         style={styles.typeImg}
                     />
                 </View>
@@ -395,7 +421,7 @@ class Inform_NoticeList extends React.Component {
             return (
                 <View style={styles.taskImg}>
                     <Image
-                        source={require("../../../assets/teacherLatestPage/article.png")}
+                        source={require("../../assets/teacherLatestPage/article.png")}
                         style={styles.typeImg}
                     />
                 </View>
@@ -405,7 +431,7 @@ class Inform_NoticeList extends React.Component {
             return (
                 <View style={styles.taskImg}>
                     <Image
-                        source={require("../../../assets/teacherLatestPage/weike.png")}
+                        source={require("../../assets/teacherLatestPage/weike.png")}
                         style={styles.typeImg}
                     />
                 </View>
@@ -418,7 +444,7 @@ class Inform_NoticeList extends React.Component {
         if (fNumber >= 10) {
             return (
                 <ImageBackground
-                    source={require("../../../assets/teacherLatestPage/rightNum.png")}
+                    source={require("../../assets/teacherLatestPage/rightNum.png")}
                     style={{
                         height: 15,
                         width: 15,
@@ -442,7 +468,7 @@ class Inform_NoticeList extends React.Component {
         } else if (fNumber > 0) {
             return (
                 <ImageBackground
-                    source={require("../../../assets/teacherLatestPage/rightNum.png")}
+                    source={require("../../assets/teacherLatestPage/rightNum.png")}
                     style={{
                         height: 15,
                         width: 15,
@@ -456,6 +482,40 @@ class Inform_NoticeList extends React.Component {
                         {fNumber}
                     </Text>
                 </ImageBackground>
+            );
+        } else {
+            return null;
+        }
+    }
+
+    //显示任务进度
+    showTaskProgress(fType, fNum4, fNum5) {
+        if (fType == 1 || fType == 7) {
+            return (
+                <View
+                    style={{
+                        flexDirection: "row",
+                        width: '25%',
+                        // paddingLeft: 15,
+                        // paddingLeft: screenWidth * 0.48,
+                        // position: "absolute",
+                    }}
+                >
+                    {/* <Text style={{ width: 20 }}></Text> */}
+                    <Image
+                        source={require("../../assets/teacherLatestPage/progress.png")}
+                        // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
+                        style={{ width: 15, height: 15 , marginTop: 3}}
+                    />
+                    <Text>{fNum4}</Text>
+                    <Text style={{ width: 10 }}></Text>
+                    <Image
+                        source={require("../../assets/teacherLatestPage/resourceSum.png")}
+                        // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
+                        style={{ width: 15, height: 15 , marginTop: 3 }}
+                    />
+                    <Text>{fNum5}</Text>
+                </View>
             );
         } else {
             return null;
@@ -531,14 +591,13 @@ class Inform_NoticeList extends React.Component {
                             height: 30,
                             alignItems: "center",
                             justifyContent: "flex-start",
-                            marginBottom: 15,
                         }}
                     >
                         <Text
                             style={{
                                 color: "#999999",
                                 fontSize: 14,
-                                marginTop: 1,
+                                marginTop: 5,
                                 marginBottom: 5,
                             }}
                         >
@@ -589,7 +648,7 @@ const styles = StyleSheet.create({
         height: 24,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 20,
+        marginBottom: 10,
     },
     typeImg: {
         // height: "100%",
@@ -598,7 +657,6 @@ const styles = StyleSheet.create({
         height: 60,
         width: 60,
         alignContent: "center",
-        // backgroundColor: 'pink'
     },
     taskImg: { 
         alignItems: "center", 
