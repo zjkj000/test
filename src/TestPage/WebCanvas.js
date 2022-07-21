@@ -18,16 +18,9 @@ var html = `<html>
      您的浏览器不支持canvas
    </canvas>
    <script>
-
-   var canvasHistory=new Array()
-   var step=0;
-
-   var canvas=null,context=null;
-
-   var $can = $('#can'),isclean=false,drawState=false,lastX,lastY,ctx;
-   ctx = $can[0].getContext("2d");
-   
-    var _width,_height;
+    var canvas = $('#can'),isclean=false,drawState=false,lastX,lastY,ctx;
+    ctx = canvas[0].getContext("2d");
+    var _width,_height,_dataUrl;
     window.document.addEventListener('message', function (e){
         var obj = JSON.parse(e.data);
         switch (parseInt(obj.action)){
@@ -52,9 +45,13 @@ var html = `<html>
               /* case64加载图片 */
               createImg(obj.data);
               break;
-          case '6':
+          case 6:
               /* 销毁监听函数 */
               destoryDraw();
+              break;
+          case 7:
+              /* 销毁监听函数 */
+              cUndo();
               break;
           case 0:
               /* 返回base64 */
@@ -67,42 +64,38 @@ var html = `<html>
         }
     });
 
-    function resetCanvas(){
-      can=document.getElementById('simple');
-      c=canvas.getContext('2d');
-    }
-
-    function init_canvas(width,height){
+    function init_canvas(width,height,dataurl){
       _width = width;
       _height = height;
-      $can.attr('width', width);
-      $can.attr('height', height);
+      _dataurl=dataurl
+      canvas.attr('width', width);
+      canvas.attr('height', height);
     }
 
     //点击了移动  应该把监听的函数销毁   这里有问题  销毁不掉
     function destoryDraw(){
-      $can.on("touchstart", function (e){
-        return false;
-      })
-      $can.on("touchmove", function (ev){
-        return false;
-      })
-      $(document).on("touchend", function (e){
-        return false;
-      })
+      cPushArray = new Array();
+      cStep = -1;
+      var canvas  = document.getElementById("can");
+      dataUrl = canvas.toDataURL();
+      window.ReactNativeWebView.postMessage(JSON.stringify({action: 6, data: dataUrl}));
     }
-    function canvasUndo(canvasId){
-      if (step > 0) {
-        step--;
-         // alert(canvasHistory[step]);
-          var canvasPic = new Image();
-          canvasPic.src=canvasHistory[step];
-          canvasPic.onload = function(e) {
-            context.clearRect(0, 0, context.width, context.height);
-            context.drawImage(canvasPic, 0, 0);
-            canvasHistory.splice(step,1); 
+
+    //撤销相关
+    var cPushArray = new Array();
+    var cStep = -1;
+    function cPush() {
+        cStep++;
+        if (cStep < cPushArray.length) { cPushArray.length = cStep; }
+        cPushArray.push(document.getElementById('can').toDataURL());
+    }
+    function cUndo() {
+        if (cStep > 0) {
+            cStep--;
+            var canvasPic = new Image();
+            canvasPic.src = cPushArray[cStep];
+            canvasPic.onload = function () { ctx.drawImage(canvasPic, 0, 0); }
         }
-      }
     }
 
     function registDraw(){
@@ -110,31 +103,32 @@ var html = `<html>
         var oy;
         var ox2;
         var oy2;
-        $can.on("touchstart", function (e){
+        canvas.on("touchstart", function (e){
             e = e.originalEvent.touches[0];
             ox2 = e.screenX;
             oy2 = e.screenY;
             drawState = true;
-            drawState = true;
-            var x = e.clientX -  $can.offset().left;
-            var y = e.clientY -  $can.offset().top + $(document).scrollTop();
+            var x = e.clientX -  canvas.offset().left;
+            var y = e.clientY -  canvas.offset().top + $(document).scrollTop();
             lastX = x;
             lastY = y;
             draw(x, y, true, isclean);
+            cPush()
             return false;
         });
-        $can.on("touchmove", function (ev){
+        canvas.on("touchmove", function (ev){
             e = ev.originalEvent.touches[0];
             if (drawState){
                 if (lastX == null || lastY == null ){
-                    $can.lastX = $can.lastY = null;
-                    lastX = e.clientX - $can.offset().left;
-                    lastY = e.clientY - $can.offset().top + $(document).scrollTop();
+                  canvas.lastX = canvas.lastY = null;
+                    lastX = e.clientX - canvas.offset().left;
+                    lastY = e.clientY - canvas.offset().top + $(document).scrollTop();
                 }
-                draw(e.clientX - $can.offset().left, 
-                    e.clientY - $can.offset().top + $(document).scrollTop(),true,isclean);
+                draw(e.clientX - canvas.offset().left, 
+                    e.clientY - canvas.offset().top + $(document).scrollTop(),true,isclean);
                 return false;
             }
+            cPush()
             return false;
         });
         $(document).on("touchend", function (e){
@@ -147,7 +141,7 @@ var html = `<html>
             ctx.globalCompositeOperation = isclean ? "destination-out" : "source-over";
             ctx.beginPath();
             ctx.strokeStyle = 'red';
-            ctx.lineWidth = isclean ? 30 : 5;
+            ctx.lineWidth = 5;
             ctx.lineJoin = "round";
             ctx.moveTo(lastX, lastY);
             ctx.lineTo(x, y);
@@ -173,8 +167,8 @@ var html = `<html>
         }
         _width = new_obj.width;
         _height = new_obj.height;
-        $can.attr("width", this.width);
-        $can.attr("height",this.height);
+        canvas.attr("width", this.width);
+        canvas.attr("height",this.height);
         ctx.clearRect(0,0,this.width,this.height);  
         ctx.putImageData(new_obj, 0, 0);
       };
@@ -185,7 +179,7 @@ var html = `<html>
       img.onload = function (){
         var width = img.naturalWidth;
         var height = img.naturalHeight;
-        can = $can[0];
+        can = canvas[0];
         ctx = can.getContext("2d");
         ctx.drawImage(img, 0, 0, _width, _height);
       };
@@ -226,21 +220,15 @@ var html = `<html>
         } 
         return imageData2base64(new_obj);
       }
-
       /* 将图片处理成base64返回 */
       function returnBase64(){
-      var data = $can[0].toDataURL();
+      var data = canvas[0].toDataURL();
       window.ReactNativeWebView.postMessage(JSON.stringify({action: 0, data: data}));
       }
-
-
  </script>
-
-
  </body>
  </html>
  `;
-<<<<<<< HEAD
  
  var _width,_height;
  export default class WebCanvas extends Component {
@@ -260,23 +248,25 @@ var html = `<html>
    _clean(){
      this.post({action: 2})
    }
+   _cUndo(){
+    this.post({action: 7})
+   }
    // 初始化画板
    _init(){
      this.post({action:'-1'})
    }
    _destoryDraw(){
-    this.post({action:'6'})
+    this.post({action:6})
    }
  
    // 以url的形式添加背景
    _addImageUrl(data){
-    this._init()
+    // this._init()
     this.post({action: 4, data: data})
    }
  
    // 以base64的形式添加背景
    _addImageBase64(data){
-    this._init()
      this.post({action: 5, data: data})
    }
  
@@ -310,7 +300,9 @@ var html = `<html>
      var obj = JSON.parse(e.nativeEvent.data);
      if (obj.action == 0){
        this.props.handleBase64(obj.data);
-     }
+     }else if (obj.action == 6){
+      this.props.handleUrl(obj.data);
+    }
    } 
  
    render() {
@@ -342,117 +334,3 @@ var html = `<html>
  
      }
  }); 
-=======
-
-var _width, _height;
-export default class WebCanvas extends Component {
-    webview = {};
-    constructor(props) {
-        super(props);
-        this.state = {
-            height: this.props.height,
-            width: this.props.width,
-        };
-    }
-    // 铅笔
-    _pen() {
-        this.post({ action: 1 });
-    }
-    // 橡皮
-    _clean() {
-        this.post({ action: 2 });
-    }
-    // 初始化画板
-    _init() {
-        this.post({ action: "-1" });
-    }
-    _destoryDraw() {
-        this.post({ action: "6" });
-    }
-
-    // 以url的形式添加背景
-    _addImageUrl(data) {
-        this._init();
-        this.post({ action: 4, data: data });
-    }
-
-    // 以base64的形式添加背景
-    _addImageBase64(data) {
-        this._init();
-        this.post({ action: 5, data: data });
-    }
-
-    _addImage(data) {
-        this.post({ action: 4, data: data });
-    }
-
-    // 得到图片的base64形式
-    _getBase64() {
-        this.post({ action: 0 });
-    }
-    // 图片右转
-    _rotateRight() {
-        this.post({ action: 3 });
-    }
-
-    post(obj) {
-        this.webview.postMessage(JSON.stringify(obj));
-    }
-
-    webviewload() {
-        // alert('加载成功！')
-        this.webview.injectJavaScript(
-            "init_canvas(" + this.props.width + ", " + this.props.height + ")"
-        );
-        this._addImageUrl(this.props.url);
-        if (this.props.onLoad) {
-            this.props.onLoad();
-        }
-    }
-
-    messageHandler(e) {
-        var obj = JSON.parse(e.nativeEvent.data);
-        if (obj.action == 0) {
-            this.props.handleBase64(obj.data);
-        }
-    }
-
-    render() {
-        return (
-            <View
-                style={[
-                    styles.container,
-                    { width: this.state.width, height: this.state.height },
-                ]}
-            >
-                <WebView
-                    androidHardwareAccelerationDisabled
-                    style={{
-                        width: this.state.width,
-                        height: this.state.height,
-                    }}
-                    ref={(w) => {
-                        this.webview = w;
-                    }}
-                    onLoad={this.webviewload.bind(this)}
-                    source={{ html: html }}
-                    onMessage={this.messageHandler.bind(this)}
-                    javaScriptEnabled={true}
-                    domStorageEnabled={false}
-                    automaticallyAdjustContentInsets={true}
-                    scalesPageToFit={Platform.OS === "android" ? true : false}
-                    scrollEnabled={false}
-                    originWhitelist={["*"]}
-                />
-            </View>
-        );
-    }
-}
-
-const styles = StyleSheet.create({
-    container: {
-        alignItems: "flex-start",
-        backgroundColor: "green",
-    },
-});
->>>>>>> f16c47de403e1906792d624a2f9f99de4459beba

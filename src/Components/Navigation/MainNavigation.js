@@ -55,16 +55,7 @@ import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin"
 import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
 import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
 import TestPage from "../../TestPage/TestPage";
-import TestPage_move from "../../TestPage/TestPage_move";
-<<<<<<< HEAD
-import {
-    Alert,
-    Image,
-    TouchableOpacity,
-} from "react-native";
-=======
 import { Alert, Image, TouchableOpacity } from "react-native";
->>>>>>> f16c47de403e1906792d624a2f9f99de4459beba
 const Stack = createStackNavigator();
 
 export default class MainNavigation extends Component {
@@ -427,13 +418,6 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="TestPage"
                         component={TestPage}
-                        options={{
-                            headerShown: false,
-                        }}
-                    ></Stack.Screen>
-                    <Stack.Screen
-                        name="TestPage_move"
-                        component={TestPage_move}
                         options={{
                             headerShown: false,
                         }}

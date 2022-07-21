@@ -151,8 +151,9 @@ class Tea_Noticecontent extends Component {
                   </Flex>
                   <Text style={styles.content}>{this.state.content}</Text>
               </View> 
-
-              <View style={{paddingTop:20}}>
+                {
+                  this.state.isAuthor?(
+                    <View style={{paddingTop:20}}>
                   <View style={{flexDirection:'row'}}>
                     <View style={{width:'50%',justifyContent:'center',flexDirection:'row',padding:10,backgroundColor:this.state.selectReadStuListType=='1'?'#C0C0C0':'#fff'}}>
                       <Text>已读学生:(</Text>
@@ -191,15 +192,18 @@ class Tea_Noticecontent extends Component {
                     </View>
                   </View>
                 {this.state.selectReadStuListType=='1'?(
-                  <View style={{padding:15,backgroundColor:'#C0C0C0'}}>
-                      <Text style={{fontSize:15}}>{this.state.readList.join()}</Text>
+                      <View style={{padding:15,backgroundColor:'#C0C0C0'}}>
+                          <Text style={{fontSize:15}}>{this.state.readList.join()}</Text>
+                      </View>
+                    ):this.state.selectReadStuListType=='2'?(
+                      <View style={{padding:15,backgroundColor:'#C0C0C0'}}>
+                          <Text style={{fontSize:15}}>{this.state.noreadList.join()}</Text>
+                      </View>
+                    ):(<></>)}
                   </View>
-                ):this.state.selectReadStuListType=='2'?(
-                  <View style={{padding:15,backgroundColor:'#C0C0C0'}}>
-                      <Text style={{fontSize:15}}>{this.state.noreadList.join()}</Text>
-                  </View>
-                ):(<></>)}
-              </View>
+                  ):(<></>)
+                }
+              
         </ScrollView>
         
         {/* 是否显示两个按钮 */}

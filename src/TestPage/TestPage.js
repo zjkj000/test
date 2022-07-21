@@ -4,9 +4,7 @@ import { screenHeight, screenWidth } from "../utils/Screen/GetSize";
 import { styles } from "./styles";
 import WebCanvas from "./WebCanvas";
 import http from "../utils/http/request";
-var base64 = "";
-var baseurl =
-    "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F21031FKU44S6-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660123240&t=70bf04c04f065c75c8676c464dd360c6";
+var imagebase64=''
 var url =
     "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F21031FKU44S6-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660123240&t=70bf04c04f065c75c8676c464dd360c6";
 export default class TestPage extends Component {
@@ -16,7 +14,6 @@ export default class TestPage extends Component {
             showNum: 0,
             imgState: 1,
             flag: "yidong",
-            url: "https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F21031FKU44S6-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660123240&t=70bf04c04f065c75c8676c464dd360c6",
         };
     }
     saveimage_base64(base64) {
@@ -25,11 +22,11 @@ export default class TestPage extends Component {
             userId: global.constants.userName,
             baseCode: base64,
         };
-        // http.post(urla, params, false).then((res) => {
-        //     if(res.success){
-        //       this.setState({url:res.data})
-        //     }
-        // })
+        http.post(urla, params, false).then((res) => {
+            if(res.success){
+              url=res.data
+            }
+        })
     }
 
     _pen() {
@@ -46,8 +43,12 @@ export default class TestPage extends Component {
         this.canvas._addImageUrl(url);
     }
     // 以base64的形式添加背景
-    _addImageBase64() {
+    _addImageBase64(base64) {
         this.canvas._addImageBase64(base64);
+    }
+    _cUndo() {
+        // this.setState({ flag: "yidong" });
+        this.canvas._cUndo();
     }
     // 得到图片的base64形式
     _getBase64() {
@@ -55,13 +56,17 @@ export default class TestPage extends Component {
     }
     // 保存base64
     _handleBase64(data) {
-        this.saveimage_base64(data);
-        base64 = data;
+        imagebase64 = data;
+    }
+    _handleUrl(data) {
+        imagebase64 =data.substring(22)
+        // this.saveimage_base64(data.substring(22))
         // this.canvas.webview.reload()
-        // this.canvas._addImageBase64(data);
+        // this._addImageBase64(imagebase64)
+        // this.canvas._addImage(url)
+        // this.canvas._addImageBase64(data.substring(22))
     }
     _destoryDraw() {
-        this._getBase64();
         this.setState({ flag: "yidong" });
         this.canvas._destoryDraw();
     }
@@ -108,6 +113,7 @@ export default class TestPage extends Component {
                 <View style={{ height: screenHeight - 130 }}>
                     <WebCanvas
                         handleBase64={this._handleBase64.bind(this)}
+                        handleUrl={this._handleUrl.bind(this)}
                         ref={(ref) => (this.canvas = ref)}
                         url={url}
                         height={screenWidth}
@@ -134,12 +140,7 @@ export default class TestPage extends Component {
                         ></Image>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={
-                            () => {
-                                this._destoryDraw();
-                            }
-                            // this._getBase64.bind(this)
-                        }
+                        onPress={this._destoryDraw.bind(this)}
                     >
                         <Image
                             style={{ width: 50, height: 50 }}
@@ -152,7 +153,7 @@ export default class TestPage extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            url = baseurl;
+                            url = url;
                             this.canvas.webview.reload();
                             this.setState({ flag: "yidong" });
                         }}
@@ -163,9 +164,7 @@ export default class TestPage extends Component {
                         ></Image>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={() => {
-                            this.setState({ flag: "chexiao" });
-                        }}
+                        onPress={this._cUndo.bind(this)}
                     >
                         <Image
                             source={require("../assets/correctpaper/chexiao.png")}
