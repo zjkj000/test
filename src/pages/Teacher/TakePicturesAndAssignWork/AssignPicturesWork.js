@@ -164,8 +164,8 @@ class AssignPicturesWork extends Component {
                 return(
                     <View 
                         style={this.state.classFlag == false ?
-                            {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5, backgroundColor: '#DCDCDC',justifyContent:'center'}
-                            : {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 1, borderColor: 'red'}
+                            {width: screenWidth*0.4,  height: 40, marginTop: 3,marginLeft:20,borderRadius:5, backgroundColor: '#DCDCDC',justifyContent:'center'}
+                            : {width: screenWidth*0.4,  height: 40, marginTop: 3,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 2, borderColor: 'red'}
                         }
                     >
                         <Text 
@@ -560,19 +560,19 @@ class AssignPicturesWork extends Component {
 
         <View style={{flexDirection:'row',height:60,alignItems:'center'}}>
             <Text style={{fontSize:15,marginRight:40,marginLeft:30}}>布置给:</Text>
-            <TouchableOpacity style={{marginRight:30}} onPress={()=>{this.updateAssignToWho('0');this.setState({SelectKeTangStatus:false})}}>
-                <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='0'?'#4DC7F8':'#fff'}}>
-                    <Text style={{fontSize:15}}>班级</Text>
+            <TouchableOpacity style={{ marginRight: 30 }} onPress={() => { this.updateAssignToWho('0'); this.setState({ SelectKeTangStatus: false }) }}>
+                <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '0' ? '#4DC7F8' : '#fff' }}>
+                    <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '0' ? '#fff' : 'gray' }}>班级</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssignToWho('1');this.setState({SelectKeTangStatus:false})}}>
-                <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='1'?'#4DC7F8':'#fff'}}>
-                    <Text>小组</Text>
+            <TouchableOpacity style={{ marginRight: 20 }} onPress={() => { this.updateAssignToWho('1'); this.setState({ SelectKeTangStatus: false }) }}>
+                <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '1' ? '#4DC7F8' : '#fff' }}>
+                    <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '1' ? '#fff' : 'gray' }}>小组</Text>
                 </View>
             </TouchableOpacity>
-            <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssignToWho('2');this.setState({SelectKeTangStatus:false})}}>
-                <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='2'?'#4DC7F8':'#fff'}}>
-                    <Text>个人</Text>
+            <TouchableOpacity style={{ marginRight: 20 }} onPress={() => { this.updateAssignToWho('2'); this.setState({ SelectKeTangStatus: false }) }}>
+                <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '2' ? '#4DC7F8' : '#fff' }}>
+                    <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '2' ? '#fff' : 'gray' }}>个人</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -586,7 +586,7 @@ class AssignPicturesWork extends Component {
       </ScrollView>
 
       {/* 按钮区域 */}
-      <View style={{flexDirection:'row',justifyContent:'space-around'}}>
+      <View style={{flexDirection:'row',justifyContent:'space-around',bottom:10}}>
             <Button onPress={()=>{
                             this.setState({
                                 beginstr: '',

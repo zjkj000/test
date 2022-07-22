@@ -1851,7 +1851,7 @@ class CreateHomework extends React.Component {
         const assignList = [];
         if (this.state.className == '') {
             return (
-                <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                <View style={{ justifyContent: 'center', alignItems: 'center',width:'100%' }}>
                     <Text style={{ fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10, }}>请先选择课堂</Text>
                 </View>
             );
@@ -1860,8 +1860,8 @@ class CreateHomework extends React.Component {
                 return (
                     <View
                         style={this.state.classFlag == false ?
-                            { width: screenWidth * 0.4, height: 40, marginTop: 10, marginLeft: 20, borderRadius: 5, backgroundColor: '#DCDCDC', justifyContent: 'center' }
-                            : { width: screenWidth * 0.4, height: 40, marginTop: 10, marginLeft: 20, borderRadius: 5, backgroundColor: '#fff', justifyContent: 'center', borderWidth: 2, borderColor: 'red' }
+                            { width: screenWidth * 0.4, height: 40, marginTop: 3, marginLeft: 20, borderRadius: 5, backgroundColor: '#DCDCDC', justifyContent: 'center' }
+                            : { width: screenWidth * 0.4, height: 40, marginTop: 3, marginLeft: 20, borderRadius: 5, backgroundColor: '#fff', justifyContent: 'center', borderWidth: 2, borderColor: 'red' }
                         }
                     >
                         <Text
@@ -1913,7 +1913,7 @@ class CreateHomework extends React.Component {
                 return (
                     this.state.groupList.length > 0
                         ? content
-                        : <View style={{ justifyContent: 'center', alignItems: 'center' }}>
+                        : <View style={{ justifyContent: 'center', alignItems: 'center',width:'100%' }}>
                             <Text style={{ fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10, }}>
                                 您还没有创建小组，可以前往电脑端进行创建</Text>
                         </View>
@@ -2165,7 +2165,7 @@ class CreateHomework extends React.Component {
                     {/* <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} /> */}
                     {/**布置对象列表 */}
                     <ScrollView>
-                        <View style={{ alignItems: 'flex-start', marginTop: 15, marginBottom: 50, flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center' }}>
+                        <View style={{alignItems:'flex-start',marginTop:5,marginBottom:30,flexDirection:'row',flexWrap:'wrap'}}>
                             {this.showAssignToWho()}
                         </View>
                     </ScrollView>
@@ -2180,6 +2180,7 @@ class CreateHomework extends React.Component {
         return (
             <View style={{ 
                 height: 50,
+                bottom: 10,
                 flexDirection: 'row', 
                 alignItems: 'center',
                 justifyContent: 'space-around', 

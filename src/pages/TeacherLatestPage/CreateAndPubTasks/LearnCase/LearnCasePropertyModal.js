@@ -527,11 +527,11 @@ class LearnCasePropertyModal extends React.Component {
             return (
                 <View key={index}>
                     <Text
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
+                        // numberOfLines={1}
+                        // ellipsizeMode={"tail"}
                         style={this.state.book == item.gradeLevelName ?
-                            styles.studyRankItemSelected :
-                            styles.studyRankItem
+                            {...styles.studyRankItemSelected} :
+                            {...styles.studyRankItem}
                         }
                         onPress={() => {
                             if (this.state.book != item.gradeLevelName) {
@@ -586,9 +586,14 @@ class LearnCasePropertyModal extends React.Component {
                     <Text
                         numberOfLines={1}
                         ellipsizeMode={"tail"}
-                        style={learnPlanType == item ?
-                            {...styles.studyRankItemSelected, width: 60, } :
-                            {...styles.studyRankItem, width: 60 }
+                        style={
+                            privateContent && learnPlanType == item 
+                            ? {...styles.studyRankItemSelected}
+                            : privateContent && learnPlanType != item
+                            ? {...styles.studyRankItem}
+                            : learnPlanType == item 
+                            ? {...styles.studyRankItemSelected,  width: 54}
+                            : {...styles.studyRankItem,  width: 54 }
                         }
                         onPress={() => {
                             console.log(learnPlanType , item)
@@ -851,11 +856,11 @@ class LearnCasePropertyModal extends React.Component {
             return (
                 <View key={index}>
                     <Text
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
+                        // numberOfLines={1}
+                        // ellipsizeMode={"tail"}
                         style={questionType == (privateContent ? item : item[1]) ?
-                            styles.studyRankItemSelected :
-                            styles.studyRankItem
+                            styles.studyRankItemSelected1 :
+                            styles.studyRankItem1
                         }
                         onPress={() => {
                             if (questionType != (privateContent ? item : item[1])) {
@@ -925,11 +930,11 @@ class LearnCasePropertyModal extends React.Component {
             return (
                 <View key={index}>
                     <Text
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
+                        // numberOfLines={1}
+                        // ellipsizeMode={"tail"}
                         style={paperType == (privateContent ? item : item[1]) ?
-                            styles.studyRankItemSelected :
-                            styles.studyRankItem
+                            {...styles.studyRankItemSelected1 , width: screenWidth * 0.3}:
+                            {...styles.studyRankItem1 , width: screenWidth * 0.3}
                         }
                         onPress={() => {
                             if (paperType != (privateContent ? item : item[1])) {
@@ -999,11 +1004,11 @@ class LearnCasePropertyModal extends React.Component {
             return (
                 <View key={index}>
                     <Text
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
+                        // numberOfLines={1}
+                        // ellipsizeMode={"tail"}
                         style={resourceType ==  item[1] ?
-                            styles.studyRankItemSelected :
-                            styles.studyRankItem
+                            {...styles.studyRankItemSelected1 , width: screenWidth * 0.3}:
+                            {...styles.studyRankItem1 , width: screenWidth * 0.3}
                         }
                         onPress={() => {
                             if (resourceType != item[1]) {
@@ -1464,12 +1469,17 @@ class LearnCasePropertyModal extends React.Component {
                     {/**类型列表!!! */}
                     {this.state.learnPlanTypeVisibility ?
                         <View style={styles.contentlistView}>
-                            {   
+                            {this.showLearnPlanType()}
+                            {/* {   
                                 this.state.shareContent 
-                                    ? this.showLearnPlanType()
+                                    ? (
+                                        <View style={{alignItems:'flex-start',marginTop:5,marginBottom:30,flexDirection:'row',flexWrap:'wrap'}}>
+                                            {this.showLearnPlanType()}
+                                        </View>
+                                    )
                                     : null
-                            }
-                            {   
+                            } */}
+                            {/* {   
                                 this.state.schoolContent 
                                     ? this.showLearnPlanType()
                                     : null
@@ -1478,7 +1488,7 @@ class LearnCasePropertyModal extends React.Component {
                                 this.state.privateContent 
                                     ? this.showLearnPlanType()
                                     : null
-                            }
+                            } */}
                         </View>
                         : null
                     }
@@ -1659,8 +1669,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',  //自动换行
         backgroundColor: '#fff',
-        left: screenWidth * 0.025,
+        left: 5,
         marginBottom: 10,
+        // justifyContent:'center'
     },
     studyRank: {
         fontSize: 15,
@@ -1686,6 +1697,32 @@ const styles = StyleSheet.create({
     studyRankItemSelected: {
         width: screenWidth * 0.2,
         height: 38,
+        fontSize: 15,
+        color: 'black',
+        backgroundColor: '#DCDCDC',
+        fontWeight: '300',
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'red',
+        textAlign: 'center',
+        marginLeft: 5,
+    },
+    studyRankItem1: {
+        width: screenWidth * 0.2,
+        // height: 40,
+        fontSize: 15,
+        color: 'black',
+        backgroundColor: '#DCDCDC',
+        fontWeight: '300',
+        padding: 10,
+        borderWidth: 2,
+        borderColor: '#fff',
+        textAlign: 'center',
+        marginLeft: 5,
+    },
+    studyRankItemSelected1: {
+        width: screenWidth * 0.2,
+        // height: 38,
         fontSize: 15,
         color: 'black',
         backgroundColor: '#DCDCDC',
