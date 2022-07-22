@@ -22,16 +22,8 @@ public class AnswerActivity extends LaunchActivity {
     public static String base64url;
 
     public static String chatTime;
-//    static class MessageItem{
-//        public static String messageStuget;
-//        public static String phone;
-//        public static String time;
-//        public static String timeStr;
-//        public static String nameStuget;
-//        public static String userId;
-//        public static String role;
-//    }
     public static List<ChatBean> messageList;
 
-    //public static List<ChatBean> chatBeanList;
+    public static String chatStatus="";
+    public static String chatMessage="";
 }

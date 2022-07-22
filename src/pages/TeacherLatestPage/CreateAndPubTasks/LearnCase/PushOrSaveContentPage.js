@@ -676,7 +676,7 @@ class PushOrSaveContentPage extends React.Component {
         const assignList = [];
         if(this.state.className == ''){
             return(
-                <View style={{justifyContent:'center', alignItems: 'center'}}>
+                <View style={{justifyContent:'center', alignItems: 'center',width:'100%'}}>
                     <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>请先选择课堂</Text>
                 </View>
             );
@@ -685,8 +685,8 @@ class PushOrSaveContentPage extends React.Component {
                 return(
                     <View 
                         style={this.state.classFlag == false ?
-                            {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5, backgroundColor: '#DCDCDC',justifyContent:'center'}
-                            : {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 2, borderColor: 'red'}
+                            {width: screenWidth*0.4,  height: 40, marginTop: 3,marginLeft:20,borderRadius:5, backgroundColor: '#DCDCDC',justifyContent:'center'}
+                            : {width: screenWidth*0.4,  height: 40, marginTop: 3,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 2, borderColor: 'red'}
                         }
                     >
                         <Text 
@@ -738,7 +738,7 @@ class PushOrSaveContentPage extends React.Component {
                 return(
                     this.state.groupList.length > 0
                     ? content
-                    : <View style={{justifyContent:'center', alignItems: 'center'}}>
+                    : <View style={{justifyContent:'center', alignItems: 'center',width:'100%'}}>
                         <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>
                         您还没有创建小组，可以前往电脑端进行创建</Text>
                     </View>
@@ -821,7 +821,7 @@ class PushOrSaveContentPage extends React.Component {
     //布置或保存导学案页面
     showPushOrSaveContent = () => {
         return(
-            <View  style={{...styles.bodyView,height:'82%'}}>
+            <View  style={{...styles.bodyView, height: screenHeight - 130}}>
                 {/**布置 保存 */}
                 <View style={{...styles.paperSelectNumView,justifyContent: 'space-around'}}>
                     <Text 
@@ -843,7 +843,7 @@ class PushOrSaveContentPage extends React.Component {
                         onPress={()=>{this.saveLearnPlan()}}
                     >保存</Text>
                 </View>
-                <ScrollView style={{height:'100%'}}>
+                <ScrollView>
                     {/**开始时间 */}
 
                     <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
@@ -951,7 +951,7 @@ class PushOrSaveContentPage extends React.Component {
                     {/* <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} /> */}
                     {/**布置对象列表 */}
                     <ScrollView>
-                        <View style={{alignItems:'flex-start',marginTop:15,marginBottom:50,flexDirection:'row',flexWrap:'wrap',justifyContent:'center'}}>
+                        <View style={{alignItems:'flex-start',marginTop:5,marginBottom:30,flexDirection:'row',flexWrap:'wrap'}}>
                             {this.showAssignToWho()}
                         </View>
                     </ScrollView>
@@ -968,7 +968,7 @@ class PushOrSaveContentPage extends React.Component {
                 style={{
                     height: 50,
                     width: screenWidth,
-                    bottom: 1,
+                    bottom: 10,
                     position: 'absolute',
                     flexDirection: 'row', 
                     alignItems: 'center',

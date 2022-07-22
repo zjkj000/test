@@ -25,8 +25,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: GetSize(295),
-                                height: GetSize(165),
+                                width: GetSize(295 * zoom),
+                                height: GetSize(165 * zoom),
                             },
                         },
                         {
@@ -55,8 +55,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: GetSize(295),
-                                height: GetSize(255),
+                                width: GetSize(295 * zoom),
+                                height: GetSize(255 * zoom),
                             },
                         },
                     ],
@@ -72,8 +72,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: GetSize(93),
-                                height: GetSize(236),
+                                width: GetSize(93 * zoom),
+                                height: GetSize(236 * zoom),
                             },
                         },
                         {
@@ -81,7 +81,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 alignItems: "flex-end",
-                                flex: 2,
+                                // flex: 2,
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -93,7 +93,7 @@ export default class Controller extends Component {
                             index: "5",
                             blockStyles: {
                                 ...styles.controllerBlock,
-                                flex: 2,
+                                // flex: 2,
                                 alignItems: "center",
                             },
                             styles: {
@@ -107,7 +107,7 @@ export default class Controller extends Component {
                             blockStyles: {
                                 ...styles.controllerBlock,
                                 alignItems: "flex-start",
-                                flex: 3,
+                                // flex: 3,
                             },
                             styles: {
                                 ...styles.controllerImg,
@@ -129,8 +129,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: GetSize(295),
-                                height: GetSize(165),
+                                width: GetSize(295 * zoom),
+                                height: GetSize(165 * zoom),
                             },
                         },
                         {
@@ -156,8 +156,8 @@ export default class Controller extends Component {
                             },
                             styles: {
                                 ...styles.controllerImg,
-                                width: GetSize(295),
-                                height: GetSize(255),
+                                width: GetSize(295 * zoom),
+                                height: GetSize(255 * zoom),
                             },
                         },
                     ],
@@ -441,55 +441,254 @@ export default class Controller extends Component {
         // console.log(this.props.buttonType);
         // console.log("================================================");
         const { buttonArray } = this.state;
-        return buttonArray.map((item1, index1) => {
-            return (
-                <Layout
-                    key={`controllerRow-${index1}`}
-                    style={styles.controllerRow}
-                >
-                    {item1.imgList.map((item2, index2) => {
-                        // console.log(item2);
-                        const renderImg =
-                            Img_arr[
-                                this.props.buttonType
-                                    ? this.props.buttonType
-                                    : "default"
-                            ][`png${item2.index}`];
-                        if (renderImg[0] === 0) {
-                            return (
-                                <View
-                                    key={`controllerBlock-${index2}`}
-                                    style={{ ...item2.blockStyles }}
-                                >
-                                    <Image
-                                        style={{ ...item2.styles }}
-                                        source={renderImg[1]}
-                                    ></Image>
-                                </View>
-                            );
-                        } else {
-                            return (
-                                <View
-                                    key={`controllerBlock-${index2}`}
-                                    style={{ ...item2.blockStyles }}
-                                >
-                                    <TouchableOpacity
-                                        onPress={() => {
-                                            this.handlePress(index1, index2);
-                                        }}
-                                    >
-                                        <Image
-                                            style={{ ...item2.styles }}
-                                            source={renderImg[1]}
-                                        ></Image>
-                                    </TouchableOpacity>
-                                </View>
-                            );
-                        }
-                    })}
+        const renderList = [
+            buttonArray[0].imgList[1],
+            buttonArray[1].imgList[1],
+            buttonArray[1].imgList[2],
+            buttonArray[1].imgList[3],
+            buttonArray[2].imgList[1],
+            buttonArray[0].imgList[0],
+            buttonArray[0].imgList[2],
+            buttonArray[1].imgList[0],
+            buttonArray[2].imgList[0],
+            buttonArray[2].imgList[2],
+        ];
+        console.log("renderTest====================================");
+        console.log(renderList);
+        console.log(PixelRatio.get());
+        console.log("====================================");
+        return (
+            <Layout style={styles.controllerBox}>
+                <Layout style={styles.controllerRow}>
+                    <View style={{ ...renderList[5].blockStyles }}>
+                        <Image
+                            source={
+                                Img_arr[
+                                    this.props.buttonType
+                                        ? this.props.buttonType
+                                        : "default"
+                                ][`png${renderList[5].index}`][1]
+                            }
+                            style={{ ...renderList[5].styles }}
+                        />
+                    </View>
+                    <View style={{ ...renderList[6].blockStyles }}>
+                        <Image
+                            source={
+                                Img_arr[
+                                    this.props.buttonType
+                                        ? this.props.buttonType
+                                        : "default"
+                                ][`png${renderList[6].index}`][1]
+                            }
+                            style={{ ...renderList[6].styles }}
+                        />
+                    </View>
                 </Layout>
-            );
-        });
+                <Layout
+                    style={{
+                        ...styles.controllerRow,
+                        flex: 25,
+                        flexDirection: "column",
+                    }}
+                >
+                    <Layout style={styles.controllerRow}>
+                        <View style={{ ...renderList[0].blockStyles }}></View>
+                        <View
+                            style={{
+                                ...renderList[0].blockStyles,
+                                flex: 6,
+                                flexDirection: "row",
+                            }}
+                        >
+                            <View
+                                style={{ ...renderList[0].blockStyles }}
+                            ></View>
+                            <View style={{ ...renderList[0].blockStyles }}>
+                                <Image
+                                    source={
+                                        Img_arr[
+                                            this.props.buttonType
+                                                ? this.props.buttonType
+                                                : "default"
+                                        ][`png${renderList[0].index}`][1]
+                                    }
+                                    style={{ ...renderList[0].styles }}
+                                />
+                            </View>
+                            <View
+                                style={{ ...renderList[0].blockStyles }}
+                            ></View>
+                        </View>
+                        <View style={{ ...renderList[0].blockStyles }}></View>
+                    </Layout>
+                    <Layout style={styles.controllerRow}>
+                        <View style={{ ...renderList[7].blockStyles }}>
+                            <Image
+                                source={
+                                    Img_arr[
+                                        this.props.buttonType
+                                            ? this.props.buttonType
+                                            : "default"
+                                    ][`png${renderList[7].index}`][1]
+                                }
+                                style={{ ...renderList[7].styles }}
+                            />
+                        </View>
+                        <View
+                            style={{
+                                ...renderList[0].blockStyles,
+                                flex: 6,
+                                flexDirection: "row",
+                            }}
+                        >
+                            <View style={{ ...renderList[1].blockStyles }}>
+                                <Image
+                                    source={
+                                        Img_arr[
+                                            this.props.buttonType
+                                                ? this.props.buttonType
+                                                : "default"
+                                        ][`png${renderList[1].index}`][1]
+                                    }
+                                    style={{ ...renderList[1].styles }}
+                                />
+                            </View>
+                            <View style={{ ...renderList[2].blockStyles }}>
+                                <Image
+                                    source={
+                                        Img_arr[
+                                            this.props.buttonType
+                                                ? this.props.buttonType
+                                                : "default"
+                                        ][`png${renderList[2].index}`][1]
+                                    }
+                                    style={{ ...renderList[2].styles }}
+                                />
+                            </View>
+                            <View style={{ ...renderList[3].blockStyles }}>
+                                <Image
+                                    source={
+                                        Img_arr[
+                                            this.props.buttonType
+                                                ? this.props.buttonType
+                                                : "default"
+                                        ][`png${renderList[3].index}`][1]
+                                    }
+                                    style={{ ...renderList[3].styles }}
+                                />
+                            </View>
+                        </View>
+                        <View style={{ ...renderList[0].blockStyles }}></View>
+                    </Layout>
+                    <Layout style={styles.controllerRow}>
+                        <View style={{ ...renderList[0].blockStyles }}></View>
+                        <View
+                            style={{
+                                ...renderList[0].blockStyles,
+                                flex: 6,
+                                flexDirection: "row",
+                            }}
+                        >
+                            <View
+                                style={{ ...renderList[4].blockStyles }}
+                            ></View>
+                            <View style={{ ...renderList[4].blockStyles }}>
+                                <Image
+                                    source={
+                                        Img_arr[
+                                            this.props.buttonType
+                                                ? this.props.buttonType
+                                                : "default"
+                                        ][`png${renderList[4].index}`][1]
+                                    }
+                                    style={{ ...renderList[4].styles }}
+                                />
+                            </View>
+                            <View
+                                style={{ ...renderList[4].blockStyles }}
+                            ></View>
+                        </View>
+                        <View style={{ ...renderList[0].blockStyles }}></View>
+                    </Layout>
+                </Layout>
+                <Layout style={styles.controllerRow}>
+                    <View style={{ ...renderList[8].blockStyles }}>
+                        <Image
+                            source={
+                                Img_arr[
+                                    this.props.buttonType
+                                        ? this.props.buttonType
+                                        : "default"
+                                ][`png${renderList[8].index}`][1]
+                            }
+                            style={{ ...renderList[8].styles }}
+                        />
+                    </View>
+                    <View style={{ ...renderList[9].blockStyles }}>
+                        <Image
+                            source={
+                                Img_arr[
+                                    this.props.buttonType
+                                        ? this.props.buttonType
+                                        : "default"
+                                ][`png${renderList[9].index}`][1]
+                            }
+                            style={{ ...renderList[9].styles }}
+                        />
+                    </View>
+                </Layout>
+            </Layout>
+        );
+        // return buttonArray.map((item1, index1) => {
+        //     return (
+        //         <Layout
+        //             key={`controllerRow-${index1}`}
+        //             style={styles.controllerRow}
+        //         >
+        //             {item1.imgList.map((item2, index2) => {
+        //                 // console.log(item2);
+        //                 const renderImg =
+        //                     Img_arr[
+        //                         this.props.buttonType
+        //                             ? this.props.buttonType
+        //                             : "default"
+        //                     ][`png${item2.index}`];
+        //                 if (renderImg[0] === 0) {
+        //                     return (
+        //                         <View
+        //                             key={`controllerBlock-${index2}`}
+        //                             style={{ ...item2.blockStyles }}
+        //                         >
+        //                             <Image
+        //                                 style={{ ...item2.styles }}
+        //                                 source={renderImg[1]}
+        //                             ></Image>
+        //                         </View>
+        //                     );
+        //                 } else {
+        //                     return (
+        //                         <View
+        //                             key={`controllerBlock-${index2}`}
+        //                             style={{ ...item2.blockStyles }}
+        //                         >
+        //                             <TouchableOpacity
+        //                                 onPress={() => {
+        //                                     this.handlePress(index1, index2);
+        //                                 }}
+        //                             >
+        //                                 <Image
+        //                                     style={{ ...item2.styles }}
+        //                                     source={renderImg[1]}
+        //                                 ></Image>
+        //                             </TouchableOpacity>
+        //                         </View>
+        //                     );
+        //                 }
+        //             })}
+        //         </Layout>
+        //     );
+        // });
     };
     render() {
         return (
