@@ -251,15 +251,15 @@ class PackagesPage extends React.Component {
                             this.showPackage(imgUrl,id,type,'PHONE');
                             WaitLoading.show('请求资源中',-1);                                      
                         }}
-                        style={{
-                            //borderWidth: 0.5,
-                            paddingTop: 10,
-                            paddingLeft: 10,
-                            paddingRight: 10,
-                            paddingBottom: 10,
-                            borderBottomWidth:0.1, //下边框
-                            backgroundColor: '#fff',
-                        }}
+                        // style={{
+                        //     //borderWidth: 0.5,
+                        //     paddingTop: 5,
+                        //     paddingLeft: 10,
+                        //     paddingRight: 10,
+                        //     paddingBottom: 5,
+                        //     // borderBottomWidth:0.5, //下边框
+                        //     // backgroundColor: '#fff',
+                        // }}
                     >
                         <View style={styles.ViewCard}>
                             <View style={styles.ViewLeft}>
@@ -278,13 +278,25 @@ class PackagesPage extends React.Component {
                                     <Text style={{height: 10}}></Text>
                                 </View>
                                 <View style={styles.textView}>
+                                    <View
+                                        style={{
+                                            width: '75%',
+                                        }}
+                                    >
                                         <Text style={styles.names}
-                                              numberOfLines={1}
-                                              ellipsizeMode={"tail"}
+                                                numberOfLines={1}
+                                                ellipsizeMode={"tail"}
                                         >
                                             {names}
                                         </Text>
+                                    </View>
+                                    <View
+                                        style={{
+                                            width: '25%'
+                                        }}
+                                    >
                                         <Text style={styles.time}>{time}</Text>
+                                    </View>
                                 </View>
                             </View>
                         </View>             
@@ -367,6 +379,7 @@ class PackagesPage extends React.Component {
                             height: 30,
                             alignItems: "center",
                             justifyContent: "flex-start",
+                            marginBottom: 15,
                         }}
                     >
                         <Text
@@ -430,16 +443,19 @@ const styles = StyleSheet.create({
         height: 24,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 10,
+        marginBottom: 20,
     },
     img: {
-        height: "90%",
-        width: "90%",
+        height: "95%",
+        width: "95%",
         resizeMode: "contain",
+        // height: 75,
+        // width: 75,
     },
     ViewCard: {
         flexDirection: 'row',
         backgroundColor: '#fff',
+        padding: 5,
         //height: screenHeight*0.1,
     },
     ViewLeft: {
@@ -447,31 +463,33 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '100%',
         width: '20%',
-        padding: 0,
+        backgroundColor: '#fff'
     },
     ViewRight: {
         //alignItems: 'flex-start',
         flexDirection: 'column',
         height: '100%',
-        width: '80%',
-        padding: 10,
+        width: '82%',
+        padding: 5,
+        backgroundColor: '#fff'
     },
     titleView: {
         flexDirection: 'row',
+        width: '100%'
         //height:screenHeight*0.05,
         // height: '50%',
         // width: '100%',
-        
     },
     title: {
         //color: 'black',
         fontSize: 20,
         fontWeight: "900",
-        width: screenWidth*0.8,
+        width: '100%',
         paddingEnd: 10,
     },
     textView: {
         flexDirection: 'row',
+        width: '100%'
         // height: '50%',
         // width: '100%',
         //paddingTop: 10,
@@ -484,7 +502,7 @@ const styles = StyleSheet.create({
     time: {
         fontSize: 18,
         fontWeight: "500",
-        paddingLeft: screenWidth * 0.5,
-        position: "absolute",
+        // paddingLeft: screenWidth * 0.5,
+        // position: "absolute",
     },
 });
