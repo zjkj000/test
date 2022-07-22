@@ -280,13 +280,15 @@ class HomeComponent extends Component {
                         setInfoButtonType={this.setInfoButtonType}
                     />
                 </Layout>
-                <Controller
-                    {...this.state.event}
-                    ipAddress={ipAddress}
-                    actionType={this.state.actionType}
-                    userName={userName}
-                    buttonType={this.state.buttonType}
-                />
+                <Layout style={styles.controllerContainer}>
+                    <Controller
+                        {...this.state.event}
+                        ipAddress={ipAddress}
+                        actionType={this.state.actionType}
+                        userName={userName}
+                        buttonType={this.state.buttonType}
+                    />
+                </Layout>
                 <Layout style={styles.bottomContainer}>
                     <TouchableOpacity
                         onPress={() => {
