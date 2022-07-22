@@ -230,12 +230,7 @@ public class HttpActivity extends AnswerActivity {
 //                System.out.println("messagelist==>"+messagelist);
                 JSONArray messages=jsonObject.getJSONArray("list");
                 System.out.println("length:"+messages.length());
-                if(messages.length()==0){
-                    LaunchActivity.refreshChatFlag = 0;
-                }
-                else {
-                    LaunchActivity.refreshChatFlag = 1;
-                }
+
                 //AnswerActivity.messageList=new ArrayList<>();
                 //messageList = new LinkedList<>();
 
@@ -262,6 +257,15 @@ public class HttpActivity extends AnswerActivity {
                     //}
                 }
                 System.out.println("mlist:"+AnswerActivity.messageList.size());
+
+                if(LaunchActivity.mlist_size!=AnswerActivity.messageList.size()){
+                    LaunchActivity.refreshChatFlag = 1;
+                    LaunchActivity.mlist_size=AnswerActivity.messageList.size();
+                }
+                else {
+                    LaunchActivity.refreshChatFlag = 0;
+                }
+                System.out.println("refreshChatFlag:"+LaunchActivity.refreshChatFlag);
 
             }catch (JSONException e) {
                 e.printStackTrace();
@@ -513,6 +517,10 @@ public class HttpActivity extends AnswerActivity {
 
                         String data = jsonObject.getString("success");
                         System.out.println("success==>"+data);
+                        AnswerActivity.chatStatus = jsonObject.getString("status");
+                        System.out.println("chatStatus==>"+AnswerActivity.chatStatus);
+                        AnswerActivity.chatMessage = jsonObject.getString("message");
+                        System.out.println("chatMessage==>"+chatMessage);
                         //JSONObject sec = new JSONObject(data);
                     }catch (JSONException e) {
                         e.printStackTrace();
@@ -812,7 +820,7 @@ public class HttpActivity extends AnswerActivity {
                     // The URL-encoded contend
                     // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致
                     baseCode = URLEncoder.encode(baseCode,"utf-8");
-                    String content = "learnPlanId=1111&userId=mingming&baseCode="+baseCode;
+                    String content = "questionId="+questionId+ "&userId="+ mUserId + "&roomId=" + mRoomId + "&baseCode="+baseCode;
                     // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
                     out.writeBytes(content);
                     out.flush();

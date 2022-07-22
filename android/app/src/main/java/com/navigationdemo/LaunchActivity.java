@@ -113,6 +113,13 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     public static TXCloudVideoView                mStudent_5;
     public static TXCloudVideoView                mStudent_6;
     public static HashMap<Integer,TXCloudVideoView>       stu_map;
+    public static ConstraintLayout                mStudent_1_div;
+    public static ConstraintLayout                mStudent_2_div;
+    public static ConstraintLayout                mStudent_3_div;
+    public static ConstraintLayout                mStudent_4_div;
+    public static ConstraintLayout                mStudent_5_div;
+    public static ConstraintLayout                mStudent_6_div;
+    public static HashMap<Integer,ConstraintLayout>       stu_map_div;
     public static int                             stu_index;
     public static ScrollView                      mstroll;
 
@@ -185,6 +192,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     //聊天
     public static RecyclerView recyclerView;
     public static int refreshChatFlag=1;
+    public static int mlist_size = 0;
 
     public static TRTCCloudDef.TRTCParams trtcParams = new TRTCCloudDef.TRTCParams();
     public static TRTCCloudDef.TRTCRenderParams trtcRenderParams = new TRTCCloudDef.TRTCRenderParams();
@@ -206,24 +214,17 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         handler = new Handler();
         AnswerActivity.messageList=new ArrayList<>();
 
+        //checkPermission();
         if (checkPermission()) {
             initView();
-            initViewBottomButton();
-            initViewAnswer();
-            initChatRoom();
-            enterRoom();
+
         }
+        initViewBottomButton();
+        initViewAnswer();
+        initChatRoom();
+        enterRoom();
 
-        //先进房间，才能进行举手请�?
-        HttpActivity.testJoinOrLeaveRoom("join");
 
-        //按时间间隔捕获教师端消息
-        HttpActivity.timer();
-
-        //按时间间隔刷新原生ui界面
-        getter();
-        //先固定一下聊天室信息内容
-        //getchatroom();
     }
 
     public void getter() {
@@ -245,12 +246,18 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     Runnable runnableUi = new Runnable() {
         @Override
         public void run(){
-            //更新上下讲台逻辑
-            getview();
-            //更新互动答题界面
-            getteacher();
-            //更新聊天室界�?
-            getchatroom();
+            try{
+                //更新上下讲台逻辑
+                getview();
+                //更新互动答题界面
+                getteacher();
+                //更新聊天室界�?
+                getchatroom();
+            }
+            catch(NullPointerException e){
+                System.out.println("item null");
+            }
+
         }
 
     };
@@ -262,7 +269,9 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 mButtonHand.setSelected(false);
             }
             else{
+
                 mButtonHand.setEnabled(true);
+
                 //mButtonHand.setSelected(false);
             }
         }
@@ -389,11 +398,15 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                         ||AnswerActivity.questionAction.equals("stopAnswerSuiji")
                         ||AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
                     current_answer = null;
+
                     LaunchActivity.group_tfanswer.setVisibility(GONE);
                     LaunchActivity.group_singleanswer.setVisibility(GONE);
                     LaunchActivity.group_multianswer.setVisibility(GONE);
                     LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
 
+                    subjective_answer.setText("");
+                    subjective_echo.setText("");
+                    subjective_scroll.setVisibility(GONE);
 
                     mQiangda.setSelected(false);
                     BottomButtonActivity.qiangDa();
@@ -511,24 +524,20 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             System.out.println("messagelist is null!");
             return;
         }
-//        if(LaunchActivity.refreshChatFlag == 0){
-//            System.out.println("LaunchActivity.refreshChatFlag is 0!");
-//            return;
-//        }
+        if(LaunchActivity.refreshChatFlag == 0){
+            System.out.println("LaunchActivity.refreshChatFlag is 0!");
+            return;
+        }
         System.out.print("xuanran size:");
         System.out.println(AnswerActivity.messageList.size());
-//        if(last_actiontime_chat.compareTo(AnswerActivity.chatTime)<0){
-//            last_actiontime_chat=AnswerActivity.chatTime;
-//            return;
-//        }
-//        //1、设置布局管理�?
+
+        //1、设置布局管理�?
 //        recyclerView.setLayoutManager(new LinearLayoutManager(this));
         //2、设置adapter
         recyclerView.setAdapter(new ChatAdapter(this, AnswerActivity.messageList));
         //3、设置默认动�?
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.scrollToPosition(AnswerActivity.messageList.size()-1);
-
     }
 
 
@@ -620,6 +629,21 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         stu_map.put(3,mStudent_4);
         stu_map.put(4,mStudent_5);
         stu_map.put(5,mStudent_6);
+
+        mStudent_1_div = findViewById(R.id.student_1_div);
+        mStudent_2_div = findViewById(R.id.student_2_div);
+        mStudent_3_div = findViewById(R.id.student_3_div);
+        mStudent_4_div = findViewById(R.id.student_4_div);
+        mStudent_5_div = findViewById(R.id.student_5_div);
+        mStudent_6_div = findViewById(R.id.student_6_div);
+
+        stu_map_div = new HashMap<>();
+        stu_map_div.put(0,mStudent_1_div);
+        stu_map_div.put(1,mStudent_2_div);
+        stu_map_div.put(2,mStudent_3_div);
+        stu_map_div.put(3,mStudent_4_div);
+        stu_map_div.put(4,mStudent_5_div);
+        stu_map_div.put(5,mStudent_6_div);
 
         stu_name_map = new HashMap<>();
         stu_name_map.put(0,mStudent_1_name);
@@ -928,6 +952,18 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 //            mTRTCCloud.stopLocalPreview();
 //            mTRTCCloud.stopLocalAudio();
 //        }
+
+        //先进房间，才能进行举手请�?
+        HttpActivity.testJoinOrLeaveRoom("join");
+
+        //按时间间隔捕获教师端消息
+        HttpActivity.timer();
+
+        //按时间间隔刷新原生ui界面
+        getter();
+        //先固定一下聊天室信息内容
+        //getchatroom();
+
     }
 
     @Override
@@ -1039,7 +1075,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
         //点击教师分享流隐藏顶部底部按�?
         else if(id == R.id.teacher_share){
-            BottomButtonActivity.touchTeachershare();
+            //BottomButtonActivity.touchTeachershare();
         }
 
         //判断
@@ -1051,17 +1087,17 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 System.out.println("判断选中了：" + checkedValues);
                 HttpActivity.stuSaveAnswer(checkedValues);
 
-                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
-                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
-                    current_answer = null;
-                    LaunchActivity.group_tfanswer.setVisibility(GONE);
-                    LaunchActivity.group_singleanswer.setVisibility(GONE);
-                    LaunchActivity.group_multianswer.setVisibility(GONE);
-                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
-
-                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
-                    System.out.println("answer over");
-                }
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
                 return;
             }
             System.out.println("this box:"+id);
@@ -1081,17 +1117,17 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 System.out.println("单选选中了：" + checkedValues+"id:"+HttpActivity.questionId);
                 HttpActivity.stuSaveAnswer(checkedValues);
 
-                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
-                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
-                    current_answer = null;
-                    LaunchActivity.group_tfanswer.setVisibility(GONE);
-                    LaunchActivity.group_singleanswer.setVisibility(GONE);
-                    LaunchActivity.group_multianswer.setVisibility(GONE);
-                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
-
-                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
-                    System.out.println("answer over");
-                }
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
                 return;
             }
             CheckBox thisbox =findViewById(id);
@@ -1109,17 +1145,17 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 System.out.println("多选选中�?:"+checkedValues);
                 HttpActivity.stuSaveAnswer(checkedValues);
 
-                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
-                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
-                    current_answer = null;
-                    LaunchActivity.group_tfanswer.setVisibility(GONE);
-                    LaunchActivity.group_singleanswer.setVisibility(GONE);
-                    LaunchActivity.group_multianswer.setVisibility(GONE);
-                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
-
-                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
-                    System.out.println("answer over");
-                }
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
                 return;
             }
             CheckBox thisbox =findViewById(id);
@@ -1153,26 +1189,26 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             else{
                 for(int i=0;i<base64_index;i++){
                     System.out.println("base64 i:"+i+" "+base64id_url.get(i));
-                    editoneValue = editoneValue.replace("'"+i+"'","'"+base64id_url.get(i)+"'");
+                    editoneValue = editoneValue.replace("'"+i+"'","< img src=\""+base64id_url.get(i)+"\">");
                 }
                 System.out.println("editoneValue i:"+editoneValue);
                 HttpActivity.stuSaveAnswer(editoneValue);
 
-                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
-                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
-                    current_answer = null;
-                    LaunchActivity.group_tfanswer.setVisibility(GONE);
-                    LaunchActivity.group_singleanswer.setVisibility(GONE);
-                    LaunchActivity.group_multianswer.setVisibility(GONE);
-                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
-
-                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
-                    System.out.println("answer over");
-                }
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    //LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    //LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
 
                 subjective_answer.setText("");
                 subjective_echo.setText("");
-                subjective_scroll.setVisibility(GONE);
+                //subjective_scroll.setVisibility(GONE);
 
                 base64_index=0;
                 base64id_url=new HashMap<>();
@@ -1274,6 +1310,20 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             }
             else{
                 HttpActivity.saveChatRoomMessage(editoneValue);
+                //mMessageInput.setText("");
+            }
+            if(AnswerActivity.chatStatus.equals("1")){
+                mMessageInput.setEnabled(false);
+                mMessageInput.setText(AnswerActivity.chatMessage);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        mMessageInput.setEnabled(true);
+                        mMessageInput.setText("");
+                    }
+                }, 1000);
+            }
+            else{
                 mMessageInput.setText("");
             }
         }
@@ -1317,11 +1367,12 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             System.out.println("onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
             int index = mRemoteUidList.indexOf(userId);
             System.out.println("onUserVideoAvailable:"+userId);
-            if (userId.equals(mTeacherId+"_camera")&&!available){
-                System.out.println("mingming_camera exit room");
-                exitRoom();
-                teacher_enable=false;
-            }
+//            if (userId.equals(mTeacherId+"_camera")&&!available){
+//                System.out.println("mingming_camera exit room");
+//                exitRoom();
+//                teacher_enable=false;
+//                return;
+//            }
             if (available) {
                 if (index != -1) {
                     return;
@@ -1337,6 +1388,24 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             }
             for(int i =0;i<mRemoteUidList.size();i++){
                 System.out.println(mRemoteUidList.get(i)+" : "+mRemoteViewList.get(i));
+            }
+
+        }
+
+        @Override
+        public void onRemoteUserEnterRoom(String userId){
+            System.out.println("onRemoteUserEnterRoom userId " + userId );
+
+        }
+
+        @Override
+        public void onRemoteUserLeaveRoom(String userId, int reason){
+            System.out.println("onRemoteUserLeaveRoom userId " + userId );
+            if (userId.equals(mTeacherId+"_camera")){
+                System.out.println("mingming_camera exit room");
+                exitRoom();
+                teacher_enable=false;
+                return;
             }
 
         }
@@ -1407,11 +1476,10 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
         public static void refreshRemoteVideoViews() {
             System.out.println("refreshRemoteVideoViews:"+AnswerActivity.platformUserId);
-
+            mTeacherCamera_name.bringToFront();
 
             String[] ids = null;
-            mCamera_name.setText(mUserCn);
-            mCamera_name.bringToFront();
+
             int flagp = 0;
             if(HttpActivity.platformUserId!=null){
                 ids = AnswerActivity.platformUserId.split(",");
@@ -1427,8 +1495,12 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                 }
                 if(flagp==0){
                     mPlatform.setVisibility(View.GONE);
-                    mButtonHandOnPlatform.setVisibility(View.GONE);
-                    mButtonHand.setSelected(true);
+                    if(mButtonHandOnPlatform!=null){
+                        mButtonHandOnPlatform.setVisibility(View.GONE);
+                    }
+                    if(mButtonHand!=null){
+                        mButtonHand.setSelected(true);
+                    }
                     BottomButtonActivity.muteHand();
                 }
                 else{
@@ -1439,6 +1511,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                     HttpActivity.testRaiseHandAction("down");//放手下讲
                     mButtonHandOnPlatform.bringToFront();
                     mButtonHandOnPlatform.setVisibility(View.VISIBLE);
+
                 }
             }
 
@@ -1482,9 +1555,14 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                                 }
                             }
                         }
+                        //该名学生在讲台上
                         if(flag==1){
+                            ConstraintLayout view_temp = stu_map_div.get(stu_index);
+                            view_temp.setVisibility(View.VISIBLE);
+
                             TXCloudVideoView temp =stu_map.get(stu_index);
                             temp.setVisibility(View.VISIBLE);
+
                             TextView temp_name = stu_name_map.get(stu_index);
                             //temp_name.setText(mRemoteUidList.get(i));
                             temp_name.setText(id_name_map.get(remoteUid));
@@ -1493,11 +1571,15 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                             mTRTCCloud.startRemoteView(remoteUid, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SMALL,temp);
                             mTRTCCloud.muteRemoteAudio(remoteUid,false);
                         }
+                        //该名学生不在讲台上
                         else{
+                            ConstraintLayout view_temp = stu_map_div.get(stu_index);
+                            view_temp.setVisibility(View.GONE);
+
                             TXCloudVideoView temp =stu_map.get(stu_index);
                             temp.setVisibility(View.GONE);
                             TextView temp_name = stu_name_map.get(stu_index);
-                            temp_name.setText(" ");
+                            //temp_name.setText(" ");
                             System.out.println("mRemoteUidList is on----"+ i + "-------"+ mRemoteUidList.get(i));
                             mTRTCCloud.stopRemoteView(remoteUid,TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SMALL);
                             mTRTCCloud.muteRemoteAudio(remoteUid,true);
@@ -1505,16 +1587,12 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
 
 
                     }
-
-                    //System.out.println("aaaaaaaaaaaaaa"+remoteUid);
                 } else {
                     mRemoteViewList.get(i).setVisibility(GONE);
-                    mTeacherCamera_name.bringToFront();
-
-
                 }
+                mTeacherCamera_name.bringToFront();
             }
-
+            mTeacherCamera_name.bringToFront();
 
 
 

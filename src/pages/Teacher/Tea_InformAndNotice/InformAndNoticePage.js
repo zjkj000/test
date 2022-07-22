@@ -213,35 +213,44 @@ class InformAndNoticePage extends React.Component {
 
     render() {
         return (
-            <View style={{backgroundColor:'#fff'}}>
+            <View style={{backgroundColor:'#fff' , height: screenHeight - 50}}>
                 <View style={styles.header}>
-                    <Flex style={styles.flexNew}>
-                        <Flex style={{ width: screenWidth * 0.12 }}>
-                            {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
-                            <TouchableOpacity style={styles.filterView}>
-                                {this.showFilter()}
-                            </TouchableOpacity>
-                        </Flex>
-                        <View style={styles.searchView}>
-                            <SearchBar
-                                style={styles.searchBar}
-                                value={{SearchText}}
-                                placeholder="请输入您想搜索的内容"
-                                ref={(ref) => (this.searchText = ref)}
-                                onCancel={this.onSearch}
-                                onChange={this.onChange}
-                                onBlur={this.onBlur}
-                                cancelText="搜索"
-                                showCancelButton
-                            />
-                        </View>
-                        <Flex style={{ width: screenWidth * 0.12 }}>
-                            {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
-                            <TouchableOpacity style={styles.filterView}>
-                                {this.showCreate()}
-                            </TouchableOpacity>
-                        </Flex>
-                    </Flex>
+                    <View style={{ width: screenWidth * 0.125 }}>
+                        {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
+                        <TouchableOpacity 
+                            style={{
+                                ...styles.filterView,
+                                // backgroundColor:'pink',
+                                marginLeft: screenWidth * 0.03,
+                            }}
+                        >
+                            {this.showFilter()}
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.searchView}>
+                        <SearchBar
+                            style={styles.searchBar}
+                            value={{ SearchText }}
+                            placeholder="请输入您想搜索的内容"
+                            ref={(ref) => (this.searchText = ref)}
+                            onCancel={this.onSearch}
+                            onChange={this.onChange}
+                            onBlur={this.onBlur}
+                            cancelText="搜索"
+                            showCancelButton
+                        />
+                    </View>
+                    <View style={{ width: screenWidth * 0.125 }}>
+                        {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
+                        <TouchableOpacity style={{
+                            ...styles.filterView,
+                            right: screenWidth * 0.03,
+                            position: 'absolute',
+                            // backgroundColor:'pink'
+                        }}>
+                            {this.showCreate()}
+                        </TouchableOpacity>
+                    </View>
                 </View>
                 <View style={styles.todoList}>
                     <Inform_NoticeListContainer 
@@ -262,32 +271,68 @@ class InformAndNoticePage extends React.Component {
 
 const styles = StyleSheet.create({
     header: {
-        height: screenHeight * 0.1,
+        height: 55,
         backgroundColor: "#4DC7F8",
+        flexDirection: 'row',
     },
     todoList: {
-        height: screenHeight * 0.8,
-        backgroundColor: '#fff'
+        height: screenHeight - 105,
+        // height: '94%',
+        backgroundColor: "#fff",
     },
     flexNew: {
         paddingTop: screenHeight * 0.02,
         paddingLeft: screenWidth * 0.03,
     },
     filterView: {
-        paddingLeft: screenWidth * 0.03,
+        height: '100%',
+        paddingTop: 15,
+        width: 25,
     },
     searchView: {
-        width: screenWidth * 0.7,
+        width: screenWidth * 0.75,
         opacity: 1,
+        height: 55,
+        paddingTop: 5,
+        backgroundColor: '#4DC7F8'
     },
     searchBar: {
-        backgroundColor: "white",
+        backgroundColor: "#fff",
         borderRadius: 40,
         borderWidth: 0,
         fontSize: 15,
         paddingLeft: 30,
+        height: 38
     },
     backdrop: {
-        //backgroundColor: "purple",
+        // backgroundColor: "purple",
+    },
+    modalView: {
+        marginTop: 50, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
+        flexDirection: 'column', 
+        backgroundColor: '#fff' , 
+        right: 20 , 
+        borderRadius: 6,
+        borderWidth: 1, 
+        borderColor: '#DCDCDC' ,
+        height: 455,
+        width: screenWidth*0.35,
+        position: 'absolute',
+        //justifyContent: "center",
+        //alignItems: "center",
+    },
+    modalView1: {
+        marginTop: 50, //model覆盖框组件不会覆盖路由标题,但是点击顶部的路由返回箭头按钮没反应（组件覆盖）（modal组件visible为true）
+        flexDirection: 'column', 
+        backgroundColor: '#fff' , 
+        right: 20 , 
+        borderRadius: 6,
+        borderWidth: 1, 
+        borderColor: '#DCDCDC' ,
+        height: 412,
+        width: screenWidth*0.35,
+        position: 'absolute',
+        //justifyContent: "center",
+        //alignItems: "center",
     },
 });

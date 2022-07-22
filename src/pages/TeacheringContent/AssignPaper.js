@@ -160,7 +160,7 @@ class AssignPaper extends Component {
                     <View 
                         style={this.state.classFlag == false ?
                             {width: screenWidth*0.4,  height: 35, marginTop: 10, marginLeft: 20, backgroundColor: '#DCDCDC'}
-                            : {width: screenWidth*0.4,  height: 35, marginTop: 10, marginLeft: 20, backgroundColor: '#fff', borderWidth: 1, borderColor: 'red'}
+                            : {width: screenWidth*0.4,  height: 35, marginTop: 10, marginLeft: 20, backgroundColor: '#fff', borderWidth: 4, borderColor: 'red'}
                         }
                     >
                         <Text 

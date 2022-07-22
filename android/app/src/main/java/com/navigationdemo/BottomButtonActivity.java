@@ -26,14 +26,17 @@ public class BottomButtonActivity extends LaunchActivity implements View.OnClick
     //举手
     public static void muteHand() {
 
-        boolean isSelected = mButtonHand.isSelected();
-        if (!isSelected) {
-            HttpActivity.testRaiseHandAction("up");//举手上讲台
+        if(mButtonHand!=null){
+            boolean isSelected = mButtonHand.isSelected();
+            if (!isSelected) {
+                HttpActivity.testRaiseHandAction("up");//举手上讲台
+            }
+            else{
+                HttpActivity.testRaiseHandAction("down");//放手下讲台
+            }
+            mButtonHand.setSelected(!isSelected);
         }
-        else{
-            HttpActivity.testRaiseHandAction("down");//放手下讲台
-        }
-        mButtonHand.setSelected(!isSelected);
+
 //        //先判断是否禁止举手
 //        boolean isActivated = mButtonHand.isActivated();
 //        if(!isActivated){
@@ -141,6 +144,8 @@ public class BottomButtonActivity extends LaunchActivity implements View.OnClick
             }
         }
         mButtonMuteVideo.setSelected(!isSelected);
+        mCamera_name.setText(mUserCn);
+        mCamera_name.bringToFront();
     }
 
     //前后摄像头转换

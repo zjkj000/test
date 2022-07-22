@@ -220,11 +220,11 @@ class ContentList extends React.Component {
             return (
                 /**水平滑动horizontal={true} 不显示滑动条showsHorizontalScrollIndicator={false} */
                 <ScrollView horizontal={true} showsHorizontalScrollIndicator={false}>
-                        <View style={{flexDirection: 'row' , backgroundColor: '#fff' , padding: 5}}>
-                            <View style={{flexDirection: 'row',width: 75,height:'100%'}}>
+                        <View style={{flexDirection: 'row' , backgroundColor: '#fff' , padding: 10}}>
+                            <View style={{flexDirection: 'row',width: screenWidth*0.2,height:'100%'}}>
                                 {this.showTaskImg(todoImg)}
                             </View>
-                            <View style={{flexDirection: 'column',width: screenWidth-90,height:'100%'}}>
+                            <View style={{flexDirection: 'column',width: screenWidth*0.8,height:'100%'}}>
                                 <View style={{flexDirection: 'row'}}>
                                     <Text
                                         numberOfLines={1}
@@ -233,28 +233,27 @@ class ContentList extends React.Component {
                                             color: "black",
                                             fontSize: 20,
                                             fontWeight: "900",
-                                            width: '75%'
+                                            width: screenWidth*0.6
                                         }}
                                     >
                                         {todo.name}
                                     </Text>
                                     <Text 
                                         style={{
-                                            // paddingLeft: screenWidth * 0.6,
-                                            // position: "absolute",
+                                            paddingLeft: screenWidth * 0.6,
+                                            position: "absolute",
                                             color: "#DCDCDC",
-                                            width: '25%'
                                         }}
                                     >
                                         {todo.createTime}
                                     </Text>
                                 </View>
-                                <View><Text style={{height:12}}></Text></View>
+                                <View><Text style={{height:10}}></Text></View>
                                 <View style={{flexDirection: 'row'}}>
                                     <Text
                                         numberOfLines={1}
                                         ellipsizeMode={"tail"}
-                                        style={{width: '72%' , fontWeight: "400"}}
+                                        style={{width: screenWidth * 0.48 , fontWeight: "400"}}
                                     >
                                         {todo.knowledge}
                                     </Text>
@@ -307,21 +306,22 @@ class ContentList extends React.Component {
             return(
                 <View  
                     style={{
-                        flexDirection: "row",
-                        width: '25%',
+                        flexDirection: 'row' , 
+                        paddingLeft: screenWidth * 0.50,
+                        position: "absolute",
                     }}
                 >
                     <Image
                         source={require("../../assets/teacherLatestPage/progress.png")}
                         // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
-                        style={{width: 15, height: 15 , marginTop: 3}}
+                        style={{width: 20, height: 20 }}
                     />
                     <Text>{propertyCount}</Text>
-                    <Text style={{width: 10}}></Text>
+                    <Text style={{width: 20}}></Text>
                     <Image
                         source={require("../../assets/teacherLatestPage/resourceSum.png")}
                         // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
-                        style={{width: 15, height: 15 , marginTop: 3}}
+                        style={{width: 20, height: 20 }}
                     />
                     <Text>{resCount}</Text>
                 </View>
@@ -962,7 +962,6 @@ class ContentList extends React.Component {
                             height: 30,
                             alignItems: "center",
                             justifyContent: "flex-start",
-                            marginBottom: 15,
                         }}
                     >
                         <Text
@@ -1020,7 +1019,7 @@ const styles = StyleSheet.create({
         height: 24,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 20,
+        marginBottom: 10,
     },
     longTitle: {
         fontSize: 15,

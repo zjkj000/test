@@ -192,7 +192,7 @@ class TodoList extends React.Component {
     
 
     //显示任务状态的图标
-    showStatusUrl = (todo, todoIndex, statusImg) => {
+    showStatusUrl = (todo, statusUrl, statusImg) => {
         //console.log('showTodo' , todo);
 
         if (todo.type == "通知" || todo.type == "公告") {
@@ -203,9 +203,19 @@ class TodoList extends React.Component {
                 )
             );
         } else if (todo.type == "作业") {
-            return <Image source={statusImg} style={styles.imgStatus} />;
+            return <Image source={statusImg} 
+                style={(statusUrl == '1' || statusUrl == '5') ?
+                    {...styles.imgStatus}
+                    : {width:15,height:15}
+                } 
+            />;
         } else {
-            return <Image source={statusImg} style={styles.imgStatus} />;
+            return <Image source={statusImg} 
+                style={(statusUrl == '1' || statusUrl == '5') ?
+                    {...styles.imgStatus}
+                    : {width:15,height:15}
+                } 
+            />;
         }
     };
 
@@ -512,83 +522,87 @@ class TodoList extends React.Component {
                             borderBottomWidth: 0.1, //下边框
                         }}
                     >
-                        <Flex>
+                        <Flex style={{}}>
                             {/*作业/导学案等图标iconUrl 作业/导学案等type 图标状态statusUrl 小标题bottomTitle 创建者createrName*/}
-                            <Image source={todoImg} style={styles.imgType} />
-                            <Text style={styles.title}>{todoType}</Text>
-                            {this.showStatusUrl(todo, todoIndex, statusImg)}
-                            <View style={{ width: screenWidth * 0.05 }}></View>
-                            <View style={styles.titlePosition}>
-                                <Text
-                                    style={styles.title}
-                                    numberOfLines={1}
-                                    ellipsizeMode={"tail"}
-                                >
-                                    {bottomTitle}
-                                </Text>
+                            <View style={{flexDirection: 'row',width:'80%'}}>
+                                <Image source={todoImg} style={styles.imgType} />
+                                <Text style={styles.title}>{todoType}</Text>
+                                {this.showStatusUrl(todo, statusUrl, statusImg)}
+                                <View style={{ width: screenWidth * 0.05 }}></View>
+                                <View style={styles.titlePosition}>
+                                    <Text
+                                        style={styles.title}
+                                        numberOfLines={1}
+                                        ellipsizeMode={"tail"}
+                                    >
+                                        {bottomTitle}
+                                    </Text>
+                                </View>
                             </View>
-                            {createrName == "直播中" ? (
-                                <View
-                                    style={{
-                                        width: 70,
-                                        height: 23,
-                                        backgroundColor: "#FF6666",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <Text
+                            <View style={{flexDirection: 'row',width:'20%'}}>
+                                {createrName == "直播中" ? (
+                                    <View
                                         style={{
-                                            fontSize: 17,
-                                            fontWeight: "bold",
-                                            color: "white",
+                                            width: 70,
+                                            height: 23,
+                                            backgroundColor: "#FF6666",
+                                            alignItems: "center",
                                         }}
                                     >
-                                        {createrName}
-                                    </Text>
-                                </View>
-                            ) : createrName == "未开始" ? (
-                                <View
-                                    style={{
-                                        width: 70,
-                                        height: 23,
-                                        backgroundColor: "#6600FF",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <Text
+                                        <Text
+                                            style={{
+                                                fontSize: 17,
+                                                fontWeight: "bold",
+                                                color: "white",
+                                            }}
+                                        >
+                                            {createrName}
+                                        </Text>
+                                    </View>
+                                ) : createrName == "未开始" ? (
+                                    <View
                                         style={{
-                                            fontSize: 17,
-                                            fontWeight: "bold",
-                                            color: "white",
+                                            width: 70,
+                                            height: 23,
+                                            backgroundColor: "#6600FF",
+                                            alignItems: "center",
                                         }}
                                     >
-                                        {createrName}
-                                    </Text>
-                                </View>
-                            ) : createrName == "已结束" ? (
-                                <View
-                                    style={{
-                                        width: 70,
-                                        height: 23,
-                                        backgroundColor: "#949599",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <Text
+                                        <Text
+                                            style={{
+                                                fontSize: 17,
+                                                fontWeight: "bold",
+                                                color: "white",
+                                            }}
+                                        >
+                                            {createrName}
+                                        </Text>
+                                    </View>
+                                ) : createrName == "已结束" ? (
+                                    <View
                                         style={{
-                                            fontSize: 17,
-                                            fontWeight: "bold",
-                                            color: "white",
+                                            width: 70,
+                                            height: 23,
+                                            backgroundColor: "#949599",
+                                            alignItems: "center",
                                         }}
                                     >
+                                        <Text
+                                            style={{
+                                                fontSize: 17,
+                                                fontWeight: "bold",
+                                                color: "white",
+                                            }}
+                                        >
+                                            {createrName}
+                                        </Text>
+                                    </View>
+                                ) : (
+                                    <Text style={styles.createrName}>
                                         {createrName}
                                     </Text>
-                                </View>
-                            ) : (
-                                <Text style={styles.createrName}>
-                                    {createrName}
-                                </Text>
-                            )}
+                                )}
+                            </View>
                         </Flex>
                         <Flex>
                             {/*课程名courseName  截止时间timeStop  资源发布时间time*/}
@@ -694,6 +708,7 @@ class TodoList extends React.Component {
                             height: 30,
                             alignItems: "center",
                             justifyContent: "flex-start",
+                            marginBottom: 15,
                         }}
                     >
                         <Text
@@ -754,16 +769,18 @@ const styles = StyleSheet.create({
         backgroundColor: "#F5FCFF",
     },
     imgType: {
-        height: "100%",
-        width: "5%",
-        resizeMode: "contain",
+        // height: "100%",
+        // width: "5%",
+        // resizeMode: "contain",
+        width:21,
+        height:21,
     },
     imgStatus: {
-        height: "80%",
-        width: "5%",
-        // height: 40,
-        // width: 40,
-        resizeMode: "contain",
+        // height: "80%",
+        // width: "5%",
+        // resizeMode: "contain",
+        height: 10,
+        width: 26,
     },
     title: {
         color: "black",
@@ -797,6 +814,6 @@ const styles = StyleSheet.create({
         height: 24,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 10,
+        marginBottom: 20,
     },
 });

@@ -232,81 +232,94 @@ class UpdateContentPage extends React.Component {
         const {selectContentList , updateContentIndex} = this.state;
         if(selectContentList[updateContentIndex].type == 'paper'){
             return(
-                <View style={{padding: 10,height: screenHeight*0.8}}>
+                <View style={styles.contentView}> 
+                    <View style={{alignItems: "center",height:40,top:5}}>
+                        <Text style={{
+                                fontSize: 20,
+                                fontWeight:'600',
+                            }}
+                            numberOfLines={1}
+                            ellipsizeMode={"tail"}
+                        >
+                            {contentList[selectContentIndex].name}
+                        </Text>
+                    </View>
                     <WebView  
                         scalesPageToFit={Platform.OS === 'ios'? true : false}
-                        source={{ uri: selectContentList[updateContentIndex].url }} 
+                        source={{ uri: contentList[selectContentIndex].url }} 
                     />
                 </View>
             );
         }else if(selectContentList[updateContentIndex].type == 'question'){
             return(
-                <ScrollView  showsVerticalScrollIndicator={false}>
-                    {/**题面 */}
-                    <Text style={styles.paperContent}>[题面]</Text>
-                    <View style={{padding: 10}}>
-                        <RenderHtml 
-                            contentWidth={screenWidth} 
-                            source={{html: selectContentList[updateContentIndex].shitiShow}}
-                            tagsStyles={{
-                                img: {
-                                  flexDirection: 'row',
-                                },
-                                p: {
-                                  flexDirection: 'row',
-                                },
-                            }}
-                        ></RenderHtml>
-                    </View>
-                    
-                    <View style={{ height: 1, backgroundColor: "#999999" }} />
+                <View style={styles.contentView}>
+                    <ScrollView  showsVerticalScrollIndicator={false}>
+                        {/**题面 */}
+                        <Text style={styles.paperContent}>[题面]</Text>
+                        <View style={{padding: 10}}>
+                            <RenderHtml 
+                                contentWidth={screenWidth} 
+                                source={{html: selectContentList[updateContentIndex].shitiShow}}
+                                tagsStyles={{
+                                    img: {
+                                    flexDirection: 'row',
+                                    },
+                                    p: {
+                                    flexDirection: 'row',
+                                    },
+                                }}
+                            ></RenderHtml>
+                        </View>
+                        
+                        <View style={{ height: 1, backgroundColor: "#999999" }} />
 
-                    {/**答案 */}
-                    <Text style={styles.paperContent}>[答案]</Text>
-                    <View style={{padding: 10}}>
-                        <RenderHtml 
-                            contentWidth={screenWidth} 
-                            source={{html: selectContentList[updateContentIndex].shitiAnswer}}
-                            tagsStyles={{
-                                img: {
-                                  flexDirection: 'row',
-                                },
-                                p: {
-                                  flexDirection: 'row',
-                                },
-                            }}
-                        ></RenderHtml>
-                    </View>
-                    <View style={{ height: 1, backgroundColor: "#999999" }} />
-                    
-                    {/**解析 */}
-                    <Text style={styles.paperContent}>[解析]</Text>
-                    <View style={{padding: 10}}>
-                        <RenderHtml 
-                            contentWidth={screenWidth} 
-                            source={{html: selectContentList[updateContentIndex].shitiAnalysis}}
-                            tagsStyles={{
-                                img: {
-                                  flexDirection: 'row',
-                                },
-                                p: {
-                                  flexDirection: 'row',
-                                },
-                            }}
-                        ></RenderHtml>
-                    </View>
-                </ScrollView>
+                        {/**答案 */}
+                        <Text style={styles.paperContent}>[答案]</Text>
+                        <View style={{padding: 10}}>
+                            <RenderHtml 
+                                contentWidth={screenWidth} 
+                                source={{html: selectContentList[updateContentIndex].shitiAnswer}}
+                                tagsStyles={{
+                                    img: {
+                                    flexDirection: 'row',
+                                    },
+                                    p: {
+                                    flexDirection: 'row',
+                                    },
+                                }}
+                            ></RenderHtml>
+                        </View>
+                        <View style={{ height: 1, backgroundColor: "#999999" }} />
+                        
+                        {/**解析 */}
+                        <Text style={styles.paperContent}>[解析]</Text>
+                        <View style={{padding: 10}}>
+                            <RenderHtml 
+                                contentWidth={screenWidth} 
+                                source={{html: selectContentList[updateContentIndex].shitiAnalysis}}
+                                tagsStyles={{
+                                    img: {
+                                    flexDirection: 'row',
+                                    },
+                                    p: {
+                                    flexDirection: 'row',
+                                    },
+                                }}
+                            ></RenderHtml>
+                        </View>
+                    </ScrollView>
+                </View>
             );
         }else if(selectContentList[updateContentIndex].type == 'resource'){
             return(
-                <ScrollView  showsVerticalScrollIndicator={false}>
+                <View style={styles.contentView}>
                     {
                         selectContentList[updateContentIndex].format == 'ppt' && this.state.pptList.length <= 0
                             ? this.setState({ pptList: selectContentList[updateContentIndex].pptList })
                             : null
                     }
                     {this.showResourceType(selectContentList[updateContentIndex])}
-                </ScrollView>
+                </View>
             );
         }
     }
@@ -315,20 +328,9 @@ class UpdateContentPage extends React.Component {
     showResourceType = (contentTemp) => {
         if(contentTemp.format == 'word'){
             return(
-                <View style={{padding: 10,height: screenHeight*0.8}}>
-                    <WebView  
-                        scalesPageToFit={Platform.OS === 'ios'? true : false}
-                        source={{ uri: contentTemp.url }} 
-                    />
-                </View>
-            );
-        }else if(contentTemp.format == 'ppt'){
-            const { pptList , selectPptIndex } = this.state;
-            return(
-                <View>
-                    <View style={{alignItems: "center"}}>
+                <View style={{height:'100%'}}>
+                    <View style={{alignItems: "center",height:40,top:5}}>
                         <Text style={{
-                                top: screenHeight*0.05,
                                 fontSize: 20,
                                 fontWeight:'600',
                             }}
@@ -338,13 +340,41 @@ class UpdateContentPage extends React.Component {
                             {contentTemp.name}
                         </Text>
                     </View>
-                    <View style={{alignItems:'center',height:'100%',paddingTop:'15%'}}>
-                        <Image style={{width:'90%',height:250}} source={{uri: pptList[selectPptIndex]}}></Image>
-                        <ScrollView horizontal={true} style={{marginTop:30}}>
-                            {this.getPPT(pptList)}
-                        </ScrollView>
+                    <WebView  
+                        scalesPageToFit={Platform.OS === 'ios'? true : false}
+                        source={{ uri: contentTemp.url }} 
+                    />
+                </View>
+            );
+        }else if(contentTemp.format == 'ppt'){
+            const { pptList , selectPptIndex } = this.state;
+            return(
+                <ScrollView 
+                    showsVerticalScrollIndicator={false}
+                    style={{flexDirection: 'column'}}
+                >
+                    <View style={{alignItems: "center",height:40,top:5}}>
+                        <Text style={{
+                                fontSize: 20,
+                                fontWeight:'600',
+                            }}
+                            numberOfLines={1}
+                            ellipsizeMode={"tail"}
+                        >
+                            {contentTemp.name}
+                        </Text>
                     </View>
-                </View> 
+                    <View style={{alignItems:'center', marginTop: screenHeight*0.1,}}>
+                        <Image style={{width:350,height:280}} source={{uri: pptList[selectPptIndex]}}></Image>
+                    </View>
+                    <ScrollView 
+                        horizontal={true} 
+                        style={{height: 100, marginTop: 30,marginTop: screenHeight*0.1}}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {this.getPPT(pptList)}
+                    </ScrollView>
+                </ScrollView> 
             );
         }else if(contentTemp.format == 'image'){
             return(
@@ -584,14 +614,20 @@ class UpdateContentPage extends React.Component {
     //底部展示区
     showUpdateContentBottom = () => {
         return(
-            <ScrollView 
-                horizontal={true} 
-                showsHorizontalScrollIndicator={false}
-                style={styles.bottomView}
-            >
-                {/**显示底部试题类型图标 */}
-                {this.showLearnCaseTypeImg()}    
-            </ScrollView>
+            <View style={{ 
+                ...styles.bottomView,
+                // backgroundColor: 'pink',
+            }}>
+                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <ScrollView 
+                        horizontal={true} 
+                        showsHorizontalScrollIndicator={false}
+                    >
+                        {/**显示底部试题类型图标 */}
+                        {this.showLearnCaseTypeImg()}    
+                    </ScrollView>
+                </View>
+            </View>
         );
     }
 
@@ -677,36 +713,33 @@ class UpdateContentPage extends React.Component {
     render(){
         console.log('-----update---render--------',this.state.selectContentNum)
         return(
-            <View style={styles.bodyView}>
-                <ScrollView   
-                    showsVerticalScrollIndicator={false}
-                    style={styles.contentView}
-                >
+            <View  style={{ flexDirection: 'column', backgroundColor: '#fff' , flex: 1 }}>
+                <View style={styles.bodyView}>
                     {
                         this.state.selectContentList.length > 0 
-                                ? this.showTitle() 
-                                : <View style={{...styles.bodyView,height:screenHeight}}>
-                                    <View style={styles.paperSelectNumView}>
-                                        <Text style={styles.selectPaperNum}>(已选中{this.state.selectPaperNum})</Text>
-                                    </View>
-                                    <View>
-                                        <Text
-                                            style={{
-                                                fontSize: 18,
-                                                color: 'black',
-                                                paddingTop: 40,
-                                                textAlign: 'center'
-                                            }}
-                                        >正在获取导学案中的内容，请耐心等待</Text>
-                                    </View>
+                            ? this.showTitle() 
+                            : <View style={{...styles.bodyView,height:screenHeight}}>
+                                <View style={styles.paperSelectNumView}>
+                                    <Text style={styles.selectPaperNum}>(已选中{this.state.selectPaperNum})</Text>
                                 </View>
+                                <View>
+                                    <Text
+                                        style={{
+                                            fontSize: 18,
+                                            color: 'black',
+                                            paddingTop: 40,
+                                            textAlign: 'center'
+                                        }}
+                                    >正在获取导学案中的内容，请耐心等待</Text>
+                                </View>
+                            </View>
                     }
                     {
                         this.state.selectContentList.length > 0 
                                 ? this.showContent() 
                                 : null
                     }
-                </ScrollView>
+                </View>
                 {
                     this.state.selectContentList.length > 0 
                             ? this.showUpdateContentBottom() 
@@ -818,20 +851,21 @@ class UpdateContentPage extends React.Component {
 
 const styles = StyleSheet.create({
     bodyView: {
-        height: screenHeight*0.9,
+        height: screenHeight - 220,
         flexDirection: 'column',
     },
     contentView:{
-        height: '90%',
+        height: screenHeight - 220,
         flexDirection: 'column',
+        // backgroundColor: 'red'
     },
     bottomView: {
-        height: screenHeight*0.2,
-        paddingTop: 20,
-        paddingBottom: 20,
+        height: 100,
+        bottom: 1,
+        position: 'absolute',
         backgroundColor: '#fff',       
-   },
-   paperContent: {
+    },
+    paperContent: {
         fontSize: 15,
         color: 'black',
         fontWeight: '500',
@@ -840,13 +874,13 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
     },
     little_image:{
-        height:60,
+        height:screenWidth*0.15,
         width:screenWidth*0.15,
         marginTop: 5,
         marginLeft:3
     },
     checked:{
-        height:65,
+        height:screenWidth*0.16,
         width:screenWidth*0.16,
         marginLeft:5,
         borderColor:'#FFA500',
@@ -863,16 +897,16 @@ const styles = StyleSheet.create({
         color: '#8B8B7A',
         paddingLeft: 20,
         paddingTop: 7,
-        width: 350
+        width: screenWidth * 0.63
     },
     pptlittle_image:{
-        height:50,
-        width:80,
+        height:75,
+        width:95,
         marginLeft:5,
     },
     pptchecked:{
-        height:50,
-        width:80,
+        height:75,
+        width:95,
         marginLeft:5,
         borderColor:'#FFA500',
         borderWidth:2,

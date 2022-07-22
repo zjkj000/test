@@ -676,7 +676,7 @@ class PushOrSaveContentPage extends React.Component {
         const assignList = [];
         if(this.state.className == ''){
             return(
-                <View style={{justifyContent:'center', alignItems: 'center'}}>
+                <View style={{justifyContent:'center', alignItems: 'center',width:'100%'}}>
                     <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>请先选择课堂</Text>
                 </View>
             );
@@ -685,8 +685,8 @@ class PushOrSaveContentPage extends React.Component {
                 return(
                     <View 
                         style={this.state.classFlag == false ?
-                            {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5, backgroundColor: '#DCDCDC',justifyContent:'center'}
-                            : {width: screenWidth*0.4,  height: 40, marginTop: 10,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 1, borderColor: 'red'}
+                            {width: screenWidth*0.4,  height: 40, marginTop: 3,marginLeft:20,borderRadius:5, backgroundColor: '#DCDCDC',justifyContent:'center'}
+                            : {width: screenWidth*0.4,  height: 40, marginTop: 3,marginLeft:20,borderRadius:5,  backgroundColor: '#fff',justifyContent:'center', borderWidth: 2, borderColor: 'red'}
                         }
                     >
                         <Text 
@@ -738,7 +738,7 @@ class PushOrSaveContentPage extends React.Component {
                 return(
                     this.state.groupList.length > 0
                     ? content
-                    : <View style={{justifyContent:'center', alignItems: 'center'}}>
+                    : <View style={{justifyContent:'center', alignItems: 'center',width:'100%'}}>
                         <Text style={{fontSize: 16, color: 'black', fontWeight: '400', paddingTop: 10,}}>
                         您还没有创建小组，可以前往电脑端进行创建</Text>
                     </View>
@@ -821,7 +821,7 @@ class PushOrSaveContentPage extends React.Component {
     //布置或保存导学案页面
     showPushOrSaveContent = () => {
         return(
-            <View  style={{...styles.bodyView,height:'82%'}}>
+            <View  style={{...styles.bodyView, height: screenHeight - 130}}>
                 {/**布置 保存 */}
                 <View style={{...styles.paperSelectNumView,justifyContent: 'space-around'}}>
                     <Text 
@@ -843,7 +843,7 @@ class PushOrSaveContentPage extends React.Component {
                         onPress={()=>{this.saveLearnPlan()}}
                     >保存</Text>
                 </View>
-                <ScrollView style={{height:'100%'}}>
+                <ScrollView>
                     {/**开始时间 */}
 
                     <View style={{flexDirection:'row',padding:15,paddingLeft:20,alignItems:'center',borderBottomWidth:0.5}}>
@@ -930,19 +930,19 @@ class PushOrSaveContentPage extends React.Component {
                     <View style={{flexDirection:'row',height:60,alignItems:'center'}}>
                         <Text style={{fontSize:15,marginRight:40,marginLeft:30}}>布置给:</Text>
                         {/**班级 小组  个人 */}
-                        <TouchableOpacity style={{marginRight:30}} onPress={()=>{this.updateAssign('0');this.setState({SelectKeTangStatus:false})}}>
-                            <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='0'?'#4DC7F8':'#fff'}}>
-                                <Text style={{fontSize:15}}>班级</Text>
+                        <TouchableOpacity style={{ marginRight: 30 }} onPress={() => { this.updateAssign('0'); this.setState({ SelectKeTangStatus: false }) }}>
+                            <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '0' ? '#4DC7F8' : '#fff' }}>
+                                <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '0' ? '#fff' : 'gray' }}>班级</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssign('1');this.setState({SelectKeTangStatus:false})}}>
-                            <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='1'?'#4DC7F8':'#fff'}}>
-                                <Text>小组</Text>
+                        <TouchableOpacity style={{ marginRight: 20 }} onPress={() => { this.updateAssign('1'); this.setState({ SelectKeTangStatus: false }) }}>
+                            <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '1' ? '#4DC7F8' : '#fff' }}>
+                                <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '1' ? '#fff' : 'gray' }}>小组</Text>
                             </View>
                         </TouchableOpacity>
-                        <TouchableOpacity style={{marginRight:20}} onPress={()=>{this.updateAssign('2');this.setState({SelectKeTangStatus:false})}}>
-                            <View style={{height:30,width:screenWidth*0.15,justifyContent:'center',borderRadius:5,alignItems:'center',backgroundColor:this.state.assigntoWho=='2'?'#4DC7F8':'#fff'}}>
-                                <Text>个人</Text>
+                        <TouchableOpacity style={{ marginRight: 20 }} onPress={() => { this.updateAssign('2'); this.setState({ SelectKeTangStatus: false }) }}>
+                            <View style={{ height: 30, width: screenWidth * 0.15, justifyContent: 'center', borderRadius: 5, alignItems: 'center', backgroundColor: this.state.assigntoWho == '2' ? '#4DC7F8' : '#fff' }}>
+                                <Text style={{ fontSize: 15 , color: this.state.assigntoWho == '2' ? '#fff' : 'gray' }}>个人</Text>
                             </View>
                         </TouchableOpacity>
                     </View>
@@ -951,7 +951,7 @@ class PushOrSaveContentPage extends React.Component {
                     {/* <View style={{ paddingLeft: 0, width: screenWidth, height: 1, backgroundColor: "#DCDCDC" }} /> */}
                     {/**布置对象列表 */}
                     <ScrollView>
-                        <View style={{alignItems:'flex-start',marginTop:15,marginBottom:50,flexDirection:'row',flexWrap:'wrap',justifyContent:'center'}}>
+                        <View style={{alignItems:'flex-start',marginTop:5,marginBottom:30,flexDirection:'row',flexWrap:'wrap'}}>
                             {this.showAssignToWho()}
                         </View>
                     </ScrollView>
@@ -966,9 +966,14 @@ class PushOrSaveContentPage extends React.Component {
         return (
             <View
                 style={{
-                    flexDirection: "row",
-                    justifyContent: "space-around",
-                    backgroundColor: "#fff",
+                    height: 50,
+                    width: screenWidth,
+                    bottom: 10,
+                    position: 'absolute',
+                    flexDirection: 'row', 
+                    alignItems: 'center',
+                    justifyContent: 'space-around', 
+                    backgroundColor: '#fff' 
                 }}
             >
                 <Button
@@ -1047,9 +1052,11 @@ class PushOrSaveContentPage extends React.Component {
             );
         } else {
             return (
-                <View style={styles.bodyView}>
-                    <Waiting/>
-                    {this.showPushOrSaveContent()}
+                <View  style={{ flexDirection: 'column', backgroundColor: '#fff' , flex: 1 }}> 
+                    <View style={styles.bodyView}>
+                        <Waiting/>
+                        {this.showPushOrSaveContent()}
+                    </View>
                     {this.showPushOrSaveContentBottom()}
                 </View>
             );
@@ -1059,11 +1066,12 @@ class PushOrSaveContentPage extends React.Component {
 
 const styles = StyleSheet.create({
     bodyView: {
-        height: screenHeight * 0.9,
+        height: screenHeight - 220,
         flexDirection: "column",
+        backgroundColor: '#fff'
     },
     paperSelectNumView: {
-        height: screenHeight * 0.06,
+        height: 40,
         flexDirection: "row",
         backgroundColor: "#EBEDEC",
     },

@@ -173,7 +173,7 @@ class StudyList extends React.Component {
     }
 
     //显示任务状态的图标
-    showStatusUrl = (todo, todoIndex, statusImg) => {
+    showStatusUrl = (todo, statusUrl, statusImg) => {
         //console.log('showTodo' , todo);
 
         if (todo.type == "通知" || todo.type == "公告") {
@@ -184,9 +184,19 @@ class StudyList extends React.Component {
                 )
             );
         } else if (todo.type == "作业") {
-            return <Image source={statusImg} style={styles.imgStatus} />;
+            return <Image source={statusImg} 
+                style={(statusUrl == '1' || statusUrl == '5') ?
+                    {...styles.imgStatus}
+                    : {width:15,height:15}
+                } 
+            />;
         } else {
-            return <Image source={statusImg} style={styles.imgStatus} />;
+            return <Image source={statusImg} 
+                style={(statusUrl == '1' || statusUrl == '5') ?
+                    {...styles.imgStatus}
+                    : {width:15,height:15}
+                } 
+            />;
         }
     };
 
@@ -437,22 +447,26 @@ class StudyList extends React.Component {
                     >
                         <Flex>
                             {/*作业/导学案等图标iconUrl 作业/导学案等type 图标状态statusUrl 小标题bottomTitle 创建者createrName*/}
-                            <Image source={todoImg} style={styles.imgType} />
-                            <Text style={styles.title}>{todoType}</Text>
-                            {this.showStatusUrl(todo, todoIndex, statusImg)}
-                            <View style={{ width: screenWidth * 0.05 }}></View>
-                            <View style={styles.titlePosition}>
-                                <Text
-                                    style={styles.title}
-                                    numberOfLines={1}
-                                    ellipsizeMode={"tail"}
-                                >
-                                    {bottomTitle}
+                            <View style={{flexDirection: 'row',width:'80%'}}>
+                                <Image source={todoImg} style={styles.imgType} />
+                                <Text style={styles.title}>{todoType}</Text>
+                                {this.showStatusUrl(todo, statusUrl, statusImg)}
+                                <View style={{ width: screenWidth * 0.05 }}></View>
+                                <View style={styles.titlePosition}>
+                                    <Text
+                                        style={styles.title}
+                                        numberOfLines={1}
+                                        ellipsizeMode={"tail"}
+                                    >
+                                        {bottomTitle}
+                                    </Text>
+                                </View>
+                            </View>
+                            <View style={{flexDirection: 'row',width:'20%'}}>
+                                <Text style={styles.createrName}>
+                                    {createrName}
                                 </Text>
                             </View>
-                            <Text style={styles.createrName}>
-                                {createrName}
-                            </Text>
                         </Flex>
                         <Flex>
                             {/*课程名courseName  截止时间timeStop  资源发布时间time*/}
@@ -557,6 +571,7 @@ class StudyList extends React.Component {
                             height: 30,
                             alignItems: "center",
                             justifyContent: "flex-start",
+                            marginBottom: 15,
                         }}
                     >
                         <Text
@@ -617,16 +632,18 @@ const styles = StyleSheet.create({
         backgroundColor: "#F5FCFF",
     },
     imgType: {
-        height: "100%",
-        width: "5%",
-        resizeMode: "contain",
+        // height: "100%",
+        // width: "5%",
+        // resizeMode: "contain",
+        width:21,
+        height:21,
     },
     imgStatus: {
-        height: "80%",
-        width: "5%",
-        // height: 40,
-        // width: 40,
-        resizeMode: "contain",
+        // height: "80%",
+        // width: "5%",
+        // resizeMode: "contain",
+        height: 10,
+        width: 26,
     },
     title: {
         color: "black",
@@ -660,6 +677,6 @@ const styles = StyleSheet.create({
         height: 24,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 10,
+        marginBottom: 20,
     },
 });

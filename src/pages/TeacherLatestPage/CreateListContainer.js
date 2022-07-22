@@ -294,13 +294,13 @@ class CreateList extends React.Component {
                         style={{
                             flexDirection: "row",
                             backgroundColor: "#fff",
-                            padding: 10,
+                            padding: 5,
                         }}
                     >
                         <View
                             style={{
                                 flexDirection: "row",
-                                width: "20%",
+                                width: 75,
                                 height: "100%",
                             }}
                         >
@@ -310,8 +310,9 @@ class CreateList extends React.Component {
                         <View
                             style={{
                                 flexDirection: "column",
-                                width: "80%",
+                                width: screenWidth - 90,
                                 height: "100%",
+                                backgroundColor: '#fff'
                             }}
                         >
                             <Text
@@ -326,47 +327,49 @@ class CreateList extends React.Component {
                                 {todo.fName}
                             </Text>
                             <View>
-                                <Text style={{ height: 10 }}></Text>
+                                <Text style={{ height: 5 }}></Text>
                             </View>
                             <View style={{ flexDirection: "row" }}>
-                                <Text
-                                    numberOfLines={1}
-                                    ellipsizeMode={"tail"}
-                                    style={{
-                                        width: screenWidth * 0.55,
-                                        fontWeight: "400",
-                                    }}
-                                >
-                                    {todo.fDescription}
-                                </Text>
-                                <Text
-                                    style={{
-                                        paddingLeft: screenWidth * 0.6,
-                                        position: "absolute",
-                                        color: "#DCDCDC",
-                                    }}
-                                >
-                                    {todo.fTime}
-                                </Text>
+                                <View style={{width: '75%',}}>
+                                    <Text
+                                        numberOfLines={1}
+                                        ellipsizeMode={"tail"}
+                                        style={{
+                                            width: screenWidth * 0.55,
+                                            fontWeight: "400",
+                                        }}
+                                    >
+                                        {todo.fDescription}
+                                    </Text>
+                                </View>
+                                <View style={{width: '25%'}}>
+                                    <Text
+                                        style={{
+                                            color: "#DCDCDC",
+                                            // paddingLeft: 10,
+                                        }}
+                                    >
+                                        {todo.fTime}
+                                    </Text>
+                                </View>
                             </View>
                             <View style={{ flexDirection: "row" }}>
-                                <Text style={{ fontWeight: "400" }}>
-                                    {todo.fNum1}
-                                </Text>
-                                <Text style={{ width: 5 }}></Text>
-                                <Text style={{ fontWeight: "400" }}>
-                                    {todo.fNum2}
-                                </Text>
-                                <Text style={{ width: 5 }}></Text>
-                                <Text style={{ fontWeight: "400" }}>
-                                    {todo.fNum3}
-                                </Text>
+                                <View  style={{width: '72%',flexDirection: 'row'}}>
+                                    <Text style={{ fontWeight: "400" }}>
+                                        {todo.fNum1}
+                                    </Text>
+                                    <Text style={{ width: 5 }}></Text>
+                                    <Text style={{ fontWeight: "400" }}>
+                                        {todo.fNum2}
+                                    </Text>
+                                    <Text style={{ width: 5 }}></Text>
+                                    <Text style={{ fontWeight: "400" }}>
+                                        {todo.fNum3}
+                                    </Text>
+                                </View>
+                                
 
-                                {this.showTaskProgress(
-                                    todo.fType,
-                                    todo.fNum4,
-                                    todo.fNum5
-                                )}
+                                {this.showTaskProgress(todo.fType,todo.fNum4,todo.fNum5)}
                             </View>
                         </View>
                     </View>
@@ -386,7 +389,7 @@ class CreateList extends React.Component {
         if (fType == 1) {
             //导学案
             return (
-                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                <View style={styles.taskImg}>
                     <Image
                         source={require("../../assets/teacherLatestPage/learnPlan.png")}
                         style={styles.typeImg}
@@ -396,7 +399,7 @@ class CreateList extends React.Component {
         } else if (fType == 2) {
             //作业
             return (
-                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                <View style={styles.taskImg}>
                     <Image
                         source={require("../../assets/teacherLatestPage/homework.png")}
                         style={styles.typeImg}
@@ -406,7 +409,7 @@ class CreateList extends React.Component {
         } else if (fType == 3) {
             //通知
             return (
-                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                <View style={styles.taskImg}>
                     <Image
                         source={require("../../assets/teacherLatestPage/notice.png")}
                         style={styles.typeImg}
@@ -416,7 +419,7 @@ class CreateList extends React.Component {
         } else if (fType == 4) {
             //公告
             return (
-                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                <View style={styles.taskImg}>
                     <Image
                         source={require("../../assets/teacherLatestPage/article.png")}
                         style={styles.typeImg}
@@ -426,7 +429,7 @@ class CreateList extends React.Component {
         } else if (fType == 7) {
             //微课
             return (
-                <View style={{ alignItems: "center", paddingTop: 10 }}>
+                <View style={styles.taskImg}>
                     <Image
                         source={require("../../assets/teacherLatestPage/weike.png")}
                         style={styles.typeImg}
@@ -443,9 +446,10 @@ class CreateList extends React.Component {
                 <ImageBackground
                     source={require("../../assets/teacherLatestPage/rightNum.png")}
                     style={{
-                        height: "42%",
-                        width: "42%",
+                        height: 15,
+                        width: 15,
                         resizeMode: "contain",
+                        marginTop: 6,
                     }}
                 >
                     <Text
@@ -466,9 +470,10 @@ class CreateList extends React.Component {
                 <ImageBackground
                     source={require("../../assets/teacherLatestPage/rightNum.png")}
                     style={{
-                        height: "42%",
-                        width: "42%",
+                        height: 15,
+                        width: 15,
                         resizeMode: "contain",
+                        marginTop: 6,
                     }}
                 >
                     <Text
@@ -490,22 +495,24 @@ class CreateList extends React.Component {
                 <View
                     style={{
                         flexDirection: "row",
-                        paddingLeft: screenWidth * 0.48,
-                        position: "absolute",
+                        width: '25%',
+                        // paddingLeft: 15,
+                        // paddingLeft: screenWidth * 0.48,
+                        // position: "absolute",
                     }}
                 >
-                    <Text style={{ width: 20 }}></Text>
+                    {/* <Text style={{ width: 20 }}></Text> */}
                     <Image
                         source={require("../../assets/teacherLatestPage/progress.png")}
                         // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
-                        style={{ width: 20, height: 20 }}
+                        style={{ width: 15, height: 15 , marginTop: 3}}
                     />
                     <Text>{fNum4}</Text>
-                    <Text style={{ width: 20 }}></Text>
+                    <Text style={{ width: 10 }}></Text>
                     <Image
                         source={require("../../assets/teacherLatestPage/resourceSum.png")}
                         // style={{width: '85%', height: '85%' , resizeMode: "contain"}}
-                        style={{ width: 20, height: 20 }}
+                        style={{ width: 15, height: 15 , marginTop: 3 }}
                     />
                     <Text>{fNum5}</Text>
                 </View>
@@ -584,6 +591,7 @@ class CreateList extends React.Component {
                             height: 30,
                             alignItems: "center",
                             justifyContent: "flex-start",
+                            marginBottom: 15,
                         }}
                     >
                         <Text
@@ -641,7 +649,7 @@ const styles = StyleSheet.create({
         height: 24,
         justifyContent: "center",
         alignItems: "center",
-        marginBottom: 10,
+        marginBottom: 20,
     },
     typeImg: {
         // height: "100%",
@@ -650,5 +658,10 @@ const styles = StyleSheet.create({
         height: 60,
         width: 60,
         alignContent: "center",
+    },
+    taskImg: { 
+        alignItems: "center", 
+        paddingTop: 5 ,
+        backgroundColor: '#fff'
     },
 });
