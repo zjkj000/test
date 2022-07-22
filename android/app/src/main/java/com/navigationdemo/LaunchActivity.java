@@ -185,6 +185,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
     //聊天
     public static RecyclerView recyclerView;
     public static int refreshChatFlag=1;
+    public static int mlist_size = 0;
 
     public static TRTCCloudDef.TRTCParams trtcParams = new TRTCCloudDef.TRTCParams();
     public static TRTCCloudDef.TRTCRenderParams trtcRenderParams = new TRTCCloudDef.TRTCRenderParams();
@@ -206,13 +207,15 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         handler = new Handler();
         AnswerActivity.messageList=new ArrayList<>();
 
+        //checkPermission();
         if (checkPermission()) {
             initView();
-            initViewBottomButton();
-            initViewAnswer();
-            initChatRoom();
+
             enterRoom();
         }
+        initViewBottomButton();
+        initViewAnswer();
+        initChatRoom();
 
 
     }
@@ -514,10 +517,10 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             System.out.println("messagelist is null!");
             return;
         }
-//        if(LaunchActivity.refreshChatFlag == 0){
-//            System.out.println("LaunchActivity.refreshChatFlag is 0!");
-//            return;
-//        }
+        if(LaunchActivity.refreshChatFlag == 0){
+            System.out.println("LaunchActivity.refreshChatFlag is 0!");
+            return;
+        }
         System.out.print("xuanran size:");
         System.out.println(AnswerActivity.messageList.size());
 //        if(last_actiontime_chat.compareTo(AnswerActivity.chatTime)<0){

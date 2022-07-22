@@ -230,12 +230,7 @@ public class HttpActivity extends AnswerActivity {
 //                System.out.println("messagelist==>"+messagelist);
                 JSONArray messages=jsonObject.getJSONArray("list");
                 System.out.println("length:"+messages.length());
-                if(messages.length()==0){
-                    LaunchActivity.refreshChatFlag = 0;
-                }
-                else {
-                    LaunchActivity.refreshChatFlag = 1;
-                }
+
                 //AnswerActivity.messageList=new ArrayList<>();
                 //messageList = new LinkedList<>();
 
@@ -262,6 +257,15 @@ public class HttpActivity extends AnswerActivity {
                     //}
                 }
                 System.out.println("mlist:"+AnswerActivity.messageList.size());
+
+                if(LaunchActivity.mlist_size!=AnswerActivity.messageList.size()){
+                    LaunchActivity.refreshChatFlag = 1;
+                    LaunchActivity.mlist_size=AnswerActivity.messageList.size();
+                }
+                else {
+                    LaunchActivity.refreshChatFlag = 0;
+                }
+                System.out.println("refreshChatFlag:"+LaunchActivity.refreshChatFlag);
 
             }catch (JSONException e) {
                 e.printStackTrace();
