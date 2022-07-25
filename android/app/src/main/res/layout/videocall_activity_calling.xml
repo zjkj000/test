@@ -137,10 +137,9 @@
                 android:gravity="left"
                 android:padding="5dp"
                 android:stateListAnimator="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/teacher_camera"
-                app:layout_constraintStart_toStartOf="@+id/teacher_camera"
+                app:layout_constraintBottom_toBottomOf="@+id/teacher_background"
+                app:layout_constraintStart_toStartOf="@+id/teacher_background"
                 />
-
             <com.tencent.rtmp.ui.TXCloudVideoView
                 android:id="@+id/teacher_camera"
                 android:layout_width="0dp"
@@ -151,7 +150,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"></com.tencent.rtmp.ui.TXCloudVideoView>
-
             <com.tencent.rtmp.ui.TXCloudVideoView
                 android:id="@+id/teacher_background"
                 android:layout_width="0dp"
@@ -176,8 +174,8 @@
                 android:gravity="left"
                 android:padding="5dp"
                 android:stateListAnimator="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/myself_camera"
-                app:layout_constraintStart_toStartOf="@+id/myself_camera"
+                app:layout_constraintBottom_toBottomOf="@+id/myself_background"
+                app:layout_constraintStart_toStartOf="@+id/myself_background"
                 />
             <ImageView
                 android:id="@+id/myself_platform"
@@ -201,8 +199,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/teacher_background" />
-
-            <!--学生端摄像头 txcvv_main-->
             <com.tencent.rtmp.ui.TXCloudVideoView
                 android:id="@+id/myself_background"
                 android:layout_width="0dp"
@@ -216,38 +212,54 @@
                 app:layout_constraintTop_toBottomOf="@+id/teacher_background" />
 
             <!--学生端_6个学生 student_1/2/3/4/5/6-->
-            <TextView
-                android:id="@+id/student_1_name"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text=""
-                android:textSize="8dp"
-                android:textColor="@android:color/white"
-                android:gravity="left"
-                android:padding="5dp"
-                android:stateListAnimator="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/student_1"
-                app:layout_constraintStart_toStartOf="@+id/student_1"
-                />
-            <com.tencent.rtmp.ui.TXCloudVideoView
-                android:id="@+id/student_1"
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/student_1_div"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:padding="2dp"
+                android:visibility="invisible"
+                android:background="@mipmap/temp_my_nocamera"
                 app:layout_constraintDimensionRatio="w,9:16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/myself_background" />
+                app:layout_constraintTop_toBottomOf="@+id/myself_background"
+                >
+                <TextView
+                    android:id="@+id/student_1_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text=""
+                    android:textSize="8dp"
+                    android:textColor="@android:color/white"
+                    android:gravity="left"
+                    android:padding="5dp"
+                    android:stateListAnimator="@null"
+                    app:layout_constraintBottom_toBottomOf="@+id/student_1_div"
+                    app:layout_constraintStart_toStartOf="@+id/student_1_div"
+                    />
+                <com.tencent.rtmp.ui.TXCloudVideoView
+                    android:id="@+id/student_1"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:padding="2dp"
+                    app:layout_constraintDimensionRatio="w,9:16"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
 
-            <com.tencent.rtmp.ui.TXCloudVideoView
-                android:id="@+id/student_2"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                android:padding="2dp"
-                app:layout_constraintDimensionRatio="w,9:16"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/student_1"/>
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/student_2_div"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            android:background="@mipmap/temp_my_nocamera"
+            app:layout_constraintDimensionRatio="w,9:16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/student_1_div"
+            >
             <TextView
                 android:id="@+id/student_2_name"
                 android:layout_width="wrap_content"
@@ -258,19 +270,32 @@
                 android:gravity="left"
                 android:padding="5dp"
                 android:stateListAnimator="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/student_2"
-                app:layout_constraintStart_toStartOf="@+id/student_2"
+                app:layout_constraintBottom_toBottomOf="@+id/student_2_div"
+                app:layout_constraintStart_toStartOf="@+id/student_2_div"
                 />
-
             <com.tencent.rtmp.ui.TXCloudVideoView
-                android:id="@+id/student_3"
+                android:id="@+id/student_2"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:padding="2dp"
                 app:layout_constraintDimensionRatio="w,9:16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/student_2" />
+                app:layout_constraintTop_toBottomOf="parent"/>
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/student_3_div"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            android:background="@mipmap/temp_my_nocamera"
+            app:layout_constraintDimensionRatio="w,9:16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/student_2_div"
+            >
             <TextView
                 android:id="@+id/student_3_name"
                 android:layout_width="wrap_content"
@@ -281,19 +306,31 @@
                 android:gravity="left"
                 android:padding="5dp"
                 android:stateListAnimator="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/student_3"
-                app:layout_constraintStart_toStartOf="@+id/student_3"
+                app:layout_constraintBottom_toBottomOf="@+id/student_3_div"
+                app:layout_constraintStart_toStartOf="@+id/student_3_div"
                 />
-
             <com.tencent.rtmp.ui.TXCloudVideoView
-                android:id="@+id/student_4"
+                android:id="@+id/student_3"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:padding="2dp"
                 app:layout_constraintDimensionRatio="w,9:16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/student_3" />
+                app:layout_constraintTop_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/student_4_div"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            android:background="@mipmap/temp_my_nocamera"
+            app:layout_constraintDimensionRatio="w,9:16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/student_3_div"
+            >
             <TextView
                 android:id="@+id/student_4_name"
                 android:layout_width="wrap_content"
@@ -304,19 +341,31 @@
                 android:gravity="left"
                 android:padding="5dp"
                 android:stateListAnimator="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/student_4"
-                app:layout_constraintStart_toStartOf="@+id/student_4"
+                app:layout_constraintBottom_toBottomOf="@+id/student_4_div"
+                app:layout_constraintStart_toStartOf="@+id/student_4_div"
                 />
-
             <com.tencent.rtmp.ui.TXCloudVideoView
-                android:id="@+id/student_5"
+                android:id="@+id/student_4"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:padding="2dp"
                 app:layout_constraintDimensionRatio="w,9:16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/student_4" />
+                app:layout_constraintTop_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/student_5_div"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            android:background="@mipmap/temp_my_nocamera"
+            app:layout_constraintDimensionRatio="w,9:16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/student_4_div"
+            >
             <TextView
                 android:id="@+id/student_5_name"
                 android:layout_width="wrap_content"
@@ -327,19 +376,31 @@
                 android:gravity="left"
                 android:padding="5dp"
                 android:stateListAnimator="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/student_5"
-                app:layout_constraintStart_toStartOf="@+id/student_5"
+                app:layout_constraintBottom_toBottomOf="@+id/student_5_div"
+                app:layout_constraintStart_toStartOf="@+id/student_5_div"
                 />
-
             <com.tencent.rtmp.ui.TXCloudVideoView
-                android:id="@+id/student_6"
+                android:id="@+id/student_5"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:padding="2dp"
                 app:layout_constraintDimensionRatio="w,9:16"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/student_5" />
+                app:layout_constraintTop_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/student_6_div"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:visibility="invisible"
+            android:background="@mipmap/temp_my_nocamera"
+            app:layout_constraintDimensionRatio="w,9:16"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/student_5_div"
+            >
             <TextView
                 android:id="@+id/student_6_name"
                 android:layout_width="wrap_content"
@@ -350,12 +411,19 @@
                 android:gravity="left"
                 android:padding="5dp"
                 android:stateListAnimator="@null"
-                app:layout_constraintBottom_toBottomOf="@+id/student_6"
-                app:layout_constraintStart_toStartOf="@+id/student_6"
+                app:layout_constraintBottom_toBottomOf="@+id/student_6_div"
+                app:layout_constraintStart_toStartOf="@+id/student_6_div"
                 />
-
-
-
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/student_6"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:padding="2dp"
+                app:layout_constraintDimensionRatio="w,9:16"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>
@@ -381,8 +449,11 @@
         android:id="@+id/group_buttons"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:padding="10dp"
+
         android:gravity="bottom"
         android:visibility="visible"
+        android:background="@color/message_input"
 
         app:constraint_referenced_ids="message_input,submit_mess,hands,hands_onplatform,message,btn_mute_audio,btn_mute_video,btn_switch_camera,refresh,fullscreen,exitroom"
         app:layout_constraintBottom_toBottomOf="parent"

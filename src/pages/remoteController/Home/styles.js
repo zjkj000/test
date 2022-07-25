@@ -85,7 +85,7 @@ export const styles = StyleSheet.create({
     controllerContainer: {
         flexDirection: "column",
         width: "100%",
-        flex: 8,
+        flex: 11,
         backgroundColor: "white",
         justifyContent: "center",
         alignItems: "center",
@@ -93,6 +93,12 @@ export const styles = StyleSheet.create({
         // marginTop: 50,
         // alignContent: "space-around",
         // padding: 5,
+    },
+    controllerBox: {
+        width: screenWidth,
+        height: screenWidth * 0.82,
+        // borderWidth: 1,
+        // borderColor: "red",
     },
     controllerRow: {
         flexDirection: "row",
@@ -104,9 +110,9 @@ export const styles = StyleSheet.create({
         backgroundColor: "rgba(255,255,255,0)",
     },
     controllerBlock: {
-        flex: 2,
-        borderColor: "blue",
-        borderWidth: 1,
+        flex: 1,
+        // borderColor: "blue",
+        // borderWidth: 1,
         height: "100%",
         alignItems: "center",
         justifyContent: "center",
@@ -122,13 +128,14 @@ export const styles = StyleSheet.create({
         flex: 2,
         width: screenWidth,
         justifyContent: "space-around",
+        alignItems: "flex-start",
         borderColor: "gray",
         borderTopWidth: 1,
-        padding: 10,
+        padding: 1,
     },
     bottomImg: {
-        width: GetSize(118),
-        height: GetSize(118),
+        width: GetSize(80),
+        height: GetSize(80),
     },
     backdrop: {
         backgroundColor: "rgba(0,0,0,0.5)",

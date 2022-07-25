@@ -517,6 +517,10 @@ public class HttpActivity extends AnswerActivity {
 
                         String data = jsonObject.getString("success");
                         System.out.println("success==>"+data);
+                        AnswerActivity.chatStatus = jsonObject.getString("status");
+                        System.out.println("chatStatus==>"+AnswerActivity.chatStatus);
+                        AnswerActivity.chatMessage = jsonObject.getString("message");
+                        System.out.println("chatMessage==>"+chatMessage);
                         //JSONObject sec = new JSONObject(data);
                     }catch (JSONException e) {
                         e.printStackTrace();

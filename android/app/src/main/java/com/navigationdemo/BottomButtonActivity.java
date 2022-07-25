@@ -144,6 +144,8 @@ public class BottomButtonActivity extends LaunchActivity implements View.OnClick
             }
         }
         mButtonMuteVideo.setSelected(!isSelected);
+        mCamera_name.setText(mUserCn);
+        mCamera_name.bringToFront();
     }
 
     //前后摄像头转换
