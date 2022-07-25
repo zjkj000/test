@@ -211,6 +211,49 @@ class InformAndNoticePage extends React.Component {
         );
     };
 
+    // render(){
+    //     return(
+    //         <View style={styles.header}>
+    //             <View style={{ width: screenWidth * 0.125 }}>
+    //                 {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
+    //                 <TouchableOpacity 
+    //                     style={{
+    //                         ...styles.filterView,
+    //                         // backgroundColor:'pink',
+    //                         marginLeft: screenWidth * 0.03,
+    //                     }}
+    //                 >
+    //                     {this.showFilter()}
+    //                 </TouchableOpacity>
+    //             </View>
+    //             <View style={styles.searchView}>
+    //                 <SearchBar
+    //                     style={styles.searchBar}
+    //                     value={{ SearchText }}
+    //                     placeholder="请输入您想搜索的内容"
+    //                     ref={(ref) => (this.searchText = ref)}
+    //                     onCancel={this.onSearch}
+    //                     onChange={this.onChange}
+    //                     onBlur={this.onBlur}
+    //                     cancelText="搜索"
+    //                     showCancelButton
+    //                 />
+    //             </View>
+    //             <View style={{ width: screenWidth * 0.125 }}>
+    //                 {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
+    //                 <TouchableOpacity style={{
+    //                     ...styles.filterView,
+    //                     right: screenWidth * 0.03,
+    //                     position: 'absolute',
+    //                     // backgroundColor:'pink'
+    //                 }}>
+    //                     {this.showCreate()}
+    //                 </TouchableOpacity>
+    //             </View>
+    //         </View>
+    //     )
+    // }
+
     render() {
         return (
             <View style={{backgroundColor:'#fff' , height: screenHeight - 50}}>
@@ -277,8 +320,8 @@ const styles = StyleSheet.create({
     },
     todoList: {
         height: screenHeight - 105,
-        // height: '94%',
-        backgroundColor: "#fff",
+        // height: '90%',
+        // backgroundColor: "pink",
     },
     flexNew: {
         paddingTop: screenHeight * 0.02,

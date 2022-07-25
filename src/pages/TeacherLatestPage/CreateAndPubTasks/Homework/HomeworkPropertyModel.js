@@ -615,8 +615,8 @@ class HomeworkPropertyModel extends React.Component {
             return (
                 <View key={index}>
                     <Text
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
+                        // numberOfLines={1}
+                        // ellipsizeMode={"tail"}
                         style={
                             this.state.book == item.gradeLevelName
                                 ? styles.studyRankItemSelected
@@ -675,12 +675,12 @@ class HomeworkPropertyModel extends React.Component {
             return (
                 <View key={index}>
                     <Text
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
+                        // numberOfLines={1}
+                        // ellipsizeMode={"tail"}
                         style={
-                            questionType == item
-                                ? styles.studyRankItemSelected
-                                : styles.studyRankItem
+                            questionType == item 
+                            ? {...styles.studyRankItemSelected}
+                            : {...styles.studyRankItem}
                         }
                         onPress={() => {
                             if (questionType != item) {
@@ -872,14 +872,11 @@ class HomeworkPropertyModel extends React.Component {
                         </View>
                     ) : null}
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**学科 */}
                     {!this.state.privateContent ? (
@@ -925,14 +922,11 @@ class HomeworkPropertyModel extends React.Component {
                         </View>
                     ) : null}
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**版本 */}
                     {!this.state.privateContent ? (
@@ -979,14 +973,11 @@ class HomeworkPropertyModel extends React.Component {
                         </View>
                     ) : null}
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**教材 */}
                     {!this.state.privateContent ? (
@@ -1034,14 +1025,11 @@ class HomeworkPropertyModel extends React.Component {
                         </View>
                     ) : null}
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**知识点 */}
                     {!this.state.privateContent ? (
@@ -1094,14 +1082,11 @@ class HomeworkPropertyModel extends React.Component {
                     ) : null}
 
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**类型 */}
                     <TouchableOpacity
@@ -1355,7 +1340,7 @@ const styles = StyleSheet.create({
     },
     studyRankItem: {
         width: screenWidth * 0.2,
-        height: 40,
+        // height: 40,
         fontSize: 15,
         color: "black",
         backgroundColor: "#DCDCDC",
@@ -1368,7 +1353,7 @@ const styles = StyleSheet.create({
     },
     studyRankItemSelected: {
         width: screenWidth * 0.2,
-        height: 38,
+        // height: 38,
         fontSize: 15,
         color: "black",
         backgroundColor: "#DCDCDC",
@@ -1379,6 +1364,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginLeft: 5,
     },
+
     studyRankImg: {
         height: 20,
         width: 20,
