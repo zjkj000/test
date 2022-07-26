@@ -393,8 +393,18 @@ class HomeworkPropertyModel extends React.Component {
                                     shortKnowledge: "",
                                     knowledgeCode: "",
                                     //类型信息修改:
-                                    paperType: "",
-                                    paperTypeList: [],
+                                    questionType1: "",
+                                    questionTypeId1: "",
+                                    questionTypeList1: [], //试题类型列表
+                                    questionTypeListFetch1: [],
+                                    questionType2: "",
+                                    questionTypeId2: "",
+                                    questionTypeList2: [], //试题类型列表
+                                    questionTypeListFetch2: [],
+                                    questionType3: "",
+                                    questionTypeId3: "",
+                                    questionTypeList3: [], //试题类型列表
+                                    questionTypeListFetch3: [],
                                 });
                             } else {
                                 this.setState({
@@ -476,8 +486,18 @@ class HomeworkPropertyModel extends React.Component {
                                     shortKnowledge: "",
                                     knowledgeCode: "",
                                     //类型信息修改:
-                                    paperType: "",
-                                    paperTypeList: [],
+                                    questionType1: "",
+                                    questionTypeId1: "",
+                                    questionTypeList1: [], //试题类型列表
+                                    questionTypeListFetch1: [],
+                                    questionType2: "",
+                                    questionTypeId2: "",
+                                    questionTypeList2: [], //试题类型列表
+                                    questionTypeListFetch2: [],
+                                    questionType3: "",
+                                    questionTypeId3: "",
+                                    questionTypeList3: [], //试题类型列表
+                                    questionTypeListFetch3: [],
                                 });
                             } else {
                                 this.setState({
@@ -556,8 +576,18 @@ class HomeworkPropertyModel extends React.Component {
                                     shortKnowledge: "",
                                     knowledgeCode: "",
                                     //类型信息修改:
-                                    paperType: "",
-                                    paperTypeList: [],
+                                    questionType1: "",
+                                    questionTypeId1: "",
+                                    questionTypeList1: [], //试题类型列表
+                                    questionTypeListFetch1: [],
+                                    questionType2: "",
+                                    questionTypeId2: "",
+                                    questionTypeList2: [], //试题类型列表
+                                    questionTypeListFetch2: [],
+                                    questionType3: "",
+                                    questionTypeId3: "",
+                                    questionTypeList3: [], //试题类型列表
+                                    questionTypeListFetch3: [],
                                 });
                             } else {
                                 this.setState({
@@ -633,8 +663,18 @@ class HomeworkPropertyModel extends React.Component {
                                     shortKnowledge: "",
                                     knowledgeCode: "",
                                     //类型信息修改:
-                                    paperType: "",
-                                    paperTypeList: [],
+                                    questionType1: "",
+                                    questionTypeId1: "",
+                                    questionTypeList1: [], //试题类型列表
+                                    questionTypeListFetch1: [],
+                                    questionType2: "",
+                                    questionTypeId2: "",
+                                    questionTypeList2: [], //试题类型列表
+                                    questionTypeListFetch2: [],
+                                    questionType3: "",
+                                    questionTypeId3: "",
+                                    questionTypeList3: [], //试题类型列表
+                                    questionTypeListFetch3: [],
                                 });
                             } else {
                                 this.setState({
@@ -1122,30 +1162,75 @@ class HomeworkPropertyModel extends React.Component {
                     {/**类型列表!!! */}
                     {this.state.paperTypeVisibility ? (
                         <View style={styles.contentlistView}>
-                            {this.state.shareContent &&
-                            this.state.questionTypeList1.length <= 0
-                                ? this.fetchPaperType()
-                                : null}
-                            {this.state.schoolContent &&
-                            this.state.questionTypeList2.length <= 0
-                                ? this.fetchPaperType()
-                                : null}
-                            {this.state.privateContent &&
-                            this.state.questionTypeList3.length <= 0
-                                ? this.fetchPaperType()
-                                : null}
-                            {this.state.shareContent &&
-                            this.state.questionTypeList1.length > 0
-                                ? this.showPaperType()
-                                : null}
-                            {this.state.schoolContent &&
-                            this.state.questionTypeList2.length > 0
-                                ? this.showPaperType()
-                                : null}
-                            {this.state.privateContent &&
-                            this.state.questionTypeList3.length > 0
-                                ? this.showPaperType()
-                                : null}
+                            {
+                                this.state.studyRankId  == '' ||
+                                this.state.studyClassId == '' ||
+                                this.state.editionId == '' ||
+                                this.state.bookId == '' || 
+                                this.state.knowledgeCode == '' 
+                                    ?   Alert.alert("", "请将属性选择完整", [
+                                        {},
+                                        { text: "关闭", onPress: () => {} },
+                                    ])
+                                    : null
+                            }
+                            {
+                                this.state.shareContent 
+                                && this.state.questionTypeList1.length <= 0
+                                && (
+                                    this.state.studyRankId  != '' &&
+                                    this.state.studyClassId != '' &&
+                                    this.state.editionId != '' &&
+                                    this.state.bookId != '' &&  
+                                    this.state.knowledgeCode != '' 
+                                )
+                                    ? this.fetchPaperType()
+                                    : null
+                                }
+                            {
+                                this.state.schoolContent &&
+                                this.state.questionTypeList2.length <= 0
+                                && (
+                                    this.state.studyRankId  != '' &&
+                                    this.state.studyClassId != '' &&
+                                    this.state.editionId != '' &&
+                                    this.state.bookId != '' &&  
+                                    this.state.knowledgeCode != '' 
+                                )
+                                    ? this.fetchPaperType()
+                                    : null
+                            }
+                            {
+                                this.state.privateContent &&
+                                this.state.questionTypeList3.length <= 0
+                                && (
+                                    this.state.studyRankId  != '' &&
+                                    this.state.studyClassId != '' &&
+                                    this.state.editionId != '' &&
+                                    this.state.bookId != '' &&  
+                                    this.state.knowledgeCode != '' 
+                                )
+                                    ? this.fetchPaperType()
+                                    : null
+                                }
+                            {
+                                this.state.shareContent &&
+                                this.state.questionTypeList1.length > 0
+                                    ? this.showPaperType()
+                                    : null
+                            }
+                            {
+                                this.state.schoolContent &&
+                                this.state.questionTypeList2.length > 0
+                                    ? this.showPaperType()
+                                    : null
+                            }
+                            {
+                                this.state.privateContent &&
+                                this.state.questionTypeList3.length > 0
+                                    ? this.showPaperType()
+                                    : null
+                            }
                         </View>
                     ) : null}
                     {/**分割线 */}

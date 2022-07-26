@@ -1,6 +1,8 @@
-import { Dimensions, PixelRatio } from "react-native";
+import { Dimensions, PixelRatio , StatusBar } from "react-native";
 const screenWidth = Math.round(Dimensions.get("window").width);
-const screenHeight = Math.round(Dimensions.get("window").height);
+//顶部显示时间等信息的高度
+const STATUS_BAR_HEIGHT = Math.round(StatusBar.currentHeight); 
+const screenHeight = Math.round(Dimensions.get("window").height) - STATUS_BAR_HEIGHT;
 const screenWidth2 = Math.round(Dimensions.get("screen").width);
 const screenHeight2 = Math.round(Dimensions.get("screen").height);
 
