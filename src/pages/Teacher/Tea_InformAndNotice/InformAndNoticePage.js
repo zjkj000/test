@@ -211,9 +211,17 @@ class InformAndNoticePage extends React.Component {
         );
     };
 
+    // render(){
+    //     return(
+    //         <View style={{height:'100%',backgroundColor:'pink'}}>
+                
+    //         </View>
+    //     )
+    // }
+
     render() {
         return (
-            <View style={{backgroundColor:'#fff' , height: screenHeight - 50}}>
+            <View style={{backgroundColor:'#fff' , height: '100%'}}>
                 <View style={styles.header}>
                     <View style={{ width: screenWidth * 0.125 }}>
                         {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
@@ -271,13 +279,15 @@ class InformAndNoticePage extends React.Component {
 
 const styles = StyleSheet.create({
     header: {
+        // flex:1,
         height: 55,
         backgroundColor: "#4DC7F8",
         flexDirection: 'row',
     },
     todoList: {
-        height: screenHeight - 105,
-        // height: '94%',
+        flex:1,
+        // height: screenHeight - 105,
+        // height: '90%',
         backgroundColor: "#fff",
     },
     flexNew: {

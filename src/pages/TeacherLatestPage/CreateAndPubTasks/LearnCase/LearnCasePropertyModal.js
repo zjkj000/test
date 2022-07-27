@@ -530,8 +530,8 @@ class LearnCasePropertyModal extends React.Component {
                         // numberOfLines={1}
                         // ellipsizeMode={"tail"}
                         style={this.state.book == item.gradeLevelName ?
-                            {...styles.studyRankItemSelected} :
-                            {...styles.studyRankItem}
+                            {...styles.studyRankItemSelected1} :
+                            {...styles.studyRankItem1}
                         }
                         onPress={() => {
                             if (this.state.book != item.gradeLevelName) {
@@ -592,8 +592,8 @@ class LearnCasePropertyModal extends React.Component {
                             : privateContent && learnPlanType != item
                             ? {...styles.studyRankItem}
                             : learnPlanType == item 
-                            ? {...styles.studyRankItemSelected,  width: 54}
-                            : {...styles.studyRankItem,  width: 54 }
+                            ? {...styles.studyRankItemSelected,  width: screenWidth * 0.15}
+                            : {...styles.studyRankItem,  width: screenWidth * 0.15 }
                         }
                         onPress={() => {
                             console.log(learnPlanType , item)
@@ -1247,7 +1247,12 @@ class LearnCasePropertyModal extends React.Component {
                         : null
                     }
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
+                    
 
                     {/**学科 */}
                     {
@@ -1292,7 +1297,11 @@ class LearnCasePropertyModal extends React.Component {
                         : null
                     }
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
                 
                     {/**版本 */}
                     {
@@ -1338,7 +1347,11 @@ class LearnCasePropertyModal extends React.Component {
                         : null
                     }
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
                     
                     {/**教材 */}
                     {
@@ -1385,7 +1398,11 @@ class LearnCasePropertyModal extends React.Component {
                         : null
                     }
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
                 
                     {/**知识点 */}
                     {   
@@ -1435,7 +1452,11 @@ class LearnCasePropertyModal extends React.Component {
                     }
 
                     {/**分割线 */}
-                    <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**类型 */}
                     <TouchableOpacity
@@ -1467,33 +1488,40 @@ class LearnCasePropertyModal extends React.Component {
                         </View>
                     </TouchableOpacity>
                     {/**类型列表!!! */}
-                    {this.state.learnPlanTypeVisibility ?
-                        <View style={styles.contentlistView}>
-                            {this.showLearnPlanType()}
-                            {/* {   
-                                this.state.shareContent 
-                                    ? (
-                                        <View style={{alignItems:'flex-start',marginTop:5,marginBottom:30,flexDirection:'row',flexWrap:'wrap'}}>
-                                            {this.showLearnPlanType()}
-                                        </View>
-                                    )
-                                    : null
-                            } */}
-                            {/* {   
-                                this.state.schoolContent 
-                                    ? this.showLearnPlanType()
-                                    : null
-                            }
-                            {   
-                                this.state.privateContent 
-                                    ? this.showLearnPlanType()
-                                    : null
-                            } */}
-                        </View>
+                    {
+                        this.state.learnPlanTypeVisibility 
+                        && (
+                            this.state.studyRankId  == '' ||
+                            this.state.studyClassId == '' ||
+                            this.state.editionId == '' ||
+                            this.state.bookId == '' ||  
+                            this.state.knowledgeCode == ''
+                        )
+                        ?   Alert.alert("", "请将属性选择完整", [
+                            {},
+                            { text: "关闭", onPress: () => {this.updateVisibility(6, this.state.learnPlanTypeVisibility)} },
+                        ])
                         : null
                     }
                     {
-                        this.showSmallLearnPlanType()
+                        this.state.learnPlanTypeVisibility 
+                        && (
+                            this.state.studyRankId  != '' &&
+                            this.state.studyClassId != '' &&
+                            this.state.editionId != '' &&
+                            this.state.bookId != '' &&  
+                            this.state.knowledgeCode != ''
+                        )
+                        ?
+                            <View style={styles.contentlistView}>
+                                {this.showLearnPlanType()}
+                            </View>
+                        : null
+                    }
+                    {
+                        this.state.learnPlanTypeVisibility 
+                            ? this.showSmallLearnPlanType()
+                            : null
                     }
                     {/**分割线 */}
                     <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />

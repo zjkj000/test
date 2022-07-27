@@ -290,7 +290,7 @@ class TeachingContentPage extends React.Component {
 
     render() {
         return (
-            <View style={{ backgroundColor: "#fff" , height: screenHeight - 50}}>
+            <View style={{ backgroundColor: "#fff" , height: '100%'}}>
                 <View style={styles.header}>
                     <View style={{ width: screenWidth * 0.125 }}>
                         {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
@@ -362,8 +362,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
     },
     todoList: {
+        flex:1,
         // height: screenHeight * 0.85,
-        height: screenHeight - 105,
+        // height: screenHeight - 105,
         backgroundColor: "#fff",
     },
     flexNew: {

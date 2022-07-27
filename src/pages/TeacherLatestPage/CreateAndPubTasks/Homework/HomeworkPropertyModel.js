@@ -393,8 +393,18 @@ class HomeworkPropertyModel extends React.Component {
                                     shortKnowledge: "",
                                     knowledgeCode: "",
                                     //类型信息修改:
-                                    paperType: "",
-                                    paperTypeList: [],
+                                    questionType1: "",
+                                    questionTypeId1: "",
+                                    questionTypeList1: [], //试题类型列表
+                                    questionTypeListFetch1: [],
+                                    questionType2: "",
+                                    questionTypeId2: "",
+                                    questionTypeList2: [], //试题类型列表
+                                    questionTypeListFetch2: [],
+                                    questionType3: "",
+                                    questionTypeId3: "",
+                                    questionTypeList3: [], //试题类型列表
+                                    questionTypeListFetch3: [],
                                 });
                             } else {
                                 this.setState({
@@ -476,8 +486,18 @@ class HomeworkPropertyModel extends React.Component {
                                     shortKnowledge: "",
                                     knowledgeCode: "",
                                     //类型信息修改:
-                                    paperType: "",
-                                    paperTypeList: [],
+                                    questionType1: "",
+                                    questionTypeId1: "",
+                                    questionTypeList1: [], //试题类型列表
+                                    questionTypeListFetch1: [],
+                                    questionType2: "",
+                                    questionTypeId2: "",
+                                    questionTypeList2: [], //试题类型列表
+                                    questionTypeListFetch2: [],
+                                    questionType3: "",
+                                    questionTypeId3: "",
+                                    questionTypeList3: [], //试题类型列表
+                                    questionTypeListFetch3: [],
                                 });
                             } else {
                                 this.setState({
@@ -556,8 +576,18 @@ class HomeworkPropertyModel extends React.Component {
                                     shortKnowledge: "",
                                     knowledgeCode: "",
                                     //类型信息修改:
-                                    paperType: "",
-                                    paperTypeList: [],
+                                    questionType1: "",
+                                    questionTypeId1: "",
+                                    questionTypeList1: [], //试题类型列表
+                                    questionTypeListFetch1: [],
+                                    questionType2: "",
+                                    questionTypeId2: "",
+                                    questionTypeList2: [], //试题类型列表
+                                    questionTypeListFetch2: [],
+                                    questionType3: "",
+                                    questionTypeId3: "",
+                                    questionTypeList3: [], //试题类型列表
+                                    questionTypeListFetch3: [],
                                 });
                             } else {
                                 this.setState({
@@ -615,8 +645,8 @@ class HomeworkPropertyModel extends React.Component {
             return (
                 <View key={index}>
                     <Text
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
+                        // numberOfLines={1}
+                        // ellipsizeMode={"tail"}
                         style={
                             this.state.book == item.gradeLevelName
                                 ? styles.studyRankItemSelected
@@ -633,8 +663,18 @@ class HomeworkPropertyModel extends React.Component {
                                     shortKnowledge: "",
                                     knowledgeCode: "",
                                     //类型信息修改:
-                                    paperType: "",
-                                    paperTypeList: [],
+                                    questionType1: "",
+                                    questionTypeId1: "",
+                                    questionTypeList1: [], //试题类型列表
+                                    questionTypeListFetch1: [],
+                                    questionType2: "",
+                                    questionTypeId2: "",
+                                    questionTypeList2: [], //试题类型列表
+                                    questionTypeListFetch2: [],
+                                    questionType3: "",
+                                    questionTypeId3: "",
+                                    questionTypeList3: [], //试题类型列表
+                                    questionTypeListFetch3: [],
                                 });
                             } else {
                                 this.setState({
@@ -675,12 +715,12 @@ class HomeworkPropertyModel extends React.Component {
             return (
                 <View key={index}>
                     <Text
-                        numberOfLines={1}
-                        ellipsizeMode={"tail"}
+                        // numberOfLines={1}
+                        // ellipsizeMode={"tail"}
                         style={
-                            questionType == item
-                                ? styles.studyRankItemSelected
-                                : styles.studyRankItem
+                            questionType == item 
+                            ? {...styles.studyRankItemSelected}
+                            : {...styles.studyRankItem}
                         }
                         onPress={() => {
                             if (questionType != item) {
@@ -872,14 +912,11 @@ class HomeworkPropertyModel extends React.Component {
                         </View>
                     ) : null}
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**学科 */}
                     {!this.state.privateContent ? (
@@ -925,14 +962,11 @@ class HomeworkPropertyModel extends React.Component {
                         </View>
                     ) : null}
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**版本 */}
                     {!this.state.privateContent ? (
@@ -979,14 +1013,11 @@ class HomeworkPropertyModel extends React.Component {
                         </View>
                     ) : null}
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**教材 */}
                     {!this.state.privateContent ? (
@@ -1034,14 +1065,11 @@ class HomeworkPropertyModel extends React.Component {
                         </View>
                     ) : null}
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**知识点 */}
                     {!this.state.privateContent ? (
@@ -1094,14 +1122,11 @@ class HomeworkPropertyModel extends React.Component {
                     ) : null}
 
                     {/**分割线 */}
-                    <View
-                        style={{
-                            paddingLeft: 0,
-                            width: screenWidth,
-                            height: 2,
-                            backgroundColor: "#DCDCDC",
-                        }}
-                    />
+                    {
+                        !this.state.privateContent
+                        ? <View style={{ paddingLeft: 0, width: screenWidth, height: 2, backgroundColor: "#DCDCDC" }} />
+                        : null
+                    }
 
                     {/**类型 */}
                     <TouchableOpacity
@@ -1137,30 +1162,75 @@ class HomeworkPropertyModel extends React.Component {
                     {/**类型列表!!! */}
                     {this.state.paperTypeVisibility ? (
                         <View style={styles.contentlistView}>
-                            {this.state.shareContent &&
-                            this.state.questionTypeList1.length <= 0
-                                ? this.fetchPaperType()
-                                : null}
-                            {this.state.schoolContent &&
-                            this.state.questionTypeList2.length <= 0
-                                ? this.fetchPaperType()
-                                : null}
-                            {this.state.privateContent &&
-                            this.state.questionTypeList3.length <= 0
-                                ? this.fetchPaperType()
-                                : null}
-                            {this.state.shareContent &&
-                            this.state.questionTypeList1.length > 0
-                                ? this.showPaperType()
-                                : null}
-                            {this.state.schoolContent &&
-                            this.state.questionTypeList2.length > 0
-                                ? this.showPaperType()
-                                : null}
-                            {this.state.privateContent &&
-                            this.state.questionTypeList3.length > 0
-                                ? this.showPaperType()
-                                : null}
+                            {
+                                this.state.studyRankId  == '' ||
+                                this.state.studyClassId == '' ||
+                                this.state.editionId == '' ||
+                                this.state.bookId == '' || 
+                                this.state.knowledgeCode == '' 
+                                    ?   Alert.alert("", "请将属性选择完整", [
+                                        {},
+                                        { text: "关闭", onPress: () => {} },
+                                    ])
+                                    : null
+                            }
+                            {
+                                this.state.shareContent 
+                                && this.state.questionTypeList1.length <= 0
+                                && (
+                                    this.state.studyRankId  != '' &&
+                                    this.state.studyClassId != '' &&
+                                    this.state.editionId != '' &&
+                                    this.state.bookId != '' &&  
+                                    this.state.knowledgeCode != '' 
+                                )
+                                    ? this.fetchPaperType()
+                                    : null
+                                }
+                            {
+                                this.state.schoolContent &&
+                                this.state.questionTypeList2.length <= 0
+                                && (
+                                    this.state.studyRankId  != '' &&
+                                    this.state.studyClassId != '' &&
+                                    this.state.editionId != '' &&
+                                    this.state.bookId != '' &&  
+                                    this.state.knowledgeCode != '' 
+                                )
+                                    ? this.fetchPaperType()
+                                    : null
+                            }
+                            {
+                                this.state.privateContent &&
+                                this.state.questionTypeList3.length <= 0
+                                && (
+                                    this.state.studyRankId  != '' &&
+                                    this.state.studyClassId != '' &&
+                                    this.state.editionId != '' &&
+                                    this.state.bookId != '' &&  
+                                    this.state.knowledgeCode != '' 
+                                )
+                                    ? this.fetchPaperType()
+                                    : null
+                                }
+                            {
+                                this.state.shareContent &&
+                                this.state.questionTypeList1.length > 0
+                                    ? this.showPaperType()
+                                    : null
+                            }
+                            {
+                                this.state.schoolContent &&
+                                this.state.questionTypeList2.length > 0
+                                    ? this.showPaperType()
+                                    : null
+                            }
+                            {
+                                this.state.privateContent &&
+                                this.state.questionTypeList3.length > 0
+                                    ? this.showPaperType()
+                                    : null
+                            }
                         </View>
                     ) : null}
                     {/**分割线 */}
@@ -1355,7 +1425,7 @@ const styles = StyleSheet.create({
     },
     studyRankItem: {
         width: screenWidth * 0.2,
-        height: 40,
+        // height: 40,
         fontSize: 15,
         color: "black",
         backgroundColor: "#DCDCDC",
@@ -1368,7 +1438,7 @@ const styles = StyleSheet.create({
     },
     studyRankItemSelected: {
         width: screenWidth * 0.2,
-        height: 38,
+        // height: 38,
         fontSize: 15,
         color: "black",
         backgroundColor: "#DCDCDC",
@@ -1379,6 +1449,7 @@ const styles = StyleSheet.create({
         textAlign: "center",
         marginLeft: 5,
     },
+
     studyRankImg: {
         height: 20,
         width: 20,

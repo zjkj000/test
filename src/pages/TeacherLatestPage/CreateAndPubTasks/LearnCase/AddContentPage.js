@@ -67,6 +67,9 @@ export default function AddContentPageContainer(props) {
 
                         learnPlanId = {props.learnPlanId}
                         setLearnPlanId = {props.setLearnPlanId}
+
+                        isFetchAgain={props.isFetchAgain}
+                        setIsFetchAgain={props.setIsFetchAgain}
             />;
 }
 
@@ -150,13 +153,15 @@ class AddContentPage extends React.Component {
         // console.log(this.props);
         //重新筛选导学案属性
         if(
-            this.props.channelCode != nextProps.channelCode
-            || this.props.subjectCode != nextProps.subjectCode
-            || this.props.textBookCode != nextProps.textBookCode
-            || this.props.gradeLevelCode != nextProps.gradeLevelCode
-            || this.props.pointCode != nextProps.pointCode
-            || this.props.type != nextProps.type
-            || this.props.typeValue != nextProps.typeValue
+            // this.props.channelCode != nextProps.channelCode
+            // || this.props.subjectCode != nextProps.subjectCode
+            // || this.props.textBookCode != nextProps.textBookCode
+            // || this.props.gradeLevelCode != nextProps.gradeLevelCode
+            // || this.props.pointCode != nextProps.pointCode
+            // || this.props.type != nextProps.type
+            // || this.props.typeValue != nextProps.typeValue
+            nextProps.isFetchAgain != this.props.isFetchAgain
+            && nextProps.isFetchAgain
         ){
             pageFlag = 0; //pageFlag=0，currentPage有效；pageFlag=1，searchPage有效
             currentPage = 0;
@@ -174,8 +179,10 @@ class AddContentPage extends React.Component {
                 pointCode: nextProps.pointCode,
                 type: nextProps.type,
                 typeValue: nextProps.typeValue
+            },()=>{
+                this.props.setIsFetchAgain(false);
+                this.fetchData(nextProps.type , nextProps.typeValue , 'PHONE');
             })
-            this.fetchData(nextProps.type , nextProps.typeValue , 'PHONE');
         }
     }
 

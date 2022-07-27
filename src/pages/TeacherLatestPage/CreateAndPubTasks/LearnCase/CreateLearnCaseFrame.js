@@ -87,6 +87,7 @@ class CreateLearnCase extends React.Component {
             selectContentNum: 0, //添加到导学案中的内容数目
             selectContentList: [], //添加到导学案中的试题
 
+            isFetchAgain: false,
 
             //网络请求状态
             error: false,
@@ -337,7 +338,8 @@ class CreateLearnCase extends React.Component {
             bookList: bookList,
             knowledge: '',
             knowledgeCode: '',
-            knowledgeList: ''
+            knowledgeList: '',
+            isFetchAgain: false,
         });
     }
 
@@ -365,7 +367,14 @@ class CreateLearnCase extends React.Component {
 
             type: paramsObj.type,
             typeValue: paramsObj.typeValue,
+            isFetchAgain: true,
         });
+    }
+
+    setIsFetchAgain = (flag) => {
+        this.setState({
+            isFetchAgain: flag,
+        })
     }
 
     //从接口中获取知识点内容
@@ -513,6 +522,9 @@ class CreateLearnCase extends React.Component {
 
                             learnPlanId = {this.state.learnPlanId}
                             setLearnPlanId = {this.setLearnPlanId}
+
+                            isFetchAgain={this.state.isFetchAgain}
+                            setIsFetchAgain={this.setIsFetchAgain}
                         />
                      : this.state.updatePaperFlag
                      ? <UpdateContentPageContainer 

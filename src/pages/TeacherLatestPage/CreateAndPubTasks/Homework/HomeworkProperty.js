@@ -814,7 +814,7 @@ class HomeworkProperty extends React.Component {
 
 
     render() {
-
+        console.log('==========屏幕高度、宽度==========================',screenHeight,screenWidth);
         return (
             <View style={{ flexDirection: 'column', backgroundColor: '#fff' ,borderTopWidth:0.8 }}>
                 <View style={{height: screenHeight - 130}}>

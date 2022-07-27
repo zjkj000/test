@@ -594,7 +594,7 @@ class CreateList extends React.Component {
                             style={{
                                 color: "#999999",
                                 fontSize: 14,
-                                marginTop: 5,
+                                marginTop: 1,
                                 marginBottom: 5,
                             }}
                         >
