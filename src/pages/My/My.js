@@ -277,7 +277,7 @@ class MyPageComponent extends Component {
 
                 <TouchableOpacity
                     onPress={() => {
-                        this.props.navigation.navigate({ name: "TestPage" });
+                        this.props.navigation.navigate({ name: "TestPage",params:{url:''} });
                     }}
                 >
                     <Divider />

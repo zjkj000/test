@@ -1,15 +1,18 @@
-import { Text, View,StyleSheet,Image,TouchableOpacity,Alert,Dimensions} from 'react-native'
+import { Text, View,StyleSheet,Image,TouchableOpacity,Alert,Dimensions,Modal} from 'react-native'
 import React, { Component } from 'react'
 import RenderHTML from 'react-native-render-html'
 import SelectScore from './SelectScore'
 import { Button } from '@ui-kitten/components';
-import { screenWidth } from '../../../utils/Screen/GetSize';
+import { screenHeight, screenWidth } from '../../../utils/Screen/GetSize';
 import { CheckBox } from '@ui-kitten/components';
+import TestPage from '../../../TestPage/TestPage';
 export default class PaperContent extends Component {
     constructor(props){
         super(props)
         this.setscore=this.setscore.bind(this)
         this.state={
+            CorretcImg_Visibility:false,   //批改图片的弹窗 是否显示
+            CorretcImg_url:'',
             CorrectResultList:[],
             sourceselectedIndex:'5',                            //记录批改的评分选项索引
             data:[],
@@ -41,7 +44,7 @@ export default class PaperContent extends Component {
             shitiAnswer: '' ,                                    //试题答案
             shitiAnalysis:'',
 
-            halfistrue:false,      //用来记录  0.5分是否选中
+            halfistrue:false,                                   //用来记录  0.5分是否选中
            
             }
      }
@@ -70,7 +73,94 @@ export default class PaperContent extends Component {
         halfistrue:this.props.CorrectResultList[i].stuscore==Math.floor(this.props.CorrectResultList[i].stuscore)?false:true
       })
     }
+    //对学生的答案HTML代码进行展示
+    showStuAnswer=()=>{
+      const {Correct_Img_url,Correct_Img_Visable} =this.props
+      var imgarr = this.AnalysisAnswerImgUrl(
+        this.state.data.stuAnswer ? this.state.data.stuAnswer : ""
+      ).imgarr;
+      var urlarr = this.AnalysisAnswerImgUrl(
+        this.state.data.stuAnswer ? this.state.data.stuAnswer : ""
+      ).urlarr;
+      var str = this.state.data.stuAnswer;
+      var showhtmlarr = [];
+      if (imgarr == null) {
+          //不存在图片的情况;
+          showhtmlarr.push(<Text>{this.state.data.stuAnswer}</Text>);
+      } else {
+          // 存在照片，在数组中遍历  替换成RN表示的类型
+          imgarr.map(function (item, index) {
+              var newstr = "has1imageistruehas1image";
+              str = str.replace(item, newstr);
+          });
+          var htmlarr = str.split("has1image");
+          var imgnum = 0;
+          htmlarr.forEach(function (item, index) {
+              if (item == "istrue") {
+                  let nowimage = 0;
+                  nowimage = imgnum;
+                  showhtmlarr.push(
+                      <View>
+                          <TouchableOpacity key={index} onPress={()=>{
+                              var src =urlarr[nowimage]
+                              Alert.alert('','是否批改这张作业图片？',[{text:'取消',onPress:()=>{}},{},{text:'确定',onPress:()=>{
+                                Correct_Img_url(src)
+                                Correct_Img_Visable()
+                              }}])
+                          }
+                            
+                          }>
+                          <Image
+                              style={{ width: screenWidth*0.3,height:screenWidth*0.3 }}
+                              source={{ uri: urlarr[imgnum] }}
+                          />
+                          </TouchableOpacity>
+                      </View>
+                  );
+                  imgnum += 1;
+              } else {
+                  showhtmlarr.push(
+                      <View>
+                          <Text multiline={true}>{item}</Text>
+                      </View>
+                  );
+              }
+          });
+      }
+      return showhtmlarr;
+  }
+
+      AnalysisAnswerImgUrl(str) {
+        // 先把返回的＂转义 \"
+        var str = str.replace('"', '"');
+        //1，匹配出图片img标签（即匹配出所有图片），过滤其他不需要的字符
+        //2.从匹配出来的结果（img标签中）循环匹配出图片地址（即src属性）
+        var imgReg = /<img.*?(?:>|\/>)/gi;
+        //匹配src属性
+        var srcReg = /src=[\'\"]?([^\'\"]*)[\'\"]?/i;
+        var arr = [];
+        arr = str.match(imgReg);
+        if (arr != null) {
+            var newsrcarr = [];
+            for (var i = 0; i < arr.length; i++) {
+                let srcarr = [];
+                srcarr = arr[i].match(srcReg);
+                newsrcarr.push(srcarr[1]);
+            }
+            return {
+                imgarr: arr,
+                urlarr: newsrcarr,
+            };
+        } else
+            return {
+                imgarr: arr,
+                urlarr: [],
+            };
+    }
+
     
+
+  
     render() {
     
     const CorrectResultList =this.state.CorrectResultList
@@ -164,17 +254,23 @@ export default class PaperContent extends Component {
                 
                 <Text style={styles.Titletext}>[学生答案]</Text>
 
-                {this.state.data.stuAnswer==''?<Text style={{fontSize:20,marginBottom:10}}>未答</Text>:<RenderHTML contentWidth={width} source={{html:this.state.data.stuAnswer}} 
-                                    tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
-                                    />}
-               
+                {this.state.data.stuAnswer==''
+                    ?<Text style={{fontSize:20,marginBottom:10}}>未答</Text>
+                    :
+                    this.showStuAnswer()
+                    // <WebView
+                    //                 javaScriptEnabled={true}
+                    //                 scalesPageToFit={Platform.OS === 'ios'? true : false}
+                    //                 // style={{height: screenHeight , width : screenWidth}}
+                    //                 source={{ html: this.deal_Stu_AnswerImageHtml( this.state.data.stuAnswer )}}
+                    // >
+                    // </WebView>
+                    // <RenderHTML contentWidth={width} source={{html:this.state.data.stuAnswer}} 
+                    //                 tagsStyles={{
+                    //                             img:{flexDirection:'row'},
+                    //                             p:{flexDirection:'row'}}}/>
+                  }
+
                 <Text style={styles.Titletext}>[标准答案]</Text>
       
                 {this.state.data.shitiAnswer==''?<Text style={{fontSize:20,marginBottom:10}}>略</Text>:<RenderHTML contentWidth={width} source={{html:this.state.data.shitiAnswer}} 

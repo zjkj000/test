@@ -14,6 +14,7 @@ export default class TestPage extends Component {
             showNum: 0,
             imgState: 1,
             flag: "yidong",
+            url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%2Fallimg%2Ftp09%2F21031FKU44S6-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=auto?sec=1660123240&t=70bf04c04f065c75c8676c464dd360c6"
         };
     }
     saveimage_base64(base64) {
@@ -22,10 +23,19 @@ export default class TestPage extends Component {
             userId: global.constants.userName,
             baseCode: base64,
         };
-        http.post(urla, params, false).then((res) => {
-            if(res.success){
-              url=res.data
-            }
+        // http.post(urla, params, false).then((res) => {
+        //     if(res.success){
+        //       url=res.data
+        //     }
+        // })
+    }
+    UNSAFE_componentWillMount(){
+        console.log('this',this.props.route.params.url)
+        this.setState({
+        // url:'http://www.cn901.com/res/studentAnswerImg/AppImage/2022/06/30/ming6056_115050504.png' 
+        url:"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fimg.jj20.com%2Fup%"  +
+            "2Fallimg%2Ftp09%2F21031FKU44S6-0-lp.jpg&refer=http%3A%2F%2Fimg.jj20.com&app=2002&size=f9999,100"+
+            "00&q=a80&n=0&g=0n&fmt=auto?sec=1660123240&t=70bf04c04f065c75c8676c464dd360c6"   
         })
     }
 
@@ -81,10 +91,9 @@ export default class TestPage extends Component {
                 style={{
                     height: screenHeight,
                     flexDirection: "column",
-                    height: "100%",
                 }}
             >
-                <View
+                {/* <View
                     style={{
                         height: 50,
                         flexDirection: "row",
@@ -109,13 +118,13 @@ export default class TestPage extends Component {
                     <Text style={{ color: "#59B9E0", fontSize: 20 }}>
                         批改作业
                     </Text>
-                </View>
-                <View style={{ height: screenHeight - 130 }}>
+                </View> */}
+                <View style={{ height: screenHeight - 80 }}>
                     <WebCanvas
                         handleBase64={this._handleBase64.bind(this)}
                         handleUrl={this._handleUrl.bind(this)}
                         ref={(ref) => (this.canvas = ref)}
-                        url={url}
+                        url={this.state.url}
                         height={screenWidth}
                         width={screenWidth}
                     />

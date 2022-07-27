@@ -261,6 +261,7 @@ var html = `<html>
  
    // 以url的形式添加背景
    _addImageUrl(data){
+    console.log('WebCanvas-----addImageUrl',data)
     // this._init()
     this.post({action: 4, data: data})
    }
@@ -289,10 +290,11 @@ var html = `<html>
  
    webviewload(){
      // alert('加载成功！')
+     console.log('WebCanvas---webviewload')
      this.webview.injectJavaScript('init_canvas('+this.props.width+', '+this.props.height+')');
-      this._addImageUrl(this.props.url)
+     this._addImageUrl(this.props.url)
      if (this.props.onLoad){
-       this.props.onLoad();
+       this.props.onLoad(); 
      }
    }
  
@@ -304,6 +306,10 @@ var html = `<html>
       this.props.handleUrl(obj.data);
     }
    } 
+
+   UNSAFE_componentWillMount(){
+    console.log('WebCanvas----WillMount',this.props.url)
+   }
  
    render() {
      return (

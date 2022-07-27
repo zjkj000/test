@@ -63,9 +63,9 @@ class TeacherTabBarComponent extends React.Component {
             }
         );
         // 轮询
-        this.timerId = setInterval(() => {
-            this.getClassStatus();
-        }, 500);
+        // this.timerId = setInterval(() => {
+        //     this.getClassStatus();
+        // }, 500);
     }
 
     componentDidUpdate() {

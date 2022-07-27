@@ -1,4 +1,4 @@
-import { Text, View,ScrollView,Image,StyleSheet,TouchableOpacity, Alert,BackHandler} from 'react-native'
+import { Text, View,ScrollView,Image,StyleSheet,TouchableOpacity, Alert,BackHandler,Modal} from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { Button,Layout, ViewPager } from '@ui-kitten/components'
 import { useNavigation } from "@react-navigation/native";
@@ -8,7 +8,7 @@ import Toast from '../../../utils/Toast/Toast';
 import Loading  from '../../../utils/loading/Loading';
 import CorrectSubmitContainer from './CorrectSubmit';
 import {WaitLoading,Waiting} from '../../../utils/WaitLoading/WaitLoading'
-import { screenWidth } from '../../../utils/Screen/GetSize';
+import { screenHeight, screenWidth } from '../../../utils/Screen/GetSize';
 var Allquestion = [];
 export default function CorrectingPaper(props) {
     const navigation = useNavigation();
@@ -23,6 +23,9 @@ export default function CorrectingPaper(props) {
     const [selectedIndex, setSelectedIndex] = useState();
     const shouldLoadComponent = (index) => index === selectedIndex;
     const [CorrectResultList,setCorrectResultList] = useState([])    // 批改结果  只自己用
+    const [Correct_Img_url,setCorrect_Img_url] = useState('')
+
+    const [flag,setflag] =useState('yidong')
     useEffect(()=>{
       navigation.setOptions( {title:props.route.params.userCn,
         // headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)
@@ -77,7 +80,8 @@ export default function CorrectingPaper(props) {
                 questionScore:item.questionScore,
                 status:item.status,
                 stuAnswer:item.stuAnswer,
-                hand:0}
+                hand:0   //记录是否批改过
+              }
               )
             })
             Allquestion=List
@@ -97,10 +101,9 @@ export default function CorrectingPaper(props) {
           }else{
             setData(resJson.data.handList)
           }
-
           setSuccess(resJson.success)
         // 如果autoMark值为yes  则跳转到结果页面，也给他批改结果数组
-          setData(Allquestion)
+          // setData(Allquestion)
           });                                                   
         }
     }
@@ -130,6 +133,14 @@ export default function CorrectingPaper(props) {
       }
     }
     
+    function setCorrect_Img_Visable(){
+      navigation.navigate({
+        name:'TestPage',
+        params:{
+          url:Correct_Img_url,
+        }}
+      )
+    }
 
     function loading(success){
       if(!success){
@@ -215,7 +226,7 @@ export default function CorrectingPaper(props) {
       
     }
 
-
+   
     function submit_correctResult(){
       WaitLoading.show('保存结果中...',-1)
       let newsonStr =[];
@@ -323,6 +334,8 @@ export default function CorrectingPaper(props) {
                                           correctingstatus={correctingstatus}
                                           CorrectResultList={CorrectResultList}    //批改 结果 数据
                                           setCorrected={setCorrectResultList}      //修改  结果  函数
+                                          Correct_Img_url={setCorrect_Img_url}         //批改 照片  函数
+                                          Correct_Img_Visable={setCorrect_Img_Visable}   //批改照片状态
                                           navigation={navigation}/>
                           </ScrollView>
                         </Layout>
