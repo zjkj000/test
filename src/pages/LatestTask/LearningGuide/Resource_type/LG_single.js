@@ -94,13 +94,15 @@ export default function LG_singleContainer(props) {
             <ScrollView style={styles.answer_area}>
                 <RenderHtml contentWidth={width} source={{html:HTML}} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                        img:{
+                                            flexDirection:'row',
+                                            flexWrap:'wrap'
+                                        },
+                                        p:{
+                                            flexDirection:'row',
+                                            flexWrap:'wrap'
+                                        }
+                                    }}
                                     />
                 <Text style={{height:50}}></Text>
             </ScrollView>

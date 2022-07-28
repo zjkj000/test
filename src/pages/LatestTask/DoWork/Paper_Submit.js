@@ -238,13 +238,15 @@ class Paper_Submit extends Component {
                                         .stuAnswer,
                                 }} 
                                 tagsStyles={{
-                                            img:{
-                                                flexDirection:'row'
-                                            },
-                                            p:{
-                                                flexDirection:'row'
-                                            }
-                                        }}
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
+                                }}
                                 />
                         ) : (
                             <Text style={{ color: "red" }}>未答</Text>

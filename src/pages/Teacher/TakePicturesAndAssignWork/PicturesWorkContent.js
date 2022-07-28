@@ -334,13 +334,15 @@ export default class PicturesWorkContent extends Component {
         <View style={{paddingLeft:15}}>
             <RenderHTML contentWidth={screenWidth} source={{html:HTML}} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                      img:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      },
+                                      p:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      }
+                                  }}
                                     />
         </View>
       ) ;

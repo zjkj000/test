@@ -497,12 +497,14 @@ class AddContentPage extends React.Component {
                                 contentWidth={screenWidth} 
                                 source={{html: contentList[selectContentIndex].shitiShow}}
                                 tagsStyles={{
-                                    img: {
-                                    flexDirection: 'row',
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
                                     },
-                                    p: {
-                                    flexDirection: 'row',
-                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
                                 }}
                             ></RenderHtml>
                         </View>
@@ -516,12 +518,14 @@ class AddContentPage extends React.Component {
                                 contentWidth={screenWidth} 
                                 source={{html: contentList[selectContentIndex].shitiAnswer}}
                                 tagsStyles={{
-                                    img: {
-                                    flexDirection: 'row',
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
                                     },
-                                    p: {
-                                    flexDirection: 'row',
-                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
                                 }}
                             ></RenderHtml>
                         </View>
@@ -534,12 +538,14 @@ class AddContentPage extends React.Component {
                                 contentWidth={screenWidth} 
                                 source={{html: contentList[selectContentIndex].shitiAnalysis}}
                                 tagsStyles={{
-                                    img: {
-                                    flexDirection: 'row',
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
                                     },
-                                    p: {
-                                    flexDirection: 'row',
-                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
                                 }}
                             ></RenderHtml>
                         </View>

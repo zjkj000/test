@@ -1129,12 +1129,14 @@ class CreateHomework extends React.Component {
                         contentWidth={screenWidth} 
                         source={{ html: paperList[selectPaperIndex].tiMian }}
                         tagsStyles={{
-                            img: {
-                              flexDirection: 'row',
+                            img:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
                             },
-                            p: {
-                              flexDirection: 'row',
-                            },
+                            p:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
+                            }
                         }}
                     ></RenderHtml>
                 </View>
@@ -1151,12 +1153,14 @@ class CreateHomework extends React.Component {
                         contentWidth={screenWidth} 
                         source={{ html: paperList[selectPaperIndex].answer }}
                         tagsStyles={{
-                            img: {
-                              flexDirection: 'row',
+                            img:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
                             },
-                            p: {
-                              flexDirection: 'row',
-                            },
+                            p:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
+                            }
                         }}
                     ></RenderHtml>
                 </View>
@@ -1170,12 +1174,14 @@ class CreateHomework extends React.Component {
                         contentWidth={screenWidth} 
                         source={{ html: paperList[selectPaperIndex].analysis }}
                         tagsStyles={{
-                            img: {
-                              flexDirection: 'row',
+                            img:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
                             },
-                            p: {
-                              flexDirection: 'row',
-                            },
+                            p:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
+                            }
                         }}
                     ></RenderHtml>
                 </View>
@@ -1532,12 +1538,14 @@ class CreateHomework extends React.Component {
                         contentWidth={screenWidth} 
                         source={{ html: selectPaperList[updatePaperIndex].answer }}
                         tagsStyles={{
-                            img: {
-                              flexDirection: 'row',
+                            img:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
                             },
-                            p: {
-                              flexDirection: 'row',
-                            },
+                            p:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
+                            }
                         }}
                     ></RenderHtml>
                 </View>
@@ -1550,12 +1558,14 @@ class CreateHomework extends React.Component {
                         contentWidth={screenWidth} 
                         source={{ html: selectPaperList[updatePaperIndex].analysis }}
                         tagsStyles={{
-                            img: {
-                              flexDirection: 'row',
+                            img:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
                             },
-                            p: {
-                              flexDirection: 'row',
-                            },
+                            p:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
+                            }
                         }}
                     ></RenderHtml>
                 </View>

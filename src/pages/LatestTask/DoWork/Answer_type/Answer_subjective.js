@@ -305,13 +305,15 @@ class Answer_subjective extends Component {
                 >
                     <RenderHtml contentWidth={width} source={{ html: HTML }} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                        img:{
+                                            flexDirection:'row',
+                                            flexWrap:'wrap'
+                                        },
+                                        p:{
+                                            flexDirection:'row',
+                                            flexWrap:'wrap'
+                                        }
+                                    }}
                                     />
                     <Text style={{ height: 50 }}></Text>
                 </ScrollView>

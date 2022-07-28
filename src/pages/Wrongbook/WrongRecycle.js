@@ -137,6 +137,16 @@ export default WrongRecycle = () => {
                                                                 <RenderHtml
                                                                     contentWidth={width - 6}
                                                                     source={{ html: item1.shitiShow }}
+                                                                    tagsStyles={{
+                                                                        img:{
+                                                                            flexDirection:'row',
+                                                                            flexWrap:'wrap'
+                                                                        },
+                                                                        p:{
+                                                                            flexDirection:'row',
+                                                                            flexWrap:'wrap'
+                                                                        }
+                                                                    }}
                                                                 />
                                                             </View>
 

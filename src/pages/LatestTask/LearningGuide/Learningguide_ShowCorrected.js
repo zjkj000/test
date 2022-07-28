@@ -111,35 +111,41 @@ export default function Learningguide_ShowCorrected(props) {
                         <Text style={styles.Titletext}>[参考答案]</Text>
                         {Item.standardAnswer==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.standardAnswer}} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                      img:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      },
+                                      p:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      }
+                                  }}
                                     />)}
                         <Text style={styles.Titletext}>[解析]</Text>
                         {Item.analysis==''?(<Text>略</Text>):(<RenderHTML source={{html:Item.analysis}} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                      img:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      },
+                                      p:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      }
+                                  }}
                                     />)}
                         <Text style={styles.Titletext}>[你的答案]</Text>
                          {Item.stuAnswer==''?(<Text>未答</Text>):(<RenderHTML source={{html:Item.stuAnswer}} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                      img:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      },
+                                      p:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      }
+                                  }}
                                     />)}
                         <View style={{flexDirection:'row',marginTop:20}}>
                            <View style={{flexDirection:'row'}}>

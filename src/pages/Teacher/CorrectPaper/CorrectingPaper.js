@@ -23,9 +23,6 @@ export default function CorrectingPaper(props) {
     const [selectedIndex, setSelectedIndex] = useState();
     const shouldLoadComponent = (index) => index === selectedIndex;
     const [CorrectResultList,setCorrectResultList] = useState([])    // 批改结果  只自己用
-    const [Correct_Img_url,setCorrect_Img_url] = useState('')
-
-    const [flag,setflag] =useState('yidong')
     useEffect(()=>{
       navigation.setOptions( {title:props.route.params.userCn,
         // headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)
@@ -36,12 +33,17 @@ export default function CorrectingPaper(props) {
       
       // console.log('props.route.params.correctingstatus',props.route.params.correctingstatus)
       if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){
-          Alert.alert('','该学生已批改！是否直接查看批改结果？',[{},{text:'否',onPress:()=>setSelectedIndex(0)},{text:'是',onPress:()=>
-          setSelectedIndex(Allquestion.length)
+          Alert.alert('','该学生已批改！是否直接查看批改结果？',[{},{text:'否',onPress:()=>{
+            setSelectedIndex(0)
+          }
+          },{text:'是',onPress:()=>{
+            setSelectedIndex(Allquestion.length)
+          }
         }])
       }else{
         setSelectedIndex(props.route.params.selectedindex)
       }
+
       return ()=>{
         changestatus()
       }
@@ -103,7 +105,9 @@ export default function CorrectingPaper(props) {
           }
           setSuccess(resJson.success)
         // 如果autoMark值为yes  则跳转到结果页面，也给他批改结果数组
-          // setData(Allquestion)
+        if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){
+          setData(Allquestion)
+        }
           });                                                   
         }
     }
@@ -124,8 +128,12 @@ export default function CorrectingPaper(props) {
           setSelectedIndex(index)
         }else{
           setData(Allquestion)
-          Alert.alert('','所有题目已批改',[{text:'取消',onPress:()=>{}},{},
-            {text:'确定',onPress:()=>setSelectedIndex(Allquestion.length)}
+          Alert.alert('','所有题目已批改',[{text:'取消',onPress:()=>{
+            setSelectedIndex(Allquestion.length-1)
+          }},{},
+            {text:'确定',onPress:()=>{
+              setSelectedIndex(Allquestion.length)
+            }}
           ])
         }
       }else{
@@ -133,13 +141,26 @@ export default function CorrectingPaper(props) {
       }
     }
     
-    function setCorrect_Img_Visable(){
+    function setCorrect_Img_Visable(Url){
       navigation.navigate({
         name:'TestPage',
         params:{
-          url:Correct_Img_url,
+          url:Url,
+          updateStuAnswer:update_StuAnswer,
+          selectedIndex:selectedIndex
         }}
       )
+    }
+    function update_StuAnswer(str1,str2){
+      
+      // console.log(data[selectedIndex].stuAnswer.replace(str1,str2))
+      // console.log(str1,str2,data[selectedIndex].stuAnswer)
+      var newdata = data
+      newdata[selectedIndex].stuAnswer=newdata[selectedIndex].stuAnswer.replace(str1,str2)
+      setData(newdata)
+      console.log(data[selectedIndex].stuAnswer)
+      
+      setSelectedIndex(selectedIndex)
     }
 
     function loading(success){
@@ -273,7 +294,7 @@ export default function CorrectingPaper(props) {
     }
 
     return (
-      <View>
+      <View style={{height:'100%'}}>
         {/* 自定义导航栏 */}
         <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center"}}>
 
@@ -310,7 +331,7 @@ export default function CorrectingPaper(props) {
         </View>
         <Waiting/>
         <ViewPager 
-            style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'85%'}} 
+            style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,flex:1}} 
             shouldLoadComponent={shouldLoadComponent}
             selectedIndex={selectedIndex} 
             onSelect={index => setSelectedIndex(index)}
@@ -334,7 +355,6 @@ export default function CorrectingPaper(props) {
                                           correctingstatus={correctingstatus}
                                           CorrectResultList={CorrectResultList}    //批改 结果 数据
                                           setCorrected={setCorrectResultList}      //修改  结果  函数
-                                          Correct_Img_url={setCorrect_Img_url}         //批改 照片  函数
                                           Correct_Img_Visable={setCorrect_Img_Visable}   //批改照片状态
                                           navigation={navigation}/>
                           </ScrollView>

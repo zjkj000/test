@@ -21,6 +21,9 @@ var html = `<html>
     var canvas = $('#can'),isclean=false,drawState=false,lastX,lastY,ctx;
     ctx = canvas[0].getContext("2d");
     var _width,_height,_dataUrl;
+    //撤销相关
+    var cPushArray = new Array();
+    var cStep = -1;
     window.document.addEventListener('message', function (e){
         var obj = JSON.parse(e.data);
         switch (parseInt(obj.action)){
@@ -81,9 +84,7 @@ var html = `<html>
       window.ReactNativeWebView.postMessage(JSON.stringify({action: 6, data: dataUrl}));
     }
 
-    //撤销相关
-    var cPushArray = new Array();
-    var cStep = -1;
+ 
     function cPush() {
         cStep++;
         if (cStep < cPushArray.length) { cPushArray.length = cStep; }
@@ -141,7 +142,7 @@ var html = `<html>
             ctx.globalCompositeOperation = isclean ? "destination-out" : "source-over";
             ctx.beginPath();
             ctx.strokeStyle = 'red';
-            ctx.lineWidth = 5;
+            ctx.lineWidth = 1;
             ctx.lineJoin = "round";
             ctx.moveTo(lastX, lastY);
             ctx.lineTo(x, y);
@@ -237,7 +238,8 @@ var html = `<html>
      super(props);
      this.state = {
        height: this.props.height,
-       width: this.props.width
+       width: this.props.width,
+       url:String(this.props.url).replace('cn901.com', 'cn901.net:8111')
      }
    }
    // 铅笔
@@ -292,7 +294,9 @@ var html = `<html>
      // alert('加载成功！')
      console.log('WebCanvas---webviewload')
      this.webview.injectJavaScript('init_canvas('+this.props.width+', '+this.props.height+')');
-     this._addImageUrl(this.props.url)
+     if(this.state.url!=null){
+      this._addImageUrl(String(this.state.url).replace('cn901.com', 'cn901.net:8111'))
+     }
      if (this.props.onLoad){
        this.props.onLoad(); 
      }
@@ -303,14 +307,24 @@ var html = `<html>
      if (obj.action == 0){
        this.props.handleBase64(obj.data);
      }else if (obj.action == 6){
+      console.log('监听到了html') 
       this.props.handleUrl(obj.data);
     }
    } 
 
    UNSAFE_componentWillMount(){
-    console.log('WebCanvas----WillMount',this.props.url)
+    // console.log('WebCanvas加载了----WillMount',this.props.url)
+    this.setState({url:String(this.props.url).replace('cn901.com', 'cn901.net:8111')})
    }
- 
+   UNSAFE_componentWillUpdate(nextProps){
+    console.log('检查原因：++++',nextProps.url)
+    
+    if(this.state.url!=nextProps.url&&this.state.url!=''){
+      this.setState({url:nextProps.url})
+    }
+   
+   }
+
    render() {
      return (
        <View style={[styles.container, {width:this.state.width, height:this.state.height}]}>  

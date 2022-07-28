@@ -102,10 +102,9 @@ export default class PaperContent extends Component {
                   showhtmlarr.push(
                       <View>
                           <TouchableOpacity key={index} onPress={()=>{
-                              var src =urlarr[nowimage]
+                              let src =urlarr[nowimage]
                               Alert.alert('','是否批改这张作业图片？',[{text:'取消',onPress:()=>{}},{},{text:'确定',onPress:()=>{
-                                Correct_Img_url(src)
-                                Correct_Img_Visable()
+                                Correct_Img_Visable(src)
                               }}])
                           }
                             
@@ -200,13 +199,15 @@ export default class PaperContent extends Component {
 
                 <RenderHTML contentWidth={width} source={{html:this.state.data.shitiShow}} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                      img:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      },
+                                      p:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      }
+                                  }}
                                     />
                 <View style={{flexDirection:'row',alignItems:'center'}}>
                   <Text style={styles.Titletext}>[得分]   {this.state.data.status==4&&CorrectResultList[i].hand==0?'':this.state.CorrectResultList[i].stuscore}</Text>
@@ -275,25 +276,29 @@ export default class PaperContent extends Component {
       
                 {this.state.data.shitiAnswer==''?<Text style={{fontSize:20,marginBottom:10}}>略</Text>:<RenderHTML contentWidth={width} source={{html:this.state.data.shitiAnswer}} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                      img:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      },
+                                      p:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      }
+                                  }}
                                     /> } 
 
                 <Text style={styles.Titletext}>[解析]</Text>
                 {this.state.data.shitiAnalysis==''?<Text style={{fontSize:20,marginBottom:10}}>略</Text>:<RenderHTML contentWidth={width} source={{html:this.state.data.shitiAnalysis}} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                      img:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      },
+                                      p:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      }
+                                  }}
                                     />}
               </View>
     )

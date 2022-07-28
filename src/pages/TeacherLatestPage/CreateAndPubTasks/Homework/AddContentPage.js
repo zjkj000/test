@@ -303,7 +303,17 @@ class AddContentPage extends React.Component {
                 {/* {console.log('---题目-----' ,paperList[selectPaperIndex].tiMian)} */}
                 <Text style={styles.paperContent}>[题面]</Text>
                 <View style={{ padding: 5 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: contentList[selectContentIndex].tiMian }}></RenderHtml>
+                    <RenderHtml contentWidth={screenWidth} source={{ html: contentList[selectContentIndex].tiMian }}
+                    tagsStyles={{
+                        img:{
+                            flexDirection:'row',
+                            flexWrap:'wrap'
+                        },
+                        p:{
+                            flexDirection:'row',
+                            flexWrap:'wrap'
+                        }
+                    }}></RenderHtml>
                 </View>
 
 
@@ -312,14 +322,34 @@ class AddContentPage extends React.Component {
                 {/**答案 */}
                 <Text style={styles.paperContent}>[答案]</Text>
                 <View style={{ padding: 5 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: contentList[selectContentIndex].answer }}></RenderHtml>
+                    <RenderHtml contentWidth={screenWidth} source={{ html: contentList[selectContentIndex].answer }}
+                    tagsStyles={{
+                        img:{
+                            flexDirection:'row',
+                            flexWrap:'wrap'
+                        },
+                        p:{
+                            flexDirection:'row',
+                            flexWrap:'wrap'
+                        }
+                    }}></RenderHtml>
                 </View>
                 <View style={{ height: 1, backgroundColor: "#999999" }} />
 
                 {/**解析 */}
                 <Text style={styles.paperContent}>[解析]</Text>
                 <View style={{ padding: 5 }}>
-                    <RenderHtml contentWidth={screenWidth} source={{ html: contentList[selectContentIndex].analysis }}></RenderHtml>
+                    <RenderHtml contentWidth={screenWidth} source={{ html: contentList[selectContentIndex].analysis }}
+                    tagsStyles={{
+                        img:{
+                            flexDirection:'row',
+                            flexWrap:'wrap'
+                        },
+                        p:{
+                            flexDirection:'row',
+                            flexWrap:'wrap'
+                        }
+                    }}></RenderHtml>
                 </View>
             </ScrollView>
         );

@@ -153,13 +153,15 @@ class LG_read extends Component {
             <ScrollView  style={this.state.closeopenstate?styles.answer_area:styles.answer_area_open}>
               <RenderHtml contentWidth={width}  source={{html:HTML}} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                      img:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      },
+                                      p:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      }
+                                  }}
                                     />
               <Text style={{height:50}}></Text>
             </ScrollView>
@@ -308,13 +310,15 @@ class LG_7S5 extends Component {
             <ScrollView  style={styles.answer_area_7S5}>
               <RenderHtml contentWidth={width}  source={{html:HTML}} 
                                     tagsStyles={{
-                                                img:{
-                                                    flexDirection:'row'
-                                                },
-                                                p:{
-                                                    flexDirection:'row'
-                                                }
-                                            }}
+                                      img:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      },
+                                      p:{
+                                          flexDirection:'row',
+                                          flexWrap:'wrap'
+                                      }
+                                  }}
                                     />
               <Text style={{height:50}}></Text>
             </ScrollView>

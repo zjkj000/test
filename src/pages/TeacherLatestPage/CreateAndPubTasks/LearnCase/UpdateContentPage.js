@@ -261,12 +261,14 @@ class UpdateContentPage extends React.Component {
                                 contentWidth={screenWidth} 
                                 source={{html: selectContentList[updateContentIndex].shitiShow}}
                                 tagsStyles={{
-                                    img: {
-                                    flexDirection: 'row',
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
                                     },
-                                    p: {
-                                    flexDirection: 'row',
-                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
                                 }}
                             ></RenderHtml>
                         </View>
@@ -280,12 +282,14 @@ class UpdateContentPage extends React.Component {
                                 contentWidth={screenWidth} 
                                 source={{html: selectContentList[updateContentIndex].shitiAnswer}}
                                 tagsStyles={{
-                                    img: {
-                                    flexDirection: 'row',
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
                                     },
-                                    p: {
-                                    flexDirection: 'row',
-                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
                                 }}
                             ></RenderHtml>
                         </View>
@@ -298,12 +302,14 @@ class UpdateContentPage extends React.Component {
                                 contentWidth={screenWidth} 
                                 source={{html: selectContentList[updateContentIndex].shitiAnalysis}}
                                 tagsStyles={{
-                                    img: {
-                                    flexDirection: 'row',
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
                                     },
-                                    p: {
-                                    flexDirection: 'row',
-                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
                                 }}
                             ></RenderHtml>
                         </View>
