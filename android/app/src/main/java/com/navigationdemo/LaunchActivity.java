@@ -1189,7 +1189,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             else{
                 for(int i=0;i<base64_index;i++){
                     System.out.println("base64 i:"+i+" "+base64id_url.get(i));
-                    editoneValue = editoneValue.replace("'"+i+"'","< img src=\""+base64id_url.get(i)+"\">");
+                    editoneValue = editoneValue.replace("'"+i+"'","<img src=\""+base64id_url.get(i)+"\">");
                 }
                 System.out.println("editoneValue i:"+editoneValue);
                 HttpActivity.stuSaveAnswer(editoneValue);

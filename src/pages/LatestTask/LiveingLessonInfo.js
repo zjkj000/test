@@ -219,6 +219,7 @@ class LiveingLessonContent extends Component {
             title:'',
             status:'',     //   1  直播中   2 未开始  3已结束
             roomId:'',
+            teacerId:'',
         }
     }
 
@@ -279,6 +280,7 @@ class LiveingLessonContent extends Component {
                                     global.constants.userName+"-"+      //userid 学生id
                                     global.constants.userCn+"-"+        //usercn 学生中文名   
                                     this.state.roomId+"-"+              //roomid 直播房间号
+                                    this.state.teacerId+"-"+            //teacherId教师id
                                     this.state.teacherName+"-"+         //teachercn 教师中文名
                                     global.constants.userPhoto         //用户头像连接 
                             );  
