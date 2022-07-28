@@ -142,11 +142,11 @@ class SharePhotoComponent extends Component {
                 // this.setState({ imgURL: res });
             })
             .catch((error) => {
-                // console.log(
-                //     "saveImageServiceError===================================="
-                // );
-                // console.log(error);
-                // console.log("====================================");
+                console.log(
+                    "saveImageServiceError===================================="
+                );
+                console.log(error);
+                console.log("====================================");
             });
     };
     handleShare = () => {
@@ -175,6 +175,7 @@ class SharePhotoComponent extends Component {
                             alignItems: "center",
                         }}
                         onPress={() => {
+                            this.handleCloseShare();
                             this.props.navigation.goBack();
                         }}
                     >

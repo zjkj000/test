@@ -180,121 +180,135 @@ export default class Module extends Component {
                     {index1 === 0 ? (
                         <View style={styles.questionNumRow}>
                             <View style={styles.questionNumBlock}>
-                                <Button
-                                    appearance={"outline"}
+                                <TouchableOpacity
                                     onPress={() => {
                                         // console.log("我被点了");
                                         this.handleQuestionChange(-1, "single");
                                     }}
-                                    style={styles.questionButton}
-                                    accessoryLeft={
+                                >
+                                    <View style={styles.questionButton}>
                                         <Icon
                                             style={{
-                                                height: GetSize(64),
-                                                width: GetSize(64),
+                                                height: GetSize(32),
+                                                width: GetSize(32),
                                             }}
-                                            fill={theme["color-primary-700"]}
+                                            fill={theme["color-primary-500"]}
                                             name={"minus"}
                                         />
-                                    }
-                                    size="tiny"
-                                ></Button>
-                                <Text>{singleQuestionNum}</Text>
-                                <Button
-                                    appearance={"outline"}
-                                    size={"tiny"}
+                                    </View>
+                                </TouchableOpacity>
+                                <Text style={styles.questionNum}>
+                                    {singleQuestionNum}
+                                </Text>
+                                <TouchableOpacity
                                     onPress={() => {
                                         this.handleQuestionChange(1, "single");
                                     }}
-                                    style={styles.questionButton}
-                                    accessoryLeft={
+                                >
+                                    <View style={styles.questionButton}>
                                         <Icon
                                             style={{
-                                                height: GetSize(64),
-                                                width: GetSize(64),
+                                                height: GetSize(32),
+                                                width: GetSize(32),
                                             }}
-                                            fill={theme["color-primary-700"]}
+                                            fill={theme["color-primary-500"]}
                                             name={"plus"}
                                         />
-                                    }
-                                ></Button>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                             <View style={styles.questionNumBlock}>
-                                <Button
-                                    appearance={"outline"}
-                                    size={"tiny"}
+                                <TouchableOpacity
                                     onPress={() => {
                                         this.handleQuestionChange(-1, "mul");
                                     }}
-                                    style={styles.questionButton}
-                                    accessoryLeft={
+                                >
+                                    <View style={styles.questionButton}>
                                         <Icon
                                             style={{
-                                                height: GetSize(64),
-                                                width: GetSize(64),
+                                                height: GetSize(32),
+                                                width: GetSize(32),
                                             }}
-                                            fill={theme["color-primary-700"]}
+                                            fill={theme["color-primary-500"]}
                                             name={"minus"}
                                         />
-                                    }
-                                ></Button>
-                                <Text>{mulQuestionNum}</Text>
-                                <Button
-                                    appearance={"outline"}
-                                    size={"tiny"}
+                                    </View>
+                                </TouchableOpacity>
+                                <Text style={styles.questionNum}>
+                                    {mulQuestionNum}
+                                </Text>
+                                <TouchableOpacity
                                     onPress={() => {
                                         this.handleQuestionChange(1, "mul");
                                     }}
-                                    style={styles.questionButton}
-                                    accessoryLeft={
+                                >
+                                    <View style={styles.questionButton}>
                                         <Icon
                                             style={{
-                                                height: GetSize(64),
-                                                width: GetSize(64),
+                                                height: GetSize(32),
+                                                width: GetSize(32),
                                             }}
-                                            fill={theme["color-primary-700"]}
+                                            fill={theme["color-primary-500"]}
                                             name={"plus"}
                                         />
-                                    }
-                                ></Button>
+                                    </View>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     ) : (
-                        <View style={styles.questionNumRow}>
-                            <View style={styles.questionNumBlock}>
-                                <Button
-                                    size={"small"}
+                        <>
+                            <View style={styles.questionNumRow}>
+                                <View
                                     style={{
-                                        borderRadius: 15,
-                                        borderWidth: 0,
-                                        backgroundColor: "gray",
-                                    }}
-                                    onPress={() => {
-                                        this.props.setModuleButton(-1);
-                                        this.setState({
-                                            questionModalVisible: false,
-                                            pressIndex: -1,
-                                        });
+                                        ...styles.questionNumBlock,
+                                        justifyContent: "space-around",
                                     }}
                                 >
-                                    取消
-                                </Button>
-                                <Button
-                                    size={"small"}
-                                    style={{
-                                        borderRadius: 15,
-                                        borderWidth: 0,
-                                        backgroundColor:
-                                            theme["color-primary-700"],
-                                    }}
-                                    onPress={() => {
-                                        this.handleConfirm();
-                                    }}
-                                >
-                                    开始作答
-                                </Button>
+                                    <Text style={styles.questionNum}>判断</Text>
+                                    <Text style={styles.questionNum}>录入</Text>
+                                </View>
                             </View>
-                        </View>
+                            <View style={styles.questionNumRow}>
+                                <View
+                                    style={{
+                                        ...styles.questionNumBlock,
+                                        justifyContent: "space-around",
+                                    }}
+                                >
+                                    <Button
+                                        size={"small"}
+                                        style={{
+                                            borderRadius: 15,
+                                            borderWidth: 0,
+                                            backgroundColor:
+                                                theme["color-primary-500"],
+                                        }}
+                                        onPress={() => {
+                                            this.handleConfirm();
+                                        }}
+                                    >
+                                        开始作答
+                                    </Button>
+                                    <Button
+                                        size={"small"}
+                                        style={{
+                                            borderRadius: 15,
+                                            borderWidth: 0,
+                                            backgroundColor: "gray",
+                                        }}
+                                        onPress={() => {
+                                            this.props.setModuleButton(-1);
+                                            this.setState({
+                                                questionModalVisible: false,
+                                                pressIndex: -1,
+                                            });
+                                        }}
+                                    >
+                                        取消
+                                    </Button>
+                                </View>
+                            </View>
+                        </>
                     )}
                 </>
             );
@@ -309,6 +323,9 @@ export default class Module extends Component {
                         <TouchableOpacity
                             key={`moduleButton${index}`}
                             onPress={() => {
+                                // if (this.props.buttonType === "openQuestion") {
+                                //     this.handleConfirm();
+                                // }
                                 this.handlePress(index);
                             }}
                         >
