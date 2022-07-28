@@ -17,6 +17,7 @@ import ActionButton from "react-native-action-button";
 import { styles } from "./styles";
 import Toast from "../../../utils/Toast/Toast";
 import InformAndNticePage from "../Tea_InformAndNotice/InformAndNoticePage";
+import { screenWidth, screenHeight } from "../../../utils/Screen/GetSize";
 const Tab = createBottomTabNavigator();
 
 export default function TeacherTabBar(props) {
@@ -146,8 +147,8 @@ class TeacherTabBarComponent extends React.Component {
     //     )
     // }
     render() {
-        return (
-            //View style={{height: 50,}}
+        console.log('================屏幕高度======宽度==============',screenHeight,screenWidth);
+        return ( //View style={{height: 105,}}
             <>
                 <Tab.Navigator
                     screenOptions={({ route }) => ({

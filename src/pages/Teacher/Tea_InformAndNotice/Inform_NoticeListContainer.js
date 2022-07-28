@@ -532,6 +532,7 @@ class Inform_NoticeList extends React.Component {
                             alignItems: "center",
                             justifyContent: "flex-start",
                             marginBottom: 15,
+                            // backgroundColor: 'pink',
                         }}
                     >
                         <Text

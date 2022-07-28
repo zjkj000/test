@@ -209,6 +209,14 @@ class InformAndNoticePage extends React.Component {
         );
     };
 
+    // render(){
+    //     return(
+    //         <View style={{height:'100%',backgroundColor:'pink'}}>
+
+    //         </View>
+    //     )
+    // }
+
     render() {
         return (
             <View
