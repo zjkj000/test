@@ -239,7 +239,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                     teacher_enable=true;
                 }
             }
-        },300,300);
+        },100,100);
     }
 
     // 构建Runnable对象，在runnable中更新界�?
