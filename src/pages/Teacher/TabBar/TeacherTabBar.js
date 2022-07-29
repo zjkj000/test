@@ -151,8 +151,9 @@ class TeacherTabBarComponent extends React.Component {
     //     )
     // }
     render() {
-        console.log('================屏幕高度======宽度==============',screenHeight,screenWidth);
-        return ( //View style={{height: 105,}}
+        // console.log('================屏幕高度======宽度==============',screenHeight,screenWidth);
+        return (
+            //View style={{height: 105,}}
             <>
                 <Tab.Navigator
                     screenOptions={({ route }) => ({

@@ -48,9 +48,9 @@ class HomeComponent extends Component {
             // showLoading: false,
         };
         const apkVersion = DeviceInfo.getVersion();
-        console.log("HomeComponent====================================");
-        console.log(apkVersion);
-        console.log("====================================");
+        // console.log("HomeComponent====================================");
+        // console.log(apkVersion);
+        // console.log("====================================");
     }
     setModuleButton = (index, status) => {
         let { moduleButton } = this.state;
@@ -94,7 +94,7 @@ class HomeComponent extends Component {
         }
     };
     setButton = (str) => {
-        console.log("====================setButton=====================");
+        // console.log("====================setButton=====================");
         this.setState({ buttonType: str });
     };
     handleMessageQueue(resJson) {
