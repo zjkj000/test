@@ -32,8 +32,8 @@ export default class Module extends Component {
         this.setState({ questionModalVisible: true });
     };
     handleQuestionChange = (option, optionNum) => {
-        console.log("handleQuestionChange====================================");
-        console.log(option);
+        // console.log("handleQuestionChange====================================");
+        // console.log(option);
         let x =
             optionNum === "single"
                 ? this.state.singleQuestionNum
@@ -43,8 +43,8 @@ export default class Module extends Component {
             if (x < 2) x = 2;
         } else if (optionNum === "mul") if (x < 3) x = 3;
         if (x > 6) x = 6;
-        console.log(x);
-        console.log("====================================");
+        // console.log(x);
+        // console.log("====================================");
         if (optionNum === "single") {
             this.setState({ singleQuestionNum: x });
         } else {
@@ -98,7 +98,7 @@ export default class Module extends Component {
                 console.log("====================================");
             });
     };
-    handleConfirm = () => {
+    handleConfirm = (index = -1) => {
         const {
             questionTypeIndex,
             singleQuestionNum,
@@ -113,6 +113,7 @@ export default class Module extends Component {
                 : pressIndex === 1
                 ? "answerRandom"
                 : "answerResponder";
+
         switch (questionTypeIndex) {
             case 0:
                 desc = `1_${singleQuestionNum}`;
@@ -126,6 +127,19 @@ export default class Module extends Component {
             case 3:
                 desc = `4_0`;
                 break;
+        }
+        if (this.props.buttonType === "openQuestion") {
+            desc = `1_4`;
+            if (index !== -1) {
+                this.props.setModuleButton(index, 1);
+                this.setState({ pressIndex: index });
+                action =
+                    index === 0
+                        ? "answerTogether"
+                        : pressIndex === 1
+                        ? "answerRandom"
+                        : "answerResponder";
+            }
         }
         this.setState({ questionModalVisible: false });
         this.props.setInfoButtonType(pressIndex);
@@ -183,6 +197,13 @@ export default class Module extends Component {
                                 <TouchableOpacity
                                     onPress={() => {
                                         // console.log("我被点了");
+                                        // console.log(
+                                        //     "ModuleRender===================================="
+                                        // );
+                                        // console.log(this.props);
+                                        // console.log(
+                                        //     "===================================="
+                                        // );
                                         this.handleQuestionChange(-1, "single");
                                     }}
                                 >
@@ -323,10 +344,11 @@ export default class Module extends Component {
                         <TouchableOpacity
                             key={`moduleButton${index}`}
                             onPress={() => {
-                                // if (this.props.buttonType === "openQuestion") {
-                                //     this.handleConfirm();
-                                // }
-                                this.handlePress(index);
+                                if (this.props.buttonType === "openQuestion") {
+                                    this.handleConfirm(index);
+                                } else {
+                                    this.handlePress(index);
+                                }
                             }}
                         >
                             <Image

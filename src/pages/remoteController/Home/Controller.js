@@ -453,10 +453,10 @@ export default class Controller extends Component {
             buttonArray[2].imgList[0],
             buttonArray[2].imgList[2],
         ];
-        console.log("renderTest====================================");
-        console.log(renderList);
-        console.log(PixelRatio.get());
-        console.log("====================================");
+        // console.log("renderTest====================================");
+        // console.log(renderList);
+        // console.log(PixelRatio.get());
+        // console.log("====================================");
         return (
             <Layout style={styles.controllerBox}>
                 <Layout style={{ ...styles.controllerRow, zIndex: 10 }}>

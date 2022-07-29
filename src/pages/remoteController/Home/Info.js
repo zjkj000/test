@@ -35,9 +35,9 @@ export default class Info extends Component {
         let { infoButtonTouchable } = this.state;
         infoButtonTouchable[row][col].touchable = touchable;
         infoButtonTouchable[row][col].status = status;
-        console.log("SetInfoButton====================================");
-        console.log(infoButtonTouchable);
-        console.log("====================================");
+        // console.log("SetInfoButton====================================");
+        // console.log(infoButtonTouchable);
+        // console.log("====================================");
         this.setState({ infoButtonTouchable });
     };
     setInfoMessage = (str) => {
@@ -522,20 +522,20 @@ export default class Info extends Component {
                                 style={styles.infoZone_row}
                             >
                                 {item1.map((item2, index2) => {
-                                    console.log(
-                                        "renderInfoButton===================================="
-                                    );
-                                    console.log(
-                                        `png${index1 * 2 + index2}_${
-                                            item2.touchable +
-                                            (item2.status === ""
-                                                ? ""
-                                                : "_" + item2.status)
-                                        }`
-                                    );
-                                    console.log(
-                                        "===================================="
-                                    );
+                                    // console.log(
+                                    //     "renderInfoButton===================================="
+                                    // );
+                                    // console.log(
+                                    //     `png${index1 * 2 + index2}_${
+                                    //         item2.touchable +
+                                    //         (item2.status === ""
+                                    //             ? ""
+                                    //             : "_" + item2.status)
+                                    //     }`
+                                    // );
+                                    // console.log(
+                                    //     "===================================="
+                                    // );
                                     const renderImg =
                                         Img_arr["infoImg"][infoButtonType][
                                             `png${index1 * 2 + index2}_${
