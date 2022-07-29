@@ -96,7 +96,7 @@ public class SelectUtil extends AppCompatActivity {
             }
             if (chb.isChecked()) {
                 if (sb.length() > 0) {
-                    sb.append(",");
+                    //sb.append(",");
                 }
                 sb.append(chb.getTag().toString());
             }

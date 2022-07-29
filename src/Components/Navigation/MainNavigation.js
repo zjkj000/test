@@ -19,7 +19,7 @@ import Paper_SubmitContainer from "../../pages/LatestTask/DoWork/Paper_Submit";
 import Learningguide_ToDo from "../../pages/LatestTask/LearningGuide/Learningguide_ToDo";
 import Learningguide_ShowCorrected from "../../pages/LatestTask/LearningGuide/Learningguide_ShowCorrected";
 import Learningguide_SubmitContainer from "../../pages/LatestTask/LearningGuide/Learningguide_Submit";
-
+import Correct_img from '../../TestPage/Correct_img'
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
@@ -54,7 +54,7 @@ import AssignLearnPlanContainer from "../../pages/TeacheringContent/AssignLearnP
 import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin";
 import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
 import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
-import TestPage from "../../TestPage/TestPage";
+import TestPage1 from "../../TestPage/TestPage1";
 import { Alert, Image, TouchableOpacity } from "react-native";
 const Stack = createStackNavigator();
 
@@ -130,6 +130,13 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="ShowCorrected_LearningGuide"
                         component={Learningguide_ShowCorrected}
+                    />
+                    <Stack.Screen
+                        name="Correct_img"
+                        component={Correct_img}
+                        options={{
+                            headerShown: false,
+                        }}
                     />
                 </Stack.Group>
 
@@ -416,8 +423,8 @@ export default class MainNavigation extends Component {
                 {/* 测试 */}
                 <Stack.Group>
                     <Stack.Screen
-                        name="TestPage"
-                        component={TestPage}
+                        name="TestPage1"
+                        component={TestPage1}
                         options={{
                             headerShown: false,
                         }}

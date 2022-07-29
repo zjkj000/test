@@ -255,8 +255,10 @@ class BuzhizuoyeContent extends Component {
             <Echarts option={option1} height={250} width={width-40}/>
         </View>
         <View>
+
           {this.state.tableData.length>0?(
-            <MyTable data={this.state.tableData.length>this.state.BuzhizuoyeTableNum?this.state.tableData.slice(0,this.state.BuzhizuoyeTableNum):this.state.tableData} tablehead={this.state.tableHead}/>
+            <MyTable data={this.state.tableData.length>this.state.BuzhizuoyeTableNum?this.state.tableData.slice(0,this.state.BuzhizuoyeTableNum):this.state.tableData}
+                     tablehead={this.state.tableHead}/>
           ):(<></>)}
         </View>
         {this.state.tableData.length>this.state.BuzhizuoyeTableNum?(

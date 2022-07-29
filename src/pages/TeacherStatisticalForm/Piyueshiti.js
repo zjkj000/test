@@ -27,9 +27,7 @@ export default function Piyueshiti(props) {
       sumNum: 0,
       tkNum: 0,
       qtNum: 0,
-      tableData: [
-                    
-                  ],
+      tableData: [],
       Xlist: ["","","","",""],
       tableHead: ["序号","班级","开始时间","结束时间","填空题","其它题","批阅总数"],
       Ylist: [{ "data": [0,0,0,0,0],
@@ -172,12 +170,14 @@ export default function Piyueshiti(props) {
         <View>
           <Echarts option={option} height={250} width={width-20} />
         </View>
+
         <View>
           {this.state.tableData.length>0?(
             <MyTable data={this.state.tableData.length>this.state.PiuyueshitiTableNum?this.state.tableData.slice(0,this.state.PiuyueshitiTableNum):this.state.tableData} 
                              tablehead={this.state.tableHead}/>
           ):(<></>)}
-                             </View>
+        </View>
+
         {this.state.tableData.length>this.state.PiuyueshitiTableNum?(
                   <View style={{justifyContent:'center',flexDirection:'row'}}>
                     <Text  onPress={()=>this.setState({PiuyueshitiTableNum:this.state.tableData.length})

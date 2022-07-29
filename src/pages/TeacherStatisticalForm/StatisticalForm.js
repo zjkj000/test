@@ -1,4 +1,4 @@
-import { Text, View,ScrollView,Image,Button, TouchableOpacity} from 'react-native';
+import { Text, View,Image,Button, TouchableOpacity,ScrollView} from 'react-native';
 import React, { Component, useEffect, useState } from 'react';
 import Leijishiyong from './Leijishiyong';
 import Ketangshouke from './Ketangshouke';
@@ -12,7 +12,7 @@ import { screenHeight, screenWidth } from '../../utils/Screen/GetSize';
 export default function StatisticalForm() {
   const navigation = useNavigation()
   return (
-    <StatisticalFormContoner navigation={navigation}/>
+        <StatisticalFormContoner navigation={navigation}/>
   )
 }
  class StatisticalFormContoner extends Component {
@@ -147,94 +147,92 @@ export default function StatisticalForm() {
     }
 
   render() {
-    if(this.state.SchoolYearTermName==''){
-      return(
-        <View>
-            <Loading show='true' color='#59B9E0'/>
-        </View>
-      )
-    }else{
-      return (
-        <View>
-          <View style={{height:40,backgroundColor:'#FFFFFF',alignContent:'center',flexDirection:'row'}}>
-            <View style={{width:screenWidth,alignItems:'center'}}>
-              <Text style={{fontSize:21,marginTop:5}}>统计报表</Text>
-            </View>
-            <View style={{position:'absolute',right:20,top:10}}>
-              <TouchableOpacity onPress={()=>{
-                this.setState({SchoolYearTermName:''})
-                this.getData()
-              }}>
-                <Image style={{width:20,height:20}} source={require('../../assets/StatisticalForm/shuaxin.png')}></Image>
-              </TouchableOpacity>
-            </View>
-          </View>
-          <ScrollView style={{backgroundColor:'#ECEEED',padding:10}}>
-            {/* 累计使用 */}
-            <Leijishiyong data={this.state.leijishiyonglist}  setdatastr={this.setselectYearTerm} SchoolYearTerm={this.state.SchoolYearTerm} SchoolYearTermName={this.state.SchoolYearTermName}yearTermStartTime={this.state.yearTermStartTime}yearTermEndTime={this.state.yearTermEndTime} />
-            {/* 课堂授课标题+日历 */}
-            <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
-              <View style={{flexDirection:'row'}}>
-                <View style={{height:25,width:5,backgroundColor:'#47BB3E',marginRight:5}}></View>
-                <Text style={{fontSize:20}}>课堂授课</Text>
-              </View>
-              <View style={{flexDirection:'row'}}>
-                <TouchableOpacity onPress={()=>{this.setState({KetangshoukeDateStr:this.theLastDay(this.state.KetangshoukeDateStr)})}}>
-                  <Text style={{color:'#87CEFA',fontSize:18}} >{'<'}   </Text>
-                </TouchableOpacity>
-                <Text style={{fontSize:18}}>{this.state.KetangshoukeDateStr}</Text>
-                <TouchableOpacity onPress={()=>{this.setState({KetangshoukeDateStr:this.nextDay(this.state.KetangshoukeDateStr)})}}>
-                  <Text style={{color:'#87CEFA',fontSize:18}} >   {'>'}</Text>
-                </TouchableOpacity>
-                
-              </View>
-              <BasePicker modle={'Date'} setDateOrTime={this.setKetangshoukeDate} selected={this.state.KetangshoukeDateStr}/>
-            </View>
-            {/* 课堂授课图表 */}
-            <Ketangshouke  data={this.state.ketangshoukelist} date={this.state.KetangshoukeDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime} />
-            {/* 布置作业标题+日历 */}
-            <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
-              <View style={{flexDirection:'row'}}>
-                <View style={{height:25,width:5,backgroundColor:'#9518BA',marginRight:5}}></View>
-                <Text style={{fontSize:20}}>布置作业</Text>
-              </View>
-              <View style={{flexDirection:'row'}}>
-                  <TouchableOpacity onPress={()=>{this.setState({BuzhizuoyeDateStr:this.theLastDay(this.state.BuzhizuoyeDateStr)})}}>
-                    <Text style={{color:'#87CEFA',fontSize:18}} >{'<'}   </Text>
-                  </TouchableOpacity>
-                <Text style={{fontSize:18}}>{this.state.BuzhizuoyeDateStr}</Text>
-                <TouchableOpacity onPress={()=>{this.setState({BuzhizuoyeDateStr:this.nextDay(this.state.BuzhizuoyeDateStr)})}}>
-                  <Text style={{color:'#87CEFA',fontSize:18}} >   {'>'}</Text>
-                </TouchableOpacity>
-                
-              </View>
-              <BasePicker modle={'Date'} setDateOrTime={this.setBuzhizuoyeDate} selected={this.state.BuzhizuoyeDateStr}/>
-            </View>
-            {/* 布置作业图表 */}
-            <Buzhizuoye data={this.state.buzhizuoyelist} date={this.state.BuzhizuoyeDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime}/>
-            {/* 批阅试题标题+日历 */}
-            <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
-              <View style={{flexDirection:'row'}}>
-                <View style={{height:25,width:5,backgroundColor:'#7C67F4',marginRight:5}}></View>
-                <Text style={{fontSize:20}}>批阅试题</Text>
-              </View>
-              <View style={{flexDirection:'row'}}>
-                <TouchableOpacity onPress={()=>{this.setState({PiyueshitiDateStr:this.theLastDay(this.state.PiyueshitiDateStr)})}}>
-                  <Text style={{color:'#87CEFA',fontSize:18}} >{'<'}   </Text>
-                </TouchableOpacity>
-                <Text style={{fontSize:18}}>{this.state.PiyueshitiDateStr}</Text>
-                <TouchableOpacity onPress={()=>{this.setState({PiyueshitiDateStr:this.nextDay(this.state.PiyueshitiDateStr)})}}>
-                  <Text style={{color:'#87CEFA',fontSize:18}} >   {'>'}</Text>
-                </TouchableOpacity>
-                
-              </View>
-              <BasePicker modle={'Date'} setDateOrTime={this.setPiyueshitiDate} selected={this.state.PiyueshitiDateStr} />
-            </View>
-            {/* 批阅试题图表 */}
-            <Piyueshiti data={this.state.piyueshitilist} date={this.state.PiyueshitiDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime}/>
-          </ScrollView>
-      </View>
-      )
-    }
+    return(
+      <View style={{height:'100%'}}>
+                <View style={{height:40,backgroundColor:'#FFFFFF',alignContent:'center',flexDirection:'row'}}>
+                  <View style={{width:screenWidth,alignItems:'center'}}>
+                    <Text style={{fontSize:21,marginTop:5}}>统计报表</Text>
+                  </View>
+                  <View style={{position:'absolute',right:20,top:10}}>
+                    <TouchableOpacity onPress={()=>{
+                      this.setState({SchoolYearTermName:''})
+                      this.getData()
+                    }}>
+                      <Image style={{width:20,height:20}} source={require('../../assets/StatisticalForm/shuaxin.png')}></Image>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              {this.state.SchoolYearTermName==''?(
+                <View>
+                    <Loading show='true' color='#59B9E0'/>
+                </View>):(
+
+                          <ScrollView style={{backgroundColor:'#ECEEED',padding:6,paddingTop:5}}>
+                          {/* 累计使用 */}
+                          <Leijishiyong data={this.state.leijishiyonglist}  setdatastr={this.setselectYearTerm} SchoolYearTerm={this.state.SchoolYearTerm} SchoolYearTermName={this.state.SchoolYearTermName}yearTermStartTime={this.state.yearTermStartTime}yearTermEndTime={this.state.yearTermEndTime} />
+                          {/* 课堂授课标题+日历 */}
+                          <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
+                            <View style={{flexDirection:'row'}}>
+                              <View style={{height:25,width:5,backgroundColor:'#47BB3E',marginRight:5}}></View>
+                              <Text style={{fontSize:20}}>课堂授课</Text>
+                            </View>
+                            <View style={{flexDirection:'row'}}>
+                              <TouchableOpacity onPress={()=>{this.setState({KetangshoukeDateStr:this.theLastDay(this.state.KetangshoukeDateStr)})}}>
+                                <Text style={{color:'#87CEFA',fontSize:18}} >{'<'}   </Text>
+                              </TouchableOpacity>
+                              <Text style={{fontSize:18}}>{this.state.KetangshoukeDateStr}</Text>
+                              <TouchableOpacity onPress={()=>{this.setState({KetangshoukeDateStr:this.nextDay(this.state.KetangshoukeDateStr)})}}>
+                                <Text style={{color:'#87CEFA',fontSize:18}} >   {'>'}</Text>
+                              </TouchableOpacity>
+                              
+                            </View>
+                            <BasePicker modle={'Date'} setDateOrTime={this.setKetangshoukeDate} selected={this.state.KetangshoukeDateStr}/>
+                          </View>
+                          {/* 课堂授课图表 */}
+                          <Ketangshouke  data={this.state.ketangshoukelist} date={this.state.KetangshoukeDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime} />
+                          {/* 布置作业标题+日历 */}
+                          <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
+                            <View style={{flexDirection:'row'}}>
+                              <View style={{height:25,width:5,backgroundColor:'#9518BA',marginRight:5}}></View>
+                              <Text style={{fontSize:20}}>布置作业</Text>
+                            </View>
+                            <View style={{flexDirection:'row'}}>
+                                <TouchableOpacity onPress={()=>{this.setState({BuzhizuoyeDateStr:this.theLastDay(this.state.BuzhizuoyeDateStr)})}}>
+                                  <Text style={{color:'#87CEFA',fontSize:18}} >{'<'}   </Text>
+                                </TouchableOpacity>
+                              <Text style={{fontSize:18}}>{this.state.BuzhizuoyeDateStr}</Text>
+                              <TouchableOpacity onPress={()=>{this.setState({BuzhizuoyeDateStr:this.nextDay(this.state.BuzhizuoyeDateStr)})}}>
+                                <Text style={{color:'#87CEFA',fontSize:18}} >   {'>'}</Text>
+                              </TouchableOpacity>
+                              
+                            </View>
+                            <BasePicker modle={'Date'} setDateOrTime={this.setBuzhizuoyeDate} selected={this.state.BuzhizuoyeDateStr}/>
+                          </View>
+                          {/* 布置作业图表 */}
+                          <Buzhizuoye data={this.state.buzhizuoyelist} date={this.state.BuzhizuoyeDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime}/>
+                          {/* 批阅试题标题+日历 */}
+                          <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
+                            <View style={{flexDirection:'row'}}>
+                              <View style={{height:25,width:5,backgroundColor:'#7C67F4',marginRight:5}}></View>
+                              <Text style={{fontSize:20}}>批阅试题</Text>
+                            </View>
+                            <View style={{flexDirection:'row'}}>
+                              <TouchableOpacity onPress={()=>{this.setState({PiyueshitiDateStr:this.theLastDay(this.state.PiyueshitiDateStr)})}}>
+                                <Text style={{color:'#87CEFA',fontSize:18}} >{'<'}   </Text>
+                              </TouchableOpacity>
+                              <Text style={{fontSize:18}}>{this.state.PiyueshitiDateStr}</Text>
+                              <TouchableOpacity onPress={()=>{this.setState({PiyueshitiDateStr:this.nextDay(this.state.PiyueshitiDateStr)})}}>
+                                <Text style={{color:'#87CEFA',fontSize:18}} >   {'>'}</Text>
+                              </TouchableOpacity>
+                            </View>
+                            <BasePicker modle={'Date'} setDateOrTime={this.setPiyueshitiDate} selected={this.state.PiyueshitiDateStr} />
+                          </View>
+                          {/* 批阅试题图表 */}
+                          <Piyueshiti data={this.state.piyueshitilist} date={this.state.PiyueshitiDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime}/>
+                         
+                          </ScrollView>)
+              }
+      </View>     
+    )
   }
 }

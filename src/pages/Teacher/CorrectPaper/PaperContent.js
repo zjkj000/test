@@ -5,7 +5,6 @@ import SelectScore from './SelectScore'
 import { Button } from '@ui-kitten/components';
 import { screenHeight, screenWidth } from '../../../utils/Screen/GetSize';
 import { CheckBox } from '@ui-kitten/components';
-import TestPage from '../../../TestPage/TestPage';
 export default class PaperContent extends Component {
     constructor(props){
         super(props)

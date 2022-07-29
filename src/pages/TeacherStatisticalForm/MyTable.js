@@ -25,9 +25,9 @@ export default class MyTable extends Component {
       <View  style={styles.container}>
             <Table >
                 <View>
-                    <Row  data={state.tableHead} style={{marginTop:3,borderWidth:0.5,backgroundColor: '#A4A4A4'}} textStyle={{textAlign:'center',marginBottom:5,fontSize:12}}/>
+                    <Row  data={state.tableHead} style={{marginTop:3,borderWidth:0.5,backgroundColor: '#A4A4A4'}} textStyle={styles.Rowtext}/>
                 </View>
-                    <Rows data={state.tableData} style={{borderWidth:0.5,borderTopWidth:0}} textStyle={{textAlign:'center',marginBottom:3,marginTop:5,fontSize:12}} />
+                    <Rows data={state.tableData} style={{borderWidth:0.5,borderTopWidth:0}} textStyle={styles.Rowstext}/>
             </Table>
       </View>
     )
@@ -35,5 +35,11 @@ export default class MyTable extends Component {
 }
 const styles = StyleSheet.create({
   container: { padding:5,width:"100%"},
-  head: { marginTop:6,}
+  head: { marginTop:6,},
+  Rowtext:{
+    textAlign:'center',marginBottom:5,fontSize:12
+  },
+  Rowstext:{
+    textAlign:'center',marginBottom:3,marginTop:5,fontSize:12
+  },
 });

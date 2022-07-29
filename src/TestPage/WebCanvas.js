@@ -313,11 +313,14 @@ var html = `<html>
    } 
 
    UNSAFE_componentWillMount(){
+    
+    console.log('检查原因：++Will++',String(this.props.url).substring(75))
     // console.log('WebCanvas加载了----WillMount',this.props.url)
     this.setState({url:String(this.props.url).replace('cn901.com', 'cn901.net:8111')})
    }
+
    UNSAFE_componentWillUpdate(nextProps){
-    console.log('检查原因：++++',nextProps.url)
+    console.log('检查原因：++Update++',String(nextProps.url).substring(75))
     
     if(this.state.url!=nextProps.url&&this.state.url!=''){
       this.setState({url:nextProps.url})

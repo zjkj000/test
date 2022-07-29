@@ -18,6 +18,7 @@ import Img_arr from "./Img_arr";
 import theme from "../../../theme/custom-theme.json";
 import ClassList from "./ClassList";
 import Loading from "../../../utils/loading/Loading";
+import DeviceInfo from "react-native-device-info";
 
 export default ControllerHome = () => {
     const navigation = useNavigation();
@@ -46,6 +47,10 @@ class HomeComponent extends Component {
             moduleButton: [0, 0, 0],
             // showLoading: false,
         };
+        const apkVersion = DeviceInfo.getVersion();
+        console.log("HomeComponent====================================");
+        console.log(apkVersion);
+        console.log("====================================");
     }
     setModuleButton = (index, status) => {
         let { moduleButton } = this.state;
@@ -64,6 +69,7 @@ class HomeComponent extends Component {
     componentWillUnmount() {
         // 结束轮询任务
         clearInterval(this.timerId);
+        this.setState({ exitModalVisible: false });
     }
     setInfoButtonType = (index) => {
         switch (index) {
@@ -234,8 +240,12 @@ class HomeComponent extends Component {
             });
     };
     handleExit = () => {
+        const { userName } = this.props.route.params;
         this.remoteControl("toScan", "toScan");
-        this.props.navigation.navigate("ControllerLogin");
+        this.props.navigation.navigate({
+            name: "Teacher_Home",
+            params: { userName: userName },
+        });
     };
     handleClassOver = () => {};
     handleQuestionAnalysis = () => {
@@ -269,6 +279,7 @@ class HomeComponent extends Component {
                         actionType={this.state.actionType}
                         userName={userName}
                         setInfoButtonType={this.setInfoButtonType}
+                        buttonType={this.state.buttonType}
                     />
                     <Info
                         resId={this.state.event.resId}
@@ -391,11 +402,8 @@ class HomeComponent extends Component {
                                 }}
                             >
                                 <Image
-                                    source={
-                                        Img_arr["infoImg"]["normalQuestion"][
-                                            "png0_1"
-                                        ]
-                                    }
+                                    source={require("../../../assets/image2/bottom/ztfx.png")}
+                                    style={styles.questionAnalysisImage}
                                 ></Image>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -407,11 +415,8 @@ class HomeComponent extends Component {
                                 }}
                             >
                                 <Image
-                                    source={
-                                        Img_arr["infoImg"]["normalQuestion"][
-                                            "png1_1_obj"
-                                        ]
-                                    }
+                                    source={require("../../../assets/image2/bottom/qsfx.png")}
+                                    style={styles.questionAnalysisImage}
                                 ></Image>
                             </TouchableOpacity>
                             <TouchableOpacity
@@ -426,11 +431,8 @@ class HomeComponent extends Component {
                                 }}
                             >
                                 <Image
-                                    source={
-                                        Img_arr["infoImg"]["normalQuestion"][
-                                            "png2_1"
-                                        ]
-                                    }
+                                    source={require("../../../assets/image2/bottom/tcxq.png")}
+                                    style={styles.questionAnalysisImage}
                                 ></Image>
                             </TouchableOpacity>
                         </View>

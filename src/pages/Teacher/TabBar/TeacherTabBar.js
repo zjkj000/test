@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, ActivityIndicator, Image } from "react-native";
+import { Text, View, ActivityIndicator, Image, ScrollView } from "react-native";
 import {
     bindBackExitApp,
     removeBackExitApp,
@@ -121,10 +121,10 @@ class TeacherTabBarComponent extends React.Component {
     };
     renderStatistic = () => {
 
-        return (
-            <View style={{paddingBottom:45}}>
-                <StatisticalForm />
-            </View>);
+        return (<View >
+               <StatisticalForm></StatisticalForm>
+        </View>
+                );
     };
     renderStudyTask = () => {
         return (

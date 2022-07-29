@@ -277,12 +277,12 @@ class MyPageComponent extends Component {
 
                 <TouchableOpacity
                     onPress={() => {
-                        this.props.navigation.navigate({ name: "TestPage",params:{url:''} });
+                        this.props.navigation.navigate({ name: "TestPage1",params:{url:''} });
                     }}
                 >
                     <Divider />
                     <View style={styles.alternativeContainer}>
-                        <Text style={styles.textLeft}>批改作业测试</Text>
+                        <Text style={styles.textLeft}>测试高度</Text>
                         <Text style={styles.textRight}>
                             <Icon
                                 style={styles.icon}

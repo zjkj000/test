@@ -143,7 +143,7 @@ export default function CorrectingPaper(props) {
     
     function setCorrect_Img_Visable(Url){
       navigation.navigate({
-        name:'TestPage',
+        name:'Correct_img',
         params:{
           url:Url,
           updateStuAnswer:update_StuAnswer,
@@ -157,10 +157,9 @@ export default function CorrectingPaper(props) {
       // console.log(str1,str2,data[selectedIndex].stuAnswer)
       var newdata = data
       newdata[selectedIndex].stuAnswer=newdata[selectedIndex].stuAnswer.replace(str1,str2)
+      setData([])
       setData(newdata)
-      console.log(data[selectedIndex].stuAnswer)
-      
-      setSelectedIndex(selectedIndex)
+      // setSelectedIndex(selectedIndex)
     }
 
     function loading(success){

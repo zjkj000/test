@@ -26,7 +26,9 @@ export default function PaperList(props) {
         get_CorrectAllQuestion();
         if(!success){fetchData(isRefreshing=false,statusa='0')}
       }
-      
+      return ()=>{
+        SearchText = ''
+      }
     },[props.route.params.whohassubmit])
 
     function fetchData(isRefreshing=false,statusa='0'){
@@ -206,7 +208,7 @@ export default function PaperList(props) {
           </View>
 
           {data.length>0?(
-            <View style={{alignItems:'center',paddingBottom:10,height:screenHeight-130,backgroundColor:'#FFFFFF',borderColor:'#000000',borderTopWidth:0.5}}>
+            <View style={{alignItems:'center',paddingBottom:10,flex:1,backgroundColor:'#FFFFFF',borderColor:'#000000',borderTopWidth:0.5}}>
                 <FlatList
                   showsVerticalScrollIndicator={false}
                     //定义数据显示效果
@@ -217,7 +219,7 @@ export default function PaperList(props) {
                     refreshing={isRefresh}
                 />
           </View>):(
-            <View style={{width:'100%',alignItems:'center',height:screenHeight-130}}>
+            <View style={{width:'100%',alignItems:'center',flex:1}}>
               <Text style={{marginTop:20,fontSize:15}}>暂时没有学生提交答案</Text>
             </View>
           )
@@ -318,8 +320,8 @@ export default function PaperList(props) {
                 </View>
                     
                 <View style={{paddingLeft:15,width:'90%',justifyContent:'center'}}>
-                    <View style={{flexDirection:'row',marginBottom:8}}>
-                        <Text style={{width:'27%'}}>{this.state.userCn}</Text>
+                    <View style={{flexDirection:'row',marginBottom:8,marginRight:5}}>
+                        <Text style={{width:'25%'}}>{this.state.userCn}</Text>
 
                         {(this.state.status=='4'||this.state.status=='5')?
                         (<View style={{flexDirection:'row',width:'25%'}}>

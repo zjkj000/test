@@ -66,7 +66,7 @@ class LookCorrectDetailsContent extends Component {
 
     render() {
     return (
-        <View>
+        <View style={{height:'100%'}}>
           <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:1}}>
               <TouchableOpacity style={{position:'absolute',left:10}} onPress={()=>{this.props.navigation.goBack()}}>
                   <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goback.png')}></Image>
@@ -92,7 +92,7 @@ class LookCorrectDetailsContent extends Component {
 
             
           </View>
-            <ScrollView style={{height:ScreenHeight-50}}>
+            <ScrollView style={{flex:1}}>
 
             {/* 平均分 */}
             <View style={{marginBottom:5,paddingTop:10,paddingBottom:10,paddingLeft:15,backgroundColor:'#FFFFFF'}}>
@@ -122,9 +122,9 @@ class LookCorrectDetailsContent extends Component {
                 {/* 根据小箭头状态判断加载不加载 */}
                 {this.state.selectItem=='最高分'
                 ?(<View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start',paddingBottom:20,paddingTop:10}}>
-                  {this.state.data.maxList.map(function(item){
+                  {this.state.data.maxList.map(function(item,index){
                             return(
-                              <View style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
+                              <View key={index} style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
                                     <Text>{item}</Text>
                                 </View>
                             )
@@ -155,9 +155,9 @@ class LookCorrectDetailsContent extends Component {
                 {/* 根据小箭头判断加载不加载 */}
                 {this.state.selectItem=='最低分'
                 ?(<View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start',paddingBottom:20,paddingTop:10}}>
-                        {this.state.data.minList.map(function(item){
+                        {this.state.data.minList.map(function(item,index){
                             return(
-                              <View style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
+                              <View key={index} style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
                                     <Text>{item}</Text>
                                 </View>
                             )
@@ -189,9 +189,9 @@ class LookCorrectDetailsContent extends Component {
                 {/* 根据小箭头判断加载不加载 */}
                 {this.state.selectItem=='已批改'
                 ?(<View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start',paddingBottom:20,paddingTop:10}}>
-                      {this.state.data.correctingList.map(function(item){
+                      {this.state.data.correctingList.map(function(item,index){
                             return(
-                              <View style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
+                              <View key={index}  style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
                                     <Text>{item}</Text>
                                 </View>
                             )
@@ -222,9 +222,9 @@ class LookCorrectDetailsContent extends Component {
                 {/* 根据小箭头判断加载不加载 */}
                 {this.state.selectItem=='未批改'
                 ?(<View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start',paddingBottom:20,paddingTop:10}}>
-                      {this.state.data.noCorrectingList.map(function(item){
+                      {this.state.data.noCorrectingList.map(function(item,index){
                             return(
-                              <View style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
+                              <View key={index} style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
                                     <Text>{item}</Text>
                                 </View>
                             )
@@ -256,9 +256,9 @@ class LookCorrectDetailsContent extends Component {
                 {/* 根据小箭头判断加载不加载 */}
                 {this.state.selectItem=='未提交'
                 ?(<View style={{flexDirection:'row',flexWrap:'wrap',alignItems:'flex-start',paddingBottom:20,paddingTop:10}}>
-                      {this.state.data.noSubmitList.map(function(item){
+                      {this.state.data.noSubmitList.map(function(item,index){
                             return(
-                                <View style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
+                                <View key={index} style={{margin:8,height:35,alignItems:"center",backgroundColor:'#C0C0C0',width:screenWidth*0.18,justifyContent:"center"}}>
                                     <Text>{item}</Text>
                                 </View>
                             )
