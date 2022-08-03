@@ -493,7 +493,7 @@ class ContentList extends React.Component {
                                 onChangeText={(text)=>{ textInputPaper = text }}
                             >{this.state.content == "null" ? '' : this.state.content}</TextInput>
                         </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
+                        <View style={{ paddingLeft: 0, width: screenWidth*0.9 - 4, height: 2, backgroundColor: "#DCDCDC" }} />
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
                             <Text style={styles.longTitle}>学习目标：</Text>
                             <TextInput
@@ -501,7 +501,7 @@ class ContentList extends React.Component {
                                 onChangeText={(text)=>{ textLearnAim = text }}
                             >{this.state.aim == "null" ? '' : this.state.aim}</TextInput>
                         </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
+                        <View style={{ paddingLeft: 0, width: screenWidth*0.9 - 4, height: 2, backgroundColor: "#DCDCDC" }} />
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
                             <Text style={styles.longTitle}>学习重点：</Text>
                             <TextInput
@@ -509,7 +509,7 @@ class ContentList extends React.Component {
                                 onChangeText={(text)=>{ textLearnPoint = text }}
                             >{this.state.point == "null" ? '' : this.state.point}</TextInput>
                         </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
+                        <View style={{ paddingLeft: 0, width: screenWidth*0.9 - 4, height: 2, backgroundColor: "#DCDCDC" }} />
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
                             <Text style={styles.longTitle}>学习难点：</Text>
                             <TextInput
@@ -517,7 +517,7 @@ class ContentList extends React.Component {
                                 onChangeText={(text)=>{ textLearnDiff = text }}
                             >{this.state.diff == "null" ? '' : this.state.diff}</TextInput>
                         </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
+                        <View style={{ paddingLeft: 0, width: screenWidth*0.9 - 4, height: 2, backgroundColor: "#DCDCDC" }} />
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
                             <Text style={styles.longTitle}>课堂总结：</Text>
                             <TextInput
@@ -525,7 +525,7 @@ class ContentList extends React.Component {
                                 onChangeText={(text)=>{ textCourseSummary = text }}
                             >{this.state.summary == "null" ? '' : this.state.summary}</TextInput>
                         </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
+                        <View style={{ paddingLeft: 0, width: screenWidth*0.9 - 4, height: 2, backgroundColor: "#DCDCDC" }} />
                         <View style={{ flexDirection: 'row', backgroundColor: '#fff', padding: 5 }}>
                             <Text style={styles.longTitle}>课外扩展：</Text>
                             <TextInput
@@ -533,7 +533,7 @@ class ContentList extends React.Component {
                                 onChangeText={(text)=>{ textCourseExpansion = text }}
                             >{this.state.extension == "null" ? '' : this.state.extension}</TextInput>
                         </View>
-                        <View style={{ paddingLeft: 0, width: screenWidth*0.9, height: 2, backgroundColor: "#DCDCDC" }} />
+                        <View style={{ paddingLeft: 0, width: screenWidth*0.9 - 4, height: 2, backgroundColor: "#DCDCDC" }} />
                     </View>
                     
                 
