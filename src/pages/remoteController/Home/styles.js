@@ -34,9 +34,10 @@ export const styles = StyleSheet.create({
     infoContainer: {
         flexDirection: "row",
         width: screenWidth,
-        flex: 6,
+        flex: 5,
         borderColor: "gray",
         borderBottomWidth: 1,
+        padding: 8,
         // backgroundColor: "red",
     },
     buttonZone: {
@@ -50,8 +51,8 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
     buttonImg: {
-        width: GetSize(233),
-        height: GetSize(110),
+        width: GetSize(233 * 0.95),
+        height: GetSize(110 * 0.95),
     },
     infoZone: {
         flex: 2,
@@ -105,14 +106,14 @@ export const styles = StyleSheet.create({
         justifyContent: "flex-start",
         width: "100%",
         flex: 1,
-        // borderColor: "red",
-        // borderWidth: 1,
+        borderColor: "red",
+        borderWidth: 1,
         backgroundColor: "rgba(255,255,255,0)",
     },
     controllerBlock: {
         flex: 1,
-        // borderColor: "blue",
-        // borderWidth: 1,
+        borderColor: "blue",
+        borderWidth: 1,
         height: "100%",
         alignItems: "center",
         justifyContent: "center",
@@ -131,11 +132,13 @@ export const styles = StyleSheet.create({
         alignItems: "flex-start",
         borderColor: "gray",
         borderTopWidth: 1,
-        padding: 1,
+        padding: 10,
+        // paddingBottom: 12,
+        // paddingTop: 10,
     },
     bottomImg: {
-        width: GetSize(80),
-        height: GetSize(80),
+        width: GetSize(110),
+        height: GetSize(110),
     },
     backdrop: {
         backgroundColor: "rgba(0,0,0,0.5)",
@@ -148,8 +151,8 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
     questionCard: {
-        width: screenWidth * 0.9,
-        height: screenHeight * 0.5,
+        width: screenWidth * 0.85,
+        height: screenHeight * 0.4,
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
@@ -173,8 +176,12 @@ export const styles = StyleSheet.create({
     questionNumBlock: {
         flex: 1,
         flexDirection: "row",
-        justifyContent: "space-evenly",
+        justifyContent: "center",
         alignItems: "center",
+    },
+    questionNum: {
+        marginHorizontal: GetSize(20),
+        fontSize: 20,
     },
     questionOption: {
         flex: 1,
@@ -184,9 +191,8 @@ export const styles = StyleSheet.create({
         alignItems: "center",
     },
     questionButton: {
-        width: 25,
-        height: 25,
-        backgroundColor: "white",
+        width: GetSize(32),
+        height: GetSize(32),
         borderColor: "gray",
         justifyContent: "center",
         alignItems: "center",
@@ -194,8 +200,8 @@ export const styles = StyleSheet.create({
         borderRadius: 50,
     },
     questionOptionImg: {
-        width: GetSize(85),
-        height: GetSize(85),
+        width: GetSize(85 * 1.5),
+        height: GetSize(85 * 1.5),
     },
     exitCard: {
         width: screenWidth * 0.9,
@@ -208,10 +214,14 @@ export const styles = StyleSheet.create({
     },
     questionAnalysisModal: {
         flexDirection: "row",
-        justifyContent: "center",
+        justifyContent: "space-around",
         alignItems: "center",
         width: screenWidth,
         height: screenHeight,
         backgroundColor: "rgba(119,136,153,0.7)",
+    },
+    questionAnalysisImage: {
+        width: GetSize(165),
+        height: GetSize(130),
     },
 });

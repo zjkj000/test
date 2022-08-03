@@ -239,7 +239,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
                     teacher_enable=true;
                 }
             }
-        },300,300);
+        },100,100);
     }
 
     // 构建Runnable对象，在runnable中更新界�?
@@ -1189,7 +1189,7 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
             else{
                 for(int i=0;i<base64_index;i++){
                     System.out.println("base64 i:"+i+" "+base64id_url.get(i));
-                    editoneValue = editoneValue.replace("'"+i+"'","< img src=\""+base64id_url.get(i)+"\">");
+                    editoneValue = editoneValue.replace("'"+i+"'","<img src=\""+base64id_url.get(i)+"\">");
                 }
                 System.out.println("editoneValue i:"+editoneValue);
                 HttpActivity.stuSaveAnswer(editoneValue);

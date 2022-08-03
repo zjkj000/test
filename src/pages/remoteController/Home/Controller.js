@@ -453,36 +453,62 @@ export default class Controller extends Component {
             buttonArray[2].imgList[0],
             buttonArray[2].imgList[2],
         ];
-        console.log("renderTest====================================");
-        console.log(renderList);
-        console.log(PixelRatio.get());
-        console.log("====================================");
+        // console.log("renderTest====================================");
+        // console.log(renderList);
+        // console.log(PixelRatio.get());
+        // console.log("====================================");
         return (
             <Layout style={styles.controllerBox}>
-                <Layout style={styles.controllerRow}>
+                <Layout style={{ ...styles.controllerRow, zIndex: 10 }}>
                     <View style={{ ...renderList[5].blockStyles }}>
-                        <Image
-                            source={
+                        <TouchableOpacity
+                            disabled={
                                 Img_arr[
                                     this.props.buttonType
                                         ? this.props.buttonType
                                         : "default"
-                                ][`png${renderList[5].index}`][1]
+                                ][`png${renderList[5].index}`][0] === 0
                             }
-                            style={{ ...renderList[5].styles }}
-                        />
+                            onPress={() => {
+                                this.handlePress(0, 0);
+                            }}
+                        >
+                            <Image
+                                source={
+                                    Img_arr[
+                                        this.props.buttonType
+                                            ? this.props.buttonType
+                                            : "default"
+                                    ][`png${renderList[5].index}`][1]
+                                }
+                                style={{ ...renderList[5].styles }}
+                            />
+                        </TouchableOpacity>
                     </View>
                     <View style={{ ...renderList[6].blockStyles }}>
-                        <Image
-                            source={
+                        <TouchableOpacity
+                            disabled={
                                 Img_arr[
                                     this.props.buttonType
                                         ? this.props.buttonType
                                         : "default"
-                                ][`png${renderList[6].index}`][1]
+                                ][`png${renderList[6].index}`][0] === 0
                             }
-                            style={{ ...renderList[6].styles }}
-                        />
+                            onPress={() => {
+                                this.handlePress(0, 2);
+                            }}
+                        >
+                            <Image
+                                source={
+                                    Img_arr[
+                                        this.props.buttonType
+                                            ? this.props.buttonType
+                                            : "default"
+                                    ][`png${renderList[6].index}`][1]
+                                }
+                                style={{ ...renderList[6].styles }}
+                            />
+                        </TouchableOpacity>
                     </View>
                 </Layout>
                 <Layout
@@ -505,16 +531,29 @@ export default class Controller extends Component {
                                 style={{ ...renderList[0].blockStyles }}
                             ></View>
                             <View style={{ ...renderList[0].blockStyles }}>
-                                <Image
-                                    source={
+                                <TouchableOpacity
+                                    disabled={
                                         Img_arr[
                                             this.props.buttonType
                                                 ? this.props.buttonType
                                                 : "default"
-                                        ][`png${renderList[0].index}`][1]
+                                        ][`png${renderList[0].index}`][0] === 0
                                     }
-                                    style={{ ...renderList[0].styles }}
-                                />
+                                    onPress={() => {
+                                        this.handlePress(0, 1);
+                                    }}
+                                >
+                                    <Image
+                                        source={
+                                            Img_arr[
+                                                this.props.buttonType
+                                                    ? this.props.buttonType
+                                                    : "default"
+                                            ][`png${renderList[0].index}`][1]
+                                        }
+                                        style={{ ...renderList[0].styles }}
+                                    />
+                                </TouchableOpacity>
                             </View>
                             <View
                                 style={{ ...renderList[0].blockStyles }}
@@ -524,16 +563,29 @@ export default class Controller extends Component {
                     </Layout>
                     <Layout style={styles.controllerRow}>
                         <View style={{ ...renderList[7].blockStyles }}>
-                            <Image
-                                source={
+                            <TouchableOpacity
+                                disabled={
                                     Img_arr[
                                         this.props.buttonType
                                             ? this.props.buttonType
                                             : "default"
-                                    ][`png${renderList[7].index}`][1]
+                                    ][`png${renderList[7].index}`][0] === 0
                                 }
-                                style={{ ...renderList[7].styles }}
-                            />
+                                onPress={() => {
+                                    this.handlePress(1, 0);
+                                }}
+                            >
+                                <Image
+                                    source={
+                                        Img_arr[
+                                            this.props.buttonType
+                                                ? this.props.buttonType
+                                                : "default"
+                                        ][`png${renderList[7].index}`][1]
+                                    }
+                                    style={{ ...renderList[7].styles }}
+                                />
+                            </TouchableOpacity>
                         </View>
                         <View
                             style={{
@@ -543,40 +595,79 @@ export default class Controller extends Component {
                             }}
                         >
                             <View style={{ ...renderList[1].blockStyles }}>
-                                <Image
-                                    source={
+                                <TouchableOpacity
+                                    disabled={
                                         Img_arr[
                                             this.props.buttonType
                                                 ? this.props.buttonType
                                                 : "default"
-                                        ][`png${renderList[1].index}`][1]
+                                        ][`png${renderList[1].index}`][0] === 0
                                     }
-                                    style={{ ...renderList[1].styles }}
-                                />
+                                    onPress={() => {
+                                        this.handlePress(1, 1);
+                                    }}
+                                >
+                                    <Image
+                                        source={
+                                            Img_arr[
+                                                this.props.buttonType
+                                                    ? this.props.buttonType
+                                                    : "default"
+                                            ][`png${renderList[1].index}`][1]
+                                        }
+                                        style={{ ...renderList[1].styles }}
+                                    />
+                                </TouchableOpacity>
                             </View>
                             <View style={{ ...renderList[2].blockStyles }}>
-                                <Image
-                                    source={
+                                <TouchableOpacity
+                                    disabled={
                                         Img_arr[
                                             this.props.buttonType
                                                 ? this.props.buttonType
                                                 : "default"
-                                        ][`png${renderList[2].index}`][1]
+                                        ][`png${renderList[2].index}`][0] === 0
                                     }
-                                    style={{ ...renderList[2].styles }}
-                                />
+                                    onPress={() => {
+                                        this.handlePress(1, 2);
+                                    }}
+                                >
+                                    <Image
+                                        source={
+                                            Img_arr[
+                                                this.props.buttonType
+                                                    ? this.props.buttonType
+                                                    : "default"
+                                            ][`png${renderList[2].index}`][1]
+                                        }
+                                        style={{ ...renderList[2].styles }}
+                                    />
+                                </TouchableOpacity>
                             </View>
                             <View style={{ ...renderList[3].blockStyles }}>
-                                <Image
-                                    source={
+                                <TouchableOpacity
+                                    disabled={
                                         Img_arr[
                                             this.props.buttonType
                                                 ? this.props.buttonType
                                                 : "default"
-                                        ][`png${renderList[3].index}`][1]
+                                        ][`png${renderList[3].index}`][0] === 0
                                     }
-                                    style={{ ...renderList[3].styles }}
-                                />
+                                    onPress={() => {
+                                        this.handlePress(1, 3);
+                                    }}
+                                >
+                                    <Image
+                                        source={
+                                            Img_arr[
+                                                this.props.buttonType
+                                                    ? this.props.buttonType
+                                                    : "default"
+                                            ][`png${renderList[3].index}`][1]
+                                        }
+                                        style={{ ...renderList[3].styles }}
+                                    />
+                                </TouchableOpacity>
                             </View>
                         </View>
                         <View style={{ ...renderList[0].blockStyles }}></View>
@@ -594,16 +685,29 @@ export default class Controller extends Component {
                                 style={{ ...renderList[4].blockStyles }}
                             ></View>
                             <View style={{ ...renderList[4].blockStyles }}>
-                                <Image
-                                    source={
+                                <TouchableOpacity
+                                    disabled={
                                         Img_arr[
                                             this.props.buttonType
                                                 ? this.props.buttonType
                                                 : "default"
-                                        ][`png${renderList[4].index}`][1]
+                                        ][`png${renderList[4].index}`][0] === 0
                                     }
-                                    style={{ ...renderList[4].styles }}
-                                />
+                                    onPress={() => {
+                                        this.handlePress(2, 1);
+                                    }}
+                                >
+                                    <Image
+                                        source={
+                                            Img_arr[
+                                                this.props.buttonType
+                                                    ? this.props.buttonType
+                                                    : "default"
+                                            ][`png${renderList[4].index}`][1]
+                                        }
+                                        style={{ ...renderList[4].styles }}
+                                    />
+                                </TouchableOpacity>
                             </View>
                             <View
                                 style={{ ...renderList[4].blockStyles }}
@@ -612,30 +716,56 @@ export default class Controller extends Component {
                         <View style={{ ...renderList[0].blockStyles }}></View>
                     </Layout>
                 </Layout>
-                <Layout style={styles.controllerRow}>
+                <Layout style={{ ...styles.controllerRow, zIndex: 10 }}>
                     <View style={{ ...renderList[8].blockStyles }}>
-                        <Image
-                            source={
+                        <TouchableOpacity
+                            disabled={
                                 Img_arr[
                                     this.props.buttonType
                                         ? this.props.buttonType
                                         : "default"
-                                ][`png${renderList[8].index}`][1]
+                                ][`png${renderList[8].index}`][0] === 0
                             }
-                            style={{ ...renderList[8].styles }}
-                        />
+                            onPress={() => {
+                                this.handlePress(2, 0);
+                            }}
+                        >
+                            <Image
+                                source={
+                                    Img_arr[
+                                        this.props.buttonType
+                                            ? this.props.buttonType
+                                            : "default"
+                                    ][`png${renderList[8].index}`][1]
+                                }
+                                style={{ ...renderList[8].styles }}
+                            />
+                        </TouchableOpacity>
                     </View>
                     <View style={{ ...renderList[9].blockStyles }}>
-                        <Image
-                            source={
+                        <TouchableOpacity
+                            disabled={
                                 Img_arr[
                                     this.props.buttonType
                                         ? this.props.buttonType
                                         : "default"
-                                ][`png${renderList[9].index}`][1]
+                                ][`png${renderList[9].index}`][0] === 0
                             }
-                            style={{ ...renderList[9].styles }}
-                        />
+                            onPress={() => {
+                                this.handlePress(2, 2);
+                            }}
+                        >
+                            <Image
+                                source={
+                                    Img_arr[
+                                        this.props.buttonType
+                                            ? this.props.buttonType
+                                            : "default"
+                                    ][`png${renderList[9].index}`][1]
+                                }
+                                style={{ ...renderList[9].styles }}
+                            />
+                        </TouchableOpacity>
                     </View>
                 </Layout>
             </Layout>

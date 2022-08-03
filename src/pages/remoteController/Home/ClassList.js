@@ -3,6 +3,7 @@ import { Button, MenuItem, OverflowMenu } from "@ui-kitten/components";
 import { TouchableOpacity, Image } from "react-native";
 import http from "../../../utils/http/request";
 import { styles } from "./styles";
+import { screenHeight } from "../../../utils/Screen/GetSize";
 
 export default function ClassList(props) {
     const [selectedIndex, setSelectedIndex] = React.useState(null);
@@ -117,7 +118,15 @@ export default function ClassList(props) {
     };
     const renderListItem = () => {
         return classList.map((item, index) => {
-            return <MenuItem key={`classList-${index}`} title={item} />;
+            return (
+                <MenuItem
+                    key={`classList-${index}`}
+                    title={item}
+                    onPress={() => {
+                        remoteControl("openRes", "openRes", index);
+                    }}
+                />
+            );
         });
     };
     return (
@@ -129,6 +138,7 @@ export default function ClassList(props) {
             onBackdropPress={() => {
                 setVisible(false);
             }}
+            style={{ overflow: "visible", maxHeight: screenHeight * 0.8 }}
         >
             {renderListItem()}
         </OverflowMenu>

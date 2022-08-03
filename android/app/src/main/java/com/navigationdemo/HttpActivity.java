@@ -66,7 +66,7 @@ public class HttpActivity extends AnswerActivity {
                 getControlMessage();
                 getChatRoomMessageByStuApp(last_actiontime_chat);
             }
-        },300,300);
+        },100,100);
     }
 
     //http访问服务器请求,学生获取互动消息接口
@@ -229,13 +229,16 @@ public class HttpActivity extends AnswerActivity {
 //                String messagelist = jsonObject.getString("list");
 //                System.out.println("messagelist==>"+messagelist);
                 JSONArray messages=jsonObject.getJSONArray("list");
-                System.out.println("length:"+messages.length());
+                System.out.println("chat_length:"+messages.length());
 
                 //AnswerActivity.messageList=new ArrayList<>();
                 //messageList = new LinkedList<>();
 
                 //AnswerActivity.messageList;
                 //chatBeanList.add(new ChatBean("Hello~~~",null,0));
+                if(messages.length()<=0){
+                    return;
+                }
                 mydrawable = HttpActivity.loadImageFromNetwork(mUserPhoto);
                 for(int i=0;i<messages.length();i++){
                     ChatBean item = new ChatBean();
@@ -256,16 +259,19 @@ public class HttpActivity extends AnswerActivity {
                         AnswerActivity.messageList.add(item);
                     //}
                 }
-                System.out.println("mlist:"+AnswerActivity.messageList.size());
-
-                if(LaunchActivity.mlist_size!=AnswerActivity.messageList.size()){
-                    LaunchActivity.refreshChatFlag = 1;
-                    LaunchActivity.mlist_size=AnswerActivity.messageList.size();
-                }
-                else {
-                    LaunchActivity.refreshChatFlag = 0;
-                }
-                System.out.println("refreshChatFlag:"+LaunchActivity.refreshChatFlag);
+//                System.out.println("mlist:"+AnswerActivity.messageList.size());
+//                for(int i=0;i<AnswerActivity.messageList.size();i++){
+//                    System.out.println("messageList["+i+"]"+AnswerActivity.messageList.get(i).messageStuget);
+//                }
+//
+//                if(LaunchActivity.mlist_size!=AnswerActivity.messageList.size()){
+//                    LaunchActivity.refreshChatFlag = 1;
+//                    LaunchActivity.mlist_size=AnswerActivity.messageList.size();
+//                }
+//                else {
+//                    LaunchActivity.refreshChatFlag = 0;
+//                }
+//                System.out.println("refreshChatFlag:"+LaunchActivity.refreshChatFlag);
 
             }catch (JSONException e) {
                 e.printStackTrace();
@@ -474,7 +480,7 @@ public class HttpActivity extends AnswerActivity {
                     String userId = LaunchActivity.mUserId;
                     String userCn =LaunchActivity.mUserCn;
                     //String userPhone ="http:\\/\\/www.cn901.com\\/res\\/avatar\\/2020\\/02\\/avatar-mingming-19074821.jpg";
-                    String userPhone ="http://www.cn901.com/res/avatar/2020/02/avatar-mingming-19074821.jpg";
+                    String userPhone =LaunchActivity.mUserPhoto;
                     //String message = "";
                     String role = "0";
                     String source = "app";
@@ -521,6 +527,7 @@ public class HttpActivity extends AnswerActivity {
                         System.out.println("chatStatus==>"+AnswerActivity.chatStatus);
                         AnswerActivity.chatMessage = jsonObject.getString("message");
                         System.out.println("chatMessage==>"+chatMessage);
+                        System.out.println("chatMessage_item==>"+message);
                         //JSONObject sec = new JSONObject(data);
                     }catch (JSONException e) {
                         e.printStackTrace();
