@@ -799,11 +799,11 @@ const styles = StyleSheet.create({
     },
     courseName_timeStop: {
         fontSize: 15,
-        width: screenWidth * 0.8,
+        width: screenWidth * 0.77,
     },
     time: {
         fontSize: 15,
-        width: screenWidth * 0.2,
+        width: screenWidth * 0.23,
     },
     content: {
         fontSize: 15,

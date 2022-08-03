@@ -231,7 +231,7 @@ class UpdateContentPage extends React.Component {
     showContent  = () => {
         const {selectContentList , updateContentIndex} = this.state;
         if(selectContentList[updateContentIndex].type == 'paper'){
-            return(
+            return(  //app崩溃，该页面没有selectContentIndex参数，应该是updateContentIndex
                 <View style={styles.contentView}> 
                     <View style={{alignItems: "center",height:40,top:5}}>
                         <Text style={{
@@ -241,12 +241,12 @@ class UpdateContentPage extends React.Component {
                             numberOfLines={1}
                             ellipsizeMode={"tail"}
                         >
-                            {contentList[selectContentIndex].name}
+                            {contentList[updateContentIndex].name}
                         </Text>
                     </View>
                     <WebView  
                         scalesPageToFit={Platform.OS === 'ios'? true : false}
-                        source={{ uri: contentList[selectContentIndex].url }} 
+                        source={{ uri: contentList[updateContentIndex].url }} 
                     />
                 </View>
             );
@@ -399,161 +399,161 @@ class UpdateContentPage extends React.Component {
         }else if(contentTemp.format == 'music'){
             return(
                 <View style={{flex: 1,backgroundColor: '#fff',}}>
-                  <View style={{alignItems: "center"}}>
-                    <Text style={{
-                        top: screenHeight*0.1,
-                        fontSize: 20,
-                        fontWeight:'600',
-                      }}
-                    >
-                        {contentTemp.name}
-                    </Text>
-                  </View>
-                  <View style={{
-                        top: screenHeight*0.1,
-                        width: screenWidth, 
-                        height: 50, 
-                        backgroundColor:'#000000',
-                      }}
-                  >
-                    <Video
-                      ref={(ref) => this.videoPlayer = ref}
-                      source={{uri: contentTemp.url}}
-                      rate={1.0}
-                      volume={1.0}
-                      muted={false}
-                      paused={!this.state.isPlaying}
-                      resizeMode={'contain'}
-                      playWhenInactive={false}
-                      playInBackground={false}
-                      ignoreSilentSwitch={'ignore'}
-                      progressUpdateInterval={250.0}  //通知频率
-                      onLoadStart={this._onLoadStart}
-                      onLoad={this._onLoaded}
-                      onProgress={this._onProgressChanged}  //播放进度通知
-                      onEnd={this._onPlayEnd}
-                      onError={this._onPlayError}
-                      onBuffer={this._onBuffering}
-                      style={{width: screenWidth, height: 50}}
-                    />
+                    <View style={{alignItems: "center"}}>
+                        <Text style={{
+                            top: screenHeight*0.27,
+                            fontSize: 20,
+                            fontWeight:'600',
+                        }}
+                        >
+                            {contentTemp.name}
+                        </Text>
                     </View>
-                    {
-                        <View style={[styles.control, {width: screenWidth}]}>
-                          {/**播放器工具栏 播放暂停图标onControlPlayPress() */}
-                          <TouchableOpacity activeOpacity={0.3} onPress={() => { this.onControlPlayPress() }}>
-                            <Image
-                              style={styles.playControl}
-                              source={this.state.isPlaying ? require('../../../../assets/LatestTaskImages/continue.png') : require('../../../../assets/LatestTaskImages/pause.png')}
-                            />
-                          </TouchableOpacity>
-                          <Text style={styles.time}>{formatTime(this.state.currentTime)}</Text>
-                          {/**进度条 */}
-                          <Slider
-                            style={{flex: 1}}
-                            maximumTrackTintColor={'#999999'}
-                            minimumTrackTintColor={'#00c06d'}
-                            thumbImage={require('../../../../assets/LatestTaskImages/jindu.png')}
-                            value={this.state.currentTime}
-                            minimumValue={0}
-                            maximumValue={this.state.duration}
-                            onValueChange={(currentTime) => { this.onSliderValueChanged(currentTime) }}
-                          />
-                          <Text style={styles.time}>{formatTime(this.state.duration)}</Text>
-                        </View>
-                    }
+                    <View style={{
+                            top: screenHeight*0.3,
+                            width: screenWidth, 
+                            height: 50, 
+                            backgroundColor:'#000000',
+                        }}
+                    >
+                        <Video
+                            ref={(ref) => this.videoPlayer = ref}
+                            source={{uri: contentTemp.url}}
+                            rate={1.0}
+                            volume={1.0}
+                            muted={false}
+                            paused={!this.state.isPlaying}
+                            resizeMode={'contain'}
+                            playWhenInactive={false}
+                            playInBackground={false}
+                            ignoreSilentSwitch={'ignore'}
+                            progressUpdateInterval={250.0}  //通知频率
+                            onLoadStart={this._onLoadStart}
+                            onLoad={this._onLoaded}
+                            onProgress={this._onProgressChanged}  //播放进度通知
+                            onEnd={this._onPlayEnd}
+                            onError={this._onPlayError}
+                            onBuffer={this._onBuffering}
+                            style={{width: screenWidth, height: 50}}
+                        />
+                        {
+                            <View style={[styles.control, {width: screenWidth}]}>
+                            {/**播放器工具栏 播放暂停图标onControlPlayPress() */}
+                                <TouchableOpacity activeOpacity={0.3} onPress={() => { this.onControlPlayPress() }}>
+                                    <Image
+                                        style={styles.playControl}
+                                        source={this.state.isPlaying ? require('../../../../assets/LatestTaskImages/continue.png') : require('../../../../assets/LatestTaskImages/pause.png')}
+                                    />
+                                </TouchableOpacity>
+                                <Text style={styles.time}>{formatTime(this.state.currentTime)}</Text>
+                                {/**进度条 */}
+                                <Slider
+                                    style={{flex: 1}}
+                                    maximumTrackTintColor={'#999999'}
+                                    minimumTrackTintColor={'#00c06d'}
+                                    thumbImage={require('../../../../assets/LatestTaskImages/jindu.png')}
+                                    value={this.state.currentTime}
+                                    minimumValue={0}
+                                    maximumValue={this.state.duration}
+                                    onValueChange={(currentTime) => { this.onSliderValueChanged(currentTime) }}
+                                />
+                                <Text style={styles.time}>{formatTime(this.state.duration)}</Text>
+                            </View>
+                        }
+                    </View>
                 </View>
             );
         }else if(contentTemp.format == 'video'){
             return(
                 // <Videos videoObj={contentTemp} />
                 <View style={{flex: 1,backgroundColor: '#fff',}}>
-                  <View style={{alignItems: "center"}}>
-                    <Text style={{
-                        top: screenHeight*0.1,
-                        fontSize: 20,
-                        fontWeight:'600',
-                      }}
-                    >
-                        {contentTemp.name}
-                    </Text>
-                  </View>
-                  <View style={{
-                        top: screenHeight*0.1,
-                        width: screenWidth, 
-                        height: screenHeight*0.57, 
-                        backgroundColor:'#000000',
-                      }}
-                  >
-                    <Video
-                      ref={(ref) => this.videoPlayer = ref}
-                      source={{uri: contentTemp.url}}
-                      rate={1.0}
-                      volume={1.0}
-                      muted={false}
-                      paused={!this.state.isPlaying}
-                      resizeMode={'contain'}
-                      playWhenInactive={false}
-                      playInBackground={false}
-                      ignoreSilentSwitch={'ignore'}
-                      progressUpdateInterval={250.0}  //通知频率
-                      onLoadStart={this._onLoadStart}
-                      onLoad={this._onLoaded}
-                      onProgress={this._onProgressChanged}  //播放进度通知
-                      onEnd={this._onPlayEnd}
-                      onError={this._onPlayError}
-                      onBuffer={this._onBuffering}
-                      style={{width: screenWidth, height: screenHeight*0.5,marginBottom:100}}
-                    />
+                    <View style={{alignItems: "center"}}>
+                        <Text style={{
+                            top: screenHeight*0.1,
+                            fontSize: 20,
+                            fontWeight:'600',
+                        }}
+                        >
+                            {contentTemp.name}
+                        </Text>
                     </View>
-                    {/**hideControl()控制播放器工具栏的显示和隐藏 */}
-                    <TouchableWithoutFeedback onPress={() => { this.hideControl() }}> 
-                      <View
-                        style={{
-                          position: 'absolute',
-                          top: screenHeight*0.1,
-                          left: 0,
-                          width: screenWidth,
-                          height: screenHeight*0.5,
-                          backgroundColor: this.state.isPlaying ? 'transparent' : 'rgba(0, 0, 0, 0)',
-                          alignItems:'center',
-                          justifyContent:'center'
-                        }}>
-                        {   //视频暂停时显示暂停图标
-                          this.state.isPlaying ? null :
-                            <TouchableWithoutFeedback onPress={() => { this.onPressPlayButton() }}>
-                              <Image
-                                style={styles.playButton}
-                                source={require('../../../../assets/LatestTaskImages/pause.png')}
-                              />
-                            </TouchableWithoutFeedback>
+                    <View style={{
+                            top: screenHeight*0.1,
+                            width: screenWidth, 
+                            height: screenHeight*0.50, 
+                            backgroundColor:'#000000',
+                        }}
+                    >
+                        <Video
+                        ref={(ref) => this.videoPlayer = ref}
+                        source={{uri: contentTemp.url}}
+                        rate={1.0}
+                        volume={1.0}
+                        muted={false}
+                        paused={!this.state.isPlaying}
+                        resizeMode={'contain'}
+                        playWhenInactive={false}
+                        playInBackground={false}
+                        ignoreSilentSwitch={'ignore'}
+                        progressUpdateInterval={250.0}  //通知频率
+                        onLoadStart={this._onLoadStart}
+                        onLoad={this._onLoaded}
+                        onProgress={this._onProgressChanged}  //播放进度通知
+                        onEnd={this._onPlayEnd}
+                        onError={this._onPlayError}
+                        onBuffer={this._onBuffering}
+                        style={{width: screenWidth, height: screenHeight*0.5,marginBottom:80}}
+                        />
+                        {/**hideControl()控制播放器工具栏的显示和隐藏 */}
+                        <TouchableWithoutFeedback onPress={() => { this.hideControl() }}> 
+                            <View
+                                style={{
+                                    position: 'absolute',
+                                    // top: screenHeight*0.1,
+                                    left: 0,
+                                    width: screenWidth,
+                                    height: screenHeight*0.5,
+                                    backgroundColor: this.state.isPlaying ? 'transparent' : 'rgba(0, 0, 0, 0)',
+                                    alignItems:'center',
+                                    justifyContent:'center'
+                                }}>
+                                {   //视频暂停时显示暂停图标
+                                this.state.isPlaying ? null :
+                                    <TouchableWithoutFeedback onPress={() => { this.onPressPlayButton() }}>
+                                    <Image
+                                        style={styles.playButton}
+                                        source={require('../../../../assets/LatestTaskImages/pause.png')}
+                                    />
+                                    </TouchableWithoutFeedback>
+                                }
+                            </View>
+                        </TouchableWithoutFeedback>
+                        {
+                            this.state.showVideoControl ?  // 是否显示视频控制组件
+                                <View style={[styles.control, {width: screenWidth}]}>
+                                    {/**播放器工具栏 播放暂停图标onControlPlayPress() */}
+                                    <TouchableOpacity activeOpacity={0.3} onPress={() => { this.onControlPlayPress() }}>
+                                        <Image
+                                        style={styles.playControl}
+                                        source={this.state.isPlaying ? require('../../../../assets/LatestTaskImages/continue.png') : require('../../../../assets/LatestTaskImages/pause.png')}
+                                        />
+                                    </TouchableOpacity>
+                                    <Text style={styles.time}>{formatTime(this.state.currentTime)}</Text>
+                                    {/**进度条 */}
+                                    <Slider
+                                        style={{flex: 1}}
+                                        maximumTrackTintColor={'#999999'}
+                                        minimumTrackTintColor={'#00c06d'}
+                                        thumbImage={require('../../../../assets/LatestTaskImages/jindu.png')}
+                                        value={this.state.currentTime}
+                                        minimumValue={0}
+                                        maximumValue={this.state.duration}
+                                        onValueChange={(currentTime) => { this.onSliderValueChanged(currentTime) }}
+                                    />
+                                    <Text style={styles.time}>{formatTime(this.state.duration)}</Text>
+                                </View> : null
                         }
-                      </View>
-                    </TouchableWithoutFeedback>
-                    {
-                      this.state.showVideoControl ?  // 是否显示视频控制组件
-                        <View style={[styles.control, {width: screenWidth}]}>
-                          {/**播放器工具栏 播放暂停图标onControlPlayPress() */}
-                          <TouchableOpacity activeOpacity={0.3} onPress={() => { this.onControlPlayPress() }}>
-                            <Image
-                              style={styles.playControl}
-                              source={this.state.isPlaying ? require('../../../../assets/LatestTaskImages/continue.png') : require('../../../../assets/LatestTaskImages/pause.png')}
-                            />
-                          </TouchableOpacity>
-                          <Text style={styles.time}>{formatTime(this.state.currentTime)}</Text>
-                          {/**进度条 */}
-                          <Slider
-                            style={{flex: 1}}
-                            maximumTrackTintColor={'#999999'}
-                            minimumTrackTintColor={'#00c06d'}
-                            thumbImage={require('../../../../assets/LatestTaskImages/jindu.png')}
-                            value={this.state.currentTime}
-                            minimumValue={0}
-                            maximumValue={this.state.duration}
-                            onValueChange={(currentTime) => { this.onSliderValueChanged(currentTime) }}
-                          />
-                          <Text style={styles.time}>{formatTime(this.state.duration)}</Text>
-                        </View> : null
-                    }
+                    </View>
                 </View>
             );
         }else if(contentTemp.format == 'other'){

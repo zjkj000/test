@@ -282,7 +282,7 @@ export default function CorrectingPaper(props) {
                   params:{ 
                     taskId:taskId, 
                     type:type,
-                    whohassubmit:userName
+                    whohassubmit:userName+new Date()
                       },
                   megre:true})
           }else{

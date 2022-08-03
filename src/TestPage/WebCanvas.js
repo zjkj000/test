@@ -239,7 +239,8 @@ var html = `<html>
      this.state = {
        height: this.props.height,
        width: this.props.width,
-       url:String(this.props.url).replace('cn901.com', 'cn901.net:8111')
+       url:String(this.props.url).replace('cn901.com', 'cn901.net:8111'),
+       isfirst:true,
      }
    }
    // 铅笔
@@ -258,12 +259,12 @@ var html = `<html>
      this.post({action:'-1'})
    }
    _destoryDraw(){
+    this.setState({isfirst:false})
     this.post({action:6})
    }
  
    // 以url的形式添加背景
    _addImageUrl(data){
-    console.log('WebCanvas-----addImageUrl',data)
     // this._init()
     this.post({action: 4, data: data})
    }
@@ -291,11 +292,13 @@ var html = `<html>
    }
  
    webviewload(){
-     // alert('加载成功！')
-     console.log('WebCanvas---webviewload')
      this.webview.injectJavaScript('init_canvas('+this.props.width+', '+this.props.height+')');
      if(this.state.url!=null){
-      this._addImageUrl(String(this.state.url).replace('cn901.com', 'cn901.net:8111'))
+      var strurl =String(this.state.url).replace('cn901.com', 'cn901.net:8111')
+      this._addImageUrl(strurl)
+     }
+     if(this.state.isfirst){
+      this._destoryDraw()
      }
      if (this.props.onLoad){
        this.props.onLoad(); 
@@ -307,21 +310,15 @@ var html = `<html>
      if (obj.action == 0){
        this.props.handleBase64(obj.data);
      }else if (obj.action == 6){
-      console.log('监听到了html') 
       this.props.handleUrl(obj.data);
     }
    } 
 
    UNSAFE_componentWillMount(){
-    
-    console.log('检查原因：++Will++',String(this.props.url).substring(75))
-    // console.log('WebCanvas加载了----WillMount',this.props.url)
     this.setState({url:String(this.props.url).replace('cn901.com', 'cn901.net:8111')})
    }
 
    UNSAFE_componentWillUpdate(nextProps){
-    console.log('检查原因：++Update++',String(nextProps.url).substring(75))
-    
     if(this.state.url!=nextProps.url&&this.state.url!=''){
       this.setState({url:nextProps.url})
     }

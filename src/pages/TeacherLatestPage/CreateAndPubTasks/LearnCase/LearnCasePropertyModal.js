@@ -1231,7 +1231,7 @@ class LearnCasePropertyModal extends React.Component {
 
                     }
                     {/**学段列表 */}
-                    {this.state.studyRankVisibility ?
+                    {this.state.studyRankVisibility && !this.state.privateContent ?
                         <View style={styles.contentlistView}>
                             {
                                 this.state.channelNameList.length <= 0
@@ -1280,7 +1280,7 @@ class LearnCasePropertyModal extends React.Component {
                         : null
                     }
                     {/**学科列表 */}
-                    {this.state.studyClassVisibility ?
+                    {this.state.studyClassVisibility && !this.state.privateContent ?
                         <View style={styles.contentlistView}>
                             {
                                 this.state.studyClassList.length <= 0
@@ -1329,7 +1329,7 @@ class LearnCasePropertyModal extends React.Component {
                         : null
                     }
                     {/**版本列表 */}
-                    {this.state.editionVisibility ?
+                    {this.state.editionVisibility && !this.state.privateContent ?
                         <View style={styles.contentlistView}>
                             {
                                 this.state.editionList.length <= 0
@@ -1379,7 +1379,7 @@ class LearnCasePropertyModal extends React.Component {
                         : null
                     }
                     {/**教材列表 */}
-                    {this.state.bookVisibility ?
+                    {this.state.bookVisibility && !this.state.privateContent ?
                         <View style={styles.contentlistView}>
                             {
                                 this.state.bookList.length <= 0
@@ -1423,7 +1423,7 @@ class LearnCasePropertyModal extends React.Component {
                         : null
                     }
                     {/**知识点选择悬浮页面!!! */}
-                    {this.state.knowledgeVisibility ?
+                    {this.state.knowledgeVisibility && !this.state.privateContent ?
                         <TouchableOpacity
                             style={styles.knowledge}
                             onPress={() => {

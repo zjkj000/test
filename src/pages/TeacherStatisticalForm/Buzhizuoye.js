@@ -4,18 +4,8 @@ let {width, height} = Dimensions.get('window');
 import Echarts from 'native-echarts';
 import MyTable from './MyTable'
 import http from '../../utils/http/request'
-import { useNavigation } from '@react-navigation/native';
 import { screenWidth } from '../../utils/Screen/GetSize';
-export default function Buzhizuoye(props) {
-  const navigation = useNavigation()
-  const yearTermStartTime = props.yearTermStartTime
-  const yearTermEndTime = props.yearTermEndTime
-  const date =props.date
-  return (
-    <BuzhizuoyeContent navigation={navigation} date={date} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
-  )
-}
-class BuzhizuoyeContent extends Component {
+export default class Buzhizuoye extends Component {
   constructor(props){
     super(props)
     this.state={
@@ -56,7 +46,7 @@ class BuzhizuoyeContent extends Component {
   }
 
   UNSAFE_componentWillReceiveProps(nextprops){
-    if(this.state.BuzhizuoyeDateStr!=nextprops.BuzhizuoyeDateStr){
+    if(this.state.BuzhizuoyeDateStr!=nextprops.date){
       this.setState({BuzhizuoyeDateStr:nextprops.date})
       this.getanayGetBZZYNum(nextprops.date+' 00:00:00',nextprops.date+' 23:59:59')
     }

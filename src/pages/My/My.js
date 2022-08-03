@@ -275,7 +275,7 @@ class MyPageComponent extends Component {
                 </TouchableOpacity>
                 
 
-                <TouchableOpacity
+                {/* <TouchableOpacity
                     onPress={() => {
                         this.props.navigation.navigate({ name: "TestPage1",params:{url:''} });
                     }}
@@ -291,7 +291,7 @@ class MyPageComponent extends Component {
                             />
                         </Text>
                     </View>
-                </TouchableOpacity>
+                </TouchableOpacity> */}
 
                 {global.constants.userType === "STUDENT" ? (
                     <>

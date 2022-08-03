@@ -162,14 +162,12 @@ export default function StatisticalForm() {
                     </TouchableOpacity>
                   </View>
                 </View>
-              {this.state.SchoolYearTermName==''?(
-                <View>
-                    <Loading show='true' color='#59B9E0'/>
-                </View>):(
-
-                          <ScrollView style={{backgroundColor:'#ECEEED',padding:6,paddingTop:5}}>
+              {this.state.SchoolYearTermName==''
+                ?(<View style={{flex:1}}><Loading show='true' color='#59B9E0'/></View>)
+                :(<View style={{flex:1}}>
+                    <ScrollView style={{backgroundColor:'#ECEEED',padding:6,paddingTop:5,flex:1}}>
                           {/* 累计使用 */}
-                          <Leijishiyong data={this.state.leijishiyonglist}  setdatastr={this.setselectYearTerm} SchoolYearTerm={this.state.SchoolYearTerm} SchoolYearTermName={this.state.SchoolYearTermName}yearTermStartTime={this.state.yearTermStartTime}yearTermEndTime={this.state.yearTermEndTime} />
+                          <Leijishiyong  setdatastr={this.setselectYearTerm} SchoolYearTerm={this.state.SchoolYearTerm} SchoolYearTermName={this.state.SchoolYearTermName}yearTermStartTime={this.state.yearTermStartTime}yearTermEndTime={this.state.yearTermEndTime} />
                           {/* 课堂授课标题+日历 */}
                           <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
                             <View style={{flexDirection:'row'}}>
@@ -189,7 +187,7 @@ export default function StatisticalForm() {
                             <BasePicker modle={'Date'} setDateOrTime={this.setKetangshoukeDate} selected={this.state.KetangshoukeDateStr}/>
                           </View>
                           {/* 课堂授课图表 */}
-                          <Ketangshouke  data={this.state.ketangshoukelist} date={this.state.KetangshoukeDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime} />
+                          <Ketangshouke   date={this.state.KetangshoukeDateStr}  />
                           {/* 布置作业标题+日历 */}
                           <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
                             <View style={{flexDirection:'row'}}>
@@ -204,12 +202,11 @@ export default function StatisticalForm() {
                               <TouchableOpacity onPress={()=>{this.setState({BuzhizuoyeDateStr:this.nextDay(this.state.BuzhizuoyeDateStr)})}}>
                                 <Text style={{color:'#87CEFA',fontSize:18}} >   {'>'}</Text>
                               </TouchableOpacity>
-                              
                             </View>
                             <BasePicker modle={'Date'} setDateOrTime={this.setBuzhizuoyeDate} selected={this.state.BuzhizuoyeDateStr}/>
                           </View>
                           {/* 布置作业图表 */}
-                          <Buzhizuoye data={this.state.buzhizuoyelist} date={this.state.BuzhizuoyeDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime}/>
+                          <Buzhizuoye date={this.state.BuzhizuoyeDateStr} />
                           {/* 批阅试题标题+日历 */}
                           <View style={{height:30,flexDirection:'row',justifyContent:'space-between',margin:10,alignItems:'center'}}>
                             <View style={{flexDirection:'row'}}>
@@ -228,9 +225,11 @@ export default function StatisticalForm() {
                             <BasePicker modle={'Date'} setDateOrTime={this.setPiyueshitiDate} selected={this.state.PiyueshitiDateStr} />
                           </View>
                           {/* 批阅试题图表 */}
-                          <Piyueshiti data={this.state.piyueshitilist} date={this.state.PiyueshitiDateStr} yearTermStartTime={this.state.yearTermStartTime} yearTermEndTime={this.state.yearTermEndTime}/>
-                         
-                          </ScrollView>)
+                          <Piyueshiti  date={this.state.PiyueshitiDateStr} />
+                          </ScrollView>
+                </View>
+                
+                          )
               }
       </View>     
     )

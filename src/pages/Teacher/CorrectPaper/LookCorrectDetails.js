@@ -31,6 +31,7 @@ class LookCorrectDetailsContent extends Component {
         taskId:this.props.taskId, 
         type:this.props.type
       })
+      console.log(this.props.type,this.props.taskId)
       const url = global.constants.baseUrl+"teacherApp_lookPresentation.do";
       const params = {
             taskId:this.props.taskId,           //作业id或者导学案id
@@ -39,6 +40,8 @@ class LookCorrectDetailsContent extends Component {
           };
       if(!this.state.success){
         http.get(url, params).then((resStr) => {
+          
+          console.log(resStr)
           let resJson = JSON.parse(resStr);
           this.setState({
                 data:resJson.data,

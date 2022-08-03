@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { View, Text, TouchableOpacity, Image,Button } from "react-native";
 import { screenHeight, screenWidth } from "../utils/Screen/GetSize";
-import { styles } from "./styles";
 import WebCanvas from "./WebCanvas";
 import http from "../utils/http/request";
 var imagebase64=''
@@ -16,16 +15,18 @@ export default class Correct_img extends Component {
         };
     }
    
-
-
     delect_correctimage(){
-        const urla = global.constants.baseUrl +
-                    "/AppServer/ajax/userManage_deleteCanvasImageFromRn.do";
+        const urla = global.constants.baseUrl + "/AppServer/ajax/userManage_deleteCanvasImageFromRn.do";
         const params = {
-            imagePath:url,
+            imagePath:baseurl,
         };
+        http.post(urla, params, false).then((res) => {
+            if(res.status){
+                this.props.navigation.goBack();
+            }
+        })
     }
-
+    //保存批改记录
     save_correctimage(data){
         const urla = global.constants.baseUrl +
                     "/AppServer/ajax/userManage_saveCanvasImageFromRn.do";
@@ -36,6 +37,7 @@ export default class Correct_img extends Component {
         };
         http.post(urla, params, false).then((res) => {
             if(res.status){
+                //修改批改页面的批改结果
                 this.props.route.params.updateStuAnswer(baseurl,res.url)
                 this.props.navigation.goBack();
             }
@@ -51,7 +53,6 @@ export default class Correct_img extends Component {
         };
         http.post(urla, params, false).then((res) => {
             if(res.status){
-                console.log('移动保存',res.url)
                 url=res.url
                 ismove=true
                 this.canvas.webview.reload();
@@ -61,7 +62,6 @@ export default class Correct_img extends Component {
 
     UNSAFE_componentWillMount(){
         url=this.props.route.params.url
-        // console.log('this',this.props.route.params.url)
         baseurl=this.props.route.params.url
     }
     _pen() {
@@ -129,9 +129,7 @@ export default class Correct_img extends Component {
                 >
                     <TouchableOpacity
                         style={{ position: "absolute", left: 10 }}
-                        onPress={() => {
-                            ismove?this.delect_correctimage():null
-                            this.props.navigation.goBack();
+                        onPress={() => {this.delect_correctimage()
                         }}
                     >
                         <Image

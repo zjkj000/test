@@ -4,19 +4,8 @@ let {width, height} = Dimensions.get('window');
 import Echarts from 'native-echarts';
 import MyTable from './MyTable'
 import http from '../../utils/http/request'
-import { useNavigation } from '@react-navigation/native';
 import {screenWidth,screenHeight} from '../../utils/Screen/GetSize'
-export default function Ketangshouke(props) {
-  const navigation = useNavigation()
-  const yearTermStartTime = props.yearTermStartTime
-  const yearTermEndTime = props.yearTermEndTime
-  const date =props.date
-  return (
-    <KetangshoukeContent navigation={navigation} date={date} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
-  )
-} 
-
-class KetangshoukeContent extends Component {
+export default class Ketangshouke extends Component {
     constructor(props){
         super(props)
         this.state={

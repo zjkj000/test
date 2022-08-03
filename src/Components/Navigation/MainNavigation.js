@@ -55,6 +55,7 @@ import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin"
 import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
 import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
 import TestPage1 from "../../TestPage/TestPage1";
+import testheight from "../../TestPage/testheight";
 import { Alert, Image, TouchableOpacity } from "react-native";
 const Stack = createStackNavigator();
 
@@ -418,17 +419,6 @@ export default class MainNavigation extends Component {
                         component={ControllerSharePhoto}
                         options={{ headerShown: false }}
                     />
-                </Stack.Group>
-
-                {/* 测试 */}
-                <Stack.Group>
-                    <Stack.Screen
-                        name="TestPage1"
-                        component={TestPage1}
-                        options={{
-                            headerShown: false,
-                        }}
-                    ></Stack.Screen>
                 </Stack.Group>
             </Stack.Navigator>
         );
