@@ -2,6 +2,8 @@ import { StyleSheet } from "react-native";
 import {
     screenHeight,
     screenWidth,
+    screenHeight2,
+    screenWidth2,
     GetSize,
 } from "../../../utils/Screen/GetSize";
 
@@ -106,14 +108,14 @@ export const styles = StyleSheet.create({
         justifyContent: "flex-start",
         width: "100%",
         flex: 1,
-        borderColor: "red",
-        borderWidth: 1,
+        // borderColor: "red",
+        // borderWidth: 1,
         backgroundColor: "rgba(255,255,255,0)",
     },
     controllerBlock: {
         flex: 1,
-        borderColor: "blue",
-        borderWidth: 1,
+        // borderColor: "blue",
+        // borderWidth: 1,
         height: "100%",
         alignItems: "center",
         justifyContent: "center",
@@ -144,9 +146,9 @@ export const styles = StyleSheet.create({
         backgroundColor: "rgba(0,0,0,0.5)",
     },
     signPageMainContainer: {
-        width: screenWidth,
-        height: screenHeight,
-        backgroundColor: "rgba(119,136,153,0.7)",
+        width: screenWidth2,
+        height: screenHeight2,
+        backgroundColor: "rgba(119,136,153,0.8)",
         justifyContent: "center",
         alignItems: "center",
     },
@@ -216,8 +218,8 @@ export const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-around",
         alignItems: "center",
-        width: screenWidth,
-        height: screenHeight,
+        width: screenWidth2,
+        height: screenHeight2,
         backgroundColor: "rgba(119,136,153,0.7)",
     },
     questionAnalysisImage: {

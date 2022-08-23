@@ -319,7 +319,7 @@ export default class Info extends Component {
             messageType: 0,
             action,
             actionType,
-            resId: resId ? resId : "",
+            resId: "",
             resPath: resPath ? resPath : null,
             learnPlanId: learnPlanId ? learnPlanId : null,
             resRootPath: resRootPath

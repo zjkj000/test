@@ -123,6 +123,10 @@ class HomeComponent extends Component {
             const { actionType, action } = event;
             this.setState({ actionType, event });
             switch (action) {
+                case "openQuestion":
+                    this.setInfoButtonType("default");
+                    this.setState({ buttonType: action });
+                    break;
                 case "closeRes":
                     this.setButton("default");
                     this.setInfoButtonType("default");
@@ -345,12 +349,7 @@ class HomeComponent extends Component {
                                     height: 200,
                                 }}
                             >
-                                <Icon
-                                    name="power-outline"
-                                    fill="#4E9AC0"
-                                    style={{ width: 64, height: 64 }}
-                                />
-                                <Button
+                                <TouchableOpacity
                                     onPress={() => {
                                         this.remoteControl(
                                             "do:goBackFromSign",
@@ -360,10 +359,12 @@ class HomeComponent extends Component {
                                             signModalVisible: false,
                                         });
                                     }}
-                                    size="giant"
                                 >
-                                    退出点名
-                                </Button>
+                                    <Image
+                                        style={styles.questionAnalysisImage}
+                                        source={require("../../../assets/image2/bottom/closedm.png")}
+                                    ></Image>
+                                </TouchableOpacity>
                             </View>
                         </View>
                     </Modal>
