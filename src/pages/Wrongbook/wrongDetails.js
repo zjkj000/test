@@ -502,6 +502,16 @@ export default WrongDetails = () => {
                                 <RenderHtml
                                     contentWidth={width - 6}
                                     source={{ html: data.shitiShow }}
+                                    tagsStyles={{
+                                        img:{
+                                            flexDirection:'row',
+                                            flexWrap:'wrap'
+                                        },
+                                        p:{
+                                            flexDirection:'row',
+                                            flexWrap:'wrap'
+                                        }
+                                    }}
                                 />
                             </View>
 

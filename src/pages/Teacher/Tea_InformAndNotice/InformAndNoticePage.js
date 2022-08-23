@@ -17,7 +17,7 @@ import Inform_NoticeListContainer from "./Inform_NoticeListContainer";
 let SearchText = "";
 
 export default function InformAndNoticePageContainer(props) {
-    console.log("通知公告：", props);
+    // console.log("通知公告：", props);
     const navigation = useNavigation();
     const route = useRoute();
     //将navigation传给LatestTask组件，防止路由出错

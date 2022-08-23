@@ -211,6 +211,8 @@ export default function Paper_ToDo(props) {
   return (
     //整个 做作业页面高度
     <View style={{height:screenHeight}}>
+      
+      {console.log(screenHeight)}
       {/* 页面自定义导航部分的高度 */}
       <View style={{
                           flex:1,

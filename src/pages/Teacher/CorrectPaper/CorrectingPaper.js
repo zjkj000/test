@@ -1,4 +1,4 @@
-import { Text, View,ScrollView,Image,StyleSheet,TouchableOpacity, Alert,BackHandler} from 'react-native'
+import { Text, View,ScrollView,Image,StyleSheet,TouchableOpacity, Alert,BackHandler,Modal} from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { Button,Layout, ViewPager } from '@ui-kitten/components'
 import { useNavigation } from "@react-navigation/native";
@@ -8,7 +8,7 @@ import Toast from '../../../utils/Toast/Toast';
 import Loading  from '../../../utils/loading/Loading';
 import CorrectSubmitContainer from './CorrectSubmit';
 import {WaitLoading,Waiting} from '../../../utils/WaitLoading/WaitLoading'
-import { screenWidth } from '../../../utils/Screen/GetSize';
+import { screenHeight, screenWidth } from '../../../utils/Screen/GetSize';
 var Allquestion = [];
 export default function CorrectingPaper(props) {
     const navigation = useNavigation();
@@ -33,12 +33,17 @@ export default function CorrectingPaper(props) {
       
       // console.log('props.route.params.correctingstatus',props.route.params.correctingstatus)
       if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){
-          Alert.alert('','该学生已批改！是否直接查看批改结果？',[{},{text:'否',onPress:()=>setSelectedIndex(0)},{text:'是',onPress:()=>
-          setSelectedIndex(Allquestion.length)
+          Alert.alert('','该学生已批改！是否直接查看批改结果？',[{},{text:'否',onPress:()=>{
+            setSelectedIndex(0)
+          }
+          },{text:'是',onPress:()=>{
+            setSelectedIndex(Allquestion.length)
+          }
         }])
       }else{
         setSelectedIndex(props.route.params.selectedindex)
       }
+
       return ()=>{
         changestatus()
       }
@@ -77,7 +82,8 @@ export default function CorrectingPaper(props) {
                 questionScore:item.questionScore,
                 status:item.status,
                 stuAnswer:item.stuAnswer,
-                hand:0}
+                hand:0   //记录是否批改过
+              }
               )
             })
             Allquestion=List
@@ -97,10 +103,11 @@ export default function CorrectingPaper(props) {
           }else{
             setData(resJson.data.handList)
           }
-
           setSuccess(resJson.success)
         // 如果autoMark值为yes  则跳转到结果页面，也给他批改结果数组
+        if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){
           setData(Allquestion)
+        }
           });                                                   
         }
     }
@@ -121,8 +128,12 @@ export default function CorrectingPaper(props) {
           setSelectedIndex(index)
         }else{
           setData(Allquestion)
-          Alert.alert('','所有题目已批改',[{text:'取消',onPress:()=>{}},{},
-            {text:'确定',onPress:()=>setSelectedIndex(Allquestion.length)}
+          Alert.alert('','所有题目已批改',[{text:'取消',onPress:()=>{
+            setSelectedIndex(Allquestion.length-1)
+          }},{},
+            {text:'确定',onPress:()=>{
+              setSelectedIndex(Allquestion.length)
+            }}
           ])
         }
       }else{
@@ -130,6 +141,26 @@ export default function CorrectingPaper(props) {
       }
     }
     
+    function setCorrect_Img_Visable(Url){
+      navigation.navigate({
+        name:'Correct_img',
+        params:{
+          url:Url,
+          updateStuAnswer:update_StuAnswer,
+          selectedIndex:selectedIndex
+        }}
+      )
+    }
+    function update_StuAnswer(str1,str2){
+      
+      // console.log(data[selectedIndex].stuAnswer.replace(str1,str2))
+      // console.log(str1,str2,data[selectedIndex].stuAnswer)
+      var newdata = data
+      newdata[selectedIndex].stuAnswer=newdata[selectedIndex].stuAnswer.replace(str1,str2)
+      setData([])
+      setData(newdata)
+      // setSelectedIndex(selectedIndex)
+    }
 
     function loading(success){
       if(!success){
@@ -215,7 +246,7 @@ export default function CorrectingPaper(props) {
       
     }
 
-
+   
     function submit_correctResult(){
       WaitLoading.show('保存结果中...',-1)
       let newsonStr =[];
@@ -251,7 +282,7 @@ export default function CorrectingPaper(props) {
                   params:{ 
                     taskId:taskId, 
                     type:type,
-                    whohassubmit:userName
+                    whohassubmit:userName+new Date()
                       },
                   megre:true})
           }else{
@@ -262,7 +293,7 @@ export default function CorrectingPaper(props) {
     }
 
     return (
-      <View>
+      <View style={{height:'100%'}}>
         {/* 自定义导航栏 */}
         <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center"}}>
 
@@ -299,7 +330,7 @@ export default function CorrectingPaper(props) {
         </View>
         <Waiting/>
         <ViewPager 
-            style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,height:'85%'}} 
+            style={{backgroundColor:'#FFFFFF',borderTopColor:'#000000',borderTopWidth:0.5,flex:1}} 
             shouldLoadComponent={shouldLoadComponent}
             selectedIndex={selectedIndex} 
             onSelect={index => setSelectedIndex(index)}
@@ -323,6 +354,7 @@ export default function CorrectingPaper(props) {
                                           correctingstatus={correctingstatus}
                                           CorrectResultList={CorrectResultList}    //批改 结果 数据
                                           setCorrected={setCorrectResultList}      //修改  结果  函数
+                                          Correct_Img_Visable={setCorrect_Img_Visable}   //批改照片状态
                                           navigation={navigation}/>
                           </ScrollView>
                         </Layout>

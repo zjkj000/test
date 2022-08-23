@@ -816,8 +816,8 @@ class HomeworkProperty extends React.Component {
     render() {
         console.log('==========屏幕高度、宽度==========================',screenHeight,screenWidth);
         return (
-            <View style={{ flexDirection: 'column', backgroundColor: '#fff' ,borderTopWidth:0.8 }}>
-                <View style={{height: screenHeight - 130}}>
+            <View style={{ flexDirection: 'column', backgroundColor: '#fff' ,borderTopWidth:0.8,height:'100%' }}>
+                <View style={{height:'90%',}}>
                     <ScrollView horizontal={false} showsVerticalScrollIndicator={false}
                         style={{ 
                             // height: '100%', 
@@ -1075,6 +1075,8 @@ class HomeworkProperty extends React.Component {
                     style={{
                         flexDirection: 'row',
                         bacgroundColor: '#fff',
+                        bottom:5,
+                        position:'absolute',
                         height: 50,
                         // backgroundColor: 'red'
                     }}

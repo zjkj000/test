@@ -74,8 +74,8 @@ export default function WordContainer(props) {
                           <WebView 
                                 key={this.state.resourceId}
                                 startInLoadingState={true}
-                                scalesPageToFit={Platform.OS === 'ios'? true : false}
-                              source={{ uri:this.state.uri}} />
+                                // scalesPageToFit={Platform.OS === 'ios'? true : false}
+                                source={{ uri:this.state.uri}} />
                       </View>
                 </View>
               )
@@ -86,5 +86,5 @@ export default function WordContainer(props) {
 
 const styles = StyleSheet.create({
     title:{padding:10,paddingLeft:30,flexDirection:'row',},
-    area:{height:'100%'}
+    area:{height:'100%',paddingBottom:15}
 })

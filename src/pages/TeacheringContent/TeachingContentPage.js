@@ -329,12 +329,6 @@ class TeachingContentPage extends React.Component {
                             {this.showCreate()}
                         </TouchableOpacity>
                     </View>  
-                        <Flex style={{ width: screenWidth * 0.12 }}>
-                            {/* <View style={{ width: screenWidth * 0.04 }}></View> */}
-                            <TouchableOpacity style={styles.filterView}>
-                                {this.showCreate()}
-                            </TouchableOpacity>
-                        </Flex>
                 </View>
                 <View style={styles.todoList}>
                     {console.log('最新内容类型' , this.state.resourceType , Date.parse(new Date()) , 'search:' , this.state.searchPoint)}

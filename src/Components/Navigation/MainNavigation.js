@@ -19,7 +19,7 @@ import Paper_SubmitContainer from "../../pages/LatestTask/DoWork/Paper_Submit";
 import Learningguide_ToDo from "../../pages/LatestTask/LearningGuide/Learningguide_ToDo";
 import Learningguide_ShowCorrected from "../../pages/LatestTask/LearningGuide/Learningguide_ShowCorrected";
 import Learningguide_SubmitContainer from "../../pages/LatestTask/LearningGuide/Learningguide_Submit";
-
+import Correct_img from '../../TestPage/Correct_img'
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
@@ -54,8 +54,8 @@ import AssignLearnPlanContainer from "../../pages/TeacheringContent/AssignLearnP
 import ControllerLogin from "../../pages/remoteController/Login/ControllerLogin";
 import ControllerHome from "../../pages/remoteController/Home/ControllerHome";
 import ControllerSharePhoto from "../../pages/remoteController/SharePhoto/ControllerSharePhoto";
-import TestPage from "../../TestPage/TestPage";
-import TestPage_move from "../../TestPage/TestPage_move";
+import TestPage1 from "../../TestPage/TestPage1";
+import testheight from "../../TestPage/testheight";
 import { Alert, Image, TouchableOpacity } from "react-native";
 const Stack = createStackNavigator();
 
@@ -131,6 +131,13 @@ export default class MainNavigation extends Component {
                     <Stack.Screen
                         name="ShowCorrected_LearningGuide"
                         component={Learningguide_ShowCorrected}
+                    />
+                    <Stack.Screen
+                        name="Correct_img"
+                        component={Correct_img}
+                        options={{
+                            headerShown: false,
+                        }}
                     />
                 </Stack.Group>
 
@@ -412,24 +419,6 @@ export default class MainNavigation extends Component {
                         component={ControllerSharePhoto}
                         options={{ headerShown: false }}
                     />
-                </Stack.Group>
-
-                {/* 测试 */}
-                <Stack.Group>
-                    <Stack.Screen
-                        name="TestPage"
-                        component={TestPage}
-                        options={{
-                            headerShown: false,
-                        }}
-                    ></Stack.Screen>
-                    <Stack.Screen
-                        name="TestPage_move"
-                        component={TestPage_move}
-                        options={{
-                            headerShown: false,
-                        }}
-                    ></Stack.Screen>
                 </Stack.Group>
             </Stack.Navigator>
         );

@@ -238,13 +238,15 @@ class Paper_Submit extends Component {
                                         .stuAnswer,
                                 }} 
                                 tagsStyles={{
-                                            img:{
-                                                flexDirection:'row'
-                                            },
-                                            p:{
-                                                flexDirection:'row'
-                                            }
-                                        }}
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
+                                }}
                                 />
                         ) : (
                             <Text style={{ color: "red" }}>未答</Text>
@@ -260,6 +262,7 @@ class Paper_Submit extends Component {
                         backgroundColor: "#FFFFFF",
                         borderTopColor: "#000000",
                         borderTopWidth: 0.5,
+                        height:'100%'
                     }}
                 >
                     <Waiting/>
@@ -291,7 +294,7 @@ class Paper_Submit extends Component {
 }
 
 const styles = StyleSheet.create({
-    preview_area: { height: "90%", paddingBottom: 50, paddingTop: 10 },
+    preview_area: { flex:1, paddingBottom: 50, paddingTop: 10 },
     result: {
         paddingLeft: 20,
         paddingRight: 20,
@@ -303,9 +306,8 @@ const styles = StyleSheet.create({
     },
     bt_submit: { marginRight: 20 },
     submit_area: {
+        height:50,
         paddingLeft: 30,
-        paddingTop: 20,
-        paddingBottom: 20,
         paddingRight: 30,
     },
 });

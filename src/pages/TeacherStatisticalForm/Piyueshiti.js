@@ -3,19 +3,9 @@ import React, { Component } from 'react'
 let {width, height} = Dimensions.get('window');
 import MyTable from './MyTable'
 import Echarts from 'native-echarts';
-
 import http from '../../utils/http/request'
-import { useNavigation } from '@react-navigation/native';
 import { screenWidth } from '../../utils/Screen/GetSize';
-export default function Piyueshiti(props) {
-  const navigation = useNavigation()
-  const yearTermStartTime = props.yearTermStartTime
-  const yearTermEndTime = props.yearTermEndTime
-  const date =props.date
-  return (
-    <PiyueshitiContent navigation={navigation} date={date} yearTermStartTime={yearTermStartTime} yearTermEndTime={yearTermEndTime}/>
-  )
-}class PiyueshitiContent extends Component {
+export default class Piyueshiti extends Component {
   constructor(props){
     super(props)
     this.state={
@@ -27,9 +17,7 @@ export default function Piyueshiti(props) {
       sumNum: 0,
       tkNum: 0,
       qtNum: 0,
-      tableData: [
-                    
-                  ],
+      tableData: [],
       Xlist: ["","","","",""],
       tableHead: ["序号","班级","开始时间","结束时间","填空题","其它题","批阅总数"],
       Ylist: [{ "data": [0,0,0,0,0],
@@ -45,7 +33,7 @@ export default function Piyueshiti(props) {
     this.getanayGetPGQueNum(new Date().toISOString().substring(0,10)+' 00:00:00',new Date().toISOString().substring(0,10)+' 23:59:59')
   }
   UNSAFE_componentWillReceiveProps(nextprops){
-    if(this.state.PiuyueshitiDateStr!=nextprops.PiuyueshitiDateStr){
+    if(this.state.PiuyueshitiDateStr!=nextprops.date){
       this.setState({PiuyueshitiDateStr:nextprops.date})
       this.getanayGetPGQueNum(nextprops.date+' 00:00:00',nextprops.date+' 23:59:59')
     }
@@ -78,8 +66,7 @@ export default function Piyueshiti(props) {
                   tableHead:resJson.data.tableHead,
                   Ylist: resJson.data.Ylist})
               }else{
-                this.setState({
-                  status:resJson.data.status})
+                this.setState({status:resJson.data.status})
               }
               
             }
@@ -172,12 +159,14 @@ export default function Piyueshiti(props) {
         <View>
           <Echarts option={option} height={250} width={width-20} />
         </View>
+
         <View>
           {this.state.tableData.length>0?(
             <MyTable data={this.state.tableData.length>this.state.PiuyueshitiTableNum?this.state.tableData.slice(0,this.state.PiuyueshitiTableNum):this.state.tableData} 
                              tablehead={this.state.tableHead}/>
-          ):(<></>)}
-                             </View>
+          ):(<View></View>)}
+        </View>
+
         {this.state.tableData.length>this.state.PiuyueshitiTableNum?(
                   <View style={{justifyContent:'center',flexDirection:'row'}}>
                     <Text  onPress={()=>this.setState({PiuyueshitiTableNum:this.state.tableData.length})

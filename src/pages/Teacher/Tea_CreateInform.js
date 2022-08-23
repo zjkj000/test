@@ -32,7 +32,7 @@ export default function Tea_CreateInform(props) {
           })
       }
     return (
-        <Tea_CreateInformContent navigation={navigation} data={data} noticeId={noticeId}/>
+        <Tea_CreateInformContent navigation={navigation} type={type} data={data} noticeId={noticeId}/>
     )
 }
 
@@ -42,15 +42,19 @@ class Tea_CreateInformContent extends Component {
         this.setDateStr=this.setDateStr.bind(this)
         this.state={
             className:'',
+            classNameisnull:true,
             classId:'',
             userName:'',
             userCN:'',
             success:false,
             stuClassList:[],  //id: 162,ids: ,name: 一年级一班（2017级）, value: ''，
-            title:'',
-            content:'',
+            title:' ',
+            titleisnull:true,
+            content:' ',
+            contentisnull:true,
             setDateFlag:'1',   //  1及时发送；2定时发送
             setDate:'',       // 定时发送时，定时的时间
+            setDateisnull:true,
             saveOrUpdate:'',  //save新建的通知，进程保存；update保存修改的通知
             noticeId:'',      
         }
@@ -70,24 +74,27 @@ class Tea_CreateInformContent extends Component {
     }
 
     UNSAFE_componentWillUpdate(nextProps){
-        if(this.state.content!=nextProps.data.content
-            &&this.state.setDate!=nextProps.data.setDate
-            &&this.state.title!=nextProps.data.title
-            &&this.state.classId!=nextProps.data.classId){
+        
+        if(nextProps.type=='3'&&this.state.titleisnull){ 
             this.setState({
                 noticeId:nextProps.noticeId,
-                saveOrUpdate:nextProps.data!=''?'update':'save',
+                saveOrUpdate:'update',
                 content:nextProps.data.content,
+                contentisnull:false,
                 setDate:nextProps.data.setDate,
+                setDateFlag:'2',
                 title:nextProps.data.title,
+                titleisnull:false,
                 classId:nextProps.data.classId,
-                className:nextProps.data.className
+                className:nextProps.data.className,
+                classNameisnull:false,
             })
         }
         
     }
+
     setDateStr(str){
-        this.setState({setDate:str+':00'})
+        this.setState({setDate:str+':00',setDateisnull:false})
     }
 
     //type  是  save  或  update
@@ -148,7 +155,7 @@ class Tea_CreateInformContent extends Component {
     this.state.stuClassList.map((item,index)=>{
         RenderStuList.push(
             <TouchableOpacity onPress={()=>{
-                this.setState({classId:item.id,className:item.name})
+                this.setState({classId:item.id,className:item.name,classNameisnull:false})
             }}>
                 <View style={{backgroundColor:this.state.classId==item.id?'#4DC7F8':'#dadada',borderWidth:1,borderColor:'#dadada',height:40,padding:10,marginTop:5,width:screenWidth-100,alignItems:'center'}}>
                     <Text style={{color:this.state.classId==item.id?'#fff':'',fontSize:15}}>{item.name}</Text>
@@ -185,7 +192,11 @@ class Tea_CreateInformContent extends Component {
                             paddingLeft:20
                         }}
                         onChangeText={(text)=>{
-                            this.setState({title:text})
+                            if(text==''){
+                                this.setState({title:text,titleisnull:true})
+                            }else{
+                                this.setState({title:text,titleisnull:false})
+                            }
                         }}
                 >
                 </TextInput>
@@ -196,6 +207,7 @@ class Tea_CreateInformContent extends Component {
                     <TextInput
                             value={this.state.className}
                             onFocus={()=>Keyboard.dismiss()}
+                            placeholder={'选择下列班级'}
                             style={{
                                 width: screenWidth-80,
                                 height:40,
@@ -268,7 +280,11 @@ class Tea_CreateInformContent extends Component {
                             paddingLeft: 20,
                         }}
                         onChangeText={(text)=>{
-                            this.setState({content:text})
+                            if(text==''){
+                                this.setState({content:text,contentisnull:true})
+                            }else{
+                                this.setState({content:text,contentisnull:false})
+                            }
                         }}
                 ></TextInput>
             </View>
@@ -276,7 +292,20 @@ class Tea_CreateInformContent extends Component {
         <View style={{width:'100%',marginBottom:10,flexDirection:'row',justifyContent:'space-around'}}>
             <Button onPress={()=>{this.props.navigation.goBack()}} style={{width:'40%'}}>取消</Button>
             <Button onPress={()=>{
-                this.saveOrUpdateInform()
+                //判断是否为空
+                console.log(this.state.title)
+                if(this.state.titleisnull){
+                    Alert.alert('','请输入标题！',[{},{text:'确定',onPress:()=>{}}])
+                }
+                else if(this.state.classNameisnull){
+                    Alert.alert('','请选择班级！',[{},{text:'确定',onPress:()=>{}}])
+                }else if(this.state.contentisnull){
+                    Alert.alert('','请先输入内容',[{},{text:'确定',onPress:()=>{}}])
+                }else if(this.state.setDateFlag=='2'&&this.state.setDateisnull){
+                    Alert.alert('','请设置定时发布时间！',[{},{text:'确定',onPress:()=>{}}])
+                }else{
+                    this.saveOrUpdateInform()
+                }
             }} style={{width:'40%'}}>确定</Button>
         </View>
       </View>

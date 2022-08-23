@@ -899,7 +899,7 @@ class HomeworkPropertyModel extends React.Component {
                         </TouchableOpacity>
                     ) : null}
                     {/**学段列表 */}
-                    {this.state.studyRankVisibility ? (
+                    {this.state.studyRankVisibility && !this.state.privateContent ? (
                         <View style={styles.contentlistView}>
                             {this.state.channelNameList.length <= 0
                                 ? this.fetchChannelName()
@@ -948,7 +948,7 @@ class HomeworkPropertyModel extends React.Component {
                         </TouchableOpacity>
                     ) : null}
                     {/**学科列表 */}
-                    {this.state.studyClassVisibility ? (
+                    {this.state.studyClassVisibility  && !this.state.privateContent ? (
                         <View style={styles.contentlistView}>
                             {this.state.studyClassList.length <= 0 &&
                             this.state.studyRank != ""
@@ -998,7 +998,7 @@ class HomeworkPropertyModel extends React.Component {
                         </TouchableOpacity>
                     ) : null}
                     {/**版本列表 */}
-                    {this.state.editionVisibility ? (
+                    {this.state.editionVisibility  && !this.state.privateContent ? (
                         <View style={styles.contentlistView}>
                             {this.state.editionList.length <= 0 &&
                             this.state.studyRank != "" &&
@@ -1049,7 +1049,7 @@ class HomeworkPropertyModel extends React.Component {
                         </TouchableOpacity>
                     ) : null}
                     {/**教材列表 */}
-                    {this.state.bookVisibility ? (
+                    {this.state.bookVisibility  && !this.state.privateContent ? (
                         <View style={styles.contentlistView}>
                             {this.state.bookList.length <= 0 &&
                             this.state.studyRank != "" &&
@@ -1072,7 +1072,7 @@ class HomeworkPropertyModel extends React.Component {
                     }
 
                     {/**知识点 */}
-                    {!this.state.privateContent ? (
+                    {!this.state.privateContent  && !this.state.privateContent ? (
                         <TouchableOpacity
                             onPress={() => {
                                 this.updateVisibility(

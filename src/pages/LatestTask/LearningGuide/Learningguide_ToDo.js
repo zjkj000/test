@@ -468,7 +468,7 @@ export default function Paper_ToDo(props) {
 
     return (
         <View style={{height:screenHeight}}>
-            <View style={{flex:1,flexDirection:'row',alignItems:"center",backgroundColor:'#fff',width:screenWidth,justifyContent:'center'}}>
+            <View style={{flex:1,flexDirection:'row',alignItems:"center",backgroundColor:'#fff',width:screenWidth,justifyContent:'center', borderBottomWidth: 0.5}}>
                 <TouchableOpacity style={{position:'absolute',left:0}} onPress={()=>{props.navigation.goBack()}}>
                      <Image style={{width:30,height:30}} source={require('../../../assets/TakePicturesAndAssignWork/goback.png')}></Image>
                 </TouchableOpacity>
@@ -502,7 +502,7 @@ export default function Paper_ToDo(props) {
               
             </View>
             <ViewPager
-                style={{ backgroundColor: "#FFFFFF", borderTopWidth: 0.5,flex:15}}
+                style={{ backgroundColor: "#FFFFFF",flex:15}}
                 swipeEnabled={false}
                 shouldLoadComponent={shouldLoadComponent}
                 selectedIndex={selectedIndex}

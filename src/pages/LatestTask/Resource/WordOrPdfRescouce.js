@@ -91,7 +91,10 @@ class Word extends Component {
         return(
             <View style={styles.area}>
                 {console.log('------url---------',this.state.resource.url , typeof(this.state.resource.url))}
-                <WebView  source={{ uri: this.state.resource.url}} />
+                <WebView  
+                  source={{ uri: this.state.resource.url}} 
+                  // scalesPageToFit={Platform.OS === 'ios'? true : false}
+                />
             </View>
         );
     }
@@ -121,6 +124,7 @@ const styles = StyleSheet.create({
     height: 300,
   },
   area:{
-      height: screenHeight,
+      // height: screenHeight,
+      flex:1
   }
 });

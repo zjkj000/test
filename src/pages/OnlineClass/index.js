@@ -139,7 +139,7 @@ class OnlineClassTemp extends Component {
             );
         }
 
-        // 轮询
+        // // 轮询
         this.timerId = setInterval(() => {
             this.handleMessageQueue();
         }, this.state.rushListening);

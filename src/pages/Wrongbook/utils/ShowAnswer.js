@@ -39,7 +39,7 @@ class ShowAnswer extends Component {
 
     }
     //随时更新键盘输入值
-    componentWillReceiveProps(nextProps) {
+    UNSAFE_componentWillReceiveProps(nextProps) {
         this.setState({
             stuAnswer: nextProps.stuAnswer
         });
@@ -56,6 +56,16 @@ class ShowAnswer extends Component {
                     <RenderHtml
                         contentWidth={this.props.width - 6}
                         source={{ html: this.state.shitiAnalysis }}
+                        tagsStyles={{
+                            img:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
+                            },
+                            p:{
+                                flexDirection:'row',
+                                flexWrap:'wrap'
+                            }
+                        }}
                     />
                 </View>
             </View>
@@ -135,6 +145,16 @@ class ShowAnswer extends Component {
                             <RenderHtml
                                 contentWidth={this.props.width - 6}
                                 source={{ html: this.state.shitiAnswer }}
+                                tagsStyles={{
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
+                                }}
                             />
                         </View>
                     </View>
@@ -148,6 +168,16 @@ class ShowAnswer extends Component {
                             <RenderHtml
                                 contentWidth={this.props.width - 6}
                                 source={{ html: this.state.stuAnswer }}
+                                tagsStyles={{
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
+                                }}
                             />
                         </View>
                     </View>
@@ -165,6 +195,16 @@ class ShowAnswer extends Component {
                             <RenderHtml
                                 contentWidth={this.props.width - 6}
                                 source={{ html: this.state.shitiAnswer }}
+                                tagsStyles={{
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
+                                }}
                             />
                         </View>
                     </View>
@@ -178,6 +218,16 @@ class ShowAnswer extends Component {
                             <RenderHtml
                                 contentWidth={this.props.width - 6}
                                 source={{ html: this.state.stuAnswer }}
+                                tagsStyles={{
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
+                                }}
                             />
                         </View>
                     </View>
@@ -195,6 +245,16 @@ class ShowAnswer extends Component {
                             <RenderHtml
                                 contentWidth={this.props.width - 6}
                                 source={{ html: this.state.shitiAnswer }}
+                                tagsStyles={{
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
+                                }}
                             />
                         </View>
                     </View>
@@ -208,6 +268,16 @@ class ShowAnswer extends Component {
                             <RenderHtml
                                 contentWidth={this.props.width - 6}
                                 source={{ html: this.state.stuAnswer }}
+                                tagsStyles={{
+                                    img:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    },
+                                    p:{
+                                        flexDirection:'row',
+                                        flexWrap:'wrap'
+                                    }
+                                }}
                             />
                         </View>
                     </View>

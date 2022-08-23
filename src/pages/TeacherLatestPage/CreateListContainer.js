@@ -76,9 +76,6 @@ class CreateList extends React.Component {
         //初始挂载执行一遍
         oldtype = this.props.resourceType;
         oldsearchStr = this.props.searchStr;
-
-
-        console.log("componentWillMount**********isRefresh****" , this.props.isRefresh);
         this.fetchData(pageNo , oldtype , oldsearchStr , true);
     }
 
@@ -87,8 +84,7 @@ class CreateList extends React.Component {
         //this.fetchData(pageNo);
     }
 
-    UNSAFE_componentWillUpdate(nextProps) {
-        console.log("componentWillUpdate******首页****isRefresh****" , nextProps.isRefresh); 
+    UNSAFE_componentWillUpdate(nextProps) { 
         if (
             oldtype != nextProps.resourceType ||
             oldsearchStr != nextProps.searchStr ||

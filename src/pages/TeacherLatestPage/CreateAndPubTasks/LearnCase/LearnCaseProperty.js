@@ -688,8 +688,8 @@ class LearnCaseProperty extends React.Component {
 
     render() {
         return (
-            <View style={{ flexDirection: 'column', backgroundColor: '#fff', borderTopWidth:0.8  }}>
-                <View style={{height: screenHeight - 130}}>
+            <View style={{ flexDirection: 'column', backgroundColor: '#fff', borderTopWidth:0.8 ,height:'100%' }}>
+                <View style={{height:'90%'}}>
                     <ScrollView horizontal={false} showsVerticalScrollIndicator={false}
                         style={{ 
                             // height: '92%', 
@@ -1096,6 +1096,8 @@ class LearnCaseProperty extends React.Component {
                         flexDirection: 'row',
                         bacgroundColor: '#fff',
                         height: 50,
+                        bottom:5,
+                        position:'absolute'
                     }}
                 >
                     <Text style={{ width: screenWidth * 0.05 , backgroundColor: '#fff'}}></Text>

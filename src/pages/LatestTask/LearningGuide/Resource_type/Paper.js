@@ -80,5 +80,5 @@ export default function PaperContainer(props) {
 
 const styles = StyleSheet.create({
     title:{padding:10,paddingLeft:30,flexDirection:'row',},
-    area:{height:'100%'}
+    area:{height:'100%',paddingBottom:15}
 })

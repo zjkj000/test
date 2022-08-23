@@ -18,7 +18,6 @@ export default function Tea_CreateNotice(props) {
         }
     },[])
     function updateInform(){
-        console.log('金')
         const url = global.constants.baseUrl+"teacherApp_getNoticeInfo.do";
         const params = {
                 noticeId:noticeId,
@@ -33,7 +32,7 @@ export default function Tea_CreateNotice(props) {
           })
       }
 
-    return (<Tea_CreateNoticeContent navigation={navigation} data={data} noticeId={noticeId}/>)
+    return (<Tea_CreateNoticeContent navigation={navigation} type={type} data={data} noticeId={noticeId}/>)
 }
 
 class Tea_CreateNoticeContent extends Component {
@@ -46,15 +45,19 @@ class Tea_CreateNoticeContent extends Component {
             AllTea:false,
             AllStu:false,
             title:'',
+            titleisnull:true,
             content:'',
+            contentisnull:true,
             setDateFlag:'1',   //  1即时发送；2定时发送
             setDate:'',       // 定时发送时，定时的时间
+            setDateisnull:true,
             saveOrUpdate:'',  //save新建的通知，进程保存；update保存修改的通知
             noticeId:'',   
         }
     }
 
     UNSAFE_componentWillMount(){
+        console.log('will--公告',this.props.data,this.props.type)
         this.setState({
             noticeId:this.props.noticeId,
             saveOrUpdate:this.props.data!=''?'update':'save',
@@ -65,23 +68,25 @@ class Tea_CreateNoticeContent extends Component {
             AllTea:(this.props.data.type=='1'||this.props.data.type=='0')?true:false,
         })
     }
-    UNSAFE_componentWillUpdate(nextProps){
-        if(this.state.content!=nextProps.data.content
-            &&this.state.setDate!=nextProps.data.setDate
-            &&this.state.title!=nextProps.data.title
-            &&this.state.type!=nextProps.data.type){
+
+    UNSAFE_componentWillUpdate(nextProps){ 
+        if(nextProps.type=='4'&&this.state.titleisnull){
             this.setState({
                 noticeId:nextProps.noticeId,
-                saveOrUpdate:nextProps.data!=''?'update':'save',
+                saveOrUpdate:'update',
                 content:nextProps.data.content,
                 setDate:nextProps.data.setDate,
                 title:nextProps.data.title,
+                titleisnull:false,
+                contentisnull:false,
+                setDateFlag:'2',
+                setDateisnull:false,
                 AllStu:(nextProps.data.type=='2'||nextProps.data.type=='0')?true:false,
                 AllTea:(nextProps.data.type=='1'||nextProps.data.type=='0')?true:false,
             })
         }
-        
     }
+
     //  是  save  或  update
     saveOrUpdateNotice(){
         const url = global.constants.baseUrl+"teacherApp_saveManageNotice.do";
@@ -122,7 +127,7 @@ class Tea_CreateNoticeContent extends Component {
     }
 
     setDateStr(str){
-        this.setState({setDate:str+':00'})
+        this.setState({setDate:str+':00',setDateisnull:false})
     }
 
   render() {
@@ -155,7 +160,11 @@ class Tea_CreateNoticeContent extends Component {
                             paddingLeft:20
                         }}
                         onChangeText={(text)=>{
-                            this.setState({title:text})
+                            if(text==''){
+                                this.setState({title:text,titleisnull:true})
+                            }else{
+                                this.setState({title:text,titleisnull:false})
+                            }
                         }}
                 >
                 </TextInput>
@@ -223,7 +232,11 @@ class Tea_CreateNoticeContent extends Component {
                             paddingLeft: 20,
                         }}
                         onChangeText={(text)=>{
-                            this.setState({content:text})
+                            if(text==''){
+                                this.setState({content:text,contentisnull:true})
+                            }else{
+                                this.setState({content:text,contentisnull:false})
+                            }
                         }}
                 ></TextInput>
             </View>
@@ -232,7 +245,19 @@ class Tea_CreateNoticeContent extends Component {
         <View style={{width:'100%',marginBottom:10,flexDirection:'row',justifyContent:'space-around'}}>
             <Button onPress={()=>{this.props.navigation.goBack()}} style={{width:'40%'}}>取消</Button>
             <Button onPress={()=>{
-                this.saveOrUpdateNotice()
+                //判断是否为空
+                if(this.state.titleisnull){ 
+                    Alert.alert('','请输入标题！',[{},{text:'确定',onPress:()=>{}}])
+                }
+                else if(!this.state.AllTea&&!this.state.AllStu){
+                    Alert.alert('','请选择发布对象！',[{},{text:'确定',onPress:()=>{}}])
+                }else if(this.state.contentisnull){
+                    Alert.alert('','请先输入内容',[{},{text:'确定',onPress:()=>{}}])
+                }else if(this.state.setDateFlag=='2'&&this.state.setDateisnull){
+                    Alert.alert('','请设置定时发布时间！',[{},{text:'确定',onPress:()=>{}}])
+                }else{
+                    this.saveOrUpdateNotice()
+                }
             }} style={{width:'40%'}}>确定</Button>
         </View>
       </View>
