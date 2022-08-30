@@ -27,6 +27,9 @@ export default class Module extends Component {
     handlePress = (index) => {
         // moduleButton = [0, 0, 0];
         // moduleButton[index] = 1;
+        // console.log("ModulePress====================================");
+        // console.log(index);
+        // console.log("====================================");
         this.props.setModuleButton(index, 1);
         this.setState({ pressIndex: index });
         this.setState({ questionModalVisible: true });
@@ -99,6 +102,9 @@ export default class Module extends Component {
             });
     };
     handleConfirm = (index = -1) => {
+        // console.log("ModuleHandleConfirm====================================");
+        // console.log(index);
+        // console.log("====================================");
         const {
             questionTypeIndex,
             singleQuestionNum,
@@ -136,7 +142,7 @@ export default class Module extends Component {
                 action =
                     index === 0
                         ? "answerTogether"
-                        : pressIndex === 1
+                        : index === 1
                         ? "answerRandom"
                         : "answerResponder";
             }

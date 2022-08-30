@@ -424,6 +424,12 @@ export default class Info extends Component {
     handlePress = (row, col) => {
         let { infoButtonType } = this.props;
         let { infoButtonTouchable } = this.state;
+        // console.log("INFOhandlePress====================================");
+        // console.log(infoButtonTouchable[row][col]);
+        // console.log("====================================");
+        if (infoButtonTouchable[row][col].touchable === 0) {
+            return;
+        }
         if (row === 0 && col === 0) {
             switch (infoButtonType) {
                 case "normalQuestion":
@@ -432,14 +438,14 @@ export default class Info extends Component {
                     else this.stopQuestion();
                     break;
                 case "randomQuestion":
-                    if (infoButtonTouchable[row][col].status === "re")
-                        this.reRandom();
-                    else this.stopQuestion();
+                    // if (infoButtonTouchable[row][col].status === "re")
+                    this.reRandom();
+                    // else this.stopQuestion();
                     break;
                 case "rushQuestion":
-                    if (infoButtonTouchable[row][col].status === "re")
-                        this.reRush();
-                    else this.stopQuestion();
+                    // if (infoButtonTouchable[row][col].status === "re")
+                    this.reRush();
+                    // else this.stopQuestion();
                     break;
             }
         } else if (row === 0 && col === 1) {

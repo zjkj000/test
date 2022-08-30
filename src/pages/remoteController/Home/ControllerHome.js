@@ -287,6 +287,7 @@ class HomeComponent extends Component {
                     />
                     <Info
                         resId={this.state.event.resId}
+                        desc={this.state.event.desc}
                         action={action}
                         ipAddress={ipAddress}
                         actionType={this.state.actionType}
