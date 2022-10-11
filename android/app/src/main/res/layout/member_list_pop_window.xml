@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+     android:layout_height="match_parent" android:layout_width="match_parent"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/member_list_pop_head"
+        app:layout_constraintHeight_percent="0.06"
+        android:layout_width="match_parent"
+        android:background="@color/popupWindow_title"
+        android:padding="5dp"
+        android:layout_height="wrap_content" >
+
+        <TextView
+            android:id="@+id/member_list_pop_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="成员（同步教室：2  移动端设备：36）"
+            android:textColor="@color/white" />
+
+        <ImageView
+            android:layout_centerVertical="true"
+            android:id="@+id/member_list_pop_close"
+            android:layout_alignParentEnd="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/close" />
+    </RelativeLayout>
+
+    <ScrollView
+        android:id="@+id/horizontal_scroll_view"
+        android:background="@color/popupWindow_container"
+        android:layout_width="match_parent"
+        android:layout_height="280dp"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+            <include
+                android:layout_width="match_parent"
+                android:id="@+id/listview_title"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                layout="@layout/member_list_title"
+                android:layout_height="wrap_content">
+            </include>
+
+            <ListView
+                android:id="@+id/member_list"
+                android:layout_width="match_parent"
+                android:layout_height="240dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/listview_title"
+                app:layout_constraintTop_creator="1"
+                app:layout_constraintRight_creator="1"
+                app:layout_constraintBottom_creator="1"
+                app:layout_constraintLeft_creator="1" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </ScrollView>
+
+</LinearLayout>

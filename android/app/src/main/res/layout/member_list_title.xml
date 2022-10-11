@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/text_doc_user"
+        android:layout_width="100dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:gravity="left"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="10dp"
+        android:singleLine="true"
+        android:text="成员"
+        android:textColor="@color/popupWindow_text_gray"
+        android:background="@color/popupWindow_container"
+        android:textSize="11sp" />
+
+<!--  分割线  -->
+
+    <TextView
+        android:id="@+id/text_doc_mute"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:paddingBottom="10dp"
+        android:textColor="@color/popupWindow_text_gray"
+        android:background="@color/popupWindow_container"
+        android:paddingTop="10dp"
+        android:singleLine="true"
+        android:textSize="11sp"
+        android:gravity="center"
+        android:text="聊天禁言" />
+
+    <TextView
+        android:id="@+id/text_check_handsUp"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:paddingBottom="10dp"
+        android:textColor="@color/popupWindow_text_gray"
+        android:background="@color/popupWindow_container"
+        android:paddingTop="10dp"
+        android:singleLine="true"
+        android:textSize="11sp"
+        android:gravity="center"
+        android:text="上下讲台" />
+
+    <TextView
+        android:id="@+id/text_board_control"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:paddingBottom="10dp"
+        android:textColor="@color/popupWindow_text_gray"
+        android:background="@color/popupWindow_container"
+        android:paddingTop="10dp"
+        android:singleLine="true"
+        android:textSize="11sp"
+        android:gravity="center"
+        android:text="白板控制" />
+
+    <TextView
+        android:id="@+id/text_check_audio"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_weight="3"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="11sp"
+        android:singleLine="true"
+        android:text="麦克风"
+        android:textColor="@color/popupWindow_text_gray"
+        android:background="@color/popupWindow_container"
+        android:textSize="11sp" />
+
+    <TextView
+        android:id="@+id/text_check_video"
+       android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:layout_weight="2"
+        android:paddingBottom="10dp"
+        android:textColor="@color/popupWindow_text_gray"
+        android:background="@color/popupWindow_container"
+        android:paddingTop="10dp"
+        android:singleLine="true"
+        android:textSize="11sp"
+        android:gravity="center"
+        android:text="摄像头" />
+
+
+</LinearLayout>

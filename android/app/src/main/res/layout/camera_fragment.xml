@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout   android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:padding="2dp"
+        app:layout_constraintDimensionRatio="w,9:16"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        >
+    <RelativeLayout
+        android:id="@+id/camera_block"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <com.tencent.rtmp.ui.TXCloudVideoView
+            android:id="@+id/camera_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="2dp"
+            app:layout_constraintDimensionRatio="w,9:16"
+            />
+
+        <RelativeLayout
+            android:id="@+id/teacher_background"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/temp_camera"
+            android:padding="2dp"
+            android:visibility="visible"
+            >
+
+            <ImageView
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_centerInParent="true"
+                android:maxWidth="20dp"
+                android:maxHeight="20dp"
+                android:src="@drawable/zbcameranoopen" />
+        </RelativeLayout>
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/teacher_name"
+        android:layout_alignBottom="@+id/camera_block"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/teacher_background"
+        android:drawablePadding="10dp"
+        android:paddingHorizontal="10dp"
+        android:paddingVertical="3dp"
+        android:text="XX老师"
+        android:alpha="0.7"
+        android:textColor="@color/white"
+        android:textSize="13sp"
+        />
+    </RelativeLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

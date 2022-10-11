@@ -1,0 +1,494 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/div_gray"
+    android:orientation="vertical"
+    tools:context=".AnswerQuestionFragment">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <!--互动类型-->
+            <TextView
+                android:text="互动类型"
+                android:layout_marginTop="5dp"
+                android:layout_marginLeft="5dp"
+                android:layout_marginBottom="7dp"
+                android:paddingLeft="5dp"
+                android:paddingRight="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/white"
+                android:background="@color/text_gray"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <ImageView
+                        android:id="@+id/img_tiwen"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="35dp"
+                        android:adjustViewBounds="true"
+                        android:maxWidth="200dp"
+                        android:maxHeight="200dp"
+                        android:src="@drawable/tab_menu_tiwen" />
+
+                    <ImageView
+                        android:id="@+id/img_suiji"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="35dp"
+                        android:adjustViewBounds="true"
+                        android:maxWidth="200dp"
+                        android:maxHeight="200dp"
+                        android:src="@drawable/tab_menu_suiji" />
+
+                    <ImageView
+                        android:id="@+id/img_qiangda"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="35dp"
+                        android:adjustViewBounds="true"
+                        android:maxWidth="200dp"
+                        android:maxHeight="200dp"
+                        android:src="@drawable/tab_menu_qiangda" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+
+                    <TextView
+                        android:id="@+id/txt_tiwen"
+                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="3dp"
+                        android:text="提问"
+                        android:textColor="@drawable/tab_menu_text"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txt_suiji"
+                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="3dp"
+                        android:text="随机"
+                        android:textColor="@drawable/tab_menu_text"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/txt_qiangda"
+                        android:gravity="center"
+                        android:layout_width="0dp"
+                        android:layout_weight="1"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="3dp"
+                        android:text="抢答"
+                        android:textColor="@drawable/tab_menu_text"
+                        android:textSize="12sp" />
+                </LinearLayout>
+<!--                <TextView-->
+<!--                    android:id="@+id/txt_tiwen"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:drawablePadding="3dp"-->
+<!--                    android:drawableTop="@drawable/tab_menu_tiwen"-->
+<!--                    android:gravity="center"-->
+<!--                    android:padding="2dp"-->
+<!--                    android:text="提问"-->
+<!--                    android:textColor="@drawable/tab_menu_text"-->
+<!--                    android:textSize="12sp" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/txt_suiji"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:drawablePadding="3dp"-->
+<!--                    android:drawableTop="@drawable/tab_menu_suiji"-->
+<!--                    android:gravity="center"-->
+<!--                    android:padding="2dp"-->
+<!--                    android:layout_marginLeft="10dp"-->
+<!--                    android:text="随机"-->
+<!--                    android:textColor="@drawable/tab_menu_text"-->
+<!--                    android:textSize="12sp" />-->
+
+<!--                <TextView-->
+<!--                    android:id="@+id/txt_qiangda"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:drawablePadding="3dp"-->
+<!--                    android:drawableTop="@drawable/tab_menu_qiangda"-->
+<!--                    android:gravity="center"-->
+<!--                    android:padding="2dp"-->
+<!--                    android:layout_marginLeft="10dp"-->
+<!--                    android:text="抢答"-->
+<!--                    android:textColor="@drawable/tab_menu_text"-->
+<!--                    android:textSize="12sp" />-->
+            </LinearLayout>
+
+            <!--互动模式-->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical">
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="7dp"
+                        android:background="@color/text_gray"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="5dp"
+                        android:text="互动模式"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:orientation="horizontal">
+                    <!--android:visibility="gone"-->
+                    <TextView
+                        android:id="@+id/txChoose"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:text="选项数:"
+                        android:textColor="@color/white"
+                        android:textSize="13sp" />
+
+                    <LinearLayout
+                        android:id="@+id/linear_choose"
+                        android:layout_width="wrap_content"
+                        android:layout_height="25dp"
+                        android:layout_marginRight="10dp"
+                        android:layout_gravity="center"
+                        android:background="@drawable/tx_choose"
+                        android:layout_marginLeft="5dp"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tx_choosenum"
+                            android:text="4"
+                            android:textColor="#0eabe5"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_width="30dp"
+                            android:layout_height="20dp" />
+
+                        <ImageView
+                            android:id="@+id/img_choose"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:layout_width="15dp"
+                            android:layout_height="15dp"
+                            android:adjustViewBounds="true"
+                            android:maxWidth="200dp"
+                            android:maxHeight="200dp"
+                            android:layout_marginLeft="5dp"
+                            android:layout_marginRight="5dp"
+                            android:src="@mipmap/choose" />
+                    </LinearLayout>
+
+
+                    <Spinner
+                        android:visibility="gone"
+                        android:id="@+id/spinner"
+                        android:layout_width="75dp"
+                        android:layout_height="25dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_gravity="center"
+                        android:entries="@array/data"
+                        android:spinnerMode="dialog" />
+                </LinearLayout>
+            </LinearLayout>
+
+            <RelativeLayout
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                >
+
+                <RelativeLayout
+                    android:id="@+id/redanxuan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgdanxuan"
+                        android:layout_width="45dp"
+                        android:layout_height="36dp"
+                        android:adjustViewBounds="true"
+                        android:maxWidth="200dp"
+                        android:maxHeight="200dp"
+                        android:src="@drawable/tab_menu_danxuan" />
+
+                    <TextView
+                        android:id="@+id/txt_danxuan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/imgdanxuan"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="3dp"
+                        android:text="单选"
+                        android:textColor="@drawable/tab_menu_text"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/redduoxuan"
+                    android:layout_toRightOf="@+id/redanxuan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgduoxuan"
+                        android:layout_width="45dp"
+                        android:layout_height="36dp"
+                        android:adjustViewBounds="true"
+                        android:maxWidth="200dp"
+                        android:maxHeight="200dp"
+                        android:src="@drawable/tab_menu_duoxuan" />
+
+                    <TextView
+                        android:id="@+id/txt_duoxuan"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/imgduoxuan"
+                        android:layout_centerInParent="true"
+                        android:layout_marginTop="3dp"
+                        android:text="多选"
+                        android:textColor="@drawable/tab_menu_text"
+                        android:textSize="12sp" />
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/repanduan"
+                    android:layout_toRightOf="@+id/redduoxuan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgpanduan"
+                        android:layout_width="45dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/tab_menu_panduan"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="200dp"
+                        android:maxWidth="200dp"/>
+
+                    <TextView
+                        android:id="@+id/txt_panduan"
+                        android:text="判断"
+                        android:textColor="@drawable/tab_menu_text"
+                        android:textSize="12sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/imgpanduan"
+                        android:layout_marginTop="3dp"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:id="@+id/reluru"
+                    android:layout_toRightOf="@+id/repanduan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/imgluru"
+                        android:layout_width="45dp"
+                        android:layout_height="36dp"
+                        android:src="@drawable/tab_menu_luru"
+                        android:adjustViewBounds="true"
+                        android:maxHeight="200dp"
+                        android:maxWidth="200dp"/>
+
+                    <TextView
+                        android:id="@+id/txt_luru"
+                        android:text="录入"
+                        android:textColor="@drawable/tab_menu_text"
+                        android:textSize="12sp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@+id/imgluru"
+                        android:layout_marginTop="3dp"
+                        android:layout_centerInParent="true"/>
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <!-- 开始按钮：不可点击 -->
+            <Button
+                android:id="@+id/btBegin1"
+                android:layout_marginTop="15dp"
+                android:layout_width="80dp"
+                android:layout_height="32dp"
+                android:paddingTop="0dp"
+                android:gravity="center"
+                android:text="开始"
+                android:textColor="@color/black"
+                android:layout_gravity="center"
+                android:state_enabled="false"
+                android:backgroundTint="@null"
+                android:background="@drawable/btn_begin_unenable"/>
+            <!-- 开始按钮：可点击 -->
+            <Button
+                android:visibility="gone"
+                android:id="@+id/btBegin2"
+                android:layout_marginTop="15dp"
+                android:layout_width="80dp"
+                android:layout_height="32dp"
+                android:paddingTop="0dp"
+                android:gravity="center"
+                android:text="开始"
+                android:textColor="@color/white"
+                android:layout_gravity="center"
+                android:backgroundTint="@null"
+                android:background="@drawable/btn_begin_enable"/>
+
+            <!--按钮：单题分析 答题详情  结束作答 关闭提问-->
+            <LinearLayout
+                android:visibility="visible"
+                android:id="@+id/linear1"
+                android:layout_marginTop="15dp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+                <LinearLayout
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+<!--                    android:layout_width="92dp"-->
+                    <Button
+                        android:id="@+id/btSingle"
+                        android:layout_width="95dp"
+                        android:layout_height="32dp"
+                        android:paddingTop="0dp"
+                        android:gravity="center"
+                        android:text="单题分析"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/btn_begin_enable"/>
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"/>
+
+                    <Button
+                        android:id="@+id/btAnswers"
+                        android:layout_width="95dp"
+                        android:layout_height="32dp"
+                        android:paddingTop="0dp"
+                        android:gravity="center"
+                        android:text="答题详情"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/btn_begin_enable"/>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:gravity="center"
+                    android:padding="3dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal">
+                    <Button
+                        android:id="@+id/btEnd"
+                        android:layout_width="95dp"
+                        android:layout_height="32dp"
+                        android:paddingTop="0dp"
+                        android:gravity="center"
+                        android:text="结束作答"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/btn_begin_enable"/>
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="match_parent"/>
+
+                    <Button
+                        android:id="@+id/btClosed"
+                        android:minWidth="95dp"
+                        android:layout_width="95dp"
+                        android:layout_height="32dp"
+                        android:paddingTop="0dp"
+                        android:gravity="center"
+                        android:text="关闭提问"
+                        android:textColor="@color/white"
+                        android:backgroundTint="@null"
+                        android:background="@drawable/btn_begin_enable"/>
+                </LinearLayout>
+            </LinearLayout>
+
+            <!--计时器-->
+            <LinearLayout
+                android:visibility="visible"
+                android:id="@+id/linear2"
+                android:gravity="center"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="150dp"
+                android:orientation="vertical"
+                android:background="@color/div_shallowgray">
+                <Chronometer
+                    android:id="@+id/id_jishiqi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/text_orange"
+                    android:textSize="25sp"
+                    android:text="00:00"
+                    android:layout_gravity="center" />
+
+                <TextView
+                    android:layout_gravity="center"
+                    android:id="@+id/tx_answers_sum"
+                    android:text="0/60位同学已提交"
+                    android:textSize="20sp"
+                    android:textColor="#485060"
+                    android:layout_marginTop="12dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

@@ -1061,8 +1061,8 @@ public class LaunchActivity extends TRTCBaseActivity implements View.OnClickList
         else if (id == R.id.refresh){
             BottomButtonActivity.remoteRefresh();
 //            new Thread(new Runnable() {//创建子线�?
-//                @Override
 //                public void run() {
+//                @Override
 //                    getwebinfo();//把路径选到MainActivity�?
 //                }
 //            }).start();//启动子线�?

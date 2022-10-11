@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" >
+
+    <TextView
+        android:id="@+id/text_doc_user"
+        android:layout_width="150dp"
+        android:layout_height="match_parent"
+        android:gravity="left"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp"
+        android:paddingLeft="15dp"
+        android:singleLine="true"
+        android:text="成员"
+        android:textColor="@color/popupWindow_text_gray"
+        android:background="@color/popupWindow_container"
+        android:textSize="11sp" />
+
+    <!--  分割线  -->
+
+
+    <TextView
+        android:id="@+id/text_board_control"
+        android:layout_width="50dp"
+        android:layout_height="match_parent"
+        android:paddingBottom="10dp"
+        android:textColor="@color/popupWindow_text_gray"
+        android:background="@color/popupWindow_container"
+        android:paddingTop="10dp"
+        android:singleLine="true"
+        android:textSize="11sp"
+        android:gravity="center"
+        android:text="上讲台" />
+
+
+</LinearLayout>

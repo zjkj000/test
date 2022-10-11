@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="match_parent"
+android:orientation="horizontal"
+android:paddingTop="5dp"
+android:layout_height="wrap_content">
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="20dp"
+    android:id="@+id/packageitem_img"/>
+
+<TextView
+    android:id="@+id/packageitem_name"
+    android:layout_width="148dp"
+    android:layout_height="match_parent"
+    android:layout_toRightOf="@id/packageitem_img"
+    android:layout_marginLeft="20dp"></TextView>
+
+<TextView
+    android:id="@+id/packageitem_date"
+    android:layout_width="97dp"
+    android:layout_toLeftOf="@id/shanchu"
+    android:layout_marginRight="10dp"
+    android:layout_height="match_parent"></TextView>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="删除"
+        android:layout_marginRight="20dp"
+        android:id="@+id/shanchu"
+        android:layout_alignParentRight="true"
+        android:textColor="#0cBA73"></TextView>
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:text="载入"
+    android:layout_marginRight="20dp"
+    android:id="@+id/zairu"
+    android:layout_alignParentRight="true"
+    android:textColor="#0cBA73"></TextView>
+
+</RelativeLayout>

@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:maxLevel="5" android:drawable="@drawable/bottom_camera" />
+    <item android:maxLevel="10" android:drawable="@drawable/bottom_camera_close" />
+</level-list>

@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#454D5B"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/img_zan"
+        android:layout_width="25dp"
+        android:layout_height="25dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="200dp"
+        android:maxHeight="200dp"
+        android:src="@mipmap/zan"
+        android:layout_gravity="right"/>
+
+    <ImageView
+        android:id="@+id/img_stu"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:adjustViewBounds="true"
+        android:maxWidth="200dp"
+        android:maxHeight="200dp"
+        android:src="@mipmap/head"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/tx_stu_name"
+        android:text="秦思茹"
+        android:textColor="#FFFFFF"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center"/>
+
+    <TextView
+        android:id="@+id/tx_tishi"
+        android:text="请回答问题"
+        android:textColor="#555D6D"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_gravity="center"/>
+</LinearLayout>

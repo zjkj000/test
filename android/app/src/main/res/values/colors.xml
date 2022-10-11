@@ -35,10 +35,54 @@
     <color name="blue_white">#0eabe5</color>
 
     <color name="background">#22252E</color>
+    <color name="teacher_background">#2A2F38</color>
+    <color name="background_tollBar">#2A2F36</color>
+    <color name="border_color">#303640</color>
+    <color name="temp_camera">#555D6D</color>
     <color name="background_chatroom">#454D5B</color>
     <color name="background_button">#050607</color>
 
 
+    <!--    zyl-->
+    <color name="backgroung_chat_input">#505A6C</color>
+    <color name="bg_select_menu">#424242</color>
+    <color name="bg_selected_menu">#525156</color>
+
+    <color name="setboardbgcolor01">#DD3232</color>
+    <color name="setboardbgcolor02">#FFFFFF</color>
+    <color name="setboardbgcolor03">#000000</color>
+    <color name="setboardbgcolor04">#234B37</color>
+    <color name="setboardbgcolor05">#B8631E</color>
+    <color name="setboardbgcolor06">#21439A</color>
+    <!--    设置弹窗里面 阴影颜色-->
+    <color name="bg_select_shadow">#505050</color>
+
+    <!--    wly-->
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+
+    <color name="text_orange">#FF6100</color>
+
+    <!--弹框内的字体颜色-->
+    <color name="text_gray">#828798</color>
+    <color name="text_black">#FF000000</color>
+
+    <color name="text_white">#FFFFFF</color>
+    <color name="text_yellow">#FFC800</color>
+    <color name="text_topbar">#694E42</color>
+    <color name="div_white">#E5E5E5</color>
+
+    <color name="div_gray">#636b79</color>
+    <color name="div_shallowgray">#828798</color>
+
+    <color name="div_shallowgray1">#f6f5ec</color>
+
+    <color name="popupWindow_title">#535353</color>
+    <color name="popupWindow_container">#424242</color>
+    <color name="popupWindow_text_gray">#9FA7B9</color>
 
 
 

@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ScrollView
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:id="@+id/ll_content"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_marginTop="10dp"
+            android:layout_height="wrap_content" >
+
+
+             <androidx.fragment.app.FragmentContainerView
+                 android:id="@+id/camera_1"
+                 android:name="com.navigationdemo.trtc_client.CameraFragment"
+                 android:layout_width="match_parent"
+                 android:layout_height="wrap_content"
+                 app:layout_constraintTop_toTopOf="parent"
+                 />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/camera_2"
+                android:name="com.navigationdemo.trtc_client.CameraFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/camera_3"
+                android:name="com.navigationdemo.trtc_client.CameraFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/camera_4"
+                android:name="com.navigationdemo.trtc_client.CameraFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/camera_5"
+                android:name="com.navigationdemo.trtc_client.CameraFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+            <androidx.fragment.app.FragmentContainerView
+                android:id="@+id/camera_6"
+                android:name="com.navigationdemo.trtc_client.CameraFragment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintTop_toTopOf="parent"
+                />
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

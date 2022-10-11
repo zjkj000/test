@@ -5,6 +5,7 @@ import android.graphics.drawable.Drawable;
 public class ChatBean {
     String messageStuget;
     String phone;
+
     String time;
     String timeStr;
     String nameStuget;
