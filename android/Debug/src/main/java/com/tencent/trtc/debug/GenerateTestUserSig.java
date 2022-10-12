@@ -70,7 +70,7 @@ public class GenerateTestUserSig {
     /**
      * `bizId` for CDN publishing and stream mixing
      */
-    public static final int BIZID = 1400695721;
+    public static final int BIZID = 1400618856;
 
     /**
      * CDN发布功能 混流appId
@@ -79,7 +79,7 @@ public class GenerateTestUserSig {
     /**
      * `appId` for CDN publishing and stream mixing
      */
-    public static final int APPID = 1400695721;
+    public static final int APPID = 1400618856;
 
     /**
      * 腾讯云 SDKAppId，需要替换为您自己账号下的 SDKAppId。
@@ -94,7 +94,7 @@ public class GenerateTestUserSig {
      * You can view your `SDKAppID` after creating an application in the [TRTC console](https://console.cloud.tencent.com/rav).
      * `SDKAppID` uniquely identifies a Tencent Cloud account.
      */
-    public static final int SDKAPPID = 1400695721;
+    public static final int SDKAPPID = 1400618856;
 
     /**
      * 签名过期时间，建议不要设置的过短
@@ -133,7 +133,7 @@ public class GenerateTestUserSig {
      * Note: this method is for testing only. Before commercial launch, please migrate the UserSig calculation code and key to your backend server to prevent key disclosure and traffic stealing.
      * Reference: https://cloud.tencent.com/document/product/647/17275#Server
      */
-    public static final String SECRETKEY = "8926bc8a7cb907f1694aca0da0f270b9bb1903193202de8a0a2779de9e144b1c";
+    public static final String SECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
 
     /**
      * 计算 UserSig 签名

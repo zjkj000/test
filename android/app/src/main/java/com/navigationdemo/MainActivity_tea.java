@@ -95,6 +95,7 @@ import com.tencent.teduboard.TEduBoardController;
 import com.tencent.trtc.TRTCCloud;
 import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
+import com.tencent.trtc.debug.Constant;
 import com.tencent.trtc.debug.GenerateTestUserSig;
 
 import org.json.JSONException;
@@ -162,7 +163,7 @@ public class MainActivity_tea extends AppCompatActivity {
     public static ArrayList<String> mMicrophoneUserList = new ArrayList<String>();
     public static int mUserCount = 0;
 
-    private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
+    private String MRegion="ap-guangzhou"   ;                                          //存储桶配置的大区  ap-guangzhou
     private String Mbucket = "zjkj-1258767809";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
     private String MsecretId = "AKID5ybx2rPggPr23oHUR8YhZBWZLr6xaw2r";                 //存储桶   永久密钥 secretId
     private String MsecretKey = "auxjESQCk11lEQL0O5WhbEZdRyEDwOYR";                    //存储桶    永久密钥 secretKey
@@ -183,7 +184,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
 
 
-    private  int SDKappID =1400618830;                                                  //SDKAppID
+    private  int SDKappID =1400618856;                                                  //SDKAppID
 
     public static String teaName = "";
     public static String teaHead = "";
@@ -306,17 +307,26 @@ public class MainActivity_tea extends AppCompatActivity {
         }
 
        //初始化测试参数
-        Intent intent = getIntent();
-        userId=intent.getExtras().get("userid").toString();
-        userCn=intent.getExtras().get("userCn").toString();
-        roomid = intent.getExtras().get("roomid").toString();
-        roomName = intent.getExtras().get("roomname").toString();
-
-        subjectId = intent.getExtras().get("subjectid").toString();
-        UserSig =GenerateTestUserSig.genTestUserSig(intent.getExtras().get("userid").toString());
-
-        keTangId = intent.getExtras().get("ketangid").toString();
-        keTangName = intent.getExtras().get("ketangname").toString();
+        handleIntent();
+//        Intent intent = getIntent();
+        userId = "mingming";
+        userCn = "mingming";
+        roomid = "750795";
+        roomName = "haha";
+        subjectId = "750795";
+        UserSig = GenerateTestUserSig.genTestUserSig(userId);
+        keTangId = "750795";
+        keTangName = "haha";
+//        userId=intent.getExtras().get("userid").toString();
+//        userCn=intent.getExtras().get("userCn").toString();
+//        roomid = intent.getExtras().get("roomid").toString();
+//        roomName = intent.getExtras().get("roomname").toString();
+//
+//        subjectId = intent.getExtras().get("subjectid").toString();
+//        UserSig =GenerateTestUserSig.genTestUserSig(intent.getExtras().get("userid").toString());
+//
+//        keTangId = intent.getExtras().get("ketangid").toString();
+//        keTangName = intent.getExtras().get("ketangname").toString();
 
 
         List<MemberDataBean> testList1 = new ArrayList<>();
@@ -615,6 +625,47 @@ public class MainActivity_tea extends AppCompatActivity {
         // 开启计时器
         startTime();
     }
+
+    /**
+     * 接受RN传递的参数
+     */
+
+    private void handleIntent() {
+        Intent intent = getIntent();
+        String params = intent.getStringExtra("params");
+        System.out.println("MainActivity_tea-params:"+params);
+        String[] strArr = params.split("-", 7);
+        userId = "mingming";
+        userCn = "mingming";
+        roomid = "750795";
+        roomName = "haha";
+        subjectId = "750795";
+        UserSig = GenerateTestUserSig.genTestUserSig(userId);
+        keTangId = "750795";
+        keTangName = "haha";
+        LaunchActivity.mUserId = strArr[0];
+        LaunchActivity.mUserCn = strArr[1];
+        LaunchActivity.mRoomId = strArr[2];
+        LaunchActivity.mTeacherId = strArr[3];
+        LaunchActivity.mTeacherCn = strArr[4];
+        LaunchActivity.mUserPhoto = strArr[5];
+        System.out.println("MainActivity_tea-userinit:"+LaunchActivity.mUserId);
+        System.out.println("MainActivity_tea-usercninit:"+LaunchActivity.mUserCn);
+        System.out.println("MainActivity_tea-roominit:"+LaunchActivity.mRoomId);
+        System.out.println("MainActivity_tea-mTeacherId:"+LaunchActivity.mTeacherId);
+        System.out.println("MainActivity_tea-mTeacherCn:"+LaunchActivity.mTeacherCn);
+        System.out.println("MainActivity_tea-mUserPhoto:"+LaunchActivity.mUserPhoto);
+
+        if (null != intent) {
+            if (intent.getStringExtra(Constant.USER_ID) != null) {
+                LaunchActivity.mUserId = intent.getStringExtra(Constant.USER_ID);
+            }
+            if (intent.getStringExtra(Constant.ROOM_ID) != null) {
+                LaunchActivity.mRoomId = intent.getStringExtra(Constant.ROOM_ID);
+            }
+        }
+    }
+
 
 
     /**

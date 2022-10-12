@@ -9,7 +9,7 @@
         android:layout_width="30dp"
         android:orientation="vertical"
         android:layout_height="wrap_content">
-        <com.navigationdemo.trtc_client.utils.MyChatHead_ImageView
+        <com.navigationdemo.utils.MyChatHead_ImageView
             android:layout_width="30dp"
             android:id="@+id/msg_head"
             android:layout_height="30dp"/>

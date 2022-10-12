@@ -20,7 +20,7 @@
 
              <androidx.fragment.app.FragmentContainerView
                  android:id="@+id/camera_1"
-                 android:name="com.navigationdemo.trtc_client.CameraFragment"
+                 android:name="com.navigationdemo.CameraFragment"
                  android:layout_width="match_parent"
                  android:layout_height="wrap_content"
                  app:layout_constraintTop_toTopOf="parent"
@@ -28,7 +28,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/camera_2"
-                android:name="com.navigationdemo.trtc_client.CameraFragment"
+                android:name="com.navigationdemo.CameraFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -36,7 +36,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/camera_3"
-                android:name="com.navigationdemo.trtc_client.CameraFragment"
+                android:name="com.navigationdemo.CameraFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -44,7 +44,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/camera_4"
-                android:name="com.navigationdemo.trtc_client.CameraFragment"
+                android:name="com.navigationdemo.CameraFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -52,7 +52,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/camera_5"
-                android:name="com.navigationdemo.trtc_client.CameraFragment"
+                android:name="com.navigationdemo.CameraFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
@@ -60,7 +60,7 @@
 
             <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/camera_6"
-                android:name="com.navigationdemo.trtc_client.CameraFragment"
+                android:name="com.navigationdemo.CameraFragment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:layout_constraintTop_toTopOf="parent"
