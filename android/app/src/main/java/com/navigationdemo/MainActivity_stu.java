@@ -55,7 +55,7 @@ import androidx.viewpager.widget.ViewPager;
 import com.navigationdemo.adapter.HandsUpListViewAdapter;
 import com.navigationdemo.adapter.MemberListViewAdapter;
 import com.navigationdemo.adapter.SetBrd_TabBarAdapter;
-import com.navigationdemo.adapter.TabBarAdapter;
+import com.navigationdemo.adapter.TabBarAdapter_stu;
 import com.navigationdemo.setBoardFragment.Set_Highlighter_Fragment;
 import com.navigationdemo.setBoardFragment.Set_bg_Fragment;
 import com.navigationdemo.setBoardFragment.Set_eraser_Fragment;
@@ -122,7 +122,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-public class MainActivity_tea extends AppCompatActivity {
+public class MainActivity_stu extends AppCompatActivity {
 
     private Timer timer;
 
@@ -175,17 +175,21 @@ public class MainActivity_tea extends AppCompatActivity {
     private  String UserSig ="";                                                        //腾讯服务签名
 //  private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
 
+
     public static String roomid  = "";                                                                              //房间号     自己填写
     public static String roomName ="";                                                                              //房间名称    自己填写
     public static String userId = "";                                                                               //用户ID     mingming
     public static String userCn="";                                                                                 //中文名      明茗
     public static String keTangId = "";                                                                             //课堂id      4193
     public static String keTangName="";                                                                             //课堂名称     明茗初一语文60人班
-    public static String userHead = "http://www.cn901.com/res/avatar/2022/07/21/avatar-mingming_173040431.png";     //用户头像
+    public static String userHead = "";     //用户头像
     public static String subjectId = "";                                                                   //学科ID     10007
 
 
+
+
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
+
     public static String teaName = "";
     public static String teaHead = "";
     public static String userName = "xgy";
@@ -283,13 +287,6 @@ public class MainActivity_tea extends AppCompatActivity {
         // 隐藏状态栏 
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
             WindowManager.LayoutParams.FLAG_FULLSCREEN);
-//        单条权限动态获取
-//        String PM_SINGLE= Manifest.permission.CAMERA;
-//        int nRet= ContextCompat.checkSelfPermission(this,PM_SINGLE);
-//        if(nRet!= PackageManager.PERMISSION_GRANTED){
-//            ActivityCompat.requestPermissions(this,new String[]{PM_SINGLE},10000);
-//        }
-
 //        多条权限动态获取
         String[] PM_MULTIPLE={
                 Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.CAMERA,Manifest.permission.WRITE_CONTACTS
@@ -316,10 +313,9 @@ public class MainActivity_tea extends AppCompatActivity {
         List<MemberDataBean> testList1 = new ArrayList<>();
         mFragmenglist.add(videoListFragment);
         mFragmenglist.add(chatRoomFragment);
-        mFragmenglist.add(answerQuestionFragment);
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_main_stu);
 
         TextView class_id_text_view = findViewById(R.id.class_id);
         class_id_text_view.setText(roomid);
@@ -368,15 +364,15 @@ public class MainActivity_tea extends AppCompatActivity {
         }
         scroll_block.setLayoutParams(scroll_block_params);
 
-        MainActivity_tea that = this;
+        MainActivity_stu that = this;
         handsUpSwitchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-                if (b) {
-                    HttpActivityTea.memberController("", "", "", "handAllNo", "", -1, that);
-                } else {
-                    HttpActivityTea.memberController("", "", "", "handAllYes", "", -1, that);
-                }
+//                if (b) {
+//                    HttpActivityTea.memberController("", "", "", "handAllNo", "", -1, that);
+//                } else {
+//                    HttpActivityTea.memberController("", "", "", "handAllYes", "", -1, that);
+//                }
             }
         });
 
@@ -511,38 +507,6 @@ public class MainActivity_tea extends AppCompatActivity {
          rf_bottommenu = findViewById(R.id.menu_bottom);
          rf_shoukeneirong = findViewById(R.id.bg_shoukeneirong);
 
-         //白板按钮
-        boardBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boardBtn.setImageResource(R.drawable.bottom_board_checked);
-                canvasBtn.setImageResource(R.drawable.bottom_file);
-                //判断元素类型 保存快照
-                    //白板初始化完成了
-                    if(BoardStatus&&addBoardtoFragmentstatus){
-                        if(mBoard!=null&&"Board".equals(CurType)){
-                            System.out.println("+++我就是在白板页面了");
-                        }else {
-                            if("File".equals(CurType)){
-                                System.out.println("+++我要切换白板页面了");
-                                TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
-                                path.path = getCacheDir()+"/"+CurBoardID+".png";
-                                mBoard.snapshot(path);
-                                mBoard.switchFile(BoardID);
-                                if(CurBoardID!=null){
-                                    mBoard.gotoBoard(CurBoardID,false);
-                                }
-                            }
-                        }
-                    }
-                    else {
-                        addBoardtoFragmentstatus =  mBoard.addBoardViewToContainer(Board_container,boardview,addBoardlayoutParams);
-                        rf_leftmenu.setVisibility(View.VISIBLE);
-                        rf_bottommenu.setVisibility(View.VISIBLE);
-                        rf_shoukeneirong.setVisibility(View.GONE);
-                    }
-            }
-        });
 
         //第二次进入就加在不成功白板了
 //        if(mBoard==null||CurType==null){
@@ -686,7 +650,7 @@ public class MainActivity_tea extends AppCompatActivity {
     }
 
     public void startTime() {
-        MainActivity_tea that = this;
+        MainActivity_stu that = this;
         baseTimer = SystemClock.elapsedRealtime();
         timer = new Timer();
         timer.schedule(new TimerTask() {
@@ -742,7 +706,7 @@ public class MainActivity_tea extends AppCompatActivity {
     }
 
     public void setHandsUpData() {
-        MainActivity_tea that = this;
+        MainActivity_stu that = this;
         handsUpItemList.clear();
         List<HandsUpItem> tempHandsUpItemList = new ArrayList<>();
         for (int i = 0; i < AnswerActivityTea.handsUpList.size(); i++) {
@@ -762,10 +726,10 @@ public class MainActivity_tea extends AppCompatActivity {
         if(item != null){
             Log.e(TAG, "switchMemberListAudioIcon: 获取用户item " + item.getName());
             item.setAudioControl(!item.getAudioControl());
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -776,7 +740,7 @@ public class MainActivity_tea extends AppCompatActivity {
             item.setVideoControl(!item.getVideoControl());
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -784,22 +748,22 @@ public class MainActivity_tea extends AppCompatActivity {
         MemberItem item = listViewAdapter.getItem(position);
         if(item != null){
             item.setChatControl(!item.getChatControl());
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
     public void switchSpeakerIcon(int position) {
         MemberItem item = listViewAdapter.getItem(position);
         if(item != null){
-            this.videoListFragment.setVideo(item.getUserId(),item.getAudioControl(),this, mTRTCCloud );
+//            this.videoListFragment.setVideo(item.getUserId(),item.getAudioControl(),this, mTRTCCloud );
             item.setSpeakControl(!item.getSpeakControl());
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -839,7 +803,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
         if(memberPosition != -1){
             MemberItem memberNow = listViewAdapter.getItem(memberPosition);
-            HttpActivityTea.speakerController(memberNow.getUserId(), item.getName(), "up", position, this);
+//            HttpActivityTea.speakerController(memberNow.getUserId(), item.getName(), "up", position, this);
             memberNow.setUserType(0);
             listViewAdapter.notifyDataSetChanged();
         }
@@ -877,33 +841,33 @@ public class MainActivity_tea extends AppCompatActivity {
     public void initMemberList() {
         Log.e(TAG, "initMemberList: hahahahhahaah");
         memberDataList = new Vector<>();
-        HttpActivityTea.getMemberList(this);
+//        HttpActivityTea.getMemberList(this);
 
         setCountMember(AnswerActivityTea.ketangList.size(), AnswerActivityTea.joinList.size());
-        MainActivity_tea that = this;
+        MainActivity_stu that = this;
         listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
         memberList.setAdapter(listViewAdapter);
-        HttpActivityTea.getMemberList(this);
+//        HttpActivityTea.getMemberList(this);
 
         listViewAdapter.setOnItemButtonListener(new MemberListViewAdapter.onItemButtonListener() {
             @Override
             public void onMoveOutClick(int i) {
-                Toast.makeText(MainActivity_tea.this, "成员 " + i + " 移除按钮被点击", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity_stu.this, "成员 " + i + " 移除按钮被点击", Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onChatControlClick(int i) {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
-                    if(item.getChatControl()){
-                        HttpActivityTea.memberController("", "", "closeWords", "", item.getUserId(), i, that);
-                    } else {
-                        HttpActivityTea.memberController("", "", "openWords", "", item.getUserId(), i, that);
-                    }
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
+//                    if(item.getChatControl()){
+//                        HttpActivityTea.memberController("", "", "closeWords", "", item.getUserId(), i, that);
+//                    } else {
+//                        HttpActivityTea.memberController("", "", "openWords", "", item.getUserId(), i, that);
+//                    }
+                    Toast.makeText(MainActivity_stu.this, "成员 " + i + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_stu.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -917,20 +881,20 @@ public class MainActivity_tea extends AppCompatActivity {
                         if(memberInKetangList != null)
                             item.setUserType(0);
                         if(studentDataBean != null) {
-                            that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
+//                            that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
                             item.setUserType(1);
                         }
-                        HttpActivityTea.speakerController(item.getUserId(), item.getName(), "down", i, that);
+//                        HttpActivityTea.speakerController(item.getUserId(), item.getName(), "down", i, that);
                     } else {
-                        that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
+//                        that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
                         that.videoListFragment.addCameraView(item.getUserId(), getmTRTCCloud());
                         item.setUserType(0);
-                        HttpActivityTea.speakerController(item.getUserId(), item.getName(), "up", i, that);
+//                        HttpActivityTea.speakerController(item.getUserId(), item.getName(), "up", i, that);
                     }
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_stu.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_stu.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -939,20 +903,20 @@ public class MainActivity_tea extends AppCompatActivity {
                 MemberItem item = listViewAdapter.getItem(i);
                 if(item != null){
                     if(item.getAudioControl()){
-                        HttpActivityTea.memberController("closeMic", "", "", "", item.getUserId(), i, that);
+//                        HttpActivityTea.memberController("closeMic", "", "", "", item.getUserId(), i, that);
                     } else {
-                        HttpActivityTea.memberController("openMic", "", "", "", item.getUserId(), i, that);
+//                        HttpActivityTea.memberController("openMic", "", "", "", item.getUserId(), i, that);
                     }
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_stu.this, "成员 " + i + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_stu.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
 
             @Override
             public void onVideoControlClick(int i) {
-                Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁视频按钮被点击", Toast.LENGTH_SHORT).show();
+                Toast.makeText(MainActivity_stu.this, "成员 " + i + " 禁视频按钮被点击", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -966,10 +930,10 @@ public class MainActivity_tea extends AppCompatActivity {
                         drawAuthority("drawAuthority" , "yes", item.getUserId());
                         item.setBoardControl(true);
                     }
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁绘画按钮被点击", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_stu.this, "成员 " + i + " 禁绘画按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity_stu.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -979,9 +943,9 @@ public class MainActivity_tea extends AppCompatActivity {
 
         //使用适配器将ViewPager与Fragment绑定在一起
         ViewPager viewPager = findViewById(R.id.tar_bar_view_page);
-        TabBarAdapter tabBarAdapter = new TabBarAdapter(getSupportFragmentManager());
-        tabBarAdapter.setmFragment(mFragmenglist);
-        viewPager.setAdapter(tabBarAdapter);
+        TabBarAdapter_stu tabBarAdapter_stu = new TabBarAdapter_stu(getSupportFragmentManager());
+        tabBarAdapter_stu.setmFragment(mFragmenglist);
+        viewPager.setAdapter(tabBarAdapter_stu);
 
         //设置ViewPager的最大缓存数
         viewPager.setOffscreenPageLimit(3);
@@ -1004,16 +968,16 @@ public class MainActivity_tea extends AppCompatActivity {
     }
 
     public static class MyTRTCCloudListener extends TRTCCloudListener {
-        private WeakReference<MainActivity_tea> mContext;
+        private WeakReference<MainActivity_stu> mContext;
 
-        public MyTRTCCloudListener(MainActivity_tea activity) {
+        public MyTRTCCloudListener(MainActivity_stu activity) {
             super();
             mContext = new WeakReference<>(activity);
         }
 
         @Override
         public void onEnterRoom(long result) {
-            MainActivity_tea activity = mContext.get();
+            MainActivity_stu activity = mContext.get();
             if(result > 0) {
                 activity.initMemberList();
                 Log.e(TAG, "onEnterRoom: 进入房间成功，耗时: " + result);
@@ -1026,18 +990,18 @@ public class MainActivity_tea extends AppCompatActivity {
 
         @Override
         public void onUserAudioAvailable(String userId, boolean available) {
-            MainActivity_tea activity = mContext.get();
+            MainActivity_stu activity = mContext.get();
             Log.d(TAG, "onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserVideoAvailable:"+userId);
-            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
+//            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
             int userPosition = listViewAdapter.getItemPositionById(userId);
             activity.switchMemberListAudioIcon(userPosition);
         }
 
         @Override
         public void onUserVideoAvailable(String userId, boolean available) {
-            MainActivity_tea activity = mContext.get();
+            MainActivity_stu activity = mContext.get();
             Log.d(TAG, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
             Toast.makeText(activity, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available , Toast.LENGTH_SHORT).show();
             System.out.println("onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
@@ -1058,15 +1022,15 @@ public class MainActivity_tea extends AppCompatActivity {
                 mUserList.remove(userId);
             int userPosition = listViewAdapter.getItemPositionById(userId);
             activity.switchMemberListVideoIcon(userPosition);
-            if(AnswerActivityTea.findMemberInKetangList((userId)) != null)
-                activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
+//            if(AnswerActivityTea.findMemberInKetangList((userId)) != null)
+//                activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
 
         }
 
         @Override
         public void onRemoteUserEnterRoom(String userId){
-            MainActivity_tea activity = mContext.get();
-            HttpActivityTea.getMemberList(activity);
+            MainActivity_stu activity = mContext.get();
+//            HttpActivityTea.getMemberList(activity);
             Log.e(TAG, "onRemoteUserEnterRoom: userId" + userId );
             System.out.println("onRemoteUserEnterRoom userId " + userId );
             Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
@@ -1076,17 +1040,17 @@ public class MainActivity_tea extends AppCompatActivity {
 
         @Override
         public void onRemoteUserLeaveRoom(String userId, int reason){
-            MainActivity_tea activity = mContext.get();
-            activity.videoListFragment.leaveRoom(userId, reason, activity,
-                    activity.mTRTCCloud);
-            HttpActivityTea.getMemberList(activity);
+            MainActivity_stu activity = mContext.get();
+//            activity.videoListFragment.leaveRoom(userId, reason, activity,
+//                    activity.mTRTCCloud);
+//            HttpActivityTea.getMemberList(activity);
 //            Toast.makeText(activity, "onRemoteUserLeaveRoom userId " + userId , Toast.LENGTH_SHORT).show();
         }
 
         @Override
         public void onError(int errCode, String errMsg, Bundle extraInfo) {
             Log.d(TAG, "sdk callback onError");
-            MainActivity_tea activity = mContext.get();
+            MainActivity_stu activity = mContext.get();
             if (activity != null) {
                 Toast.makeText(activity, "onError: " + errMsg + "[" + errCode+ "]" , Toast.LENGTH_SHORT).show();
                 if (errCode == TXLiteAVCode.ERR_ROOM_ENTER_FAIL) {
@@ -1101,7 +1065,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //        Log.e(TAG, "enterLiveRoom: ");
 
         mTRTCCloud = TRTCCloud.sharedInstance(getApplicationContext());
-        mTRTCCloud.setListener(new MyTRTCCloudListener(MainActivity_tea.this));
+        mTRTCCloud.setListener(new MyTRTCCloudListener(MainActivity_stu.this));
 
         // 组装TRTC进房参数
 //        String userId = "mingming";
@@ -1153,10 +1117,10 @@ public class MainActivity_tea extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
-        HttpActivityTea.initClass(screenWidth, screenHeight, "skydt", this);
 
+//        HttpActivityTea.initClass(screenWidth, screenHeight, "skydt", this);
         // 开启举手监听事件
-        HttpActivityTea.startHandsUpTimer(this);
+//        HttpActivityTea.startHandsUpTimer(this);
     }
 
 
@@ -1295,8 +1259,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 alert_text.setText("白板加载完成！");
                 if(!addBoardtoFragmentstatus){
                     addBoardtoFragmentstatus =  mBoard.addBoardViewToContainer(Board_container,boardview,addBoardlayoutParams);
-                    rf_leftmenu.setVisibility(View.VISIBLE);
-                    rf_bottommenu.setVisibility(View.VISIBLE);
+                    mBoard.setToolType(0);
                     rf_shoukeneirong.setVisibility(View.GONE);//默认图片那个消失
                 }
             }
@@ -2547,19 +2510,6 @@ public class MainActivity_tea extends AppCompatActivity {
                 return false;
             }
         });
-        menub06.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
-                if(CurType=="Board"){
-                    path.path = getCacheDir()+"/"+CurBoardID+".png";
-                }else {
-                    path.path= getCacheDir()+"/"+CurFileID+".png";
-                }
-//                mBoard.snapshot(path);
-                mBoard.prevBoard();
-            }
-        });
         //底部功能栏  第7个按钮  向后翻页 按钮
         menub07 = findViewById(R.id.menub07);
         menub07.setOnTouchListener(new View.OnTouchListener() {
@@ -2571,19 +2521,6 @@ public class MainActivity_tea extends AppCompatActivity {
                     menub07.setBackgroundResource(R.mipmap.menu_b07); //改为抬起时的图片
                 }
                 return false;
-            }
-        });
-        menub07.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
-                if(CurType=="Board"){
-                    path.path = getCacheDir()+"/"+CurBoardID+".png";
-                }else {
-                    path.path= getCacheDir()+"/"+CurFileID+".png";
-                }
-//                mBoard.snapshot(path);
-                mBoard.nextBoard();
             }
         });
         //底部功能栏  第8个按钮  新增一页 按钮
@@ -2599,13 +2536,6 @@ public class MainActivity_tea extends AppCompatActivity {
                 return false;
             }
         });
-        menub08.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //添加一页
-                mBoard.addBoard(null,TEduBoardController.TEduBoardImageFitMode.TEDU_BOARD_IMAGE_FIT_MODE_CENTER, TEduBoardController.TEduBoardBackgroundType.TEDU_BOARD_BACKGROUND_IMAGE,true);
-            }
-        });
         //底部功能栏  第9个按钮  删除当前页 按钮
         menub09 = findViewById(R.id.menub09);
         menub09.setOnTouchListener(new View.OnTouchListener() {
@@ -2619,15 +2549,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 return false;
             }
         });
-        menub09.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //删除一页
-                if(mBoard.getBoardList().size()>1){
-                    mBoard.deleteBoard(null);
-                }
-            }
-        });
+
         //底部功能栏  第10个按钮  折叠展开底部菜单栏 按钮
         menub10 = findViewById(R.id.menub10);
         menub02_1 = findViewById(R.id.menub02_1);
@@ -2782,7 +2704,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
 
     public void onExitLiveRoom() {
-        HttpActivityTea.overClass("leave", "skydt", this);
+//        HttpActivityTea.overClass("leave", "skydt", this);
         final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(
                 "finish".getBytes(),       //data
                 "all"+"_WhiteBoard",     //descripition

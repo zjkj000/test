@@ -61,6 +61,13 @@
             android:theme="@style/Theme.TRTC_Client.NoActionBar" >
         </activity>
         <activity
+            android:name=".MainActivity_stu"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.TRTC_Client.NoActionBar" >
+        </activity>
+        <activity
             android:name=".SetInfo_MainActivity"
             android:exported="true"
             android:screenOrientation="landscape">

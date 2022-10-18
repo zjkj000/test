@@ -276,13 +276,20 @@ class LiveingLessonContent extends Component {
                     <TouchableOpacity style={{position:"absolute",right:25}} onPress={
                         ()=>{
                             NativeModules.IntentMoudle.startActivityFromJS(
-                                "LaunchActivity", 
-                                    global.constants.userName+"-"+      //userid 学生id
-                                    global.constants.userCn+"-"+        //usercn 学生中文名   
-                                    this.state.roomId+"-"+              //roomid 直播房间号
-                                    this.state.teacherId+"-"+            //teacherId教师id
-                                    this.state.teacherName+"-"+         //teachercn 教师中文名
-                                    global.constants.userPhoto         //用户头像连接 
+                                    "MainActivity_stu",
+                                                                global.constants.userName+"-@-"+       //userid id
+                                                                global.constants.userCn+"-@-"+         //usercn 中文名
+                                                                 this.state.roomId+"-@-"+              //roomid 直播房间号
+                                                                 this.state.title+"-@-"+               //直播房间名称
+                                                                "subjectId"+"-@-"+         //学科ID
+                                                                "ketangId"+"-@-"+         //课堂ID
+                                                                "ketangName"+"-@-"+         //课堂名称
+                                                                global.constants.userPhoto
+
+                                                                // 下面这三个暂时没有 传递固定值
+                                                                // this.state.subjectId+"-@-"+         //学科ID
+                                                                // this.state.ketangId+"-@-"+         //课堂ID
+                                                                // this.state.ketangName+"-@-"+         //课堂名称
                             );  
                         }
                         }>
