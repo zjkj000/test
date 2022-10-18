@@ -170,7 +170,7 @@ class Tea_CreateInformContent extends Component {
               <TouchableOpacity style={{position:'absolute',left:10}} 
                                 onPress={()=>{this.props.navigation.goBack()
             }}>
-                <Image style={{width:30,height:30}} source={require('../../assets/teacherLatestPage/goback.png')} ></Image>
+                <Image style={{width:30,height:30}} source={require('../../assets/teacherLatestPage/goBack.png')} ></Image>
               </TouchableOpacity>
               <Text style={{color:'#59B9E0',fontSize:20}}>发布通知</Text>
                 

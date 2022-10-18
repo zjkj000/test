@@ -37,7 +37,9 @@ import CreateHomeworkFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks
 import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
 import CreateLearnCaseFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/CreateLearnCaseFrame";
 
-import LiveingLessonInfo from "../../pages/LatestTask/LiveingLessonInfo";
+import LiveingLessionInfo_stu from "../../pages/LatestTask/LiveingLessionInfo_stu";
+import LiveingLessionInfo_teacher from "../../pages/LatestTask/LiveingLessionInfo_teacher";
+import LiveingLession_add from "../../pages/LatestTask/LiveingLession_add";
 
 import PaperListContainer from "../../pages/Teacher/CorrectPaper/PaperList";
 import CorrectingPaper from "../../pages/Teacher/CorrectPaper/CorrectingPaper";
@@ -143,9 +145,25 @@ export default class MainNavigation extends Component {
 
                 <Stack.Screen
                     name="LiveingLession"
-                    component={LiveingLessonInfo}
+                    component={LiveingLessionInfo_stu}
                     options={{
                         title: "直播公开课",
+                    }}
+                />
+                <Stack.Screen
+                    name="LiveingLessionInfo_teacher"
+                    component={LiveingLessionInfo_teacher}
+                    options={{
+                        title: "我讲的直播课",
+                        headerShown:false,
+                    }}
+                />
+                <Stack.Screen
+                    name="LiveingLession_add"
+                    component={LiveingLession_add}
+                    options={{
+                        title: "新建直播课",
+                        headerShown:false,
                     }}
                 />
 
@@ -230,7 +248,7 @@ export default class MainNavigation extends Component {
                                                 width: 30,
                                                 left: 10,
                                             }}
-                                            source={require("../../assets/teacherLatestPage/goback.png")}
+                                            source={require("../../assets/teacherLatestPage/goBack.png")}
                                         />
                                     </TouchableOpacity>
                                 );
@@ -286,7 +304,7 @@ export default class MainNavigation extends Component {
                                                 width: 30,
                                                 left: 10,
                                             }}
-                                            source={require("../../assets/teacherLatestPage/goback.png")}
+                                            source={require("../../assets/teacherLatestPage/goBack.png")}
                                         />
                                     </TouchableOpacity>
                                 );

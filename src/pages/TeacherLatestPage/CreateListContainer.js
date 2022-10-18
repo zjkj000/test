@@ -27,7 +27,7 @@ import Loading from "../../utils/loading/Loading"; //Loading组件使用export {
 
 import "../../utils/global/constants";
 
-let pageNo = 0; //当前第几页
+let pageNo = 1; //当前第几页
 let itemNo = 0; //item的个数
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
 
@@ -101,7 +101,7 @@ class CreateList extends React.Component {
                 isRefresh: true,
                 showFoot: 0,
             });
-            pageNo = 0; //当前第几页
+            pageNo = 1; //当前第几页
             itemNo = 0; //item的个数
             dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
             this.fetchData(pageNo, oldtype, oldsearchStr, true);
@@ -113,7 +113,7 @@ class CreateList extends React.Component {
     }
 
     componentWillUnmount() {
-        pageNo = 0; //当前第几页
+        pageNo = 1; //当前第几页
         itemNo = 0; //item的个数
         dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
         
@@ -140,6 +140,7 @@ class CreateList extends React.Component {
             resourceType: type,
             type: "new",
             searchStr: search,
+            source: "RN",
             //callback:'ha',
             token: token,
         };
@@ -239,6 +240,7 @@ class CreateList extends React.Component {
         //Object.keys(todoItem).length != 0
         if (todo != null) {
             //console.log('tododo' , todo);
+            let todo_fNumber = "[" + todo.fNumber + "条]";
             return (
                 <TouchableOpacity
                     onPress={() => {
@@ -272,6 +274,9 @@ class CreateList extends React.Component {
                                     fNumber: todo.fNumber, // 0 已读   1  未读
                                 },
                             });
+                        } else if (todo.fType == "10") {
+                            //跳转直播
+                           this.props.navigation.navigate("LiveingLessionInfo_teacher");
                         } else {
                             this.props.navigation.navigate({
                                 name: "CorrectPaperList",
@@ -301,7 +306,7 @@ class CreateList extends React.Component {
                             }}
                         >
                             {this.showTaskImg(todo.fType)}
-                            {this.showTaskReadNum(todo.fNumber)}
+                            {todo.fType != "10" ? this.showTaskReadNum(todo.fNumber) : null}
                         </View>
                         <View
                             style={{
@@ -311,27 +316,126 @@ class CreateList extends React.Component {
                                 backgroundColor: '#fff'
                             }}
                         >
-                            <Text
-                                numberOfLines={1}
-                                ellipsizeMode={"tail"}
-                                style={{
-                                    color: "black",
-                                    fontSize: 20,
-                                    fontWeight: "900",
-                                }}
-                            >
-                                {todo.fName}
-                            </Text>
+                            {
+                                todo.fType == "10"
+                                ? 
+                                    <View
+                                        style={{
+                                            paddingTop: 5,
+                                            flexDirection: "row",
+                                            width: "100%",
+                                            backgroundColor: '#fff'
+                                        }}
+                                    >
+                                        <Text
+                                            numberOfLines={1}
+                                            ellipsizeMode={"tail"}
+                                            style={{
+                                                color: "black",
+                                                fontSize: 20,
+                                                fontWeight: "900",
+                                                width: "75%"
+                                            }}
+                                        >
+                                            {todo.fName}
+                                        </Text>
+                                        <View
+                                            style={{
+                                                width: "25%",
+                                            }}
+                                        >
+                                            {/**fFlag字段，1未开始2直播中3已结束 */}
+                                            {todo.fFlag == "2" ? ( 
+                                                <View
+                                                    style={{
+                                                        width: 70,
+                                                        height: 23,
+                                                        backgroundColor: "#FF6666",
+                                                        alignItems: "center",
+                                                    }}
+                                                >
+                                                    <Text
+                                                        style={{
+                                                            fontSize: 17,
+                                                            fontWeight: "bold",
+                                                            color: "white",
+                                                        }}
+                                                    >直播中</Text>
+                                                </View>
+                                            ) : todo.fFlag == "1" ? (
+                                                <View
+                                                    style={{
+                                                        width: 70,
+                                                        height: 23,
+                                                        backgroundColor: "#6600FF",
+                                                        alignItems: "center",
+                                                    }}
+                                                >
+                                                    <Text
+                                                        style={{
+                                                            fontSize: 17,
+                                                            fontWeight: "bold",
+                                                            color: "white",
+                                                        }}
+                                                    >未开始</Text>
+                                                </View>
+                                            ) :(
+                                                <View
+                                                    style={{
+                                                        width: 70,
+                                                        height: 23,
+                                                        backgroundColor: "#949599",
+                                                        alignItems: "center",
+                                                    }}
+                                                >
+                                                    <Text
+                                                        style={{
+                                                            fontSize: 17,
+                                                            fontWeight: "bold",
+                                                            color: "white",
+                                                        }}
+                                                    >已结束</Text>
+                                                </View>
+                                            ) }
+                                        </View>
+                                    </View>
+                                :   <Text
+                                        numberOfLines={1}
+                                        ellipsizeMode={"tail"}
+                                        style={{
+                                            color: "black",
+                                            fontSize: 20,
+                                            fontWeight: "900",
+                                        }}
+                                    >
+                                        {todo.fName}
+                                    </Text>
+                            }
                             <View>
-                                <Text style={{ height: 5 }}></Text>
+                                {
+                                    todo.fType == "10"
+                                    ? <Text style={{ height: 10 }}></Text>
+                                    : <Text style={{ height: 5 }}></Text>
+                                }
                             </View>
                             <View style={{ flexDirection: "row" }}>
-                                <View style={{width: '75%',}}>
+                                <View style={{width: '75%',flexDirection: "row"}}>
+                                    {
+                                        todo.fType == "10"
+                                        ? <Text
+                                                style={{
+                                                    fontWeight: "400",
+                                                }}
+                                            >
+                                                {todo_fNumber}
+                                            </Text>
+                                        : null
+                                    }
                                     <Text
                                         numberOfLines={1}
                                         ellipsizeMode={"tail"}
                                         style={{
-                                            width: screenWidth * 0.55,
+                                            width: todo.fType == "10" ? "80%" : "100%",
                                             fontWeight: "400",
                                         }}
                                     >
@@ -349,24 +453,26 @@ class CreateList extends React.Component {
                                     </Text>
                                 </View>
                             </View>
-                            <View style={{ flexDirection: "row" }}>
-                                <View  style={{width: '72%',flexDirection: 'row'}}>
-                                    <Text style={{ fontWeight: "400" }}>
-                                        {todo.fNum1}
-                                    </Text>
-                                    <Text style={{ width: 5 }}></Text>
-                                    <Text style={{ fontWeight: "400" }}>
-                                        {todo.fNum2}
-                                    </Text>
-                                    <Text style={{ width: 5 }}></Text>
-                                    <Text style={{ fontWeight: "400" }}>
-                                        {todo.fNum3}
-                                    </Text>
-                                </View>
-                                
-
-                                {this.showTaskProgress(todo.fType,todo.fNum4,todo.fNum5)}
-                            </View>
+                            {
+                                todo.fType != "10"
+                                ? <View style={{ flexDirection: "row" }}>
+                                        <View  style={{width: '72%',flexDirection: 'row'}}>
+                                            <Text style={{ fontWeight: "400" }}>
+                                                {todo.fNum1}
+                                            </Text>
+                                            <Text style={{ width: 5 }}></Text>
+                                            <Text style={{ fontWeight: "400" }}>
+                                                {todo.fNum2}
+                                            </Text>
+                                            <Text style={{ width: 5 }}></Text>
+                                            <Text style={{ fontWeight: "400" }}>
+                                                {todo.fNum3}
+                                            </Text>
+                                        </View>
+                                        {this.showTaskProgress(todo.fType,todo.fNum4,todo.fNum5)}
+                                    </View>
+                                : null
+                            }
                         </View>
                     </View>
                 </TouchableOpacity>
@@ -428,6 +534,16 @@ class CreateList extends React.Component {
                 <View style={styles.taskImg}>
                     <Image
                         source={require("../../assets/teacherLatestPage/weike.png")}
+                        style={styles.typeImg}
+                    />
+                </View>
+            );
+        } else if (fType == 10){
+            //直播
+            return (
+                <View style={styles.taskImg}>
+                    <Image
+                        source={require("../../assets/teacherLatestPage/zhibo.jpg")}
                         style={styles.typeImg}
                     />
                 </View>
@@ -560,7 +676,7 @@ class CreateList extends React.Component {
     //下拉刷新
     _onRefresh = () => {
         console.log("下拉刷新！！！");
-        pageNo = 0;
+        pageNo = 1;
         itemNo = 0;
         this.setState({
             isRefresh: true, //下拉控制
@@ -627,7 +743,7 @@ class CreateList extends React.Component {
             return;
         }
         //如果当前页大于或等于总页数，那就是到最后一页了，返回
-        if (pageNo != 0 && dataFlag == false) {
+        if (pageNo != 1 && dataFlag == false) {
             return;
         } else {
             pageNo++;

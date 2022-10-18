@@ -128,7 +128,7 @@ export default function PaperList(props) {
                                                   }
                                         })
             }}>
-                <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goback.png')} ></Image>
+                <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goBack.png')} ></Image>
               </TouchableOpacity>
 
               <View style={{width:'62%'}}>

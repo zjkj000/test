@@ -72,7 +72,7 @@ class LookCorrectDetailsContent extends Component {
         <View style={{height:'100%'}}>
           <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:1}}>
               <TouchableOpacity style={{position:'absolute',left:10}} onPress={()=>{this.props.navigation.goBack()}}>
-                  <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goback.png')}></Image>
+                  <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goBack.png')}></Image>
               </TouchableOpacity>
               
             <Text style={{color:'#59B9E0',fontSize:20}}>查看报告</Text>

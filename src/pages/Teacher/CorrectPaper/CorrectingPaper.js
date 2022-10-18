@@ -24,14 +24,12 @@ export default function CorrectingPaper(props) {
     const shouldLoadComponent = (index) => index === selectedIndex;
     const [CorrectResultList,setCorrectResultList] = useState([])    // 批改结果  只自己用
     useEffect(()=>{
-      navigation.setOptions( {title:props.route.params.userCn,
-        // headerRight:()=>(<Menu getselectedindex={setSelectedIndex} learnPlanId={props.route.params.learnId}/>)
-      })
+      navigation.setOptions( {title:props.route.params.userCn})
 
       props.route.params.CorrectResultList?setCorrectResultList(props.route.params.CorrectResultList):setCorrectResultList([])
-      getData()
+      getData();
       
-      // console.log('props.route.params.correctingstatus',props.route.params.correctingstatus)
+       console.log('props.route.params.selectedindex',props.route.params.selectedindex)
       if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){
           Alert.alert('','该学生已批改！是否直接查看批改结果？',[{},{text:'否',onPress:()=>{
             setSelectedIndex(0)
@@ -40,10 +38,9 @@ export default function CorrectingPaper(props) {
             setSelectedIndex(Allquestion.length)
           }
         }])
-      }else{
+      }else {
         setSelectedIndex(props.route.params.selectedindex)
       }
-
       return ()=>{
         changestatus()
       }
@@ -99,15 +96,20 @@ export default function CorrectingPaper(props) {
                 NoAllQuestionList.push(item)
               }
             })
-            setData(NoAllQuestionList)
+            if(NoAllQuestionList.length==0&&props.route.params.correctingstatus!='4'&&props.route.params.correctingstatus!='5'){
+              setData(Allquestion)
+              Alert.alert('','该学生试题均不需手工批改！是否直接查看批改结果？',[{},{text:'否',onPress:()=>{setSelectedIndex(0)}
+                  },{text:'是',onPress:()=>{setSelectedIndex(Allquestion.length)}}])
+            }else{
+              setData(NoAllQuestionList)
+            }
+            
           }else{
             setData(resJson.data.handList)
           }
           setSuccess(resJson.success)
-        // 如果autoMark值为yes  则跳转到结果页面，也给他批改结果数组
-        if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){
-          setData(Allquestion)
-        }
+          
+        if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){setData(Allquestion)}
           });                                                   
         }
     }
@@ -153,13 +155,10 @@ export default function CorrectingPaper(props) {
     }
     function update_StuAnswer(str1,str2){
       
-      // console.log(data[selectedIndex].stuAnswer.replace(str1,str2))
-      // console.log(str1,str2,data[selectedIndex].stuAnswer)
       var newdata = data
       newdata[selectedIndex].stuAnswer=newdata[selectedIndex].stuAnswer.replace(str1,str2)
       setData([])
       setData(newdata)
-      // setSelectedIndex(selectedIndex)
     }
 
     function loading(success){
@@ -306,7 +305,7 @@ export default function CorrectingPaper(props) {
                                                     }
                                           })
               }}>
-                  <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goback.png')} ></Image>
+                  <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goBack.png')} ></Image>
          </TouchableOpacity>
           
           <Text style={{color:'#59B9E0',fontSize:20}}>{userCn}</Text>

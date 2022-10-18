@@ -148,7 +148,7 @@ export default class Ketangshouke extends Component {
 
                 <View style={{marginLeft:10,marginRight:10}}>
                     <View>
-                        <Echarts option={option} height={250} width={width-20} />
+                        <Echarts option={option} height={250} width={width-20}/>
                     </View>
                 </View>
 
