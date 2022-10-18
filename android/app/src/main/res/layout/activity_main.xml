@@ -37,7 +37,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/stroll"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintHeight_percent="0.06"
+        app:layout_constraintHeight_percent="0.035"
         android:background="@drawable/border_bottom_background"
         android:layout_height="0dp"
         android:layout_width="0dp"
@@ -48,9 +48,10 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
+            android:layout_marginLeft="32dp"
             android:text="基因突变和基因重组"
-            android:textColor="@color/gray_text"
-            android:textSize="15sp" />
+            android:textColor="@color/white"
+            android:textSize="7sp" />
 
         <TextView
             android:id="@+id/student_num"
@@ -58,22 +59,24 @@
             android:layout_height="match_parent"
             android:layout_alignParentEnd="true"
             android:gravity="center_vertical"
-            android:paddingHorizontal="15sp"
+            android:paddingHorizontal="3dp"
             android:text="成员（同步教室：2     移动端：36）"
-            android:textColor="@color/gray_text"
-            android:textSize="10sp"
+            android:textColor="@color/white"
+            android:textSize="7sp"
             tools:ignore="SmallSp" />
+
         <TextView
             android:id="@+id/class_time"
-            android:layout_toStartOf="@id/student_num"
-            android:text="已上课 00:05:32"
-            android:gravity="center_vertical"
-            android:textColor="@color/gray_text"
-            android:textSize="10sp"
-            android:background="@drawable/border_right_background"
             android:layout_width="wrap_content"
-            android:paddingHorizontal="15sp"
             android:layout_height="match_parent"
+            android:layout_toStartOf="@id/student_num"
+            android:background="@drawable/border_right_background"
+            android:paddingHorizontal="3dp"
+            android:gravity="center_vertical"
+            android:text="已上课 00:05:32"
+            android:textColor="@color/white"
+
+            android:textSize="7sp"
             tools:ignore="SmallSp" />
 
         <TextView
@@ -82,12 +85,11 @@
             android:layout_height="match_parent"
             android:layout_toStartOf="@id/class_time"
             android:background="@drawable/border_right_background"
-            android:drawablePadding="10dp"
             android:gravity="center_vertical"
-            android:paddingHorizontal="15sp"
+            android:paddingHorizontal="3dp"
             android:text="课堂号: 5723908"
-            android:textColor="@color/gray_text"
-            android:textSize="10sp"
+            android:textColor="@color/white"
+            android:textSize="7sp"
             tools:ignore="SmallSp" />
     </RelativeLayout>
 
@@ -118,17 +120,18 @@
             android:id="@+id/menu_left"
             android:layout_marginBottom="10dp"
             android:layout_marginTop="10dp"
-            android:layout_marginLeft="1dp"
             android:layout_height="fill_parent">
+
             <TableLayout
                 android:layout_width="0dp"
-                app:layout_constraintHeight_percent="0.55"
+                app:layout_constraintHeight_percent="0.54"
                 android:id="@+id/select_menu_top"
                 android:visibility="gone"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintBottom_toTopOf="@id/select_menu"
                 android:layout_height="0dp" />
+
             <TableLayout
                 app:layout_constraintTop_toBottomOf="@id/select_menu_top"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -137,10 +140,9 @@
                 android:orientation="vertical"
                 android:gravity="bottom"
                 android:paddingTop="5dp"
-                android:layout_marginLeft="1dp"
                 android:background="@color/bg_select_menu"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent">
+                android:layout_width="wrap_content">
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:orientation="horizontal"
@@ -148,10 +150,13 @@
                     android:id="@+id/menu01RL"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_01_mouse"
                         android:id="@+id/menu01" />
                 </RelativeLayout>
@@ -162,16 +167,19 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:id="@+id/menu02RL"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
                         android:id="@+id/menu02"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:adjustViewBounds="true"
                         android:background="@mipmap/menu_02_paint1" />
                     <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:alpha="0.7"
                         android:id="@+id/menu02color"
                         android:layout_alignRight="@id/menu02"
@@ -186,15 +194,18 @@
                     android:layout_weight="1"
                     android:gravity="center"
                     android:id="@+id/menu03RL"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
                         android:id="@+id/menu03"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_03_text" />
                     <ImageView
-                        android:layout_width="8dp"
-                        android:layout_height="8dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:alpha="0.7"
                         android:id="@+id/menu03color"
                         android:layout_alignRight="@id/menu03"
@@ -209,15 +220,18 @@
                     android:id="@+id/menu04RL"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
                         android:id="@+id/menu04"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_04_jihe" />
                     <ImageView
-                    android:layout_width="8dp"
-                    android:layout_height="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
                     android:id="@+id/menu04color"
                     android:layout_alignRight="@id/menu04"
                     android:alpha="0.7"
@@ -232,10 +246,13 @@
                     android:id="@+id/menu05RL"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_05_select"
                         android:id="@+id/menu05"/>
                 </RelativeLayout>
@@ -246,10 +263,13 @@
                     android:id="@+id/menu06RL"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_06_tools"
                         android:id="@+id/menu06"/>
                 </RelativeLayout>
@@ -260,10 +280,13 @@
                     android:id="@+id/menu07RL"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_07_move"
                         android:id="@+id/menu07"/>
                 </RelativeLayout>
@@ -274,10 +297,13 @@
                     android:id="@+id/menu08RL"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_08_earsea"
                         android:id="@+id/menu08"/>
                 </RelativeLayout>
@@ -288,10 +314,13 @@
                     android:id="@+id/menu09RL"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_09_clean"
                         android:id="@+id/menu09"/>
                 </RelativeLayout>
@@ -302,10 +331,13 @@
                     android:id="@+id/menu10RL"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginBottom="2dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_10"
                         android:id="@+id/menu10"/>
                 </RelativeLayout>
@@ -316,13 +348,16 @@
                     android:id="@+id/menu11RL"
                     android:layout_weight="1"
                     android:gravity="center"
-                    android:layout_margin="1dp">
+                    android:layout_marginLeft="4dp"
+                    android:layout_marginRight="4dp"
+                    android:layout_marginTop="2dp">
                     <ImageButton
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_11_bg"
                         android:id="@+id/menu11"/>
                 </RelativeLayout>
+
                 <RelativeLayout
                     android:layout_width="wrap_content"
                     android:orientation="horizontal"
@@ -332,8 +367,8 @@
                     android:gravity="bottom">
                     <ImageButton
                         android:id="@+id/menu12"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="31dp"
+                        android:layout_height="15dp"
                         android:background="@mipmap/menu_12_down"
                         tools:ignore="MissingConstraints" />
                 </RelativeLayout>
@@ -359,36 +394,48 @@
                     android:paddingLeft="3dp">
                     <ImageButton
                         android:id="@+id/menub01"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="1dp"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
                         android:background="@mipmap/menu_b01" />
                     <ImageButton
                         android:id="@+id/menub02"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="1dp"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
                         android:background="@mipmap/menu_b02" />
                     <ImageButton
                         android:id="@+id/menub02_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/bottom_line" />
                     <ImageButton
                         android:id="@+id/menub03"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="1dp"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
                         android:background="@mipmap/menu_b03" />
                     <ImageButton
                         android:id="@+id/menub04"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="1dp"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
                         android:background="@mipmap/menu_b04" />
                     <TextView
                         android:id="@+id/board_size"
-                        android:layout_width="20dp"
+                        android:layout_width="24dp"
                         android:layout_height="20dp"
                         android:background="@color/bg_select_menu"
                         android:gravity="center"
@@ -405,19 +452,22 @@
                         android:textColor="@color/white" />
                     <ImageButton
                         android:id="@+id/menub05"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/menu_b05" />
                     <ImageButton
                         android:id="@+id/menub05_1"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
                         android:background="@mipmap/bottom_line" />
                     <ImageButton
                         android:id="@+id/menub06"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="1dp"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
                         android:background="@mipmap/menu_b06" />
                     <TextView
                         android:id="@+id/board_curpage"
@@ -450,19 +500,28 @@
                         android:id="@+id/menub07"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_margin="1dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
                         android:background="@mipmap/menu_b07" />
                     <ImageButton
                         android:id="@+id/menub08"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="1dp"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
                         android:background="@mipmap/menu_b08" />
                     <ImageButton
                         android:id="@+id/menub09"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="1dp"
+                        android:layout_width="23dp"
+                        android:layout_height="23dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="2dp"
+                        android:layout_marginRight="2dp"
                         android:background="@mipmap/menu_b09" />
                     <RelativeLayout
                         android:layout_width="wrap_content"
@@ -470,8 +529,8 @@
                         android:gravity="center">
                         <ImageButton
                             android:id="@+id/menub10"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
+                            android:layout_width="15dp"
+                            android:layout_height="31dp"
                             android:background="@mipmap/menu_b10" />
                     </RelativeLayout>
 
@@ -540,6 +599,7 @@
                   android:layout_width="match_parent"
                   android:layout_gravity="center"
                   android:padding="5dp"
+                  android:background="@color/bg_select_menu"
                   android:layout_height="wrap_content">
                   <TextView
                       app:layout_constraintTop_toTopOf="parent"
@@ -630,7 +690,7 @@
                   android:gravity="center"
                   android:layout_height="wrap_content">
                   <TextView
-                      android:layout_width="wrap_content"
+                      android:layout_width="200dp"
                       android:id="@+id/msgTips"
                       android:text="文件正在上传："
                       android:textColor="@color/gray_text"
@@ -703,7 +763,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="1.0"
-        app:layout_constraintWidth_percent="0.3"
+        app:layout_constraintWidth_percent="0.25"
         app:layout_constraintTop_toTopOf="parent"
         >
 
@@ -732,8 +792,7 @@
                         android:id="@+id/teacher_camera"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="2dp"
-                        />
+                        android:padding="2dp" />
 
                     <RelativeLayout
                         android:id="@+id/teacher_background"
@@ -760,12 +819,12 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/teacher_background"
-                android:drawablePadding="10dp"
-                android:paddingHorizontal="10dp"
-                android:paddingVertical="3dp"
+                android:drawablePadding="2dp"
+                android:paddingHorizontal="2dp"
+                android:paddingVertical="2dp"
                 android:text="XX老师"
                 android:textColor="@color/white"
-                android:textSize="13sp"
+                android:textSize="7sp"
                 />
             </RelativeLayout>
 
@@ -816,10 +875,10 @@
         android:padding="10dp"
         android:visibility="visible"
 
-        app:constraint_referenced_ids="canvas_btn, board_btn, content_btn, member_btn, hand_btn_frame_layout, mic_btn, camera_btn, share_btn, exit_btn, bottom_line_1, bottom_line_2, bottom_line_3"
+        app:constraint_referenced_ids="canvas_btn, board_btn, content_btn, member_btn, hand_btn_frame_layout, mic_btn, camera_btn, exit_btn, bottom_line_1, bottom_line_2, bottom_line_3"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/stroll"
-        app:layout_constraintHeight_percent="0.10"
+        app:layout_constraintHeight_percent="0.07"
         app:layout_constraintWidth_percent="0.8" />
     <ImageView
         android:id="@+id/canvas_btn"
@@ -838,7 +897,7 @@
         app:layout_constraintStart_toEndOf="@id/canvas_btn"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
-        android:src="@drawable/bottom_dir"
+        android:src="@drawable/bottom_board_checked"
         />
     <ImageView
         android:id="@+id/bottom_line_1"
@@ -856,7 +915,7 @@
         app:layout_constraintStart_toEndOf="@id/bottom_line_1"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
-        android:src="@drawable/bottom_content"
+        android:src="@drawable/bottom_dir"
         />
 
     <ImageView
@@ -952,15 +1011,16 @@
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
         android:src="@drawable/bottom_exit"
         />
-    <ImageView
-        android:id="@+id/share_btn"
-        android:layout_width="50dp"
-        android:layout_height="0dp"
-        app:layout_constraintEnd_toStartOf="@id/exit_btn"
-        app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
-        app:layout_constraintTop_toTopOf="@+id/group_buttons"
-        android:src="@drawable/bottom_share"
-        />
+<!--    共享屏幕按钮-->
+<!--    <ImageView-->
+<!--        android:id="@+id/share_btn"-->
+<!--        android:layout_width="50dp"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintEnd_toStartOf="@id/exit_btn"-->
+<!--        app:layout_constraintBottom_toBottomOf="@+id/group_buttons"-->
+<!--        app:layout_constraintTop_toTopOf="@+id/group_buttons"-->
+<!--        android:src="@drawable/bottom_share"-->
+<!--        />-->
 
 
 

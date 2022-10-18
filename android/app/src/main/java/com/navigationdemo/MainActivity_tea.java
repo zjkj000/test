@@ -24,6 +24,8 @@ import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
@@ -106,6 +108,8 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.io.StringWriter;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -163,10 +167,10 @@ public class MainActivity_tea extends AppCompatActivity {
     public static ArrayList<String> mMicrophoneUserList = new ArrayList<String>();
     public static int mUserCount = 0;
 
-    private String MRegion="ap-guangzhou"   ;                                          //存储桶配置的大区  ap-guangzhou
-    private String Mbucket = "zjkj-1258767809";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKID5ybx2rPggPr23oHUR8YhZBWZLr6xaw2r";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "auxjESQCk11lEQL0O5WhbEZdRyEDwOYR";                    //存储桶    永久密钥 secretKey
+    private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
+    private String Mbucket = "zjkj-1309130014";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
+    private String MsecretId = "AKID89yXyjS6YoBRUObm3kMp6Eev8Ce5hktu";                 //存储桶   永久密钥 secretId
+    private String MsecretKey = "vjU7Ys44460ypaZZXzUCqSwobDbmmZAZ";                    //存储桶    永久密钥 secretKey
 
     private  String UserSig ="";                                                        //腾讯服务签名
 //  private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
@@ -207,7 +211,7 @@ public class MainActivity_tea extends AppCompatActivity {
     //互动白板相关
     private TextView alert_text, upload_btn;                                    //提示白板当前的状态
     private View boardview;                                                     //白板的view
-    private static TEduBoardController mBoard;                                  //白板实例
+    public static TEduBoardController mBoard;                                  //白板实例
     public TEduBoardController getmBoard() {return this.mBoard;}                //获取到白班实例
     private Boolean BoardStatus=false;                                          //记录白板初始化 状态
     private Boolean addBoardtoFragmentstatus=false;                             //记录白板是否添加到了父容器中
@@ -273,12 +277,16 @@ public class MainActivity_tea extends AppCompatActivity {
     public Switch handsUpSwitchBtn;
 
     // UI消息监听器
-    public Handler handler;
+    public  static Handler handler;
     @SuppressLint("HandlerLeak")
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
+        // 隐藏标题栏 
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        // 隐藏状态栏 
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
 //        单条权限动态获取
 //        String PM_SINGLE= Manifest.permission.CAMERA;
 //        int nRet= ContextCompat.checkSelfPermission(this,PM_SINGLE);
@@ -308,26 +316,6 @@ public class MainActivity_tea extends AppCompatActivity {
 
        //初始化测试参数
         handleIntent();
-//        Intent intent = getIntent();
-        userId = "mingming";
-        userCn = "mingming";
-        roomid = "750795";
-        roomName = "haha";
-        subjectId = "750795";
-        UserSig = GenerateTestUserSig.genTestUserSig(userId);
-        keTangId = "750795";
-        keTangName = "haha";
-//        userId=intent.getExtras().get("userid").toString();
-//        userCn=intent.getExtras().get("userCn").toString();
-//        roomid = intent.getExtras().get("roomid").toString();
-//        roomName = intent.getExtras().get("roomname").toString();
-//
-//        subjectId = intent.getExtras().get("subjectid").toString();
-//        UserSig =GenerateTestUserSig.genTestUserSig(intent.getExtras().get("userid").toString());
-//
-//        keTangId = intent.getExtras().get("ketangid").toString();
-//        keTangName = intent.getExtras().get("ketangname").toString();
-
 
         List<MemberDataBean> testList1 = new ArrayList<>();
         mFragmenglist.add(videoListFragment);
@@ -339,12 +327,6 @@ public class MainActivity_tea extends AppCompatActivity {
 
         TextView class_id_text_view = findViewById(R.id.class_id);
         class_id_text_view.setText(roomid);
-        @SuppressLint("UseCompatLoadingForDrawables") Drawable class_id_icon = getResources().getDrawable(R.drawable.copy);
-        class_id_icon.setBounds(0,0,15,15);
-        class_id_text_view.setCompoundDrawables(null, null, class_id_icon,null);
-
-
-
 
         // 获取CameraView
         mTXCVVTeacherPreviewView = findViewById(R.id.teacher_camera);
@@ -367,7 +349,7 @@ public class MainActivity_tea extends AppCompatActivity {
         memberPopupCloseBtn = memberPopupView.findViewById(R.id.member_list_pop_close);
         memberList = memberPopupView.findViewById(R.id.member_list);
         group_btn = findViewById(R.id.group_buttons);
-        canvasBtn = findViewById(R.id.canvas_btn);
+        canvasBtn = findViewById(R.id.canvas_btn); //现在是文件图标
         exit_btn = findViewById(R.id.exit_btn);
         handBtnBadge = findViewById(R.id.hand_btn_badge);
 
@@ -377,7 +359,8 @@ public class MainActivity_tea extends AppCompatActivity {
         handBtn = findViewById(R.id.hand_btn);
         audioBtn = findViewById(R.id.mic_btn);
         cameraBtn = findViewById(R.id.camera_btn);
-        overClassBtn = findViewById(R.id.exit_btn);
+//        overClassBtn = findViewById(R.id.exit_btn);
+
         teacher_name_view = findViewById(R.id.teacher_name);
         // 初始化布局
         RelativeLayout scroll_block = findViewById(R.id.stroll);
@@ -401,12 +384,7 @@ public class MainActivity_tea extends AppCompatActivity {
             }
         });
 
-        overClassBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onExitLiveRoom();
-            }
-        });
+
         teacher_name_view.setText(userId+"老师");
         //文件上传部分按钮
         select_resources=findViewById(R.id.select_resources);
@@ -435,19 +413,16 @@ public class MainActivity_tea extends AppCompatActivity {
                 canvasBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                     }
                 });
                 contentBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                     }
                 });
                 boardBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-
                     }
                 });
             }
@@ -456,6 +431,7 @@ public class MainActivity_tea extends AppCompatActivity {
         choosefile.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isincludeType=false;
                 uploadprogress.setVisibility(View.GONE);
                 uploadfile.setText("开始上传");
                 msgTips.setText("文件正在上传：");
@@ -506,9 +482,10 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onClick(View v) {
      //判断元素类型 保存快照
-                System.out.println("+++点了切换文件："+"--白板切换前类型:"+CurType+"--当前页白板ID"+FileID+"当前元素："+mBoard.getBoardElementList(null).toString());
                if(addBoardtoFragmentstatus){
                    if("Board".equals(CurType)&&FileID!=null){
+                       boardBtn.setImageResource(R.drawable.bottom_board);
+                       canvasBtn.setImageResource(R.drawable.bottom_file_checked);
                        TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
                        path.path = getCacheDir()+"/"+CurBoardID+".png";
                        mBoard.snapshot(path);
@@ -531,11 +508,6 @@ public class MainActivity_tea extends AppCompatActivity {
 
 //         // 为了 适配屏幕  白板需要用到的参数 初始化
 
-
-
-
-
-
          Board_container = findViewById(R.id.teachingcontent);
 
 
@@ -547,7 +519,8 @@ public class MainActivity_tea extends AppCompatActivity {
         boardBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                System.out.println("+++点了白板按钮：白板是否为空："+(mBoard!=null)+"--白板初始化状态"+BoardStatus+"--白板当前类型:"+CurType+"--当前页白板ID"+BoardID+"当前元素："+mBoard.getBoardElementList(null).toString());
+                boardBtn.setImageResource(R.drawable.bottom_board_checked);
+                canvasBtn.setImageResource(R.drawable.bottom_file);
                 //判断元素类型 保存快照
                     //白板初始化完成了
                     if(BoardStatus&&addBoardtoFragmentstatus){
@@ -575,9 +548,11 @@ public class MainActivity_tea extends AppCompatActivity {
             }
         });
 
-        if(mBoard==null||CurType==null){
+        //第二次进入就加在不成功白板了
+//        if(mBoard==null||CurType==null){
             initTIM();
-        }
+            initBoard();
+//        }
 
 
 
@@ -610,6 +585,20 @@ public class MainActivity_tea extends AppCompatActivity {
                     case 7:
                         updateMemberList();
                         break;
+                    case 8:  //处理  白板添加资源 任务
+                        Integer type = msg.getData().getInt("type");
+                        String url = msg.getData().getString("url");
+                        String name = msg.getData().getString("name");
+                        dealWith_mBoardaddResouce(type,url,name);
+                        break;
+                    case 9:  //处理  白板添加资源 任务
+                        String title = msg.getData().getString("title");
+                        String ResultUrl = msg.getData().getString("url");
+                        Integer page = msg.getData().getInt("page");
+                        String Resolution = msg.getData().getString("Resolution");
+                        TEduBoardController.TEduBoardTranscodeFileResult config = new TEduBoardController.TEduBoardTranscodeFileResult(title,ResultUrl,page,Resolution);
+                        mBoard.addTranscodeFile(config,true);
+                        break;
                     default:
                         break;
                 }
@@ -625,36 +614,58 @@ public class MainActivity_tea extends AppCompatActivity {
         // 开启计时器
         startTime();
     }
+    private void dealWith_mBoardaddResouce(Integer type,String url,String name){
+//        type 1  转码任务
+//        type 2  加载图片任务
+//        type 3  加载音频任务
+//        type 4  加载ppt任务
+//        type 5  加载视频任务
+        if(type==1){
+            uploadfile.setText("正在转换");
+            msgTips.setText("文件正在转换：");
+            proBar.setProgress(0);
+            CreateTranscode(url);
+        }else if(type==2){
+            uploadfile.setText("正在加载");
+            msgTips.setText("文件正在加载：");
+            proBar.setProgress(95);
+            mBoard.addElement(TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_IMAGE,url);
+        }else if(type==3){
+            uploadfile.setText("正在加载");
+            msgTips.setText("文件正在加载：");
+            proBar.setProgress(95);
+            mBoard.addElement(TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_AUDIO,url);
+        }else if(type==4){
+            uploadfile.setText("正在加载");
+            msgTips.setText("文件正在加载：");
+            proBar.setProgress(95);
+            mBoardAddTranscodeFile(name,url+"?for_tiw=1");
+        }else if(type==5){
+            uploadfile.setText("正在加载");
+            msgTips.setText("文件正在加载：");
+            proBar.setProgress(95);
+            mBoard.addVideoFile(url,name,true);
+        }
+
+    }
+
 
     /**
      * 接受RN传递的参数
      */
-
     private void handleIntent() {
         Intent intent = getIntent();
         String params = intent.getStringExtra("params");
-        System.out.println("MainActivity_tea-params:"+params);
-        String[] strArr = params.split("-", 7);
-        userId = "mingming";
-        userCn = "mingming";
-        roomid = "750795";
-        roomName = "haha";
-        subjectId = "750795";
-        UserSig = GenerateTestUserSig.genTestUserSig(userId);
-        keTangId = "750795";
-        keTangName = "haha";
-        LaunchActivity.mUserId = strArr[0];
-        LaunchActivity.mUserCn = strArr[1];
-        LaunchActivity.mRoomId = strArr[2];
-        LaunchActivity.mTeacherId = strArr[3];
-        LaunchActivity.mTeacherCn = strArr[4];
-        LaunchActivity.mUserPhoto = strArr[5];
-        System.out.println("MainActivity_tea-userinit:"+LaunchActivity.mUserId);
-        System.out.println("MainActivity_tea-usercninit:"+LaunchActivity.mUserCn);
-        System.out.println("MainActivity_tea-roominit:"+LaunchActivity.mRoomId);
-        System.out.println("MainActivity_tea-mTeacherId:"+LaunchActivity.mTeacherId);
-        System.out.println("MainActivity_tea-mTeacherCn:"+LaunchActivity.mTeacherCn);
-        System.out.println("MainActivity_tea-mUserPhoto:"+LaunchActivity.mUserPhoto);
+        String[] strArr = params.split("-@-");
+        userId = strArr[0];
+        userCn = strArr[1];
+        roomid = strArr[2];
+        roomName = strArr[3];
+        subjectId = strArr[4];
+        UserSig = GenerateTestUserSig.genTestUserSig(strArr[0]);
+        keTangId = strArr[5];
+        keTangName = strArr[6];
+        userHead = strArr[7];
 
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
@@ -991,6 +1002,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
     // 退出房间
     public static void exitRoom() {
+
         mTRTCCloud.exitRoom();
         HttpActivityTea.stopHandsUpTimer();
     }
@@ -1198,6 +1210,7 @@ public class MainActivity_tea extends AppCompatActivity {
     }
 
     public void showMemberListBtn(View view) {
+        select_resources.setVisibility(View.GONE);
         Point point = new Point();
         this.getWindowManager().getDefaultDisplay().getSize(point);
         int popUpWindowWidth = (int) (point.x*0.5);
@@ -1216,6 +1229,7 @@ public class MainActivity_tea extends AppCompatActivity {
     }
 
     public void showHandsUpBtn(View view) {
+        select_resources.setVisibility(View.GONE);
         Point point = new Point();
         this.getWindowManager().getDefaultDisplay().getSize(point);
         int popUpWindowWidth = (int) (point.x*0.3);
@@ -1461,7 +1475,6 @@ public class MainActivity_tea extends AppCompatActivity {
             }
             @Override
             public void onTEBSwitchFile(String fileId) {
-                handlerCount.removeCallbacks(runnablere_mBoardaddResouce);
                 if(fileId.equals("#DEFAULT")){
  //                 当是白板的时候就要 跳转到之前相应页码数
                     CurType="Board";
@@ -1725,6 +1738,7 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //文件上传  打开文件管理器
+                isincludeType=false;
                 uploadprogress.setVisibility(View.GONE);
                 uploadfile.setText("开始上传");
                 msgTips.setText("文件正在上传：");
@@ -2800,6 +2814,7 @@ public class MainActivity_tea extends AppCompatActivity {
         CurType=null;
         mBoard.removeCallback(mBoardCallback);
         mBoard.uninit();
+        mBoard=null;
         BoardStatus=false;
         addBoardtoFragmentstatus=false;
     }
@@ -2807,7 +2822,7 @@ public class MainActivity_tea extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if(mBoard!=null){
+        if(mBoard!=null&&BoardStatus){
             destroyBoard();
         }
     }
@@ -2866,7 +2881,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     isincludeType=true;
                     filename.setText(name);
                 }
-                System.out.println("+++合法上传图片"+name);
+                System.out.println("+++合法上传PPt"+name);
             }else if(name.endsWith(".png")||name.endsWith(".jpg")){
                 if(ffsize>104857600){filename.setText("图片文件过大,请重新选择!"); // 图片文件过大
                 }else {
@@ -2911,131 +2926,112 @@ public class MainActivity_tea extends AppCompatActivity {
         //cosprefix  存储桶目录    path 本地文件路径   name  名称
         // 访问 COS 服务  上传对象
         // 初始化 TransferConfig，这里使用默认配置，如果需要定制，请参考 SDK 接口文档
-                TransferConfig transferConfig = new TransferConfig.Builder().build();
+        TransferConfig transferConfig = new TransferConfig.Builder().build();
         // 初始化 TransferManager
-                TransferManager transferManager = new TransferManager(cosXmlService,transferConfig);
+        TransferManager transferManager = new TransferManager(cosXmlService,transferConfig);
 
         // 存储桶名称，由bucketname-appid 组成，appid必须填入，可以在COS控制台查看存储桶名称。 https://console.cloud.tencent.com/cos5/bucket
         // String bucket = Mbucket;
 
-                //  class/年/月/日/subjectId/roomId/res/xxxx.ppt   资源上传目录
-                String cosPath = cosprefix + name; //对象在存储桶中的位置标识符，即称对象键    文件夹
-                String srcPath = new File(path).toString(); //本地文件的绝对路径
+        //  class/年/月/日/subjectId/roomId/res/xxxx.ppt   资源上传目录
+        String cosPath = cosprefix + name; //对象在存储桶中的位置标识符，即称对象键    文件夹
+        String srcPath = new File(path).toString(); //本地文件的绝对路径
 
         //若存在初始化分块上传的 UploadId，则赋值对应的 uploadId 值用于续传；否则，赋值 null
-                String uploadId = null;
+        String uploadId = null;
         // 上传文件
-                COSXMLUploadTask cosxmlUploadTask = transferManager.upload(Mbucket, cosPath,srcPath, uploadId);
+        COSXMLUploadTask cosxmlUploadTask = transferManager.upload(Mbucket, cosPath,srcPath, uploadId);
 
         //设置上传进度回调
-                cosxmlUploadTask.setCosXmlProgressListener(new CosXmlProgressListener() {
-                    @Override
-                    public void onProgress(long complete, long target) {
-                        proBar.setProgress((int)(complete*100/target));
-                    }
-                });
+        cosxmlUploadTask.setCosXmlProgressListener(new CosXmlProgressListener() {
+            @Override
+            public void onProgress(long complete, long target) {
+                proBar.setProgress((int)(complete*100/target));
+            }
+        });
         //设置返回结果回调
-                cosxmlUploadTask.setCosXmlResultListener(new CosXmlResultListener() {
-                    @Override
-                    public void onSuccess(CosXmlRequest request, CosXmlResult result) {
-                        COSXMLUploadTask.COSXMLUploadTaskResult uploadResult =
-                                (COSXMLUploadTask.COSXMLUploadTaskResult) result;
-                        if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){
-         //doc  pdf  docx  三种文件调用接口转码
-                            runnablere_mBoardaddResouce = () -> {
-                                try {
-                                        uploadfile.setText("正在转换");
-                                        msgTips.setText("文件正在转换：");
-                                        proBar.setProgress(0);
-                                        CreateTranscode(result.accessUrl);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            };
-                        }else if(name.endsWith("png")||name.endsWith("jpg")){
-         // 图片格式文件
-                            runnablere_mBoardaddResouce = () -> {
-                                try {
-                                    uploadfile.setText("正在加载");
-                                    msgTips.setText("文件正在加载：");
-                                    proBar.setProgress(95);
-                                    mBoard.addElement(TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_IMAGE,result.accessUrl);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            };
-                        }else if(name.endsWith("mp3")){
-          //png  音频文件
-                            runnablere_mBoardaddResouce = () -> {
-                                try {
-                                    uploadfile.setText("正在加载");
-                                    msgTips.setText("文件正在加载：");
-                                    proBar.setProgress(95);
-                                    mBoard.addElement(TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_AUDIO,result.accessUrl);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            };
-
-                        } else{
-                            if(name.endsWith("ppt")||name.endsWith("pptx")){
-         //ppt  pptx  采用新的转码方式  直接添加
-                                runnablere_mBoardaddResouce = () -> {
-                                                try {
-                                                    uploadfile.setText("正在加载");
-                                                    msgTips.setText("文件正在加载：");
-                                                    proBar.setProgress(95);
-                                                    mBoardAddTranscodeFile(name,result.accessUrl+"?for_tiw=1");
-                                                    } catch (Exception e) {
-                                                        e.printStackTrace();
-                                                    }
-                                                };
-
-                            }else {
-         //  mp4 格式的数据  直接添加
-                                runnablere_mBoardaddResouce = () -> {
-                                    try {
-                                        uploadfile.setText("正在加载");
-                                        msgTips.setText("文件正在加载：");
-                                        proBar.setProgress(95);
-                                        mBoard.addVideoFile(result.accessUrl,name,true);
-                                    } catch (Exception e) {
-                                        e.printStackTrace();
-                                    }
-                                };
-
-                            }
-                        }
+        cosxmlUploadTask.setCosXmlResultListener(new CosXmlResultListener() {
+            @Override
+            public void onSuccess(CosXmlRequest request, CosXmlResult result) {
+                COSXMLUploadTask.COSXMLUploadTaskResult uploadResult =
+                        (COSXMLUploadTask.COSXMLUploadTaskResult) result;
+                if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
+                    Message msg = Message.obtain();
+                    msg.what = 8;
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type", 1);
+                    bundle.putString("url", result.accessUrl);
+                    bundle.putString("name", name);
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
+                }else if(name.endsWith("png")||name.endsWith("jpg")){        // 图片格式文件
+                    Message msg = Message.obtain();
+                    msg.what = 8;
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type", 2);
+                    bundle.putString("url", result.accessUrl);
+                    bundle.putString("name", name);
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
+                }else if(name.endsWith("mp3")){                         //  音频文件
+                    Message msg = Message.obtain();
+                    msg.what = 8;
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("type", 3);
+                    bundle.putString("url", result.accessUrl);
+                    bundle.putString("name", name);
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
+                } else{
+                    if(name.endsWith("ppt")||name.endsWith("pptx")){      //ppt  pptx  采用新的转码方式  直接添加
+                        Message msg = Message.obtain();
+                        msg.what = 8;
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("type", 4);
+                        bundle.putString("url", result.accessUrl);
+                        bundle.putString("name", name);
+                        msg.setData(bundle);
+                        handler.sendMessage(msg);
+                    }else {                                                //  mp4 格式的数据  直接添加
+                        Message msg = Message.obtain();
+                        msg.what = 8;
+                        Bundle bundle = new Bundle();
+                        bundle.putInt("type", 5);
+                        bundle.putString("url", result.accessUrl);
+                        bundle.putString("name", name);
+                        msg.setData(bundle);
+                        handler.sendMessage(msg);
                     }
-                    // 如果您使用 kotlin 语言来调用，请注意回调方法中的异常是可空的，否则不会回调 onFail 方法，即：
-                    // clientException 的类型为 CosXmlClientException?，serviceException 的类型为 CosXmlServiceException?
-                    @Override
-                    public void onFail(CosXmlRequest request,
-                                       @Nullable CosXmlClientException clientException,
-                                       @Nullable CosXmlServiceException serviceException) {
-                        System.out.println("+++上传失败"+clientException.toString());
-                        System.out.println("+++上传失败"+serviceException.toString());
-                        if (clientException != null) {
-                            clientException.printStackTrace();
-                        } else {
-                            serviceException.printStackTrace();
-                        }
-                    }
-                });
+                }
+            }
+            // 如果您使用 kotlin 语言来调用，请注意回调方法中的异常是可空的，否则不会回调 onFail 方法，即：
+            // clientException 的类型为 CosXmlClientException?，serviceException 的类型为 CosXmlServiceException?
+            @Override
+            public void onFail(CosXmlRequest request,
+                               @Nullable CosXmlClientException clientException,
+                               @Nullable CosXmlServiceException serviceException) {
+                System.out.println("+++上传失败"+clientException.toString());
+                System.out.println("+++上传失败"+serviceException.toString());
+                if (clientException != null) {
+                    clientException.printStackTrace();
+                } else {
+                    serviceException.printStackTrace();
+                }
+            }
+        });
         //设置任务状态回调, 可以查看任务过程
-                cosxmlUploadTask.setTransferStateListener(new TransferStateListener() {
-                    @Override
-                    public void onStateChanged(TransferState state) {
-                        System.out.println("+++任务状态回调,"+state.toString().equals("COMPLETED"));
-                        if(state.toString().equals("COMPLETED")){
-                            if(isdelete){
-                                File ff = new File(path);
-                                ff.delete();
-                            }
-                            curfilename="";   // 上传完成，记录当前选择的文件名称清空
-                            curfilepath="";   // 上传完成，记录当前选择的文件路径清空
-                            handlerCount.postDelayed(runnablere_mBoardaddResouce, 500); // 1000ms后执行这个runnablerefreshStatus
-                        }
+        cosxmlUploadTask.setTransferStateListener(new TransferStateListener() {
+            @Override
+            public void onStateChanged(TransferState state) {
+                System.out.println("+++任务状态回调,"+state.toString().equals("COMPLETED"));
+                if(state.toString().equals("COMPLETED")){
+                    if(isdelete){
+                        File ff = new File(path);
+                        ff.delete();
+                    }
+                    curfilename="";   // 上传完成，记录当前选择的文件名称清空
+                    curfilepath="";   // 上传完成，记录当前选择的文件路径清空
+                }
 
 //                                CONSTRAINED,
 //                                WAITING,
@@ -3046,8 +3042,8 @@ public class MainActivity_tea extends AppCompatActivity {
 //                                CANCELED,
 //                                FAILED,
 //                                UNKNOWN;
-                    }
-                });
+            }
+        });
     }
 
     //白板添加文件  添加上去的名称， 文件的网络地址
@@ -3142,15 +3138,6 @@ public class MainActivity_tea extends AppCompatActivity {
                 DescribeTranscode(secretId,secretKey,region,sdkAppId,taskId,mBoard,progressBar);
             }
         },500,500);
-
-//        runnablere_mBoardaddResouce = () -> {
-//            try {
-//                DescribeTranscode(secretId,secretKey,region,sdkAppId,taskId);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        };
-//        handlerCount.postDelayed(runnablere_mBoardaddResouce, 500); // 500ms后执行这个runnablerefreshStatus
     }
 
     //获取转码进度
@@ -3197,17 +3184,18 @@ public class MainActivity_tea extends AppCompatActivity {
                         String status = json.get("Status").toString();
                         if(status.equals("FINISHED")){
                             ResultUrl =  json.get("ResultUrl").toString();
-                            System.out.println("+++关闭查询转码进度任务："+ResultUrl);
                             Boardtimer.cancel();
-                            runnablere_mBoardaddResouce = () -> {
-                                try {
-                                    TEduBoardController.TEduBoardTranscodeFileResult config = new TEduBoardController.TEduBoardTranscodeFileResult(json.get("Title").toString(), json.get("ResultUrl").toString(), Integer.parseInt(json.get("Pages").toString()), json.get("Resolution").toString());
-                                    mBoard.addTranscodeFile(config,true);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            };
-                            handlerCount.postDelayed(runnablere_mBoardaddResouce,2000); //
+
+                            Message msg = Message.obtain();
+                            msg.what = 9;
+                            Bundle bundle = new Bundle();
+                            bundle.putString("title", json.get("Title").toString());
+                            bundle.putString("url", json.get("ResultUrl").toString());
+                            bundle.putInt("page", Integer.parseInt(json.get("Pages").toString()));
+                            bundle.putString("Resolution", json.get("Resolution").toString());
+                            msg.setData(bundle);
+                            handler.sendMessage(msg);
+
                         }else if(status.equals("fail")){
                             Boardtimer.cancel();
                             System.out.println("+++查询转码进度任务失败：");

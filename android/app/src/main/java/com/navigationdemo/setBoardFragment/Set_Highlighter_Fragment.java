@@ -53,7 +53,7 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(100);
+                activity.getmBoard().setBrushThin(100);
                 MainActivity_tea.cur_Highlighterpaintsize=100;
                 sethihtlightersize1.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
@@ -64,7 +64,7 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(150);
+                activity.getmBoard().setBrushThin(150);
                 MainActivity_tea.cur_Highlighterpaintsize=150;
                 sethihtlightersize2.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
@@ -75,7 +75,7 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(200);
+                activity.getmBoard().setBrushThin(200);
                 MainActivity_tea.cur_Highlighterpaintsize=200;
                 sethihtlightersize3.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
@@ -86,7 +86,7 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(250);
+                activity.getmBoard().setBrushThin(250);
                 MainActivity_tea.cur_Highlighterpaintsize=250;
                 sethihtlightersize4.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
@@ -97,7 +97,7 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(350);
+                activity.getmBoard().setBrushThin(350);
                 MainActivity_tea.cur_Highlighterpaintsize=350;
                 sethihtlightersize5.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
@@ -108,7 +108,7 @@ public class Set_Highlighter_Fragment extends Fragment {
             @Override
             public void onClick(View v) {
                 setLinSizestatus();
-                activity.getmBoard().setTextSize(450);
+                activity.getmBoard().setBrushThin(450);
                 MainActivity_tea.cur_Highlighterpaintsize=450;
                 sethihtlightersize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
