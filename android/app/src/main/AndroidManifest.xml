@@ -25,7 +25,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:requestLegacyExternalStorage="true"
         android:name=".MainApplication"
-        android:label="学习一点通_2.0"
+        android:label="学习一点通_3.0"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -37,7 +37,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="学习一点通_2.0"
+            android:label="学习一点通_3.0"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan">
@@ -56,6 +56,14 @@
         <activity
             android:name=".MainActivity_tea"
             android:exported="true"
+            android:windowSoftInputMode="adjustPan|stateHidden"
+            android:screenOrientation="landscape"
+            android:theme="@style/Theme.TRTC_Client.NoActionBar" >
+        </activity>
+        <activity
+            android:name=".MainActivity_stu"
+            android:exported="true"
+            android:windowSoftInputMode="adjustPan|stateHidden"
             android:screenOrientation="landscape"
             android:theme="@style/Theme.TRTC_Client.NoActionBar" >
         </activity>

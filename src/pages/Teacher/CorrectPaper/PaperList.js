@@ -138,6 +138,7 @@ export default function PaperList(props) {
     }
 
     return (
+<<<<<<< HEAD
         <View
             style={{
                 backgroundColor: "#FFFFFF",
@@ -171,6 +172,22 @@ export default function PaperList(props) {
                         source={require("../../../assets/teacherLatestPage/goback.png")}
                     ></Image>
                 </TouchableOpacity>
+=======
+      
+        <View style={{backgroundColor:'#FFFFFF',height:"100%",flexDirection:'column'}}>
+          <View style={{height:60,flexDirection:'row',alignItems:'center',borderBottomWidth:0.5,borderColor:'#CBCBCB'}}>
+              <TouchableOpacity style={{marginLeft:10,marginRight:10}} 
+                                onPress={()=>{navigation.goBack({
+                                            name: 'CorrectPaperList',
+                                            params:{ 
+                                                taskId:props.route.params.taskId,
+                                                type:props.route.params.type
+                                                  }
+                                        })
+            }}>
+                <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goBack.png')} ></Image>
+              </TouchableOpacity>
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
 
                 <View style={{ width: "62%" }}>
                     <SearchBar

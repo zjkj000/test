@@ -125,6 +125,7 @@ class Tea_Noticecontent extends Component {
         });
     }
 
+<<<<<<< HEAD
     UNSAFE_componentWillMount() {
         this.setState({
             classTimeId: this.props.taskId,
@@ -132,6 +133,28 @@ class Tea_Noticecontent extends Component {
         });
         this.fetchData(this.props.taskId, this.props.type);
     }
+=======
+  UNSAFE_componentWillMount(){
+    this.setState({classTimeId:this.props.taskId,type:this.props.type})
+    this.fetchData(this.props.taskId,this.props.type)
+  }
+  
+  render() {
+    return (
+      <View style={{backgroundColor:'#fff',height:'100%',borderTopWidth:0.5}}>
+          <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
+                  <TouchableOpacity style={{position:'absolute',left:10}} 
+                                    onPress={()=>{this.props.navigation.goBack()
+                }}>
+                    <Image style={{width:30,height:30}} source={require('../../assets/teacherLatestPage/goBack.png')} ></Image>
+                  </TouchableOpacity>
+                  <Text style={{color:'#59B9E0',fontSize:20}}>公告</Text>
+            </View>
+          <ScrollView style={{width:screenWidth}}>
+            
+              {/**未读的通知或公告将调用Api修改状态   这部分没写*/}
+              {/* {(status == 5)? (this.updateStatus(status , type , learnId)) : null} */}
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
 
     render() {
         return (

@@ -160,6 +160,7 @@ class Tea_CreateNoticeContent extends Component {
         this.setState({ setDate: str + ":00", setDateisnull: false });
     }
 
+<<<<<<< HEAD
     render() {
         return (
             <View
@@ -196,6 +197,20 @@ class Tea_CreateNoticeContent extends Component {
                         发布公告
                     </Text>
                 </View>
+=======
+  render() {
+    return (
+      <View style={{backgroundColor:'#fff',height:'100%',borderTopWidth:0.5}}>
+        <Waiting/>
+        <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
+              <TouchableOpacity style={{position:'absolute',left:10}} 
+                                onPress={()=>{this.props.navigation.goBack()
+            }}>
+                <Image style={{width:30,height:30}} source={require('../../assets/teacherLatestPage/goBack.png')} ></Image>
+              </TouchableOpacity>
+              <Text style={{color:'#59B9E0',fontSize:20}}>发布公告</Text>
+        </View>
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
 
                 <ScrollView style={{ paddingBottom: 20 }}>
                     <View

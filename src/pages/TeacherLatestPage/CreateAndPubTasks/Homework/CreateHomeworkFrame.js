@@ -429,10 +429,14 @@ class CreateLearnCase extends React.Component {
                             this.props.navigation.goBack();
                         }}
                     >
+<<<<<<< HEAD
                         <Image
                             style={{ width: 30, height: 30 }}
                             source={require("../../../../assets/teacherLatestPage/goback.png")}
                         ></Image>
+=======
+                        <Image style={{width: 30, height: 30}} source={require('../../../../assets/teacherLatestPage/goBack.png')}></Image>
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
                     </TouchableOpacity>
                     {/**三个可选项 */}
                     <View

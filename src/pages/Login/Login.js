@@ -17,8 +17,8 @@ const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 
 export default Login = () => {
     const navigation = useNavigation();
-    const [Name, setName] = React.useState(global.constants.userName);
-    const [Password, setPassword] = React.useState("");
+    const [Name, setName] = React.useState("ming6001");
+    const [Password, setPassword] = React.useState("2020");
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
     const [showLoading, setShowLoading] = React.useState(false);
     const toggleSecureEntry = () => {
@@ -139,7 +139,7 @@ export default Login = () => {
 
             <Input
                 value={Password}
-                placeholder="请输入密码"
+                text={"2020"}
                 //caption={renderPasswordCaption}
                 accessoryLeft={<Icon name="lock" />}
                 accessoryRight={renderEyeIcon}

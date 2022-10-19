@@ -128,6 +128,7 @@ class Tea_Informcontent extends Component {
         });
     }
 
+<<<<<<< HEAD
     UNSAFE_componentWillMount() {
         this.setState({
             classTimeId: this.props.taskId,
@@ -135,6 +136,45 @@ class Tea_Informcontent extends Component {
         });
         this.fetchData(this.props.taskId, this.props.type);
     }
+=======
+  UNSAFE_componentWillMount(){
+    this.setState({classTimeId:this.props.taskId,type:this.props.type})
+    this.fetchData(this.props.taskId,this.props.type)
+  }
+  
+  render() {
+    return (
+      <View style={{backgroundColor:'#fff',height:'100%'}}>
+            <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
+                  <TouchableOpacity style={{position:'absolute',left:10}} 
+                                    onPress={()=>{this.props.navigation.goBack()
+                }}>
+                    <Image style={{width:30,height:30}} source={require('../../assets/teacherLatestPage/goBack.png')} ></Image>
+                  </TouchableOpacity>
+                  <Text style={{color:'#59B9E0',fontSize:20}}>通知</Text>
+            </View>
+            <ScrollView style={{width:screenWidth}}>
+                {/* *未读的通知或公告将调用Api修改状态 */}
+                {/* {(status == 5)? (this.updateStatus(status , type , learnId)) : null} */}
+                <View style={{paddingBottom:20,borderBottomWidth:0.5}}>
+                    <Text style={styles.title}>{this.state.title}</Text>
+                    <Flex style={styles.flexContent}>
+                        <Flex.Item style={styles.createrNameImg}>
+                            <Image source={require('../../assets/LatestTaskImages/teName.png')} />
+                        </Flex.Item>
+                        <Flex.Item style={styles.createrNameText}>
+                            <Text>{this.state.author}</Text>
+                        </Flex.Item>
+                        <Flex.Item style={styles.timeImg}>
+                            <Image source={require('../../assets/LatestTaskImages/timeClock.png')} />
+                        </Flex.Item>
+                        <Flex.Item style={styles.timeText}>
+                            <Text>{this.props.data.fTime}</Text>
+                        </Flex.Item>
+                    </Flex>
+                    <Text style={styles.content}>{this.state.content}</Text>
+                </View> 
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
 
     render() {
         return (

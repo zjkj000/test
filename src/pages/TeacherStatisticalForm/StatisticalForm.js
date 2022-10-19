@@ -32,12 +32,23 @@ export default function StatisticalForm() {
             yearTermStartTime:'',
             yearTermEndTime:'',
             isrefresh:false,
+            loadingChart:false
         }
     }   
 
     UNSAFE_componentWillMount(){
       this.getData()
     }
+    componentDidMount(){
+      this.timer = setTimeout(
+        () => { this.setState({loadingChart:true}) },
+        500
+      );
+    }
+    componentWillUnmount(){
+      this.timer && clearTimeout(this.timer);
+    }
+    
     getTimeStr(type){
       var Str=new Date().toISOString().substring(0,10)
       if(type=='Ketang'){
@@ -148,7 +159,7 @@ export default function StatisticalForm() {
 
   render() {
     return(
-      <View style={{height:'100%'}}>
+      <View style={{height:screenHeight-60}}>
                 <View style={{height:40,backgroundColor:'#FFFFFF',alignContent:'center',flexDirection:'row'}}>
                   <View style={{width:screenWidth,alignItems:'center'}}>
                     <Text style={{fontSize:21,marginTop:5}}>统计报表</Text>
@@ -162,10 +173,9 @@ export default function StatisticalForm() {
                     </TouchableOpacity>
                   </View>
                 </View>
-              {this.state.SchoolYearTermName==''
-                ?(<View style={{flex:1}}><Loading show='true' color='#59B9E0'/></View>)
-                :(<View style={{flex:1}}>
-                    <ScrollView style={{backgroundColor:'#ECEEED',padding:6,paddingTop:5,flex:1}}>
+
+             {(this.state.SchoolYearTermName!=''&&this.state.loadingChart)?(
+                <ScrollView style={{backgroundColor:'#ECEEED',padding:6,paddingTop:5,paddingBottom:0,height:screenHeight}}>
                           {/* 累计使用 */}
                           <Leijishiyong  setdatastr={this.setselectYearTerm} SchoolYearTerm={this.state.SchoolYearTerm} SchoolYearTermName={this.state.SchoolYearTermName}yearTermStartTime={this.state.yearTermStartTime}yearTermEndTime={this.state.yearTermEndTime} />
                           {/* 课堂授课标题+日历 */}
@@ -186,6 +196,7 @@ export default function StatisticalForm() {
                             </View>
                             <BasePicker modle={'Date'} setDateOrTime={this.setKetangshoukeDate} selected={this.state.KetangshoukeDateStr}/>
                           </View>
+
                           {/* 课堂授课图表 */}
                           <Ketangshouke   date={this.state.KetangshoukeDateStr}  />
                           {/* 布置作业标题+日历 */}
@@ -205,6 +216,7 @@ export default function StatisticalForm() {
                             </View>
                             <BasePicker modle={'Date'} setDateOrTime={this.setBuzhizuoyeDate} selected={this.state.BuzhizuoyeDateStr}/>
                           </View>
+
                           {/* 布置作业图表 */}
                           <Buzhizuoye date={this.state.BuzhizuoyeDateStr} />
                           {/* 批阅试题标题+日历 */}
@@ -224,12 +236,11 @@ export default function StatisticalForm() {
                             </View>
                             <BasePicker modle={'Date'} setDateOrTime={this.setPiyueshitiDate} selected={this.state.PiyueshitiDateStr} />
                           </View>
+                          
                           {/* 批阅试题图表 */}
                           <Piyueshiti  date={this.state.PiyueshitiDateStr} />
-                          </ScrollView>
-                </View>
-                
-                          )
+                    </ScrollView>
+                          ):(<View style={{flex:1}}><Loading show='true' color='#59B9E0'/></View>)
               }
       </View>     
     )

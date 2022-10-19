@@ -140,7 +140,7 @@ export default class Correct_img extends Component {
                     >
                         <Image
                             style={{ width: 30, height: 30 }}
-                            source={require("../assets/teacherLatestPage/goback.png")}
+                            source={require("../assets/teacherLatestPage/goBack.png")}
                         ></Image>
                     </TouchableOpacity>
                     <Button

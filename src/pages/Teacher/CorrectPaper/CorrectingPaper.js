@@ -32,6 +32,7 @@ export default function CorrectingPaper(props) {
     const [success, setSuccess] = useState(false);
     const [selectedIndex, setSelectedIndex] = useState();
     const shouldLoadComponent = (index) => index === selectedIndex;
+<<<<<<< HEAD
     const [CorrectResultList, setCorrectResultList] = useState([]); // 批改结果  只自己用
     useEffect(() => {
         navigation.setOptions({
@@ -80,6 +81,39 @@ export default function CorrectingPaper(props) {
             teacherID: global.constants.userName,
         };
         http.get(url, params).then((resStr) => {});
+=======
+    const [CorrectResultList,setCorrectResultList] = useState([])    // 批改结果  只自己用
+    useEffect(()=>{
+      navigation.setOptions( {title:props.route.params.userCn})
+
+      props.route.params.CorrectResultList?setCorrectResultList(props.route.params.CorrectResultList):setCorrectResultList([])
+      getData();
+      
+       console.log('props.route.params.selectedindex',props.route.params.selectedindex)
+      if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){
+          Alert.alert('','该学生已批改！是否直接查看批改结果？',[{},{text:'否',onPress:()=>{
+            setSelectedIndex(0)
+          }
+          },{text:'是',onPress:()=>{
+            setSelectedIndex(Allquestion.length)
+          }
+        }])
+      }else {
+        setSelectedIndex(props.route.params.selectedindex)
+      }
+      return ()=>{
+        changestatus()
+      }
+    },[props.route.params.selectedindex])
+    
+    function changestatus(){
+      const url = global.constants.baseUrl+"teacherApp_deleteAccessControl.do"
+      const params = {
+        teacherID:global.constants.userName
+      };
+      http.get(url, params).then((resStr) => {
+      })
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
     }
 
     function getData() {
@@ -113,6 +147,7 @@ export default function CorrectingPaper(props) {
                     setCorrectResultList(List);
                 }
 
+<<<<<<< HEAD
                 //根据模式来  指定在批改页面要展示的试题顺序     只有在第一次进入批改页面的时候 并且 模式是只显示需要手工批改的题目才会执行，其余的情况每次进来都是模式为所有试题
                 if (!props.route.params.CorrectAllQuestion) {
                     Allquestion = resJson.data.handList; //这里是为了记录 返回的数据，当跳出这个页面的时候  就需要把全部试题设置到这里面了
@@ -135,6 +170,32 @@ export default function CorrectingPaper(props) {
                     setData(Allquestion);
                 }
             });
+=======
+          //根据模式来  指定在批改页面要展示的试题顺序     只有在第一次进入批改页面的时候 并且 模式是只显示需要手工批改的题目才会执行，其余的情况每次进来都是模式为所有试题
+          if(!props.route.params.CorrectAllQuestion){
+            Allquestion =resJson.data.handList;//这里是为了记录 返回的数据，当跳出这个页面的时候  就需要把全部试题设置到这里面了
+            var NoAllQuestionList =[];
+            resJson.data.handList.map(function(item,index){
+              if(item.status=='4'){
+                NoAllQuestionList.push(item)
+              }
+            })
+            if(NoAllQuestionList.length==0&&props.route.params.correctingstatus!='4'&&props.route.params.correctingstatus!='5'){
+              setData(Allquestion)
+              Alert.alert('','该学生试题均不需手工批改！是否直接查看批改结果？',[{},{text:'否',onPress:()=>{setSelectedIndex(0)}
+                  },{text:'是',onPress:()=>{setSelectedIndex(Allquestion.length)}}])
+            }else{
+              setData(NoAllQuestionList)
+            }
+            
+          }else{
+            setData(resJson.data.handList)
+          }
+          setSuccess(resJson.success)
+          
+        if(props.route.params.correctingstatus=='4'||props.route.params.correctingstatus=='5'){setData(Allquestion)}
+          });                                                   
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
         }
     }
 
@@ -185,6 +246,7 @@ export default function CorrectingPaper(props) {
             },
         });
     }
+<<<<<<< HEAD
     function update_StuAnswer(str1, str2) {
         // console.log(data[selectedIndex].stuAnswer.replace(str1,str2))
         // console.log(str1,str2,data[selectedIndex].stuAnswer)
@@ -195,6 +257,14 @@ export default function CorrectingPaper(props) {
         setData([]);
         setData(newdata);
         // setSelectedIndex(selectedIndex)
+=======
+    function update_StuAnswer(str1,str2){
+      
+      var newdata = data
+      newdata[selectedIndex].stuAnswer=newdata[selectedIndex].stuAnswer.replace(str1,str2)
+      setData([])
+      setData(newdata)
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
     }
 
     function loading(success) {
@@ -408,6 +478,7 @@ export default function CorrectingPaper(props) {
                     ></Image>
                 </TouchableOpacity>
 
+<<<<<<< HEAD
                 <Text style={{ color: "#59B9E0", fontSize: 20 }}>{userCn}</Text>
                 {selectedIndex != Allquestion.length ? (
                     <TouchableOpacity
@@ -417,6 +488,28 @@ export default function CorrectingPaper(props) {
                                 setSelectedIndex(data.length);
                             } else {
                                 setData(Allquestion);
+=======
+         <TouchableOpacity style={{position:'absolute',left:10}} 
+                                  onPress={()=>{navigation.goBack({
+                                              name: 'CorrectPaperList',
+                                              params:{ 
+                                                  taskId:props.route.params.taskId,
+                                                  type:props.route.params.type
+                                                    }
+                                          })
+              }}>
+                  <Image style={{width:30,height:30}} source={require('../../../assets/teacherLatestPage/goBack.png')} ></Image>
+         </TouchableOpacity>
+          
+          <Text style={{color:'#59B9E0',fontSize:20}}>{userCn}</Text>
+          {(selectedIndex!=Allquestion.length)?(
+          <TouchableOpacity style={{position:'absolute',right:16,top:13}}
+                            onPress={()=>{
+                              if(data.length==CorrectResultList.length){
+                                setSelectedIndex(data.length)
+                              }else{
+                                setData(Allquestion)
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
                                 // setSelectedIndex(Allquestion.length)
                                 Alert.alert("", "确定跳转保存结果页面？", [
                                     { text: "取消", onPress: () => {} },

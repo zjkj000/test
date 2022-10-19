@@ -1998,7 +1998,11 @@
 
 "@react-native-community/clipboard@^1.5.1":
   version "1.5.1"
+<<<<<<< HEAD
   resolved "https://registry.npmmirror.com/@react-native-community/clipboard/-/clipboard-1.5.1.tgz#32abb3ea2eb91ee3f9c5fb1d32d5783253c9fabe"
+=======
+  resolved "https://registry.yarnpkg.com/@react-native-community/clipboard/-/clipboard-1.5.1.tgz#32abb3ea2eb91ee3f9c5fb1d32d5783253c9fabe"
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
   integrity sha512-AHAmrkLEH5UtPaDiRqoULERHh3oNv7Dgs0bTC0hO5Z2GdNokAMPT5w8ci8aMcRemcwbtdHjxChgtjbeA38GBdA==
 
 "@react-native-community/eslint-config@^3.0.1":
@@ -7268,7 +7272,7 @@ native-base@^3.3.7:
 
 native-echarts@^0.5.0:
   version "0.5.0"
-  resolved "https://registry.npmjs.org/native-echarts/-/native-echarts-0.5.0.tgz"
+  resolved "https://registry.yarnpkg.com/native-echarts/-/native-echarts-0.5.0.tgz#611382db27e48ae66cfda733cdf06b85a10b8abc"
   integrity sha512-3agM6Mh6Xg95M0OrOdKWsuVl5MrGPz1ZS8hT1Ophhjr/byHZLKtL7RCqj4ul5f+t5ZXRuUOikM0obsyIANM7zw==
   dependencies:
     echarts "3.2.3"

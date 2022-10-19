@@ -171,6 +171,7 @@ class Tea_CreateInformContent extends Component {
         });
     }
 
+<<<<<<< HEAD
     render() {
         const RenderStuList = [];
         this.state.stuClassList.map((item, index) => {
@@ -185,6 +186,39 @@ class Tea_CreateInformContent extends Component {
                     }}
                 >
                     <View
+=======
+  render() {
+    const RenderStuList = []
+    this.state.stuClassList.map((item,index)=>{
+        RenderStuList.push(
+            <TouchableOpacity onPress={()=>{
+                this.setState({classId:item.id,className:item.name,classNameisnull:false})
+            }}>
+                <View style={{backgroundColor:this.state.classId==item.id?'#4DC7F8':'#dadada',borderWidth:1,borderColor:'#dadada',height:40,padding:10,marginTop:5,width:screenWidth-100,alignItems:'center'}}>
+                    <Text style={{color:this.state.classId==item.id?'#fff':'',fontSize:15}}>{item.name}</Text>
+                </View>
+            </TouchableOpacity>
+        )
+    })
+    return (
+      <View style={{backgroundColor:'#fff',height:'100%',borderTopWidth:0.5}}>
+        <Waiting/>
+        <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
+              <TouchableOpacity style={{position:'absolute',left:10}} 
+                                onPress={()=>{this.props.navigation.goBack()
+            }}>
+                <Image style={{width:30,height:30}} source={require('../../assets/teacherLatestPage/goBack.png')} ></Image>
+              </TouchableOpacity>
+              <Text style={{color:'#59B9E0',fontSize:20}}>发布通知</Text>
+                
+        </View>
+        <ScrollView style={{paddingBottom:20}}>
+            <View style={{flexDirection:'row',borderBottomWidth:0.5,padding:10,borderColor:"#CBCBCB"}}>
+                <Text style={{marginTop:10,width:40}}>标题:</Text>
+                <TextInput
+                        placeholder="请输入标题"
+                        value={this.state.title}
+>>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
                         style={{
                             backgroundColor:
                                 this.state.classId == item.id
