@@ -16,7 +16,7 @@ import http from "../../utils/http/request";
 import Toast from "../../utils/Toast/Toast";
 let SearchText = "";
 let currentPage = 1;
-export default function LiveingLessonInfo() {
+export default function LiveingLessonInfo_stu() {
     const navigation = useNavigation();
     const [data, setdata] = useState([]);
     const [type, settype] = useState("All");
@@ -398,7 +398,7 @@ class LiveingLessonContent extends Component {
                                 style={{ position: "absolute", right: 25 }}
                                 onPress={() => {
                                     NativeModules.IntentMoudle.startActivityFromJS(
-                                        "MainActivity_tea",
+                                        "LaunchActivity",
                                         global.constants.userName +
                                             "-" + //userid 学生id
                                             global.constants.userCn +

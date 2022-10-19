@@ -19,7 +19,7 @@ import Paper_SubmitContainer from "../../pages/LatestTask/DoWork/Paper_Submit";
 import Learningguide_ToDo from "../../pages/LatestTask/LearningGuide/Learningguide_ToDo";
 import Learningguide_ShowCorrected from "../../pages/LatestTask/LearningGuide/Learningguide_ShowCorrected";
 import Learningguide_SubmitContainer from "../../pages/LatestTask/LearningGuide/Learningguide_Submit";
-import Correct_img from '../../TestPage/Correct_img'
+import Correct_img from "../../TestPage/Correct_img";
 import OnlineClassTempPage from "../../pages/OnlineClass";
 import QRCodeScanner from "../../utils/QRCode/QRCodeScanner";
 import ConnectClass from "../../pages/OnlineClass/ConnectClass";
@@ -37,7 +37,9 @@ import CreateHomeworkFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks
 import LearnCasePropertyContainer from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/LearnCaseProperty";
 import CreateLearnCaseFrame from "../../pages/TeacherLatestPage/CreateAndPubTasks/LearnCase/CreateLearnCaseFrame";
 
-import LiveingLessonInfo from "../../pages/LatestTask/LiveingLessonInfo";
+import LiveingLessionInfo_stu from "../../pages/LatestTask/LiveingLessionInfo_stu";
+import LiveingLessionInfo_teacher from "../../pages/LatestTask/LiveingLessionInfo_teacher";
+import LiveingLession_add from "../../pages/LatestTask/LiveingLession_add";
 
 import PaperListContainer from "../../pages/Teacher/CorrectPaper/PaperList";
 import CorrectingPaper from "../../pages/Teacher/CorrectPaper/CorrectingPaper";
@@ -143,9 +145,25 @@ export default class MainNavigation extends Component {
 
                 <Stack.Screen
                     name="LiveingLession"
-                    component={LiveingLessonInfo}
+                    component={LiveingLessionInfo_stu}
                     options={{
                         title: "直播公开课",
+                    }}
+                />
+                <Stack.Screen
+                    name="LiveingLessionInfo_teacher"
+                    component={LiveingLessionInfo_teacher}
+                    options={{
+                        title: "我讲的直播课",
+                        headerShown: false,
+                    }}
+                />
+                <Stack.Screen
+                    name="LiveingLession_add"
+                    component={LiveingLession_add}
+                    options={{
+                        title: "新建直播课",
+                        headerShown: false,
                     }}
                 />
 

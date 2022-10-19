@@ -127,6 +127,7 @@ public class MainActivity_tea extends AppCompatActivity {
     private static Timer Boardtimer = new Timer();  // 白板定时任务  用于获取转码进度
 
     //Tabbar三个Fragment
+
     private List<Fragment> mFragmenglist = new ArrayList<>();
     public List<Fragment> getmFragmenglist() {
         return mFragmenglist;
