@@ -17,41 +17,100 @@ import java.util.List;
 public class BoardRescourseAdapter extends BaseAdapter {
     private List<BoardRescourseBean> data;
     private Context context;
+    private BoardRescourseAdapter.OnChooseFileClickListener mOnChooseFileClickListener;
 
     public BoardRescourseAdapter(List<BoardRescourseBean> data, Context context) {
         this.data = data;
         this.context = context;
     }
 
-    public BoardRescourseAdapter() {
-
-    }
-
     @Override
     public int getCount() {
-        return data.size();
+        if (data != null) {
+            return data.size();
+        }
+        return 0;
     }
 
     @Override
-    public Object getItem(int i) {
+    public BoardRescourseBean getItem(int position) {
+        if (data != null) {
+            return data.get(position);
+        }
         return null;
     }
 
     @Override
-    public long getItemId(int i) {
-        return i;
+    public long getItemId(int position) {
+        return position;
+    }
+
+    //设置行不可点击
+    @Override
+    public boolean isEnabled(int position) {
+        return false;
+    }
+
+    public void setOnSpeakerControllerClickListener(BoardRescourseAdapter.OnChooseFileClickListener mOnChooseFileClickListener) {
+        this.mOnChooseFileClickListener = mOnChooseFileClickListener;
+    }
+
+
+    public interface OnChooseFileClickListener {
+        void OnChooseFileClick(BoardRescourseBean item);
+    }
+
+
+    public static class ViewHolder{
+        public TextView tx_name;
+        public ImageView img;
+        public TextView tx_date;
+        public TextView zairu;
     }
 
     @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        if(view==null){
-            view = LayoutInflater.from(context).inflate(R.layout.boardresources_item, viewGroup,false);
+    public View getView(int position, View convertView, ViewGroup parent) {
+        ViewHolder viewHolder ;
+        if(convertView == null){
+            //获取list_item.xml页面
+            viewHolder = new ViewHolder();
+            convertView = LayoutInflater.from(context).inflate(R.layout.boardresources_item,parent,false);
+            viewHolder.img =  convertView.findViewById(R.id.packageitem_type);
+            viewHolder.tx_name = convertView.findViewById(R.id.packageitem_name);
+            viewHolder.tx_date = convertView.findViewById(R.id.packageitem_date);
+            viewHolder.zairu = convertView.findViewById(R.id.zairu);
+            convertView.setTag(viewHolder);
+        }else{
+            //第一次以后
+            viewHolder = (ViewHolder)convertView.getTag();
         }
-        ImageView img =  view.findViewById(R.id.packageitem_img);
-        TextView tx_name = view.findViewById(R.id.packageitem_name);
-        TextView tx_date = view.findViewById(R.id.packageitem_date);
-        tx_name.setText(data.get(i).getPname());
-        tx_date.setText(data.get(i).getPdate());
-        return view;
+        //textView里面放置bean的数据
+        viewHolder.tx_name.setText(data.get(position).getPname());
+        viewHolder.tx_date.setText(data.get(position).getPdate());
+//        根据类型判断
+        if(data.get(position).getStyle().equals("ppt")||data.get(position).getStyle().equals("pptx")){
+            viewHolder.img.setImageResource(R.mipmap.type_ppt);
+        }else if(data.get(position).getStyle().equals("doc")||data.get(position).getStyle().equals("docx")){
+            viewHolder.img.setImageResource(R.mipmap.type_word);
+        }else if(data.get(position).getStyle().equals("pdf")){
+            viewHolder.img.setImageResource(R.mipmap.type_pdf);
+        }else if(data.get(position).getStyle().equals("mp4")){
+            viewHolder.img.setImageResource(R.mipmap.type_mp4);
+        }else if(data.get(position).getStyle().equals("mp3")){
+            viewHolder.img.setImageResource(R.mipmap.type_mp3);
+        }else if(data.get(position).getStyle().equals("img")||data.get(position).getStyle().equals("jpg")||data.get(position).getStyle().equals("png")){
+            viewHolder.img.setImageResource(R.mipmap.type_img);
+        }else {
+            viewHolder.img.setImageResource(R.mipmap.type_other);
+        }
+        viewHolder.zairu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mOnChooseFileClickListener.OnChooseFileClick(data.get(position));
+            }
+        });
+        return convertView;
     }
+
+
 }

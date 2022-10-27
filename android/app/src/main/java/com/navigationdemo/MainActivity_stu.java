@@ -130,7 +130,7 @@ public class MainActivity_stu extends AppCompatActivity {
     private static Runnable runnablere_mBoardaddResouce;
     private static Timer Boardtimer = new Timer();  // 白板定时任务  用于获取转码进度
 
-    //Tabbar三个Fragment
+    //Tabbar两个个Fragment
     private List<Fragment> mFragmenglist = new ArrayList<>();
     public List<Fragment> getmFragmenglist() {
         return mFragmenglist;
@@ -167,14 +167,7 @@ public class MainActivity_stu extends AppCompatActivity {
     public static ArrayList<String> mMicrophoneUserList = new ArrayList<String>();
     public static int mUserCount = 0;
 
-    private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
-    private String Mbucket = "zjkj-1309130014";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKID89yXyjS6YoBRUObm3kMp6Eev8Ce5hktu";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "vjU7Ys44460ypaZZXzUCqSwobDbmmZAZ";                    //存储桶    永久密钥 secretKey
-
     private  String UserSig ="";                                                        //腾讯服务签名
-//  private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
-
 
     public static String roomid  = "";                                                                              //房间号     自己填写
     public static String roomName ="";                                                                              //房间名称    自己填写
@@ -186,12 +179,22 @@ public class MainActivity_stu extends AppCompatActivity {
     public static String subjectId = "";                                                                   //学科ID     10007
 
 
+    //TRTC   SDKAPPID
+    private  int TRTCSDKAPPID = 1400618856;//王id
+    private  String TRTCSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
+
+    //即时通信SDKAPPID
+    private  int IMSDKAPPID = 1400618856;//王id
+    private  String IMSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
+
+    //白板SDKAPPID
+    private  int BOARDSDKAPPID = 1400756405;//徐id
+    private  String BOARDSECRETKEY = "f859da55e5ceeb14ae8b52c3efbf94ed697a8ef7890d001b9b0fed95914000c3";
 
 
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
 
     public static String teaName = "";
-    public static String teaHead = "";
     public static String userName = "xgy";
 
     //即时通信相关
@@ -331,7 +334,6 @@ public class MainActivity_stu extends AppCompatActivity {
         classTitle = findViewById(R.id.class_title);
 
         // 获取底部按钮
-
         handsUpPopupView = getLayoutInflater().inflate(R.layout.hands_up_pop_window, null);
         handsUpSwitchBtn = handsUpPopupView.findViewById(R.id.hands_up_controller);
         handsUpPopupCloseBtn = handsUpPopupView.findViewById(R.id.hands_up_list_pop_close);
@@ -365,16 +367,6 @@ public class MainActivity_stu extends AppCompatActivity {
         scroll_block.setLayoutParams(scroll_block_params);
 
         MainActivity_stu that = this;
-        handsUpSwitchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-//                if (b) {
-//                    HttpActivityTea.memberController("", "", "", "handAllNo", "", -1, that);
-//                } else {
-//                    HttpActivityTea.memberController("", "", "", "handAllYes", "", -1, that);
-//                }
-            }
-        });
 
 
         teacher_name_view.setText(userId+"老师");
@@ -433,22 +425,7 @@ public class MainActivity_stu extends AppCompatActivity {
                 intoFileManager();
             }
         });
-        //上传文件按钮
-        uploadfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //点击开始上传 执行上传任务
-                if(isincludeType){
-                    uploadprogress.setVisibility(View.VISIBLE);
-                    uploadfile.setText("正在上传");
-                    msgTips.setText("正在上传中：");
-                    Time time = new Time("GMT+8");
-                    time.setToNow();
-                    String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/res/";
-                    UploadToBucket(cosprefix,curfilepath,curfilename,false);
-                }
-            }
-        });
+
         //文件夹 按钮 现在是授课内容 未替换图片
         contentBtn = findViewById(R.id.content_btn);
         contentBtn.setOnClickListener(new View.OnClickListener() {
@@ -473,7 +450,7 @@ public class MainActivity_stu extends AppCompatActivity {
         canvasBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-     //判断元素类型 保存快照
+                //判断元素类型 保存快照
                if(addBoardtoFragmentstatus){
                    if("Board".equals(CurType)&&FileID!=null){
                        boardBtn.setImageResource(R.drawable.bottom_board);
@@ -495,24 +472,17 @@ public class MainActivity_stu extends AppCompatActivity {
         });
 
         //白板需要用到的一些组件 初始化
-
-        addBoardlayoutParams  = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
-
-//         // 为了 适配屏幕  白板需要用到的参数 初始化
-
+         addBoardlayoutParams  = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
+         // 为了 适配屏幕  白板需要用到的参数 初始化
          Board_container = findViewById(R.id.teachingcontent);
 
-
-        rf_leftmenu = findViewById(R.id.menu_left);
+         rf_leftmenu = findViewById(R.id.menu_left);
          rf_bottommenu = findViewById(R.id.menu_bottom);
          rf_shoukeneirong = findViewById(R.id.bg_shoukeneirong);
 
-
-        //第二次进入就加在不成功白板了
-//        if(mBoard==null||CurType==null){
-            initTIM();
-            initBoard();
-//        }
+         initTIM();
+         initBoard();
+         dealStopDraw();
 
 
 
@@ -549,7 +519,7 @@ public class MainActivity_stu extends AppCompatActivity {
                         Integer type = msg.getData().getInt("type");
                         String url = msg.getData().getString("url");
                         String name = msg.getData().getString("name");
-                        dealWith_mBoardaddResouce(type,url,name);
+//                        dealWith_mBoardaddResouce(type,url,name);
                         break;
                     case 9:  //处理  白板添加资源 任务
                         String title = msg.getData().getString("title");
@@ -566,7 +536,7 @@ public class MainActivity_stu extends AppCompatActivity {
         };
         setClassTitle("测试课堂");
         //初始化存储桶服务
-        InitBucket(this);
+//        InitBucket(this);
         initHandsUpList();
         initMemberList();
         initTabBarNavigation();
@@ -574,41 +544,6 @@ public class MainActivity_stu extends AppCompatActivity {
         // 开启计时器
         startTime();
     }
-    private void dealWith_mBoardaddResouce(Integer type,String url,String name){
-//        type 1  转码任务
-//        type 2  加载图片任务
-//        type 3  加载音频任务
-//        type 4  加载ppt任务
-//        type 5  加载视频任务
-        if(type==1){
-            uploadfile.setText("正在转换");
-            msgTips.setText("文件正在转换：");
-            proBar.setProgress(0);
-            CreateTranscode(url);
-        }else if(type==2){
-            uploadfile.setText("正在加载");
-            msgTips.setText("文件正在加载：");
-            proBar.setProgress(95);
-            mBoard.addElement(TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_IMAGE,url);
-        }else if(type==3){
-            uploadfile.setText("正在加载");
-            msgTips.setText("文件正在加载：");
-            proBar.setProgress(95);
-            mBoard.addElement(TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_AUDIO,url);
-        }else if(type==4){
-            uploadfile.setText("正在加载");
-            msgTips.setText("文件正在加载：");
-            proBar.setProgress(95);
-            mBoardAddTranscodeFile(name,url+"?for_tiw=1");
-        }else if(type==5){
-            uploadfile.setText("正在加载");
-            msgTips.setText("文件正在加载：");
-            proBar.setProgress(95);
-            mBoard.addVideoFile(url,name,true);
-        }
-
-    }
-
 
     /**
      * 接受RN传递的参数
@@ -1070,7 +1005,10 @@ public class MainActivity_stu extends AppCompatActivity {
         // 组装TRTC进房参数
 //        String userId = "mingming";
         myTRTCParams = new TRTCCloudDef.TRTCParams();
-        myTRTCParams.sdkAppId = GenerateTestUserSig.SDKAPPID;
+        GenerateTestUserSig.SDKAPPID  = TRTCSDKAPPID;
+        GenerateTestUserSig.SECRETKEY = TRTCSECRETKEY;
+        myTRTCParams.sdkAppId = TRTCSDKAPPID;
+
         myTRTCParams.userId = userId;
         myTRTCParams.roomId = Integer.parseInt(roomid);
         myTRTCParams.userSig = GenerateTestUserSig.genTestUserSig(myTRTCParams.userId);
@@ -1214,8 +1152,10 @@ public class MainActivity_stu extends AppCompatActivity {
         System.out.println("+++开始初始化白板");
         mBoard=null;
         mBoardCallback=null;
+        GenerateTestUserSig.SDKAPPID=BOARDSDKAPPID;
+        GenerateTestUserSig.SECRETKEY=BOARDSECRETKEY;
         TEduBoardController.TEduBoardAuthParam authParam = new TEduBoardController.TEduBoardAuthParam(
-                SDKappID , userId, UserSig);
+                BOARDSDKAPPID , userId, GenerateTestUserSig.genTestUserSig(userId));
         //（2）白板默认配置
         TEduBoardController.TEduBoardInitParam initParam = new TEduBoardController.TEduBoardInitParam();
         initParam.timSync=false;
@@ -1493,7 +1433,7 @@ public class MainActivity_stu extends AppCompatActivity {
                     time.setToNow();
                     // isquestion  用来区分本次快照是题目的快照还是 切换的时候保存的快照
                     String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture/";
-                    UploadToBucket(cosprefix,path,name,true);
+//                    UploadToBucket(cosprefix,path,name,true);
                 }else {
                     System.out.println("++++白板快照出错"+msg+"   code:"+code);
                 }
@@ -1541,7 +1481,7 @@ public class MainActivity_stu extends AppCompatActivity {
     public void initTIM(){
         //初始化 IMSDK
         V2TIMSDKConfig timSdkConfig = new V2TIMSDKConfig();
-        IMLoginresult = V2TIMManager.getInstance().initSDK(this, SDKappID, timSdkConfig, new V2TIMSDKListener() {
+        IMLoginresult = V2TIMManager.getInstance().initSDK(this, IMSDKAPPID, timSdkConfig, new V2TIMSDKListener() {
             @Override
             public void onConnecting() {
                 super.onConnecting();
@@ -1604,6 +1544,16 @@ public class MainActivity_stu extends AppCompatActivity {
 
                             f.getChatMsgAdapter().notifyDataSetChanged();
                             f.getChatlv().setSelection(f.getChatlv().getBottom());
+                        }else if("drawAuthority".equals(Msg_Extension)){
+                            //控制白板消息消息
+                            System.out.println("+++收到了消息"+Msg_Description);
+                            if(Msg_Description.equals(userId)){
+                                if(msg.getCustomElem().getData().equals("yes")){
+                                    dealAllowDraw();
+                                }else if(msg.getCustomElem().getData().equals("no")){
+                                    dealStopDraw();
+                                }
+                            }
                         }
                     }
                     @Override
@@ -1696,25 +1646,9 @@ public class MainActivity_stu extends AppCompatActivity {
         resupload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //文件上传  打开文件管理器
-                isincludeType=false;
-                uploadprogress.setVisibility(View.GONE);
-                uploadfile.setText("开始上传");
-                msgTips.setText("文件正在上传：");
-                filename.setText("未选择任何文件");
-                curfilename="";
-                curfilepath="";
-                intoFileManager();
             }
         });
-        //关闭文件弹窗按钮
-        close_select_resources.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //关闭文件上传弹窗
-                select_resources.setVisibility(View.GONE);
-            }
-        });
+
 
         //左侧功能栏  第一个按钮  鼠标按钮
         menu01 = findViewById(R.id.menu01);
@@ -2614,6 +2548,8 @@ public class MainActivity_stu extends AppCompatActivity {
             findViewById(R.id.setBoardWindow).setVisibility(View.GONE);
         }
     }
+
+
     /**
      * 白板控制
      * @param extension 消息类型  @param action    操作动作  @param id        操作对象ID
@@ -2639,6 +2575,9 @@ public class MainActivity_stu extends AppCompatActivity {
         });
     }
 
+
+
+
     public void sendMsg(Chat_Msg msg){
         // 发送聊天消息
         final V2TIMMessage v2TIMMessage_chat = V2TIMManager.getMessageManager().createCustomMessage(
@@ -2660,47 +2599,6 @@ public class MainActivity_stu extends AppCompatActivity {
         });
     }
 
-    //聊天调用 此方法  设置 全员是是否 禁言
-    public void stopAllchat(Boolean isstop){
-        // 全员禁言
-        V2TIMGroupInfo info = new V2TIMGroupInfo();
-        info.setGroupID(roomid);
-        info.setAllMuted(isstop);
-        V2TIMManager.getGroupManager().setGroupInfo(info, new V2TIMCallback() {
-            @Override
-            public void onSuccess() {
-                // 全员禁言成功
-                ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
-                EditText ed =  f.getView().findViewById(R.id.inputtext);
-                Switch sw = f.getView().findViewById(R.id.stopchat);
-                sw.setChecked(isstop);
-                if(isstop){
-                    ed.setHint("全体禁言成功！");
-                    //禁言按钮设置打开状态
-                    sw.setChecked(true);
-                }else {
-                    ed.setHint("取消全体禁言！");
-                    sw.setChecked(false);
-                }
-            }
-
-            @Override
-            public void onError(int code, String desc) {
-                // 全员禁言失败
-                System.out.println("+++全员禁言失败！"+code+desc);
-                ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
-                Switch sw = f.getView().findViewById(R.id.stopchat);
-                sw.setChecked(false);
-                if(code==10007){
-                    sw.setChecked(false);
-                    EditText ed =  f.getView().findViewById(R.id.inputtext);
-                    ed.setHint("你没有禁言权限！");
-
-                }
-
-            }
-        });
-    }
 
 
     public void onExitLiveRoom() {
@@ -2754,221 +2652,25 @@ public class MainActivity_stu extends AppCompatActivity {
         startActivityForResult(intent, 12); //requestCode==1   用来记录是这里的操作
     }
 
-    //文件管理器选择了回调  requestCode==12的时候   支持的文件类型  MP3  MP4  doc  docx ppt  pptx  pdf  png  jpg
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK&&requestCode==12) {
-            Uri uri = data.getData();               // 得到uri   用工具处理Uri得到绝对路径
-            String path= UriUtils.getFileAbsolutePath(this,uri);
-            File ff = new File(path);
-            String name = ff.getName();
-            System.out.println("+++path:"+path);   //输出文件绝对路径
-            System.out.println("+++name:"+name);   //输出文件大小
-            Long ffsize = ff.length();
-            if(name.endsWith(".mp3")){
-                if(ffsize>104857600){filename.setText("mp3文件过大！"); // mp3文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-            }else if(name.endsWith(".mp4")){
-                if(ffsize>104857600){ filename.setText("mp4文件过大,请重新选择!");// mp4文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-            }else if(name.endsWith(".pdf")){
-                if(ffsize>20971520){filename.setText("pdf文件过大,请重新选择!");// pdf文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-                System.out.println("+++合法上传pdf格式");
-            }else if(name.endsWith(".doc")||name.endsWith(".docx")){
-                System.out.println("+++合法上传doc格式");
-                if(ffsize>20971520){filename.setText("doc文件过大,请重新选择!");// doc文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-            }else if(name.endsWith(".ppt")||name.endsWith(".pptx")){
-                System.out.println("+++合法上传ppt格式");
-                if(ffsize>20971520){filename.setText("ppt文件过大,请重新选择!");// ppt文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-                System.out.println("+++合法上传PPt"+name);
-            }else if(name.endsWith(".png")||name.endsWith(".jpg")){
-                if(ffsize>104857600){filename.setText("图片文件过大,请重新选择!"); // 图片文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-                System.out.println("+++合法上传图片"+name);
-            }else {
-                filename.setText("不支持此类格式文件,请重新选择!");
-                System.out.println("+++该种数据不支持上传");
-            }
-            if(isincludeType){
-                //符合上传条件了再来记录当前 选中的文件name path
-                curfilename=name;
-                curfilepath=path;
-            }
+    //处理允许绘画
+    public void dealAllowDraw(){
+        if(mBoard!=null&&!mBoard.isDrawEnable()){
+            mBoard.setDrawEnable(true);
+            rf_leftmenu.setVisibility(View.VISIBLE);
+            rf_bottommenu.setVisibility(View.VISIBLE);
         }
     }
 
-    //初始化存储桶
-    private void InitBucket(Context context) {
-        // String secretId = "AKID5ybx2rPggPr23oHUR8YhZBWZLr6xaw2r"; //永久密钥 secretId
-        // String secretKey = "auxjESQCk11lEQL0O5WhbEZdRyEDwOYR"; //永久密钥 secretKey
-        // keyDuration 为请求中的密钥有效期，单位为秒（临时密匙的时候有效）
-        QCloudCredentialProvider myCredentialProvider =
-                new ShortTimeCredentialProvider(MsecretId, MsecretKey, 300);
-        // 存储桶所在地域简称，例如广州地区是 ap-guangzhou
-        String region = "ap-guangzhou";
-
-        // 创建 CosXmlServiceConfig 对象，根据需要修改默认的配置参数
-        CosXmlServiceConfig serviceConfig = new CosXmlServiceConfig.Builder()
-                .setRegion(region)
-                .isHttps(true) // 使用 HTTPS 请求, 默认为 HTTP 请求
-                .builder();
-        // 初始化 COS Service，获取实例
-        cosXmlService = new CosXmlService(context, serviceConfig, myCredentialProvider);
+    //处理禁止绘画
+    public void dealStopDraw(){
+        if(mBoard!=null&&mBoard.isDrawEnable()) {
+            mBoard.setDrawEnable(false);
+            rf_leftmenu.setVisibility(View.GONE);
+            rf_bottommenu.setVisibility(View.GONE);
+        }
     }
 
-    //上传文件到存储桶  存储桶公共路径  、  文件本地路径  、   文件名称   、   是否删除本地缓存
-    private void UploadToBucket(String cosprefix,String path,String name,boolean isdelete){
-        isquestion=false;
-        //cosprefix  存储桶目录    path 本地文件路径   name  名称
-        // 访问 COS 服务  上传对象
-        // 初始化 TransferConfig，这里使用默认配置，如果需要定制，请参考 SDK 接口文档
-        TransferConfig transferConfig = new TransferConfig.Builder().build();
-        // 初始化 TransferManager
-        TransferManager transferManager = new TransferManager(cosXmlService,transferConfig);
 
-        // 存储桶名称，由bucketname-appid 组成，appid必须填入，可以在COS控制台查看存储桶名称。 https://console.cloud.tencent.com/cos5/bucket
-        // String bucket = Mbucket;
-
-        //  class/年/月/日/subjectId/roomId/res/xxxx.ppt   资源上传目录
-        String cosPath = cosprefix + name; //对象在存储桶中的位置标识符，即称对象键    文件夹
-        String srcPath = new File(path).toString(); //本地文件的绝对路径
-
-        //若存在初始化分块上传的 UploadId，则赋值对应的 uploadId 值用于续传；否则，赋值 null
-        String uploadId = null;
-        // 上传文件
-        COSXMLUploadTask cosxmlUploadTask = transferManager.upload(Mbucket, cosPath,srcPath, uploadId);
-
-        //设置上传进度回调
-        cosxmlUploadTask.setCosXmlProgressListener(new CosXmlProgressListener() {
-            @Override
-            public void onProgress(long complete, long target) {
-                proBar.setProgress((int)(complete*100/target));
-            }
-        });
-        //设置返回结果回调
-        cosxmlUploadTask.setCosXmlResultListener(new CosXmlResultListener() {
-            @Override
-            public void onSuccess(CosXmlRequest request, CosXmlResult result) {
-                COSXMLUploadTask.COSXMLUploadTaskResult uploadResult =
-                        (COSXMLUploadTask.COSXMLUploadTaskResult) result;
-                if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
-                    Message msg = Message.obtain();
-                    msg.what = 8;
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", 1);
-                    bundle.putString("url", result.accessUrl);
-                    bundle.putString("name", name);
-                    msg.setData(bundle);
-                    handler.sendMessage(msg);
-                }else if(name.endsWith("png")||name.endsWith("jpg")){        // 图片格式文件
-                    Message msg = Message.obtain();
-                    msg.what = 8;
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", 2);
-                    bundle.putString("url", result.accessUrl);
-                    bundle.putString("name", name);
-                    msg.setData(bundle);
-                    handler.sendMessage(msg);
-                }else if(name.endsWith("mp3")){                         //  音频文件
-                    Message msg = Message.obtain();
-                    msg.what = 8;
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", 3);
-                    bundle.putString("url", result.accessUrl);
-                    bundle.putString("name", name);
-                    msg.setData(bundle);
-                    handler.sendMessage(msg);
-                } else{
-                    if(name.endsWith("ppt")||name.endsWith("pptx")){      //ppt  pptx  采用新的转码方式  直接添加
-                        Message msg = Message.obtain();
-                        msg.what = 8;
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("type", 4);
-                        bundle.putString("url", result.accessUrl);
-                        bundle.putString("name", name);
-                        msg.setData(bundle);
-                        handler.sendMessage(msg);
-                    }else {                                                //  mp4 格式的数据  直接添加
-                        Message msg = Message.obtain();
-                        msg.what = 8;
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("type", 5);
-                        bundle.putString("url", result.accessUrl);
-                        bundle.putString("name", name);
-                        msg.setData(bundle);
-                        handler.sendMessage(msg);
-                    }
-                }
-            }
-            // 如果您使用 kotlin 语言来调用，请注意回调方法中的异常是可空的，否则不会回调 onFail 方法，即：
-            // clientException 的类型为 CosXmlClientException?，serviceException 的类型为 CosXmlServiceException?
-            @Override
-            public void onFail(CosXmlRequest request,
-                               @Nullable CosXmlClientException clientException,
-                               @Nullable CosXmlServiceException serviceException) {
-                System.out.println("+++上传失败"+clientException.toString());
-                System.out.println("+++上传失败"+serviceException.toString());
-                if (clientException != null) {
-                    clientException.printStackTrace();
-                } else {
-                    serviceException.printStackTrace();
-                }
-            }
-        });
-        //设置任务状态回调, 可以查看任务过程
-        cosxmlUploadTask.setTransferStateListener(new TransferStateListener() {
-            @Override
-            public void onStateChanged(TransferState state) {
-                System.out.println("+++任务状态回调,"+state.toString().equals("COMPLETED"));
-                if(state.toString().equals("COMPLETED")){
-                    if(isdelete){
-                        File ff = new File(path);
-                        ff.delete();
-                    }
-                    curfilename="";   // 上传完成，记录当前选择的文件名称清空
-                    curfilepath="";   // 上传完成，记录当前选择的文件路径清空
-                }
-
-//                                CONSTRAINED,
-//                                WAITING,
-//                                IN_PROGRESS,
-//                                PAUSED,
-//                                RESUMED_WAITING,
-//                                COMPLETED,
-//                                CANCELED,
-//                                FAILED,
-//                                UNKNOWN;
-            }
-        });
-    }
-
-    //白板添加文件  添加上去的名称， 文件的网络地址
-    private void mBoardAddTranscodeFile(String name,String url) {
-        TEduBoardController.TEduBoardTranscodeFileResult config = new TEduBoardController.TEduBoardTranscodeFileResult(name,url);
-        mBoard.addTranscodeFile(config,true);
-    }
 
     //为了 接口获取到的数据（字符串）转成JSON格式
     public static JSONObject stringToJson(String str) {
@@ -2983,169 +2685,6 @@ public class MainActivity_stu extends AppCompatActivity {
         return jsonObject;
     }
 
-    //创建转码任务 （pdf  doc   docx）
-    private void CreateTranscode(String slink) {
-        //开始创建转码任务
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                try{
-                    String SecretId  = MsecretId;
-                    String SecretKey = MsecretKey;
-                    String Region    = MRegion;
-                    String SdkAppId  = SDKappID+"";
-                    String link      = slink;
-                    URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_CreateTranscode.do?"
-                            + "SecretId=" + SecretId + "&SecretKey=" + SecretKey + "&Region=" + Region
-                            + "&SdkAppId="+ SdkAppId   + "&link="+ link);
-
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("GET");
-                    httpURLConnection.setConnectTimeout(8000);
-                    httpURLConnection.setReadTimeout(8000);
-                    httpURLConnection.connect();
-
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
-                    BufferedReader bufferedReader = new BufferedReader(reader);
-
-                    StringBuffer buffer = new StringBuffer();
-                    String temp = null;
-
-                    while((temp = bufferedReader.readLine()) != null){
-                        buffer.append(temp);
-                    }
-
-                    // 关闭
-                    bufferedReader.close();
-                    reader.close();
-                    inputStream.close();
-                    httpURLConnection.disconnect();
-
-                    try{
-                        String backLogJsonStr = buffer.toString();
-                        JSONObject json = stringToJson(backLogJsonStr);
-                        String status = json.get("Status").toString();
-                        if(status.equals("success")){
-                            System.out.println("+++转码接口任务成功：返回了taskId:;"+json.get("TaskId"));
-//                          上传任务创建成功 就要调用查看转码状态
-                            proBar.setProgress(0);
-                            msgTips.setText("文件正在转码：");
-                            uploadfile.setText("正在转码");
-                            DescribeTranscodehandler(MsecretId,MsecretKey,Region,SdkAppId,json.get("TaskId").toString(),mBoard,proBar);
-                        }else {
-//                            失败，页面提示“创建文件转换任务失败，请稍后重试。”
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-
-    //创建 转码任务 定时请求器
-    public static void DescribeTranscodehandler(String secretId,String secretKey,String region,String sdkAppId,String taskId,TEduBoardController mBoard,ProgressBar progressBar) {
-        Boardtimer.schedule(new TimerTask() {
-            @Override
-            public void run() {
-                DescribeTranscode(secretId,secretKey,region,sdkAppId,taskId,mBoard,progressBar);
-            }
-        },500,500);
-    }
-
-    //获取转码进度
-    private static void DescribeTranscode(String secretId,String secretKey,String region,String sdkAppId,String taskId,TEduBoardController mBoard,ProgressBar progressBar) {
-        new Thread(new Runnable() {
-            String ResultUrl =null;
-            @Override
-            public void run() {
-                try{
-                    String SecretId  = secretId;
-                    String SecretKey = secretKey;
-                    String Region    = region;
-                    String SdkAppId  = sdkAppId;
-                    String TaskId    = taskId;
-                    URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_DescribeTranscode.do?"
-                            + "SecretId=" + SecretId + "&SecretKey=" + SecretKey + "&Region=" + Region
-                            + "&SdkAppId="+ SdkAppId  + "&TaskId="+ TaskId);
-                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-                    httpURLConnection.setRequestMethod("GET");
-                    httpURLConnection.setConnectTimeout(8000);
-                    httpURLConnection.setReadTimeout(8000);
-                    httpURLConnection.connect();
-
-                    InputStream inputStream = httpURLConnection.getInputStream();
-                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
-                    BufferedReader bufferedReader = new BufferedReader(reader);
-                    StringBuffer buffer = new StringBuffer();
-                    String temp = null;
-                    while((temp = bufferedReader.readLine()) != null){
-                        buffer.append(temp);
-                    }
-                    // 关闭
-                    bufferedReader.close();
-                    reader.close();
-                    inputStream.close();
-                    httpURLConnection.disconnect();
-//        "Status": "PROCESSING",  "Progress": "10",//转码进度，区间0--100 "ResultUrl": "",//装换成功之后的预览路径  "Pages": "3", "Title": "七年级测试卷", "Resolution": "1280*800"
-//        其中Status包含  - QUEUED: 正在排队等待转换  - PROCESSING: 转换中 - FINISHED: 转换完成 - fail:装换异常，需要提示“文件转换任务失败，请稍后重试”（自定义提示）
-                    try{
-                        String backLogJsonStr = buffer.toString();
-                        System.out.println("+++转码任务接口返回数据："+backLogJsonStr);
-                        JSONObject json = stringToJson(backLogJsonStr);
-                        System.out.println("+++转码任务接口返回状态："+json.get("Status"));
-                        String status = json.get("Status").toString();
-                        if(status.equals("FINISHED")){
-                            ResultUrl =  json.get("ResultUrl").toString();
-                            Boardtimer.cancel();
-
-                            Message msg = Message.obtain();
-                            msg.what = 9;
-                            Bundle bundle = new Bundle();
-                            bundle.putString("title", json.get("Title").toString());
-                            bundle.putString("url", json.get("ResultUrl").toString());
-                            bundle.putInt("page", Integer.parseInt(json.get("Pages").toString()));
-                            bundle.putString("Resolution", json.get("Resolution").toString());
-                            msg.setData(bundle);
-                            handler.sendMessage(msg);
-
-                        }else if(status.equals("fail")){
-                            Boardtimer.cancel();
-                            System.out.println("+++查询转码进度任务失败：");
-//                            装换异常，需要提示“文件转换任务失败，请稍后重试”（自定义提示）
-                        }else if(status.equals("PROCESSING")){
-                            progressBar.setProgress(Integer.parseInt(json.get("Progress").toString()));
-                            System.out.println("+++查询转码进度任务进行中......："+json.get("Progress"));
-//                            json.get("PROCESSING").toString();设置进度条
-                        }else if(status.equals("QUEUED")){
-                            System.out.println("+++查询转码进度任务队列中......："+json.get("Progress"));
-                        }
-
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        }).start();
-    }
-
-
-//白板快照   王璐瑶调用
-    public static void ScreenShotBoard(Context context,String answerQuestionId,TEduBoardController mBoard){
-        isquestion=true;//调用的时候把这个值设置为true  后面改变存储的路径
-        //白板快照
-        TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
-        path.path=context.getCacheDir()+"/"+answerQuestionId+".png";
-        mBoard.snapshot(path);
-        // class/年/月/日/subjectId/roomId/question/questionId.png   王璐瑶那块
-    }
 
     // 清空 几何工具 弹窗  左侧的选中状态
     private void setgeometrystatus() {
