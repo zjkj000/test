@@ -155,11 +155,7 @@ export default class MainNavigation extends Component {
                     component={LiveingLessionInfo_teacher}
                     options={{
                         title: "我讲的直播课",
-<<<<<<< HEAD
                         headerShown: false,
-=======
-                        headerShown:false,
->>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
                     }}
                 />
                 <Stack.Screen
@@ -167,11 +163,7 @@ export default class MainNavigation extends Component {
                     component={LiveingLession_add}
                     options={{
                         title: "新建直播课",
-<<<<<<< HEAD
                         headerShown: false,
-=======
-                        headerShown:false,
->>>>>>> 168413b3ca8a405caa8e12d049f7a60663bb5011
                     }}
                 />
 

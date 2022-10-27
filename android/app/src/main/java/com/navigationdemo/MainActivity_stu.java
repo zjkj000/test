@@ -1,14 +1,22 @@
 package com.navigationdemo;
 
 
+import static android.view.View.GONE;
+
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.content.ContentUris;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -17,16 +25,26 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
+import android.provider.DocumentsContract;
+import android.provider.MediaStore;
+import android.text.Spannable;
+import android.text.SpannableString;
 import android.text.format.Time;
+import android.text.style.ImageSpan;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -37,6 +55,7 @@ import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.Switch;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -49,6 +68,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager.widget.ViewPager;
 
@@ -90,6 +110,7 @@ import com.tencent.imsdk.v2.V2TIMSDKListener;
 import com.tencent.imsdk.v2.V2TIMSendCallback;
 import com.tencent.imsdk.v2.V2TIMValueCallback;
 import com.tencent.liteav.TXLiteAVCode;
+import com.tencent.liteav.device.TXDeviceManager;
 import com.tencent.qcloud.core.auth.QCloudCredentialProvider;
 import com.tencent.qcloud.core.auth.ShortTimeCredentialProvider;
 import com.tencent.rtmp.ui.TXCloudVideoView;
@@ -105,6 +126,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -117,18 +139,21 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
 
-public class MainActivity_stu extends AppCompatActivity {
+public class MainActivity_stu extends AppCompatActivity implements View.OnClickListener {
 
     private Timer timer;
 
     private static Handler handlerCount = new Handler();
     private static Runnable runnablere_mBoardaddResouce;
     private static Timer Boardtimer = new Timer();  // 白板定时任务  用于获取转码进度
+    private static Timer handsTimer = new Timer();  // 举手倒计时
+    private static int handsUpTime = 20; // 举手最长时间
 
     //Tabbar三个Fragment
     private List<Fragment> mFragmenglist = new ArrayList<>();
@@ -140,8 +165,13 @@ public class MainActivity_stu extends AppCompatActivity {
     public final static String TAG = "Ender_MainActivity";
     public static TRTCCloud mTRTCCloud;
     private TRTCCloudDef.TRTCParams myTRTCParams;
-    private TXCloudVideoView mTXCVVTeacherPreviewView;
-    private RelativeLayout teacherTRTCBackground;
+    private TXCloudVideoView mTXCVVTeacherPreviewView;  //教师视频
+    public static TXDeviceManager mTXDeviceManager; // TRTC摄像头管理
+    private RelativeLayout teacherTRTCBackground;   //教师视频背景
+
+    private TXCloudVideoView mTXCVVStudentPreviewView;  //学生视频
+    private RelativeLayout studentTRTCBackground;   //学生视频背景
+
     private ImageView boardBtn;     //白板按钮
     private ImageView canvasBtn;    //文件 按钮  现在是画笔按钮
 
@@ -150,9 +180,11 @@ public class MainActivity_stu extends AppCompatActivity {
     private ImageView handBtn;
     private ImageView cameraBtn;   //关闭摄像头按钮
     private ImageView audioBtn;
+    public static boolean mIsFrontCamera = true; // 摄像头前后标志位
 
-    private ImageView exit_btn;     //下课按钮
+    private ImageView class_over_btn;     //下课按钮
     private TextView teacher_name_view; //显示教师名称
+    private TextView student_name_view; //显示本人名称
     private ImageView overClassBtn;
     private Group group_btn;
 
@@ -175,7 +207,8 @@ public class MainActivity_stu extends AppCompatActivity {
     private  String UserSig ="";                                                        //腾讯服务签名
 //  private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
 
-
+    public static String teacherName = "";
+    public static String teacherId = "";
     public static String roomid  = "";                                                                              //房间号     自己填写
     public static String roomName ="";                                                                              //房间名称    自己填写
     public static String userId = "";                                                                               //用户ID     mingming
@@ -184,7 +217,7 @@ public class MainActivity_stu extends AppCompatActivity {
     public static String keTangName="";                                                                             //课堂名称     明茗初一语文60人班
     public static String userHead = "";     //用户头像
     public static String subjectId = "";                                                                   //学科ID     10007
-
+    private static String handsState = "down"; //举手状态，up为正在举手，down为手已放下，off为禁止举手
 
 
 
@@ -276,6 +309,47 @@ public class MainActivity_stu extends AppCompatActivity {
     private TextView handBtnBadge;
     public Switch handsUpSwitchBtn;
 
+    //答题界面，判断、单选、多选、主�?
+    public static CheckBox tfyes,tfno;
+    public static List<CheckBox> radios_tf;
+    public static CheckBox sa,sb,sc,sd,se,sf,sg,sh;
+    public static List<CheckBox> radios_single;
+    public static CheckBox ma,mb,mc,md,me,mf,mg,mh;
+    public static List<CheckBox> radios_multi;
+    public static ConstraintLayout group_tfanswer,group_singleanswer,group_multianswer,group_subjectiveanswer;
+    public static EditText subjective_answer;
+    public static TextView subjective_save,subjective_echo;
+    public static ScrollView subjective_scroll;
+    public static Button tf_submit,single_submit,multi_submit,subjective_submit;
+    public static Button mQiangda;
+    public static Button xiangce,paizhao,luru,qingkong;
+    public static HashMap<Integer,String> base64id_url;
+    public static SharedPreferences pref;
+    public static SharedPreferences.Editor editor;
+    public static ConstraintLayout current_answer;//当前答题界面
+    public static Boolean openWords_flag=false;
+
+    public static int TAKE_PHOTO = 1;
+    public static final int CHOOSE_PHOTO = 2;
+    private String imgP;
+    private EditText picture;
+    private Uri imageUri;
+
+    //public static Runnable runnableUi;
+    public static String last_actiontime_answer = "";
+    public static String last_actiontime_mic = "";
+    public static String last_actiontime_camera = "";
+    public static String last_actiontime_words = "";
+    public static String last_actiontime_chat = "0000000000000";
+    public static String last_platformUserId = "";
+    public static String last_actiontime_startqd = "";
+    public static String last_actiontime_stopqd = "";
+    public static int base64_index = 0;
+
+    //进房间逻辑
+    public static Boolean teacher_enable=true;
+
+
     // UI消息监听器
     public  static Handler handler;
     @SuppressLint("HandlerLeak")
@@ -324,6 +398,10 @@ public class MainActivity_stu extends AppCompatActivity {
         mTXCVVTeacherPreviewView = findViewById(R.id.teacher_camera);
         teacherTRTCBackground = findViewById(R.id.teacher_background);
 
+        // 获取StudentCameraView
+        mTXCVVStudentPreviewView = findViewById(R.id.student_camera);
+        studentTRTCBackground = findViewById(R.id.student_background);
+
         alert_text = findViewById(R.id.alert_text);
 
         headerCountString = findViewById(R.id.student_num);
@@ -342,7 +420,7 @@ public class MainActivity_stu extends AppCompatActivity {
         memberList = memberPopupView.findViewById(R.id.member_list);
         group_btn = findViewById(R.id.group_buttons);
         canvasBtn = findViewById(R.id.canvas_btn); //现在是文件图标
-        exit_btn = findViewById(R.id.exit_btn);
+        class_over_btn = findViewById(R.id.class_over_btn);
         handBtnBadge = findViewById(R.id.hand_btn_badge);
 
         boardBtn = findViewById(R.id.board_btn);
@@ -351,9 +429,10 @@ public class MainActivity_stu extends AppCompatActivity {
         handBtn = findViewById(R.id.hand_btn);
         audioBtn = findViewById(R.id.mic_btn);
         cameraBtn = findViewById(R.id.camera_btn);
-//        overClassBtn = findViewById(R.id.exit_btn);
+//        overClassBtn = findViewById(R.id.class_over_btn);
 
         teacher_name_view = findViewById(R.id.teacher_name);
+        student_name_view = findViewById(R.id.student_name);
         // 初始化布局
         RelativeLayout scroll_block = findViewById(R.id.stroll);
         ViewGroup.LayoutParams scroll_block_params = scroll_block.getLayoutParams();
@@ -377,7 +456,8 @@ public class MainActivity_stu extends AppCompatActivity {
         });
 
 
-        teacher_name_view.setText(userId+"老师");
+        teacher_name_view.setText(teacherId+"老师");
+        student_name_view.setText(userId);
         //文件上传部分按钮
         select_resources=findViewById(R.id.select_resources);
         proBar = findViewById(R.id.proBar);
@@ -390,7 +470,7 @@ public class MainActivity_stu extends AppCompatActivity {
         uploadprogress = findViewById(R.id.uploadprogress);
 
         //下课按钮
-        exit_btn.setOnClickListener(new View.OnClickListener() {
+        class_over_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 destroyBoard();
@@ -419,80 +499,80 @@ public class MainActivity_stu extends AppCompatActivity {
                 });
             }
         });
-        //选择文件按钮
-        choosefile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                isincludeType=false;
-                uploadprogress.setVisibility(View.GONE);
-                uploadfile.setText("开始上传");
-                msgTips.setText("文件正在上传：");
-                filename.setText("未选择任何文件");
-                curfilename="";
-                curfilepath="";
-                intoFileManager();
-            }
-        });
-        //上传文件按钮
-        uploadfile.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //点击开始上传 执行上传任务
-                if(isincludeType){
-                    uploadprogress.setVisibility(View.VISIBLE);
-                    uploadfile.setText("正在上传");
-                    msgTips.setText("正在上传中：");
-                    Time time = new Time("GMT+8");
-                    time.setToNow();
-                    String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/res/";
-                    UploadToBucket(cosprefix,curfilepath,curfilename,false);
-                }
-            }
-        });
-        //文件夹 按钮 现在是授课内容 未替换图片
-        contentBtn = findViewById(R.id.content_btn);
-        contentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(addBoardtoFragmentstatus){
-                    if(select_resources.getVisibility()==View.VISIBLE){
-                        select_resources.setVisibility(View.GONE);
-                    }else {
-                        select_resources.setVisibility(View.VISIBLE);
-                        filename.setText("未选择任何文件");
-                        uploadfile.setText("开始上传");
-                        uploadprogress.setVisibility(View.GONE);
-                        curfilename="";
-                        curfilepath="";
-                    }
-                }
-            }
-        });
+//        //选择文件按钮
+//        choosefile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                isincludeType=false;
+//                uploadprogress.setVisibility(View.GONE);
+//                uploadfile.setText("开始上传");
+//                msgTips.setText("文件正在上传：");
+//                filename.setText("未选择任何文件");
+//                curfilename="";
+//                curfilepath="";
+//                intoFileManager();
+//            }
+//        });
+//        //上传文件按钮
+//        uploadfile.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                //点击开始上传 执行上传任务
+//                if(isincludeType){
+//                    uploadprogress.setVisibility(View.VISIBLE);
+//                    uploadfile.setText("正在上传");
+//                    msgTips.setText("正在上传中：");
+//                    Time time = new Time("GMT+8");
+//                    time.setToNow();
+//                    String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/res/";
+//                    UploadToBucket(cosprefix,curfilepath,curfilename,false);
+//                }
+//            }
+//        });
+//        //文件夹 按钮 现在是授课内容 未替换图片
+//        contentBtn = findViewById(R.id.content_btn);
+//        contentBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if(addBoardtoFragmentstatus){
+//                    if(select_resources.getVisibility()==View.VISIBLE){
+//                        select_resources.setVisibility(View.GONE);
+//                    }else {
+//                        select_resources.setVisibility(View.VISIBLE);
+//                        filename.setText("未选择任何文件");
+//                        uploadfile.setText("开始上传");
+//                        uploadprogress.setVisibility(View.GONE);
+//                        curfilename="";
+//                        curfilepath="";
+//                    }
+//                }
+//            }
+//        });
 
-        //文件按钮  现在显示是画笔  未替换图片
-        canvasBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-     //判断元素类型 保存快照
-               if(addBoardtoFragmentstatus){
-                   if("Board".equals(CurType)&&FileID!=null){
-                       boardBtn.setImageResource(R.drawable.bottom_board);
-                       canvasBtn.setImageResource(R.drawable.bottom_file_checked);
-                       TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
-                       path.path = getCacheDir()+"/"+CurBoardID+".png";
-                       mBoard.snapshot(path);
-                       mBoard.switchFile(FileID);
-                       if(CurFileID!=null){
-                           mBoard.gotoBoard(CurFileID,false);
-                       }
-                   }else if("File".equals(CurType)&&FileID!=null) {
-                       System.out.println("+++当前就是在文件页面");
-                   }else {
-                       System.out.println("+++先上传文件");
-                   }
-               }
-            }
-        });
+//        //文件按钮  现在显示是画笔  未替换图片
+//        canvasBtn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//     //判断元素类型 保存快照
+//               if(addBoardtoFragmentstatus){
+//                   if("Board".equals(CurType)&&FileID!=null){
+//                       boardBtn.setImageResource(R.drawable.bottom_board);
+//                       canvasBtn.setImageResource(R.drawable.bottom_file_checked);
+//                       TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
+//                       path.path = getCacheDir()+"/"+CurBoardID+".png";
+//                       mBoard.snapshot(path);
+//                       mBoard.switchFile(FileID);
+//                       if(CurFileID!=null){
+//                           mBoard.gotoBoard(CurFileID,false);
+//                       }
+//                   }else if("File".equals(CurType)&&FileID!=null) {
+//                       System.out.println("+++当前就是在文件页面");
+//                   }else {
+//                       System.out.println("+++先上传文件");
+//                   }
+//               }
+//            }
+//        });
 
         //白板需要用到的一些组件 初始化
 
@@ -567,6 +647,7 @@ public class MainActivity_stu extends AppCompatActivity {
         setClassTitle("测试课堂");
         //初始化存储桶服务
         InitBucket(this);
+        initViewAnswer();
         initHandsUpList();
         initMemberList();
         initTabBarNavigation();
@@ -574,6 +655,176 @@ public class MainActivity_stu extends AppCompatActivity {
         // 开启计时器
         startTime();
     }
+
+
+    public void getter() {
+        Timer timer = new Timer();
+        timer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                handler.post(runnableUi);
+                if(!teacher_enable){
+                    exitRoom();
+                    finish();
+                    teacher_enable=true;
+                }
+            }
+        }, 100, 100);
+    }
+
+    // 构建Runnable对象，在runnable中更新界�?
+    Runnable runnableUi = new Runnable() {
+        @Override
+        public void run(){
+            try{
+                //更新互动答题界面
+                getteacher();
+            }
+            catch(NullPointerException e){
+                System.out.println("item null");
+            }
+
+        }
+
+    };
+
+
+
+    //初始化互动答题界面：判断、单选、多选、主�?
+
+    /**
+     * 初始化答题界面
+     */
+    private void initViewAnswer(){
+        group_tfanswer = findViewById(R.id.tfanswer);
+        group_tfanswer.setOnClickListener(this);
+        group_singleanswer = findViewById(R.id.singleanswer);
+        group_singleanswer.setOnClickListener(this);
+        group_multianswer = findViewById(R.id.multianswer);
+        group_multianswer.setOnClickListener(this);
+        group_subjectiveanswer = findViewById(R.id.subjectiveanswer);
+        group_subjectiveanswer.setOnClickListener(this);
+
+        tfyes = findViewById(R.id.tfyes);
+        tfno = findViewById(R.id.tfno);
+        tfyes.setOnClickListener(this);
+        tfno.setOnClickListener(this);
+        radios_tf = new ArrayList<>();
+        radios_tf.add(tfyes);
+        radios_tf.add(tfno);
+
+        sa = findViewById(R.id.singlea);
+        sb = findViewById(R.id.singleb);
+        sc = findViewById(R.id.singlec);
+        sd = findViewById(R.id.singled);
+        se = findViewById(R.id.singlee);
+        sf = findViewById(R.id.singlef);
+        sg = findViewById(R.id.singleg);
+        sh = findViewById(R.id.singleh);
+        sa.setOnClickListener(this);
+        sb.setOnClickListener(this);
+        sc.setOnClickListener(this);
+        sd.setOnClickListener(this);
+        se.setOnClickListener(this);
+        sf.setOnClickListener(this);
+        sg.setOnClickListener(this);
+        sh.setOnClickListener(this);
+        radios_single = new ArrayList<>();
+        radios_single.add(sa);
+        radios_single.add(sb);
+        radios_single.add(sc);
+        radios_single.add(sd);
+        radios_single.add(se);
+        radios_single.add(sf);
+        radios_single.add(sg);
+        radios_single.add(sh);
+
+        ma = findViewById(R.id.multia);
+        mb = findViewById(R.id.multib);
+        mc = findViewById(R.id.multic);
+        md = findViewById(R.id.multid);
+        me = findViewById(R.id.multie);
+        mf = findViewById(R.id.multif);
+        mg = findViewById(R.id.multig);
+        mh = findViewById(R.id.multih);
+        ma.setOnClickListener(this);
+        mb.setOnClickListener(this);
+        mc.setOnClickListener(this);
+        md.setOnClickListener(this);
+        me.setOnClickListener(this);
+        mf.setOnClickListener(this);
+        mg.setOnClickListener(this);
+        mh.setOnClickListener(this);
+        radios_multi = new ArrayList<>();
+        radios_multi.add(ma);
+        radios_multi.add(mb);
+        radios_multi.add(mc);
+        radios_multi.add(md);
+        radios_multi.add(me);
+        radios_multi.add(mf);
+        radios_multi.add(mg);
+        radios_multi.add(mh);
+
+        tf_submit = findViewById(R.id.tfsubmit);
+        tf_submit.setOnClickListener(this);
+        single_submit = findViewById(R.id.singlesubmit);
+        single_submit.setOnClickListener(this);
+        multi_submit = findViewById(R.id.multisubmit);
+        multi_submit.setOnClickListener(this);
+        subjective_submit = findViewById(R.id.subjectivesubmit);
+        subjective_submit.setOnClickListener(this);
+
+        mQiangda = findViewById(R.id.qiangda);
+        mQiangda.setOnClickListener(this);
+
+        pref = PreferenceManager.getDefaultSharedPreferences(this);
+        String data = pref.getString("data","");
+
+        xiangce = findViewById(R.id.xiangce);
+        xiangce.setOnClickListener(this);
+        paizhao = findViewById(R.id.paizhao);
+        paizhao.setOnClickListener(this);
+//        luru = findViewById(R.id.luru);
+//        luru.setOnClickListener(this);
+
+        qingkong = findViewById(R.id.qingkong);
+        qingkong.setOnClickListener(this);
+
+        //主观题输入框
+        subjective_answer = findViewById(R.id.tiankong);
+        subjective_answer.setOnClickListener(this);
+        //主观题回显textview
+        subjective_echo = findViewById(R.id.tiankong_echo);
+        subjective_echo.setOnClickListener(this);
+        //主观题保存textview
+        subjective_save = findViewById(R.id.tiankong_save);
+        subjective_save.setOnClickListener(this);
+
+        subjective_scroll = findViewById(R.id.stroll_tiankong);
+        subjective_scroll.setOnClickListener(this);
+
+        subjective_answer.setImeOptions(EditorInfo.IME_ACTION_DONE);
+        subjective_answer.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            public boolean onEditorAction(TextView v, int actionId,                   KeyEvent event)  {
+                if (actionId==EditorInfo.IME_ACTION_DONE ||(event!=null&&event.getKeyCode()== KeyEvent.KEYCODE_ENTER))
+                {
+                    //do something;
+                    System.out.println("edittext true!");
+                    InputMethodManager im = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    im.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), InputMethodManager.HIDE_NOT_ALWAYS);
+
+                    return true;
+                }
+                System.out.println("edittext false!");
+                return false;
+            }
+        });
+
+        base64id_url = new HashMap<>();
+
+
+    }
+
     private void dealWith_mBoardaddResouce(Integer type,String url,String name){
 //        type 1  转码任务
 //        type 2  加载图片任务
@@ -629,10 +880,10 @@ public class MainActivity_stu extends AppCompatActivity {
 
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
-                LaunchActivity.mUserId = intent.getStringExtra(Constant.USER_ID);
+                MainActivity_stu.userId = intent.getStringExtra(Constant.USER_ID);
             }
             if (intent.getStringExtra(Constant.ROOM_ID) != null) {
-                LaunchActivity.mRoomId = intent.getStringExtra(Constant.ROOM_ID);
+                MainActivity_stu.roomid = intent.getStringExtra(Constant.ROOM_ID);
             }
         }
     }
@@ -995,8 +1246,8 @@ public class MainActivity_stu extends AppCompatActivity {
             System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserVideoAvailable:"+userId);
 //            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
-            int userPosition = listViewAdapter.getItemPositionById(userId);
-            activity.switchMemberListAudioIcon(userPosition);
+//            int userPosition = listViewAdapter.getItemPositionById(userId);
+//            activity.switchMemberListAudioIcon(userPosition);
         }
 
         @Override
@@ -1020,8 +1271,8 @@ public class MainActivity_stu extends AppCompatActivity {
             }
             else
                 mUserList.remove(userId);
-            int userPosition = listViewAdapter.getItemPositionById(userId);
-            activity.switchMemberListVideoIcon(userPosition);
+//            int userPosition = listViewAdapter.getItemPositionById(userId);
+//            activity.switchMemberListVideoIcon(userPosition);
 //            if(AnswerActivityTea.findMemberInKetangList((userId)) != null)
 //                activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
 
@@ -1041,6 +1292,13 @@ public class MainActivity_stu extends AppCompatActivity {
         @Override
         public void onRemoteUserLeaveRoom(String userId, int reason){
             MainActivity_stu activity = mContext.get();
+            System.out.println("onRemoteUserLeaveRoom userId " + userId );
+            if (userId.equals(mTeacherId+"_camera")){
+                System.out.println("mingming_camera exit room");
+                exitRoom();
+                teacher_enable=false;
+                return;
+            }
 //            activity.videoListFragment.leaveRoom(userId, reason, activity,
 //                    activity.mTRTCCloud);
 //            HttpActivityTea.getMemberList(activity);
@@ -1066,6 +1324,7 @@ public class MainActivity_stu extends AppCompatActivity {
 
         mTRTCCloud = TRTCCloud.sharedInstance(getApplicationContext());
         mTRTCCloud.setListener(new MyTRTCCloudListener(MainActivity_stu.this));
+        mTXDeviceManager = mTRTCCloud.getDeviceManager();
 
         // 组装TRTC进房参数
 //        String userId = "mingming";
@@ -1095,7 +1354,7 @@ public class MainActivity_stu extends AppCompatActivity {
         mTRTCCloud.setLocalRenderParams(myTRTCRenderParams);
 
         // 开启本地摄像头预览
-        mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
+        mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
         cameraOn = true;
 
 
@@ -1103,7 +1362,7 @@ public class MainActivity_stu extends AppCompatActivity {
         mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
         musicOn = true;
 
-        teacherTRTCBackground.setVisibility(View.INVISIBLE);
+        studentTRTCBackground.setVisibility(View.INVISIBLE);
 //        teacherTRTCBackground.bringToFront();
 
         // 设置姓名旁的静音标记
@@ -1112,6 +1371,14 @@ public class MainActivity_stu extends AppCompatActivity {
         teacher_name_mic_icon.setBounds(0,0,20,20);
         teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
 
+        @SuppressLint("UseCompatLoadingForDrawables") Drawable student_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
+        student_name_mic_icon.setBounds(0,0,20,20);
+        student_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+
+        // 初始化教师视频
+        mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTXCVVTeacherPreviewView);
+        teacherTRTCBackground.setVisibility(View.VISIBLE);
+
         // 初始化房间信息
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
@@ -1119,30 +1386,35 @@ public class MainActivity_stu extends AppCompatActivity {
         int screenHeight = dm.heightPixels;
 
 //        HttpActivityTea.initClass(screenWidth, screenHeight, "skydt", this);
-        // 开启举手监听事件
-//        HttpActivityTea.startHandsUpTimer(this);
+        // 开启学生消息监听事件
+        HttpActivityStu.startGetControlMessageTimer(roomid, userId, this);
     }
 
 
-    public void switchCamera(View view) {
+    public void handleOpenCamera(View view) {
         Log.e(TAG, "switchCamera: switchCamera" );
         if(mTRTCCloud!=null){
             if(cameraOn) {
                 Log.e(TAG, "switchCamera: close");
                 mTRTCCloud.stopLocalPreview();
-                teacherTRTCBackground.setVisibility(View.VISIBLE);
+                studentTRTCBackground.setVisibility(View.VISIBLE);
 //            mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, true);
                 cameraOn = false;
                 cameraBtn.getDrawable().setLevel(10);
             } else {
                 Log.e(TAG, "switchCamera: open");
-                mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
-                teacherTRTCBackground.setVisibility(View.INVISIBLE);
+                mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
+                studentTRTCBackground.setVisibility(View.INVISIBLE);
 //            mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, false);
                 cameraOn = true;
                 cameraBtn.getDrawable().setLevel(5);
             }
         }
+    }
+
+    public void handleSwitchCamera(View view) {
+        mIsFrontCamera = !mIsFrontCamera;
+        mTXDeviceManager.switchCamera(mIsFrontCamera);
     }
 
     public void switchMusic(View view) {
@@ -1154,7 +1426,7 @@ public class MainActivity_stu extends AppCompatActivity {
             // 设置图标
             @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_off);
             teacher_name_mic_icon.setBounds(0,0,20,20);
-            teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+            student_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
         } else {
             mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
             musicOn = true;
@@ -1162,7 +1434,7 @@ public class MainActivity_stu extends AppCompatActivity {
             // 设置图标
             @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
             teacher_name_mic_icon.setBounds(0,0,20,20);
-            teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+            student_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
         }
     }
 
@@ -1188,23 +1460,31 @@ public class MainActivity_stu extends AppCompatActivity {
         popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
     }
 
-    public void showHandsUpBtn(View view) {
-        select_resources.setVisibility(View.GONE);
-        Point point = new Point();
-        this.getWindowManager().getDefaultDisplay().getSize(point);
-        int popUpWindowWidth = (int) (point.x*0.3);
-        int popUpWindowHeight = (int) (point.y * 0.5);
-        PopupWindow popupWindow = new PopupWindow(handsUpPopupView, popUpWindowWidth, popUpWindowHeight, true);
-        handsUpPopupCloseBtn.setOnClickListener(new View.OnClickListener() {
+    public void startHandsTimer() {
+        handsTimer.schedule(new TimerTask() {
             @Override
-            public void onClick(View view) {
-                popupWindow.dismiss();
+            public void run() {
+                handsUpTime--;
             }
-        });
-        handsUpPopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int offsetX = - popUpWindowWidth /4;
-        int offsetY = - popUpWindowHeight - (view.getHeight()) - 10;
-        popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
+        }, 0, 1000);
+    }
+
+    public void stopHandsTimer() {
+        handsTimer.cancel();
+    }
+
+    public void handleHandsUpBtn(View view) {
+        if(handsState.equals("down")) {
+            HttpActivityStu.handsUp(userId, roomid, "up", this);
+            handsState = "up";
+            view.setBackgroundResource(R.drawable.bottom_stuhand_down);
+            startHandsTimer();
+        }
+        else if (handsState.equals("up")) {
+            HttpActivityStu.handsUp(userId, roomid, "down", this);
+            handsState = "down";
+            view.setBackgroundResource(R.drawable.bottom_stuhand_up);
+        }
     }
 
     //初始化白板
@@ -3216,6 +3496,690 @@ public class MainActivity_stu extends AppCompatActivity {
                 menu03color.setImageResource(R.mipmap.text_yellow);
             }else if(params=="red"){
                 menu03color.setImageResource(R.mipmap.text_red);
+            }
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+//    @Override
+//    protected void onPermissionGranted() {
+//        initView();
+//        enterLiveRoom();
+//    }
+
+    @Override
+    public void onClick(View v) {
+        int id = v.getId();
+        //返回上级页面
+//        if (id == R.id.iv_back) {
+//            finish();
+//        }
+        if (id == R.id.exitroom) {
+            exitRoom();
+            finish();
+
+        }
+
+        else if(id == R.id.tiankong_save){
+            if(subjective_answer.getText().length()>0){
+                System.out.println("echo"+subjective_answer.getText());
+                subjective_scroll.setVisibility(View.VISIBLE);
+                subjective_scroll.bringToFront();
+                //subjective_echo.setText(subjective_answer.getText());
+                subjective_echo.append(subjective_answer.getText());
+                subjective_answer.setText("");
+
+
+            }
+        }
+
+//        else if(id==R.id.qiangda){
+//            BottomButtonActivity.qiangDa();
+//        }
+//
+//        //举手上讲�?
+//        else if(id == R.id.hands){
+//            BottomButtonActivity.muteHand();
+//        }
+//
+//        //开闭聊天室
+//        else if (id == R.id.message) {
+//            BottomButtonActivity.muteMessage();
+//        }
+//
+//        //开闭摄像头
+//        else if (id == R.id.btn_mute_video) {
+//            BottomButtonActivity.muteVideo();
+//        }
+//
+//        //开闭麦
+//        else if (id == R.id.btn_mute_audio) {
+//            BottomButtonActivity.muteAudio();
+//        }
+//
+//        //前置后置摄像�?
+//        else if (id == R.id.btn_switch_camera) {
+//            BottomButtonActivity.switchCamera();
+//        }
+//
+//        //刷新
+//        else if (id == R.id.refresh){
+//            BottomButtonActivity.remoteRefresh();
+////            new Thread(new Runnable() {//创建子线�?
+////                public void run() {
+////                @Override
+////                    getwebinfo();//把路径选到MainActivity�?
+////                }
+////            }).start();//启动子线�?
+//        }
+//
+//        //全屏
+//        else if (id == R.id.fullscreen){
+//            BottomButtonActivity.fullscreen();
+//        }
+//
+//        //点击教师分享流隐藏顶部底部按�?
+//        else if(id == R.id.teacher_share){
+//            //BottomButtonActivity.touchTeachershare();
+//        }
+
+        //判断
+        else if(id == R.id.tfyes ||id == R.id.tfno
+                ||id == R.id.tfsubmit){
+            // 显示选中项�?
+            if(id == R.id.tfsubmit){
+                String checkedValues = SelectUtil.getOne(radios_tf);
+                System.out.println("判断选中了：" + checkedValues);
+                HttpActivityStu.saveAnswer(checkedValues, userId, userName, this);
+
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
+                return;
+            }
+            System.out.println("this box:"+id);
+            CheckBox thisbox =findViewById(id);
+            SelectUtil.unCheck(radios_tf);
+            thisbox.setChecked(true);
+
+        }
+
+        //单�?
+        else if(id == R.id.singlea ||id == R.id.singleb || id == R.id.singlec ||id == R.id.singled
+                ||id == R.id.singlee ||id == R.id.singlef || id == R.id.singleg ||id == R.id.singleh
+                ||id == R.id.singlesubmit){
+            // 显示选中项�?
+            if(id == R.id.singlesubmit){
+                String checkedValues = SelectUtil.getOne(radios_single);
+                System.out.println("单选选中了：" + checkedValues+"id:"+HttpActivityStu.questionId);
+                HttpActivityStu.saveAnswer(checkedValues, userId, userName, this);
+
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
+                return;
+            }
+            CheckBox thisbox =findViewById(id);
+            SelectUtil.unCheck(radios_single);
+            thisbox.setChecked(true);
+        }
+
+        //多�?
+        else if(id == R.id.multia ||id == R.id.multib || id == R.id.multic ||id == R.id.multid
+                ||id == R.id.multie ||id == R.id.multif || id == R.id.multig ||id == R.id.multih
+                ||id == R.id.multisubmit){
+            // 显示选中项�?
+            if(id == R.id.multisubmit){
+                String checkedValues = SelectUtil.getMany(radios_multi);
+                System.out.println("多选选中�?:"+checkedValues);
+                HttpActivityStu.saveAnswer(checkedValues, userId, userName, this);
+
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
+                return;
+            }
+            CheckBox thisbox =findViewById(id);
+            if(thisbox.isChecked()==false){
+                thisbox.setChecked(false);
+            }
+            else{
+                thisbox.setChecked(true);
+            }
+        }
+
+        //主观_填空�?
+        else if(id == R.id.subjectivesubmit){
+            // 显示选中项�?
+            TextView editone = findViewById(R.id.tiankong_echo);
+            String editoneValue = editone.getText().toString();
+            System.out.println("主观题答案的内容:"+editoneValue);
+
+            if(editoneValue.length()==0||editoneValue.equals("消息不允许为空")){
+                System.out.println("主观题答案不允许为空");
+                subjective_answer.setEnabled(false);
+                subjective_answer.setText("主观题答案不允许为空");
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        subjective_answer.setEnabled(true);
+                        subjective_answer.setText("");
+                    }
+                }, 1000);
+            }
+            else{
+                for(int i=0;i<base64_index;i++){
+                    System.out.println("base64 i:"+i+" "+base64id_url.get(i));
+                    editoneValue = editoneValue.replace("'"+i+"'","<img src=\""+base64id_url.get(i)+"\">");
+                }
+                System.out.println("editoneValue i:"+editoneValue);
+                HttpActivityStu.saveAnswer(editoneValue, userId, userName, this);
+
+//                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    //LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//                    //LaunchActivity.mGroupButtons.setVisibility(View.VISIBLE);
+//                    System.out.println("answer over");
+//                }
+
+                subjective_answer.setText("");
+                subjective_echo.setText("");
+                //subjective_scroll.setVisibility(GONE);
+
+                base64_index=0;
+                base64id_url=new HashMap<>();
+            }
+
+        }
+
+        else if(id == R.id.qingkong){
+            subjective_echo.setText("");
+
+            base64_index=0;
+            base64id_url=new HashMap<>();
+        }
+
+        //相册�?
+        else if(id == R.id.xiangce){
+            {
+                if (ContextCompat.checkSelfPermission(MainActivity_stu.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                    ActivityCompat.requestPermissions(MainActivity_stu.this,new
+                            String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},1);
+                }else {
+                    openAlbum();
+                    Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+                    intent.setType("image/*");
+                    intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+                    handleImageOnKitKat(intent);
+                }
+            }
+        }
+
+        //拍照�?
+        else if(id == R.id.paizhao){
+            //创建File对象，用于存储拍照后的图片
+            File outputImage=new File(getExternalCacheDir(),"output_image.jpg");
+            try {
+                if(outputImage.exists()){
+                    outputImage.delete();
+                }
+                outputImage.createNewFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            if(Build.VERSION.SDK_INT >= 24){
+                imageUri = FileProvider.getUriForFile(MainActivity_stu.this,
+                        "com.navigationdemo.fileprovider",outputImage);//查找存储在File对象中的图片URL地址
+            }else {
+                imageUri = Uri.fromFile(outputImage);
+            }
+
+
+            System.out.println("imageUri:"+imageUri);
+
+            //启动相机程序
+            Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
+            intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+            startActivityForResult(intent,TAKE_PHOTO);
+
+            System.out.println("imageUri2:"+imageUri);
+
+            try {
+                //将拍摄的图片显示出来
+                Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().
+                        openInputStream(imageUri));
+                editpic(bitmap);
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                System.out.println("imageUri3333333333333:"+imageUri);
+            }
+        }
+
+        //录入�?
+//        else if(id == R.id.luru){
+//            // 显示选中项�?
+//            EditText editone = findViewById(R.id.tiankong);
+//            String editoneValue = editone.getText().toString();
+//            System.out.println("填空的内�?:"+editoneValue);
+//            HttpActivity.stuSaveAnswer(editoneValue);
+//        }
+    }
+
+    private void openAlbum(){
+        Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
+        intent.setType("image/*");
+        intent.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+        startActivityForResult(intent,CHOOSE_PHOTO);    //打开相册
+    }
+
+    //拍照主观题
+    protected void editpic(Bitmap bitmap){
+        try {
+//                Field field = R.drawable.class.getDeclaredField("google_earth");
+//                int resourceId = Integer.parseInt(field.get(null).toString());
+//                Bitmap bitmap = BitmapFactory.decodeResource(getResources(),
+//                        resourceId);
+            bitmap = transbase64(bitmap);
+            subjective_scroll.setVisibility(View.VISIBLE);
+            subjective_scroll.bringToFront();
+            ImageSpan imageSpan = new ImageSpan(bitmap);
+            SpannableString spannableString = new SpannableString("'"+base64_index+"'");
+            //SpannableString spannableString = new SpannableString("a");
+            //SpannableString spannableString = new SpannableString("pic"+String.valueOf(base64_index));
+
+            spannableString.setSpan(imageSpan, 0, String.valueOf(base64_index).length()+2, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //base64_index++;
+            //spannableString.setSpan(imageSpan, 0, 1, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            //subjective_answer.append(spannableString);
+            subjective_echo.append(spannableString);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private Bitmap transbase64(Bitmap bitmap) {
+        int src_w = bitmap.getWidth();
+        int src_h = bitmap.getHeight();
+
+        int scroll_w = subjective_echo.getMeasuredWidth();
+        int scroll_h = subjective_echo.getMeasuredHeight();
+        //2160*1080 4608*3456
+        System.out.println("src_w:"+src_w);
+        System.out.println("src_h:"+src_h);
+
+        float subjective_answer_height = subjective_answer.getMeasuredHeight()/2;
+        float wh = src_w/src_h;
+
+        float new_src_w;
+        float new_src_h;
+
+        if(src_w>scroll_w){
+            new_src_w = (float) 0.3;
+            new_src_h = (float) 0.3;
+        }
+        else if(src_h>scroll_h){
+            new_src_w = (float) 0.3;
+            new_src_h = (float) 0.3;
+        }
+        else{
+            new_src_w = (float) 1.2;
+            new_src_h = (float) 1.2;
+        }
+
+        Matrix matrix = new Matrix();
+        matrix.postScale(new_src_w, new_src_h);
+        Bitmap bihuanbmp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,true);
+
+        if((src_w>2160)||(src_h>1080)){
+            System.out.println("readContent small :");
+            matrix = new Matrix();
+            matrix.postScale((float) 0.2, (float) 0.2);
+            Bitmap temp = Bitmap.createBitmap(bitmap, 0, 0, src_w, src_h, matrix,true);
+            bitmap = temp;
+            bihuanbmp = temp;
+        }
+
+        System.out.println("readContent:");
+        String httpreturn = HttpActivity.readContentFromPost(bitmap);
+
+        System.out.println("httpreturn:"+ httpreturn);
+        return bihuanbmp;
+    }
+
+    /*****************************************************************************************************************/
+    private void handleImageBeforeKitKat(Intent data) {
+        Uri uri=data.getData();
+        String imagePath = getImagePath(uri,null);
+        try {
+            displayImage(imagePath);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private void handleImageOnKitKat(Intent data) {         //返回图片URL路径
+        String imagePath = null;
+        Uri uri = data.getData();
+        if(DocumentsContract.isDocumentUri(this,uri)){
+            //如果是document类型的Uri，则通过document id处理
+            String docId = DocumentsContract.getDocumentId(uri);
+            if("com.android.providers.media.documents".equals(uri.getAuthority())){
+                String id=docId.split(":")[1];//解析出数字格式的id
+                String selection=MediaStore.Images.Media._ID+"="+id;
+                imagePath=getImagePath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI,selection);
+            }else if("com.android.providers.downloads.documents".equals(uri.getAuthority())){
+                Uri contentUri= ContentUris.withAppendedId(Uri.parse("content:" +
+                        "//downloads/public_downloads"),Long.valueOf(docId));
+                imagePath=getImagePath(contentUri,null);
+            }else if("context".equalsIgnoreCase(uri.getScheme())){
+                //如果是content类型的Uri，则用普通方式处理
+                imagePath=getImagePath(uri,null);
+            }else if("file".equalsIgnoreCase(uri.getScheme())){
+                //如果是file类型的Uri，直接获取图片路径即可
+                imagePath = uri.getPath();
+            }
+            try {
+                displayImage(imagePath);//根据图片路径显示图片
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private String getImagePath(Uri uri, String selection) {
+        String path=null;
+        //通过Uri和selection来获取真实的图片路径
+        Cursor cursor = getContentResolver().query(uri,null,selection,null,null);
+        if(cursor != null){
+            if(cursor.moveToFirst()){
+                path=cursor.getString(cursor.getColumnIndex(MediaStore.Images.Media.DATA));
+            }
+            cursor.close();
+        }
+        return path;
+    }
+    private void displayImage(String imagePath) throws InterruptedException {
+        if(imagePath != null){
+            editor=pref.edit();
+            editor.putString("data",imagePath);
+            imgP=imagePath;
+            editor.apply();
+            Bitmap bitmap = BitmapFactory.decodeFile(imagePath);
+            editpic(bitmap);
+
+        }else {
+            Toast.makeText(this,"fail to get image",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    //更新互动答题界面
+    private static void getteacher(){
+        if(AnswerActivity.questionAction!=null){
+//                if(AnswerActivity.questionAction.equals("stopAnswer")
+//                        ||AnswerActivity.questionAction.equals("stopAnswerSuiji")
+//                        ||AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
+//                    current_answer = null;
+//                    LaunchActivity.group_tfanswer.setVisibility(GONE);
+//                    LaunchActivity.group_singleanswer.setVisibility(GONE);
+//                    LaunchActivity.group_multianswer.setVisibility(GONE);
+//                    LaunchActivity.group_subjectiveanswer.setVisibility(GONE);
+//
+//
+//                    mQiangda.setSelected(false);
+//                    BottomButtonActivity.qiangDa();
+//
+//                    LaunchActivity.mMessageInput.setVisibility(View.VISIBLE);
+//                    LaunchActivity.mMessageInput.bringToFront();
+//                    System.out.println("no time answer over");
+//                }
+            if(last_actiontime_answer.equals(AnswerActivity.questionTime)){
+                return;
+            }
+            else{
+                last_actiontime_answer=AnswerActivity.questionTime;
+            }
+            if(AnswerActivity.questionAction.equals("startAnswer")
+                    ||AnswerActivity.questionAction.equals("startAnswerSuiji")
+                    ||AnswerActivity.questionAction.equals("startAnswerQiangDa")) {
+                mQiangda.setSelected(false);
+                BottomButtonActivity.qiangDa();
+//                MainActivity_stu.mMessageInput.setVisibility(GONE);
+
+                System.out.println("answer over a");
+
+                if (AnswerActivity.questionBaseTypeId.equals("101")) {
+                    current_answer = group_singleanswer;
+//                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
+                    MainActivity_stu.group_singleanswer.setVisibility(View.VISIBLE);
+//                        LaunchActivity.group_multianswer.setVisibility(View.GONE);
+//                        LaunchActivity.group_subjectiveanswer.setVisibility(View.GONE);
+
+//                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
+                    int index =0;
+                    int sub_num = Integer.parseInt(AnswerActivity.questionSubNum);
+                    for(CheckBox item:radios_single){
+                        if(index<sub_num){
+                            item.setChecked(false);
+                            item.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            item.setChecked(false);
+                            item.setVisibility(GONE);
+                        }
+                        index++;
+                    }
+                }
+                else if (AnswerActivity.questionBaseTypeId.equals("102")) {
+                    current_answer = group_multianswer;
+//                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
+//                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
+                    MainActivity_stu.group_multianswer.setVisibility(View.VISIBLE);
+//                        LaunchActivity.group_subjectiveanswer.setVisibility(View.GONE);
+//                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
+                    int index =0;
+                    int sub_num = Integer.parseInt(AnswerActivity.questionSubNum);
+                    for(CheckBox item:radios_multi){
+                        if(index<sub_num){
+                            item.setChecked(false);
+                            item.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            item.setChecked(false);
+                            item.setVisibility(GONE);
+                        }
+                        index++;
+                    }
+                }
+                else if (AnswerActivity.questionBaseTypeId.equals("103")) {
+                    current_answer = group_tfanswer;
+                    MainActivity_stu.group_tfanswer.setVisibility(View.VISIBLE);
+//                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
+//                        LaunchActivity.group_multianswer.setVisibility(View.GONE);
+//                        LaunchActivity.group_subjectiveanswer.setVisibility(View.GONE);
+//                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
+                    int index =0;
+                    //int sub_num = Integer.parseInt(AnswerActivity.questionSubNum);
+                    int sub_num=2;
+                    for(CheckBox item:radios_tf){
+                        if(index<sub_num){
+                            item.setChecked(false);
+                            item.setVisibility(View.VISIBLE);
+                        }
+                        else{
+                            item.setChecked(false);
+                            item.setVisibility(GONE);
+                        }
+                        index++;
+                    }
+                }
+                else if (AnswerActivity.questionBaseTypeId.equals("104")) {
+                    current_answer = group_subjectiveanswer;
+//                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
+//                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
+//                        LaunchActivity.group_multianswer.setVisibility(View.GONE);
+                    MainActivity_stu.group_subjectiveanswer.setVisibility(View.VISIBLE);
+//                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
+                }
+            }
+            else if(AnswerActivity.questionAction.equals("stopAnswer")
+                    ||AnswerActivity.questionAction.equals("stopAnswerSuiji")
+                    ||AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
+                current_answer = null;
+
+                MainActivity_stu.group_tfanswer.setVisibility(GONE);
+                MainActivity_stu.group_singleanswer.setVisibility(GONE);
+                MainActivity_stu.group_multianswer.setVisibility(GONE);
+                MainActivity_stu.group_subjectiveanswer.setVisibility(GONE);
+
+                subjective_answer.setText("");
+                subjective_echo.setText("");
+                subjective_scroll.setVisibility(GONE);
+
+                mQiangda.setSelected(false);
+                BottomButtonActivity.qiangDa();
+
+//                    LaunchActivity.mMessageInput.setVisibility(View.VISIBLE);
+//                MainActivity_stu.mGroupButtons.setVisibility(View.VISIBLE);
+                System.out.println("answer over b");
+            }
+            else if(AnswerActivity.questionAction.equals("startQiangDa")){
+//                MainActivity_stu.mGroupButtons.setVisibility(View.VISIBLE);
+//                MainActivity_stu.mMessageInput.setVisibility(GONE);
+                MainActivity_stu.group_tfanswer.setVisibility(GONE);
+                MainActivity_stu.group_singleanswer.setVisibility(GONE);
+                MainActivity_stu.group_multianswer.setVisibility(GONE);
+                MainActivity_stu.group_subjectiveanswer.setVisibility(GONE);
+                mQiangda.setSelected(true);
+                BottomButtonActivity.qiangDa();
+                System.out.println("answer over c");
+            }
+            else if(AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
+
+                BottomButtonActivity.qiangDa();
+//                MainActivity_stu.mMessageInput.setVisibility(View.VISIBLE);
+                System.out.println("answer over d");
+            }
+            else{
+
+                BottomButtonActivity.qiangDa();
+                System.out.println("answer over f"+AnswerActivity.questionAction);
+            }
+        }
+        if(AnswerActivity.deviceMicAction!=null){
+            if(last_actiontime_mic.equals(AnswerActivity.deviceMicTime)){
+                return;
+            }
+            else{
+                last_actiontime_mic=AnswerActivity.deviceMicTime;
+            }
+//            if(AnswerActivity.deviceMicAction.equals("openMic")){
+//                boolean isSelected = mButtonMuteAudio.isSelected();
+//                if (isSelected){
+//                    BottomButtonActivity.muteAudio();
+//                }
+//            }
+//            else if(AnswerActivity.deviceMicAction.equals("closeMic")){
+//                boolean isSelected = mButtonMuteAudio.isSelected();
+//                if (!isSelected){
+//                    BottomButtonActivity.muteAudio();
+//                }
+//            }
+        }
+        if(AnswerActivity.deviceCameraAction!=null){
+            if(last_actiontime_camera.equals(AnswerActivity.deviceCameraTime)){
+                return;
+            }
+            else{
+                last_actiontime_camera=AnswerActivity.deviceCameraTime;
+            }
+//            if(AnswerActivity.deviceCameraAction.equals("openCamera")){
+//                boolean isSelected = mButtonMuteVideo.isSelected();
+//                if (isSelected){
+//                    BottomButtonActivity.muteVideo();
+//                }
+//            }
+//            else if(AnswerActivity.deviceCameraAction.equals("closeCamera")){
+//                boolean isSelected = mButtonMuteVideo.isSelected();
+//                if (!isSelected){
+//                    BottomButtonActivity.muteVideo();
+//                }
+//            }
+        }
+        if(AnswerActivity.deviceWordsAction!=null){
+            System.out.println("last_actiontime_words:"+last_actiontime_words);
+            System.out.println("AnswerActivity.deviceWordsTime:"+AnswerActivity.deviceWordsTime);
+            if(last_actiontime_words.equals(AnswerActivity.deviceWordsTime)){
+                System.out.println("actiontime return");
+                return;
+            }
+            else{
+                System.out.println("actiontime change");
+                last_actiontime_words=AnswerActivity.deviceWordsTime;
+            }
+            if(AnswerActivity.deviceWordsAction.equals("openWords")&&!openWords_flag){
+                openWords_flag = true;
+                //mMessageInput.setFocusable(true);
+//                mMessageInput.setText("");
+                //
+//                mMessageInput.setEnabled(true);
+                System.out.println("openWords!!!!!!!");
+//                mMessageSubmit.setEnabled(true);
+//                    boolean isSelected = mButtonMuteVideo.isSelected();
+//                    if (isSelected){
+//                        BottomButtonActivity.muteVideo();
+//                    }
+            }
+            else if(AnswerActivity.deviceWordsAction.equals("closeWords")){
+                openWords_flag = false;
+                //mMessageInput.setFocusable(false);
+//                mMessageInput.setEnabled(false);
+//                mMessageInput.setText("您当前已被教师禁言");
+
+//                mMessageSubmit.setEnabled(false);
+//                    boolean isSelected = mButtonMuteVideo.isSelected();
+//                    if (!isSelected){
+//                        BottomButtonActivity.muteVideo();
+//                    }
             }
         }
     }

@@ -398,7 +398,7 @@ class LiveingLessonContent extends Component {
                                 style={{ position: "absolute", right: 25 }}
                                 onPress={() => {
                                     NativeModules.IntentMoudle.startActivityFromJS(
-                                        "MainActivity_tea",
+                                        "SetInfo_MainActivity",
                                         global.constants.userName +
                                             "-" + //userid 学生id
                                             global.constants.userCn +
