@@ -1,12 +1,12 @@
 import React, { Component } from "react";
-import { View, Text, TouchableOpacity, Image,Button } from "react-native";
+import { View, Text, TouchableOpacity, Image, Button } from "react-native";
 import { screenHeight, screenWidth } from "../utils/Screen/GetSize";
 import WebCanvas from "./WebCanvas";
 import http from "../utils/http/request";
-var imagebase64=''
-var url ="";
-var baseurl ='';
-var ismove =false
+var imagebase64 = "";
+var url = "";
+var baseurl = "";
+var ismove = false;
 export default class Correct_img extends Component {
     constructor(props) {
         super(props);
@@ -14,55 +14,60 @@ export default class Correct_img extends Component {
             flag: "yidong",
         };
     }
-   
-    delect_correctimage(){
-        const urla = global.constants.baseUrl + "/AppServer/ajax/userManage_deleteCanvasImageFromRn.do";
+
+    delect_correctimage() {
+        const urla =
+            global.constants.baseUrl +
+            "/AppServer/ajax/userManage_deleteCanvasImageFromRn.do";
         const params = {
-            imagePath:baseurl,
+            imagePath: baseurl,
         };
         http.post(urla, params, false).then((res) => {
-            if(res.status){
+            if (res.status) {
                 this.props.navigation.goBack();
             }
-        })
+        });
     }
     //保存批改记录
-    save_correctimage(data){
-        const urla = global.constants.baseUrl +
-                    "/AppServer/ajax/userManage_saveCanvasImageFromRn.do";
+    save_correctimage(data) {
+        const urla =
+            global.constants.baseUrl +
+            "/AppServer/ajax/userManage_saveCanvasImageFromRn.do";
         const params = {
-            type:'save',
-            imagePath:baseurl,
-            baseData:data,
+            type: "save",
+            imagePath: baseurl,
+            baseData: data,
         };
         http.post(urla, params, false).then((res) => {
-            if(res.status){
+            if (res.status) {
                 //修改批改页面的批改结果
-                this.props.route.params.updateStuAnswer(baseurl,res.url)
+                this.props.route.params.updateStuAnswer(baseurl, res.url);
                 this.props.navigation.goBack();
             }
-        })
+        });
     }
 
     saveimage_base64(base64) {
-        const urla = global.constants.baseUrl+"/AppServer/ajax/userManage_saveCanvasImageFromRn.do";
+        const urla =
+            global.constants.baseUrl +
+            "/AppServer/ajax/userManage_saveCanvasImageFromRn.do";
         const params = {
-            type:'move',
-            imagePath:ismove?url:baseurl,
+            type: "move",
+            imagePath: ismove ? url : baseurl,
             baseData: base64,
         };
         http.post(urla, params, false).then((res) => {
-            if(res.status){
-                url=res.url
-                ismove=true
+            if (res.status) {
+                url = res.url;
+                ismove = true;
                 this.canvas.webview.reload();
             }
-        })
+        });
     }
 
-    UNSAFE_componentWillMount(){
-        url=this.props.route.params.url
-        baseurl=this.props.route.params.url
+    UNSAFE_componentWillMount() {
+        url = this.props.route.params.url;
+        baseurl = this.props.route.params.url;
     }
     _pen() {
         this.canvas._pen();
@@ -92,17 +97,17 @@ export default class Correct_img extends Component {
     // 保存base64
     _handleBase64(data) {
         imagebase64 = data.substring(22);
-        this.save_correctimage(data.substring(22))
+        this.save_correctimage(data.substring(22));
     }
     _handleUrl(data) {
-        imagebase64 =data.substring(22)
-        this.saveimage_base64(data.substring(22))
+        imagebase64 = data.substring(22);
+        this.saveimage_base64(data.substring(22));
         // this.canvas.webview.reload()
         // this._addImageBase64(imagebase64)
         // this.canvas._addImage(url)
         // this.canvas._addImageBase64(data.substring(22))
     }
-  
+
     // 图片右转
     _rotateRight() {
         this.canvas._rotateRight();
@@ -129,7 +134,8 @@ export default class Correct_img extends Component {
                 >
                     <TouchableOpacity
                         style={{ position: "absolute", left: 10 }}
-                        onPress={() => {this.delect_correctimage()
+                        onPress={() => {
+                            this.delect_correctimage();
                         }}
                     >
                         <Image
@@ -137,12 +143,14 @@ export default class Correct_img extends Component {
                             source={require("../assets/teacherLatestPage/goBack.png")}
                         ></Image>
                     </TouchableOpacity>
-                    <Button onPress={()=>{
-                        this._getBase64()
-                    }}
-                            title="保存批改"></Button>
+                    <Button
+                        onPress={() => {
+                            this._getBase64();
+                        }}
+                        title="保存批改"
+                    ></Button>
                 </View>
-                <View style={{ flex:1 }}>
+                <View style={{ flex: 1 }}>
                     <WebCanvas
                         handleBase64={this._handleBase64.bind(this)}
                         handleUrl={this._handleUrl.bind(this)}
@@ -159,7 +167,7 @@ export default class Correct_img extends Component {
                         width: "100%",
                         justifyContent: "space-around",
                         height: 70,
-                        paddingBottom:15,
+                        paddingBottom: 15,
                         alignItems: "center",
                     }}
                 >
@@ -174,13 +182,12 @@ export default class Correct_img extends Component {
                         ></Image>
                     </TouchableOpacity>
                     <TouchableOpacity
-                        onPress={
-                            ()=>{
-                                if(this.state.flag!='yidong'){;
-                                    this.canvas._destoryDraw();
-                                    this.setState({ flag: "yidong" });
-                                }
-                            }}
+                        onPress={() => {
+                            if (this.state.flag != "yidong") {
+                                this.canvas._destoryDraw();
+                                this.setState({ flag: "yidong" });
+                            }
+                        }}
                     >
                         <Image
                             style={{ width: 50, height: 50 }}
@@ -193,7 +200,7 @@ export default class Correct_img extends Component {
                     </TouchableOpacity>
                     <TouchableOpacity
                         onPress={() => {
-                            url=baseurl
+                            url = baseurl;
                             this.canvas.webview.reload();
                             this.setState({ flag: "yidong" });
                         }}
@@ -203,9 +210,7 @@ export default class Correct_img extends Component {
                             source={require("../assets/correctpaper/qingkong.png")}
                         ></Image>
                     </TouchableOpacity>
-                    <TouchableOpacity
-                        onPress={this._cUndo.bind(this)}
-                    >
+                    <TouchableOpacity onPress={this._cUndo.bind(this)}>
                         <Image
                             source={require("../assets/correctpaper/chexiao.png")}
                         ></Image>

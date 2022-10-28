@@ -51,17 +51,15 @@ import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
-import com.navigationdemo.adapter.BoardRescourseAdapter;
-import com.navigationdemo.adapter.ChooseFileListViewAdapter;
+import com.navigationdemo.adapter.BoardLoadingAirRescourseAdapter;
+import com.navigationdemo.adapter.ChooseFileRecyclerViewAdapter;
 import com.navigationdemo.adapter.HandsUpListViewAdapter;
 import com.navigationdemo.adapter.MemberListViewAdapter;
 import com.navigationdemo.adapter.SetBrd_TabBarAdapter;
-import com.navigationdemo.adapter.SwitchFileListViewAdapter;
 import com.navigationdemo.adapter.TabBarAdapter;
 import com.navigationdemo.setBoardFragment.Set_Highlighter_Fragment;
 import com.navigationdemo.setBoardFragment.Set_bg_Fragment;
@@ -117,8 +115,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -137,6 +133,7 @@ public class MainActivity_tea extends AppCompatActivity {
     private static Timer Boardtimer = new Timer();  // 白板定时任务  用于获取转码进度
 
     //Tabbar三个Fragment
+
     private List<Fragment> mFragmenglist = new ArrayList<>();
     public List<Fragment> getmFragmenglist() {
         return mFragmenglist;
@@ -294,8 +291,8 @@ public class MainActivity_tea extends AppCompatActivity {
     private static ImageView littlechooseNativeFilePopupBtn;  //选择本机文件 顶部小图
     private static RecyclerView chooseFileRecyclerView;     // 白板当前文件的recyclerview
     private static ListView chooseFileListView;             //选择云端资源的listview
-    private static ChooseFileListViewAdapter boardchoosefilelistViewAdapter;    //载入资源的时候Adapter
-    private static BoardRescourseAdapter boardswitchfilelistViewAdapter;        //切换文件的时候Adapter
+    private static ChooseFileRecyclerViewAdapter boardswitchfilelistViewAdapter;    //切换资源的时候Adapter
+    private static BoardLoadingAirRescourseAdapter boardchoosefilelistViewAdapter;            //载入文件的时候Adapter
     private static LinearLayout choosefileLinerLayout;                          //用于隐藏有资源的时候  两个默认图片
     private List<TEduBoardController.TEduBoardFileInfo> CurBoardFileInfoList=new ArrayList();    //白板里面当前文件列表  切换文件的时候用
     private List<BoardRescourseBean> AirBoardFileInfoList=new ArrayList();       //白板里面载入云端资源  切换文件的时候用
@@ -1051,9 +1048,8 @@ public class MainActivity_tea extends AppCompatActivity {
 
     // 退出房间
     public static void exitRoom() {
-
         mTRTCCloud.exitRoom();
-        HttpActivityTea.stopHandsUpTimer();
+//        HttpActivityTea.stopHandsUpTimer();
     }
 
     public static class MyTRTCCloudListener extends TRTCCloudListener {
@@ -1273,15 +1269,25 @@ public class MainActivity_tea extends AppCompatActivity {
             choosefileLinerLayout.setVisibility(View.GONE);
             chooseFileRecyclerView.setVisibility(View.VISIBLE);
             littlechooseAirFilePopupBtn.setVisibility(View.VISIBLE);
-            boardchoosefilelistViewAdapter = new ChooseFileListViewAdapter(CurBoardFileInfoList.subList(1, CurBoardFileInfoList.size()),getBaseContext(),mBoard.getCurrentFile());
-            chooseFileRecyclerView.setAdapter(boardchoosefilelistViewAdapter);
-            boardchoosefilelistViewAdapter.setOnSwitchFileClickListener(new ChooseFileListViewAdapter.OnSwitchFileClickListener() {
+            boardswitchfilelistViewAdapter = new ChooseFileRecyclerViewAdapter(CurBoardFileInfoList.subList(1, CurBoardFileInfoList.size()),getBaseContext(),mBoard.getCurrentFile());
+            chooseFileRecyclerView.setAdapter(boardswitchfilelistViewAdapter);
+            boardswitchfilelistViewAdapter.setOnSwitchFileClickListener(new ChooseFileRecyclerViewAdapter.OnSwitchFileClickListener() {
                 @Override
                 public void onSwitchFileClick(TEduBoardController.TEduBoardFileInfo item) {
                     //处理切换文件
-                    boardchoosefilelistViewAdapter.setCurFileId(item.fileId);
+                    boardswitchfilelistViewAdapter.setCurFileId(item.fileId);
                     mBoard.switchFile(item.fileId);
                     mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "载入中...");
+                }
+
+                @Override
+                public void onDelectFileCilck(TEduBoardController.TEduBoardFileInfo item) {
+                    mBoard.deleteFile(item.getFileId());
+
+                    boardswitchfilelistViewAdapter.setData(mBoard.getFileInfoList());
+
+                    boardchoosefilelistViewAdapter.notifyDataSetChanged();
+
                 }
             });
             StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -1314,9 +1320,9 @@ public class MainActivity_tea extends AppCompatActivity {
                     if(AirBoardFileInfoList.size()<1){
                         livePlay_getResData(userId);
                     }
-                    boardswitchfilelistViewAdapter = new BoardRescourseAdapter(AirBoardFileInfoList,getBaseContext());
-                    chooseFileListView.setAdapter(boardswitchfilelistViewAdapter);
-                    boardswitchfilelistViewAdapter.setOnSpeakerControllerClickListener(new BoardRescourseAdapter.OnChooseFileClickListener() {
+                    boardchoosefilelistViewAdapter = new BoardLoadingAirRescourseAdapter(AirBoardFileInfoList,getBaseContext());
+                    chooseFileListView.setAdapter(boardchoosefilelistViewAdapter);
+                    boardchoosefilelistViewAdapter.setOnSpeakerControllerClickListener(new BoardLoadingAirRescourseAdapter.OnChooseFileClickListener() {
                         @Override
                         public void OnChooseFileClick(BoardRescourseBean item) {
                             mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "导入中...");
@@ -1348,9 +1354,9 @@ public class MainActivity_tea extends AppCompatActivity {
                     //要做的就是 打开另一个云端资源列表 popupwindow
                     chooseAirFilepopupWindow = new PopupWindow(chooseAirFilePopupView, popUpWindowWidth, popUpWindowHeight, true);
                     if(AirBoardFileInfoList.size()<1){livePlay_getResData(userId);}
-                    boardswitchfilelistViewAdapter = new BoardRescourseAdapter(AirBoardFileInfoList,getBaseContext());
-                    chooseFileListView.setAdapter(boardswitchfilelistViewAdapter);
-                    boardswitchfilelistViewAdapter.setOnSpeakerControllerClickListener(new BoardRescourseAdapter.OnChooseFileClickListener() {
+                    boardchoosefilelistViewAdapter = new BoardLoadingAirRescourseAdapter(AirBoardFileInfoList,getBaseContext());
+                    chooseFileListView.setAdapter(boardchoosefilelistViewAdapter);
+                    boardchoosefilelistViewAdapter.setOnSpeakerControllerClickListener(new BoardLoadingAirRescourseAdapter.OnChooseFileClickListener() {
                         @Override
                         public void OnChooseFileClick(BoardRescourseBean item) {
                             mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "导入中...");
@@ -1693,13 +1699,15 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onTEBDeleteFile(String fileId) {
                 System.out.println("onTEBDeleteFile"+"+++:删除了文件的ID："+fileId);
+                CurBoardFileInfoList = mBoard.getFileInfoList();
+
             }
             @Override
             public void onTEBSwitchFile(String fileId) {
                 CurBoardFileInfoList = mBoard.getFileInfoList();
-                if(boardchoosefilelistViewAdapter!=null){
-                    boardchoosefilelistViewAdapter.setCurFileId(fileId);
-                    boardchoosefilelistViewAdapter.notifyDataSetChanged();
+                if(boardswitchfilelistViewAdapter!=null){
+                    boardswitchfilelistViewAdapter.setCurFileId(fileId);
+                    boardswitchfilelistViewAdapter.notifyDataSetChanged();
                 }
                 if(fileId.equals("#DEFAULT")){
  //                 当是白板的时候就要 跳转到之前相应页码数
@@ -3341,7 +3349,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             System.out.println("+++要看的"+BoardRescourseBean.toString());
                         }
                         if(AirBoardFileInfoList.size()>1){
-                            boardswitchfilelistViewAdapter.notifyDataSetChanged();
+                            boardchoosefilelistViewAdapter.notifyDataSetChanged();
                         }
 
                     } catch (Exception e) {

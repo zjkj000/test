@@ -35,12 +35,10 @@ public class HttpActivityTea extends AnswerActivityTea {
             public void run() {
                 getHandsUp(mainActivityTea);
             }
-        },500,100);
+        },10,100);
     }
 
-    public static void stopHandsUpTimer() {
-        getHandsUpTimer.cancel();
-    }
+
 
 
     public static JSONObject stringToJson(String str) {

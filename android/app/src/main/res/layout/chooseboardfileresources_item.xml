@@ -11,23 +11,34 @@
         android:background="@drawable/fileitembg"
         android:id="@+id/fillitemRl"
         android:layout_height="wrap_content">
+
         <LinearLayout
+            android:id="@+id/fileitemLinerLayout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="5dp"
             android:background="@drawable/fileitembg_in"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:padding="5dp">
+
             <ImageView
                 android:id="@+id/filetype"
                 android:layout_width="50dp"
-                android:layout_margin="5dp"
-                android:layout_height="50dp" />
+                android:layout_height="50dp"
+                android:layout_margin="5dp" />
             <TextView
                 android:id="@+id/filetitle"
-                android:layout_marginTop="3dp"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"/>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="3dp" />
         </LinearLayout>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_alignRight="@+id/fileitemLinerLayout"
+            android:layout_alignTop="@+id/fileitemLinerLayout"
+            android:layout_height="wrap_content"
+            android:background="@drawable/close"
+            android:id="@+id/closefileItem"/>
+
     </RelativeLayout>
 
 </RelativeLayout>

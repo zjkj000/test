@@ -2,7 +2,6 @@ package com.navigationdemo.adapter;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -12,39 +11,45 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.navigationdemo.BoardRescourseBean;
 import com.navigationdemo.R;
 import com.tencent.teduboard.TEduBoardController;
 
 import java.util.List;
 
-public class ChooseFileListViewAdapter extends RecyclerView.Adapter<MyViewHoder>{
+            //切换资源时候用到的
+public class ChooseFileRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHoder>{
     private List<TEduBoardController.TEduBoardFileInfo> data;
-    private Context context;
+
+                public void setData(List<TEduBoardController.TEduBoardFileInfo> data) {
+                    this.data = data;
+                }
+
+                private Context context;
     private String curFileId;
 
     public void setCurFileId(String curFileId) {
         this.curFileId = curFileId;
     }
 
-    private ChooseFileListViewAdapter.OnSwitchFileClickListener mOnSwitchFileClickListener;
+    private ChooseFileRecyclerViewAdapter.OnSwitchFileClickListener mOnSwitchFileClickListener;
 
 
 
     public interface OnSwitchFileClickListener {
         void onSwitchFileClick(TEduBoardController.TEduBoardFileInfo item);
+        void onDelectFileCilck(TEduBoardController.TEduBoardFileInfo item);
     }
-    public void setOnSwitchFileClickListener(ChooseFileListViewAdapter.OnSwitchFileClickListener mOnSwitchFileClickListener) {
+    public void setOnSwitchFileClickListener(ChooseFileRecyclerViewAdapter.OnSwitchFileClickListener mOnSwitchFileClickListener) {
         this.mOnSwitchFileClickListener = mOnSwitchFileClickListener;
     }
 
 
-    public ChooseFileListViewAdapter(List<TEduBoardController.TEduBoardFileInfo> data, Context context,String curFileId) {
+    public ChooseFileRecyclerViewAdapter(List<TEduBoardController.TEduBoardFileInfo> data, Context context, String curFileId) {
         this.data = data;
         this.context = context;
         this.curFileId  =curFileId;
     }
-    public ChooseFileListViewAdapter() {
+    public ChooseFileRecyclerViewAdapter() {
     }
 
     @NonNull
@@ -77,10 +82,17 @@ public class ChooseFileListViewAdapter extends RecyclerView.Adapter<MyViewHoder>
                 mOnSwitchFileClickListener.onSwitchFileClick(mdata);
             }
         });
+        holder.closefile.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                System.out.println("+++要删除的文件ID"+mdata.getFileId());
+                mOnSwitchFileClickListener.onDelectFileCilck(mdata);
+            }
+        });
     }
     @Override
     public int getItemCount() {
-        return data.size();
+        return data.size()>0?data.size():0;
     }
 }
 
@@ -88,10 +100,12 @@ class MyViewHoder extends RecyclerView.ViewHolder {
     TextView mTitle;
     ImageView mImg;
     RelativeLayout fileRL;
+    ImageView closefile;
     public MyViewHoder(@NonNull View itemView) {
         super(itemView);
         mTitle = itemView.findViewById(R.id.filetitle);
         mImg = itemView.findViewById(R.id.filetype);
         fileRL = itemView.findViewById(R.id.fillitemRl);
+        closefile = itemView.findViewById(R.id.closefileItem);
     }
 }

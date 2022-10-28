@@ -14,12 +14,19 @@ import com.navigationdemo.BoardRescourseBean;
 
 import java.util.List;
 
-public class BoardRescourseAdapter extends BaseAdapter {
-    private List<BoardRescourseBean> data;
-    private Context context;
-    private BoardRescourseAdapter.OnChooseFileClickListener mOnChooseFileClickListener;
 
-    public BoardRescourseAdapter(List<BoardRescourseBean> data, Context context) {
+//载入  云端资源使用到的
+public class BoardLoadingAirRescourseAdapter extends BaseAdapter {
+    private List<BoardRescourseBean> data;
+
+    public void setData(List<BoardRescourseBean> data) {
+        this.data = data;
+    }
+
+    private Context context;
+    private BoardLoadingAirRescourseAdapter.OnChooseFileClickListener mOnChooseFileClickListener;
+
+    public BoardLoadingAirRescourseAdapter(List<BoardRescourseBean> data, Context context) {
         this.data = data;
         this.context = context;
     }
@@ -51,7 +58,7 @@ public class BoardRescourseAdapter extends BaseAdapter {
         return false;
     }
 
-    public void setOnSpeakerControllerClickListener(BoardRescourseAdapter.OnChooseFileClickListener mOnChooseFileClickListener) {
+    public void setOnSpeakerControllerClickListener(BoardLoadingAirRescourseAdapter.OnChooseFileClickListener mOnChooseFileClickListener) {
         this.mOnChooseFileClickListener = mOnChooseFileClickListener;
     }
 
