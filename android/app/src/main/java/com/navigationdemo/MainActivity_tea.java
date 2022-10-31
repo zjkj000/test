@@ -45,6 +45,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
@@ -459,6 +460,12 @@ public class MainActivity_tea extends AppCompatActivity {
                 if(SnapshotMarkFlag){
                     mBoard.addSnapshotMark();
                 }
+
+
+                //后面加一个 处理关闭  定时器一类的方法  在这里调用   比如 答题部分：AnswerQuestionFragment.java:3798  如果未关闭 直接下课就会出问题
+
+
+
                 save_livePlay_CreateSnapshotTask();
                 finish();
 
@@ -514,7 +521,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     Time time = new Time("GMT+8");
                     time.setToNow();
                     String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/res/";
-                    UploadToBucket(cosprefix,curfilepath,curfilename,false);
+                    UploadToBucket(cosprefix,curfilepath,curfilename,false,true);
                 }
             }
         });
@@ -1275,19 +1282,23 @@ public class MainActivity_tea extends AppCompatActivity {
                 @Override
                 public void onSwitchFileClick(TEduBoardController.TEduBoardFileInfo item) {
                     //处理切换文件
-                    boardswitchfilelistViewAdapter.setCurFileId(item.fileId);
-                    mBoard.switchFile(item.fileId);
-                    mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "载入中...");
+                    if(!boardswitchfilelistViewAdapter.getCurFileId().equals(item.getFileId())){
+                        boardswitchfilelistViewAdapter.setCurFileId(item.fileId);
+                        mBoard.switchFile(item.fileId);
+                        mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "载入中...");
+                    }
                 }
-
                 @Override
                 public void onDelectFileCilck(TEduBoardController.TEduBoardFileInfo item) {
-                    mBoard.deleteFile(item.getFileId());
-
-                    boardswitchfilelistViewAdapter.setData(mBoard.getFileInfoList());
-
-                    boardchoosefilelistViewAdapter.notifyDataSetChanged();
-
+                    if(!boardswitchfilelistViewAdapter.getCurFileId().equals(item.getFileId())){
+                        mBoard.deleteFile(item.getFileId());
+                        CurBoardFileInfoList = mBoard.getFileInfoList();
+                        boardswitchfilelistViewAdapter.setData(mBoard.getFileInfoList().subList(1, mBoard.getFileInfoList().size())  );
+                        boardchoosefilelistViewAdapter.notifyDataSetChanged();
+                        if(!(CurBoardFileInfoList.size()>2)){
+                            chooseFilepopupWindow.dismiss();
+                        }
+                    }
                 }
             });
             StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
@@ -1575,7 +1586,10 @@ public class MainActivity_tea extends AppCompatActivity {
             public void onTEBRedoStatusChanged(boolean canRedo) {
                 System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
                 select_resources.setVisibility(View.GONE);
-                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
+                if(mBoard.getCurrentFile()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
+                    b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
+                }
+
             }
 
             @Override
@@ -1699,6 +1713,7 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onTEBDeleteFile(String fileId) {
                 System.out.println("onTEBDeleteFile"+"+++:删除了文件的ID："+fileId);
+                CurFileID=null;
                 CurBoardFileInfoList = mBoard.getFileInfoList();
 
             }
@@ -1768,7 +1783,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     time.setToNow();
                     // isquestion  用来区分本次快照是题目的快照还是 切换的时候保存的快照
                     String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture/";
-                    UploadToBucket(cosprefix,path,name,true);
+                    UploadToBucket(cosprefix,path,name,true,false);
                 }else {
                     System.out.println("++++白板快照出错"+msg+"   code:"+code);
                 }
@@ -3160,8 +3175,8 @@ public class MainActivity_tea extends AppCompatActivity {
         cosXmlService = new CosXmlService(context, serviceConfig, myCredentialProvider);
     }
 
-    //上传文件到存储桶  存储桶公共路径  、  文件本地路径  、   文件名称   、   是否删除本地缓存
-    private void UploadToBucket(String cosprefix,String path,String name,boolean isdelete){
+    //上传文件到存储桶  存储桶公共路径  、  文件本地路径  、   文件名称   、   是否删除本地缓存        是否添加到屏幕
+    private void UploadToBucket(String cosprefix,String path,String name,boolean isdelete,boolean needAddtoScreen){
         isquestion=false;
         //cosprefix  存储桶目录    path 本地文件路径   name  名称
         // 访问 COS 服务  上传对象
@@ -3195,7 +3210,7 @@ public class MainActivity_tea extends AppCompatActivity {
             public void onSuccess(CosXmlRequest request, CosXmlResult result) {
                 COSXMLUploadTask.COSXMLUploadTaskResult uploadResult =
                         (COSXMLUploadTask.COSXMLUploadTaskResult) result;
-
+                if(needAddtoScreen){
                 if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
                     Message msg = Message.obtain();
                     msg.what = 8;
@@ -3247,7 +3262,7 @@ public class MainActivity_tea extends AppCompatActivity {
                         handler.sendMessage(msg);
                     }
                 }
-
+                }
             }
             // 如果您使用 kotlin 语言来调用，请注意回调方法中的异常是可空的，否则不会回调 onFail 方法，即：
             // clientException 的类型为 CosXmlClientException?，serviceException 的类型为 CosXmlServiceException?

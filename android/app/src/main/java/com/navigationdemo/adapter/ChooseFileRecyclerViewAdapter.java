@@ -5,6 +5,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -25,7 +26,13 @@ public class ChooseFileRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHo
                 }
 
                 private Context context;
-    private String curFileId;
+
+                public String getCurFileId() {
+                    return curFileId;
+                }
+
+                private String curFileId;
+
 
     public void setCurFileId(String curFileId) {
         this.curFileId = curFileId;
@@ -76,7 +83,7 @@ public class ChooseFileRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHo
         if(mdata.fileId.equals(curFileId)){
             holder.fileRL.setBackgroundResource(R.drawable.fileitembg_ed);
         }
-        holder.fileRL.setOnClickListener(new View.OnClickListener() {
+        holder.fileitemLinerLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 mOnSwitchFileClickListener.onSwitchFileClick(mdata);
@@ -100,6 +107,7 @@ class MyViewHoder extends RecyclerView.ViewHolder {
     TextView mTitle;
     ImageView mImg;
     RelativeLayout fileRL;
+    LinearLayout fileitemLinerLayout;
     ImageView closefile;
     public MyViewHoder(@NonNull View itemView) {
         super(itemView);
@@ -107,5 +115,6 @@ class MyViewHoder extends RecyclerView.ViewHolder {
         mImg = itemView.findViewById(R.id.filetype);
         fileRL = itemView.findViewById(R.id.fillitemRl);
         closefile = itemView.findViewById(R.id.closefileItem);
+        fileitemLinerLayout=itemView.findViewById(R.id.fileitemLinerLayout);
     }
 }
