@@ -147,14 +147,14 @@ import java.util.Vector;
 
 public class MainActivity_stu extends AppCompatActivity implements View.OnClickListener {
 
-
+    
     private static int TRTCSDKAPPID = 1400618856;//王id
     private static String TRTCSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
-    private static int IMSDKAPPID = 1400618856;//王id
-    private static String IMSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
+    private static int IMSDKAPPID = 1400757936;//王id
+    private static String IMSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
 
-    private static int BOARDSDKAPPID = 1400756405;//徐id
-    private static String BOARDSECRETKEY = "f859da55e5ceeb14ae8b52c3efbf94ed697a8ef7890d001b9b0fed95914000c3";
+    private static int BOARDSDKAPPID = 1400757936;//徐id
+    private static String BOARDSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
 
     private Timer timer;
 

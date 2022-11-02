@@ -188,7 +188,7 @@ public class MainActivity_tea extends AppCompatActivity {
     public static String userCn="";                                                                                 //中文名      明茗
     public static String keTangId = "";                                                                             //课堂id      4193
     public static String keTangName="";                                                                             //课堂名称     明茗初一语文60人班
-    public static String userHead = "http://www.cn901.com/res/avatar/2022/07/21/avatar-mingming_173040431.png";     //用户头像
+    public static String userHead = "";     //用户头像
     public static String subjectId = "";                                                                   //学科ID     10007
 
 
@@ -199,15 +199,14 @@ public class MainActivity_tea extends AppCompatActivity {
     private  String TRTCSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
 
     //即时通信SDKAPPID
-    private  int IMSDKAPPID = 1400618856;//王id
-    private  String IMSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
+    private  int IMSDKAPPID = 1400757936;//王id
+    private  String IMSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
 
     //白板SDKAPPID
-    private  int BOARDSDKAPPID = 1400756405;//徐id
-    private  String BOARDSECRETKEY = "f859da55e5ceeb14ae8b52c3efbf94ed697a8ef7890d001b9b0fed95914000c3";
+    private  int BOARDSDKAPPID = 1400757936;//徐id
+    private  String BOARDSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
 
-
-
+ 
     public static String teaName = "";
     public static String teaHead = "";
     public static String userName = "xgy";
@@ -1675,6 +1674,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
             @Override
             public void onTEBGotoBoard(String boardId, String fileId) {
+                b_size.setText(mBoard.getBoardScale()+"");
                 if(BoardID.equals(fileId)){
                     CurType="Board";
                     CurBoardID = boardId;
@@ -2563,7 +2563,6 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mBoard.clear(false);
-                mBoard.setToolType(0);
             }
         });
         //左侧功能栏  第10个按钮  激光笔 按钮

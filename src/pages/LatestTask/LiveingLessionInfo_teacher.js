@@ -237,12 +237,12 @@ class LiveingLessonContent_teacher extends Component {
         this.state={
                 title:'纪念刘和珍君',               //名称//直播页面需要传递的参数
                 roomId:'457893492',                //课堂号//直播页面需要传递的参数
-                hour:'40分钟',                      //课节时长
-                subjectName:'初中语文',             //学科名称
-                minutes:'我的课堂（1）,高中语文（1）', //授课对象
+                hour:'',                      //课节时长
+                subjectName:'',             //学科名称
+                minutes:'', //授课对象
                 showStrTop:'',                     //顶部时间  //status==1,此处显示进入课堂按钮   2 则顶部时间位置显示按钮，提示”进入教室
-                showStrBottom:'距上课<7分钟',       //底部时间
-                status:'1',                        //1未开始2直播中3已结束   
+                showStrBottom:'',       //底部时间
+                status:'',                        //1直播中  2未开始  3已结束   
                 
                 className:'',
                 hostUserId:'',          //主讲人登录名，需要传递的参数
@@ -262,9 +262,9 @@ class LiveingLessonContent_teacher extends Component {
     }
     
     // 删除直播课
-    DeleteLivingLession(){
+    DeleteLivingLession(rommid){
         const url = "http://www.cn901.com/ShopGoods/ajax/livePlay_deleteZbLive.do";
-        const params = {roomId:''         //房间号
+        const params = {roomId:rommid         //房间号
           };
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
@@ -285,8 +285,8 @@ class LiveingLessonContent_teacher extends Component {
       <View style={{flexDirection:'row',paddingLeft:10,paddingBottom:10,paddingTop:10,backgroundColor:'#fff',marginBottom:10}}>
         
         {/* 右侧直播课 状态 图标 */}
-        { this.state.status=='1'?<Image style={{position:'absolute',right:0,width:40,height:40}} source={require('../../assets/teacherLatestPage/tea_new.png')}></Image>:
-          this.state.status=='2'?<Image style={{position:'absolute',right:0,width:40,height:40}} source={require('../../assets/teacherLatestPage/tea_ing.png')}></Image>:
+        { this.state.status=='1'?<Image style={{position:'absolute',right:0,width:40,height:40}} source={require('../../assets/teacherLatestPage/tea_ing.png')}></Image>:
+          this.state.status=='2'?<Image style={{position:'absolute',right:0,width:40,height:40}} source={require('../../assets/teacherLatestPage/tea_new.png')}></Image>:
           this.state.status=='3'?<Image style={{position:'absolute',right:0,width:40,height:40}} source={require('../../assets/teacherLatestPage/tea_ed.png')}></Image>:<></>  }
         
         {/* 第一列  名称 时间 信息 */}
@@ -306,7 +306,7 @@ class LiveingLessonContent_teacher extends Component {
                 <View style={{flexWrap:'nowrap',width:'80%',flexDirection:'row',alignItems:'center'}}>
                     <Text style={{fontSize:18,fontWeight:'600'}}>{this.state.title}</Text>
                     
-                    {this.state.status=="1"?    //未开始的直播课才有编辑和删除
+                    {this.state.status=="2"?    //未开始的直播课才有编辑和删除
                         (<><TouchableOpacity
                                 onPress={()=>{
                                     this.props.navigation.navigate({
@@ -319,7 +319,7 @@ class LiveingLessonContent_teacher extends Component {
                             <Image style={{width:13,height:13,marginLeft:3}} source={require('../../assets/teacherLatestPage/tea_edit.png')}/>
                         </TouchableOpacity>
                         <TouchableOpacity
-                                onPress={()=>{DeleteLivingLession()}}>
+                                onPress={()=>{DeleteLivingLession(this.state.roomId)}}>
                             <Image style={{width:13,height:13,marginLeft:3}} source={require('../../assets/teacherLatestPage/tea_delete.png')}/>
                         </TouchableOpacity>
                         </>):(<></>)}
@@ -350,7 +350,7 @@ class LiveingLessonContent_teacher extends Component {
          {/* 第二列 开始时间  进入课堂 信息 */}
          <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
             {
-            // 未开始状态
+            // 直播中 状态
             this.state.status=='1'?(<>
                 {this.state.showStrTop==""?(
                     <TouchableOpacity style={{backgroundColor:'#66B878',width:75,height:33,justifyContent:'center',alignItems:'center',margin:3}}
@@ -372,24 +372,12 @@ class LiveingLessonContent_teacher extends Component {
                     ):<Text style={{color:'#7CA78B',fontSize:30}}>{this.state.showStrTop}</Text>}
                 <Text>{this.state.showStrBottom}</Text>
             </>):
-            // 直播中状态
+            // 未开始 状态
             this.state.status=='2'?(<>
-               <TouchableOpacity style={{backgroundColor:'#66B878',width:75,height:33,justifyContent:'center',alignItems:'center',margin:3}}
-                                 onPress={()=>{
-                                    // 跳转教师端直播页面
-                                      NativeModules.IntentMoudle.startActivityFromJS(
-                                                                    "MainActivity_tea",
-                                                                        global.constants.userName+"-@-"+      //userid id
-                                                                                                                                    global.constants.userCn+"-@-"+        //usercn 中文名
-                                                                                                                                    this.state.roomId+"-@-"+              //roomid 直播房间号
-                                                                                                                                    this.state.title+"-@-"+            //直播房间名称
-                                                                                                                                    this.state.subjectId+"-@-"+         //学科ID
-                                                                                                                                    this.state.ketangId+"-@-"+         //课堂ID
-                                                                                                                                    this.state.ketangName+"-@-"+         //课堂名称
-                                                                                                                                    global.constants.userPhoto   );
-                                 }}>
-                    <Text style={{fontSize:12,color:'white'}}>进入课堂</Text>
+               <TouchableOpacity style={{backgroundColor:'#66B878',width:75,height:33,justifyContent:'center',alignItems:'center',margin:3}}>
+                    <Text style={{fontSize:12,color:'white'}}>{this.state.showStrTop}</Text>
                 </TouchableOpacity>
+
                 <Text style={{fontSize:13}}>{this.state.showStrBottom}</Text>
                 </>):
             // 已结束状态

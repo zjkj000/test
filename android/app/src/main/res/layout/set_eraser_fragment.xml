@@ -16,6 +16,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/setboard_Showtextcolor"
             android:textSize="7sp"
+            android:layout_marginLeft="5dp"
             android:text="大小 "/>
         <LinearLayout
             android:layout_width="wrap_content"
@@ -24,7 +25,7 @@
             android:background="@drawable/bgset_select"
             android:layout_height="wrap_content">
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bgset_select"
                 android:orientation="horizontal">

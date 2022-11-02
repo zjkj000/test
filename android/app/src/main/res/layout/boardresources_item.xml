@@ -13,6 +13,7 @@ android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/packageitem_name"
+        android:textColor="#D6A7B7"
         android:layout_height="match_parent"
         android:layout_toRightOf="@id/packageitem_type"
         android:layout_toLeftOf="@+id/packageitem_date"

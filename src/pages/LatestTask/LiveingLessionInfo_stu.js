@@ -60,8 +60,9 @@ export default function LiveingLessonInfo_stu() {
       }
 
     function _onRefresh(){
-        currentPage=1
-        setisRefresh(true)
+        currentPage=1;
+        setisRefresh(true);
+        setdata([]);
         fetchData(type,1,true);
       }
     function _onEndReached(){
@@ -197,7 +198,7 @@ export default function LiveingLessonInfo_stu() {
                         renderItem={_renderItemView.bind(this)}
                         //下拉刷新相关
                         onRefresh={() => _onRefresh()}
-                        refreshing={isRefresh}
+                        refreshing={{isRefresh}}
                         ListFooterComponent={_renderFooter.bind(this)}
                         onEndReached={_onEndReached.bind(this)}
                         onEndReachedThreshold={0.5}
