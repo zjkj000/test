@@ -1041,17 +1041,6 @@
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
         android:src="@drawable/bottom_exitkt"
         />
-
-    <ImageView
-        android:id="@+id/class_over_btn"
-        android:layout_width="50dp"
-        android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        app:layout_constraintEnd_toEndOf="@id/group_buttons"
-        app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
-        app:layout_constraintTop_toTopOf="@+id/group_buttons"
-        android:src="@drawable/bottom_exit"
-        />
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tfanswer"
         android:layout_width="0dp"

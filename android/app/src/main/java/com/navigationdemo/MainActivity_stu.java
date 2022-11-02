@@ -147,6 +147,15 @@ import java.util.Vector;
 
 public class MainActivity_stu extends AppCompatActivity implements View.OnClickListener {
 
+
+    private static int TRTCSDKAPPID = 1400618856;//王id
+    private static String TRTCSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
+    private static int IMSDKAPPID = 1400618856;//王id
+    private static String IMSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
+
+    private static int BOARDSDKAPPID = 1400756405;//徐id
+    private static String BOARDSECRETKEY = "f859da55e5ceeb14ae8b52c3efbf94ed697a8ef7890d001b9b0fed95914000c3";
+
     private Timer timer;
 
     private static Handler handlerCount = new Handler();
@@ -206,6 +215,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     private  String UserSig ="";                                                        //腾讯服务签名
 //  private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
+
+
+
 
     public static String teacherName = "";
     public static String teacherId = "";
@@ -420,7 +432,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         memberList = memberPopupView.findViewById(R.id.member_list);
         group_btn = findViewById(R.id.group_buttons);
         canvasBtn = findViewById(R.id.canvas_btn); //现在是文件图标
-        class_over_btn = findViewById(R.id.class_over_btn);
         handBtnBadge = findViewById(R.id.hand_btn_badge);
 
         boardBtn = findViewById(R.id.board_btn);
@@ -429,7 +440,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         handBtn = findViewById(R.id.hand_btn);
         audioBtn = findViewById(R.id.mic_btn);
         cameraBtn = findViewById(R.id.camera_btn);
-//        overClassBtn = findViewById(R.id.class_over_btn);
 
         teacher_name_view = findViewById(R.id.teacher_name);
         student_name_view = findViewById(R.id.student_name);
@@ -1329,9 +1339,13 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         // 组装TRTC进房参数
 //        String userId = "mingming";
         myTRTCParams = new TRTCCloudDef.TRTCParams();
-        myTRTCParams.sdkAppId = GenerateTestUserSig.SDKAPPID;
+//        myTRTCParams.sdkAppId = GenerateTestUserSig.SDKAPPID;
+        myTRTCParams.sdkAppId = TRTCSDKAPPID;
         myTRTCParams.userId = userId;
         myTRTCParams.roomId = Integer.parseInt(roomid);
+//        myTRTCParams.userSig = GenerateTestUserSig.genTestUserSig(myTRTCParams.userId);
+        GenerateTestUserSig.SDKAPPID = TRTCSDKAPPID;
+        GenerateTestUserSig.SECRETKEY = TRTCSECRETKEY;
         myTRTCParams.userSig = GenerateTestUserSig.genTestUserSig(myTRTCParams.userId);
 //        myTRTCParams.userSig = "eJwtzMEKgkAUheF3mXXI9eoMKbTQiFoE4WQQ7dSZ4jY0mVoa0btn6vJ8B-4PS7d756UrFjJ0gM2GTUrbhs40cEfZHdzpqZXJypIUC10fQCAEyMdHdyVVunfOOQLAqA3d-iYE*p6HPJgqdOnD-ukooyQNjELZbeQhf7ytKAp7Xc7XBmFXJzxvoyes4nbBvj8x1DFE";
 
@@ -1494,8 +1508,10 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         System.out.println("+++开始初始化白板");
         mBoard=null;
         mBoardCallback=null;
+        GenerateTestUserSig.SDKAPPID = BOARDSDKAPPID;
+        GenerateTestUserSig.SECRETKEY = BOARDSECRETKEY;
         TEduBoardController.TEduBoardAuthParam authParam = new TEduBoardController.TEduBoardAuthParam(
-                SDKappID , userId, UserSig);
+                BOARDSDKAPPID , userId, GenerateTestUserSig.genTestUserSig(userId));
         //（2）白板默认配置
         TEduBoardController.TEduBoardInitParam initParam = new TEduBoardController.TEduBoardInitParam();
         initParam.timSync=false;
@@ -1821,7 +1837,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public void initTIM(){
         //初始化 IMSDK
         V2TIMSDKConfig timSdkConfig = new V2TIMSDKConfig();
-        IMLoginresult = V2TIMManager.getInstance().initSDK(this, SDKappID, timSdkConfig, new V2TIMSDKListener() {
+        IMLoginresult = V2TIMManager.getInstance().initSDK(this, IMSDKAPPID, timSdkConfig, new V2TIMSDKListener() {
             @Override
             public void onConnecting() {
                 super.onConnecting();
@@ -1855,6 +1871,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     }
     public void LoginTIM(){
+        GenerateTestUserSig.SDKAPPID = IMSDKAPPID;
         V2TIMManager.getInstance().login(userId, UserSig, new V2TIMCallback() {
             @Override
             public void onError(int i, String s) {
