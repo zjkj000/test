@@ -4,6 +4,7 @@ package com.navigationdemo;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -44,14 +45,19 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.constraintlayout.widget.Group;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
+import androidx.recyclerview.widget.StaggeredGridLayoutManager;
 import androidx.viewpager.widget.ViewPager;
 
+import com.navigationdemo.adapter.BoardLoadingAirRescourseAdapter;
+import com.navigationdemo.adapter.ChooseFileRecyclerViewAdapter;
 import com.navigationdemo.adapter.HandsUpListViewAdapter;
 import com.navigationdemo.adapter.MemberListViewAdapter;
 import com.navigationdemo.adapter.SetBrd_TabBarAdapter;
@@ -63,6 +69,7 @@ import com.navigationdemo.setBoardFragment.Set_geometry_Fragment;
 import com.navigationdemo.setBoardFragment.Set_more_Fragment;
 import com.navigationdemo.setBoardFragment.Set_paint_Fragment;
 import com.navigationdemo.setBoardFragment.Set_text_Fragment;
+import com.navigationdemo.utils.LoadingUtils;
 import com.navigationdemo.utils.UriUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.tencent.cos.xml.CosXmlService;
@@ -100,6 +107,7 @@ import com.tencent.trtc.TRTCCloudListener;
 import com.tencent.trtc.debug.Constant;
 import com.tencent.trtc.debug.GenerateTestUserSig;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -108,8 +116,6 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.io.StringWriter;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -123,11 +129,8 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 public class MainActivity_tea extends AppCompatActivity {
-
+    public static Dialog mDialog = null;
     private Timer timer;
-
-    private static Handler handlerCount = new Handler();
-    private static Runnable runnablere_mBoardaddResouce;
     private static Timer Boardtimer = new Timer();  // 白板定时任务  用于获取转码进度
 
     //Tabbar三个Fragment
@@ -169,9 +172,12 @@ public class MainActivity_tea extends AppCompatActivity {
     public static int mUserCount = 0;
 
     private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
-    private String Mbucket = "zjkj-1309130014";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKID89yXyjS6YoBRUObm3kMp6Eev8Ce5hktu";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "vjU7Ys44460ypaZZXzUCqSwobDbmmZAZ";                    //存储桶    永久密钥 secretKey
+    private String Mbucket = "zjkj-1314645179";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
+    private String MsecretId = "AKID32qRqBMK6g2GI3dz85vY2IK9lBOOFyb3";                 //存储桶   永久密钥 secretId
+    private String MsecretKey = "89B2ojep4EC774qXFoMpBbxBKNG5nMm8";                    //存储桶    永久密钥 secretKey
+
+
+
 
     private  String UserSig ="";                                                        //腾讯服务签名
 //  private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
@@ -182,11 +188,25 @@ public class MainActivity_tea extends AppCompatActivity {
     public static String userCn="";                                                                                 //中文名      明茗
     public static String keTangId = "";                                                                             //课堂id      4193
     public static String keTangName="";                                                                             //课堂名称     明茗初一语文60人班
-    public static String userHead = "http://www.cn901.com/res/avatar/2022/07/21/avatar-mingming_173040431.png";     //用户头像
+    public static String userHead = "";     //用户头像
     public static String subjectId = "";                                                                   //学科ID     10007
 
 
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
+
+    //TRTC   SDKAPPID
+    private  int TRTCSDKAPPID = 1400618856;//王id
+    private  String TRTCSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
+
+    //即时通信SDKAPPID
+    private  int IMSDKAPPID = 1400757936;//王id
+    private  String IMSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
+
+    //白板SDKAPPID
+    private  int BOARDSDKAPPID = 1400757936;//徐id
+    private  String BOARDSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
+
+ 
     public static String teaName = "";
     public static String teaHead = "";
     public static String userName = "xgy";
@@ -206,6 +226,9 @@ public class MainActivity_tea extends AppCompatActivity {
     private List<Chat_Msg> data = new ArrayList<>();
 
     //互动白板相关
+    public static Boolean SnapshotMarkFlag =false;  //记录是否要打标 后续 保存页面
+
+    private PopupWindow  chooseFilepopupWindow = null,chooseAirFilepopupWindow = null;        //切换文件弹窗  选择文件弹窗
     private TextView alert_text, upload_btn;                                    //提示白板当前的状态
     private View boardview;                                                     //白板的view
     public static TEduBoardController mBoard;                                  //白板实例
@@ -243,6 +266,8 @@ public class MainActivity_tea extends AppCompatActivity {
     private String CurType=null;                    // 初试为空   两种类型  Board和File
     private static Boolean isquestion=false;        //用于记录是不是  题目保存调用快照
 
+
+
     private Button choosefile,uploadfile;                       //选择文件弹窗  选择文件  上传文件 按钮
     private TextView msgTips,filename;                          //选择文件弹窗  提示当前文件名称  提示当前文件状态
     private ProgressBar  proBar;                                //上传文件 进度条
@@ -256,6 +281,21 @@ public class MainActivity_tea extends AppCompatActivity {
     private final VideoListFragment videoListFragment =  new VideoListFragment();                   //右侧视频列表的Fragment实例
     private final AnswerQuestionFragment answerQuestionFragment = new AnswerQuestionFragment();     //右侧互动答题的Fragment实例
 
+    //选择加载的文件 弹窗
+    private static View chooseFilePopupView;      //选择方式和当前文件列表
+    private static View chooseAirFilePopupView;   //云端资源列表 弹窗
+    private static ImageView chooseFilePopupCloseBtn,chooseairFilePopupCloseBtn;
+    private static ImageView chooseAirFilePopupBtn;     //选择云端资源文件  图片
+    private static ImageView chooseNativeFilePopupBtn;  //选择本机文件   图片
+    private static ImageView littlechooseAirFilePopupBtn;     //选择云端资源文件  顶部小图
+    private static ImageView littlechooseNativeFilePopupBtn;  //选择本机文件 顶部小图
+    private static RecyclerView chooseFileRecyclerView;     // 白板当前文件的recyclerview
+    private static ListView chooseFileListView;             //选择云端资源的listview
+    private static ChooseFileRecyclerViewAdapter boardswitchfilelistViewAdapter;    //切换资源的时候Adapter
+    private static BoardLoadingAirRescourseAdapter boardchoosefilelistViewAdapter;            //载入文件的时候Adapter
+    private static LinearLayout choosefileLinerLayout;                          //用于隐藏有资源的时候  两个默认图片
+    private List<TEduBoardController.TEduBoardFileInfo> CurBoardFileInfoList=new ArrayList();    //白板里面当前文件列表  切换文件的时候用
+    private List<BoardRescourseBean> AirBoardFileInfoList=new ArrayList();       //白板里面载入云端资源  切换文件的时候用
     // 成员列表
     private static View memberPopupView;
     private static ImageView memberPopupCloseBtn;
@@ -335,16 +375,32 @@ public class MainActivity_tea extends AppCompatActivity {
         classTime = findViewById(R.id.class_time);
         classTitle = findViewById(R.id.class_title);
 
-        // 获取底部按钮
 
+        chooseFilePopupView            =getLayoutInflater().inflate(R.layout.choose_file_pop_window, null);
+        chooseFilePopupCloseBtn        =chooseFilePopupView.findViewById(R.id.choose_file_pop_close);
+        chooseAirFilePopupBtn          =chooseFilePopupView.findViewById(R.id.chooseAirFileBtn);    //选择云端资源文件  图片
+        chooseNativeFilePopupBtn       =chooseFilePopupView.findViewById(R.id.chooseNativeFileBtn);    //选择本机文件   图片
+        littlechooseAirFilePopupBtn    =chooseFilePopupView.findViewById(R.id.little_chooseAirFileBtn);    //选择云端资源文件  顶部小图
+        littlechooseNativeFilePopupBtn =chooseFilePopupView.findViewById(R.id.little_chooseNativeFileBtn);    //选择本机文件 顶部小图
+        chooseFileRecyclerView         =chooseFilePopupView.findViewById(R.id.choosefile_RecyclerView);           //选择要切换的文件列表
+        choosefileLinerLayout          =chooseFilePopupView.findViewById(R.id.choosefileLinerlayout);          //显示两个默认图片的 布局
+
+        chooseAirFilePopupView =getLayoutInflater().inflate(R.layout.choose_airfile_pop_window, null);
+        chooseFileListView = chooseAirFilePopupView.findViewById(R.id.chooseAirfile_ListView);
+        chooseairFilePopupCloseBtn = chooseAirFilePopupView.findViewById(R.id.choose_airfile_pop_close);
+
+        // 获取底部按钮
         handsUpPopupView = getLayoutInflater().inflate(R.layout.hands_up_pop_window, null);
         handsUpSwitchBtn = handsUpPopupView.findViewById(R.id.hands_up_controller);
         handsUpPopupCloseBtn = handsUpPopupView.findViewById(R.id.hands_up_list_pop_close);
         handsUpList = handsUpPopupView.findViewById(R.id.hands_up_list);
+
         memberPopupView = getLayoutInflater().inflate(R.layout.member_list_pop_window, null);
         memberListCountString = memberPopupView.findViewById(R.id.member_list_pop_title);
         memberPopupCloseBtn = memberPopupView.findViewById(R.id.member_list_pop_close);
         memberList = memberPopupView.findViewById(R.id.member_list);
+
+
         group_btn = findViewById(R.id.group_buttons);
         canvasBtn = findViewById(R.id.canvas_btn); //现在是文件图标
         exit_btn = findViewById(R.id.exit_btn);
@@ -400,6 +456,19 @@ public class MainActivity_tea extends AppCompatActivity {
             public void onClick(View v) {
                 destroyBoard();
                 onExitLiveRoom();
+                if(SnapshotMarkFlag){
+                    mBoard.addSnapshotMark();
+                }
+
+
+                //后面加一个 处理关闭  定时器一类的方法  在这里调用   比如 答题部分：AnswerQuestionFragment.java:3798  如果未关闭 直接下课就会出问题
+
+
+
+                save_livePlay_CreateSnapshotTask();
+                finish();
+
+
                 addBoardtoFragmentstatus =false;
                 rf_leftmenu.setVisibility(View.GONE);
                 rf_bottommenu.setVisibility(View.GONE);
@@ -423,6 +492,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     }
                 });
             }
+
         });
         //选择文件按钮
         choosefile.setOnClickListener(new View.OnClickListener() {
@@ -450,29 +520,12 @@ public class MainActivity_tea extends AppCompatActivity {
                     Time time = new Time("GMT+8");
                     time.setToNow();
                     String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/res/";
-                    UploadToBucket(cosprefix,curfilepath,curfilename,false);
+                    UploadToBucket(cosprefix,curfilepath,curfilename,false,true);
                 }
             }
         });
         //文件夹 按钮 现在是授课内容 未替换图片
         contentBtn = findViewById(R.id.content_btn);
-        contentBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if(addBoardtoFragmentstatus){
-                    if(select_resources.getVisibility()==View.VISIBLE){
-                        select_resources.setVisibility(View.GONE);
-                    }else {
-                        select_resources.setVisibility(View.VISIBLE);
-                        filename.setText("未选择任何文件");
-                        uploadfile.setText("开始上传");
-                        uploadprogress.setVisibility(View.GONE);
-                        curfilename="";
-                        curfilepath="";
-                    }
-                }
-            }
-        });
 
         //文件按钮  现在显示是画笔  未替换图片
         canvasBtn.setOnClickListener(new View.OnClickListener() {
@@ -488,6 +541,9 @@ public class MainActivity_tea extends AppCompatActivity {
                        mBoard.snapshot(path);
                        mBoard.switchFile(FileID);
                        if(CurFileID!=null){
+                           if(SnapshotMarkFlag){
+                               mBoard.addSnapshotMark();
+                           }
                            mBoard.gotoBoard(CurFileID,false);
                        }
                    }else if("File".equals(CurType)&&FileID!=null) {
@@ -531,6 +587,9 @@ public class MainActivity_tea extends AppCompatActivity {
                                 mBoard.snapshot(path);
                                 mBoard.switchFile(BoardID);
                                 if(CurBoardID!=null){
+                                    if(SnapshotMarkFlag){
+                                        mBoard.addSnapshotMark();
+                                    }
                                     mBoard.gotoBoard(CurBoardID,false);
                                 }
                             }
@@ -611,12 +670,8 @@ public class MainActivity_tea extends AppCompatActivity {
         // 开启计时器
         startTime();
     }
+
     private void dealWith_mBoardaddResouce(Integer type,String url,String name){
-//        type 1  转码任务
-//        type 2  加载图片任务
-//        type 3  加载音频任务
-//        type 4  加载ppt任务
-//        type 5  加载视频任务
         if(type==1){
             uploadfile.setText("正在转换");
             msgTips.setText("文件正在转换：");
@@ -999,9 +1054,8 @@ public class MainActivity_tea extends AppCompatActivity {
 
     // 退出房间
     public static void exitRoom() {
-
         mTRTCCloud.exitRoom();
-        HttpActivityTea.stopHandsUpTimer();
+//        HttpActivityTea.stopHandsUpTimer();
     }
 
     public static class MyTRTCCloudListener extends TRTCCloudListener {
@@ -1107,9 +1161,11 @@ public class MainActivity_tea extends AppCompatActivity {
         // 组装TRTC进房参数
 //        String userId = "mingming";
         myTRTCParams = new TRTCCloudDef.TRTCParams();
-        myTRTCParams.sdkAppId = GenerateTestUserSig.SDKAPPID;
+        myTRTCParams.sdkAppId = TRTCSDKAPPID;
         myTRTCParams.userId = userId;
         myTRTCParams.roomId = Integer.parseInt(roomid);
+        GenerateTestUserSig.SDKAPPID = TRTCSDKAPPID;
+        GenerateTestUserSig.SECRETKEY = TRTCSECRETKEY;
         myTRTCParams.userSig = GenerateTestUserSig.genTestUserSig(myTRTCParams.userId);
 //        myTRTCParams.userSig = "eJwtzMEKgkAUheF3mXXI9eoMKbTQiFoE4WQQ7dSZ4jY0mVoa0btn6vJ8B-4PS7d756UrFjJ0gM2GTUrbhs40cEfZHdzpqZXJypIUC10fQCAEyMdHdyVVunfOOQLAqA3d-iYE*p6HPJgqdOnD-ukooyQNjELZbeQhf7ytKAp7Xc7XBmFXJzxvoyes4nbBvj8x1DFE";
 
@@ -1206,6 +1262,169 @@ public class MainActivity_tea extends AppCompatActivity {
     public void sentToVideoList(Bundle bundle) {
     }
 
+    //白板点击 文件夹 要弹出的窗口
+    public void showchooseFile(View view) {
+        CurBoardFileInfoList=mBoard.getFileInfoList();
+        select_resources.setVisibility(View.GONE);
+        Point point = new Point();
+        this.getWindowManager().getDefaultDisplay().getSize(point);
+        int popUpWindowWidth = (int) (point.x*0.6);
+        int popUpWindowHeight = (int) (point.y * 0.75);
+        chooseFilepopupWindow = new PopupWindow(chooseFilePopupView, popUpWindowWidth, popUpWindowHeight, true);
+        if(CurBoardFileInfoList.size()>1){
+            choosefileLinerLayout.setVisibility(View.GONE);
+            chooseFileRecyclerView.setVisibility(View.VISIBLE);
+            littlechooseAirFilePopupBtn.setVisibility(View.VISIBLE);
+            boardswitchfilelistViewAdapter = new ChooseFileRecyclerViewAdapter(CurBoardFileInfoList.subList(1, CurBoardFileInfoList.size()),getBaseContext(),mBoard.getCurrentFile());
+            chooseFileRecyclerView.setAdapter(boardswitchfilelistViewAdapter);
+            boardswitchfilelistViewAdapter.setOnSwitchFileClickListener(new ChooseFileRecyclerViewAdapter.OnSwitchFileClickListener() {
+                @Override
+                public void onSwitchFileClick(TEduBoardController.TEduBoardFileInfo item) {
+                    //处理切换文件
+                    if(!boardswitchfilelistViewAdapter.getCurFileId().equals(item.getFileId())){
+                        boardswitchfilelistViewAdapter.setCurFileId(item.fileId);
+                        mBoard.switchFile(item.fileId);
+                        mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "载入中...");
+                    }
+                }
+                @Override
+                public void onDelectFileCilck(TEduBoardController.TEduBoardFileInfo item) {
+                    if(!boardswitchfilelistViewAdapter.getCurFileId().equals(item.getFileId())){
+                        mBoard.deleteFile(item.getFileId());
+                        CurBoardFileInfoList = mBoard.getFileInfoList();
+                        boardswitchfilelistViewAdapter.setData(mBoard.getFileInfoList().subList(1, mBoard.getFileInfoList().size())  );
+                        boardchoosefilelistViewAdapter.notifyDataSetChanged();
+                        if(!(CurBoardFileInfoList.size()>2)){
+                            chooseFilepopupWindow.dismiss();
+                        }
+                    }
+                }
+            });
+            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+            chooseFileRecyclerView.setLayoutManager(layoutManager);
+            littlechooseNativeFilePopupBtn.setVisibility(View.VISIBLE);
+            littlechooseNativeFilePopupBtn.setOnClickListener(new View.OnClickListener() {   //点击 本地上传打开的弹窗
+                @Override
+                public void onClick(View v) {
+                    chooseFilepopupWindow.dismiss();
+                    if(addBoardtoFragmentstatus){
+                        if(select_resources.getVisibility()==View.VISIBLE){
+                            select_resources.setVisibility(View.GONE);
+                        }else {
+                            select_resources.setVisibility(View.VISIBLE);
+                            filename.setText("未选择任何文件");
+                            uploadfile.setText("开始上传");
+                            uploadprogress.setVisibility(View.GONE);
+                            curfilename="";
+                            curfilepath="";
+                            intoFileManager();
+                        }
+                    }
+                }
+            });
+            littlechooseAirFilePopupBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //要做的就是 打开另一个云端资源列表 popupwindow
+                    chooseAirFilepopupWindow = new PopupWindow(chooseAirFilePopupView, popUpWindowWidth, popUpWindowHeight, true);
+                    if(AirBoardFileInfoList.size()<1){
+                        livePlay_getResData(userId);
+                    }
+                    boardchoosefilelistViewAdapter = new BoardLoadingAirRescourseAdapter(AirBoardFileInfoList,getBaseContext());
+                    chooseFileListView.setAdapter(boardchoosefilelistViewAdapter);
+                    boardchoosefilelistViewAdapter.setOnSpeakerControllerClickListener(new BoardLoadingAirRescourseAdapter.OnChooseFileClickListener() {
+                        @Override
+                        public void OnChooseFileClick(BoardRescourseBean item) {
+                            mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "导入中...");
+                            livePlay_uploadFileToCOS(item.getId());               //上传文件到存储桶
+                            if(item.getStyle().equals("ppt")||item.getStyle().equals("word")||item.getStyle().equals("pdf")||item.getStyle().equals("mp4")){
+                            GetTransferProgress_Transcodehandler(item.getId());   //2s后开始查询  1s查询一次 上传进度
+                             }
+                        }
+                    });
+
+                    chooseAirFilePopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                    int offsetX = - popUpWindowWidth / 8;
+                    int offsetY = - popUpWindowHeight - (view.getHeight())-20;
+                    chooseAirFilepopupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
+                    chooseFilepopupWindow.dismiss();
+                    chooseairFilePopupCloseBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            chooseAirFilepopupWindow.dismiss();
+                        }
+                    });
+                }
+            });
+
+        }else {
+            chooseAirFilePopupBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    //要做的就是 打开另一个云端资源列表 popupwindow
+                    chooseAirFilepopupWindow = new PopupWindow(chooseAirFilePopupView, popUpWindowWidth, popUpWindowHeight, true);
+                    if(AirBoardFileInfoList.size()<1){livePlay_getResData(userId);}
+                    boardchoosefilelistViewAdapter = new BoardLoadingAirRescourseAdapter(AirBoardFileInfoList,getBaseContext());
+                    chooseFileListView.setAdapter(boardchoosefilelistViewAdapter);
+                    boardchoosefilelistViewAdapter.setOnSpeakerControllerClickListener(new BoardLoadingAirRescourseAdapter.OnChooseFileClickListener() {
+                        @Override
+                        public void OnChooseFileClick(BoardRescourseBean item) {
+                            mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "导入中...");
+                            livePlay_uploadFileToCOS(item.getId());               //上传文件到存储桶
+                            if(item.getStyle().equals("ppt")||item.getStyle().equals("word")||item.getStyle().equals("pdf")||item.getStyle().equals("mp4")){
+                                GetTransferProgress_Transcodehandler(item.getId());   //2s后开始查询  1s查询一次 上传进度
+                            }
+                        }
+                    });
+                    chooseAirFilePopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                    int offsetX = - popUpWindowWidth / 8;
+                    int offsetY = - popUpWindowHeight - (view.getHeight())-20;
+                    chooseAirFilepopupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
+                    chooseFilepopupWindow.dismiss();
+                    chooseairFilePopupCloseBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            chooseAirFilepopupWindow.dismiss();
+                        }
+                    });
+                }
+            });
+            chooseNativeFilePopupBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    chooseFilepopupWindow.dismiss();
+                    if(addBoardtoFragmentstatus){
+                        if(select_resources.getVisibility()==View.VISIBLE){
+                            select_resources.setVisibility(View.GONE);
+                        }else {
+                            select_resources.setVisibility(View.VISIBLE);
+                            filename.setText("未选择任何文件");
+                            uploadfile.setText("开始上传");
+                            uploadprogress.setVisibility(View.GONE);
+                            curfilename="";
+                            curfilepath="";
+                            intoFileManager();
+                        }
+                    }
+                }
+            });
+        }
+
+        //设置关闭弹窗按钮
+        chooseFilePopupCloseBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                chooseFilepopupWindow.dismiss();
+            }
+        });
+
+        //显示这个choosefilepopupwindow
+        chooseFilePopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+        int offsetX = - popUpWindowWidth / 8;
+        int offsetY = - popUpWindowHeight - (view.getHeight())-20;
+        chooseFilepopupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
+    }
+
     public void showMemberListBtn(View view) {
         select_resources.setVisibility(View.GONE);
         Point point = new Point();
@@ -1251,8 +1470,11 @@ public class MainActivity_tea extends AppCompatActivity {
         System.out.println("+++开始初始化白板");
         mBoard=null;
         mBoardCallback=null;
+        GenerateTestUserSig.SDKAPPID =BOARDSDKAPPID;
+        GenerateTestUserSig.SECRETKEY = BOARDSECRETKEY;
         TEduBoardController.TEduBoardAuthParam authParam = new TEduBoardController.TEduBoardAuthParam(
-                SDKappID , userId, UserSig);
+                BOARDSDKAPPID , userId,GenerateTestUserSig.genTestUserSig(userId));
+
         //（2）白板默认配置
         TEduBoardController.TEduBoardInitParam initParam = new TEduBoardController.TEduBoardInitParam();
         initParam.timSync=false;
@@ -1293,6 +1515,9 @@ public class MainActivity_tea extends AppCompatActivity {
                 BoardStatus=true;
                 boardview = mBoard.getBoardRenderView();
                 initBoardMenu();
+                if(AirBoardFileInfoList.size()<1){
+                    livePlay_getResData(userId);//初始化云端资源数组
+                }
                 alert_text.setText("白板加载完成！");
                 if(!addBoardtoFragmentstatus){
                     addBoardtoFragmentstatus =  mBoard.addBoardViewToContainer(Board_container,boardview,addBoardlayoutParams);
@@ -1300,11 +1525,13 @@ public class MainActivity_tea extends AppCompatActivity {
                     rf_bottommenu.setVisibility(View.VISIBLE);
                     rf_shoukeneirong.setVisibility(View.GONE);//默认图片那个消失
                 }
+                //设置 当前白板 文件的BoardFileInfolist
+                CurBoardFileInfoList = mBoard.getFileInfoList();
             }
             @Override
             public void onTEBHistroyDataSyncCompleted() {
                 System.out.println("onTEBHistroyDataSyncCompleted"+"+++++++++++++");
-                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
+//                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
             }
             @Override
             public void onTEBSyncData(String data) {
@@ -1343,39 +1570,54 @@ public class MainActivity_tea extends AppCompatActivity {
 
             @Override
             public void onTEBUndoStatusChanged(boolean canUndo) {
-                System.out.println("onTEBUndoStatusChanged"+"+++"+canUndo);
-
+                SnapshotMarkFlag = canUndo;
+                    if(mDialog!=null&&mDialog.isShowing()){
+                        mDialog.dismiss();
+                        if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
+                            chooseFilepopupWindow.dismiss();
+                        }if(chooseAirFilepopupWindow!=null&&chooseAirFilepopupWindow.isShowing()){
+                            chooseAirFilepopupWindow.dismiss();
+                        }
+                    }
+                System.out.println("onTEBUndoStatusChanged"+"+++当前是否打锚点"+canUndo);
             }
-
             @Override
             public void onTEBRedoStatusChanged(boolean canRedo) {
                 System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
                 select_resources.setVisibility(View.GONE);
+                if(mBoard.getCurrentFile()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
+                    b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
+                }
+
             }
 
             @Override
             public void onTEBImageStatusChanged(String boardId, String url, int status) {
+                SnapshotMarkFlag = true;
                 System.out.println("onTEBImageStatusChanged"+"+++");
 
             }
 
             @Override
             public void onTEBSetBackgroundImage(String url) {
+                SnapshotMarkFlag = true;
                 System.out.println("onTEBSetBackgroundImage"+"+++");
             }
 
             @Override
             public void onTEBAddImageElement(String url) {
-                System.out.println("onTEBAddImageElement"+"+++");
+                System.out.println("onTEBAddImageElement"+"+++添加了图片");
             }
 
             @Override
             public void onTEBAddElement(String id, int type, String url) {
+                SnapshotMarkFlag = true;
                 System.out.println("onTEBAddElement"+"+++");
             }
 
             @Override
             public void onTEBDeleteElement(List<String> id) {
+                SnapshotMarkFlag = true;
                 System.out.println("onTEBDeleteElement"+"+++");
             }
 
@@ -1386,6 +1628,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
             @Override
             public void onTEBMathGraphEvent(int code, String boardId, String graphId, String message) {
+                SnapshotMarkFlag = true;
                 System.out.println("onTEBMathGraphEvent"+"+++");
             }
 
@@ -1431,6 +1674,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
             @Override
             public void onTEBGotoBoard(String boardId, String fileId) {
+                b_size.setText(mBoard.getBoardScale()+"");
                 if(BoardID.equals(fileId)){
                     CurType="Board";
                     CurBoardID = boardId;
@@ -1469,9 +1713,17 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onTEBDeleteFile(String fileId) {
                 System.out.println("onTEBDeleteFile"+"+++:删除了文件的ID："+fileId);
+                CurFileID=null;
+                CurBoardFileInfoList = mBoard.getFileInfoList();
+
             }
             @Override
             public void onTEBSwitchFile(String fileId) {
+                CurBoardFileInfoList = mBoard.getFileInfoList();
+                if(boardswitchfilelistViewAdapter!=null){
+                    boardswitchfilelistViewAdapter.setCurFileId(fileId);
+                    boardswitchfilelistViewAdapter.notifyDataSetChanged();
+                }
                 if(fileId.equals("#DEFAULT")){
  //                 当是白板的时候就要 跳转到之前相应页码数
                     CurType="Board";
@@ -1531,7 +1783,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     time.setToNow();
                     // isquestion  用来区分本次快照是题目的快照还是 切换的时候保存的快照
                     String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture/";
-                    UploadToBucket(cosprefix,path,name,true);
+                    UploadToBucket(cosprefix,path,name,true,false);
                 }else {
                     System.out.println("++++白板快照出错"+msg+"   code:"+code);
                 }
@@ -1579,7 +1831,7 @@ public class MainActivity_tea extends AppCompatActivity {
     public void initTIM(){
         //初始化 IMSDK
         V2TIMSDKConfig timSdkConfig = new V2TIMSDKConfig();
-        IMLoginresult = V2TIMManager.getInstance().initSDK(this, SDKappID, timSdkConfig, new V2TIMSDKListener() {
+        IMLoginresult = V2TIMManager.getInstance().initSDK(this, IMSDKAPPID, timSdkConfig, new V2TIMSDKListener() {
             @Override
             public void onConnecting() {
                 super.onConnecting();
@@ -1613,7 +1865,9 @@ public class MainActivity_tea extends AppCompatActivity {
 
     }
     public void LoginTIM(){
-        V2TIMManager.getInstance().login(userId, UserSig, new V2TIMCallback() {
+        GenerateTestUserSig.SDKAPPID =IMSDKAPPID;
+        GenerateTestUserSig.SECRETKEY = IMSECRETKEY;
+        V2TIMManager.getInstance().login(userId, GenerateTestUserSig.genTestUserSig(userId), new V2TIMCallback() {
             @Override
             public void onError(int i, String s) {
                 System.out.println("++++++登陆失败"+s);
@@ -1633,13 +1887,10 @@ public class MainActivity_tea extends AppCompatActivity {
                             mBoard.addSyncData(new String(msg.getCustomElem().getData()));
                         }else if("TBKTExt".equals(Msg_Extension)){
                             //文本消息
-                            System.out.println("+++收到了消息"+Msg_Description);
                             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                             Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2);// type  2 别人 1 自己
-
                             ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
                             f.setData(msg_rec);
-
                             f.getChatMsgAdapter().notifyDataSetChanged();
                             f.getChatlv().setSelection(f.getChatlv().getBottom());
                         }
@@ -2312,7 +2563,6 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 mBoard.clear(false);
-                mBoard.setToolType(0);
             }
         });
         //左侧功能栏  第10个按钮  激光笔 按钮
@@ -2557,6 +2807,9 @@ public class MainActivity_tea extends AppCompatActivity {
                 }else {
                     path.path= getCacheDir()+"/"+CurFileID+".png";
                 }
+                if(SnapshotMarkFlag){
+                    mBoard.addSnapshotMark();
+                }
 //                mBoard.snapshot(path);
                 mBoard.prevBoard();
             }
@@ -2584,6 +2837,9 @@ public class MainActivity_tea extends AppCompatActivity {
                     path.path= getCacheDir()+"/"+CurFileID+".png";
                 }
 //                mBoard.snapshot(path);
+                if(SnapshotMarkFlag){
+                    mBoard.addSnapshotMark();
+                }
                 mBoard.nextBoard();
             }
         });
@@ -2604,6 +2860,9 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //添加一页
+                if(SnapshotMarkFlag){
+                    mBoard.addSnapshotMark();
+                }
                 mBoard.addBoard(null,TEduBoardController.TEduBoardImageFitMode.TEDU_BOARD_IMAGE_FIT_MODE_CENTER, TEduBoardController.TEduBoardBackgroundType.TEDU_BOARD_BACKGROUND_IMAGE,true);
             }
         });
@@ -2842,8 +3101,6 @@ public class MainActivity_tea extends AppCompatActivity {
             String path= UriUtils.getFileAbsolutePath(this,uri);
             File ff = new File(path);
             String name = ff.getName();
-            System.out.println("+++path:"+path);   //输出文件绝对路径
-            System.out.println("+++name:"+name);   //输出文件大小
             Long ffsize = ff.length();
             if(name.endsWith(".mp3")){
                 if(ffsize>104857600){filename.setText("mp3文件过大！"); // mp3文件过大
@@ -2917,8 +3174,8 @@ public class MainActivity_tea extends AppCompatActivity {
         cosXmlService = new CosXmlService(context, serviceConfig, myCredentialProvider);
     }
 
-    //上传文件到存储桶  存储桶公共路径  、  文件本地路径  、   文件名称   、   是否删除本地缓存
-    private void UploadToBucket(String cosprefix,String path,String name,boolean isdelete){
+    //上传文件到存储桶  存储桶公共路径  、  文件本地路径  、   文件名称   、   是否删除本地缓存        是否添加到屏幕
+    private void UploadToBucket(String cosprefix,String path,String name,boolean isdelete,boolean needAddtoScreen){
         isquestion=false;
         //cosprefix  存储桶目录    path 本地文件路径   name  名称
         // 访问 COS 服务  上传对象
@@ -2952,6 +3209,7 @@ public class MainActivity_tea extends AppCompatActivity {
             public void onSuccess(CosXmlRequest request, CosXmlResult result) {
                 COSXMLUploadTask.COSXMLUploadTaskResult uploadResult =
                         (COSXMLUploadTask.COSXMLUploadTaskResult) result;
+                if(needAddtoScreen){
                 if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
                     Message msg = Message.obtain();
                     msg.what = 8;
@@ -2961,7 +3219,8 @@ public class MainActivity_tea extends AppCompatActivity {
                     bundle.putString("name", name);
                     msg.setData(bundle);
                     handler.sendMessage(msg);
-                }else if(name.endsWith("png")||name.endsWith("jpg")){        // 图片格式文件
+                }
+                else if(name.endsWith("png")||name.endsWith("jpg")){        // 图片格式文件
                     Message msg = Message.obtain();
                     msg.what = 8;
                     Bundle bundle = new Bundle();
@@ -2970,7 +3229,8 @@ public class MainActivity_tea extends AppCompatActivity {
                     bundle.putString("name", name);
                     msg.setData(bundle);
                     handler.sendMessage(msg);
-                }else if(name.endsWith("mp3")){                         //  音频文件
+                }
+                else if(name.endsWith("mp3")){                         //  音频文件
                     Message msg = Message.obtain();
                     msg.what = 8;
                     Bundle bundle = new Bundle();
@@ -2979,7 +3239,8 @@ public class MainActivity_tea extends AppCompatActivity {
                     bundle.putString("name", name);
                     msg.setData(bundle);
                     handler.sendMessage(msg);
-                } else{
+                }
+                else{
                     if(name.endsWith("ppt")||name.endsWith("pptx")){      //ppt  pptx  采用新的转码方式  直接添加
                         Message msg = Message.obtain();
                         msg.what = 8;
@@ -2999,6 +3260,7 @@ public class MainActivity_tea extends AppCompatActivity {
                         msg.setData(bundle);
                         handler.sendMessage(msg);
                     }
+                }
                 }
             }
             // 如果您使用 kotlin 语言来调用，请注意回调方法中的异常是可空的，否则不会回调 onFail 方法，即：
@@ -3062,6 +3324,272 @@ public class MainActivity_tea extends AppCompatActivity {
         return jsonObject;
     }
 
+    //查询云端资源
+    private void livePlay_getResData(String userid) {
+        //开始创建转码任务
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    String userId  = userid;
+                    URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_getResData.do?" + "userId=" + userId);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(8000);
+                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.connect();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+                    while((temp = bufferedReader.readLine()) != null){
+                        buffer.append(temp);
+                    }
+                    // 关闭
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    try{
+                        String backLogJsonStr = buffer.toString();
+                        JSONObject json = stringToJson(backLogJsonStr);
+                        JSONArray Jsonitemlist =json.getJSONArray("list");
+                        AirBoardFileInfoList.clear();
+                        for (int i=0; i < Jsonitemlist.length(); i ++) {
+                            JSONObject jsonObj = Jsonitemlist.getJSONObject(i);
+                            BoardRescourseBean BoardRescourseBean = new BoardRescourseBean(jsonObj.getString("format"), jsonObj.getString("name"), jsonObj.getString("createDateStr").substring(0,10),jsonObj.getString("path"), jsonObj.getString("previewUrl"), jsonObj.getString("id"));
+                            AirBoardFileInfoList.add(BoardRescourseBean);
+                            System.out.println("+++要看的"+BoardRescourseBean.toString());
+                        }
+                        if(AirBoardFileInfoList.size()>1){
+                            boardchoosefilelistViewAdapter.notifyDataSetChanged();
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+        //保存  课程中的快照 记录
+    private void  save_livePlay_CreateSnapshotTask(){
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    String SecretId  = MsecretId;
+                    String SecretKey  = MsecretKey;
+                    String Region  = MRegion;
+                    String Bucket  = Mbucket;
+                    String SdkAppId  = BOARDSDKAPPID+"";
+                    String RoomId  = roomid;
+                    Time time = new Time("GMT+8");
+                    time.setToNow();
+                    String TargetDir="class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture";//目标目录
+                    String Uin = "100028107277"; //主账号
+
+                    URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_CreateSnapshotTask.do?" + "SecretId=" + SecretId
+                            + "&SecretKey=" + SecretKey + "&Region=" + Region + "&Bucket=" + Bucket + "&SdkAppId=" + SdkAppId
+                            + "&RoomId=" + RoomId + "&TargetDir=" + TargetDir + "&Uin="+Uin);
+                    System.out.println("+++监控最后保存锚点："+url);
+
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(8000);
+                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.connect();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+                    while((temp = bufferedReader.readLine()) != null){
+                        buffer.append(temp);
+                    }
+                    // 关闭
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+    //上传云端资源到存储桶
+    private void livePlay_uploadFileToCOS(String resid) {
+        //开始创建转码任务
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    String SecretId  = MsecretId;
+                    String SecretKey  = MsecretKey;
+                    String Region  = MRegion;
+                    String bucketName  = Mbucket;
+                    String SdkAppId  = BOARDSDKAPPID+"";
+                    String resId  = resid;
+                    String subjectid  = subjectId ;
+                    String roomId  = roomid;
+                    URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_uploadFileToCOS.do?" + "SecretId=" + SecretId
+                    + "&SecretKey=" + SecretKey + "&Region=" + Region + "&Bucket=" + bucketName + "&SdkAppId=" + SdkAppId
+                    + "&resId=" + resId + "&subjectId=" + subjectid + "&roomId="+roomId);
+                    System.out.println("+++监控上传云端资源到存储桶："+url);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(8000);
+                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.connect();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+                    while((temp = bufferedReader.readLine()) != null){
+                        buffer.append(temp);
+                    }
+                    // 关闭
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    try{
+                        String backLogJsonStr = buffer.toString();
+                        JSONObject json = stringToJson(backLogJsonStr);
+                        String taskId  = json.getString("taskId");
+                        if(json.getString("status").equals("success")){
+                            String name = json.getString("name");
+                            String fileurl = json.getString("link");
+                            if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
+                                Message msg = Message.obtain();
+                                msg.what = 8;
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("type", 1);
+                                bundle.putString("url", fileurl);
+                                bundle.putString("name", name);
+                                msg.setData(bundle);
+                                handler.sendMessage(msg);
+                            }
+                            else if(name.endsWith("png")||name.endsWith("jpg")){        // 图片格式文件
+                                Message msg = Message.obtain();
+                                msg.what = 8;
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("type", 2);
+                                bundle.putString("url", fileurl);
+                                bundle.putString("name", name);
+                                msg.setData(bundle);
+                                handler.sendMessage(msg);
+                            }
+                            else if(name.endsWith("mp3")){                         //  音频文件
+                                Message msg = Message.obtain();
+                                msg.what = 8;
+                                Bundle bundle = new Bundle();
+                                bundle.putInt("type", 3);
+                                bundle.putString("url", fileurl);
+                                bundle.putString("name", name);
+                                msg.setData(bundle);
+                                handler.sendMessage(msg);
+                            }
+                            else{
+                                if(name.endsWith("ppt")||name.endsWith("pptx")){      //ppt  pptx  采用新的转码方式  直接添加
+                                    Message msg = Message.obtain();
+                                    msg.what = 8;
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("type", 4);
+                                    bundle.putString("url", fileurl);
+                                    bundle.putString("name", name);
+                                    msg.setData(bundle);
+                                    handler.sendMessage(msg);
+                                }else {                                                //  mp4 格式的数据  直接添加
+                                    Message msg = Message.obtain();
+                                    msg.what = 8;
+                                    Bundle bundle = new Bundle();
+                                    bundle.putInt("type", 5);
+                                    bundle.putString("url", fileurl);
+                                    bundle.putString("name", name);
+                                    msg.setData(bundle);
+                                    handler.sendMessage(msg);
+                                }
+                            }
+                        }else {
+//                            Boardtimer.cancel();
+                            mDialog.closeOptionsMenu();
+//                            Toast.makeText(MainActivity_tea.this, "文件导入失败,请重新导入！", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    //查询 上传云端资源到存储桶上传进度
+    private void livePlay_getTransferProgress(String resid) {
+        //开始创建转码任务
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    String resId  = resid;
+                    URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_getTransferProgress.do?" +"resId="+ resId);
+                    System.out.println("+++监控上传云端资源到存储桶上传进度："+url);
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(8000);
+                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.connect();
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+                    while((temp = bufferedReader.readLine()) != null){
+                        buffer.append(temp);
+                    }
+                    // 关闭
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+                    try{
+                        String backLogJsonStr = buffer.toString();
+                        JSONObject json = stringToJson(backLogJsonStr);
+                        String progress  = json.getString("progress");
+//                        否则就要设置 提示   提示上传进度
+                        System.out.println("+++这里是查询云端资源传到存储桶定时任务，上传的文件进度"+progress);
+                        if(progress.equals("100")){
+                            Boardtimer.cancel();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    //创建 查询上传云端资源到存储桶上传进度 定时请求器
+    public void GetTransferProgress_Transcodehandler(String resid) {
+        Boardtimer.schedule(new TimerTask() {
+            @Override
+            public void run() {
+                livePlay_getTransferProgress(resid);
+            }
+        },0,1000);
+    }
+
     //创建转码任务 （pdf  doc   docx）
     private void CreateTranscode(String slink) {
         //开始创建转码任务
@@ -3072,12 +3600,11 @@ public class MainActivity_tea extends AppCompatActivity {
                     String SecretId  = MsecretId;
                     String SecretKey = MsecretKey;
                     String Region    = MRegion;
-                    String SdkAppId  = SDKappID+"";
+                    String SdkAppId  = BOARDSDKAPPID+"";
                     String link      = slink;
                     URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_CreateTranscode.do?"
                             + "SecretId=" + SecretId + "&SecretKey=" + SecretKey + "&Region=" + Region
                             + "&SdkAppId="+ SdkAppId   + "&link="+ link);
-
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setConnectTimeout(8000);
@@ -3125,7 +3652,6 @@ public class MainActivity_tea extends AppCompatActivity {
             }
         }).start();
     }
-
 
     //创建 转码任务 定时请求器
     public static void DescribeTranscodehandler(String secretId,String secretKey,String region,String sdkAppId,String taskId,TEduBoardController mBoard,ProgressBar progressBar) {
@@ -3215,8 +3741,7 @@ public class MainActivity_tea extends AppCompatActivity {
         }).start();
     }
 
-
-//白板快照   王璐瑶调用
+    //白板快照   王璐瑶调用
     public static void ScreenShotBoard(Context context,String answerQuestionId,TEduBoardController mBoard){
         isquestion=true;//调用的时候把这个值设置为true  后面改变存储的路径
         //白板快照

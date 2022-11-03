@@ -54,11 +54,11 @@
         android:gravity="bottom">
         <EditText
             android:hint="请输入讨论的内容"
-            android:textSize="12sp"
+            android:textSize="10sp"
             android:layout_width="0dp"
             android:layout_weight="1"
-            android:paddingLeft="10dp"
-            android:paddingRight="10dp"
+            android:paddingLeft="3dp"
+            android:paddingRight="3dp"
             android:layout_height="20dp"
             android:background="@color/backgroung_chat_input"
             android:gravity="top"

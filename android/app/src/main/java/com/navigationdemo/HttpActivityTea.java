@@ -38,9 +38,7 @@ public class HttpActivityTea extends AnswerActivityTea {
         },10,100);
     }
 
-    public static void stopHandsUpTimer() {
-        getHandsUpTimer.cancel();
-    }
+
 
 
     public static JSONObject stringToJson(String str) {

@@ -3879,7 +3879,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         questionAnswerType ,
                         questionSubNum ,
                         questionBaseTypeId ,
-                        questionAction
+                        questionAction,
+                        AnswerActivityTea.answerQuestionId
                 );
             }
         }).start();

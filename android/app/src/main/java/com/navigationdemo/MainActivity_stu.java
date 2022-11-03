@@ -147,16 +147,15 @@ import java.util.Vector;
 
 public class MainActivity_stu extends AppCompatActivity implements View.OnClickListener {
 
-
     private static int TRTCSDKAPPID = 1400618856;//王id
     private static String TRTCSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
-    private static int IMSDKAPPID = 1400618856;//王id
-    private static String IMSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
+    private static int IMSDKAPPID = 1400757936;//王id
+    private static String IMSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
 
-    private static int BOARDSDKAPPID = 1400756405;//徐id
-    private static String BOARDSECRETKEY = "f859da55e5ceeb14ae8b52c3efbf94ed697a8ef7890d001b9b0fed95914000c3";
+    private static int BOARDSDKAPPID = 1400757936;//徐id
+    private static String BOARDSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
 
-    private Timer timer;
+    private static Timer timer;
 
     private static Handler handlerCount = new Handler();
     private static Runnable runnablere_mBoardaddResouce;
@@ -165,7 +164,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     private static int handsUpTime = 20; // 举手最长时间
 
     //Tabbar三个Fragment
-    private List<Fragment> mFragmenglist = new ArrayList<>();
+    public List<Fragment> mFragmenglist = new ArrayList<>();
     public List<Fragment> getmFragmenglist() {
         return mFragmenglist;
     }
@@ -173,34 +172,34 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     public final static String TAG = "Ender_MainActivity";
     public static TRTCCloud mTRTCCloud;
-    private TRTCCloudDef.TRTCParams myTRTCParams;
-    private TXCloudVideoView mTXCVVTeacherPreviewView;  //教师视频
+    public static TRTCCloudDef.TRTCParams myTRTCParams;
+    public static TXCloudVideoView mTXCVVTeacherPreviewView;  //教师视频
     public static TXDeviceManager mTXDeviceManager; // TRTC摄像头管理
-    private RelativeLayout teacherTRTCBackground;   //教师视频背景
+    public static RelativeLayout teacherTRTCBackground;   //教师视频背景
 
-    private TXCloudVideoView mTXCVVStudentPreviewView;  //学生视频
-    private RelativeLayout studentTRTCBackground;   //学生视频背景
+    public static TXCloudVideoView mTXCVVStudentPreviewView;  //学生视频
+    public static RelativeLayout studentTRTCBackground;   //学生视频背景
 
-    private ImageView boardBtn;     //白板按钮
-    private ImageView canvasBtn;    //文件 按钮  现在是画笔按钮
+    public static ImageView boardBtn;     //白板按钮
+    public static ImageView canvasBtn;    //文件 按钮  现在是画笔按钮
 
-    private ImageView contentBtn;  //文件夹按钮  现在是授课内容
-    private ImageView memberBtn;
-    private ImageView handBtn;
-    private ImageView cameraBtn;   //关闭摄像头按钮
-    private ImageView audioBtn;
+    public static ImageView contentBtn;  //文件夹按钮  现在是授课内容
+    public static ImageView memberBtn;
+    public static ImageView handBtn;
+    public static ImageView cameraBtn;   //关闭摄像头按钮
+    public static ImageView audioBtn;
     public static boolean mIsFrontCamera = true; // 摄像头前后标志位
 
-    private ImageView class_over_btn;     //下课按钮
-    private TextView teacher_name_view; //显示教师名称
-    private TextView student_name_view; //显示本人名称
-    private ImageView overClassBtn;
-    private Group group_btn;
+    public static ImageView class_over_btn;     //下课按钮
+    public static TextView teacher_name_view; //显示教师名称
+    public static TextView student_name_view; //显示本人名称
+    public static ImageView overClassBtn;
+    public static Group group_btn;
 
     public static String mTeacherId;
 
-    private boolean musicOn = true;
-    private boolean cameraOn = true;
+    public static boolean musicOn = true;
+    public static boolean cameraOn = true;
 
     // 监听用户进入房间
     public static ArrayList<String> mUserList = new ArrayList<String>();
@@ -237,7 +236,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     public static String teaName = "";
     public static String teaHead = "";
-    public static String userName = "xgy";
 
     //即时通信相关
     private V2TIMManager v2TIMManager;                                        //IM实例
@@ -320,6 +318,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public List<HandsUpItem> handsUpItemList = new ArrayList<>();
     private TextView handBtnBadge;
     public Switch handsUpSwitchBtn;
+    public TextView handsUpTimeView;
 
     //答题界面，判断、单选、多选、主�?
     public static CheckBox tfyes,tfno;
@@ -433,6 +432,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         group_btn = findViewById(R.id.group_buttons);
         canvasBtn = findViewById(R.id.canvas_btn); //现在是文件图标
         handBtnBadge = findViewById(R.id.hand_btn_badge);
+        handsUpTimeView = findViewById(R.id.hand_time);
 
         boardBtn = findViewById(R.id.board_btn);
         contentBtn = findViewById(R.id.content_btn);
@@ -469,123 +469,25 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         teacher_name_view.setText(teacherId+"老师");
         student_name_view.setText(userId);
         //文件上传部分按钮
-        select_resources=findViewById(R.id.select_resources);
         proBar = findViewById(R.id.proBar);
         msgTips = findViewById(R.id.msgTips);
         filename = findViewById(R.id.filename);
-        close_select_resources = findViewById(R.id.close_select_resources);
-        resupload= findViewById(R.id.res_upload);
-        choosefile = findViewById(R.id.choosefile);
-        uploadfile = findViewById(R.id.uploadfile);
-        uploadprogress = findViewById(R.id.uploadprogress);
 
-        //下课按钮
-        class_over_btn.setOnClickListener(new View.OnClickListener() {
+
+
+        ImageView exit_btn = findViewById(R.id.exit_btn);
+        exit_btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                exitRoom();
                 destroyBoard();
-                onExitLiveRoom();
-                addBoardtoFragmentstatus =false;
-                rf_leftmenu.setVisibility(View.GONE);
-                rf_bottommenu.setVisibility(View.GONE);
-                RelativeLayout bg_shoukeneirong = findViewById(R.id.bg_shoukeneirong);
-                bg_shoukeneirong.setVisibility(View.VISIBLE);
-                alert_text.setText("已经下课，请退出教室！");
-                Board_container.setVisibility(View.GONE);
-                canvasBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
-                contentBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
-                boardBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                    }
-                });
+                stopTime();
+                finish();
             }
         });
-//        //选择文件按钮
-//        choosefile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                isincludeType=false;
-//                uploadprogress.setVisibility(View.GONE);
-//                uploadfile.setText("开始上传");
-//                msgTips.setText("文件正在上传：");
-//                filename.setText("未选择任何文件");
-//                curfilename="";
-//                curfilepath="";
-//                intoFileManager();
-//            }
-//        });
-//        //上传文件按钮
-//        uploadfile.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                //点击开始上传 执行上传任务
-//                if(isincludeType){
-//                    uploadprogress.setVisibility(View.VISIBLE);
-//                    uploadfile.setText("正在上传");
-//                    msgTips.setText("正在上传中：");
-//                    Time time = new Time("GMT+8");
-//                    time.setToNow();
-//                    String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/res/";
-//                    UploadToBucket(cosprefix,curfilepath,curfilename,false);
-//                }
-//            }
-//        });
-//        //文件夹 按钮 现在是授课内容 未替换图片
-//        contentBtn = findViewById(R.id.content_btn);
-//        contentBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                if(addBoardtoFragmentstatus){
-//                    if(select_resources.getVisibility()==View.VISIBLE){
-//                        select_resources.setVisibility(View.GONE);
-//                    }else {
-//                        select_resources.setVisibility(View.VISIBLE);
-//                        filename.setText("未选择任何文件");
-//                        uploadfile.setText("开始上传");
-//                        uploadprogress.setVisibility(View.GONE);
-//                        curfilename="";
-//                        curfilepath="";
-//                    }
-//                }
-//            }
-//        });
 
-//        //文件按钮  现在显示是画笔  未替换图片
-//        canvasBtn.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//     //判断元素类型 保存快照
-//               if(addBoardtoFragmentstatus){
-//                   if("Board".equals(CurType)&&FileID!=null){
-//                       boardBtn.setImageResource(R.drawable.bottom_board);
-//                       canvasBtn.setImageResource(R.drawable.bottom_file_checked);
-//                       TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
-//                       path.path = getCacheDir()+"/"+CurBoardID+".png";
-//                       mBoard.snapshot(path);
-//                       mBoard.switchFile(FileID);
-//                       if(CurFileID!=null){
-//                           mBoard.gotoBoard(CurFileID,false);
-//                       }
-//                   }else if("File".equals(CurType)&&FileID!=null) {
-//                       System.out.println("+++当前就是在文件页面");
-//                   }else {
-//                       System.out.println("+++先上传文件");
-//                   }
-//               }
-//            }
-//        });
 
         //白板需要用到的一些组件 初始化
-
         addBoardlayoutParams  = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.MATCH_PARENT, FrameLayout.LayoutParams.MATCH_PARENT);
 
 //         // 为了 适配屏幕  白板需要用到的参数 初始化
@@ -613,7 +515,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 int position = -1;
                 switch (msg.what) {
                     case 1:
-                        setHandsUpData();
+                        setHandsUpData(String.valueOf(handsUpTime));
                         break;
                     case 2:
                         position = msg.getData().getInt("position");
@@ -639,7 +541,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         Integer type = msg.getData().getInt("type");
                         String url = msg.getData().getString("url");
                         String name = msg.getData().getString("name");
-                        dealWith_mBoardaddResouce(type,url,name);
                         break;
                     case 9:  //处理  白板添加资源 任务
                         String title = msg.getData().getString("title");
@@ -656,12 +557,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         };
         setClassTitle("测试课堂");
         //初始化存储桶服务
-        InitBucket(this);
         initViewAnswer();
-        initHandsUpList();
-        initMemberList();
+//        initHandsUpList();
+//        initMemberList();
         initTabBarNavigation();
         enterLiveRoom();
+        getter();
         // 开启计时器
         startTime();
     }
@@ -835,40 +736,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     }
 
-    private void dealWith_mBoardaddResouce(Integer type,String url,String name){
-//        type 1  转码任务
-//        type 2  加载图片任务
-//        type 3  加载音频任务
-//        type 4  加载ppt任务
-//        type 5  加载视频任务
-        if(type==1){
-            uploadfile.setText("正在转换");
-            msgTips.setText("文件正在转换：");
-            proBar.setProgress(0);
-            CreateTranscode(url);
-        }else if(type==2){
-            uploadfile.setText("正在加载");
-            msgTips.setText("文件正在加载：");
-            proBar.setProgress(95);
-            mBoard.addElement(TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_IMAGE,url);
-        }else if(type==3){
-            uploadfile.setText("正在加载");
-            msgTips.setText("文件正在加载：");
-            proBar.setProgress(95);
-            mBoard.addElement(TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_AUDIO,url);
-        }else if(type==4){
-            uploadfile.setText("正在加载");
-            msgTips.setText("文件正在加载：");
-            proBar.setProgress(95);
-            mBoardAddTranscodeFile(name,url+"?for_tiw=1");
-        }else if(type==5){
-            uploadfile.setText("正在加载");
-            msgTips.setText("文件正在加载：");
-            proBar.setProgress(95);
-            mBoard.addVideoFile(url,name,true);
-        }
-
-    }
 
 
     /**
@@ -887,6 +754,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         keTangId = strArr[5];
         keTangName = strArr[6];
         userHead = strArr[7];
+        teacherId = strArr[8];
 
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
@@ -930,7 +798,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         }, 0, 1000L);
     }
 
-    public void stopTime() {
+    public static void stopTime() {
         if(timer != null)
             timer.cancel();
     }
@@ -966,20 +834,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void setHandsUpData() {
-        MainActivity_stu that = this;
-        handsUpItemList.clear();
-        List<HandsUpItem> tempHandsUpItemList = new ArrayList<>();
-        for (int i = 0; i < AnswerActivityTea.handsUpList.size(); i++) {
-            tempHandsUpItemList.add(new HandsUpItem( AnswerActivityTea.handsUpList.get(i).getUserType(), AnswerActivityTea.handsUpList.get(i).getName(), AnswerActivityTea.handsUpList.get(i).getUserId(), false));
-        }
-        for (int i =0; i< tempHandsUpItemList.size(); i++) {
-            Log.e(TAG, "updateHandsUpList: "  + tempHandsUpItemList.get(i).toString());
-        }
-        handsUpItemList.addAll(tempHandsUpItemList);
-        setHandBtnBadge(handsUpItemList.size());
-//        UtilTools.QBadge(this, handBtn, AnswerActivityTea.handsUpList.size());
-        handsUpListViewAdapter.notifyDataSetChanged();
+    public void setHandsUpData(String text) {
+        handsUpTimeView.setText(text);
     }
 
     public void switchMemberListAudioIcon(int position) {
@@ -1220,12 +1076,13 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         TabLayout.Tab answerQuestion = mTabLayout.getTabAt(2);
     }
 
-
     // 退出房间
     public static void exitRoom() {
-
         mTRTCCloud.exitRoom();
-        HttpActivityTea.stopHandsUpTimer();
+        HttpActivityStu.stopGetControlMessageTimer();
+        MainActivity_stu.stopTime();
+        HttpActivityStu.leaveOrJoinClass(userId, roomid, "leave", null);
+//        HttpActivityTea.stopHandsUpTimer();
     }
 
     public static class MyTRTCCloudListener extends TRTCCloudListener {
@@ -1255,9 +1112,28 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             Log.d(TAG, "onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserVideoAvailable:"+userId);
+            if(available) {
+                if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.muteRemoteAudio(userId, false);
+                    @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_on);
+                    teacher_name_mic_icon.setBounds(0,0,20,20);
+                    teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+                } else {
 //            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
 //            int userPosition = listViewAdapter.getItemPositionById(userId);
 //            activity.switchMemberListAudioIcon(userPosition);
+                }
+            }
+            else {
+                if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.muteRemoteAudio(userId, true);
+                    @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_off);
+                    teacher_name_mic_icon.setBounds(0,0,20,20);
+                    teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+                } else {
+                    mUserList.remove(userId);
+                }
+            }
         }
 
         @Override
@@ -1274,13 +1150,23 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                return;
 //            }
             if(available) {
-                if(AnswerActivityTea.findMemberInKetangList(userId) != null) {
-
-                    mUserList.add(userId);
+                if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, activity.mTXCVVTeacherPreviewView);
+                    activity.teacherTRTCBackground.setVisibility(View.INVISIBLE);
+                } else {
+                    if(AnswerActivityTea.findMemberInKetangList(userId) != null) {
+                        mUserList.add(userId);
+                    }
                 }
             }
-            else
-                mUserList.remove(userId);
+            else {
+                if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.stopRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+                    activity.teacherTRTCBackground.setVisibility(View.VISIBLE);
+                } else {
+                    mUserList.remove(userId);
+                }
+            }
 //            int userPosition = listViewAdapter.getItemPositionById(userId);
 //            activity.switchMemberListVideoIcon(userPosition);
 //            if(AnswerActivityTea.findMemberInKetangList((userId)) != null)
@@ -1295,16 +1181,21 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             Log.e(TAG, "onRemoteUserEnterRoom: userId" + userId );
             System.out.println("onRemoteUserEnterRoom userId " + userId );
             Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
-            if(AnswerActivityTea.findMemberInKetangList(userId) != null)
-                activity.videoListFragment.addCameraView(userId, activity.mTRTCCloud);
+            if (userId.equals(teacherId+"_camera")) {
+                mTRTCCloud.startRemoteView(teacherId + "_camera", TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, activity.mTXCVVTeacherPreviewView);
+                activity.teacherTRTCBackground.setVisibility(View.INVISIBLE);
+            } else {
+                if(AnswerActivityTea.findMemberInKetangList(userId) != null)
+                    activity.videoListFragment.addCameraView(userId, activity.mTRTCCloud);
+            }
         }
 
         @Override
         public void onRemoteUserLeaveRoom(String userId, int reason){
             MainActivity_stu activity = mContext.get();
             System.out.println("onRemoteUserLeaveRoom userId " + userId );
-            if (userId.equals(mTeacherId+"_camera")){
-                System.out.println("mingming_camera exit room");
+            if (userId.equals(teacherId +"_camera")){
+                System.out.println("teacher exit room");
                 exitRoom();
                 teacher_enable=false;
                 return;
@@ -1321,6 +1212,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             MainActivity_stu activity = mContext.get();
             if (activity != null) {
                 Toast.makeText(activity, "onError: " + errMsg + "[" + errCode+ "]" , Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "onError: " + errMsg + "[" + errCode+ "]");
                 if (errCode == TXLiteAVCode.ERR_ROOM_ENTER_FAIL) {
                     activity.exitRoom();
                 }
@@ -1331,6 +1223,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public void enterLiveRoom() {
 
 //        Log.e(TAG, "enterLiveRoom: ");
+
+        // 进入教室
+        HttpActivityStu.leaveOrJoinClass(userId, roomid, "join", this);
 
         mTRTCCloud = TRTCCloud.sharedInstance(getApplicationContext());
         mTRTCCloud.setListener(new MyTRTCCloudListener(MainActivity_stu.this));
@@ -1390,7 +1285,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         student_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
 
         // 初始化教师视频
-        mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTXCVVTeacherPreviewView);
+//        mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTXCVVTeacherPreviewView);
         teacherTRTCBackground.setVisibility(View.VISIBLE);
 
         // 初始化房间信息
@@ -1399,7 +1294,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
 
-//        HttpActivityTea.initClass(screenWidth, screenHeight, "skydt", this);
         // 开启学生消息监听事件
         HttpActivityStu.startGetControlMessageTimer(roomid, userId, this);
     }
@@ -1456,7 +1350,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     }
 
     public void showMemberListBtn(View view) {
-        select_resources.setVisibility(View.GONE);
         Point point = new Point();
         this.getWindowManager().getDefaultDisplay().getSize(point);
         int popUpWindowWidth = (int) (point.x*0.5);
@@ -1474,16 +1367,31 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
     }
 
+    public void initHandsTimer() {
+        handsUpTimeView.setVisibility(View.INVISIBLE);
+        handsUpTime = 20;
+    }
+
     public void startHandsTimer() {
+        MainActivity_stu that = this;
+        handsUpTimeView.setVisibility(View.VISIBLE);
         handsTimer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if(handsUpTime == 0) {
+                    initHandsTimer();
+                    return;
+                }
+                Message updateHandsUpTimeMessage = Message.obtain();
+                updateHandsUpTimeMessage.what = 1;
+                that.handler.sendMessage(updateHandsUpTimeMessage);
                 handsUpTime--;
             }
         }, 0, 1000);
     }
 
     public void stopHandsTimer() {
+        initHandsTimer();
         handsTimer.cancel();
     }
 
@@ -1491,13 +1399,14 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         if(handsState.equals("down")) {
             HttpActivityStu.handsUp(userId, roomid, "up", this);
             handsState = "up";
-            view.setBackgroundResource(R.drawable.bottom_stuhand_down);
+            handBtn.setImageResource(R.drawable.bottom_stuhand_down);
             startHandsTimer();
         }
         else if (handsState.equals("up")) {
             HttpActivityStu.handsUp(userId, roomid, "down", this);
             handsState = "down";
-            view.setBackgroundResource(R.drawable.bottom_stuhand_up);
+            handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+            stopHandsTimer();
         }
     }
 
@@ -1541,6 +1450,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTEBInit() {
                 System.out.println("onTEBInit"+"++++白板初始化完成了");
+                if(mBoard.isDrawEnable()){
+                  dealStopDraw();
+                }
                 ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
                 if(findViewById(R.id.boardcontent).getMeasuredWidth()>findViewById(R.id.boardcontent).getMeasuredHeight()){
                     params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
@@ -1608,7 +1520,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTEBRedoStatusChanged(boolean canRedo) {
                 System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
-                select_resources.setVisibility(View.GONE);
             }
 
             @Override
@@ -1722,7 +1633,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTEBAddTranscodeFile(String fileId) {
                 System.out.println("onTEBAddTranscodeFile"+fileId);
-                select_resources.setVisibility(View.GONE);
             }
             @Override
             public void onTEBDeleteFile(String fileId) {
@@ -1782,17 +1692,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTEBSnapshot(String path, int code, String msg) {
                 System.out.println("onTEBSnapshot"+"++++白板快照"+path+msg+code);
-                if(code==0){
-                    File ff = new File(path);
-                    String name = ff.getName();
-                    Time time = new Time("GMT+8");
-                    time.setToNow();
-                    // isquestion  用来区分本次快照是题目的快照还是 切换的时候保存的快照
-                    String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture/";
-                    UploadToBucket(cosprefix,path,name,true);
-                }else {
-                    System.out.println("++++白板快照出错"+msg+"   code:"+code);
-                }
             }
 
             @Override
@@ -1886,6 +1785,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     public void onRecvNewMessage(V2TIMMessage msg) {
                         String Msg_Extension = new String(msg.getCustomElem().getExtension());
                         String Msg_Description = msg.getCustomElem().getDescription();
+                        String Msg_Data = new String(msg.getCustomElem().getData());
                         super.onRecvNewMessage(msg);
                         if("TXWhiteBoardExt".equals(Msg_Extension)){
                             //白板消息
@@ -1901,6 +1801,16 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
                             f.getChatMsgAdapter().notifyDataSetChanged();
                             f.getChatlv().setSelection(f.getChatlv().getBottom());
+                        }else if("drawAuthority".equals(Msg_Extension)){
+                            //文本消息
+                            System.out.println("+++收到了教师控制学生编办消息"+Msg_Data+Msg_Description+Msg_Extension);
+                            if(Msg_Description.startsWith(userId)){
+                                if(Msg_Data.equals("yes")){
+                                    dealAllowDraw();
+                                }else  if(Msg_Data.equals("no")){
+                                    dealStopDraw();
+                                }
+                            }
                         }
                     }
                     @Override
@@ -1989,29 +1899,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
 
 
-//        文件上传按钮
-        resupload.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //文件上传  打开文件管理器
-                isincludeType=false;
-                uploadprogress.setVisibility(View.GONE);
-                uploadfile.setText("开始上传");
-                msgTips.setText("文件正在上传：");
-                filename.setText("未选择任何文件");
-                curfilename="";
-                curfilepath="";
-                intoFileManager();
-            }
-        });
-        //关闭文件弹窗按钮
-        close_select_resources.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //关闭文件上传弹窗
-                select_resources.setVisibility(View.GONE);
-            }
-        });
 
         //左侧功能栏  第一个按钮  鼠标按钮
         menu01 = findViewById(R.id.menu01);
@@ -2940,7 +2827,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         // 发送聊天消息
         final V2TIMMessage v2TIMMessage_chat = V2TIMManager.getMessageManager().createCustomMessage(
                 msg.getContent().getBytes(),       //data
-                ("2@#@"+userName+"@#@"+userHead),  //descripition
+                ("2@#@"+userCn+"@#@"+userHead),  //descripition
                 "TBKTExt".getBytes());             //extension
         V2TIMManager.getMessageManager().sendMessage(v2TIMMessage_chat, null,roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
             @Override
@@ -3051,221 +2938,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         startActivityForResult(intent, 12); //requestCode==1   用来记录是这里的操作
     }
 
-    //文件管理器选择了回调  requestCode==12的时候   支持的文件类型  MP3  MP4  doc  docx ppt  pptx  pdf  png  jpg
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == Activity.RESULT_OK&&requestCode==12) {
-            Uri uri = data.getData();               // 得到uri   用工具处理Uri得到绝对路径
-            String path= UriUtils.getFileAbsolutePath(this,uri);
-            File ff = new File(path);
-            String name = ff.getName();
-            System.out.println("+++path:"+path);   //输出文件绝对路径
-            System.out.println("+++name:"+name);   //输出文件大小
-            Long ffsize = ff.length();
-            if(name.endsWith(".mp3")){
-                if(ffsize>104857600){filename.setText("mp3文件过大！"); // mp3文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-            }else if(name.endsWith(".mp4")){
-                if(ffsize>104857600){ filename.setText("mp4文件过大,请重新选择!");// mp4文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-            }else if(name.endsWith(".pdf")){
-                if(ffsize>20971520){filename.setText("pdf文件过大,请重新选择!");// pdf文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-                System.out.println("+++合法上传pdf格式");
-            }else if(name.endsWith(".doc")||name.endsWith(".docx")){
-                System.out.println("+++合法上传doc格式");
-                if(ffsize>20971520){filename.setText("doc文件过大,请重新选择!");// doc文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-            }else if(name.endsWith(".ppt")||name.endsWith(".pptx")){
-                System.out.println("+++合法上传ppt格式");
-                if(ffsize>20971520){filename.setText("ppt文件过大,请重新选择!");// ppt文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-                System.out.println("+++合法上传PPt"+name);
-            }else if(name.endsWith(".png")||name.endsWith(".jpg")){
-                if(ffsize>104857600){filename.setText("图片文件过大,请重新选择!"); // 图片文件过大
-                }else {
-                    isincludeType=true;
-                    filename.setText(name);
-                }
-                System.out.println("+++合法上传图片"+name);
-            }else {
-                filename.setText("不支持此类格式文件,请重新选择!");
-                System.out.println("+++该种数据不支持上传");
-            }
-            if(isincludeType){
-                //符合上传条件了再来记录当前 选中的文件name path
-                curfilename=name;
-                curfilepath=path;
-            }
-        }
-    }
 
-    //初始化存储桶
-    private void InitBucket(Context context) {
-        // String secretId = "AKID5ybx2rPggPr23oHUR8YhZBWZLr6xaw2r"; //永久密钥 secretId
-        // String secretKey = "auxjESQCk11lEQL0O5WhbEZdRyEDwOYR"; //永久密钥 secretKey
-        // keyDuration 为请求中的密钥有效期，单位为秒（临时密匙的时候有效）
-        QCloudCredentialProvider myCredentialProvider =
-                new ShortTimeCredentialProvider(MsecretId, MsecretKey, 300);
-        // 存储桶所在地域简称，例如广州地区是 ap-guangzhou
-        String region = "ap-guangzhou";
-
-        // 创建 CosXmlServiceConfig 对象，根据需要修改默认的配置参数
-        CosXmlServiceConfig serviceConfig = new CosXmlServiceConfig.Builder()
-                .setRegion(region)
-                .isHttps(true) // 使用 HTTPS 请求, 默认为 HTTP 请求
-                .builder();
-        // 初始化 COS Service，获取实例
-        cosXmlService = new CosXmlService(context, serviceConfig, myCredentialProvider);
-    }
-
-    //上传文件到存储桶  存储桶公共路径  、  文件本地路径  、   文件名称   、   是否删除本地缓存
-    private void UploadToBucket(String cosprefix,String path,String name,boolean isdelete){
-        isquestion=false;
-        //cosprefix  存储桶目录    path 本地文件路径   name  名称
-        // 访问 COS 服务  上传对象
-        // 初始化 TransferConfig，这里使用默认配置，如果需要定制，请参考 SDK 接口文档
-        TransferConfig transferConfig = new TransferConfig.Builder().build();
-        // 初始化 TransferManager
-        TransferManager transferManager = new TransferManager(cosXmlService,transferConfig);
-
-        // 存储桶名称，由bucketname-appid 组成，appid必须填入，可以在COS控制台查看存储桶名称。 https://console.cloud.tencent.com/cos5/bucket
-        // String bucket = Mbucket;
-
-        //  class/年/月/日/subjectId/roomId/res/xxxx.ppt   资源上传目录
-        String cosPath = cosprefix + name; //对象在存储桶中的位置标识符，即称对象键    文件夹
-        String srcPath = new File(path).toString(); //本地文件的绝对路径
-
-        //若存在初始化分块上传的 UploadId，则赋值对应的 uploadId 值用于续传；否则，赋值 null
-        String uploadId = null;
-        // 上传文件
-        COSXMLUploadTask cosxmlUploadTask = transferManager.upload(Mbucket, cosPath,srcPath, uploadId);
-
-        //设置上传进度回调
-        cosxmlUploadTask.setCosXmlProgressListener(new CosXmlProgressListener() {
-            @Override
-            public void onProgress(long complete, long target) {
-                proBar.setProgress((int)(complete*100/target));
-            }
-        });
-        //设置返回结果回调
-        cosxmlUploadTask.setCosXmlResultListener(new CosXmlResultListener() {
-            @Override
-            public void onSuccess(CosXmlRequest request, CosXmlResult result) {
-                COSXMLUploadTask.COSXMLUploadTaskResult uploadResult =
-                        (COSXMLUploadTask.COSXMLUploadTaskResult) result;
-                if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
-                    Message msg = Message.obtain();
-                    msg.what = 8;
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", 1);
-                    bundle.putString("url", result.accessUrl);
-                    bundle.putString("name", name);
-                    msg.setData(bundle);
-                    handler.sendMessage(msg);
-                }else if(name.endsWith("png")||name.endsWith("jpg")){        // 图片格式文件
-                    Message msg = Message.obtain();
-                    msg.what = 8;
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", 2);
-                    bundle.putString("url", result.accessUrl);
-                    bundle.putString("name", name);
-                    msg.setData(bundle);
-                    handler.sendMessage(msg);
-                }else if(name.endsWith("mp3")){                         //  音频文件
-                    Message msg = Message.obtain();
-                    msg.what = 8;
-                    Bundle bundle = new Bundle();
-                    bundle.putInt("type", 3);
-                    bundle.putString("url", result.accessUrl);
-                    bundle.putString("name", name);
-                    msg.setData(bundle);
-                    handler.sendMessage(msg);
-                } else{
-                    if(name.endsWith("ppt")||name.endsWith("pptx")){      //ppt  pptx  采用新的转码方式  直接添加
-                        Message msg = Message.obtain();
-                        msg.what = 8;
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("type", 4);
-                        bundle.putString("url", result.accessUrl);
-                        bundle.putString("name", name);
-                        msg.setData(bundle);
-                        handler.sendMessage(msg);
-                    }else {                                                //  mp4 格式的数据  直接添加
-                        Message msg = Message.obtain();
-                        msg.what = 8;
-                        Bundle bundle = new Bundle();
-                        bundle.putInt("type", 5);
-                        bundle.putString("url", result.accessUrl);
-                        bundle.putString("name", name);
-                        msg.setData(bundle);
-                        handler.sendMessage(msg);
-                    }
-                }
-            }
-            // 如果您使用 kotlin 语言来调用，请注意回调方法中的异常是可空的，否则不会回调 onFail 方法，即：
-            // clientException 的类型为 CosXmlClientException?，serviceException 的类型为 CosXmlServiceException?
-            @Override
-            public void onFail(CosXmlRequest request,
-                               @Nullable CosXmlClientException clientException,
-                               @Nullable CosXmlServiceException serviceException) {
-                System.out.println("+++上传失败"+clientException.toString());
-                System.out.println("+++上传失败"+serviceException.toString());
-                if (clientException != null) {
-                    clientException.printStackTrace();
-                } else {
-                    serviceException.printStackTrace();
-                }
-            }
-        });
-        //设置任务状态回调, 可以查看任务过程
-        cosxmlUploadTask.setTransferStateListener(new TransferStateListener() {
-            @Override
-            public void onStateChanged(TransferState state) {
-                System.out.println("+++任务状态回调,"+state.toString().equals("COMPLETED"));
-                if(state.toString().equals("COMPLETED")){
-                    if(isdelete){
-                        File ff = new File(path);
-                        ff.delete();
-                    }
-                    curfilename="";   // 上传完成，记录当前选择的文件名称清空
-                    curfilepath="";   // 上传完成，记录当前选择的文件路径清空
-                }
-
-//                                CONSTRAINED,
-//                                WAITING,
-//                                IN_PROGRESS,
-//                                PAUSED,
-//                                RESUMED_WAITING,
-//                                COMPLETED,
-//                                CANCELED,
-//                                FAILED,
-//                                UNKNOWN;
-            }
-        });
-    }
-
-    //白板添加文件  添加上去的名称， 文件的网络地址
-    private void mBoardAddTranscodeFile(String name,String url) {
-        TEduBoardController.TEduBoardTranscodeFileResult config = new TEduBoardController.TEduBoardTranscodeFileResult(name,url);
-        mBoard.addTranscodeFile(config,true);
-    }
 
     //为了 接口获取到的数据（字符串）转成JSON格式
     public static JSONObject stringToJson(String str) {
@@ -3616,7 +3289,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             if(id == R.id.tfsubmit){
                 String checkedValues = SelectUtil.getOne(radios_tf);
                 System.out.println("判断选中了：" + checkedValues);
-                HttpActivityStu.saveAnswer(checkedValues, userId, userName, this);
+                HttpActivityStu.saveAnswer(checkedValues, userId, userCn, this);
 
 //                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
@@ -3646,7 +3319,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             if(id == R.id.singlesubmit){
                 String checkedValues = SelectUtil.getOne(radios_single);
                 System.out.println("单选选中了：" + checkedValues+"id:"+HttpActivityStu.questionId);
-                HttpActivityStu.saveAnswer(checkedValues, userId, userName, this);
+                HttpActivityStu.saveAnswer(checkedValues, userId, userCn, this);
 
 //                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
@@ -3674,7 +3347,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             if(id == R.id.multisubmit){
                 String checkedValues = SelectUtil.getMany(radios_multi);
                 System.out.println("多选选中�?:"+checkedValues);
-                HttpActivityStu.saveAnswer(checkedValues, userId, userName, this);
+                HttpActivityStu.saveAnswer(checkedValues, userId, userCn, this);
 
 //                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
@@ -3723,7 +3396,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     editoneValue = editoneValue.replace("'"+i+"'","<img src=\""+base64id_url.get(i)+"\">");
                 }
                 System.out.println("editoneValue i:"+editoneValue);
-                HttpActivityStu.saveAnswer(editoneValue, userId, userName, this);
+                HttpActivityStu.saveAnswer(editoneValue, userId, userCn, this);
 
 //                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
@@ -3971,7 +3644,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     //更新互动答题界面
     private static void getteacher(){
-        if(AnswerActivity.questionAction!=null){
+        if(AnswerActivityStu.questionAction!=null){
 //                if(AnswerActivity.questionAction.equals("stopAnswer")
 //                        ||AnswerActivity.questionAction.equals("stopAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
@@ -3989,22 +3662,22 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                    LaunchActivity.mMessageInput.bringToFront();
 //                    System.out.println("no time answer over");
 //                }
-            if(last_actiontime_answer.equals(AnswerActivity.questionTime)){
+            if(last_actiontime_answer.equals(AnswerActivityStu.questionTime)){
                 return;
             }
             else{
-                last_actiontime_answer=AnswerActivity.questionTime;
+                last_actiontime_answer=AnswerActivityStu.questionTime;
             }
-            if(AnswerActivity.questionAction.equals("startAnswer")
-                    ||AnswerActivity.questionAction.equals("startAnswerSuiji")
-                    ||AnswerActivity.questionAction.equals("startAnswerQiangDa")) {
+            if(AnswerActivityStu.questionAction.equals("startAnswer")
+                    ||AnswerActivityStu.questionAction.equals("startAnswerSuiji")
+                    ||AnswerActivityStu.questionAction.equals("startAnswerQiangDa")) {
                 mQiangda.setSelected(false);
                 BottomButtonActivity.qiangDa();
 //                MainActivity_stu.mMessageInput.setVisibility(GONE);
 
                 System.out.println("answer over a");
 
-                if (AnswerActivity.questionBaseTypeId.equals("101")) {
+                if (AnswerActivityStu.questionBaseTypeId.equals("101")) {
                     current_answer = group_singleanswer;
 //                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
                     MainActivity_stu.group_singleanswer.setVisibility(View.VISIBLE);
@@ -4013,7 +3686,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
 //                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
                     int index =0;
-                    int sub_num = Integer.parseInt(AnswerActivity.questionSubNum);
+                    int sub_num = Integer.parseInt(AnswerActivityStu.questionSubNum);
                     for(CheckBox item:radios_single){
                         if(index<sub_num){
                             item.setChecked(false);
@@ -4026,7 +3699,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         index++;
                     }
                 }
-                else if (AnswerActivity.questionBaseTypeId.equals("102")) {
+                else if (AnswerActivityStu.questionBaseTypeId.equals("102")) {
                     current_answer = group_multianswer;
 //                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
 //                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
@@ -4034,7 +3707,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                        LaunchActivity.group_subjectiveanswer.setVisibility(View.GONE);
 //                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
                     int index =0;
-                    int sub_num = Integer.parseInt(AnswerActivity.questionSubNum);
+                    int sub_num = Integer.parseInt(AnswerActivityStu.questionSubNum);
                     for(CheckBox item:radios_multi){
                         if(index<sub_num){
                             item.setChecked(false);
@@ -4047,7 +3720,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         index++;
                     }
                 }
-                else if (AnswerActivity.questionBaseTypeId.equals("103")) {
+                else if (AnswerActivityStu.questionBaseTypeId.equals("103")) {
                     current_answer = group_tfanswer;
                     MainActivity_stu.group_tfanswer.setVisibility(View.VISIBLE);
 //                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
@@ -4069,7 +3742,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         index++;
                     }
                 }
-                else if (AnswerActivity.questionBaseTypeId.equals("104")) {
+                else if (AnswerActivityStu.questionBaseTypeId.equals("104")) {
                     current_answer = group_subjectiveanswer;
 //                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
 //                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
@@ -4078,9 +3751,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
                 }
             }
-            else if(AnswerActivity.questionAction.equals("stopAnswer")
-                    ||AnswerActivity.questionAction.equals("stopAnswerSuiji")
-                    ||AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
+            else if(AnswerActivityStu.questionAction.equals("stopAnswer")
+                    ||AnswerActivityStu.questionAction.equals("stopAnswerSuiji")
+                    ||AnswerActivityStu.questionAction.equals("stopAnswerQiangDa")){
                 current_answer = null;
 
                 MainActivity_stu.group_tfanswer.setVisibility(GONE);
@@ -4099,7 +3772,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                MainActivity_stu.mGroupButtons.setVisibility(View.VISIBLE);
                 System.out.println("answer over b");
             }
-            else if(AnswerActivity.questionAction.equals("startQiangDa")){
+            else if(AnswerActivityStu.questionAction.equals("startQiangDa")){
 //                MainActivity_stu.mGroupButtons.setVisibility(View.VISIBLE);
 //                MainActivity_stu.mMessageInput.setVisibility(GONE);
                 MainActivity_stu.group_tfanswer.setVisibility(GONE);
@@ -4110,7 +3783,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 BottomButtonActivity.qiangDa();
                 System.out.println("answer over c");
             }
-            else if(AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
+            else if(AnswerActivityStu.questionAction.equals("stopAnswerQiangDa")){
 
                 BottomButtonActivity.qiangDa();
 //                MainActivity_stu.mMessageInput.setVisibility(View.VISIBLE);
@@ -4119,15 +3792,15 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             else{
 
                 BottomButtonActivity.qiangDa();
-                System.out.println("answer over f"+AnswerActivity.questionAction);
+                System.out.println("answer over f"+AnswerActivityStu.questionAction);
             }
         }
-        if(AnswerActivity.deviceMicAction!=null){
-            if(last_actiontime_mic.equals(AnswerActivity.deviceMicTime)){
+        if(AnswerActivityStu.deviceMicAction!=null){
+            if(last_actiontime_mic.equals(AnswerActivityStu.deviceMicTime)){
                 return;
             }
             else{
-                last_actiontime_mic=AnswerActivity.deviceMicTime;
+                last_actiontime_mic=AnswerActivityStu.deviceMicTime;
             }
 //            if(AnswerActivity.deviceMicAction.equals("openMic")){
 //                boolean isSelected = mButtonMuteAudio.isSelected();
@@ -4142,12 +3815,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                }
 //            }
         }
-        if(AnswerActivity.deviceCameraAction!=null){
-            if(last_actiontime_camera.equals(AnswerActivity.deviceCameraTime)){
+        if(AnswerActivityStu.deviceCameraAction!=null){
+            if(last_actiontime_camera.equals(AnswerActivityStu.deviceCameraTime)){
                 return;
             }
             else{
-                last_actiontime_camera=AnswerActivity.deviceCameraTime;
+                last_actiontime_camera=AnswerActivityStu.deviceCameraTime;
             }
 //            if(AnswerActivity.deviceCameraAction.equals("openCamera")){
 //                boolean isSelected = mButtonMuteVideo.isSelected();
@@ -4162,18 +3835,18 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                }
 //            }
         }
-        if(AnswerActivity.deviceWordsAction!=null){
+        if(AnswerActivityStu.deviceWordsAction!=null){
             System.out.println("last_actiontime_words:"+last_actiontime_words);
-            System.out.println("AnswerActivity.deviceWordsTime:"+AnswerActivity.deviceWordsTime);
-            if(last_actiontime_words.equals(AnswerActivity.deviceWordsTime)){
+            System.out.println("AnswerActivity.deviceWordsTime:"+AnswerActivityStu.deviceWordsTime);
+            if(last_actiontime_words.equals(AnswerActivityStu.deviceWordsTime)){
                 System.out.println("actiontime return");
                 return;
             }
             else{
                 System.out.println("actiontime change");
-                last_actiontime_words=AnswerActivity.deviceWordsTime;
+                last_actiontime_words=AnswerActivityStu.deviceWordsTime;
             }
-            if(AnswerActivity.deviceWordsAction.equals("openWords")&&!openWords_flag){
+            if(AnswerActivityStu.deviceWordsAction.equals("openWords")&&!openWords_flag){
                 openWords_flag = true;
                 //mMessageInput.setFocusable(true);
 //                mMessageInput.setText("");
@@ -4186,7 +3859,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                        BottomButtonActivity.muteVideo();
 //                    }
             }
-            else if(AnswerActivity.deviceWordsAction.equals("closeWords")){
+            else if(AnswerActivityStu.deviceWordsAction.equals("closeWords")){
                 openWords_flag = false;
                 //mMessageInput.setFocusable(false);
 //                mMessageInput.setEnabled(false);
@@ -4199,7 +3872,28 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                    }
             }
         }
+        if(AnswerActivityStu.allHandAction!=null) {
+            if(AnswerActivityStu.allHandAction.equals("handAllYes")) {
+                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+            } else if(AnswerActivityStu.allHandAction.equals("handAllNo")) {
+                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_no);
+            }
+        }
     }
+    //处理禁止涂鸦啊
+     public void   dealStopDraw(){
+         rf_leftmenu.setVisibility(GONE);
+         rf_bottommenu.setVisibility(GONE);
+        mBoard.setDrawEnable(false);
+        mBoard.setMouseToolBehavior(false,false,false,false);
+     }
+     //处理允许涂鸦
+     public void  dealAllowDraw(){
+        rf_leftmenu.setVisibility(View.VISIBLE);
+        rf_bottommenu.setVisibility(View.VISIBLE);
+            mBoard.setDrawEnable(true);
+            mBoard.setMouseToolBehavior(true,true,true,true);
+        }
 
 }
 

@@ -1,6 +1,7 @@
 package com.navigationdemo;
 
 import android.annotation.SuppressLint;
+import android.text.format.Time;
 import android.util.Log;
 
 import org.json.JSONException;
@@ -21,7 +22,9 @@ public class Http_HuDongActivityTea extends AnswerActivityTea {
     public static boolean saveQueHdAction(int questionAnswerType ,
             int questionSubNum ,
             int questionBaseTypeId ,
-            String questionAction
+            String questionAction,
+            String id
+
     ) {
         try {
             System.out.println("http访问服务器请求,开始答题、结束答题等接口！！！！！！！！！！！！！！！！！！！");
@@ -34,6 +37,9 @@ public class Http_HuDongActivityTea extends AnswerActivityTea {
             String currentketangId = AnswerActivityTea.currentketangId;
             //1,找水源--创建URL
             URL url;
+            Time time = new Time("GMT+8");
+            time.setToNow();
+            String path = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+MainActivity_tea.subjectId+"/"+MainActivity_tea.roomid+"/question/"+id+".png";
             if(questionAction.equals("stopAnswer")){
                 url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_saveQueHdAction.do?roomId="
                         + roomId
@@ -52,7 +58,8 @@ public class Http_HuDongActivityTea extends AnswerActivityTea {
                         + "&currentketangId="
                         + currentketangId
                         + "&versionFlag="
-                        + "whiteBoard");
+                        + "whiteBoard"
+                        +"&path="+path);
             }else{
                 url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_saveQueHdAction.do?roomId="
                         + roomId
@@ -71,7 +78,8 @@ public class Http_HuDongActivityTea extends AnswerActivityTea {
                         + "&currentketangId="
                         + ""
                         + "&versionFlag="
-                        + "whiteBoard");
+                        + "whiteBoard"
+                        +"&path="+path);
             }
 
             //2,开水闸--openConnection

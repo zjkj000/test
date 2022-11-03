@@ -14,9 +14,10 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:textColor="@color/gray_text"
+        android:textColor="@color/setboard_Showtextcolor"
         android:textSize="7sp"
         android:layout_marginTop="5dp"
+        android:layout_marginLeft="5dp"
         android:text="字号" />
     <LinearLayout
         android:layout_width="match_parent"
@@ -36,7 +37,7 @@
                 android:layout_height="wrap_content"
                 android:textSize="7sp"
                 android:id="@+id/setText_textsize"
-                android:textColor="@color/gray_text"/>
+                android:textColor="@color/setboard_setText_Textcolor"/>
         </LinearLayout>
         <LinearLayout
             android:layout_width="match_parent"
@@ -47,7 +48,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="6sp"
-                    android:textColor="@color/gray_text"
+                    android:textColor="@color/setboard_Showtextcolor"
                     android:text="小"/>
                 <SeekBar
                     android:id="@+id/selectTextSize"
@@ -63,7 +64,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="6sp"
-                    android:textColor="@color/gray_text"
+                    android:textColor="@color/setboard_Showtextcolor"
                     android:layout_marginRight="8dp"
                     android:text="大"/>
         </LinearLayout>
@@ -71,8 +72,9 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@color/gray_text"
+        android:textColor="@color/setboard_Showtextcolor"
         android:textSize="7sp"
+        android:layout_marginLeft="5dp"
         android:text="颜色 "/>
         <LinearLayout
             android:layout_width="wrap_content"
