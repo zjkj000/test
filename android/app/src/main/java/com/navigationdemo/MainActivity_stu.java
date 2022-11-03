@@ -555,7 +555,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 }
             }
         };
-        setClassTitle("测试课堂");
+        setClassTitle(keTangName);
         //初始化存储桶服务
         initViewAnswer();
 //        initHandsUpList();
