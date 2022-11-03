@@ -173,7 +173,7 @@ public class Set_paint_Fragment extends Fragment {
                 setpaintred.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
-
+        System.out.println("+++画笔颜色"+activity.getmBoard().getBrushColor().toInt());
         if(activity.getmBoard()!=null){
             if(activity.getmBoard().getBrushThin()==25){
                 setpaintsize1.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
@@ -198,7 +198,7 @@ public class Set_paint_Fragment extends Fragment {
                 setpaintgreen.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }else if(activity.getmBoard().getBrushColor().toInt()==16776960){
                 setpaintyellow.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushColor().toInt()==16711680){
+            }else if(activity.getmBoard().getBrushColor().toInt()==-65536){
                 setpaintred.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         }

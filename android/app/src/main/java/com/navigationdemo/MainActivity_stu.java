@@ -2,7 +2,7 @@ package com.navigationdemo;
 
 
 import static android.view.View.GONE;
-
+import com.navigationdemo.AnswerQuestionFragment;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
@@ -297,7 +297,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     private LinearLayout uploadprogress;                        //选择文件弹窗布局  用来设置Visiable
 
     //TabBarFragment
-    private final ChatRoomFragment chatRoomFragment = new ChatRoomFragment();                       //右侧聊天的Fragment实例
+    private final ChatRoomFragmentStu chatRoomFragment = new ChatRoomFragmentStu();                       //右侧聊天的Fragment实例
     private final VideoListFragment videoListFragment =  new VideoListFragment();                   //右侧视频列表的Fragment实例
     private final AnswerQuestionFragment answerQuestionFragment = new AnswerQuestionFragment();     //右侧互动答题的Fragment实例
 
@@ -1749,7 +1749,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
                             Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2);// type  2 别人 1 自己
 
-                            ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
+                            ChatRoomFragmentStu f = (ChatRoomFragmentStu)getmFragmenglist().get(1);
                             f.setData(msg_rec);
 
                             f.getChatMsgAdapter().notifyDataSetChanged();
@@ -2793,48 +2793,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onError(int code, String desc) {
                 System.out.println("+++文本消息发送失败");
-            }
-        });
-    }
-
-    //聊天调用 此方法  设置 全员是是否 禁言
-    public void stopAllchat(Boolean isstop){
-        // 全员禁言
-        V2TIMGroupInfo info = new V2TIMGroupInfo();
-        info.setGroupID(roomid);
-        info.setAllMuted(isstop);
-        V2TIMManager.getGroupManager().setGroupInfo(info, new V2TIMCallback() {
-            @Override
-            public void onSuccess() {
-                // 全员禁言成功
-                ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
-                EditText ed =  f.getView().findViewById(R.id.inputtext);
-                Switch sw = f.getView().findViewById(R.id.stopchat);
-                sw.setChecked(isstop);
-                if(isstop){
-                    ed.setHint("全体禁言成功！");
-                    //禁言按钮设置打开状态
-                    sw.setChecked(true);
-                }else {
-                    ed.setHint("取消全体禁言！");
-                    sw.setChecked(false);
-                }
-            }
-
-            @Override
-            public void onError(int code, String desc) {
-                // 全员禁言失败
-                System.out.println("+++全员禁言失败！"+code+desc);
-                ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
-                Switch sw = f.getView().findViewById(R.id.stopchat);
-                sw.setChecked(false);
-                if(code==10007){
-                    sw.setChecked(false);
-                    EditText ed =  f.getView().findViewById(R.id.inputtext);
-                    ed.setHint("你没有禁言权限！");
-
-                }
-
             }
         });
     }

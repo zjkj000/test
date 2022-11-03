@@ -106,6 +106,7 @@ import com.tencent.trtc.TRTCCloudDef;
 import com.tencent.trtc.TRTCCloudListener;
 import com.tencent.trtc.debug.Constant;
 import com.tencent.trtc.debug.GenerateTestUserSig;
+import com.navigationdemo.AnswerQuestionFragment;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -2021,6 +2022,7 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //设置点击效果
+
                 mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.NONE);
                 mBoard.setToolType(1);
                 mBoard.setBrushThin(cur_paintsize);
@@ -2041,6 +2043,7 @@ public class MainActivity_tea extends AppCompatActivity {
                         mBoard.setToolType(1);
                         mBoard.setBrushThin(cur_paintsize);
                         //默认改变当前右下角颜色
+                        System.out.println("+++当点了画笔的时候颜色更改paint1+"+mBoard.getBrushColor().toInt());
                         if(mBoard.getBrushColor().toInt()==8947848){
                             menu02color.setImageResource(R.mipmap.text_gray);
                         }else if(mBoard.getBrushColor().toInt()==0){
@@ -2051,7 +2054,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             menu02color.setImageResource(R.mipmap.text_green);
                         }else if(mBoard.getBrushColor().toInt()==16776960){
                             menu02color.setImageResource(R.mipmap.text_yellow);
-                        }else if(mBoard.getBrushColor().toInt()==16711680) {
+                        }else if(mBoard.getBrushColor().toInt()==-65536) {
                             menu02color.setImageResource(R.mipmap.text_red);
                         }
                         pw_selectpaint.dismiss();
@@ -2064,22 +2067,20 @@ public class MainActivity_tea extends AppCompatActivity {
                         mBoard.setHighlighterColor(new TEduBoardController.TEduBoardColor(Color.GREEN));
                         mBoard.setBrushThin(cur_Highlighterpaintsize);  //选了荧光笔就要  设置之前荧光笔  默认的大小
                         menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
-
                         //选择荧光笔的时候  默认改变当前右下角颜色     当前SDK版本有问题  后续会更改这个bug
-                        if(mBoard.getBrushColor().toInt()==8947848){
+                        if(mBoard.getHighlighterColor().toInt()==2139654280){
                             menu02color.setImageResource(R.mipmap.text_gray);
-                        }else if(mBoard.getHighlighterColor().toInt()==0){
+                        }else if(mBoard.getHighlighterColor().toInt()==2130706432){
                             menu02color.setImageResource(R.mipmap.text_black);
-                        }else if(mBoard.getHighlighterColor().toInt()==255){
+                        }else if(mBoard.getHighlighterColor().toInt()==2130706687){
                             menu02color.setImageResource(R.mipmap.text_blue);
-                        }else if(mBoard.getHighlighterColor().toInt()==16777215){
+                        }else if(mBoard.getHighlighterColor().toInt()==2130771712){
                             menu02color.setImageResource(R.mipmap.text_green);
-                        }else if(mBoard.getHighlighterColor().toInt()==16776960){
+                        }else if(mBoard.getHighlighterColor().toInt()==2147483392){
                             menu02color.setImageResource(R.mipmap.text_yellow);
-                        }else if(mBoard.getHighlighterColor().toInt()==16711680) {
+                        }else if(mBoard.getHighlighterColor().toInt()==2147418112) {
                             menu02color.setImageResource(R.mipmap.text_red);
                         }
-
                         pw_selectpaint.dismiss();
                     }
                 });
@@ -2100,7 +2101,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             menu02color.setImageResource(R.mipmap.text_green);
                         }else if(mBoard.getBrushColor().toInt()==16776960){
                             menu02color.setImageResource(R.mipmap.text_yellow);
-                        }else if(mBoard.getBrushColor().toInt()==16711680) {
+                        }else if(mBoard.getBrushColor().toInt()==-65536) {
                             menu02color.setImageResource(R.mipmap.text_red);
                         }
                         pw_selectpaint.dismiss();
@@ -2115,6 +2116,19 @@ public class MainActivity_tea extends AppCompatActivity {
             public void onClick(View v) {
                 mBoard.setToolType(11);
                 setLeftmenustatus(true);
+                if(mBoard.getTextColor().toInt()==-7829368){
+                    menu03color.setImageResource(R.mipmap.text_gray);
+                }else if(mBoard.getTextColor().toInt()==-16777216){
+                    menu03color.setImageResource(R.mipmap.text_black);
+                }else if(mBoard.getTextColor().toInt()==-16776961){
+                    menu03color.setImageResource(R.mipmap.text_blue);
+                }else if(mBoard.getTextColor().toInt()==-16711936){
+                    menu03color.setImageResource(R.mipmap.text_green);
+                }else if(mBoard.getTextColor().toInt()==-256){
+                    menu03color.setImageResource(R.mipmap.text_yellow);
+                }else if(mBoard.getTextColor().toInt()==-65536) {
+                    menu03color.setImageResource(R.mipmap.text_red);
+                }
                 menu03.setBackgroundResource(R.mipmap.menu_03_text1);
                 menu03color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
             }

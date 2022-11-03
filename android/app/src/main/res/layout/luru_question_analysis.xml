@@ -245,6 +245,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="10dp"/>
+
+                    <ImageView
+                        android:id="@+id/imgShare"
+                        android:src="@mipmap/share"
+                        android:scaleType="fitCenter"
+                        android:layout_width="30dp"
+                        android:layout_height="30dp"
+                        android:layout_marginLeft="10dp"/>
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

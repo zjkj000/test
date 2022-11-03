@@ -98,7 +98,7 @@ public class Set_text_Fragment extends Fragment {
             public void onClick(View v) {
                 setLinColorstatus();
                 activity.forSetFragmentSet("textcolor","gray");
-                activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.GRAY));
+                activity.getmBoard().setTextColor(new TEduBoardController.TEduBoardColor(Color.GRAY));
                 settextgray.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -109,7 +109,7 @@ public class Set_text_Fragment extends Fragment {
             public void onClick(View v) {
                 setLinColorstatus();
                 activity.forSetFragmentSet("textcolor","black");
-                activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.BLACK));
+                activity.getmBoard().setTextColor(new TEduBoardController.TEduBoardColor(Color.BLACK));
                 settextblack.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -120,7 +120,7 @@ public class Set_text_Fragment extends Fragment {
             public void onClick(View v) {
                 setLinColorstatus();
                 activity.forSetFragmentSet("textcolor","blue");
-                activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.BLUE));
+                activity.getmBoard().setTextColor(new TEduBoardController.TEduBoardColor(Color.BLUE));
                 settextblue.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -131,7 +131,7 @@ public class Set_text_Fragment extends Fragment {
             public void onClick(View v) {
                 setLinColorstatus();
                 activity.forSetFragmentSet("textcolor","green");
-                activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.GREEN));
+                activity.getmBoard().setTextColor(new TEduBoardController.TEduBoardColor(Color.GREEN));
                 settextgreen.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -142,7 +142,7 @@ public class Set_text_Fragment extends Fragment {
             public void onClick(View v) {
                 setLinColorstatus();
                 activity.forSetFragmentSet("textcolor","yellow");
-                activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.YELLOW));
+                activity.getmBoard().setTextColor(new TEduBoardController.TEduBoardColor(Color.YELLOW));
                 settextyellow.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -153,23 +153,23 @@ public class Set_text_Fragment extends Fragment {
             public void onClick(View v) {
                 setLinColorstatus();
                 activity.forSetFragmentSet("textcolor","red");
-                activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.RED));
+                activity.getmBoard().setTextColor(new TEduBoardController.TEduBoardColor(Color.RED));
                 settextred.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
-
+        System.out.println("+++荧光笔颜色"+activity.getmBoard().getTextColor().toInt());
         if(activity.getmBoard()!=null){
-            if(activity.getmBoard().getTextColor().toInt()==8947848){
+            if(activity.getmBoard().getTextColor().toInt()==-7829368){
                 settextgray.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getTextColor().toInt()==0){
+            }else if(activity.getmBoard().getTextColor().toInt()==-16777216){
                 settextblack.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getTextColor().toInt()==255){
+            }else if(activity.getmBoard().getTextColor().toInt()==-16776961){
                 settextblue.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getTextColor().toInt()==65280){
+            }else if(activity.getmBoard().getTextColor().toInt()==-16711936){
                 settextgreen.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getTextColor().toInt()==16776960){
+            }else if(activity.getmBoard().getTextColor().toInt()==-256){
                 settextyellow.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getTextColor().toInt()==16711680){
+            }else if(activity.getmBoard().getTextColor().toInt()==-65536){
                 settextred.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
 

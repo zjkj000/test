@@ -196,17 +196,17 @@ public class Set_Highlighter_Fragment extends Fragment {
             }else if(activity.getmBoard().getBrushThin()==450){
                 sethihtlightersize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
-            if(activity.getmBoard().getHighlighterColor().toInt()==8947848){
+            if(activity.getmBoard().getHighlighterColor().toInt()==2139654280){
                 sethihtlightergray.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getHighlighterColor().toInt()==0){
+            }else if(activity.getmBoard().getHighlighterColor().toInt()==2130706432){
                 sethihtlighterblack.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getHighlighterColor().toInt()==255){
+            }else if(activity.getmBoard().getHighlighterColor().toInt()==2130706687){
                 sethihtlighterblue.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getHighlighterColor().toInt()==16777215){
+            }else if(activity.getmBoard().getHighlighterColor().toInt()==2130771712){
                 sethihtlightergreen.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getHighlighterColor().toInt()==16776960){
+            }else if(activity.getmBoard().getHighlighterColor().toInt()==2147483392){
                 sethihtlighteryellow.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getHighlighterColor().toInt()==16711680){
+            }else if(activity.getmBoard().getHighlighterColor().toInt()==2147418112){
                 sethihtlighterred.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         }

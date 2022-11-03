@@ -1,6 +1,5 @@
 package com.navigationdemo;
 
-
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Color;
@@ -16,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.AdapterView;
@@ -32,8 +32,6 @@ import android.widget.Toast;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
-import com.navigationdemo.adapter.MyAdapter;
-import com.navigationdemo.utils.MyImageGetter;
 import com.github.mikephil.charting.charts.BarChart;
 import com.github.mikephil.charting.components.AxisBase;
 import com.github.mikephil.charting.components.Legend;
@@ -47,6 +45,14 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.github.mikephil.charting.formatter.IValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet;
 import com.github.mikephil.charting.utils.ViewPortHandler;
+import com.navigationdemo.AnswerActivityTea;
+import com.navigationdemo.Http_HuDongActivityTea;
+import com.navigationdemo.KeTangBean;
+import com.navigationdemo.MainActivity_tea;
+import com.navigationdemo.R;
+import com.navigationdemo.StuAnswerBean;
+import com.navigationdemo.adapter.MyAdapter;
+import com.navigationdemo.utils.MyImageGetter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -407,7 +413,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     //分割学生答案-客观题
     private void splitStuAnswers(){
         System.out.println("开始分割学生答案！！！！！！！！！！！！！！");
-        //AnswerActivityTea.answerStu格式:
+        //AnswerActivity.answerStu格式:
         // D:葛舸_2,葛舸_5,索夏利,@#@A:葛舸_3,@#@B:葛舸_1,何一繁,卢文静,@#@C:葛舸_0,葛舸_4,孙亮亮,@#@
         String stuAnswers = AnswerActivityTea.answerStu;
         System.out.println("学生答案1111:" + stuAnswers);
@@ -468,7 +474,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     private List<StuAnswerBean> getACStuBeanList(int num){
         int findNum = num >= 3 ? 3 : num;
         List<StuAnswerBean> answerRight_stuslistTop = new ArrayList<StuAnswerBean>();
-        for(int i = 0; i < AnswerActivityTea.alist.size() ; i++){
+        for(int i = 0 ; i < AnswerActivityTea.alist.size() ; i++){
             if(answerRight_stuslistTop.size() >= findNum){
                 break;
             }else{
@@ -530,7 +536,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 //            if(index == -1){ //计算汇总人数
 //                classAllNum = getJoinClassAllStuNum();
 //            }else{ //获取要分析的班级人数
-//                classAllNum = AnswerActivityTea.classList.get(index).stuNum;
+//                classAllNum = AnswerActivity.classList.get(index).stuNum;
 //            }
             System.out.println("作答总人数: " + classAllNum);
             linear_right.setVisibility(View.VISIBLE);
@@ -551,7 +557,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     //获取加入课堂的总人数
     private int getJoinClassAllStuNum(){
         int count = 0 ;
-        for(int i = 0; i < AnswerActivityTea.classList.size() ; i++){
+        for(int i = 0 ; i < AnswerActivityTea.classList.size() ; i++){
             count += AnswerActivityTea.classList.get(i).stuNum;
         }
         System.out.println("加入课堂的学生总人数:   " + count);
@@ -560,7 +566,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //加载加入课堂的成员（ming、gege、其它移动端）
     private void initJoinClassInformation(){
-        //直接从AnswerActivity.ketangList   AnswerActivityTea.joinList获取就好（肖赋值）
+        //直接从AnswerActivity.ketangList   AnswerActivity.joinList获取就好（肖赋值）
         if(AnswerActivityTea.classList != null){
             AnswerActivityTea.classList.clear();
         }
@@ -568,7 +574,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             AnswerActivityTea.classList = new ArrayList<>();
         }
         if(AnswerActivityTea.ketangList != null && AnswerActivityTea.ketangList.size() > 0){
-            for(int i = 0; i < AnswerActivityTea.ketangList.size() ; i++){
+            for(int i = 0 ; i < AnswerActivityTea.ketangList.size() ; i++){
                 KeTangBean classItem = new KeTangBean(
                         AnswerActivityTea.ketangList.get(i).getUserId() ,
                         AnswerActivityTea.ketangList.get(i).getName() ,
@@ -583,9 +589,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 //        KeTangBean class_ming = new KeTangBean("4193" , "我校2022级明铭班" , 60);
 //        KeTangBean class_ge = new KeTangBean("4195ketang" , "我校2022级葛舸班" , 60);
 //        KeTangBean class_yidong = new KeTangBean("zb" , "其他移动端" , 20);
-//        AnswerActivityTea.classList.add(class_ming);
-//        AnswerActivityTea.classList.add(class_ge);
-//        AnswerActivityTea.classList.add(class_yidong);
+//        AnswerActivity.classList.add(class_ming);
+//        AnswerActivity.classList.add(class_ge);
+//        AnswerActivity.classList.add(class_yidong);
     }
 
     //清空学生作答情况
@@ -667,7 +673,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             public void run() {
                 System.out.println("获取加入课堂的班级或移动端的学生作答情况！！！！！！！！！！！！！！！！！！！！！！！！");
                 initHttpData_memberAnswer();
-//                int count = AnswerActivityTea.alist != null && AnswerActivityTea.alist.size() > 0 ? AnswerActivityTea.alist.size() : 0;
+//                int count = AnswerActivity.alist != null && AnswerActivity.alist.size() > 0 ? AnswerActivity.alist.size() : 0;
                 System.out.println("学生作答情况111:  " + AnswerActivityTea.xlist);
                 JSONObject jsonObject = Http_HuDongActivityTea.getSubmitAnswerClass_keguan(ketangId , stuNum);
                 String status = "";
@@ -681,7 +687,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     }
                 }
                 if(jsonObject != null && status != null && status.length() > 0){
-//                    count = AnswerActivityTea.alist != null && AnswerActivityTea.alist.size() > 0 ? AnswerActivityTea.alist.size() : 0;
+//                    count = AnswerActivity.alist != null && AnswerActivity.alist.size() > 0 ? AnswerActivity.alist.size() : 0;
                     System.out.println("学生作答情况333:  " + AnswerActivityTea.xlist);
                     getActivity().runOnUiThread(new Runnable() {
                         public void run() {
@@ -689,7 +695,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                             if(ketangId.equals("all")){
                                 int all_count = getJoinClassAllStuNum();
                                 int answer_count = 0;
-                                for(int i = 0; i < AnswerActivityTea.ylist.size() ; i++){
+                                for(int i = 0 ; i < AnswerActivityTea.ylist.size() ; i++){
                                     answer_count += AnswerActivityTea.ylist.get(i);
                                 }
                                 tx_dati2.setText((int)(answer_count * 1.0 / all_count * 100) + "%");
@@ -697,7 +703,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                             }else{
                                 int all_count = AnswerActivityTea.classList.get(index).stuNum;
                                 int answer_count = 0;
-                                for(int i = 0; i < AnswerActivityTea.ylist.size() ; i++){
+                                for(int i = 0 ; i < AnswerActivityTea.ylist.size() ; i++){
                                     answer_count += AnswerActivityTea.ylist.get(i);
                                 }
                                 tx_dati2.setText((int)(answer_count * 1.0 / all_count * 100) + "%");
@@ -752,7 +758,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         if(screenWidth <= 0){
             getScreenProps();
         }
-        PopupWindow popupWindow = new PopupWindow(v , (int)(screenWidth * 0.75) , (int)(screenHeight * 0.8) , false);
+//        PopupWindow popupWindow = new PopupWindow(v , (int)(screenWidth * 0.75) , (int)(screenHeight * 0.8) , false);
+        PopupWindow popupWindow = new PopupWindow(v , WindowManager.LayoutParams.MATCH_PARENT , WindowManager.LayoutParams.MATCH_PARENT , false);
 
         //弹框展示在屏幕中间Gravity.CENTER,x和y是相对于Gravity.CENTER的偏移
         popupWindow.showAtLocation(v , Gravity.CENTER , 0 , 0);
@@ -1014,6 +1021,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         ImageView img_flash = v.findViewById(R.id.imgFlash);
         //退出按钮
         ImageView imgexit = v.findViewById(R.id.imgExit);
+        //共享屏幕
+        ImageView img_share = v.findViewById(R.id.imgShare);
 
         img_szda.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -1099,10 +1108,24 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         imgexit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //退出之前，需要先关闭共享屏幕！！！！！！
                 popupWindow.dismiss();
                 selectedIndex = 0;
                 answer = "";
                 isSelect_huizong = true;
+            }
+        });
+
+        img_share.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share).getConstantState())){
+                    //开始共享屏幕
+                    img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
+                }else{
+                    //结束共享屏幕
+                    img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share)));
+                }
             }
         });
     }
@@ -1138,7 +1161,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         });
 
         int max = 0;
-        for(int i = 0; i < AnswerActivityTea.ylist.size() ; i++){
+        for(int i = 0 ; i < AnswerActivityTea.ylist.size() ; i++){
             if(AnswerActivityTea.ylist.get(i) > max){
                 max = AnswerActivityTea.ylist.get(i);
             }
@@ -1817,7 +1840,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             stusAnswerList = new ArrayList<>();
         }
 
-        for(int i = 0; i < AnswerActivityTea.alist_zhuguan.size() ; i++){
+        for(int i = 0 ; i < AnswerActivityTea.alist_zhuguan.size() ; i++){
             stusNameList.add(AnswerActivityTea.alist_zhuguan.get(i).name);
             stusAnswerList.add(AnswerActivityTea.alist_zhuguan.get(i).stuAnswer);
             System.out.println("学生姓名: " + stusNameList.get(i) + "  ,  学生答案: " + stusAnswerList.get(i));
@@ -1924,7 +1947,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     //List<String> stusAnswerList_name_img;  List<String> stusAnswerList_answer_img;
     private void splitStuAnswers_zhuguan(){
         System.out.println("开始分割学生答案！！！！！！！！！！！！！！");
-        //AnswerActivityTea.answerStu格式:
+        //AnswerActivity.answerStu格式:
         // D:葛舸_2,葛舸_5,索夏利,@#@A:葛舸_3,@#@B:葛舸_1,何一繁,卢文静,@#@C:葛舸_0,葛舸_4,孙亮亮,@#@
         String stuAnswers = AnswerActivityTea.answerStu;
         System.out.println("学生答案1111:" + stuAnswers);
@@ -2050,7 +2073,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         if(screenWidth <= 0){
             getScreenProps();
         }
-        PopupWindow popupWindow = new PopupWindow(v , (int)(screenWidth * 0.75) , (int)(screenHeight * 0.8) , false);
+//        PopupWindow popupWindow = new PopupWindow(v , (int)(screenWidth * 0.75) , (int)(screenHeight * 0.8) , false);
+        PopupWindow popupWindow = new PopupWindow(v , WindowManager.LayoutParams.MATCH_PARENT , WindowManager.LayoutParams.MATCH_PARENT , false);
 
         //弹框展示在屏幕中间Gravity.CENTER,x和y是相对于Gravity.CENTER的偏移
         popupWindow.showAtLocation(v , Gravity.CENTER , 0 , 0);
@@ -2286,6 +2310,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         ImageView img_flash = v.findViewById(R.id.imgFlash);
         //退出按钮
         ImageView img_exit = v.findViewById(R.id.imgExit);
+        //共享按钮
+        ImageView img_share = v.findViewById(R.id.imgShare);
 
 
         img_gbjg.setOnClickListener(new View.OnClickListener() {
@@ -2361,9 +2387,23 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         img_exit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                //退出之前，需要先关闭屏幕共享！！！！！！
                 popupWindow.dismiss();
                 selectedIndex = 0;
                 isSelect_huizong = true;
+            }
+        });
+
+        img_share.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share).getConstantState())){
+                    //开始共享屏幕
+                    img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
+                }else{
+                    //结束共享屏幕
+                    img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share)));
+                }
             }
         });
     }
@@ -3038,7 +3078,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 //                pw_selectStu = new PopupWindow(view_selectStu , 200, 200, false);
                 //弹框展示在屏幕中间Gravity.CENTER,x和y是相对于Gravity.CENTER的偏移
 //                pw_selectStu.showAtLocation(view_selectStu , Gravity.TOP | Gravity.RIGHT , (int)(screenWidth * 0.26) , (int)(screenHeight * 0.47));
-                pw_selectStu.showAsDropDown(btSingle , -(pw_selectStu.getWidth() + 15) , -(pw_selectStu.getWidth() + 20));
+                pw_selectStu.showAsDropDown(btSingle , -(pw_selectStu.getWidth() + 35) , 0);
 
                 img_zan = view_selectStu.findViewById(R.id.img_zan);
                 if(answer_sq != null && answer_sq.length() > 0 && stuAnswer_selected.equals(answer_sq)){
@@ -3846,8 +3886,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            MainActivity_tea activity = (MainActivity_tea)getActivity();
-                            activity.ScreenShotBoard(getContext(), AnswerActivityTea.answerQuestionId,activity.getmBoard());
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.ScreenShotBoard(getContext(),AnswerActivityTea.answerQuestionId,activity.getmBoard());
                         }
                     });
                 }
@@ -3894,6 +3934,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         // 设置布局文件
         View contentView = inflater.inflate(R.layout.answer_question, container, false);
         FcontentView = contentView;
+
         txType_tiwen = (TextView) contentView.findViewById(R.id.txt_tiwen);
         txType_suiji = (TextView) contentView.findViewById(R.id.txt_suiji);
         txType_qiangda = (TextView) contentView.findViewById(R.id.txt_qiangda);

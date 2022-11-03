@@ -198,7 +198,7 @@ export default function LiveingLessonInfo_stu() {
                         renderItem={_renderItemView.bind(this)}
                         //下拉刷新相关
                         onRefresh={() => _onRefresh()}
-                        refreshing={{isRefresh}}
+                        refreshing={isRefresh}
                         ListFooterComponent={_renderFooter.bind(this)}
                         onEndReached={_onEndReached.bind(this)}
                         onEndReachedThreshold={0.5}
@@ -284,7 +284,7 @@ class LiveingLessonContent extends Component {
                                                                  this.state.title+"-@-"+               //直播房间名称
                                                                 "subjectId"+"-@-"+         //学科ID
                                                                 "ketangId"+"-@-"+         //课堂ID
-                                                                "ketangName"+"-@-"+         //课堂名称
+                                                                this.state.title+"-@-"+         //课堂名称
                                                                 global.constants.userPhoto
 
                                                                 // 下面这三个暂时没有 传递固定值
