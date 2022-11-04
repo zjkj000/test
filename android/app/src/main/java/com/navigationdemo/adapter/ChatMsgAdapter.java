@@ -53,7 +53,7 @@ public class ChatMsgAdapter extends ArrayAdapter {
         mViewHolder.Msgname.setText(mMsg.getName());
         mViewHolder.Msgdate.setText(mMsg.getDate());
         mViewHolder.Msgcontent.setText(mMsg.getContent());
-        mViewHolder.msg_head.setImageURL("http://www.cn901.com/res/avatar/2022/07/21/avatar-mingming_173040431.png");
+        mViewHolder.msg_head.setImageURL(mMsg.getUrl());
         //设置格式
         if(mMsg.getType() == 2)      //  接受  听课端的
         {

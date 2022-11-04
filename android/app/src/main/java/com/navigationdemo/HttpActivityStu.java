@@ -245,7 +245,7 @@ public class HttpActivityStu extends AnswerActivityStu {
                             + "roomId=" + roomId
                             + "&raiseHandAction=" + type + "_" + userId
                     );
-                    Log.e(TAG, "leaveOrJoinClass: " +  url);
+                    Log.e(TAG, "handsUp: " +  url);
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("GET");
@@ -269,7 +269,7 @@ public class HttpActivityStu extends AnswerActivityStu {
                     inputStream.close();
                     httpURLConnection.disconnect();
 
-                    Log.e(TAG, "leaveOrJoinClass: " +  buffer.toString());
+                    Log.e(TAG, "handsUp: " +  buffer.toString());
                     try{
                         String backLogJsonStr = buffer.toString();
 //                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
@@ -308,10 +308,10 @@ public class HttpActivityStu extends AnswerActivityStu {
             public void run() {
                 try {
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_TestJoinOrLeaveRoom.do?"
-                            + "userId=" + userId
+                            + "userId=" + userId + "_" + userCn
                             + "&roomId=" + roomId
                             + "&type=" + type
-                            + "$source=" + "app"
+                            + "&source=" + "app"
                     );
                     Log.e(TAG, "leaveOrJoinClass: " +  url);
 
@@ -345,9 +345,11 @@ public class HttpActivityStu extends AnswerActivityStu {
                         String success = "";
                         success = jsonObject.getString("success");
                         if(!success.equals("")) {
-                            Toast.makeText(mainActivity_stu, type + "房间操作成功！", Toast.LENGTH_SHORT).show();
+                            if(mainActivity_stu != null)
+                                Toast.makeText(mainActivity_stu, type + "房间操作成功！", Toast.LENGTH_SHORT).show();
                         } else {
-                            Toast.makeText(mainActivity_stu, "操作失败，请检查网络设置", Toast.LENGTH_SHORT).show();
+                            if(mainActivity_stu != null)
+                                Toast.makeText(mainActivity_stu, "操作失败，请检查网络设置", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

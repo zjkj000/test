@@ -439,7 +439,7 @@ public class MainActivity_tea extends AppCompatActivity {
         });
 
 
-        teacher_name_view.setText(userId+"老师");
+        teacher_name_view.setText(userCn+"老师");
         //文件上传部分按钮
         select_resources=findViewById(R.id.select_resources);
         proBar = findViewById(R.id.proBar);
@@ -1883,13 +1883,14 @@ public class MainActivity_tea extends AppCompatActivity {
                         String Msg_Extension = new String(msg.getCustomElem().getExtension());
                         String Msg_Description = msg.getCustomElem().getDescription();
                         super.onRecvNewMessage(msg);
+                        System.out.println("+++教师端收到了消息"+Msg_Extension+Msg_Description);
                         if("TXWhiteBoardExt".equals(Msg_Extension)){
                             //白板消息
                             mBoard.addSyncData(new String(msg.getCustomElem().getData()));
                         }else if("TBKTExt".equals(Msg_Extension)){
                             //文本消息
                             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-                            Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2);// type  2 别人 1 自己
+                            Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2,userHead);// type  2 别人 1 自己
                             ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
                             f.setData(msg_rec);
                             f.getChatMsgAdapter().notifyDataSetChanged();

@@ -147,7 +147,6 @@ import java.util.Vector;
 
 public class MainActivity_stu extends AppCompatActivity implements View.OnClickListener {
 
-    
     private static int TRTCSDKAPPID = 1400618856;//王id
     private static String TRTCSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
     private static int IMSDKAPPID = 1400757936;//王id
@@ -156,7 +155,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     private static int BOARDSDKAPPID = 1400757936;//徐id
     private static String BOARDSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
 
-    private Timer timer;
+    private static Timer timer;
 
     private static Handler handlerCount = new Handler();
     private static Runnable runnablere_mBoardaddResouce;
@@ -165,7 +164,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     private static int handsUpTime = 20; // 举手最长时间
 
     //Tabbar三个Fragment
-    private List<Fragment> mFragmenglist = new ArrayList<>();
+    public List<Fragment> mFragmenglist = new ArrayList<>();
     public List<Fragment> getmFragmenglist() {
         return mFragmenglist;
     }
@@ -173,34 +172,34 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     public final static String TAG = "Ender_MainActivity";
     public static TRTCCloud mTRTCCloud;
-    private TRTCCloudDef.TRTCParams myTRTCParams;
-    private TXCloudVideoView mTXCVVTeacherPreviewView;  //教师视频
+    public static TRTCCloudDef.TRTCParams myTRTCParams;
+    public static TXCloudVideoView mTXCVVTeacherPreviewView;  //教师视频
     public static TXDeviceManager mTXDeviceManager; // TRTC摄像头管理
-    private RelativeLayout teacherTRTCBackground;   //教师视频背景
+    public static RelativeLayout teacherTRTCBackground;   //教师视频背景
 
-    private TXCloudVideoView mTXCVVStudentPreviewView;  //学生视频
-    private RelativeLayout studentTRTCBackground;   //学生视频背景
+    public static TXCloudVideoView mTXCVVStudentPreviewView;  //学生视频
+    public static RelativeLayout studentTRTCBackground;   //学生视频背景
 
-    private ImageView boardBtn;     //白板按钮
-    private ImageView canvasBtn;    //文件 按钮  现在是画笔按钮
+    public static ImageView boardBtn;     //白板按钮
+    public static ImageView canvasBtn;    //文件 按钮  现在是画笔按钮
 
-    private ImageView contentBtn;  //文件夹按钮  现在是授课内容
-    private ImageView memberBtn;
-    private ImageView handBtn;
-    private ImageView cameraBtn;   //关闭摄像头按钮
-    private ImageView audioBtn;
+    public static ImageView contentBtn;  //文件夹按钮  现在是授课内容
+    public static ImageView memberBtn;
+    public static ImageView handBtn;
+    public static ImageView cameraBtn;   //关闭摄像头按钮
+    public static ImageView audioBtn;
     public static boolean mIsFrontCamera = true; // 摄像头前后标志位
 
-    private ImageView class_over_btn;     //下课按钮
-    private TextView teacher_name_view; //显示教师名称
-    private TextView student_name_view; //显示本人名称
-    private ImageView overClassBtn;
-    private Group group_btn;
+    public static ImageView class_over_btn;     //下课按钮
+    public static TextView teacher_name_view; //显示教师名称
+    public static TextView student_name_view; //显示本人名称
+    public static ImageView overClassBtn;
+    public static Group group_btn;
 
     public static String mTeacherId;
 
-    private boolean musicOn = true;
-    private boolean cameraOn = true;
+    public static boolean musicOn = true;
+    public static boolean cameraOn = true;
 
     // 监听用户进入房间
     public static ArrayList<String> mUserList = new ArrayList<String>();
@@ -215,6 +214,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     private  String UserSig ="";                                                        //腾讯服务签名
 //  private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
+
+
+
 
     public static String teacherName = "";
     public static String teacherId = "";
@@ -234,7 +236,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     public static String teaName = "";
     public static String teaHead = "";
-    public static String userName = "xgy";
 
     //即时通信相关
     private V2TIMManager v2TIMManager;                                        //IM实例
@@ -317,6 +318,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public List<HandsUpItem> handsUpItemList = new ArrayList<>();
     private TextView handBtnBadge;
     public Switch handsUpSwitchBtn;
+    public TextView handsUpTimeView;
 
     //答题界面，判断、单选、多选、主�?
     public static CheckBox tfyes,tfno;
@@ -430,6 +432,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         group_btn = findViewById(R.id.group_buttons);
         canvasBtn = findViewById(R.id.canvas_btn); //现在是文件图标
         handBtnBadge = findViewById(R.id.hand_btn_badge);
+        handsUpTimeView = findViewById(R.id.hand_time);
 
         boardBtn = findViewById(R.id.board_btn);
         contentBtn = findViewById(R.id.content_btn);
@@ -437,7 +440,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         handBtn = findViewById(R.id.hand_btn);
         audioBtn = findViewById(R.id.mic_btn);
         cameraBtn = findViewById(R.id.camera_btn);
-//        overClassBtn = findViewById(R.id.class_over_btn);
 
         teacher_name_view = findViewById(R.id.teacher_name);
         student_name_view = findViewById(R.id.student_name);
@@ -464,8 +466,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         });
 
 
-        teacher_name_view.setText(teacherId+"老师");
-        student_name_view.setText(userId);
+        teacher_name_view.setText(teacherName+"老师");
+        student_name_view.setText(userCn);
         //文件上传部分按钮
         proBar = findViewById(R.id.proBar);
         msgTips = findViewById(R.id.msgTips);
@@ -513,7 +515,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 int position = -1;
                 switch (msg.what) {
                     case 1:
-                        setHandsUpData();
+                        setHandsUpData(String.valueOf(handsUpTime));
                         break;
                     case 2:
                         position = msg.getData().getInt("position");
@@ -553,13 +555,14 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 }
             }
         };
-        setClassTitle("测试课堂");
+        setClassTitle(keTangName);
         //初始化存储桶服务
         initViewAnswer();
-        initHandsUpList();
-        initMemberList();
+//        initHandsUpList();
+//        initMemberList();
         initTabBarNavigation();
         enterLiveRoom();
+        getter();
         // 开启计时器
         startTime();
     }
@@ -751,6 +754,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         keTangId = strArr[5];
         keTangName = strArr[6];
         userHead = strArr[7];
+        teacherId = strArr[8];
 
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
@@ -794,7 +798,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         }, 0, 1000L);
     }
 
-    public void stopTime() {
+    public static void stopTime() {
         if(timer != null)
             timer.cancel();
     }
@@ -830,20 +834,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         }
     }
 
-    public void setHandsUpData() {
-        MainActivity_stu that = this;
-        handsUpItemList.clear();
-        List<HandsUpItem> tempHandsUpItemList = new ArrayList<>();
-        for (int i = 0; i < AnswerActivityTea.handsUpList.size(); i++) {
-            tempHandsUpItemList.add(new HandsUpItem( AnswerActivityTea.handsUpList.get(i).getUserType(), AnswerActivityTea.handsUpList.get(i).getName(), AnswerActivityTea.handsUpList.get(i).getUserId(), false));
-        }
-        for (int i =0; i< tempHandsUpItemList.size(); i++) {
-            Log.e(TAG, "updateHandsUpList: "  + tempHandsUpItemList.get(i).toString());
-        }
-        handsUpItemList.addAll(tempHandsUpItemList);
-        setHandBtnBadge(handsUpItemList.size());
-//        UtilTools.QBadge(this, handBtn, AnswerActivityTea.handsUpList.size());
-        handsUpListViewAdapter.notifyDataSetChanged();
+    public void setHandsUpData(String text) {
+        handsUpTimeView.setText(text);
     }
 
     public void switchMemberListAudioIcon(int position) {
@@ -1087,6 +1079,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     // 退出房间
     public static void exitRoom() {
         mTRTCCloud.exitRoom();
+        HttpActivityStu.stopGetControlMessageTimer();
+        MainActivity_stu.stopTime();
+        HttpActivityStu.leaveOrJoinClass(userId, roomid, "leave", null);
 //        HttpActivityTea.stopHandsUpTimer();
     }
 
@@ -1117,9 +1112,28 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             Log.d(TAG, "onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserVideoAvailable:"+userId);
+            if(available) {
+                if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.muteRemoteAudio(userId, false);
+                    @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_on);
+                    teacher_name_mic_icon.setBounds(0,0,20,20);
+                    teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+                } else {
 //            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
 //            int userPosition = listViewAdapter.getItemPositionById(userId);
 //            activity.switchMemberListAudioIcon(userPosition);
+                }
+            }
+            else {
+                if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.muteRemoteAudio(userId, true);
+                    @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_off);
+                    teacher_name_mic_icon.setBounds(0,0,20,20);
+                    teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+                } else {
+                    mUserList.remove(userId);
+                }
+            }
         }
 
         @Override
@@ -1136,13 +1150,23 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                return;
 //            }
             if(available) {
-                if(AnswerActivityTea.findMemberInKetangList(userId) != null) {
-
-                    mUserList.add(userId);
+                if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, activity.mTXCVVTeacherPreviewView);
+                    activity.teacherTRTCBackground.setVisibility(View.INVISIBLE);
+                } else {
+                    if(AnswerActivityTea.findMemberInKetangList(userId) != null) {
+                        mUserList.add(userId);
+                    }
                 }
             }
-            else
-                mUserList.remove(userId);
+            else {
+                if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.stopRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+                    activity.teacherTRTCBackground.setVisibility(View.VISIBLE);
+                } else {
+                    mUserList.remove(userId);
+                }
+            }
 //            int userPosition = listViewAdapter.getItemPositionById(userId);
 //            activity.switchMemberListVideoIcon(userPosition);
 //            if(AnswerActivityTea.findMemberInKetangList((userId)) != null)
@@ -1157,16 +1181,21 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             Log.e(TAG, "onRemoteUserEnterRoom: userId" + userId );
             System.out.println("onRemoteUserEnterRoom userId " + userId );
             Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
-            if(AnswerActivityTea.findMemberInKetangList(userId) != null)
-                activity.videoListFragment.addCameraView(userId, activity.mTRTCCloud);
+            if (userId.equals(teacherId+"_camera")) {
+                mTRTCCloud.startRemoteView(teacherId + "_camera", TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, activity.mTXCVVTeacherPreviewView);
+                activity.teacherTRTCBackground.setVisibility(View.INVISIBLE);
+            } else {
+                if(AnswerActivityTea.findMemberInKetangList(userId) != null)
+                    activity.videoListFragment.addCameraView(userId, activity.mTRTCCloud);
+            }
         }
 
         @Override
         public void onRemoteUserLeaveRoom(String userId, int reason){
             MainActivity_stu activity = mContext.get();
             System.out.println("onRemoteUserLeaveRoom userId " + userId );
-            if (userId.equals(mTeacherId+"_camera")){
-                System.out.println("mingming_camera exit room");
+            if (userId.equals(teacherId +"_camera")){
+                System.out.println("teacher exit room");
                 exitRoom();
                 teacher_enable=false;
                 return;
@@ -1194,6 +1223,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public void enterLiveRoom() {
 
 //        Log.e(TAG, "enterLiveRoom: ");
+
+        // 进入教室
+        HttpActivityStu.leaveOrJoinClass(userId, roomid, "join", this);
 
         mTRTCCloud = TRTCCloud.sharedInstance(getApplicationContext());
         mTRTCCloud.setListener(new MyTRTCCloudListener(MainActivity_stu.this));
@@ -1253,7 +1285,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         student_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
 
         // 初始化教师视频
-        mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTXCVVTeacherPreviewView);
+//        mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTXCVVTeacherPreviewView);
         teacherTRTCBackground.setVisibility(View.VISIBLE);
 
         // 初始化房间信息
@@ -1262,7 +1294,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         int screenWidth = dm.widthPixels;
         int screenHeight = dm.heightPixels;
 
-//        HttpActivityTea.initClass(screenWidth, screenHeight, "skydt", this);
         // 开启学生消息监听事件
         HttpActivityStu.startGetControlMessageTimer(roomid, userId, this);
     }
@@ -1336,16 +1367,31 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         popupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
     }
 
+    public void initHandsTimer() {
+        handsUpTimeView.setVisibility(View.INVISIBLE);
+        handsUpTime = 20;
+    }
+
     public void startHandsTimer() {
+        MainActivity_stu that = this;
+        handsUpTimeView.setVisibility(View.VISIBLE);
         handsTimer.schedule(new TimerTask() {
             @Override
             public void run() {
+                if(handsUpTime == 0) {
+                    initHandsTimer();
+                    return;
+                }
+                Message updateHandsUpTimeMessage = Message.obtain();
+                updateHandsUpTimeMessage.what = 1;
+                that.handler.sendMessage(updateHandsUpTimeMessage);
                 handsUpTime--;
             }
         }, 0, 1000);
     }
 
     public void stopHandsTimer() {
+        initHandsTimer();
         handsTimer.cancel();
     }
 
@@ -1353,13 +1399,14 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         if(handsState.equals("down")) {
             HttpActivityStu.handsUp(userId, roomid, "up", this);
             handsState = "up";
-            view.setBackgroundResource(R.drawable.bottom_stuhand_down);
+            handBtn.setImageResource(R.drawable.bottom_stuhand_down);
             startHandsTimer();
         }
         else if (handsState.equals("up")) {
             HttpActivityStu.handsUp(userId, roomid, "down", this);
             handsState = "down";
-            view.setBackgroundResource(R.drawable.bottom_stuhand_up);
+            handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+            stopHandsTimer();
         }
     }
 
@@ -1453,7 +1500,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                             @Override
                             public void onError(int i, String s) {
                                 // 发送 IM 消息失败，建议进行重试
-                                System.out.println("+++发送 IM 消息失败，建议进行重试"+s);
+                                System.out.println("+++发送 IM 消息失败，建议进行重试"+s+i);
                                 mBoard.syncAndReload();
                             }
                             @Override
@@ -1724,7 +1771,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     }
     public void LoginTIM(){
         GenerateTestUserSig.SDKAPPID = IMSDKAPPID;
-        V2TIMManager.getInstance().login(userId, UserSig, new V2TIMCallback() {
+        GenerateTestUserSig.SECRETKEY = IMSECRETKEY;
+        V2TIMManager.getInstance().login(userId, GenerateTestUserSig.genTestUserSig(userId), new V2TIMCallback() {
             @Override
             public void onError(int i, String s) {
                 System.out.println("++++++登陆失败"+s);
@@ -1740,14 +1788,18 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         String Msg_Description = msg.getCustomElem().getDescription();
                         String Msg_Data = new String(msg.getCustomElem().getData());
                         super.onRecvNewMessage(msg);
+                        System.out.println("+++教师端收到了消息"+Msg_Extension+"**"+Msg_Description+"**"+Msg_Data);
                         if("TXWhiteBoardExt".equals(Msg_Extension)){
                             //白板消息
-                            mBoard.addSyncData(new String(msg.getCustomElem().getData()));
+                            if(mBoard!=null){
+                                mBoard.addSyncData(new String(msg.getCustomElem().getData()));
+                            }
+
                         }else if("TBKTExt".equals(Msg_Extension)){
                             //文本消息
                             System.out.println("+++收到了消息"+Msg_Description);
                             SimpleDateFormat format = new SimpleDateFormat("HH:mm");
-                            Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2);// type  2 别人 1 自己
+                            Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2,userHead);// type  2 别人 1 自己
 
                             ChatRoomFragmentStu f = (ChatRoomFragmentStu)getmFragmenglist().get(1);
                             f.setData(msg_rec);
@@ -2411,7 +2463,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 mBoard.clear(false);
-                mBoard.setToolType(0);
             }
         });
         //左侧功能栏  第10个按钮  激光笔 按钮
@@ -2780,7 +2831,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         // 发送聊天消息
         final V2TIMMessage v2TIMMessage_chat = V2TIMManager.getMessageManager().createCustomMessage(
                 msg.getContent().getBytes(),       //data
-                ("2@#@"+userName+"@#@"+userHead),  //descripition
+                ("2@#@"+userCn+"@#@"+userHead),  //descripition
                 "TBKTExt".getBytes());             //extension
         V2TIMManager.getMessageManager().sendMessage(v2TIMMessage_chat, null,roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
             @Override
@@ -2792,7 +2843,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
             @Override
             public void onError(int code, String desc) {
-                System.out.println("+++文本消息发送失败");
+                System.out.println("+++文本消息发送失败"+code+desc);
             }
         });
     }
@@ -3200,7 +3251,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             if(id == R.id.tfsubmit){
                 String checkedValues = SelectUtil.getOne(radios_tf);
                 System.out.println("判断选中了：" + checkedValues);
-                HttpActivityStu.saveAnswer(checkedValues, userId, userName, this);
+                HttpActivityStu.saveAnswer(checkedValues, userId, userCn, this);
 
 //                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
@@ -3230,7 +3281,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             if(id == R.id.singlesubmit){
                 String checkedValues = SelectUtil.getOne(radios_single);
                 System.out.println("单选选中了：" + checkedValues+"id:"+HttpActivityStu.questionId);
-                HttpActivityStu.saveAnswer(checkedValues, userId, userName, this);
+                HttpActivityStu.saveAnswer(checkedValues, userId, userCn, this);
 
 //                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
@@ -3258,7 +3309,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             if(id == R.id.multisubmit){
                 String checkedValues = SelectUtil.getMany(radios_multi);
                 System.out.println("多选选中�?:"+checkedValues);
-                HttpActivityStu.saveAnswer(checkedValues, userId, userName, this);
+                HttpActivityStu.saveAnswer(checkedValues, userId, userCn, this);
 
 //                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
@@ -3307,7 +3358,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     editoneValue = editoneValue.replace("'"+i+"'","<img src=\""+base64id_url.get(i)+"\">");
                 }
                 System.out.println("editoneValue i:"+editoneValue);
-                HttpActivityStu.saveAnswer(editoneValue, userId, userName, this);
+                HttpActivityStu.saveAnswer(editoneValue, userId, userCn, this);
 
 //                if(AnswerActivity.questionAction.equals("startAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("startAnswerQiangDa")){
@@ -3555,7 +3606,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     //更新互动答题界面
     private static void getteacher(){
-        if(AnswerActivity.questionAction!=null){
+        if(AnswerActivityStu.questionAction!=null){
 //                if(AnswerActivity.questionAction.equals("stopAnswer")
 //                        ||AnswerActivity.questionAction.equals("stopAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
@@ -3573,22 +3624,22 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                    LaunchActivity.mMessageInput.bringToFront();
 //                    System.out.println("no time answer over");
 //                }
-            if(last_actiontime_answer.equals(AnswerActivity.questionTime)){
+            if(last_actiontime_answer.equals(AnswerActivityStu.questionTime)){
                 return;
             }
             else{
-                last_actiontime_answer=AnswerActivity.questionTime;
+                last_actiontime_answer=AnswerActivityStu.questionTime;
             }
-            if(AnswerActivity.questionAction.equals("startAnswer")
-                    ||AnswerActivity.questionAction.equals("startAnswerSuiji")
-                    ||AnswerActivity.questionAction.equals("startAnswerQiangDa")) {
+            if(AnswerActivityStu.questionAction.equals("startAnswer")
+                    ||AnswerActivityStu.questionAction.equals("startAnswerSuiji")
+                    ||AnswerActivityStu.questionAction.equals("startAnswerQiangDa")) {
                 mQiangda.setSelected(false);
                 BottomButtonActivity.qiangDa();
 //                MainActivity_stu.mMessageInput.setVisibility(GONE);
 
                 System.out.println("answer over a");
 
-                if (AnswerActivity.questionBaseTypeId.equals("101")) {
+                if (AnswerActivityStu.questionBaseTypeId.equals("101")) {
                     current_answer = group_singleanswer;
 //                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
                     MainActivity_stu.group_singleanswer.setVisibility(View.VISIBLE);
@@ -3597,7 +3648,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
 //                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
                     int index =0;
-                    int sub_num = Integer.parseInt(AnswerActivity.questionSubNum);
+                    int sub_num = Integer.parseInt(AnswerActivityStu.questionSubNum);
                     for(CheckBox item:radios_single){
                         if(index<sub_num){
                             item.setChecked(false);
@@ -3610,7 +3661,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         index++;
                     }
                 }
-                else if (AnswerActivity.questionBaseTypeId.equals("102")) {
+                else if (AnswerActivityStu.questionBaseTypeId.equals("102")) {
                     current_answer = group_multianswer;
 //                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
 //                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
@@ -3618,7 +3669,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                        LaunchActivity.group_subjectiveanswer.setVisibility(View.GONE);
 //                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
                     int index =0;
-                    int sub_num = Integer.parseInt(AnswerActivity.questionSubNum);
+                    int sub_num = Integer.parseInt(AnswerActivityStu.questionSubNum);
                     for(CheckBox item:radios_multi){
                         if(index<sub_num){
                             item.setChecked(false);
@@ -3631,7 +3682,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         index++;
                     }
                 }
-                else if (AnswerActivity.questionBaseTypeId.equals("103")) {
+                else if (AnswerActivityStu.questionBaseTypeId.equals("103")) {
                     current_answer = group_tfanswer;
                     MainActivity_stu.group_tfanswer.setVisibility(View.VISIBLE);
 //                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
@@ -3653,7 +3704,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         index++;
                     }
                 }
-                else if (AnswerActivity.questionBaseTypeId.equals("104")) {
+                else if (AnswerActivityStu.questionBaseTypeId.equals("104")) {
                     current_answer = group_subjectiveanswer;
 //                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
 //                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
@@ -3662,9 +3713,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
                 }
             }
-            else if(AnswerActivity.questionAction.equals("stopAnswer")
-                    ||AnswerActivity.questionAction.equals("stopAnswerSuiji")
-                    ||AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
+            else if(AnswerActivityStu.questionAction.equals("stopAnswer")
+                    ||AnswerActivityStu.questionAction.equals("stopAnswerSuiji")
+                    ||AnswerActivityStu.questionAction.equals("stopAnswerQiangDa")){
                 current_answer = null;
 
                 MainActivity_stu.group_tfanswer.setVisibility(GONE);
@@ -3683,7 +3734,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                MainActivity_stu.mGroupButtons.setVisibility(View.VISIBLE);
                 System.out.println("answer over b");
             }
-            else if(AnswerActivity.questionAction.equals("startQiangDa")){
+            else if(AnswerActivityStu.questionAction.equals("startQiangDa")){
 //                MainActivity_stu.mGroupButtons.setVisibility(View.VISIBLE);
 //                MainActivity_stu.mMessageInput.setVisibility(GONE);
                 MainActivity_stu.group_tfanswer.setVisibility(GONE);
@@ -3694,7 +3745,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 BottomButtonActivity.qiangDa();
                 System.out.println("answer over c");
             }
-            else if(AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
+            else if(AnswerActivityStu.questionAction.equals("stopAnswerQiangDa")){
 
                 BottomButtonActivity.qiangDa();
 //                MainActivity_stu.mMessageInput.setVisibility(View.VISIBLE);
@@ -3703,15 +3754,15 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             else{
 
                 BottomButtonActivity.qiangDa();
-                System.out.println("answer over f"+AnswerActivity.questionAction);
+                System.out.println("answer over f"+AnswerActivityStu.questionAction);
             }
         }
-        if(AnswerActivity.deviceMicAction!=null){
-            if(last_actiontime_mic.equals(AnswerActivity.deviceMicTime)){
+        if(AnswerActivityStu.deviceMicAction!=null){
+            if(last_actiontime_mic.equals(AnswerActivityStu.deviceMicTime)){
                 return;
             }
             else{
-                last_actiontime_mic=AnswerActivity.deviceMicTime;
+                last_actiontime_mic=AnswerActivityStu.deviceMicTime;
             }
 //            if(AnswerActivity.deviceMicAction.equals("openMic")){
 //                boolean isSelected = mButtonMuteAudio.isSelected();
@@ -3726,12 +3777,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                }
 //            }
         }
-        if(AnswerActivity.deviceCameraAction!=null){
-            if(last_actiontime_camera.equals(AnswerActivity.deviceCameraTime)){
+        if(AnswerActivityStu.deviceCameraAction!=null){
+            if(last_actiontime_camera.equals(AnswerActivityStu.deviceCameraTime)){
                 return;
             }
             else{
-                last_actiontime_camera=AnswerActivity.deviceCameraTime;
+                last_actiontime_camera=AnswerActivityStu.deviceCameraTime;
             }
 //            if(AnswerActivity.deviceCameraAction.equals("openCamera")){
 //                boolean isSelected = mButtonMuteVideo.isSelected();
@@ -3746,18 +3797,18 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                }
 //            }
         }
-        if(AnswerActivity.deviceWordsAction!=null){
+        if(AnswerActivityStu.deviceWordsAction!=null){
             System.out.println("last_actiontime_words:"+last_actiontime_words);
-            System.out.println("AnswerActivity.deviceWordsTime:"+AnswerActivity.deviceWordsTime);
-            if(last_actiontime_words.equals(AnswerActivity.deviceWordsTime)){
+            System.out.println("AnswerActivity.deviceWordsTime:"+AnswerActivityStu.deviceWordsTime);
+            if(last_actiontime_words.equals(AnswerActivityStu.deviceWordsTime)){
                 System.out.println("actiontime return");
                 return;
             }
             else{
                 System.out.println("actiontime change");
-                last_actiontime_words=AnswerActivity.deviceWordsTime;
+                last_actiontime_words=AnswerActivityStu.deviceWordsTime;
             }
-            if(AnswerActivity.deviceWordsAction.equals("openWords")&&!openWords_flag){
+            if(AnswerActivityStu.deviceWordsAction.equals("openWords")&&!openWords_flag){
                 openWords_flag = true;
                 //mMessageInput.setFocusable(true);
 //                mMessageInput.setText("");
@@ -3770,7 +3821,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                        BottomButtonActivity.muteVideo();
 //                    }
             }
-            else if(AnswerActivity.deviceWordsAction.equals("closeWords")){
+            else if(AnswerActivityStu.deviceWordsAction.equals("closeWords")){
                 openWords_flag = false;
                 //mMessageInput.setFocusable(false);
 //                mMessageInput.setEnabled(false);
@@ -3783,21 +3834,41 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                    }
             }
         }
+        if(AnswerActivityStu.allHandAction!=null) {
+            if(AnswerActivityStu.allHandAction.equals("handAllYes")) {
+                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+            } else if(AnswerActivityStu.allHandAction.equals("handAllNo")) {
+                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_no);
+            }
+        }
     }
     //处理禁止涂鸦啊
      public void   dealStopDraw(){
          rf_leftmenu.setVisibility(GONE);
          rf_bottommenu.setVisibility(GONE);
-        mBoard.setDrawEnable(false);
-        mBoard.setMouseToolBehavior(false,false,false,false);
+         if(mBoard!=null){
+            mBoard.setDrawEnable(false);
+            mBoard.setMouseToolBehavior(false,false,false,false);
+         }else {
+             initBoard();
+             mBoard.setDrawEnable(false);
+             mBoard.setMouseToolBehavior(false,false,false,false);
+         }
      }
      //处理允许涂鸦
      public void  dealAllowDraw(){
         rf_leftmenu.setVisibility(View.VISIBLE);
         rf_bottommenu.setVisibility(View.VISIBLE);
+        if(mBoard!=null){
+            mBoard.setDrawEnable(true);
+            mBoard.setMouseToolBehavior(true,true,true,true);
+        }else {
+            initBoard();
             mBoard.setDrawEnable(true);
             mBoard.setMouseToolBehavior(true,true,true,true);
         }
+    }
+
 
 }
 

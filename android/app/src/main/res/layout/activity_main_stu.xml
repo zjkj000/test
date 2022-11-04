@@ -47,8 +47,8 @@
             android:id="@+id/class_title"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:gravity="center_vertical"
             android:layout_marginLeft="32dp"
+            android:gravity="center_vertical"
             android:text="基因突变和基因重组"
             android:textColor="@color/white"
             android:textSize="7sp" />
@@ -893,7 +893,7 @@
         />
     <ImageView
         android:id="@+id/bottom_line_2"
-        android:layout_width="25dp"
+        android:layout_width="20dp"
         android:layout_height="0dp"
         app:layout_constraintStart_toEndOf="@+id/camera_switch_btn"
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
@@ -910,7 +910,17 @@
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
         android:src="@drawable/bottom_exitkt"
         />
-
+    <TextView
+        android:id="@+id/hand_time"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:text="20s"
+        android:gravity="center"
+        android:textColor="@color/text_gray"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
+        app:layout_constraintStart_toEndOf="@+id/exit_btn"
+        app:layout_constraintTop_toTopOf="@+id/group_buttons" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/tfanswer"

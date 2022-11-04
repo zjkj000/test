@@ -8,10 +8,11 @@ public class Chat_Msg {
     private Integer type;  // 1 主讲人  2  听课端
 
 
-    public Chat_Msg(String name, String date, String content, Integer type) {
+    public Chat_Msg(String name, String date, String content, Integer type,String url) {
         this.name = name;
         this.date = date;
         this.content = content;
+        this.url = url;
         this.type = type;
     }
 
