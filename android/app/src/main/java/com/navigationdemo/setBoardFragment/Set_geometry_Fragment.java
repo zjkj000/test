@@ -188,17 +188,18 @@ public class Set_geometry_Fragment extends Fragment {
             }else if(activity.getmBoard().getBrushThin()==250){
                 setgeometrysize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
-            if(activity.getmBoard().getBrushColor().toInt()==8947848){
+
+            if(activity.getmBoard().getBrushColor().toInt()==-7829368){
                 setgeometrygray.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushColor().toInt()==0){
+            }else if(activity.getmBoard().getBrushColor().toInt()==-16777216){
                 setgeometryblack.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushColor().toInt()==255){
+            }else if(activity.getmBoard().getBrushColor().toInt()==-16776961){
                 setgeometryblue.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushColor().toInt()==65280){
+            }else if(activity.getmBoard().getBrushColor().toInt()==-16711936){
                 setgeometrygreen.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushColor().toInt()==16776960){
+            }else if(activity.getmBoard().getBrushColor().toInt()==-256){
                 setgeometryyellow.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushColor().toInt()==16711680){
+            }else if(activity.getmBoard().getBrushColor().toInt()==-65536){
                 setgeometryred.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         }

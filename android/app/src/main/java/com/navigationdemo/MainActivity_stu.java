@@ -1520,7 +1520,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTEBHistroyDataSyncCompleted() {
                 System.out.println("onTEBHistroyDataSyncCompleted"+"+++++++++++++");
-                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
             }
             @Override
             public void onTEBSyncData(String data) {
@@ -1566,6 +1565,10 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTEBRedoStatusChanged(boolean canRedo) {
                 System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
+                if(mBoard.getCurrentFile()!=null&&mBoard.getCurrentBoard()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
+                    b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
+                    b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
+                }
             }
 
             @Override
@@ -1947,7 +1950,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         select_menu = findViewById(R.id.select_menu);
         select_menu_top = findViewById(R.id.select_menu_top);
         b_size.setText(mBoard.getBoardScale()+"");
-
+        dealStopDraw();
 
 
 
@@ -1973,6 +1976,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 setLeftmenustatus(true);
                 menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
                 menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu04color.setImageResource(R.color.bg_select_menu);
+                menu03color.setImageResource(R.color.bg_select_menu);
+
 
                 //开启画笔弹窗
                 View v_selectpaint = getLayoutInflater().inflate(R.layout.pw_selectpaint,null);
@@ -1987,17 +1993,17 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         mBoard.setToolType(1);
                         mBoard.setBrushThin(cur_paintsize);
                         //默认改变当前右下角颜色
-                        if(mBoard.getBrushColor().toInt()==8947848){
+                        if(mBoard.getBrushColor().toInt()==-7829368){
                             menu02color.setImageResource(R.mipmap.text_gray);
-                        }else if(mBoard.getBrushColor().toInt()==0){
+                        }else if(mBoard.getBrushColor().toInt()==-16777216){
                             menu02color.setImageResource(R.mipmap.text_black);
-                        }else if(mBoard.getBrushColor().toInt()==255){
+                        }else if(mBoard.getBrushColor().toInt()==-16776961){
                             menu02color.setImageResource(R.mipmap.text_blue);
-                        }else if(mBoard.getBrushColor().toInt()==65280){
+                        }else if(mBoard.getBrushColor().toInt()==-16711936){
                             menu02color.setImageResource(R.mipmap.text_green);
-                        }else if(mBoard.getBrushColor().toInt()==16776960){
+                        }else if(mBoard.getBrushColor().toInt()==-256){
                             menu02color.setImageResource(R.mipmap.text_yellow);
-                        }else if(mBoard.getBrushColor().toInt()==16711680) {
+                        }else if(mBoard.getBrushColor().toInt()==-65536) {
                             menu02color.setImageResource(R.mipmap.text_red);
                         }
                         pw_selectpaint.dismiss();
@@ -2012,17 +2018,17 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
 
                         //选择荧光笔的时候  默认改变当前右下角颜色     当前SDK版本有问题  后续会更改这个bug
-                        if(mBoard.getBrushColor().toInt()==8947848){
+                        if(mBoard.getHighlighterColor().toInt()==2139654280){
                             menu02color.setImageResource(R.mipmap.text_gray);
-                        }else if(mBoard.getHighlighterColor().toInt()==0){
+                        }else if(mBoard.getHighlighterColor().toInt()==2130706432){
                             menu02color.setImageResource(R.mipmap.text_black);
-                        }else if(mBoard.getHighlighterColor().toInt()==255){
+                        }else if(mBoard.getHighlighterColor().toInt()==2130706687){
                             menu02color.setImageResource(R.mipmap.text_blue);
-                        }else if(mBoard.getHighlighterColor().toInt()==16777215){
+                        }else if(mBoard.getHighlighterColor().toInt()==2130771712){
                             menu02color.setImageResource(R.mipmap.text_green);
-                        }else if(mBoard.getHighlighterColor().toInt()==16776960){
+                        }else if(mBoard.getHighlighterColor().toInt()==2147483392){
                             menu02color.setImageResource(R.mipmap.text_yellow);
-                        }else if(mBoard.getHighlighterColor().toInt()==16711680) {
+                        }else if(mBoard.getHighlighterColor().toInt()==2147418112) {
                             menu02color.setImageResource(R.mipmap.text_red);
                         }
 
@@ -2036,17 +2042,17 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         mBoard.setBrushThin(cur_paintsize);
                         mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.AUTO);
                         //默认改变当前右下角颜色
-                        if(mBoard.getBrushColor().toInt()==8947848){
+                        if(mBoard.getBrushColor().toInt()==-7829368){
                             menu02color.setImageResource(R.mipmap.text_gray);
-                        }else if(mBoard.getBrushColor().toInt()==0){
+                        }else if(mBoard.getBrushColor().toInt()==-16777216){
                             menu02color.setImageResource(R.mipmap.text_black);
-                        }else if(mBoard.getBrushColor().toInt()==255){
+                        }else if(mBoard.getBrushColor().toInt()==-16776961){
                             menu02color.setImageResource(R.mipmap.text_blue);
-                        }else if(mBoard.getBrushColor().toInt()==65280){
+                        }else if(mBoard.getBrushColor().toInt()==-16711936){
                             menu02color.setImageResource(R.mipmap.text_green);
-                        }else if(mBoard.getBrushColor().toInt()==16776960){
+                        }else if(mBoard.getBrushColor().toInt()==-256){
                             menu02color.setImageResource(R.mipmap.text_yellow);
-                        }else if(mBoard.getBrushColor().toInt()==16711680) {
+                        }else if(mBoard.getBrushColor().toInt()==-65536) {
                             menu02color.setImageResource(R.mipmap.text_red);
                         }
                         pw_selectpaint.dismiss();
@@ -2061,8 +2067,23 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             public void onClick(View v) {
                 mBoard.setToolType(11);
                 setLeftmenustatus(true);
+                if(mBoard.getTextColor().toInt()==-7829368){
+                    menu03color.setImageResource(R.mipmap.text_gray);
+                }else if(mBoard.getTextColor().toInt()==-16777216){
+                    menu03color.setImageResource(R.mipmap.text_black);
+                }else if(mBoard.getTextColor().toInt()==-16776961){
+                    menu03color.setImageResource(R.mipmap.text_blue);
+                }else if(mBoard.getTextColor().toInt()==-16711936){
+                    menu03color.setImageResource(R.mipmap.text_green);
+                }else if(mBoard.getTextColor().toInt()==-256){
+                    menu03color.setImageResource(R.mipmap.text_yellow);
+                }else if(mBoard.getTextColor().toInt()==-65536) {
+                    menu03color.setImageResource(R.mipmap.text_red);
+                }
                 menu03.setBackgroundResource(R.mipmap.menu_03_text1);
-                menu03color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu02color.setImageResource(R.color.bg_select_menu);
+                menu03color.setImageResource(R.color.bg_select_menu);
             }
         });
         //左侧功能栏  第4个按钮  选择几何图形按钮
@@ -2074,7 +2095,21 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 mBoard.setToolType(6);
                 setLeftmenustatus(true);
                 menu04.setBackgroundResource(R.mipmap.menu_04_jihe1);
-                menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu03color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                if(mBoard.getBrushColor().toInt()==8947848){
+                    menu04color.setImageResource(R.mipmap.text_gray);
+                }else if(mBoard.getBrushColor().toInt()==0){
+                    menu04color.setImageResource(R.mipmap.text_black);
+                }else if(mBoard.getBrushColor().toInt()==255){
+                    menu04color.setImageResource(R.mipmap.text_blue);
+                }else if(mBoard.getBrushColor().toInt()==65280){
+                    menu04color.setImageResource(R.mipmap.text_green);
+                }else if(mBoard.getBrushColor().toInt()==16776960){
+                    menu04color.setImageResource(R.mipmap.text_yellow);
+                }else if(mBoard.getBrushColor().toInt()==-65536) {
+                    menu04color.setImageResource(R.mipmap.text_red);
+                }
                 //开启 几何图形弹窗
                 View v_selectgeometry = getLayoutInflater().inflate(R.layout.pw_selectgeometry,null);
                 if(pw_selecgeometry==null){
@@ -3890,8 +3925,10 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     }
     //处理禁止涂鸦啊
      public void   dealStopDraw(){
-         rf_leftmenu.setVisibility(GONE);
-         rf_bottommenu.setVisibility(GONE);
+        if(rf_bottommenu!=null&&rf_leftmenu!=null){
+            rf_leftmenu.setVisibility(GONE);
+            rf_bottommenu.setVisibility(GONE);
+        }
          if(mBoard!=null){
             mBoard.setDrawEnable(false);
             mBoard.setMouseToolBehavior(false,false,false,false);

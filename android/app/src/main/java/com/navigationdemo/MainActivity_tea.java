@@ -607,13 +607,29 @@ public class MainActivity_tea extends AppCompatActivity {
             }
         });
 
+
         //第二次进入就加在不成功白板了
 //        if(mBoard==null||CurType==null){
             initTIM();
             initBoard();
 //        }
-
-
+        if(menu02!=null&&mBoard!=null&&menu02color!=null){
+            menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
+            //初始化默认选中 笔的下标颜色
+            if(mBoard.getBrushColor().toInt()==-7829368){
+                menu02color.setImageResource(R.mipmap.text_gray);
+            }else if(mBoard.getBrushColor().toInt()==-16777216){
+                menu02color.setImageResource(R.mipmap.text_black);
+            }else if(mBoard.getBrushColor().toInt()==-16776961){
+                menu02color.setImageResource(R.mipmap.text_blue);
+            }else if(mBoard.getBrushColor().toInt()==-16711936){
+                menu02color.setImageResource(R.mipmap.text_green);
+            }else if(mBoard.getBrushColor().toInt()==-256){
+                menu02color.setImageResource(R.mipmap.text_yellow);
+            }else if(mBoard.getBrushColor().toInt()==-65536) {
+                menu02color.setImageResource(R.mipmap.text_red);
+            }
+        }
 
         handler = new Handler() {
             @Override
@@ -1604,7 +1620,8 @@ public class MainActivity_tea extends AppCompatActivity {
             public void onTEBRedoStatusChanged(boolean canRedo) {
                 System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
                 select_resources.setVisibility(View.GONE);
-                if(mBoard.getCurrentFile()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
+                if(mBoard.getCurrentFile()!=null&&mBoard.getCurrentBoard()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
+                    b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
                     b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
                 }
 
@@ -1997,7 +2014,14 @@ public class MainActivity_tea extends AppCompatActivity {
         menu04color= findViewById(R.id.menu04color);
         select_menu = findViewById(R.id.select_menu);
         select_menu_top = findViewById(R.id.select_menu_top);
+
+
         b_size.setText(mBoard.getBoardScale()+"");
+
+        //初始化默认选中笔
+        mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.NONE);
+        mBoard.setToolType(1);
+        mBoard.setBrushThin(cur_paintsize);
 
 
 
@@ -2041,14 +2065,15 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //设置点击效果
-
                 mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.NONE);
                 mBoard.setToolType(1);
                 mBoard.setBrushThin(cur_paintsize);
+                System.out.println("+++当前点了画笔，颜色是"+mBoard.getBrushColor().toInt());
                 setLeftmenustatus(true);
                 menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
                 menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
-
+                menu04color.setImageResource(R.color.bg_select_menu);
+                menu03color.setImageResource(R.color.bg_select_menu);
                 //开启画笔弹窗
                 View v_selectpaint = getLayoutInflater().inflate(R.layout.pw_selectpaint,null);
                 pw_selectpaint  = new PopupWindow(v_selectpaint,ViewGroup.LayoutParams.WRAP_CONTENT,ViewGroup.LayoutParams.WRAP_CONTENT,true);
@@ -2063,15 +2088,15 @@ public class MainActivity_tea extends AppCompatActivity {
                         mBoard.setBrushThin(cur_paintsize);
                         //默认改变当前右下角颜色
                         System.out.println("+++当点了画笔的时候颜色更改paint1+"+mBoard.getBrushColor().toInt());
-                        if(mBoard.getBrushColor().toInt()==8947848){
+                        if(mBoard.getBrushColor().toInt()==-7829368){
                             menu02color.setImageResource(R.mipmap.text_gray);
-                        }else if(mBoard.getBrushColor().toInt()==0){
+                        }else if(mBoard.getBrushColor().toInt()==-16777216){
                             menu02color.setImageResource(R.mipmap.text_black);
-                        }else if(mBoard.getBrushColor().toInt()==255){
+                        }else if(mBoard.getBrushColor().toInt()==-16776961){
                             menu02color.setImageResource(R.mipmap.text_blue);
-                        }else if(mBoard.getBrushColor().toInt()==65280){
+                        }else if(mBoard.getBrushColor().toInt()==-16711936){
                             menu02color.setImageResource(R.mipmap.text_green);
-                        }else if(mBoard.getBrushColor().toInt()==16776960){
+                        }else if(mBoard.getBrushColor().toInt()==-256){
                             menu02color.setImageResource(R.mipmap.text_yellow);
                         }else if(mBoard.getBrushColor().toInt()==-65536) {
                             menu02color.setImageResource(R.mipmap.text_red);
@@ -2110,15 +2135,15 @@ public class MainActivity_tea extends AppCompatActivity {
                         mBoard.setBrushThin(cur_paintsize);
                         mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.AUTO);
                         //默认改变当前右下角颜色
-                        if(mBoard.getBrushColor().toInt()==8947848){
+                        if(mBoard.getBrushColor().toInt()==-7829368){
                             menu02color.setImageResource(R.mipmap.text_gray);
-                        }else if(mBoard.getBrushColor().toInt()==0){
+                        }else if(mBoard.getBrushColor().toInt()==-16777216){
                             menu02color.setImageResource(R.mipmap.text_black);
-                        }else if(mBoard.getBrushColor().toInt()==255){
+                        }else if(mBoard.getBrushColor().toInt()==-16776961){
                             menu02color.setImageResource(R.mipmap.text_blue);
-                        }else if(mBoard.getBrushColor().toInt()==65280){
+                        }else if(mBoard.getBrushColor().toInt()==-16711936){
                             menu02color.setImageResource(R.mipmap.text_green);
-                        }else if(mBoard.getBrushColor().toInt()==16776960){
+                        }else if(mBoard.getBrushColor().toInt()==-256){
                             menu02color.setImageResource(R.mipmap.text_yellow);
                         }else if(mBoard.getBrushColor().toInt()==-65536) {
                             menu02color.setImageResource(R.mipmap.text_red);
@@ -2150,6 +2175,8 @@ public class MainActivity_tea extends AppCompatActivity {
                 }
                 menu03.setBackgroundResource(R.mipmap.menu_03_text1);
                 menu03color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu02color.setImageResource(R.color.bg_select_menu);
+                menu04color.setImageResource(R.color.bg_select_menu);
             }
         });
         //左侧功能栏  第4个按钮  选择几何图形按钮
@@ -2162,6 +2189,22 @@ public class MainActivity_tea extends AppCompatActivity {
                 setLeftmenustatus(true);
                 menu04.setBackgroundResource(R.mipmap.menu_04_jihe1);
                 menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu02color.setImageResource(R.color.bg_select_menu);
+                menu03color.setImageResource(R.color.bg_select_menu);
+                if(mBoard.getBrushColor().toInt()==-7829368){
+                    menu04color.setImageResource(R.mipmap.text_gray);
+                }else if(mBoard.getBrushColor().toInt()==-16777216){
+                    menu04color.setImageResource(R.mipmap.text_black);
+                }else if(mBoard.getBrushColor().toInt()==-16776961){
+                    menu04color.setImageResource(R.mipmap.text_blue);
+                }else if(mBoard.getBrushColor().toInt()==-16711936){
+                    menu04color.setImageResource(R.mipmap.text_green);
+                }else if(mBoard.getBrushColor().toInt()==-256){
+                    menu04color.setImageResource(R.mipmap.text_yellow);
+                }else if(mBoard.getBrushColor().toInt()==-65536) {
+                    menu04color.setImageResource(R.mipmap.text_red);
+                }
+
                 //开启 几何图形弹窗
                 View v_selectgeometry = getLayoutInflater().inflate(R.layout.pw_selectgeometry,null);
                 if(pw_selecgeometry==null){
@@ -2473,6 +2516,9 @@ public class MainActivity_tea extends AppCompatActivity {
             }
         });
         //左侧功能栏  第5个按钮  框选工具按钮
+
+
+
         menu05 = findViewById(R.id.menu05);
         menu05.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -188,19 +188,21 @@ public class Set_paint_Fragment extends Fragment {
             }else if(activity.getmBoard().getBrushThin()==250){
                 setpaintsize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
-            if(activity.getmBoard().getBrushColor().toInt()==8947848){
+            if(activity.getmBoard().getBrushColor().toInt()==-7829368){
                 setpaintgray.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushColor().toInt()==0){
+            }else if(activity.getmBoard().getBrushColor().toInt()==-16777216){
                 setpaintblack.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushColor().toInt()==255){
+            }else if(activity.getmBoard().getBrushColor().toInt()==-16776961){
                 setpaintblue.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushColor().toInt()==65280){
+            }else if(activity.getmBoard().getBrushColor().toInt()==-16711936){
                 setpaintgreen.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
-            }else if(activity.getmBoard().getBrushColor().toInt()==16776960){
+            }else if(activity.getmBoard().getBrushColor().toInt()==-256){
                 setpaintyellow.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }else if(activity.getmBoard().getBrushColor().toInt()==-65536){
                 setpaintred.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
+
+
         }
 
         return view;
