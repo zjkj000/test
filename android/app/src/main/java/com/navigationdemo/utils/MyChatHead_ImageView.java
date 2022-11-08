@@ -49,7 +49,7 @@ public class MyChatHead_ImageView extends androidx.appcompat.widget.AppCompatIma
     }
 
     //设置网络图片
-    public void setImageURL(final String path) {
+    public void setImageURL(String path) {
         //开启一个线程用于联网
         new Thread() {
             @Override
