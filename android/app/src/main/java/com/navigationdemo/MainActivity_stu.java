@@ -197,6 +197,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static TextView student_name_view; //显示本人名称
     public static ImageView overClassBtn;
     public static Group group_btn;
+    public static Timer UIListener;
 
     public static String mTeacherId;
 
@@ -364,6 +365,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
 
     // UI消息监听器
+    public  static Handler UIhandler;
     public  static Handler handler;
     @SuppressLint("HandlerLeak")
 
@@ -513,7 +515,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //        }
 
 
-
+        // 用于更新UI的handler
+        UIhandler = new Handler();
         handler = new Handler() {
             @Override
             public void handleMessage(@NonNull Message msg) {
@@ -562,6 +565,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
         };
         setClassTitle(keTangName);
+        // 初始化答题参数
+        initQuestionData();
         //初始化存储桶服务
         initViewAnswer();
 //        initHandsUpList();
@@ -573,20 +578,37 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         startTime();
     }
 
+    public void initQuestionData() {
+        last_actiontime_answer = "";
+        last_actiontime_mic = "";
+        last_actiontime_camera = "";
+        last_actiontime_words = "";
+        last_actiontime_chat = "0000000000000";
+        last_platformUserId = "";
+        last_actiontime_startqd = "";
+        last_actiontime_stopqd = "";
+        base64_index = 0;
+    }
+
+    public static void closeUIListener() {
+        if(UIListener != null)
+            UIListener.cancel();
+    }
 
     public void getter() {
-        Timer timer = new Timer();
-        timer.schedule(new TimerTask() {
+        UIListener = new Timer();
+        UIListener.schedule(new TimerTask() {
             @Override
             public void run() {
                 handler.post(runnableUi);
                 if(!teacher_enable){
+                    Log.e(TAG, "run: 监听到老师下课");
                     exitRoom();
                     finish();
                     teacher_enable=true;
                 }
             }
-        }, 100, 100);
+        }, 10, 300);
     }
 
     // 构建Runnable对象，在runnable中更新界�?
@@ -1095,6 +1117,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         TRTCCloud.destroySharedInstance();
         HttpActivityStu.stopGetControlMessageTimer();
         MainActivity_stu.stopTime();
+        MainActivity_stu.closeUIListener();
         HttpActivityStu.leaveOrJoinClass(userId, roomid, "leave", null);
 //        HttpActivityTea.stopHandsUpTimer();
     }
@@ -3628,8 +3651,18 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     }
 
     //更新互动答题界面
-    private static void getteacher(){
+    private void getteacher(){
+//        Toast.makeText(this, "更新互动答题UI", Toast.LENGTH_SHORT).show();
+        Log.e(TAG, "getteacher: 更新互动答题UI" + AnswerActivityStu.questionAction + " " + AnswerActivityStu.questionBaseTypeId);
+        if(AnswerActivityStu.allHandAction!=null) {
+            if(AnswerActivityStu.allHandAction.equals("handAllYes")) {
+                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+            } else if(AnswerActivityStu.allHandAction.equals("handAllNo")) {
+                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_no);
+            }
+        }
         if(AnswerActivityStu.questionAction!=null){
+            Log.e(TAG, "getteacher: 答题操作" + AnswerActivityStu.questionAction + " " + AnswerActivityStu.questionBaseTypeId);
 //                if(AnswerActivity.questionAction.equals("stopAnswer")
 //                        ||AnswerActivity.questionAction.equals("stopAnswerSuiji")
 //                        ||AnswerActivity.questionAction.equals("stopAnswerQiangDa")){
@@ -3647,137 +3680,134 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                    LaunchActivity.mMessageInput.bringToFront();
 //                    System.out.println("no time answer over");
 //                }
+
             if(last_actiontime_answer.equals(AnswerActivityStu.questionTime)){
+                Log.e(TAG, "getteacher: 判断时间" + AnswerActivityStu.questionTime + " " + AnswerActivityStu.questionBaseTypeId);
                 return;
             }
             else{
+                Log.e(TAG, "getteacher: 设置时间" + AnswerActivityStu.questionTime + " " + AnswerActivityStu.questionBaseTypeId);
+                Toast.makeText(this, "设置时间" + AnswerActivityStu.questionTime, Toast.LENGTH_SHORT).show();
                 last_actiontime_answer=AnswerActivityStu.questionTime;
             }
-            if(AnswerActivityStu.questionAction.equals("startAnswer")
-                    ||AnswerActivityStu.questionAction.equals("startAnswerSuiji")
-                    ||AnswerActivityStu.questionAction.equals("startAnswerQiangDa")) {
-                mQiangda.setSelected(false);
-                BottomButtonActivity.qiangDa();
+            switch (AnswerActivityStu.questionAction) {
+                case "startAnswer":
+                case "startAnswerSuiji":
+                case "startAnswerQiangDa":
+                    mQiangda.setSelected(false);
+                    BottomButtonActivity.qiangDa();
 //                MainActivity_stu.mMessageInput.setVisibility(GONE);
 
-                System.out.println("answer over a");
+                    Log.e(TAG, "getteacher: " + "answer over a");
 
-                if (AnswerActivityStu.questionBaseTypeId.equals("101")) {
-                    current_answer = group_singleanswer;
+                    if (AnswerActivityStu.questionBaseTypeId.equals("101")) {
+                        Toast.makeText(this, "显示题目类型101", Toast.LENGTH_SHORT).show();
+                        Log.e(TAG, "getteacher: 显示题目类型101");
+                        current_answer = group_singleanswer;
 //                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
-                    MainActivity_stu.group_singleanswer.setVisibility(View.VISIBLE);
+                        MainActivity_stu.group_singleanswer.setVisibility(View.VISIBLE);
 //                        LaunchActivity.group_multianswer.setVisibility(View.GONE);
 //                        LaunchActivity.group_subjectiveanswer.setVisibility(View.GONE);
 
 //                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
-                    int index =0;
-                    int sub_num = Integer.parseInt(AnswerActivityStu.questionSubNum);
-                    for(CheckBox item:radios_single){
-                        if(index<sub_num){
-                            item.setChecked(false);
-                            item.setVisibility(View.VISIBLE);
+                        int index = 0;
+                        int sub_num = Integer.parseInt(AnswerActivityStu.questionSubNum);
+                        for (CheckBox item : radios_single) {
+                            if (index < sub_num) {
+                                item.setChecked(false);
+                                item.setVisibility(View.VISIBLE);
+                            } else {
+                                item.setChecked(false);
+                                item.setVisibility(GONE);
+                            }
+                            index++;
                         }
-                        else{
-                            item.setChecked(false);
-                            item.setVisibility(GONE);
-                        }
-                        index++;
-                    }
-                }
-                else if (AnswerActivityStu.questionBaseTypeId.equals("102")) {
-                    current_answer = group_multianswer;
+                    } else if (AnswerActivityStu.questionBaseTypeId.equals("102")) {
+                        current_answer = group_multianswer;
 //                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
 //                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
-                    MainActivity_stu.group_multianswer.setVisibility(View.VISIBLE);
+                        MainActivity_stu.group_multianswer.setVisibility(View.VISIBLE);
 //                        LaunchActivity.group_subjectiveanswer.setVisibility(View.GONE);
 //                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
-                    int index =0;
-                    int sub_num = Integer.parseInt(AnswerActivityStu.questionSubNum);
-                    for(CheckBox item:radios_multi){
-                        if(index<sub_num){
-                            item.setChecked(false);
-                            item.setVisibility(View.VISIBLE);
+                        int index = 0;
+                        int sub_num = Integer.parseInt(AnswerActivityStu.questionSubNum);
+                        for (CheckBox item : radios_multi) {
+                            if (index < sub_num) {
+                                item.setChecked(false);
+                                item.setVisibility(View.VISIBLE);
+                            } else {
+                                item.setChecked(false);
+                                item.setVisibility(GONE);
+                            }
+                            index++;
                         }
-                        else{
-                            item.setChecked(false);
-                            item.setVisibility(GONE);
-                        }
-                        index++;
-                    }
-                }
-                else if (AnswerActivityStu.questionBaseTypeId.equals("103")) {
-                    current_answer = group_tfanswer;
-                    MainActivity_stu.group_tfanswer.setVisibility(View.VISIBLE);
+                    } else if (AnswerActivityStu.questionBaseTypeId.equals("103")) {
+                        current_answer = group_tfanswer;
+                        MainActivity_stu.group_tfanswer.setVisibility(View.VISIBLE);
 //                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
 //                        LaunchActivity.group_multianswer.setVisibility(View.GONE);
 //                        LaunchActivity.group_subjectiveanswer.setVisibility(View.GONE);
 //                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
-                    int index =0;
-                    //int sub_num = Integer.parseInt(AnswerActivity.questionSubNum);
-                    int sub_num=2;
-                    for(CheckBox item:radios_tf){
-                        if(index<sub_num){
-                            item.setChecked(false);
-                            item.setVisibility(View.VISIBLE);
+                        int index = 0;
+                        //int sub_num = Integer.parseInt(AnswerActivity.questionSubNum);
+                        int sub_num = 2;
+                        for (CheckBox item : radios_tf) {
+                            if (index < sub_num) {
+                                item.setChecked(false);
+                                item.setVisibility(View.VISIBLE);
+                            } else {
+                                item.setChecked(false);
+                                item.setVisibility(GONE);
+                            }
+                            index++;
                         }
-                        else{
-                            item.setChecked(false);
-                            item.setVisibility(GONE);
-                        }
-                        index++;
-                    }
-                }
-                else if (AnswerActivityStu.questionBaseTypeId.equals("104")) {
-                    current_answer = group_subjectiveanswer;
+                    } else if (AnswerActivityStu.questionBaseTypeId.equals("104")) {
+                        current_answer = group_subjectiveanswer;
 //                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
 //                        LaunchActivity.group_singleanswer.setVisibility(View.GONE);
 //                        LaunchActivity.group_multianswer.setVisibility(View.GONE);
-                    MainActivity_stu.group_subjectiveanswer.setVisibility(View.VISIBLE);
+                        MainActivity_stu.group_subjectiveanswer.setVisibility(View.VISIBLE);
 //                    MainActivity_stu.mGroupButtons.setVisibility(GONE);
-                }
-            }
-            else if(AnswerActivityStu.questionAction.equals("stopAnswer")
-                    ||AnswerActivityStu.questionAction.equals("stopAnswerSuiji")
-                    ||AnswerActivityStu.questionAction.equals("stopAnswerQiangDa")){
-                current_answer = null;
+                    }
+                    break;
+                case "startQiangDa":
+//                MainActivity_stu.mGroupButtons.setVisibility(View.VISIBLE);
+//                MainActivity_stu.mMessageInput.setVisibility(GONE);
+                    MainActivity_stu.group_tfanswer.setVisibility(View.INVISIBLE);
+                    MainActivity_stu.group_singleanswer.setVisibility(View.INVISIBLE);
+                    MainActivity_stu.group_multianswer.setVisibility(View.INVISIBLE);
+                    MainActivity_stu.group_subjectiveanswer.setVisibility(View.INVISIBLE);
+                    mQiangda.setSelected(true);
+                    BottomButtonActivity.qiangDa();
+                    System.out.println("answer over c");
+                    break;
+                case "stopAnswer":
+                case "stopAnswerSuiji":
+                case "stopAnswerQiangDa":
+                    current_answer = null;
 
-                MainActivity_stu.group_tfanswer.setVisibility(GONE);
-                MainActivity_stu.group_singleanswer.setVisibility(GONE);
-                MainActivity_stu.group_multianswer.setVisibility(GONE);
-                MainActivity_stu.group_subjectiveanswer.setVisibility(GONE);
+                    MainActivity_stu.group_tfanswer.setVisibility(View.INVISIBLE);
+                    MainActivity_stu.group_singleanswer.setVisibility(View.INVISIBLE);
+                    MainActivity_stu.group_multianswer.setVisibility(View.INVISIBLE);
+                    MainActivity_stu.group_subjectiveanswer.setVisibility(View.INVISIBLE);
 
-                subjective_answer.setText("");
-                subjective_echo.setText("");
-                subjective_scroll.setVisibility(GONE);
+                    subjective_answer.setText("");
+                    subjective_echo.setText("");
+                    subjective_scroll.setVisibility(View.INVISIBLE);
 
-                mQiangda.setSelected(false);
-                BottomButtonActivity.qiangDa();
+                    mQiangda.setSelected(false);
+                    BottomButtonActivity.qiangDa();
+                    initQuestionData();
 
 //                    LaunchActivity.mMessageInput.setVisibility(View.VISIBLE);
 //                MainActivity_stu.mGroupButtons.setVisibility(View.VISIBLE);
-                System.out.println("answer over b");
-            }
-            else if(AnswerActivityStu.questionAction.equals("startQiangDa")){
-//                MainActivity_stu.mGroupButtons.setVisibility(View.VISIBLE);
-//                MainActivity_stu.mMessageInput.setVisibility(GONE);
-                MainActivity_stu.group_tfanswer.setVisibility(GONE);
-                MainActivity_stu.group_singleanswer.setVisibility(GONE);
-                MainActivity_stu.group_multianswer.setVisibility(GONE);
-                MainActivity_stu.group_subjectiveanswer.setVisibility(GONE);
-                mQiangda.setSelected(true);
-                BottomButtonActivity.qiangDa();
-                System.out.println("answer over c");
-            }
-            else if(AnswerActivityStu.questionAction.equals("stopAnswerQiangDa")){
+                    System.out.println("answer over b");
+                    break;
+                default:
 
-                BottomButtonActivity.qiangDa();
-//                MainActivity_stu.mMessageInput.setVisibility(View.VISIBLE);
-                System.out.println("answer over d");
-            }
-            else{
-
-                BottomButtonActivity.qiangDa();
-                System.out.println("answer over f"+AnswerActivityStu.questionAction);
+                    BottomButtonActivity.qiangDa();
+                    System.out.println("answer over f" + AnswerActivityStu.questionAction);
+                    break;
             }
         }
         if(AnswerActivityStu.deviceMicAction!=null){
@@ -3855,13 +3885,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                    if (!isSelected){
 //                        BottomButtonActivity.muteVideo();
 //                    }
-            }
-        }
-        if(AnswerActivityStu.allHandAction!=null) {
-            if(AnswerActivityStu.allHandAction.equals("handAllYes")) {
-                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
-            } else if(AnswerActivityStu.allHandAction.equals("handAllNo")) {
-                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_no);
             }
         }
     }
