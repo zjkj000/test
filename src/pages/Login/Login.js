@@ -139,7 +139,7 @@ export default Login = () => {
 
             <Input
                 value={Password}
-                text={"2020"}
+                placeholder="请输入密码"
                 //caption={renderPasswordCaption}
                 accessoryLeft={<Icon name="lock" />}
                 accessoryRight={renderEyeIcon}

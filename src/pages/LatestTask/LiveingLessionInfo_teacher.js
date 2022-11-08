@@ -271,6 +271,7 @@ class LiveingLessonContent_teacher extends Component {
             if("success"==resJson.status){
                 Toast.showSuccessToast('删除成功',500)
             }
+            this.props.refresh();
         })
     }
 
@@ -319,7 +320,8 @@ class LiveingLessonContent_teacher extends Component {
                             <Image style={{width:13,height:13,marginLeft:3}} source={require('../../assets/teacherLatestPage/tea_edit.png')}/>
                         </TouchableOpacity>
                         <TouchableOpacity
-                                onPress={()=>{DeleteLivingLession(this.state.roomId)}}>
+                                // onPress={()=>{this.DeleteLivingLession(this.state.roomId)}}
+                                >
                             <Image style={{width:13,height:13,marginLeft:3}} source={require('../../assets/teacherLatestPage/tea_delete.png')}/>
                         </TouchableOpacity>
                         </>):(<></>)}
@@ -374,10 +376,8 @@ class LiveingLessonContent_teacher extends Component {
             </>):
             // 未开始 状态
             this.state.status=='2'?(<>
-               <TouchableOpacity style={{backgroundColor:'#66B878',width:75,height:33,justifyContent:'center',alignItems:'center',margin:3}}>
-                    <Text style={{fontSize:12,color:'white'}}>{this.state.showStrTop}</Text>
-                </TouchableOpacity>
-
+               
+                <Text style={{fontSize:30,color:'#66B878'}}>{this.state.showStrTop}</Text>
                 <Text style={{fontSize:13}}>{this.state.showStrBottom}</Text>
                 </>):
             // 已结束状态

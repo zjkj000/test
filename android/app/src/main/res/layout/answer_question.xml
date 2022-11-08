@@ -21,7 +21,7 @@
                 android:text="互动类型"
                 android:layout_marginTop="5dp"
                 android:layout_marginLeft="5dp"
-                android:layout_marginBottom="7dp"
+                android:layout_marginBottom="5dp"
                 android:paddingLeft="5dp"
                 android:paddingRight="5dp"
                 android:layout_width="wrap_content"
@@ -83,7 +83,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="1dp"
                         android:text="提问"
                         android:textColor="@drawable/tab_menu_text"
                         android:textSize="12sp" />
@@ -95,7 +95,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="1dp"
                         android:text="随机"
                         android:textColor="@drawable/tab_menu_text"
                         android:textSize="12sp" />
@@ -107,7 +107,7 @@
                         android:layout_weight="1"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:layout_marginTop="3dp"
+                        android:layout_marginTop="1dp"
                         android:text="抢答"
                         android:textColor="@drawable/tab_menu_text"
                         android:textSize="12sp" />
@@ -154,7 +154,7 @@
             <!--互动模式-->
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="40dp"
+                android:layout_height="30dp"
                 android:layout_gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -167,8 +167,7 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentLeft="true"
                         android:layout_marginLeft="5dp"
-                        android:layout_marginTop="10dp"
-                        android:layout_marginBottom="7dp"
+                        android:layout_gravity="center_vertical"
                         android:background="@color/text_gray"
                         android:paddingLeft="5dp"
                         android:paddingRight="5dp"
@@ -196,7 +195,7 @@
                         android:id="@+id/linear_choose"
                         android:layout_width="wrap_content"
                         android:layout_height="25dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginRight="3dp"
                         android:layout_gravity="center"
                         android:background="@drawable/tx_choose"
                         android:layout_marginLeft="5dp"
@@ -238,125 +237,235 @@
                 </LinearLayout>
             </LinearLayout>
 
-            <RelativeLayout
-                android:gravity="center"
-                android:layout_centerHorizontal="true"
-                android:layout_width="fill_parent"
+            <LinearLayout
+                android:id="@+id/linear_moshi1"
+                android:layout_gravity="center"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                >
+                android:orientation="horizontal">
 
-                <RelativeLayout
-                    android:id="@+id/redanxuan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imgdanxuan"
+                    android:layout_width="0dp"
+                    android:layout_height="35dp"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="200dp"
+                    android:maxHeight="200dp"
+                    android:src="@drawable/tab_menu_danxuan" />
 
-                    <ImageView
-                        android:id="@+id/imgdanxuan"
-                        android:layout_width="45dp"
-                        android:layout_height="36dp"
-                        android:adjustViewBounds="true"
-                        android:maxWidth="200dp"
-                        android:maxHeight="200dp"
-                        android:src="@drawable/tab_menu_danxuan" />
+                <ImageView
+                    android:id="@+id/imgduoxuan"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="200dp"
+                    android:maxHeight="200dp"
+                    android:src="@drawable/tab_menu_duoxuan" />
 
-                    <TextView
-                        android:id="@+id/txt_danxuan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/imgdanxuan"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="3dp"
-                        android:text="单选"
-                        android:textColor="@drawable/tab_menu_text"
-                        android:textSize="12sp" />
-                </RelativeLayout>
+                <ImageView
+                    android:id="@+id/imgpanduan"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="35dp"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="200dp"
+                    android:maxHeight="200dp"
+                    android:src="@drawable/tab_menu_panduan" />
 
-                <RelativeLayout
-                    android:id="@+id/redduoxuan"
-                    android:layout_toRightOf="@+id/redanxuan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                <ImageView
+                    android:id="@+id/imgluru"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="35dp"
+                    android:adjustViewBounds="true"
+                    android:maxWidth="200dp"
+                    android:maxHeight="200dp"
+                    android:src="@drawable/tab_menu_luru" />
+            </LinearLayout>
 
-                    <ImageView
-                        android:id="@+id/imgduoxuan"
-                        android:layout_width="45dp"
-                        android:layout_height="36dp"
-                        android:adjustViewBounds="true"
-                        android:maxWidth="200dp"
-                        android:maxHeight="200dp"
-                        android:src="@drawable/tab_menu_duoxuan" />
+            <LinearLayout
+                android:id="@+id/linear_moshi2"
+                android:layout_gravity="center"
+                android:paddingRight="5dp"
+                android:paddingLeft="5dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
 
-                    <TextView
-                        android:id="@+id/txt_duoxuan"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/imgduoxuan"
-                        android:layout_centerInParent="true"
-                        android:layout_marginTop="3dp"
-                        android:text="多选"
-                        android:textColor="@drawable/tab_menu_text"
-                        android:textSize="12sp" />
-                </RelativeLayout>
+                <TextView
+                    android:id="@+id/txt_danxuan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="单选"
+                    android:textColor="@drawable/tab_menu_text"
+                    android:textSize="12sp" />
 
-                <RelativeLayout
-                    android:id="@+id/repanduan"
-                    android:layout_toRightOf="@+id/redduoxuan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                <TextView
+                    android:id="@+id/txt_duoxuan"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="1dp"
+                    android:text="多选"
+                    android:textColor="@drawable/tab_menu_text"
+                    android:textSize="12sp" />
 
-                    <ImageView
-                        android:id="@+id/imgpanduan"
-                        android:layout_width="45dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/tab_menu_panduan"
-                        android:adjustViewBounds="true"
-                        android:maxHeight="200dp"
-                        android:maxWidth="200dp"/>
+                <TextView
+                    android:id="@+id/txt_panduan"
+                    android:gravity="center"
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="1dp"
+                    android:text="判断"
+                    android:textColor="@drawable/tab_menu_text"
+                    android:textSize="12sp" />
 
-                    <TextView
-                        android:id="@+id/txt_panduan"
-                        android:text="判断"
-                        android:textColor="@drawable/tab_menu_text"
-                        android:textSize="12sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/imgpanduan"
-                        android:layout_marginTop="3dp"
-                        android:layout_centerInParent="true"/>
-                </RelativeLayout>
+                <TextView
+                    android:id="@+id/txt_luru"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_marginTop="1dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="录入"
+                    android:textColor="@drawable/tab_menu_text"
+                    android:textSize="12sp" />
+            </LinearLayout>
 
-                <RelativeLayout
-                    android:id="@+id/reluru"
-                    android:layout_toRightOf="@+id/repanduan"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+<!--            <RelativeLayout-->
+<!--                android:gravity="center"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                >-->
 
-                    <ImageView
-                        android:id="@+id/imgluru"
-                        android:layout_width="45dp"
-                        android:layout_height="36dp"
-                        android:src="@drawable/tab_menu_luru"
-                        android:adjustViewBounds="true"
-                        android:maxHeight="200dp"
-                        android:maxWidth="200dp"/>
+<!--                &lt;!&ndash;    android:layout_width="45dp"-->
+<!--                        android:layout_height="36dp"&ndash;&gt;-->
+<!--                <RelativeLayout-->
+<!--                    android:id="@+id/redanxuan"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content">-->
+<!--                    &lt;!&ndash;android:layout_width="38dp"   android:layout_height="36dp"&ndash;&gt;-->
+<!--                    <ImageView-->
+<!--                        android:id="@+id/imgdanxuan"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="36dp"-->
+<!--                        android:adjustViewBounds="true"-->
+<!--                        android:maxWidth="200dp"-->
+<!--                        android:maxHeight="200dp"-->
+<!--                        android:src="@drawable/tab_menu_danxuan" />-->
 
-                    <TextView
-                        android:id="@+id/txt_luru"
-                        android:text="录入"
-                        android:textColor="@drawable/tab_menu_text"
-                        android:textSize="12sp"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_below="@+id/imgluru"
-                        android:layout_marginTop="3dp"
-                        android:layout_centerInParent="true"/>
-                </RelativeLayout>
-            </RelativeLayout>
+<!--                    <TextView-->
+<!--                        android:id="@+id/txt_danxuan"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_below="@+id/imgdanxuan"-->
+<!--                        android:layout_centerInParent="true"-->
+<!--                        android:layout_marginTop="3dp"-->
+<!--                        android:text="单选"-->
+<!--                        android:textColor="@drawable/tab_menu_text"-->
+<!--                        android:textSize="12sp" />-->
+<!--                </RelativeLayout>-->
+
+<!--                <RelativeLayout-->
+<!--                    android:id="@+id/redduoxuan"-->
+<!--                    android:layout_toRightOf="@+id/redanxuan"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/imgduoxuan"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="36dp"-->
+<!--                        android:adjustViewBounds="true"-->
+<!--                        android:maxWidth="200dp"-->
+<!--                        android:maxHeight="200dp"-->
+<!--                        android:src="@drawable/tab_menu_duoxuan" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/txt_duoxuan"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_below="@+id/imgduoxuan"-->
+<!--                        android:layout_centerInParent="true"-->
+<!--                        android:layout_marginTop="3dp"-->
+<!--                        android:text="多选"-->
+<!--                        android:textColor="@drawable/tab_menu_text"-->
+<!--                        android:textSize="12sp" />-->
+<!--                </RelativeLayout>-->
+
+<!--                <RelativeLayout-->
+<!--                    android:id="@+id/repanduan"-->
+<!--                    android:layout_toRightOf="@+id/redduoxuan"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/imgpanduan"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="36dp"-->
+<!--                        android:adjustViewBounds="true"-->
+<!--                        android:maxWidth="200dp"-->
+<!--                        android:maxHeight="200dp"-->
+<!--                        android:src="@drawable/tab_menu_panduan" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/txt_panduan"-->
+<!--                        android:text="判断"-->
+<!--                        android:textColor="@drawable/tab_menu_text"-->
+<!--                        android:textSize="12sp"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_below="@+id/imgpanduan"-->
+<!--                        android:layout_marginTop="3dp"-->
+<!--                        android:layout_centerInParent="true"/>-->
+<!--                </RelativeLayout>-->
+
+<!--                <RelativeLayout-->
+<!--                    android:id="@+id/reluru"-->
+<!--                    android:layout_toRightOf="@+id/repanduan"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content">-->
+
+<!--                    <ImageView-->
+<!--                        android:id="@+id/imgluru"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="36dp"-->
+<!--                        android:adjustViewBounds="true"-->
+<!--                        android:maxWidth="200dp"-->
+<!--                        android:maxHeight="200dp"-->
+<!--                        android:src="@drawable/tab_menu_luru" />-->
+
+<!--                    <TextView-->
+<!--                        android:id="@+id/txt_luru"-->
+<!--                        android:text="录入"-->
+<!--                        android:textColor="@drawable/tab_menu_text"-->
+<!--                        android:textSize="12sp"-->
+<!--                        android:layout_width="wrap_content"-->
+<!--                        android:layout_height="wrap_content"-->
+<!--                        android:layout_below="@+id/imgluru"-->
+<!--                        android:layout_marginTop="3dp"-->
+<!--                        android:layout_centerInParent="true"/>-->
+<!--                </RelativeLayout>-->
+<!--            </RelativeLayout>-->
 
             <!-- 开始按钮：不可点击 -->
             <Button
                 android:id="@+id/btBegin1"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:layout_width="80dp"
                 android:layout_height="32dp"
                 android:paddingTop="0dp"
@@ -371,7 +480,7 @@
             <Button
                 android:visibility="gone"
                 android:id="@+id/btBegin2"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:layout_width="80dp"
                 android:layout_height="32dp"
                 android:paddingTop="0dp"
@@ -386,7 +495,7 @@
             <LinearLayout
                 android:visibility="visible"
                 android:id="@+id/linear1"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="5dp"
                 android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
@@ -396,14 +505,15 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-<!--                    android:layout_width="92dp"-->
+<!--                    android:layout_width="95dp"-->
                     <Button
                         android:id="@+id/btSingle"
-                        android:layout_width="95dp"
+                        android:layout_width="80dp"
                         android:layout_height="32dp"
                         android:paddingTop="0dp"
                         android:gravity="center"
                         android:text="单题分析"
+                        android:textSize="14sp"
                         android:textColor="@color/white"
                         android:backgroundTint="@null"
                         android:background="@drawable/btn_begin_enable"/>
@@ -414,11 +524,12 @@
 
                     <Button
                         android:id="@+id/btAnswers"
-                        android:layout_width="95dp"
+                        android:layout_width="80dp"
                         android:layout_height="32dp"
                         android:paddingTop="0dp"
                         android:gravity="center"
                         android:text="答题详情"
+                        android:textSize="14sp"
                         android:textColor="@color/white"
                         android:backgroundTint="@null"
                         android:background="@drawable/btn_begin_enable"/>
@@ -427,17 +538,18 @@
                 <LinearLayout
                     android:gravity="center"
                     android:padding="3dp"
-                    android:layout_marginTop="10dp"
+                    android:layout_marginTop="0dp"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
                     <Button
                         android:id="@+id/btEnd"
-                        android:layout_width="95dp"
+                        android:layout_width="80dp"
                         android:layout_height="32dp"
                         android:paddingTop="0dp"
                         android:gravity="center"
                         android:text="结束作答"
+                        android:textSize="14sp"
                         android:textColor="@color/white"
                         android:backgroundTint="@null"
                         android:background="@drawable/btn_begin_enable"/>
@@ -448,12 +560,12 @@
 
                     <Button
                         android:id="@+id/btClosed"
-                        android:minWidth="95dp"
-                        android:layout_width="95dp"
+                        android:layout_width="80dp"
                         android:layout_height="32dp"
                         android:paddingTop="0dp"
                         android:gravity="center"
                         android:text="关闭提问"
+                        android:textSize="14sp"
                         android:textColor="@color/white"
                         android:backgroundTint="@null"
                         android:background="@drawable/btn_begin_enable"/>
@@ -465,7 +577,7 @@
                 android:visibility="visible"
                 android:id="@+id/linear2"
                 android:gravity="center"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="3dp"
                 android:layout_width="match_parent"
                 android:layout_height="150dp"
                 android:orientation="vertical"

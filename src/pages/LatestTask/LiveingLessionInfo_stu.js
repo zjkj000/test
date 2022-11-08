@@ -412,7 +412,7 @@ class LiveingLessonContent extends Component {
                                             "-@-" + //学科ID
                                             "ketangId" +
                                             "-@-" + //课堂ID
-                                            "ketangName" +
+                                            this.state.title +
                                             "-@-" + //课堂名称
                                             global.constants.userPhoto +
                                             "-@-" +
