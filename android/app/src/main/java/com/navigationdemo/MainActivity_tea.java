@@ -157,6 +157,8 @@ public class MainActivity_tea extends AppCompatActivity {
 
     private ImageView exit_btn;     //下课按钮
     private TextView teacher_name_view; //显示教师名称
+    public static ImageView shareBtn;   //分享按钮
+    public static boolean shareState = false;   //分享状态
     private ImageView overClassBtn;
     private Group group_btn;
 
@@ -1056,6 +1058,22 @@ public class MainActivity_tea extends AppCompatActivity {
     public static void exitRoom() {
         mTRTCCloud.exitRoom();
 //        HttpActivityTea.stopHandsUpTimer();
+    }
+
+    public void handleSareScreen(View view) {
+        if(shareState) {
+            TRTCCloudDef.TRTCVideoEncParam encParam = new TRTCCloudDef.TRTCVideoEncParam();
+            encParam.videoResolution = 1920 * 1080;
+            encParam.videoFps = 8;
+            encParam.videoBitrate = 1600;
+            encParam.enableAdjustRes = false;
+            mTRTCCloud.startScreenCapture(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, encParam, new TRTCCloudDef.TRTCScreenShareParams());
+            shareBtn.setImageResource(R.drawable.bottom_share_close);
+        } else {
+            mTRTCCloud.stopScreenCapture();
+            shareBtn.setImageResource(R.drawable.bottom_share);
+        }
+        shareState = !shareState;
     }
 
     public static class MyTRTCCloudListener extends TRTCCloudListener {

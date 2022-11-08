@@ -73,5 +73,10 @@
             android:screenOrientation="landscape">
 
         </activity>
+        <!--    分享视频功能需要    -->
+        <activity
+            android:name="com.tencent.rtmp.video.TXScreenCapture$TXScreenCaptureAssistantActivity"
+            android:theme="@android:style/Theme.Translucent"/>
+
     </application>
 </manifest>

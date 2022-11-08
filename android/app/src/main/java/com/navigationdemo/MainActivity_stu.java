@@ -173,9 +173,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public final static String TAG = "Ender_MainActivity";
     public static TRTCCloud mTRTCCloud;
     public static TRTCCloudDef.TRTCParams myTRTCParams;
+    public static TRTCCloudDef.TRTCRenderParams trtcRenderParams = new TRTCCloudDef.TRTCRenderParams();
     public static TXCloudVideoView mTXCVVTeacherPreviewView;  //教师视频
     public static TXDeviceManager mTXDeviceManager; // TRTC摄像头管理
     public static RelativeLayout teacherTRTCBackground;   //教师视频背景
+    public static TXCloudVideoView mTeacherShare;    // 共享屏幕
 
     public static TXCloudVideoView mTXCVVStudentPreviewView;  //学生视频
     public static RelativeLayout studentTRTCBackground;   //学生视频背景
@@ -412,6 +414,10 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         // 获取StudentCameraView
         mTXCVVStudentPreviewView = findViewById(R.id.student_camera);
         studentTRTCBackground = findViewById(R.id.student_background);
+
+        // 获取ShareView
+        mTeacherShare = (TXCloudVideoView)findViewById(R.id.teacher_share);
+        mTeacherShare.setOnClickListener(this);
 
         alert_text = findViewById(R.id.alert_text);
 
@@ -1078,7 +1084,15 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     // 退出房间
     public static void exitRoom() {
-        mTRTCCloud.exitRoom();
+        if (mTRTCCloud != null) {
+            mTRTCCloud.stopLocalAudio();
+            mTRTCCloud.stopLocalPreview();
+            mTRTCCloud.exitRoom();
+            mTRTCCloud.setListener(null);
+            mTRTCCloud.exitRoom();
+        }
+        mTRTCCloud = null;
+        TRTCCloud.destroySharedInstance();
         HttpActivityStu.stopGetControlMessageTimer();
         MainActivity_stu.stopTime();
         HttpActivityStu.leaveOrJoinClass(userId, roomid, "leave", null);
@@ -1150,7 +1164,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                return;
 //            }
             if(available) {
-                if (userId.equals(teacherId+"_camera")) {
+                if(userId.contains("_share")){
+                    mTeacherShare.setVisibility(View.VISIBLE);
+                    mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
+                    mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTeacherShare);
+                }
+                else if (userId.equals(teacherId+"_camera")) {
                     mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, activity.mTXCVVTeacherPreviewView);
                     activity.teacherTRTCBackground.setVisibility(View.INVISIBLE);
                 } else {
@@ -1160,7 +1179,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 }
             }
             else {
-                if (userId.equals(teacherId+"_camera")) {
+                if(userId.contains("_share")){
+                    mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+                    mTeacherShare.setVisibility(View.INVISIBLE);
+                }
+                else if (userId.equals(teacherId+"_camera")) {
                     mTRTCCloud.stopRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
                     activity.teacherTRTCBackground.setVisibility(View.VISIBLE);
                 } else {

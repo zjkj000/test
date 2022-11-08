@@ -1003,6 +1003,18 @@
         android:src="@drawable/bottom_line"
         />
 
+
+    <ImageView
+        android:id="@+id/share_btn"
+        android:layout_width="50dp"
+        android:layout_height="0dp"
+        android:adjustViewBounds="true"
+        android:onClick="handleSareScreen"
+        app:layout_constraintEnd_toStartOf="@id/exit_btn"
+        app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
+        app:layout_constraintTop_toTopOf="@+id/group_buttons"
+        android:src="@drawable/bottom_share"
+        />
     <ImageView
         android:id="@+id/exit_btn"
         android:layout_width="50dp"
