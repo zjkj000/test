@@ -420,8 +420,32 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         // 获取ShareView
         mTeacherShare = (TXCloudVideoView)findViewById(R.id.teacher_share);
         mTeacherShare.setOnClickListener(this);
+        //白板按钮
+        b_size = findViewById(R.id.board_size);
+        b_cur =  findViewById(R.id.board_curpage);
+        b_sum =  findViewById(R.id.board_sumpage);
+        b_chu =  findViewById(R.id.b_chu);
+        b_per =  findViewById(R.id.b_per);
+        menu01RL = findViewById(R.id.menu01RL);
+        menu02RL = findViewById(R.id.menu02RL);
+        menu03RL = findViewById(R.id.menu03RL);
+        menu04RL = findViewById(R.id.menu04RL);
+        menu05RL = findViewById(R.id.menu05RL);
+        menu06RL = findViewById(R.id.menu06RL);
+        menu07RL = findViewById(R.id.menu07RL);
+        menu08RL = findViewById(R.id.menu08RL);
+        menu09RL = findViewById(R.id.menu09RL);
+        menu10RL = findViewById(R.id.menu10RL);
+        menu11RL = findViewById(R.id.menu11RL);
+        menu12RL = findViewById(R.id.menu12RL);
+        menu02color= findViewById(R.id.menu02color);
+        menu03color= findViewById(R.id.menu03color);
+        menu04color= findViewById(R.id.menu04color);
+        select_menu = findViewById(R.id.select_menu);
+        select_menu_top = findViewById(R.id.select_menu_top);
 
         alert_text = findViewById(R.id.alert_text);
+
 
         headerCountString = findViewById(R.id.student_num);
         classTime = findViewById(R.id.class_time);
@@ -513,6 +537,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             initTIM();
             initBoard();
 //        }
+
+        if(menu02!=null&&mBoard!=null&&menu02color!=null){
+            menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
+            menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+            menu02color.setImageResource(R.mipmap.text_red);
+        }
 
 
         // 用于更新UI的handler
@@ -1927,32 +1957,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     //初始化白板的 左侧  底部按钮
     public void initBoardMenu(){
-        b_size = findViewById(R.id.board_size);
-        b_cur =  findViewById(R.id.board_curpage);
-        b_sum =  findViewById(R.id.board_sumpage);
-        b_chu =  findViewById(R.id.b_chu);
-        b_per =  findViewById(R.id.b_per);
-        menu01RL = findViewById(R.id.menu01RL);
-        menu02RL = findViewById(R.id.menu02RL);
-        menu03RL = findViewById(R.id.menu03RL);
-        menu04RL = findViewById(R.id.menu04RL);
-        menu05RL = findViewById(R.id.menu05RL);
-        menu06RL = findViewById(R.id.menu06RL);
-        menu07RL = findViewById(R.id.menu07RL);
-        menu08RL = findViewById(R.id.menu08RL);
-        menu09RL = findViewById(R.id.menu09RL);
-        menu10RL = findViewById(R.id.menu10RL);
-        menu11RL = findViewById(R.id.menu11RL);
-        menu12RL = findViewById(R.id.menu12RL);
-        menu02color= findViewById(R.id.menu02color);
-        menu03color= findViewById(R.id.menu03color);
-        menu04color= findViewById(R.id.menu04color);
-        select_menu = findViewById(R.id.select_menu);
-        select_menu_top = findViewById(R.id.select_menu_top);
+
         b_size.setText(mBoard.getBoardScale()+"");
         dealStopDraw();
-
-
 
         //左侧功能栏  第一个按钮  鼠标按钮
         menu01 = findViewById(R.id.menu01);
@@ -2081,9 +2088,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     menu03color.setImageResource(R.mipmap.text_red);
                 }
                 menu03.setBackgroundResource(R.mipmap.menu_03_text1);
-                menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu03color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
                 menu02color.setImageResource(R.color.bg_select_menu);
-                menu03color.setImageResource(R.color.bg_select_menu);
+                menu04color.setImageResource(R.color.bg_select_menu);
             }
         });
         //左侧功能栏  第4个按钮  选择几何图形按钮
@@ -2095,8 +2102,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 mBoard.setToolType(6);
                 setLeftmenustatus(true);
                 menu04.setBackgroundResource(R.mipmap.menu_04_jihe1);
-                menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
-                menu03color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu02color.setImageResource(R.color.bg_select_menu);
+                menu03color.setImageResource(R.color.bg_select_menu);
                 if(mBoard.getBrushColor().toInt()==8947848){
                     menu04color.setImageResource(R.mipmap.text_gray);
                 }else if(mBoard.getBrushColor().toInt()==0){
@@ -2589,10 +2597,14 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         sl = new String[]{"画笔设置", "背景设置", "更多设置"};
                         mTabFragmenList.add(set_paint_fragment);
                     } else if (mBoard.getToolType() == 11) {
-                        mBoard.setToolType(11);
                         sl = new String[]{"文本设置", "背景设置", "更多设置"};
                         mTabFragmenList.add(set_text_fragment);
-                    } else if (mBoard.getToolType() == 6) {
+                    } else if (mBoard.getToolType() == 4||  mBoard.getToolType()==5
+                            ||  mBoard.getToolType()==6  ||  mBoard.getToolType()==13
+                            ||  mBoard.getToolType()==15  ||  mBoard.getToolType()==20
+                            ||  mBoard.getToolType()==21  ||  mBoard.getToolType()==22
+                            ||  mBoard.getToolType()==23  ||  mBoard.getToolType()==24
+                            ||  mBoard.getToolType()==25  ||  mBoard.getToolType()==26) {
                         sl = new String[]{"几何图形设置", "背景设置", "更多设置"};
                         mTabFragmenList.add(set_geometry_fragment);
                     } else if (mBoard.getToolType() == 2) {
@@ -3659,6 +3671,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    @SuppressLint("Range")
     private String getImagePath(Uri uri, String selection) {
         String path=null;
         //通过Uri和selection来获取真实的图片路径
@@ -3942,10 +3955,16 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         rf_leftmenu.setVisibility(View.VISIBLE);
         rf_bottommenu.setVisibility(View.VISIBLE);
         if(mBoard!=null){
+            mBoard.setToolType(1);
+            menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+            menu02color.setImageResource(R.mipmap.text_red);
             mBoard.setDrawEnable(true);
             mBoard.setMouseToolBehavior(true,true,true,true);
         }else {
             initBoard();
+            mBoard.setToolType(1);
+            menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+            menu02color.setImageResource(R.mipmap.text_red);
             mBoard.setDrawEnable(true);
             mBoard.setMouseToolBehavior(true,true,true,true);
         }

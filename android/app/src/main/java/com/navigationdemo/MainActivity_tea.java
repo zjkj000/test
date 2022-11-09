@@ -378,6 +378,29 @@ public class MainActivity_tea extends AppCompatActivity {
         classTime = findViewById(R.id.class_time);
         classTitle = findViewById(R.id.class_title);
 
+        //白板参数
+        b_size = findViewById(R.id.board_size);
+        b_cur =  findViewById(R.id.board_curpage);
+        b_sum =  findViewById(R.id.board_sumpage);
+        b_chu =  findViewById(R.id.b_chu);
+        b_per =  findViewById(R.id.b_per);
+        menu01RL = findViewById(R.id.menu01RL);
+        menu02RL = findViewById(R.id.menu02RL);
+        menu03RL = findViewById(R.id.menu03RL);
+        menu04RL = findViewById(R.id.menu04RL);
+        menu05RL = findViewById(R.id.menu05RL);
+        menu06RL = findViewById(R.id.menu06RL);
+        menu07RL = findViewById(R.id.menu07RL);
+        menu08RL = findViewById(R.id.menu08RL);
+        menu09RL = findViewById(R.id.menu09RL);
+        menu10RL = findViewById(R.id.menu10RL);
+        menu11RL = findViewById(R.id.menu11RL);
+        menu12RL = findViewById(R.id.menu12RL);
+        menu02color= findViewById(R.id.menu02color);
+        menu03color= findViewById(R.id.menu03color);
+        menu04color= findViewById(R.id.menu04color);
+        select_menu = findViewById(R.id.select_menu);
+        select_menu_top = findViewById(R.id.select_menu_top);
 
         chooseFilePopupView            =getLayoutInflater().inflate(R.layout.choose_file_pop_window, null);
         chooseFilePopupCloseBtn        =chooseFilePopupView.findViewById(R.id.choose_file_pop_close);
@@ -462,15 +485,10 @@ public class MainActivity_tea extends AppCompatActivity {
                 if(SnapshotMarkFlag){
                     mBoard.addSnapshotMark();
                 }
-
-
                 //后面加一个 处理关闭  定时器一类的方法  在这里调用   比如 答题部分：AnswerQuestionFragment.java:3798  如果未关闭 直接下课就会出问题
-
-
 
                 save_livePlay_CreateSnapshotTask();
                 finish();
-
 
                 addBoardtoFragmentstatus =false;
                 rf_leftmenu.setVisibility(View.GONE);
@@ -607,7 +625,6 @@ public class MainActivity_tea extends AppCompatActivity {
             }
         });
 
-
         //第二次进入就加在不成功白板了
 //        if(mBoard==null||CurType==null){
             initTIM();
@@ -615,20 +632,8 @@ public class MainActivity_tea extends AppCompatActivity {
 //        }
         if(menu02!=null&&mBoard!=null&&menu02color!=null){
             menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
-            //初始化默认选中 笔的下标颜色
-            if(mBoard.getBrushColor().toInt()==-7829368){
-                menu02color.setImageResource(R.mipmap.text_gray);
-            }else if(mBoard.getBrushColor().toInt()==-16777216){
-                menu02color.setImageResource(R.mipmap.text_black);
-            }else if(mBoard.getBrushColor().toInt()==-16776961){
-                menu02color.setImageResource(R.mipmap.text_blue);
-            }else if(mBoard.getBrushColor().toInt()==-16711936){
-                menu02color.setImageResource(R.mipmap.text_green);
-            }else if(mBoard.getBrushColor().toInt()==-256){
-                menu02color.setImageResource(R.mipmap.text_yellow);
-            }else if(mBoard.getBrushColor().toInt()==-65536) {
-                menu02color.setImageResource(R.mipmap.text_red);
-            }
+            menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+            menu02color.setImageResource(R.mipmap.text_red);
         }
 
         handler = new Handler() {
@@ -1992,37 +1997,12 @@ public class MainActivity_tea extends AppCompatActivity {
 
     //初始化白板的 左侧  底部按钮
     public void initBoardMenu(){
-        b_size = findViewById(R.id.board_size);
-        b_cur =  findViewById(R.id.board_curpage);
-        b_sum =  findViewById(R.id.board_sumpage);
-        b_chu =  findViewById(R.id.b_chu);
-        b_per =  findViewById(R.id.b_per);
-        menu01RL = findViewById(R.id.menu01RL);
-        menu02RL = findViewById(R.id.menu02RL);
-        menu03RL = findViewById(R.id.menu03RL);
-        menu04RL = findViewById(R.id.menu04RL);
-        menu05RL = findViewById(R.id.menu05RL);
-        menu06RL = findViewById(R.id.menu06RL);
-        menu07RL = findViewById(R.id.menu07RL);
-        menu08RL = findViewById(R.id.menu08RL);
-        menu09RL = findViewById(R.id.menu09RL);
-        menu10RL = findViewById(R.id.menu10RL);
-        menu11RL = findViewById(R.id.menu11RL);
-        menu12RL = findViewById(R.id.menu12RL);
-        menu02color= findViewById(R.id.menu02color);
-        menu03color= findViewById(R.id.menu03color);
-        menu04color= findViewById(R.id.menu04color);
-        select_menu = findViewById(R.id.select_menu);
-        select_menu_top = findViewById(R.id.select_menu_top);
-
-
         b_size.setText(mBoard.getBoardScale()+"");
 
         //初始化默认选中笔
         mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.NONE);
         mBoard.setToolType(1);
         mBoard.setBrushThin(cur_paintsize);
-
 
 
 //        文件上传按钮
@@ -2068,7 +2048,6 @@ public class MainActivity_tea extends AppCompatActivity {
                 mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.NONE);
                 mBoard.setToolType(1);
                 mBoard.setBrushThin(cur_paintsize);
-                System.out.println("+++当前点了画笔，颜色是"+mBoard.getBrushColor().toInt());
                 setLeftmenustatus(true);
                 menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
                 menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
@@ -2690,7 +2669,13 @@ public class MainActivity_tea extends AppCompatActivity {
                         mBoard.setToolType(11);
                         sl = new String[]{"文本设置", "背景设置", "更多设置"};
                         mTabFragmenList.add(set_text_fragment);
-                    } else if (mBoard.getToolType() == 6) {
+                    } else if (mBoard.getToolType() == 4||  mBoard.getToolType()==5
+                            ||  mBoard.getToolType()==6  ||  mBoard.getToolType()==13
+                            ||  mBoard.getToolType()==15  ||  mBoard.getToolType()==20
+                            ||  mBoard.getToolType()==21  ||  mBoard.getToolType()==22
+                            ||  mBoard.getToolType()==23  ||  mBoard.getToolType()==24
+                            ||  mBoard.getToolType()==25  ||  mBoard.getToolType()==26
+                    ) {
                         sl = new String[]{"几何图形设置", "背景设置", "更多设置"};
                         mTabFragmenList.add(set_geometry_fragment);
                     } else if (mBoard.getToolType() == 2) {

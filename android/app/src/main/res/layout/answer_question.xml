@@ -112,43 +112,43 @@
                         android:textColor="@drawable/tab_menu_text"
                         android:textSize="12sp" />
                 </LinearLayout>
-<!--                <TextView-->
-<!--                    android:id="@+id/txt_tiwen"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:drawablePadding="3dp"-->
-<!--                    android:drawableTop="@drawable/tab_menu_tiwen"-->
-<!--                    android:gravity="center"-->
-<!--                    android:padding="2dp"-->
-<!--                    android:text="提问"-->
-<!--                    android:textColor="@drawable/tab_menu_text"-->
-<!--                    android:textSize="12sp" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/txt_tiwen"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:drawablePadding="3dp"-->
+                <!--                    android:drawableTop="@drawable/tab_menu_tiwen"-->
+                <!--                    android:gravity="center"-->
+                <!--                    android:padding="2dp"-->
+                <!--                    android:text="提问"-->
+                <!--                    android:textColor="@drawable/tab_menu_text"-->
+                <!--                    android:textSize="12sp" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/txt_suiji"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:drawablePadding="3dp"-->
-<!--                    android:drawableTop="@drawable/tab_menu_suiji"-->
-<!--                    android:gravity="center"-->
-<!--                    android:padding="2dp"-->
-<!--                    android:layout_marginLeft="10dp"-->
-<!--                    android:text="随机"-->
-<!--                    android:textColor="@drawable/tab_menu_text"-->
-<!--                    android:textSize="12sp" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/txt_suiji"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:drawablePadding="3dp"-->
+                <!--                    android:drawableTop="@drawable/tab_menu_suiji"-->
+                <!--                    android:gravity="center"-->
+                <!--                    android:padding="2dp"-->
+                <!--                    android:layout_marginLeft="10dp"-->
+                <!--                    android:text="随机"-->
+                <!--                    android:textColor="@drawable/tab_menu_text"-->
+                <!--                    android:textSize="12sp" />-->
 
-<!--                <TextView-->
-<!--                    android:id="@+id/txt_qiangda"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content"-->
-<!--                    android:drawablePadding="3dp"-->
-<!--                    android:drawableTop="@drawable/tab_menu_qiangda"-->
-<!--                    android:gravity="center"-->
-<!--                    android:padding="2dp"-->
-<!--                    android:layout_marginLeft="10dp"-->
-<!--                    android:text="抢答"-->
-<!--                    android:textColor="@drawable/tab_menu_text"-->
-<!--                    android:textSize="12sp" />-->
+                <!--                <TextView-->
+                <!--                    android:id="@+id/txt_qiangda"-->
+                <!--                    android:layout_width="wrap_content"-->
+                <!--                    android:layout_height="wrap_content"-->
+                <!--                    android:drawablePadding="3dp"-->
+                <!--                    android:drawableTop="@drawable/tab_menu_qiangda"-->
+                <!--                    android:gravity="center"-->
+                <!--                    android:padding="2dp"-->
+                <!--                    android:layout_marginLeft="10dp"-->
+                <!--                    android:text="抢答"-->
+                <!--                    android:textColor="@drawable/tab_menu_text"-->
+                <!--                    android:textSize="12sp" />-->
             </LinearLayout>
 
             <!--互动模式-->
@@ -189,7 +189,7 @@
                         android:layout_gravity="center"
                         android:text="选项数:"
                         android:textColor="@color/white"
-                        android:textSize="13sp" />
+                        android:textSize="12sp" />
 
                     <LinearLayout
                         android:id="@+id/linear_choose"
@@ -204,6 +204,7 @@
                         <TextView
                             android:id="@+id/tx_choosenum"
                             android:text="4"
+                            android:textSize="12sp"
                             android:textColor="#0eabe5"
                             android:layout_gravity="center"
                             android:gravity="center"
@@ -345,138 +346,140 @@
                     android:textSize="12sp" />
             </LinearLayout>
 
-<!--            <RelativeLayout-->
-<!--                android:gravity="center"-->
-<!--                android:layout_centerHorizontal="true"-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                >-->
+            <!--            <RelativeLayout-->
+            <!--                android:gravity="center"-->
+            <!--                android:layout_centerHorizontal="true"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="wrap_content"-->
+            <!--                >-->
 
-<!--                &lt;!&ndash;    android:layout_width="45dp"-->
-<!--                        android:layout_height="36dp"&ndash;&gt;-->
-<!--                <RelativeLayout-->
-<!--                    android:id="@+id/redanxuan"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content">-->
-<!--                    &lt;!&ndash;android:layout_width="38dp"   android:layout_height="36dp"&ndash;&gt;-->
-<!--                    <ImageView-->
-<!--                        android:id="@+id/imgdanxuan"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="36dp"-->
-<!--                        android:adjustViewBounds="true"-->
-<!--                        android:maxWidth="200dp"-->
-<!--                        android:maxHeight="200dp"-->
-<!--                        android:src="@drawable/tab_menu_danxuan" />-->
+            <!--                &lt;!&ndash;    android:layout_width="45dp"-->
+            <!--                        android:layout_height="36dp"&ndash;&gt;-->
+            <!--                <RelativeLayout-->
+            <!--                    android:id="@+id/redanxuan"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content">-->
+            <!--                    &lt;!&ndash;android:layout_width="38dp"   android:layout_height="36dp"&ndash;&gt;-->
+            <!--                    <ImageView-->
+            <!--                        android:id="@+id/imgdanxuan"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="36dp"-->
+            <!--                        android:adjustViewBounds="true"-->
+            <!--                        android:maxWidth="200dp"-->
+            <!--                        android:maxHeight="200dp"-->
+            <!--                        android:src="@drawable/tab_menu_danxuan" />-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/txt_danxuan"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_below="@+id/imgdanxuan"-->
-<!--                        android:layout_centerInParent="true"-->
-<!--                        android:layout_marginTop="3dp"-->
-<!--                        android:text="单选"-->
-<!--                        android:textColor="@drawable/tab_menu_text"-->
-<!--                        android:textSize="12sp" />-->
-<!--                </RelativeLayout>-->
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/txt_danxuan"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_below="@+id/imgdanxuan"-->
+            <!--                        android:layout_centerInParent="true"-->
+            <!--                        android:layout_marginTop="3dp"-->
+            <!--                        android:text="单选"-->
+            <!--                        android:textColor="@drawable/tab_menu_text"-->
+            <!--                        android:textSize="12sp" />-->
+            <!--                </RelativeLayout>-->
 
-<!--                <RelativeLayout-->
-<!--                    android:id="@+id/redduoxuan"-->
-<!--                    android:layout_toRightOf="@+id/redanxuan"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content">-->
+            <!--                <RelativeLayout-->
+            <!--                    android:id="@+id/redduoxuan"-->
+            <!--                    android:layout_toRightOf="@+id/redanxuan"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content">-->
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/imgduoxuan"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="36dp"-->
-<!--                        android:adjustViewBounds="true"-->
-<!--                        android:maxWidth="200dp"-->
-<!--                        android:maxHeight="200dp"-->
-<!--                        android:src="@drawable/tab_menu_duoxuan" />-->
+            <!--                    <ImageView-->
+            <!--                        android:id="@+id/imgduoxuan"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="36dp"-->
+            <!--                        android:adjustViewBounds="true"-->
+            <!--                        android:maxWidth="200dp"-->
+            <!--                        android:maxHeight="200dp"-->
+            <!--                        android:src="@drawable/tab_menu_duoxuan" />-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/txt_duoxuan"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_below="@+id/imgduoxuan"-->
-<!--                        android:layout_centerInParent="true"-->
-<!--                        android:layout_marginTop="3dp"-->
-<!--                        android:text="多选"-->
-<!--                        android:textColor="@drawable/tab_menu_text"-->
-<!--                        android:textSize="12sp" />-->
-<!--                </RelativeLayout>-->
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/txt_duoxuan"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_below="@+id/imgduoxuan"-->
+            <!--                        android:layout_centerInParent="true"-->
+            <!--                        android:layout_marginTop="3dp"-->
+            <!--                        android:text="多选"-->
+            <!--                        android:textColor="@drawable/tab_menu_text"-->
+            <!--                        android:textSize="12sp" />-->
+            <!--                </RelativeLayout>-->
 
-<!--                <RelativeLayout-->
-<!--                    android:id="@+id/repanduan"-->
-<!--                    android:layout_toRightOf="@+id/redduoxuan"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content">-->
+            <!--                <RelativeLayout-->
+            <!--                    android:id="@+id/repanduan"-->
+            <!--                    android:layout_toRightOf="@+id/redduoxuan"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content">-->
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/imgpanduan"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="36dp"-->
-<!--                        android:adjustViewBounds="true"-->
-<!--                        android:maxWidth="200dp"-->
-<!--                        android:maxHeight="200dp"-->
-<!--                        android:src="@drawable/tab_menu_panduan" />-->
+            <!--                    <ImageView-->
+            <!--                        android:id="@+id/imgpanduan"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="36dp"-->
+            <!--                        android:adjustViewBounds="true"-->
+            <!--                        android:maxWidth="200dp"-->
+            <!--                        android:maxHeight="200dp"-->
+            <!--                        android:src="@drawable/tab_menu_panduan" />-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/txt_panduan"-->
-<!--                        android:text="判断"-->
-<!--                        android:textColor="@drawable/tab_menu_text"-->
-<!--                        android:textSize="12sp"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_below="@+id/imgpanduan"-->
-<!--                        android:layout_marginTop="3dp"-->
-<!--                        android:layout_centerInParent="true"/>-->
-<!--                </RelativeLayout>-->
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/txt_panduan"-->
+            <!--                        android:text="判断"-->
+            <!--                        android:textColor="@drawable/tab_menu_text"-->
+            <!--                        android:textSize="12sp"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_below="@+id/imgpanduan"-->
+            <!--                        android:layout_marginTop="3dp"-->
+            <!--                        android:layout_centerInParent="true"/>-->
+            <!--                </RelativeLayout>-->
 
-<!--                <RelativeLayout-->
-<!--                    android:id="@+id/reluru"-->
-<!--                    android:layout_toRightOf="@+id/repanduan"-->
-<!--                    android:layout_width="wrap_content"-->
-<!--                    android:layout_height="wrap_content">-->
+            <!--                <RelativeLayout-->
+            <!--                    android:id="@+id/reluru"-->
+            <!--                    android:layout_toRightOf="@+id/repanduan"-->
+            <!--                    android:layout_width="wrap_content"-->
+            <!--                    android:layout_height="wrap_content">-->
 
-<!--                    <ImageView-->
-<!--                        android:id="@+id/imgluru"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="36dp"-->
-<!--                        android:adjustViewBounds="true"-->
-<!--                        android:maxWidth="200dp"-->
-<!--                        android:maxHeight="200dp"-->
-<!--                        android:src="@drawable/tab_menu_luru" />-->
+            <!--                    <ImageView-->
+            <!--                        android:id="@+id/imgluru"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="36dp"-->
+            <!--                        android:adjustViewBounds="true"-->
+            <!--                        android:maxWidth="200dp"-->
+            <!--                        android:maxHeight="200dp"-->
+            <!--                        android:src="@drawable/tab_menu_luru" />-->
 
-<!--                    <TextView-->
-<!--                        android:id="@+id/txt_luru"-->
-<!--                        android:text="录入"-->
-<!--                        android:textColor="@drawable/tab_menu_text"-->
-<!--                        android:textSize="12sp"-->
-<!--                        android:layout_width="wrap_content"-->
-<!--                        android:layout_height="wrap_content"-->
-<!--                        android:layout_below="@+id/imgluru"-->
-<!--                        android:layout_marginTop="3dp"-->
-<!--                        android:layout_centerInParent="true"/>-->
-<!--                </RelativeLayout>-->
-<!--            </RelativeLayout>-->
+            <!--                    <TextView-->
+            <!--                        android:id="@+id/txt_luru"-->
+            <!--                        android:text="录入"-->
+            <!--                        android:textColor="@drawable/tab_menu_text"-->
+            <!--                        android:textSize="12sp"-->
+            <!--                        android:layout_width="wrap_content"-->
+            <!--                        android:layout_height="wrap_content"-->
+            <!--                        android:layout_below="@+id/imgluru"-->
+            <!--                        android:layout_marginTop="3dp"-->
+            <!--                        android:layout_centerInParent="true"/>-->
+            <!--                </RelativeLayout>-->
+            <!--            </RelativeLayout>-->
 
             <!-- 开始按钮：不可点击 -->
+            <!-- 开始按钮：可点击 -->
             <Button
                 android:id="@+id/btBegin1"
-                android:layout_marginTop="5dp"
                 android:layout_width="80dp"
-                android:layout_height="32dp"
-                android:paddingTop="0dp"
-                android:gravity="center"
-                android:text="开始"
-                android:textColor="@color/black"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
-                android:state_enabled="false"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/btn_begin_unenable"
                 android:backgroundTint="@null"
-                android:background="@drawable/btn_begin_unenable"/>
-            <!-- 开始按钮：可点击 -->
+                android:gravity="center"
+                android:paddingTop="0dp"
+                android:state_enabled="false"
+                android:text="开始"
+                android:textSize="12sp"
+                android:textColor="@color/black" />
+
             <Button
                 android:visibility="gone"
                 android:id="@+id/btBegin2"
@@ -486,6 +489,7 @@
                 android:paddingTop="0dp"
                 android:gravity="center"
                 android:text="开始"
+                android:textSize="12sp"
                 android:textColor="@color/white"
                 android:layout_gravity="center"
                 android:backgroundTint="@null"
@@ -505,31 +509,31 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal">
-<!--                    android:layout_width="95dp"-->
+                    <!--                    android:layout_width="95dp"-->
                     <Button
                         android:id="@+id/btSingle"
-                        android:layout_width="80dp"
+                        android:layout_width="65dp"
                         android:layout_height="32dp"
                         android:paddingTop="0dp"
                         android:gravity="center"
                         android:text="单题分析"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:textColor="@color/white"
                         android:backgroundTint="@null"
                         android:background="@drawable/btn_begin_enable"/>
 
                     <View
-                        android:layout_width="5dp"
+                        android:layout_width="3dp"
                         android:layout_height="match_parent"/>
 
                     <Button
                         android:id="@+id/btAnswers"
-                        android:layout_width="80dp"
+                        android:layout_width="65dp"
                         android:layout_height="32dp"
                         android:paddingTop="0dp"
                         android:gravity="center"
                         android:text="答题详情"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:textColor="@color/white"
                         android:backgroundTint="@null"
                         android:background="@drawable/btn_begin_enable"/>
@@ -544,28 +548,28 @@
                     android:orientation="horizontal">
                     <Button
                         android:id="@+id/btEnd"
-                        android:layout_width="80dp"
+                        android:layout_width="65dp"
                         android:layout_height="32dp"
                         android:paddingTop="0dp"
                         android:gravity="center"
                         android:text="结束作答"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:textColor="@color/white"
                         android:backgroundTint="@null"
                         android:background="@drawable/btn_begin_enable"/>
 
                     <View
-                        android:layout_width="5dp"
+                        android:layout_width="3dp"
                         android:layout_height="match_parent"/>
 
                     <Button
                         android:id="@+id/btClosed"
-                        android:layout_width="80dp"
+                        android:layout_width="65dp"
                         android:layout_height="32dp"
                         android:paddingTop="0dp"
                         android:gravity="center"
                         android:text="关闭提问"
-                        android:textSize="14sp"
+                        android:textSize="12sp"
                         android:textColor="@color/white"
                         android:backgroundTint="@null"
                         android:background="@drawable/btn_begin_enable"/>
@@ -587,7 +591,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textColor="@color/text_orange"
-                    android:textSize="25sp"
+                    android:textSize="20sp"
                     android:text="00:00"
                     android:layout_gravity="center" />
 
@@ -595,7 +599,7 @@
                     android:layout_gravity="center"
                     android:id="@+id/tx_answers_sum"
                     android:text="0/60位同学已提交"
-                    android:textSize="20sp"
+                    android:textSize="16sp"
                     android:textColor="#485060"
                     android:layout_marginTop="12dp"
                     android:layout_width="wrap_content"

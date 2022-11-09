@@ -26,14 +26,14 @@
             android:orientation="vertical">
 
             <!--分割线-->
-<!--            <View-->
-<!--                android:visibility="invisible"-->
-<!--                android:id="@+id/view_daan"-->
-<!--                android:layout_marginLeft="5dp"-->
-<!--                android:layout_width="1dp"-->
-<!--                android:layout_height="25dp"-->
-<!--                android:layout_marginTop="5dp"-->
-<!--                android:background="#d3d7d4" />-->
+            <!--            <View-->
+            <!--                android:visibility="invisible"-->
+            <!--                android:id="@+id/view_daan"-->
+            <!--                android:layout_marginLeft="5dp"-->
+            <!--                android:layout_width="1dp"-->
+            <!--                android:layout_height="25dp"-->
+            <!--                android:layout_marginTop="5dp"-->
+            <!--                android:background="#d3d7d4" />-->
 
             <!--答题率-->
             <LinearLayout
@@ -335,11 +335,20 @@
                     android:gravity="right|center_vertical">
 
                     <ImageView
+                        android:id="@+id/imgShare"
+                        android:src="@mipmap/share"
+                        android:scaleType="fitCenter"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        />
+
+                    <ImageView
                         android:id="@+id/imgSet"
                         android:src="@mipmap/q_szda"
                         android:scaleType="center"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="10dp"/>
 
                     <ImageView
                         android:visibility="gone"
@@ -364,14 +373,6 @@
                         android:scaleType="center"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"/>
-
-                    <ImageView
-                        android:id="@+id/imgShare"
-                        android:src="@mipmap/share"
-                        android:scaleType="fitCenter"
-                        android:layout_width="30dp"
-                        android:layout_height="30dp"
                         android:layout_marginLeft="10dp"/>
 
                 </LinearLayout>
