@@ -740,10 +740,10 @@ public class MainActivity_tea extends AppCompatActivity {
 
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
-                LaunchActivity.mUserId = intent.getStringExtra(Constant.USER_ID);
+                userId = intent.getStringExtra(Constant.USER_ID);
             }
             if (intent.getStringExtra(Constant.ROOM_ID) != null) {
-                LaunchActivity.mRoomId = intent.getStringExtra(Constant.ROOM_ID);
+                roomid = intent.getStringExtra(Constant.ROOM_ID);
             }
         }
     }

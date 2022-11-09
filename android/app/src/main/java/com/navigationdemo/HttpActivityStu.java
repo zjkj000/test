@@ -13,6 +13,7 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -41,6 +42,96 @@ public class HttpActivityStu extends AnswerActivityStu {
                 getControlMessage(roomId, userId, mainActivity_stu);
             }
         },10,300);
+    }
+    public static String readContentFromPost(Bitmap bitmap){
+        final String[] ans = {""};
+        new Thread(new Runnable() {
+            @Override
+            public void run(){
+                try {
+                    String baseCode = bitmapToBase64(bitmap);
+                    System.out.println("basecode:"+baseCode);
+
+
+//                    URL  postUrl = new URL("http://www.cn901.net:8111/AppServer/ajax/studentApp_saveBase64Image.do?"
+//                    + "roomId="+LaunchActivity.mRoomId
+//                    + "&userId="+LaunchActivity.mUserId
+//                    + "&questionId="+questionId
+//                    + "&baseCode="+baseCode);
+
+                    // Post请求的url，与get不同的是不需要带参数
+                    //URL postUrl = new URL("http://www.cn901.net:8111/AppServer/ajax/studentApp_saveBase64Image.do");
+                    URL postUrl = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_saveBase64Image.do");
+                    // 打开连接
+                    HttpURLConnection connection = (HttpURLConnection) postUrl.openConnection();
+                    // 设置是否向connection输出，因为这个是post请求，参数要放在
+                    // http正文内，因此需要设为true
+                    connection.setDoOutput(true);
+                    // Read from the connection. Default is true.
+                    connection.setDoInput(true);
+                    // 默认是 GET方式
+                    connection.setRequestMethod("POST");
+                    // Post 请求不能使用缓存
+                    connection.setUseCaches(false);
+                    connection.setInstanceFollowRedirects(true);
+                    // 配置本次连接的Content-type，配置为application/x-www-form-urlencoded的
+                    // 意思是正文是urlencoded编码过的form参数，下面我们可以看到我们对正文内容使用URLEncoder.encode
+                    // 进行编码
+                    connection.setRequestProperty("Content-Type","application/x-www-form-urlencoded");
+                    // 连接，从postUrl.openConnection()至此的配置必须要在connect之前完成，
+                    // 要注意的是connection.getOutputStream会隐含的进行connect。
+                    connection.connect();
+                    DataOutputStream out = new DataOutputStream(connection.getOutputStream());
+                    // The URL-encoded contend
+                    // 正文，正文内容其实跟get的URL中 '? '后的参数字符串一致
+                    baseCode = URLEncoder.encode(baseCode,"utf-8");
+                    String content = "questionId="+questionId+ "&userId="+ userId + "&roomId=" + roomid + "&baseCode="+baseCode;
+                    // DataOutputStream.writeBytes将字符串中的16位的unicode字符以8位的字符形式写到流里面
+                    out.writeBytes(content);
+                    out.flush();
+                    out.close();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+                    String line;
+                    StringBuffer buffer = new StringBuffer();
+                    while ((line = reader.readLine()) != null){
+                        System.out.println(line);
+                        buffer.append(line);
+                    }
+                    try{
+                        // 从服务器端获取Json字符串
+                        String backlogJsonStr = buffer.toString();
+                        backlogJsonStr = backlogJsonStr.substring(backlogJsonStr.indexOf("{"), backlogJsonStr.lastIndexOf("}") + 1);
+                        backlogJsonStr = backlogJsonStr.replace("\\\"","'");
+                        JSONObject jsonObject = new JSONObject(backlogJsonStr);
+                        String data = jsonObject.getString("status");
+                        System.out.println("base64 success==>"+data);
+
+                        base64url = jsonObject.getString("url");
+                        //System.out.println("base64 url==>"+base64url.replaceFirst("/html",""));
+                        System.out.println("base64 url==>"+base64url.replaceFirst("/html",""));
+                        ans[0] = base64url;
+                        base64id_url.put(base64_index,base64url);
+                        base64_index++;
+
+                    }catch (JSONException e) {
+                        e.printStackTrace();
+                        System.out.println("base64 wrong1==>");
+                    }
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    System.out.println("readContent wrong:");
+                }
+
+            }
+
+        }).start();
+        try {
+            Thread.sleep(60);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return ans[0];
     }
 
     public static void stopGetControlMessageTimer() {

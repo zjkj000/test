@@ -3613,7 +3613,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         }
 
         System.out.println("readContent:");
-        String httpreturn = HttpActivity.readContentFromPost(bitmap);
+        String httpreturn = HttpActivityStu.readContentFromPost(bitmap);
 
         System.out.println("httpreturn:"+ httpreturn);
         return bihuanbmp;
@@ -3688,7 +3688,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     //更新互动答题界面
     private void getteacher(){
 //        Toast.makeText(this, "更新互动答题UI", Toast.LENGTH_SHORT).show();
-        Log.e(TAG, "getteacher: 更新互动答题UI" + AnswerActivityStu.questionAction + " " + AnswerActivityStu.questionBaseTypeId);
         if(AnswerActivityStu.allHandAction!=null) {
             if(AnswerActivityStu.allHandAction.equals("handAllYes")) {
                 MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
@@ -3722,21 +3721,21 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
             else{
                 Log.e(TAG, "getteacher: 设置时间" + AnswerActivityStu.questionTime + " " + AnswerActivityStu.questionBaseTypeId);
-                Toast.makeText(this, "设置时间" + AnswerActivityStu.questionTime, Toast.LENGTH_SHORT).show();
                 last_actiontime_answer=AnswerActivityStu.questionTime;
             }
+            Log.e(TAG, "准备更新UI " + AnswerActivityStu.questionAction.equals("startAnswer"));
             switch (AnswerActivityStu.questionAction) {
                 case "startAnswer":
+                    Log.e(TAG, "准备更新UI" + AnswerActivityStu.questionAction);
                 case "startAnswerSuiji":
                 case "startAnswerQiangDa":
                     mQiangda.setSelected(false);
-                    BottomButtonActivity.qiangDa();
+                    BottomButtonActivity.qiangDa(this);
 //                MainActivity_stu.mMessageInput.setVisibility(GONE);
 
                     Log.e(TAG, "getteacher: " + "answer over a");
 
                     if (AnswerActivityStu.questionBaseTypeId.equals("101")) {
-                        Toast.makeText(this, "显示题目类型101", Toast.LENGTH_SHORT).show();
                         Log.e(TAG, "getteacher: 显示题目类型101");
                         current_answer = group_singleanswer;
 //                        LaunchActivity.group_tfanswer.setVisibility(View.GONE);
@@ -3813,7 +3812,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     MainActivity_stu.group_multianswer.setVisibility(View.INVISIBLE);
                     MainActivity_stu.group_subjectiveanswer.setVisibility(View.INVISIBLE);
                     mQiangda.setSelected(true);
-                    BottomButtonActivity.qiangDa();
+                    BottomButtonActivity.qiangDa(this);
                     System.out.println("answer over c");
                     break;
                 case "stopAnswer":
@@ -3831,7 +3830,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     subjective_scroll.setVisibility(View.INVISIBLE);
 
                     mQiangda.setSelected(false);
-                    BottomButtonActivity.qiangDa();
+                    BottomButtonActivity.qiangDa(this);
                     initQuestionData();
 
 //                    LaunchActivity.mMessageInput.setVisibility(View.VISIBLE);
@@ -3840,7 +3839,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     break;
                 default:
 
-                    BottomButtonActivity.qiangDa();
+                    BottomButtonActivity.qiangDa(this);
                     System.out.println("answer over f" + AnswerActivityStu.questionAction);
                     break;
             }

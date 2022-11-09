@@ -28,4 +28,23 @@ public class AnswerActivityStu extends MainActivity_stu {
 
     public static String chatStatus="";
     public static String chatMessage="";
+
+    public static List<ClassDataBean> ketangList = new ArrayList<>();
+    public static List<StudentDataBean> joinList = new ArrayList<>();
+
+    public static StudentDataBean findMemberInJoinList(String userId) {
+        for (int i = 0; i < joinList.size(); i++ ){
+            if(userId.equals(joinList.get(i).getUserId()))
+                return joinList.get(i);
+        }
+        return null;
+    }
+
+    public static ClassDataBean findMemberInKetangList(String userId) {
+        for (int i = 0; i < ketangList.size(); i++ ){
+            if(userId.equals(ketangList.get(i).getUserId()))
+                return ketangList.get(i);
+        }
+        return null;
+    }
 }
