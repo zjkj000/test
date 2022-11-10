@@ -25,6 +25,9 @@ export default function LiveingLessonInfo_stu() {
     const [showFoot, setshowFoot] = useState("0"); //0代表还可以加载  1代表没数据了
     useEffect(() => {
         fetchData("All", 1);
+        return ()=>{
+            SearchText = ''
+          }
     }, []);
 
     function fetchData(newtype, newcurrentPage, isRefreshing = false) {

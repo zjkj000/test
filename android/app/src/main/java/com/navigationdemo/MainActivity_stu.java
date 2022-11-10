@@ -1985,7 +1985,19 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
                 menu04color.setImageResource(R.color.bg_select_menu);
                 menu03color.setImageResource(R.color.bg_select_menu);
-
+                if(mBoard.getBrushColor().toInt()==-7829368){
+                    menu02color.setImageResource(R.mipmap.text_gray);
+                }else if(mBoard.getBrushColor().toInt()==-16777216){
+                    menu02color.setImageResource(R.mipmap.text_black);
+                }else if(mBoard.getBrushColor().toInt()==-16776961){
+                    menu02color.setImageResource(R.mipmap.text_blue);
+                }else if(mBoard.getBrushColor().toInt()==-16711936){
+                    menu02color.setImageResource(R.mipmap.text_green);
+                }else if(mBoard.getBrushColor().toInt()==-256){
+                    menu02color.setImageResource(R.mipmap.text_yellow);
+                }else if(mBoard.getBrushColor().toInt()==-65536) {
+                    menu02color.setImageResource(R.mipmap.text_red);
+                }
 
                 //开启画笔弹窗
                 View v_selectpaint = getLayoutInflater().inflate(R.layout.pw_selectpaint,null);

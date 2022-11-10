@@ -18,6 +18,9 @@ export default function LiveingLessionInfo_teacher() {
     const [showFoot,setshowFoot]=useState('0')             //0代表还可以加载  1代表没数据了
     useEffect(()=>{
         fetchData('0',1)
+        return ()=>{
+            SearchText = ''
+          }
       },[])
 
     function fetchData(newtype,newcurrentPage,isRefreshing=false){
@@ -52,7 +55,7 @@ export default function LiveingLessionInfo_teacher() {
     function renderAvatar(){
         return (
             <TouchableOpacity onPress={() => setmoduleVisible(true)}>
-                <Text style={{fontSize:15,color:'#87CEFA'}}>{type=='1'?"未开始":type=='2'?'直播中':type=='3'?"已结束":'全部'}</Text>
+                <Text style={{fontSize:15,color:'#87CEFA'}}>{type=='2'?"未开始":type=='1'?'直播中':type=='3'?"已结束":'全部'}</Text>
                 <Text style={{position:'absolute',right:5}}>▼</Text>
             </TouchableOpacity>
         );
