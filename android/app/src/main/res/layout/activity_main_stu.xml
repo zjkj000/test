@@ -15,8 +15,7 @@
         android:gravity="center"
         android:padding="0dp"
         app:layout_constraintBottom_toTopOf="parent"
-
-
+        android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHeight_percent="1.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -69,7 +68,7 @@
             android:id="@+id/class_time"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:layout_toStartOf="@id/student_num"
+            android:layout_alignParentEnd="true"
             android:background="@drawable/border_right_background"
             android:paddingHorizontal="3dp"
             android:gravity="center_vertical"
@@ -875,27 +874,16 @@
         android:id="@+id/hand_btn"
         android:layout_width="50dp"
         android:layout_height="0dp"
-        android:onClick="handleHandsUpBtn"
         android:src="@drawable/bottom_stuhand_up"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintEnd_toEndOf="@+id/group_buttons"
         app:layout_constraintStart_toStartOf="@+id/group_buttons"
         app:layout_constraintTop_toTopOf="@+id/group_buttons" />
     <ImageView
-        android:id="@+id/camera_switch_btn"
-        android:layout_width="50dp"
-        android:layout_height="0dp"
-        android:onClick="handleSwitchCamera"
-        app:layout_constraintTop_toTopOf="@+id/group_buttons"
-        app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
-        app:layout_constraintStart_toEndOf="@+id/hand_btn"
-        android:src="@drawable/switch_camera"
-        />
-    <ImageView
         android:id="@+id/bottom_line_2"
         android:layout_width="20dp"
         android:layout_height="0dp"
-        app:layout_constraintStart_toEndOf="@+id/camera_switch_btn"
+        app:layout_constraintStart_toEndOf="@+id/hand_btn"
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         android:src="@drawable/bottom_line"

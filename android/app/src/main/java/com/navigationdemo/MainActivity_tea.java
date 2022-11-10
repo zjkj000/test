@@ -316,6 +316,9 @@ public class MainActivity_tea extends AppCompatActivity {
     private TextView handBtnBadge;
     public Switch handsUpSwitchBtn;
 
+    public static int screenWidth = -1;
+    public static int screenHeight = -1;
+
     // UI消息监听器
     public  static Handler handler;
     @SuppressLint("HandlerLeak")
@@ -415,6 +418,7 @@ public class MainActivity_tea extends AppCompatActivity {
         handBtn = findViewById(R.id.hand_btn);
         audioBtn = findViewById(R.id.mic_btn);
         cameraBtn = findViewById(R.id.camera_btn);
+        shareBtn = findViewById(R.id.share_btn);
 //        overClassBtn = findViewById(R.id.exit_btn);
 
         teacher_name_view = findViewById(R.id.teacher_name);
@@ -833,7 +837,9 @@ public class MainActivity_tea extends AppCompatActivity {
     }
 
     public void switchMemberListAudioIcon(int position) {
-        MemberItem item = listViewAdapter.getItem(position);
+        MemberItem item = null;
+        if(position >= 0)
+            item = listViewAdapter.getItem(position);
         if(item != null){
             Log.e(TAG, "switchMemberListAudioIcon: 获取用户item " + item.getName());
             item.setAudioControl(!item.getAudioControl());
@@ -1076,18 +1082,26 @@ public class MainActivity_tea extends AppCompatActivity {
         mTRTCCloud.exitRoom();
 //        HttpActivityTea.stopHandsUpTimer();
     }
+    public static void startScreenCapture() {
+        TRTCCloudDef.TRTCVideoEncParam encParam = new TRTCCloudDef.TRTCVideoEncParam();
+        encParam.videoResolution = 1920 * 1080;
+        encParam.videoFps = 8;
+        encParam.videoBitrate = 1600;
+        encParam.enableAdjustRes = true;
+        TRTCCloudDef.TRTCScreenShareParams trtcScreenShareParams = new TRTCCloudDef.TRTCScreenShareParams();
+        mTRTCCloud.startScreenCapture(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB, encParam, trtcScreenShareParams);
+    }
+
+    public static void stopScreenCapture() {
+        mTRTCCloud.stopScreenCapture();
+    }
 
     public void handleSareScreen(View view) {
         if(shareState) {
-            TRTCCloudDef.TRTCVideoEncParam encParam = new TRTCCloudDef.TRTCVideoEncParam();
-            encParam.videoResolution = 1920 * 1080;
-            encParam.videoFps = 8;
-            encParam.videoBitrate = 1600;
-            encParam.enableAdjustRes = false;
-            mTRTCCloud.startScreenCapture(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, encParam, new TRTCCloudDef.TRTCScreenShareParams());
+            startScreenCapture();
             shareBtn.setImageResource(R.drawable.bottom_share_close);
         } else {
-            mTRTCCloud.stopScreenCapture();
+            stopScreenCapture();
             shareBtn.setImageResource(R.drawable.bottom_share);
         }
         shareState = !shareState;
@@ -1197,7 +1211,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //        String userId = "mingming";
         myTRTCParams = new TRTCCloudDef.TRTCParams();
         myTRTCParams.sdkAppId = TRTCSDKAPPID;
-        myTRTCParams.userId = userId;
+        myTRTCParams.userId = userId + "_camera";
         myTRTCParams.roomId = Integer.parseInt(roomid);
         GenerateTestUserSig.SDKAPPID = TRTCSDKAPPID;
         GenerateTestUserSig.SECRETKEY = TRTCSECRETKEY;
@@ -1243,8 +1257,8 @@ public class MainActivity_tea extends AppCompatActivity {
         // 初始化房间信息
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
-        int screenWidth = dm.widthPixels;
-        int screenHeight = dm.heightPixels;
+        screenWidth = dm.widthPixels;
+        screenHeight = dm.heightPixels;
         HttpActivityTea.initClass(screenWidth, screenHeight, "skydt", this);
 
         // 开启举手监听事件
