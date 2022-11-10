@@ -75,7 +75,7 @@ public class MemberListViewAdapter extends BaseAdapter {
 
     @Override
     public MemberItem getItem(int position) {
-        if (list != null) {
+        if (list != null && position >= 0) {
             return list.get(position);
         }
         return null;
