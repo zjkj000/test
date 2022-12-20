@@ -71,6 +71,7 @@ import com.navigationdemo.setBoardFragment.Set_paint_Fragment;
 import com.navigationdemo.setBoardFragment.Set_text_Fragment;
 import com.navigationdemo.utils.LoadingUtils;
 import com.navigationdemo.utils.UriUtils;
+import com.navigationdemo.MyEvent;
 import com.google.android.material.tabs.TabLayout;
 import com.tencent.cos.xml.CosXmlService;
 import com.tencent.cos.xml.CosXmlServiceConfig;
@@ -125,6 +126,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -175,9 +177,9 @@ public class MainActivity_tea extends AppCompatActivity {
     public static int mUserCount = 0;
 
     private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
-    private String Mbucket = "zjkj-1314645179";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKID32qRqBMK6g2GI3dz85vY2IK9lBOOFyb3";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "89B2ojep4EC774qXFoMpBbxBKNG5nMm8";                    //存储桶    永久密钥 secretKey
+    private String Mbucket = "zjkj-1313356181";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
+    private String MsecretId = "AKIDwhBPM6bruXw7A0ZwTovtnQpzwgroY5NQ";                 //存储桶   永久密钥 secretId
+    private String MsecretKey = "zlI5sb8TdeZHm4ObllT9duwztkS2Xoqf";                    //存储桶    永久密钥 secretKey
 
 
 
@@ -198,16 +200,16 @@ public class MainActivity_tea extends AppCompatActivity {
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
 
     //TRTC   SDKAPPID
-    private  int TRTCSDKAPPID = 1400618856;//王id
-    private  String TRTCSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
+    private  int TRTCSDKAPPID = 1400772698;//王id
+    private  String TRTCSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
 
     //即时通信SDKAPPID
-    private  int IMSDKAPPID = 1400757936;//王id
-    private  String IMSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
+    private  int IMSDKAPPID = 1400772698;//王id
+    private  String IMSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
 
     //白板SDKAPPID
-    private  int BOARDSDKAPPID = 1400757936;//徐id
-    private  String BOARDSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
+    private  int BOARDSDKAPPID = 1400779599;//徐id
+    private  String BOARDSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
 
  
     public static String teaName = "";
@@ -641,36 +643,36 @@ public class MainActivity_tea extends AppCompatActivity {
                 super.handleMessage(msg);
                 int position = -1;
                 switch (msg.what) {
-                    case 1:
+                    case MyEvent.UPDATE_HANDS_UP_TIME:
                         setHandsUpData();
                         break;
-                    case 2:
+                    case MyEvent.UPDATE_AUDIO_ICON:
                         position = msg.getData().getInt("position");
                         switchMemberListAudioIcon(position);
                         break;
-                    case 3:
+                    case MyEvent.UPDATE_CHAT_ICON:
                         position = msg.getData().getInt("position");
                         switchMemberListChatIcon(position);
                         break;
                     case 4:
                         break;
-                    case 5:
+                    case MyEvent.UPDATE_SPEAKER_ICON:
                         position = msg.getData().getInt("position");
                         switchSpeakerIcon(position);
                         break;
-                    case 6:
+                    case MyEvent.UPDATE_CLASS_TIME:
                         setClassTime((String) msg.obj);
                         break;
-                    case 7:
+                    case MyEvent.UPDATE_MEMBER_LIST:
                         updateMemberList();
                         break;
-                    case 8:  //处理  白板添加资源 任务
+                    case MyEvent.WHITEBOARD_ADD_RESOURCE:  //处理  白板添加资源 任务
                         Integer type = msg.getData().getInt("type");
                         String url = msg.getData().getString("url");
                         String name = msg.getData().getString("name");
                         dealWith_mBoardaddResouce(type,url,name);
                         break;
-                    case 9:  //处理  白板添加资源 任务
+                    case MyEvent.WHITEBOARD_ADD_PAGE:  //处理  白板添加资源 任务
                         String title = msg.getData().getString("title");
                         String ResultUrl = msg.getData().getString("url");
                         Integer page = msg.getData().getInt("page");
@@ -777,7 +779,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 String ss = new DecimalFormat("00").format(time % 60);
                 String timeFormat = new String(hh + ":" + mm + ":" + ss);
                 Message msg = new Message();
-                msg.what = 6;
+                msg.what = MyEvent.UPDATE_CLASS_TIME;
                 msg.obj = timeFormat;
                 that.handler.sendMessage(msg);
             }
@@ -1867,6 +1869,16 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onTEBElementPositionChange(List<TEduBoardController.ElementItem> elementItemList) {
                 System.out.println("onTEBElementPositionChange"+"++++");
+            }
+
+            @Override
+            public void onTEBPermissionChanged(List<String> permissions, Map<String, List<String>> filters) {
+                System.out.println("onTEBPermissionChange"+"++++");
+            }
+
+            @Override
+            public void onTEBPermissionDenied(String permission) {
+                System.out.println("onTEBPermissionDenied"+"++++");
             }
         };
 
@@ -3305,7 +3317,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 if(needAddtoScreen){
                 if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
                     Message msg = Message.obtain();
-                    msg.what = 8;
+                    msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
                     Bundle bundle = new Bundle();
                     bundle.putInt("type", 1);
                     bundle.putString("url", result.accessUrl);
@@ -3315,7 +3327,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 }
                 else if(name.endsWith("png")||name.endsWith("jpg")){        // 图片格式文件
                     Message msg = Message.obtain();
-                    msg.what = 8;
+                    msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
                     Bundle bundle = new Bundle();
                     bundle.putInt("type", 2);
                     bundle.putString("url", result.accessUrl);
@@ -3325,7 +3337,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 }
                 else if(name.endsWith("mp3")){                         //  音频文件
                     Message msg = Message.obtain();
-                    msg.what = 8;
+                    msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
                     Bundle bundle = new Bundle();
                     bundle.putInt("type", 3);
                     bundle.putString("url", result.accessUrl);
@@ -3336,7 +3348,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 else{
                     if(name.endsWith("ppt")||name.endsWith("pptx")){      //ppt  pptx  采用新的转码方式  直接添加
                         Message msg = Message.obtain();
-                        msg.what = 8;
+                        msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
                         Bundle bundle = new Bundle();
                         bundle.putInt("type", 4);
                         bundle.putString("url", result.accessUrl);
@@ -3345,7 +3357,7 @@ public class MainActivity_tea extends AppCompatActivity {
                         handler.sendMessage(msg);
                     }else {                                                //  mp4 格式的数据  直接添加
                         Message msg = Message.obtain();
-                        msg.what = 8;
+                        msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
                         Bundle bundle = new Bundle();
                         bundle.putInt("type", 5);
                         bundle.putString("url", result.accessUrl);
@@ -3484,7 +3496,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     Time time = new Time("GMT+8");
                     time.setToNow();
                     String TargetDir="class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture";//目标目录
-                    String Uin = "100028107277"; //主账号
+                    String Uin = "100026965953"; //主账号
 
                     URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_CreateSnapshotTask.do?" + "SecretId=" + SecretId
                             + "&SecretKey=" + SecretKey + "&Region=" + Region + "&Bucket=" + Bucket + "&SdkAppId=" + SdkAppId
@@ -3562,7 +3574,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             String fileurl = json.getString("link");
                             if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
                                 Message msg = Message.obtain();
-                                msg.what = 8;
+                                msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
                                 Bundle bundle = new Bundle();
                                 bundle.putInt("type", 1);
                                 bundle.putString("url", fileurl);
@@ -3572,7 +3584,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             }
                             else if(name.endsWith("png")||name.endsWith("jpg")){        // 图片格式文件
                                 Message msg = Message.obtain();
-                                msg.what = 8;
+                                msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
                                 Bundle bundle = new Bundle();
                                 bundle.putInt("type", 2);
                                 bundle.putString("url", fileurl);
@@ -3582,7 +3594,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             }
                             else if(name.endsWith("mp3")){                         //  音频文件
                                 Message msg = Message.obtain();
-                                msg.what = 8;
+                                msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
                                 Bundle bundle = new Bundle();
                                 bundle.putInt("type", 3);
                                 bundle.putString("url", fileurl);
@@ -3593,7 +3605,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             else{
                                 if(name.endsWith("ppt")||name.endsWith("pptx")){      //ppt  pptx  采用新的转码方式  直接添加
                                     Message msg = Message.obtain();
-                                    msg.what = 8;
+                                    msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("type", 4);
                                     bundle.putString("url", fileurl);
@@ -3602,7 +3614,7 @@ public class MainActivity_tea extends AppCompatActivity {
                                     handler.sendMessage(msg);
                                 }else {                                                //  mp4 格式的数据  直接添加
                                     Message msg = Message.obtain();
-                                    msg.what = 8;
+                                    msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
                                     Bundle bundle = new Bundle();
                                     bundle.putInt("type", 5);
                                     bundle.putString("url", fileurl);
@@ -3803,7 +3815,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             Boardtimer.cancel();
 
                             Message msg = Message.obtain();
-                            msg.what = 9;
+                            msg.what = MyEvent.WHITEBOARD_ADD_PAGE;
                             Bundle bundle = new Bundle();
                             bundle.putString("title", json.get("Title").toString());
                             bundle.putString("url", json.get("ResultUrl").toString());

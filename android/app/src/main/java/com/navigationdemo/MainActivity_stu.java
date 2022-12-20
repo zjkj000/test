@@ -83,6 +83,7 @@ import com.navigationdemo.setBoardFragment.Set_geometry_Fragment;
 import com.navigationdemo.setBoardFragment.Set_more_Fragment;
 import com.navigationdemo.setBoardFragment.Set_paint_Fragment;
 import com.navigationdemo.setBoardFragment.Set_text_Fragment;
+import com.navigationdemo.MyEvent;
 import com.navigationdemo.utils.UriUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.tencent.cos.xml.CosXmlService;
@@ -141,6 +142,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.Vector;
@@ -528,35 +530,35 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 super.handleMessage(msg);
                 int position = -1;
                 switch (msg.what) {
-                    case 1:
+                    case MyEvent.UPDATE_HANDS_UP_TIME:
                         setHandsUpData(String.valueOf(handsUpTime));
                         break;
-                    case 2:
+                    case MyEvent.UPDATE_AUDIO_ICON:
                         position = msg.getData().getInt("position");
                         switchMemberListAudioIcon(position);
                         break;
-                    case 3:
+                    case MyEvent.UPDATE_CHAT_ICON:
                         position = msg.getData().getInt("position");
                         switchMemberListChatIcon(position);
                         break;
                     case 4:
                         break;
-                    case 5:
+                    case MyEvent.UPDATE_SPEAKER_ICON:
                         position = msg.getData().getInt("position");
                         switchSpeakerIcon(position);
                         break;
-                    case 6:
+                    case MyEvent.UPDATE_CLASS_TIME:
                         setClassTime((String) msg.obj);
                         break;
-                    case 7:
+                    case MyEvent.UPDATE_MEMBER_LIST:
                         updateMemberList();
                         break;
-                    case 8:  //处理  白板添加资源 任务
+                    case MyEvent.WHITEBOARD_ADD_RESOURCE:  //处理  白板添加资源 任务
                         Integer type = msg.getData().getInt("type");
                         String url = msg.getData().getString("url");
                         String name = msg.getData().getString("name");
                         break;
-                    case 9:  //处理  白板添加资源 任务
+                    case MyEvent.WHITEBOARD_ADD_PAGE:  //处理  白板添加资源 任务
                         String title = msg.getData().getString("title");
                         String ResultUrl = msg.getData().getString("url");
                         Integer page = msg.getData().getInt("page");
@@ -564,7 +566,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         TEduBoardController.TEduBoardTranscodeFileResult config = new TEduBoardController.TEduBoardTranscodeFileResult(title,ResultUrl,page,Resolution);
                         mBoard.addTranscodeFile(config,true);
                         break;
-                    case 10:    // 结束计时器
+                    case MyEvent.STOP_HANDS_UP_TIME:    // 结束计时器
                         stopHandsTimer();
                         break;
                     default:
@@ -827,7 +829,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 String ss = new DecimalFormat("00").format(time % 60);
                 String timeFormat = new String(hh + ":" + mm + ":" + ss);
                 Message msg = new Message();
-                msg.what = 6;
+                msg.what = MyEvent.UPDATE_CLASS_TIME;
                 msg.obj = timeFormat;
                 that.handler.sendMessage(msg);
             }
@@ -1347,12 +1349,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             public void run() {
                 if(handsUpTime == 0) {
                     Message updateHandsUpTimeMessage = Message.obtain();
-                    updateHandsUpTimeMessage.what = 10;
+                    updateHandsUpTimeMessage.what = MyEvent.STOP_HANDS_UP_TIME;
                     handler.sendMessage(updateHandsUpTimeMessage);
                     return;
                 }
                 Message updateHandsUpTimeMessage = Message.obtain();
-                updateHandsUpTimeMessage.what = 1;
+                updateHandsUpTimeMessage.what = MyEvent.UPDATE_HANDS_UP_TIME;
                 handler.sendMessage(updateHandsUpTimeMessage);
                 handsUpTime--;
             }
@@ -1681,6 +1683,16 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTEBElementPositionChange(List<TEduBoardController.ElementItem> elementItemList) {
                 System.out.println("onTEBElementPositionChange"+"++++");
+            }
+
+            @Override
+            public void onTEBPermissionChanged(List<String> permissions, Map<String, List<String>> filters) {
+                System.out.println("onTEBPermissionChange"+"++++");
+            }
+
+            @Override
+            public void onTEBPermissionDenied(String permission) {
+                System.out.println("onTEBPermissionDenied"+"++++");
             }
         };
 
@@ -3028,7 +3040,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                             Boardtimer.cancel();
 
                             Message msg = Message.obtain();
-                            msg.what = 9;
+                            msg.what = MyEvent.WHITEBOARD_ADD_PAGE;
                             Bundle bundle = new Bundle();
                             bundle.putString("title", json.get("Title").toString());
                             bundle.putString("url", json.get("ResultUrl").toString());

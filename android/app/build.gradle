@@ -132,6 +132,8 @@ android {
         pickFirst 'lib/x86_64/libc++_shared.so'
         pickFirst 'lib/armeabi-v7a/libc++_shared.so'
         pickFirst 'lib/arm64-v8a/libc++_shared.so'
+//        加入该行解决依赖重复的问题
+        pickFirst 'lib/armeabi-v7a/libfbjni.so'
     }
     
     lintOptions {
