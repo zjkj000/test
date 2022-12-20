@@ -1009,6 +1009,7 @@
         android:layout_width="50dp"
         android:layout_height="0dp"
         android:adjustViewBounds="true"
+        android:visibility="gone"
         android:onClick="handleSareScreen"
         app:layout_constraintEnd_toStartOf="@id/exit_btn"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"

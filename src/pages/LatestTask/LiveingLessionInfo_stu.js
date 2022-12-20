@@ -420,7 +420,8 @@ class LiveingLessonContent extends Component {
                                             global.constants.userPhoto +
                                             "-@-" +
                                             this.state.teacherId // 教师ID
-
+                                            +"-@-" +
+                                            this.state.teacherName
                                         // 下面这三个暂时没有 传递固定值
                                         // this.state.subjectId+"-@-"+         //学科ID
                                         // this.state.ketangId+"-@-"+         //课堂ID

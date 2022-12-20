@@ -48,7 +48,7 @@ class AssignPicturesWork extends Component {
 
     UNSAFE_componentWillMount(){
         var _dateStr=new Date().toISOString().substring(0,10)+' '+new Date().toISOString().substring(11,16)
-            _dateStr = _dateStr.substring(0,11)+(parseInt(_dateStr.substring(12,13))+8)+_dateStr.substring(13,16)
+            _dateStr = _dateStr.substring(0,11)+(parseInt(_dateStr.substring(11,13))+8)+_dateStr.substring(13,16)
         this.setState({
             paperName:this.props.paperName,
             paperId:this.props.paperId,

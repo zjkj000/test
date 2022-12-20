@@ -116,6 +116,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     private TextView tx_noanswer; //没有人提交答案
     private ScrollView slStusAnswers; //答题详情
 
+    private PopupWindow popupWindow_szda; //客观题-设置答案弹框
+
     //主观题
     private ScrollView slStusAnswersImg; //答案内容
     private ScrollView slStusAnswers_zhuguan;  //答题详情
@@ -1109,10 +1111,23 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 //退出之前，需要先关闭共享屏幕！！！！！！
+                if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share_end).getConstantState())){
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.stopScreenCapture();
+                        }
+                    });
+                }
                 popupWindow.dismiss();
                 selectedIndex = 0;
                 answer = "";
                 isSelect_huizong = true;
+                //如果设置答案弹框未关闭，则主动关闭
+                if(popupWindow_szda != null && popupWindow_szda.isShowing()){
+                    popupWindow_szda.dismiss();
+                }
             }
         });
 
@@ -1122,9 +1137,23 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share).getConstantState())){
                     //开始共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.startScreenCapture();
+                        }
+                    });
                 }else{
                     //结束共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share)));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.stopScreenCapture();
+                        }
+                    });
                 }
             }
         });
@@ -1257,7 +1286,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         if(screenWidth <= 0){
             getScreenProps();
         }
-        PopupWindow popupWindow_szda = new PopupWindow(v , (int)(screenWidth * 0.45) , (int)(screenHeight * 0.4) , false);
+        popupWindow_szda = new PopupWindow(v , (int)(screenWidth * 0.45) , (int)(screenHeight * 0.4) , false);
 
         //弹框展示在屏幕中间Gravity.CENTER,x和y是相对于Gravity.CENTER的偏移
         popupWindow_szda.showAtLocation(v , Gravity.CENTER , 0 , 0);
@@ -1679,13 +1708,13 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //单选图标状态
     public void setDanxuanImgStatus(){
-        a.setImageDrawable(getResources().getDrawable((R.mipmap.a)));
-        b.setImageDrawable(getResources().getDrawable((R.mipmap.b)));
-        c.setImageDrawable(getResources().getDrawable((R.mipmap.c)));
-        d.setImageDrawable(getResources().getDrawable((R.mipmap.d)));
-        e.setImageDrawable(getResources().getDrawable((R.mipmap.e)));
-        f.setImageDrawable(getResources().getDrawable((R.mipmap.f)));
-        g.setImageDrawable(getResources().getDrawable((R.mipmap.g)));
+        a.setImageDrawable(getResources().getDrawable((R.mipmap.aa)));
+        b.setImageDrawable(getResources().getDrawable((R.mipmap.ab)));
+        c.setImageDrawable(getResources().getDrawable((R.mipmap.ac)));
+        d.setImageDrawable(getResources().getDrawable((R.mipmap.ad)));
+        e.setImageDrawable(getResources().getDrawable((R.mipmap.ae)));
+        f.setImageDrawable(getResources().getDrawable((R.mipmap.af)));
+        g.setImageDrawable(getResources().getDrawable((R.mipmap.ag)));
         h.setImageDrawable(getResources().getDrawable((R.mipmap.h)));
         a.setSelected(false);
         b.setSelected(false);
@@ -2294,6 +2323,15 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 //退出之前，需要先关闭屏幕共享！！！！！！
+                if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share_end).getConstantState())){
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.stopScreenCapture();
+                        }
+                    });
+                }
                 popupWindow.dismiss();
                 selectedIndex = 0;
                 isSelect_huizong = true;
@@ -2306,9 +2344,23 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share).getConstantState())){
                     //开始共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.startScreenCapture();
+                        }
+                    });
                 }else{
                     //结束共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share)));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.stopScreenCapture();
+                        }
+                    });
                 }
             }
         });
