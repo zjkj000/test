@@ -76,6 +76,7 @@ import com.navigationdemo.adapter.HandsUpListViewAdapter;
 import com.navigationdemo.adapter.MemberListViewAdapter;
 import com.navigationdemo.adapter.SetBrd_TabBarAdapter;
 import com.navigationdemo.adapter.TabBarAdapter_stu;
+<<<<<<< HEAD
 import com.navigationdemo.setBoardFragment.Set_Highlighter_Fragment;
 import com.navigationdemo.setBoardFragment.Set_bg_Fragment;
 import com.navigationdemo.setBoardFragment.Set_eraser_Fragment;
@@ -84,6 +85,15 @@ import com.navigationdemo.setBoardFragment.Set_more_Fragment;
 import com.navigationdemo.setBoardFragment.Set_paint_Fragment;
 import com.navigationdemo.setBoardFragment.Set_text_Fragment;
 import com.navigationdemo.MyEvent;
+=======
+import com.navigationdemo.setBoardFragment.Set_Highlighter_Fragment_Stu;
+import com.navigationdemo.setBoardFragment.Set_bg_Fragment_Stu;
+import com.navigationdemo.setBoardFragment.Set_eraser_Fragment_Stu;
+import com.navigationdemo.setBoardFragment.Set_geometry_Fragment_Stu;
+import com.navigationdemo.setBoardFragment.Set_more_Fragment_Stu;
+import com.navigationdemo.setBoardFragment.Set_paint_Fragment_Stu;
+import com.navigationdemo.setBoardFragment.Set_text_Fragment_Stu;
+>>>>>>> 6d745360b0e4a2deb2b3eb3f7b6121bc469b93d5
 import com.navigationdemo.utils.UriUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.tencent.cos.xml.CosXmlService;
@@ -149,13 +159,17 @@ import java.util.Vector;
 
 public class MainActivity_stu extends AppCompatActivity implements View.OnClickListener {
 
-    private static int TRTCSDKAPPID = 1400618856;//王id
-    private static String TRTCSECRETKEY = "afdcb7a5862d6e51db58a07f9de3f97952fd1559837371f443fed29737856b3b";
-    private static int IMSDKAPPID = 1400757936;//王id
-    private static String IMSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
+    //TRTC   SDKAPPID
+    private  int TRTCSDKAPPID = 1400772698;//王id
+    private  String TRTCSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
 
-    private static int BOARDSDKAPPID = 1400757936;//徐id
-    private static String BOARDSECRETKEY = "255202d8e9406b8ad513f29066a0e55d20ca4a2c3db7c236f87beb0bbb045e04";
+    //即时通信SDKAPPID
+    private  int IMSDKAPPID = 1400779599;//王id
+    private  String IMSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
+
+    //白板SDKAPPID
+    private  int BOARDSDKAPPID = 1400779599;//徐id
+    private  String BOARDSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
 
     private static Timer timer;
 
@@ -213,9 +227,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static int mUserCount = 0;
 
     private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
-    private String Mbucket = "zjkj-1309130014";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKID89yXyjS6YoBRUObm3kMp6Eev8Ce5hktu";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "vjU7Ys44460ypaZZXzUCqSwobDbmmZAZ";                    //存储桶    永久密钥 secretKey
+    private String Mbucket = "zjkj-1313356181";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
+    private String MsecretId = "AKIDwhBPM6bruXw7A0ZwTovtnQpzwgroY5NQ";                 //存储桶   永久密钥 secretId
+    private String MsecretKey = "zlI5sb8TdeZHm4ObllT9duwztkS2Xoqf";                    //存储桶    永久密钥 secretKey
 
     private  String UserSig ="";                                                        //腾讯服务签名
 //  private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
@@ -420,8 +434,32 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         // 获取ShareView
         mTeacherShare = (TXCloudVideoView)findViewById(R.id.teacher_share);
         mTeacherShare.setOnClickListener(this);
+        //白板按钮
+        b_size = findViewById(R.id.board_size);
+        b_cur =  findViewById(R.id.board_curpage);
+        b_sum =  findViewById(R.id.board_sumpage);
+        b_chu =  findViewById(R.id.b_chu);
+        b_per =  findViewById(R.id.b_per);
+        menu01RL = findViewById(R.id.menu01RL);
+        menu02RL = findViewById(R.id.menu02RL);
+        menu03RL = findViewById(R.id.menu03RL);
+        menu04RL = findViewById(R.id.menu04RL);
+        menu05RL = findViewById(R.id.menu05RL);
+        menu06RL = findViewById(R.id.menu06RL);
+        menu07RL = findViewById(R.id.menu07RL);
+        menu08RL = findViewById(R.id.menu08RL);
+        menu09RL = findViewById(R.id.menu09RL);
+        menu10RL = findViewById(R.id.menu10RL);
+        menu11RL = findViewById(R.id.menu11RL);
+        menu12RL = findViewById(R.id.menu12RL);
+        menu02color= findViewById(R.id.menu02color);
+        menu03color= findViewById(R.id.menu03color);
+        menu04color= findViewById(R.id.menu04color);
+        select_menu = findViewById(R.id.select_menu);
+        select_menu_top = findViewById(R.id.select_menu_top);
 
         alert_text = findViewById(R.id.alert_text);
+
 
         classTime = findViewById(R.id.class_time);
         classTitle = findViewById(R.id.class_title);
@@ -520,6 +558,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             initTIM();
             initBoard();
 //        }
+
+        if(menu02!=null&&mBoard!=null&&menu02color!=null){
+            menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
+            menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+            menu02color.setImageResource(R.mipmap.text_red);
+        }
 
 
         // 用于更新UI的handler
@@ -788,12 +832,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         roomid = strArr[2];
         roomName = strArr[3];
         subjectId = strArr[4];
-        UserSig = GenerateTestUserSig.genTestUserSig(strArr[0]);
         keTangId = strArr[5];
         keTangName = strArr[6];
         userHead = strArr[7];
         teacherId = strArr[8];
-
+        teacherName = strArr[9];
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
                 MainActivity_stu.userId = intent.getStringExtra(Constant.USER_ID);
@@ -1384,6 +1427,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         initParam.timSync=false;
         mBoard = new TEduBoardController(this);
         //（3）添加白板事件回调 实现TEduBoardCallback接口
+<<<<<<< HEAD
         mBoardCallback = new TEduBoardController.TEduBoardCallback(){
             @Override
             public void onTEBError(int code, String msg) {
@@ -1695,6 +1739,319 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 System.out.println("onTEBPermissionDenied"+"++++");
             }
         };
+=======
+         mBoardCallback = new TEduBoardController.TEduBoardCallback(){
+             @Override
+             public void onTEBError(int code, String msg) {
+                 System.out.println("onTEBError"+"+++++++++++++code"+code+msg);
+                 alert_text.setText("白板加载失败！重新加载");
+             }
+             @Override
+             public void onTEBWarning(int code, String msg) {
+                 System.out.println("onTEBWarning"+"+++++++++++++code:"+code);
+                 if(code==7){  //VIDEO_ALREADY_EXISTS
+                     System.out.println("onTEBWarning"+"+++++++++++++VIDEO已经存在了:");
+                     mBoard.gotoBoard(msg);
+                 }else if(code==3){  //H5PPT_ALREADY_EXISTS
+                     System.out.println("onTEBWarning"+"+++++++++++++H5PPT已经存在了:");
+                     mBoard.gotoBoard(msg);
+                 }else if(code==6){  //H5PPT_ALREADY_EXISTS
+                     System.out.println("onTEBWarning"+"+++++++++++++H5FILE已经存在了:");
+                     mBoard.gotoBoard(msg);
+                 }
+ //                TEduBoardController.TEduBoardWarningCode.TEDU_BOARD_WARNING_IMAGE_MEDIA_BITRATE_TOO_LARGE
+             }
+             @Override
+             public void onTEBInit() {
+                 System.out.println("onTEBInit"+"++++白板初始化完成了");
+                 if(mBoard.isDrawEnable()){
+                   dealStopDraw();
+                 }
+                 ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+                 if(findViewById(R.id.boardcontent).getMeasuredWidth()>findViewById(R.id.boardcontent).getMeasuredHeight()){
+                     params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
+                 }else {
+                     params.setMargins(0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2,0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2);
+                 }
+                 Board_container.setLayoutParams(params);
+                 findViewById(R.id.bg_shoukeneirong).setVisibility(View.GONE);
+                 BoardStatus=true;
+                 boardview = mBoard.getBoardRenderView();
+                 initBoardMenu();
+                 alert_text.setText("白板加载完成！");
+                 if(!addBoardtoFragmentstatus){
+                     addBoardtoFragmentstatus =  mBoard.addBoardViewToContainer(Board_container,boardview,addBoardlayoutParams);
+                     mBoard.setToolType(0);
+                     rf_shoukeneirong.setVisibility(View.GONE);//默认图片那个消失
+                 }
+             }
+             @Override
+             public void onTEBHistroyDataSyncCompleted() {
+                 System.out.println("onTEBHistroyDataSyncCompleted"+"+++++++++++++");
+             }
+             @Override
+             public void onTEBSyncData(String data) {
+                 final V2TIMMessage Board_message = V2TIMManager.getMessageManager().createCustomMessage(
+                         data.getBytes(),                   //data
+                         "",                             //description
+                         "TXWhiteBoardExt".getBytes());     //extension
+                 V2TIMManager.getInstance().getConversationManager().getConversation(roomid, new V2TIMValueCallback<V2TIMConversation>() {
+                     @Override
+                     public void onError(int i, String s) {
+                         // 获取回话失败
+                         System.out.println("+++获取会话失败"+s+i);
+                     }
+                     @Override
+                     public void onSuccess(V2TIMConversation v2TIMConversation) {
+                         V2TIMManager.getInstance().getMessageManager().sendMessage(Board_message, null, roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
+                             @Override
+                             public void onSuccess(V2TIMMessage v2TIMMessage) {
+                                 // 发送 IM 消息成功
+                                 System.out.println("+++发送白板数据成功"+v2TIMMessage.getCustomElem().toString());
+                                 if(findViewById(R.id.setBoardWindow).getVisibility()==View.VISIBLE){findViewById(R.id.setBoardWindow).setVisibility(View.GONE);}
+                             }
+                             @Override
+                             public void onError(int i, String s) {
+                                 // 发送 IM 消息失败，建议进行重试
+                                 System.out.println("+++发送 IM 消息失败，建议进行重试"+s+i);
+                                 mBoard.syncAndReload();
+                             }
+                             @Override
+                             public void onProgress(int i) {
+                             }
+                         });
+                     }
+                 });
+             }
+
+             @Override
+             public void onTEBUndoStatusChanged(boolean canUndo) {
+                 System.out.println("onTEBUndoStatusChanged"+"+++"+canUndo);
+
+             }
+
+             @Override
+             public void onTEBRedoStatusChanged(boolean canRedo) {
+                 System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
+                 if(mBoard.getCurrentFile()!=null&&mBoard.getCurrentBoard()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
+                     b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
+                     b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
+                 }
+             }
+
+             @Override
+             public void onTEBImageStatusChanged(String boardId, String url, int status) {
+                 System.out.println("onTEBImageStatusChanged"+"+++");
+
+             }
+
+             @Override
+             public void onTEBSetBackgroundImage(String url) {
+                 System.out.println("onTEBSetBackgroundImage"+"+++");
+             }
+
+             @Override
+             public void onTEBAddImageElement(String url) {
+                 System.out.println("onTEBAddImageElement"+"+++");
+             }
+
+             @Override
+             public void onTEBAddElement(String id, int type, String url) {
+                 System.out.println("onTEBAddElement"+"+++");
+             }
+
+             @Override
+             public void onTEBDeleteElement(List<String> id) {
+                 System.out.println("onTEBDeleteElement"+"+++");
+             }
+
+             @Override
+             public void onTEBSelectElement(List<TEduBoardController.ElementItem> elementItemList) {
+                 System.out.println("onTEBSelectElement"+"+++");
+             }
+
+             @Override
+             public void onTEBMathGraphEvent(int code, String boardId, String graphId, String message) {
+                 System.out.println("onTEBMathGraphEvent"+"+++");
+             }
+
+             @Override
+             public void onTEBZoomDragStatus(String fid, int scale, int xOffset, int yOffset) {
+                 //远端白板缩放移动状态回调
+                 if( mBoard.getBoardScale()>300){
+                     mBoard.setBoardScale(300);
+                     b_size.setText("300");
+                 }else {
+                     b_size.setText(mBoard.getBoardScale()+"");
+                 }
+
+             }
+
+             @Override
+             public void onTEBBackgroundH5StatusChanged(String boardId, String url, int status) {
+                 System.out.println("onTEBBackgroundH5StatusChanged"+"+++");
+             }
+
+             @Override
+             public void onTEBTextElementWarning(String code, String message) {
+                 System.out.println("onTEBTextElementWarning"+"++++");
+             }
+
+             @Override
+             public void onTEBImageElementStatusChanged(int status, String currentBoardId, String imgUrl, String currentImgUrl) {
+                 System.out.println("onTEBImageElementStatusChanged"+"++");
+             }
+
+             @Override
+             public void onTEBAddBoard(List<String> boardList, String fileId) {
+                 if(!"#DEFAULT".equals(fileId)){
+                     FileID=fileId;
+                     CurFileID=null;
+                 }
+             }
+
+             @Override
+             public void onTEBDeleteBoard(List<String> boardList, String fileId) {
+
+             }
+
+             @Override
+             public void onTEBGotoBoard(String boardId, String fileId) {
+                 if(BoardID.equals(fileId)){
+                     CurType="Board";
+                     CurBoardID = boardId;
+                 }else {
+                     CurType="File";
+                     CurFileID = boardId;
+                 }
+                 b_cur.setText((mBoard.getFileBoardList(fileId).indexOf(boardId)+1)+"");
+                 b_sum.setText(mBoard.getFileBoardList(fileId).size()+"");
+             }
+
+             @Override
+             public void onTEBGotoStep(int currentStep, int totalStep) {
+                 System.out.println("onTEBGotoStep"+"+++++");
+             }
+
+             @Override
+             public void onTEBRectSelected() {
+                 System.out.println("onTEBRectSelected"+"++++");
+             }
+
+             @Override
+             public void onTEBRefresh() {
+                 System.out.println("onTEBRefresh"+"++++");
+             }
+
+             @Override
+             public void onTEBOfflineWarning(int count) {
+                 System.out.println("onTEBOfflineWarning"+"+++");
+             }
+             @Override
+             public void onTEBAddTranscodeFile(String fileId) {
+                 System.out.println("onTEBAddTranscodeFile"+fileId);
+             }
+             @Override
+             public void onTEBDeleteFile(String fileId) {
+                 System.out.println("onTEBDeleteFile"+"+++:删除了文件的ID："+fileId);
+             }
+             @Override
+             public void onTEBSwitchFile(String fileId) {
+                 if(fileId.equals("#DEFAULT")){
+  //                 当是白板的时候就要 跳转到之前相应页码数
+                     CurType="Board";
+                     CurBoardID = mBoard.getCurrentBoard();
+                 }else {
+  //                 当不是白板的时候 记录一下  打开的文件ID
+                     CurType="File";
+                     if(!fileId.equals(FileID)){
+                         //打开的文件不是上一次打开的文件就需要存起来文件ID了
+                         FileID=fileId;
+                     }
+                     CurFileID = mBoard.getCurrentBoard();
+                 }
+             }
+
+             @Override
+             public void onTEBFileUploadProgress(String path, int currentBytes, int totalBytes, int uploadSpeed, float percent) {
+                 System.out.println("onTEBFileUploadProgress"+"+++++");
+             }
+
+             @Override
+             public void onTEBFileUploadStatus(String path, int status, int errorCode, String errorMsg) {
+                 System.out.println("onTEBFileUploadStatus"+"++++");
+             }
+
+             @Override
+             public void onTEBFileTranscodeProgress(String file, String errorCode, String errorMsg, TEduBoardController.TEduBoardTranscodeFileResult result) {
+                 System.out.println("onTEBFileTranscodeProgress"+"+++++FileTranscodeProgress");
+             }
+
+             @Override
+             public void onTEBH5FileStatusChanged(String fileId, int status) {
+                 System.out.println("onTEBH5FileStatusChanged"+"+++++++");
+             }
+
+             @Override
+             public void onTEBAddImagesFile(String fileId) {
+                 System.out.println("onTEBAddImagesFile"+"++++++");
+             }
+
+             @Override
+             public void onTEBVideoStatusChanged(String fileId, int status, float progress, float duration) {
+             }
+
+             @Override
+             public void onTEBAudioStatusChanged(String elementId, int status, float progress, float duration) {
+                 System.out.println("onTEBAudioStatusChanged"+"+++++");
+             }
+
+             @Override
+             public void onTEBSnapshot(String path, int code, String msg) {
+                 System.out.println("onTEBSnapshot"+"++++白板快照"+path+msg+code);
+             }
+
+             @Override
+             public void onTEBH5PPTStatusChanged(int statusCode, String fid, String describeMsg) {
+                 System.out.println("onTEBH5PPTStatusChanged"+"+++");
+             }
+
+             @Override
+             public void onTEBTextElementStatusChange(String status, String id, String value, int left, int top) {
+                 System.out.println("onTEBTextElementStatusChange"+"+++++");
+             }
+
+             @Override
+             public void onTEBScrollChanged(String boardId, int trigger, double scrollLeft, double scrollTop, double scale) {
+                 System.out.println("onTEBScrollChanged"+"+++");
+             }
+
+             @Override
+             public void onTEBClassGroupStatusChanged(boolean enable, String classGroupId, int operationType, String message) {
+                 System.out.println("onTEBClassGroupStatusChanged"+"++");
+             }
+
+             @Override
+             public void onTEBCursorPositionChanged(Point point) {
+                 System.out.println("onTEBCursorPositionChanged"+"+++");
+             }
+
+             @Override
+             public void onTEBElementPositionChange(List<TEduBoardController.ElementItem> elementItemList) {
+                 System.out.println("onTEBElementPositionChange"+"++++");
+             }
+
+             @Override
+             public void onTEBPermissionChanged(List<String> permissions, Map<String, List<String>> filters) {
+                 System.out.println("onTEBPermissionChanged权限改变"+"++++");
+             }
+
+             @Override
+             public void onTEBPermissionDenied(String permission) {
+                 System.out.println("onTEBPermissionDenied权限被拒绝"+"++++");
+             }
+         };
+>>>>>>> 6d745360b0e4a2deb2b3eb3f7b6121bc469b93d5
 
         mBoard.addCallback(mBoardCallback);
         //（4）进行初始化
@@ -1849,32 +2206,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     //初始化白板的 左侧  底部按钮
     public void initBoardMenu(){
-        b_size = findViewById(R.id.board_size);
-        b_cur =  findViewById(R.id.board_curpage);
-        b_sum =  findViewById(R.id.board_sumpage);
-        b_chu =  findViewById(R.id.b_chu);
-        b_per =  findViewById(R.id.b_per);
-        menu01RL = findViewById(R.id.menu01RL);
-        menu02RL = findViewById(R.id.menu02RL);
-        menu03RL = findViewById(R.id.menu03RL);
-        menu04RL = findViewById(R.id.menu04RL);
-        menu05RL = findViewById(R.id.menu05RL);
-        menu06RL = findViewById(R.id.menu06RL);
-        menu07RL = findViewById(R.id.menu07RL);
-        menu08RL = findViewById(R.id.menu08RL);
-        menu09RL = findViewById(R.id.menu09RL);
-        menu10RL = findViewById(R.id.menu10RL);
-        menu11RL = findViewById(R.id.menu11RL);
-        menu12RL = findViewById(R.id.menu12RL);
-        menu02color= findViewById(R.id.menu02color);
-        menu03color= findViewById(R.id.menu03color);
-        menu04color= findViewById(R.id.menu04color);
-        select_menu = findViewById(R.id.select_menu);
-        select_menu_top = findViewById(R.id.select_menu_top);
+
         b_size.setText(mBoard.getBoardScale()+"");
         dealStopDraw();
-
-
 
         //左侧功能栏  第一个按钮  鼠标按钮
         menu01 = findViewById(R.id.menu01);
@@ -1900,7 +2234,19 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
                 menu04color.setImageResource(R.color.bg_select_menu);
                 menu03color.setImageResource(R.color.bg_select_menu);
-
+                if(mBoard.getBrushColor().toInt()==-7829368){
+                    menu02color.setImageResource(R.mipmap.text_gray);
+                }else if(mBoard.getBrushColor().toInt()==-16777216){
+                    menu02color.setImageResource(R.mipmap.text_black);
+                }else if(mBoard.getBrushColor().toInt()==-16776961){
+                    menu02color.setImageResource(R.mipmap.text_blue);
+                }else if(mBoard.getBrushColor().toInt()==-16711936){
+                    menu02color.setImageResource(R.mipmap.text_green);
+                }else if(mBoard.getBrushColor().toInt()==-256){
+                    menu02color.setImageResource(R.mipmap.text_yellow);
+                }else if(mBoard.getBrushColor().toInt()==-65536) {
+                    menu02color.setImageResource(R.mipmap.text_red);
+                }
 
                 //开启画笔弹窗
                 View v_selectpaint = getLayoutInflater().inflate(R.layout.pw_selectpaint,null);
@@ -2003,9 +2349,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     menu03color.setImageResource(R.mipmap.text_red);
                 }
                 menu03.setBackgroundResource(R.mipmap.menu_03_text1);
-                menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu03color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
                 menu02color.setImageResource(R.color.bg_select_menu);
-                menu03color.setImageResource(R.color.bg_select_menu);
+                menu04color.setImageResource(R.color.bg_select_menu);
             }
         });
         //左侧功能栏  第4个按钮  选择几何图形按钮
@@ -2017,8 +2363,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 mBoard.setToolType(6);
                 setLeftmenustatus(true);
                 menu04.setBackgroundResource(R.mipmap.menu_04_jihe1);
-                menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
-                menu03color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+                menu02color.setImageResource(R.color.bg_select_menu);
+                menu03color.setImageResource(R.color.bg_select_menu);
                 if(mBoard.getBrushColor().toInt()==8947848){
                     menu04color.setImageResource(R.mipmap.text_gray);
                 }else if(mBoard.getBrushColor().toInt()==0){
@@ -2497,13 +2844,13 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     ViewPager setboardviewPager = findViewById(R.id.set_board_tar_bar_viewpage);
                     setboardviewPager.setOffscreenPageLimit(3);
                     //构造参数
-                    Set_eraser_Fragment set_eraser_fragment = new Set_eraser_Fragment("4");
-                    Set_geometry_Fragment set_geometry_fragment = new Set_geometry_Fragment();
-                    Set_text_Fragment set_text_fragment = new Set_text_Fragment();
-                    Set_paint_Fragment set_paint_fragment = new Set_paint_Fragment();
-                    Set_bg_Fragment set_bg_fragment = new Set_bg_Fragment();
-                    Set_more_Fragment set_more_fragment = new Set_more_Fragment();
-                    Set_Highlighter_Fragment set_highlighter_fragment = new Set_Highlighter_Fragment();
+                    Set_eraser_Fragment_Stu set_eraser_fragment = new Set_eraser_Fragment_Stu("4");
+                    Set_geometry_Fragment_Stu set_geometry_fragment = new Set_geometry_Fragment_Stu();
+                    Set_text_Fragment_Stu set_text_fragment = new Set_text_Fragment_Stu();
+                    Set_paint_Fragment_Stu set_paint_fragment = new Set_paint_Fragment_Stu();
+                    Set_bg_Fragment_Stu set_bg_fragment = new Set_bg_Fragment_Stu();
+                    Set_more_Fragment_Stu set_more_fragment = new Set_more_Fragment_Stu();
+                    Set_Highlighter_Fragment_Stu set_highlighter_fragment = new Set_Highlighter_Fragment_Stu();
 //                设置弹窗  四种状态   画笔设置|文本设置|几何图形设置|板擦设置 +  背景设置  +  更多设置
                     String[] sl=null;
                     mTabFragmenList.clear();
@@ -2511,10 +2858,14 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         sl = new String[]{"画笔设置", "背景设置", "更多设置"};
                         mTabFragmenList.add(set_paint_fragment);
                     } else if (mBoard.getToolType() == 11) {
-                        mBoard.setToolType(11);
                         sl = new String[]{"文本设置", "背景设置", "更多设置"};
                         mTabFragmenList.add(set_text_fragment);
-                    } else if (mBoard.getToolType() == 6) {
+                    } else if (mBoard.getToolType() == 4||  mBoard.getToolType()==5
+                            ||  mBoard.getToolType()==6  ||  mBoard.getToolType()==13
+                            ||  mBoard.getToolType()==15  ||  mBoard.getToolType()==20
+                            ||  mBoard.getToolType()==21  ||  mBoard.getToolType()==22
+                            ||  mBoard.getToolType()==23  ||  mBoard.getToolType()==24
+                            ||  mBoard.getToolType()==25  ||  mBoard.getToolType()==26) {
                         sl = new String[]{"几何图形设置", "背景设置", "更多设置"};
                         mTabFragmenList.add(set_geometry_fragment);
                     } else if (mBoard.getToolType() == 2) {
@@ -3582,6 +3933,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         }
     }
 
+    @SuppressLint("Range")
     private String getImagePath(Uri uri, String selection) {
         String path=null;
         //通过Uri和selection来获取真实的图片路径
@@ -3865,10 +4217,16 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         rf_leftmenu.setVisibility(View.VISIBLE);
         rf_bottommenu.setVisibility(View.VISIBLE);
         if(mBoard!=null){
+            mBoard.setToolType(1);
+            menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+            menu02color.setImageResource(R.mipmap.text_red);
             mBoard.setDrawEnable(true);
             mBoard.setMouseToolBehavior(true,true,true,true);
         }else {
             initBoard();
+            mBoard.setToolType(1);
+            menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
+            menu02color.setImageResource(R.mipmap.text_red);
             mBoard.setDrawEnable(true);
             mBoard.setMouseToolBehavior(true,true,true,true);
         }

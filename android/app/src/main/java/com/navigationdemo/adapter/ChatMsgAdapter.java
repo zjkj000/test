@@ -15,7 +15,6 @@ import androidx.annotation.NonNull;
 import com.navigationdemo.Chat_Msg;
 
 import com.navigationdemo.utils.MyChatHead_ImageView;
-
 import java.util.List;
 
 public class ChatMsgAdapter extends ArrayAdapter {
@@ -45,6 +44,7 @@ public class ChatMsgAdapter extends ArrayAdapter {
             mViewHolder.Msgdate = (TextView) mView.findViewById(R.id.date);
             mViewHolder.Msgcontent = (TextView) mView.findViewById(R.id.msgcontent);
             mViewHolder.msg_head = (MyChatHead_ImageView) mView.findViewById(R.id.msg_head);
+
             mView.setTag(mViewHolder);
         }else {
             mView = convertView;
@@ -61,8 +61,8 @@ public class ChatMsgAdapter extends ArrayAdapter {
             mViewHolder.Layout1.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             mViewHolder.Msgname.setTextColor(Color.WHITE);
             mViewHolder.Msgcontent.setTextColor(Color.WHITE);
-        }
-        else if(mMsg.getType() == 1)  //  发送的消息  主讲人
+
+        }else if(mMsg.getType() == 1)  //  发送的消息  主讲人
         {
             mViewHolder.Layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             mViewHolder.Layout1.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);

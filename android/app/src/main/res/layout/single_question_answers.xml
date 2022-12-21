@@ -34,15 +34,15 @@
             android:maxHeight="200dp"
             android:maxWidth="200dp"/>
 
-<!--        <ImageButton-->
-<!--            android:layout_width="20dp"-->
-<!--            android:layout_height="20dp"-->
-<!--            android:layout_alignParentRight="true"-->
-<!--            android:layout_marginRight="10dp"-->
-<!--            android:background="#45b97c"-->
-<!--            android:clickable="true"-->
-<!--            android:scaleType="centerCrop"-->
-<!--            android:src="@mipmap/close_szda"/>-->
+        <!--        <ImageButton-->
+        <!--            android:layout_width="20dp"-->
+        <!--            android:layout_height="20dp"-->
+        <!--            android:layout_alignParentRight="true"-->
+        <!--            android:layout_marginRight="10dp"-->
+        <!--            android:background="#45b97c"-->
+        <!--            android:clickable="true"-->
+        <!--            android:scaleType="centerCrop"-->
+        <!--            android:src="@mipmap/close_szda"/>-->
 
 
 
@@ -67,22 +67,24 @@
             android:orientation="horizontal"
             android:gravity="center">
 
+            <!--layout_height="35dp            -->
             <ImageView
                 android:id="@+id/a"
-                android:src="@mipmap/a"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
-                android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
+                android:maxWidth="200dp"
                 android:maxHeight="200dp"
-                android:maxWidth="200dp"/>
+                android:src="@mipmap/aa" />
 
             <ImageView
                 android:id="@+id/b"
-                android:src="@mipmap/b"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:src="@mipmap/ab"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
@@ -90,9 +92,10 @@
 
             <ImageView
                 android:id="@+id/c"
-                android:src="@mipmap/c"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:src="@mipmap/ac"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
@@ -100,9 +103,10 @@
 
             <ImageView
                 android:id="@+id/d"
-                android:src="@mipmap/d"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:src="@mipmap/ad"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
@@ -110,38 +114,42 @@
 
             <ImageView
                 android:id="@+id/e"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="200dp"
                 android:maxHeight="200dp"
-                android:src="@mipmap/e" />
+                android:src="@mipmap/ae" />
 
             <ImageView
                 android:id="@+id/f"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="200dp"
                 android:maxHeight="200dp"
-                android:src="@mipmap/f" />
+                android:src="@mipmap/af" />
 
             <ImageView
                 android:id="@+id/g"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="200dp"
                 android:maxHeight="200dp"
-                android:src="@mipmap/g" />
+                android:src="@mipmap/ag" />
 
             <ImageView
                 android:id="@+id/h"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="200dp"
@@ -161,20 +169,21 @@
 
             <ImageView
                 android:id="@+id/a1"
-                android:src="@mipmap/ad"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:src="@mipmap/da"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
-                android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
                 android:maxWidth="200dp"/>
 
             <ImageView
                 android:id="@+id/b1"
-                android:src="@mipmap/bd"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:src="@mipmap/db"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
@@ -182,9 +191,10 @@
 
             <ImageView
                 android:id="@+id/c1"
-                android:src="@mipmap/cd"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:src="@mipmap/dc"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
@@ -193,8 +203,9 @@
             <ImageView
                 android:id="@+id/d1"
                 android:src="@mipmap/dd"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxHeight="200dp"
@@ -202,8 +213,9 @@
 
             <ImageView
                 android:id="@+id/e1"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="200dp"
@@ -212,8 +224,9 @@
 
             <ImageView
                 android:id="@+id/f1"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="200dp"
@@ -222,8 +235,9 @@
 
             <ImageView
                 android:id="@+id/g1"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="200dp"
@@ -232,8 +246,9 @@
 
             <ImageView
                 android:id="@+id/h1"
-                android:layout_width="35dp"
-                android:layout_height="35dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="3dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="200dp"
@@ -253,8 +268,9 @@
 
             <ImageView
                 android:id="@+id/right"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="200dp"
@@ -263,8 +279,9 @@
 
             <ImageView
                 android:id="@+id/error"
-                android:layout_width="65dp"
-                android:layout_height="65dp"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="wrap_content"
                 android:layout_margin="5dp"
                 android:adjustViewBounds="true"
                 android:maxWidth="200dp"

@@ -116,6 +116,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     private TextView tx_noanswer; //没有人提交答案
     private ScrollView slStusAnswers; //答题详情
 
+    private PopupWindow popupWindow_szda; //客观题-设置答案弹框
+
     //主观题
     private ScrollView slStusAnswersImg; //答案内容
     private ScrollView slStusAnswers_zhuguan;  //答题详情
@@ -1109,10 +1111,23 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 //退出之前，需要先关闭共享屏幕！！！！！！
+                if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share_end).getConstantState())){
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.stopScreenCapture();
+                        }
+                    });
+                }
                 popupWindow.dismiss();
                 selectedIndex = 0;
                 answer = "";
                 isSelect_huizong = true;
+                //如果设置答案弹框未关闭，则主动关闭
+                if(popupWindow_szda != null && popupWindow_szda.isShowing()){
+                    popupWindow_szda.dismiss();
+                }
             }
         });
 
@@ -1122,9 +1137,23 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share).getConstantState())){
                     //开始共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.startScreenCapture();
+                        }
+                    });
                 }else{
                     //结束共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share)));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.stopScreenCapture();
+                        }
+                    });
                 }
             }
         });
@@ -1257,7 +1286,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         if(screenWidth <= 0){
             getScreenProps();
         }
-        PopupWindow popupWindow_szda = new PopupWindow(v , (int)(screenWidth * 0.45) , (int)(screenHeight * 0.4) , false);
+        popupWindow_szda = new PopupWindow(v , (int)(screenWidth * 0.45) , (int)(screenHeight * 0.4) , false);
 
         //弹框展示在屏幕中间Gravity.CENTER,x和y是相对于Gravity.CENTER的偏移
         popupWindow_szda.showAtLocation(v , Gravity.CENTER , 0 , 0);
@@ -1297,35 +1326,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         right = v.findViewById(R.id.right);
         error = v.findViewById(R.id.error);
 
-//        int count = 0; //选项个数
-//        for(int i = 0 ; i < labelName.length ; i++){
-//            if(labelName[i] != "未答"){
-//                count++;
-//            }
-//        }
 
         int count = chooseNum; //选项个数
-//        int count = 8;
-        //2-4个选项
-        LinearLayout.LayoutParams lps1 = new LinearLayout.LayoutParams(90, 90);
-//        LinearLayout.LayoutParams lps1 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT , 1);
-        lps1.setMargins(3 , 3 , 3 , 3);
-        //5个选项
-        LinearLayout.LayoutParams lps2 = new LinearLayout.LayoutParams(70, 70);
-//        LinearLayout.LayoutParams lps2 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT , 1);
-        lps2.setMargins(3 , 3 , 3 , 3);
-        //6个选项
-        LinearLayout.LayoutParams lps3 = new LinearLayout.LayoutParams(65, 65);
-//        LinearLayout.LayoutParams lps3 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT , 1);
-        lps3.setMargins(3 , 3 , 3 , 3);
-        //7个选项
-        LinearLayout.LayoutParams lps4 = new LinearLayout.LayoutParams(55, 55);
-//        LinearLayout.LayoutParams lps4 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT , 1);
-        lps4.setMargins(3 , 3 , 3 , 3);
-        //8个选项
-        LinearLayout.LayoutParams lps5 = new LinearLayout.LayoutParams(49, 49);
-//        LinearLayout.LayoutParams lps5 = new LinearLayout.LayoutParams(0, LinearLayout.LayoutParams.WRAP_CONTENT , 1);
-        lps5.setMargins(3 , 3 , 3 , 3);
+
         //单选(图标）
         if(txModle_danxuan.isSelected()){
             linear_danxuan.setVisibility(View.VISIBLE);
@@ -1333,8 +1336,6 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             linear_panduan.setVisibility(View.GONE);
 
             if(count == 2){
-                a.setLayoutParams(lps1);
-                b.setLayoutParams(lps1);
                 c.setVisibility(View.GONE);
                 d.setVisibility(View.GONE);
                 e.setVisibility(View.GONE);
@@ -1342,59 +1343,27 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 g.setVisibility(View.GONE);
                 h.setVisibility(View.GONE);
             }else if(count == 3){
-                a.setLayoutParams(lps1);
-                b.setLayoutParams(lps1);
-                c.setLayoutParams(lps1);
                 d.setVisibility(View.GONE);
                 e.setVisibility(View.GONE);
                 f.setVisibility(View.GONE);
                 g.setVisibility(View.GONE);
                 h.setVisibility(View.GONE);
             }else if(count == 4){
-                a.setLayoutParams(lps1);
-                b.setLayoutParams(lps1);
-                c.setLayoutParams(lps1);
-                d.setLayoutParams(lps1);
                 e.setVisibility(View.GONE);
                 f.setVisibility(View.GONE);
                 g.setVisibility(View.GONE);
                 h.setVisibility(View.GONE);
             }else if(count == 5){
-                a.setLayoutParams(lps2);
-                b.setLayoutParams(lps2);
-                c.setLayoutParams(lps2);
-                d.setLayoutParams(lps2);
-                e.setLayoutParams(lps2);
                 f.setVisibility(View.GONE);
                 g.setVisibility(View.GONE);
                 h.setVisibility(View.GONE);
             }else if(count == 6){
-                a.setLayoutParams(lps3);
-                b.setLayoutParams(lps3);
-                c.setLayoutParams(lps3);
-                d.setLayoutParams(lps3);
-                e.setLayoutParams(lps3);
-                f.setLayoutParams(lps3);
                 g.setVisibility(View.GONE);
                 h.setVisibility(View.GONE);
             }else if(count == 7){
-                a.setLayoutParams(lps4);
-                b.setLayoutParams(lps4);
-                c.setLayoutParams(lps4);
-                d.setLayoutParams(lps4);
-                e.setLayoutParams(lps4);
-                f.setLayoutParams(lps4);
-                g.setLayoutParams(lps4);
                 h.setVisibility(View.GONE);
             }else if(count == 8){
-                a.setLayoutParams(lps5);
-                b.setLayoutParams(lps5);
-                c.setLayoutParams(lps5);
-                d.setLayoutParams(lps5);
-                e.setLayoutParams(lps5);
-                f.setLayoutParams(lps5);
-                g.setLayoutParams(lps5);
-                h.setLayoutParams(lps5);
+
             }
         }
         //多选(图标）
@@ -1403,8 +1372,6 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             linear_panduan.setVisibility(View.GONE);
             linear_duoxuan.setVisibility(View.VISIBLE);
             if(count == 2){
-                a1.setLayoutParams(lps1);
-                b1.setLayoutParams(lps1);
                 c1.setVisibility(View.GONE);
                 d1.setVisibility(View.GONE);
                 e1.setVisibility(View.GONE);
@@ -1412,59 +1379,27 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 g1.setVisibility(View.GONE);
                 h1.setVisibility(View.GONE);
             }else if(count == 3){
-                a1.setLayoutParams(lps1);
-                b1.setLayoutParams(lps1);
-                c1.setLayoutParams(lps1);
                 d1.setVisibility(View.GONE);
                 e1.setVisibility(View.GONE);
                 f1.setVisibility(View.GONE);
                 g1.setVisibility(View.GONE);
                 h1.setVisibility(View.GONE);
             }else if(count == 4){
-                a1.setLayoutParams(lps1);
-                b1.setLayoutParams(lps1);
-                c1.setLayoutParams(lps1);
-                d1.setLayoutParams(lps1);
                 e1.setVisibility(View.GONE);
                 f1.setVisibility(View.GONE);
                 g1.setVisibility(View.GONE);
                 h1.setVisibility(View.GONE);
             }else if(count == 5){
-                a1.setLayoutParams(lps2);
-                b1.setLayoutParams(lps2);
-                c1.setLayoutParams(lps2);
-                d1.setLayoutParams(lps2);
-                e1.setLayoutParams(lps2);
                 f1.setVisibility(View.GONE);
                 g1.setVisibility(View.GONE);
                 h1.setVisibility(View.GONE);
             }else if(count == 6){
-                a1.setLayoutParams(lps3);
-                b1.setLayoutParams(lps3);
-                c1.setLayoutParams(lps3);
-                d1.setLayoutParams(lps3);
-                e1.setLayoutParams(lps3);
-                f1.setLayoutParams(lps3);
                 g1.setVisibility(View.GONE);
                 h1.setVisibility(View.GONE);
             }else if(count == 7){
-                a1.setLayoutParams(lps4);
-                b1.setLayoutParams(lps4);
-                c1.setLayoutParams(lps4);
-                d1.setLayoutParams(lps4);
-                e1.setLayoutParams(lps4);
-                f1.setLayoutParams(lps4);
-                g1.setLayoutParams(lps4);
                 h1.setVisibility(View.GONE);
             }else if(count == 8){
-                a1.setLayoutParams(lps5);
-                b1.setLayoutParams(lps5);
-                c1.setLayoutParams(lps5);
-                d1.setLayoutParams(lps5);
-                e1.setLayoutParams(lps5);
-                f1.setLayoutParams(lps5);
-                g1.setLayoutParams(lps5);
-                h1.setLayoutParams(lps5);
+
             }
         }
         //判断(图标）
@@ -1548,7 +1483,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         ContextCompat.getDrawable(getActivity(), R.mipmap.ad_select).getConstantState())
                 ) {
                     a1.setSelected(false);
-                    a1.setImageDrawable(getResources().getDrawable((R.mipmap.ad)));
+                    a1.setImageDrawable(getResources().getDrawable((R.mipmap.da)));
                 }else {
                     a1.setSelected(true);
                     a1.setImageDrawable(getResources().getDrawable((R.mipmap.ad_select)));
@@ -1561,7 +1496,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             public void onClick(View view) {
                 if((b1.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.bd_select).getConstantState())){
                     b1.setSelected(false);
-                    b1.setImageDrawable(getResources().getDrawable((R.mipmap.bd)));
+                    b1.setImageDrawable(getResources().getDrawable((R.mipmap.db)));
                 }else{
                     b1.setSelected(true);
                     b1.setImageDrawable(getResources().getDrawable((R.mipmap.bd_select)));
@@ -1573,7 +1508,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             public void onClick(View view) {
                 if((c1.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.cd_select).getConstantState())){
                     c1.setSelected(false);
-                    c1.setImageDrawable(getResources().getDrawable((R.mipmap.cd)));
+                    c1.setImageDrawable(getResources().getDrawable((R.mipmap.dc)));
                 }else{
                     c1.setSelected(true);
                     c1.setImageDrawable(getResources().getDrawable((R.mipmap.cd_select)));
@@ -1773,13 +1708,13 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //单选图标状态
     public void setDanxuanImgStatus(){
-        a.setImageDrawable(getResources().getDrawable((R.mipmap.a)));
-        b.setImageDrawable(getResources().getDrawable((R.mipmap.b)));
-        c.setImageDrawable(getResources().getDrawable((R.mipmap.c)));
-        d.setImageDrawable(getResources().getDrawable((R.mipmap.d)));
-        e.setImageDrawable(getResources().getDrawable((R.mipmap.e)));
-        f.setImageDrawable(getResources().getDrawable((R.mipmap.f)));
-        g.setImageDrawable(getResources().getDrawable((R.mipmap.g)));
+        a.setImageDrawable(getResources().getDrawable((R.mipmap.aa)));
+        b.setImageDrawable(getResources().getDrawable((R.mipmap.ab)));
+        c.setImageDrawable(getResources().getDrawable((R.mipmap.ac)));
+        d.setImageDrawable(getResources().getDrawable((R.mipmap.ad)));
+        e.setImageDrawable(getResources().getDrawable((R.mipmap.ae)));
+        f.setImageDrawable(getResources().getDrawable((R.mipmap.af)));
+        g.setImageDrawable(getResources().getDrawable((R.mipmap.ag)));
         h.setImageDrawable(getResources().getDrawable((R.mipmap.h)));
         a.setSelected(false);
         b.setSelected(false);
@@ -2388,6 +2323,15 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 //退出之前，需要先关闭屏幕共享！！！！！！
+                if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share_end).getConstantState())){
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.stopScreenCapture();
+                        }
+                    });
+                }
                 popupWindow.dismiss();
                 selectedIndex = 0;
                 isSelect_huizong = true;
@@ -2400,9 +2344,23 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share).getConstantState())){
                     //开始共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.startScreenCapture();
+                        }
+                    });
                 }else{
                     //结束共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share)));
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            MainActivity_tea activity = (MainActivity_tea) getActivity();
+                            activity.stopScreenCapture();
+                        }
+                    });
                 }
             }
         });

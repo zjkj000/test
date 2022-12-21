@@ -276,7 +276,15 @@ class CreateList extends React.Component {
                             });
                         } else if (todo.fType == "10") {
                             //跳转直播
-                           this.props.navigation.navigate("LiveingLessionInfo_teacher");
+                           this.props.navigation.navigate({
+                            name:'LiveingLessionInfo_teacher',
+                            params:{
+                                flag:''
+                            },
+                            merge:true
+                        }
+                            
+                            );
                         } else {
                             this.props.navigation.navigate({
                                 name: "CorrectPaperList",

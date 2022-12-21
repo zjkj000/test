@@ -13,6 +13,7 @@
         android:background="@color/popupWindow_title"
         android:padding="5dp"
         android:layout_height="wrap_content" >
+
         <TextView
             android:id="@+id/member_list_pop_title"
             android:layout_width="wrap_content"
@@ -37,8 +38,18 @@
             android:visibility="gone"
             android:layout_marginRight="30dp"
             android:background="@mipmap/littlenativefile"
+            android:layout_toStartOf="@+id/little_choosePackageBtn"
+            android:layout_height="wrap_content"/>
+        <ImageView
+            android:id="@+id/little_choosePackageBtn"
+            android:layout_centerVertical="true"
+            android:layout_width="wrap_content"
+            android:visibility="gone"
+            android:layout_marginRight="30dp"
+            android:background="@mipmap/littleairpackage"
             android:layout_toStartOf="@+id/choose_file_pop_close"
             android:layout_height="wrap_content"/>
+
         <ImageView
             android:layout_centerVertical="true"
             android:id="@+id/choose_file_pop_close"
@@ -90,6 +101,20 @@
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
                         android:background="@mipmap/nativefile" />
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:layout_gravity="clip_vertical"
+                    android:layout_height="match_parent">
+
+                    <ImageView
+                        android:id="@+id/choosePackageBtn"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerVertical="true"
+                        android:background="@mipmap/airpackage" />
                 </RelativeLayout>
             </LinearLayout>
             <androidx.recyclerview.widget.RecyclerView

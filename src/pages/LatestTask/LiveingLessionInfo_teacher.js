@@ -1,7 +1,9 @@
-import { Text, View,Image,ScrollView, FlatList, TouchableOpacity,Alert, NativeModules } from 'react-native'
+import { Text, View,Image,ScrollView, FlatList, TouchableOpacity,Alert, NativeModules,Modal } from 'react-native'
 import React, { Component,useEffect, useState } from 'react'
 import { useNavigation } from "@react-navigation/native";
-import { OverflowMenu, MenuItem,Button } from "@ui-kitten/components";
+import { CheckBox,Layout,OverflowMenu, MenuItem,Button } from "@ui-kitten/components";
+
+
 import {screenHeight } from '../../utils/Screen/GetSize'
 import { SearchBar } from "@ant-design/react-native";
 import http from '../../utils/http/request'
@@ -9,15 +11,42 @@ import Toast from '../../utils/Toast/Toast';
 import Clipboard from '@react-native-community/clipboard';
 let SearchText = '';
 let currentPage= 1;
-export default function LiveingLessionInfo_teacher() {
+export default function LiveingLessionInfo_teacher(props) {
     const navigation = useNavigation();
     const [data,setdata] = useState([])
     const [type,settype] =useState('All')
     const [moduleVisible,setmoduleVisible]=useState(false)
     const [isRefresh,setisRefresh] = useState(false)
+    const [chooseClassCamera,setchooseClassCamera] =useState(true)   //代表开启摄像头 
+    const [chooseClassMicrophone,setchooseClassMicrophone] =useState(false)   //代表开启麦克风
+    const [chooseClassName,setchooseClassName] =useState('')
+    const [chooseClassroomId,setchooseClassroomId] =useState('')
+    const [chooseClasstitle,setchooseClasstitle] =useState('')
+    const [chooseClasssubjectId,setchooseClasssubjectId] =useState('')
+    const [chooseClassketangId,setchooseClassketangId] =useState('')
+    
+    const [chooseClassmodalVisible,setchooseClassmodalVisible] =useState(false)
     const [showFoot,setshowFoot]=useState('0')             //0代表还可以加载  1代表没数据了
     useEffect(()=>{
+        const timer = setInterval(() => {
+            console.log('刷新')
+            currentPage=1
+            setisRefresh(true)
+            setdata([])
+            fetchData(type,1,true);
+        }, 30000);
+
+       
+        if(props.route.params.flag=='refresh'){
+            setdata([])
+            fetchData('0',1)
+        }
+
         fetchData('0',1)
+        return ()=>{
+            SearchText = ''
+            clearInterval(timer)
+          }
       },[])
 
     function fetchData(newtype,newcurrentPage,isRefreshing=false){
@@ -33,6 +62,7 @@ export default function LiveingLessionInfo_teacher() {
           };
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
+            console.log('请求到的直播课数据列表')
                 if(newcurrentPage==1){
                     setshowFoot('0')  //第一页还可以请求
                     setdata(resJson.list)
@@ -52,13 +82,19 @@ export default function LiveingLessionInfo_teacher() {
     function renderAvatar(){
         return (
             <TouchableOpacity onPress={() => setmoduleVisible(true)}>
-                <Text style={{fontSize:15,color:'#87CEFA'}}>{type=='1'?"未开始":type=='2'?'直播中':type=='3'?"已结束":'全部'}</Text>
+                <Text style={{fontSize:15,color:'#87CEFA'}}>{type=='2'?"未开始":type=='1'?'直播中':type=='3'?"已结束":'全部'}</Text>
                 <Text style={{position:'absolute',right:5}}>▼</Text>
             </TouchableOpacity>
         );
     };
     function _renderItemView(dataItem){
-            return (<LiveingLessonContent_teacher navigation={navigation} source={dataItem} />)
+            return (<LiveingLessonContent_teacher navigation={navigation} source={dataItem} 
+                                                    setchooseClassmodalVisible={setchooseClassmodalVisible}
+                                                    setchooseClassName={setchooseClassName} 
+                                                    setchooseClassketangId={setchooseClassketangId}
+                                                    setchooseClasstitle={setchooseClasstitle}
+                                                    setchooseClasssubjectId={setchooseClasssubjectId}
+                                                    setchooseClassroomId={setchooseClassroomId}/>)
       }
 
     function _onRefresh(){
@@ -110,7 +146,59 @@ export default function LiveingLessionInfo_teacher() {
     }
 
   return (
-  <View>
+  <>
+     <Modal        animationType='slide'
+                              transparent={true}
+                              visible={chooseClassmodalVisible}
+                              onRequestClose={()=>{
+                                setchooseClassmodalVisible(false)
+                                }}
+                            >
+                  <View style={{backgroundColor:'#000000',opacity:0.6}}>    
+                    <View style={{height:'100%',alignItems:'center',backgroundColor:'#FFFFFF'}}>
+                        <View style={{backgroundColor:'#FFFFFF',marginTop:'60%'}}>
+                            <View style={{justifyContent:'center',backgroundColor:'#FFFFFF',padding:10,alignItems:'center'}}>
+                                <View style={{margin:20}}><Text style={{fontSize:20,color:'red'}}>{chooseClasstitle}</Text></View>
+                                {/* 选择是否开启  摄像头   麦克风 */}
+                                    <Layout style={{flexDirection:'row'}}>
+                                        <CheckBox  checked={chooseClassCamera} onChange={()=>{setchooseClassCamera(!chooseClassCamera)}}>开启摄像头</CheckBox>
+                                        <CheckBox checked={chooseClassMicrophone} onChange={()=>{setchooseClassMicrophone(!chooseClassMicrophone)}}>开启麦克风</CheckBox>
+                                    </Layout>
+                                
+                                <View style={{flexDirection:'row',width:'50%',justifyContent:'space-between',marginBottom:20,marginTop:50}}>
+                                    <TouchableOpacity onPress={()=>{
+                                    setchooseClassmodalVisible(false)
+                                    }}><Text style={{color:'#59B9E0',fontSize:18}}>取消</Text></TouchableOpacity>
+
+                                    <TouchableOpacity onPress={()=>{
+                                            // 跳转教师端直播页面
+                                            NativeModules.IntentMoudle.startActivityFromJS(
+                                                "MainActivity_tea",
+                                                global.constants.userName+"-@-"+      //userid id
+                                                global.constants.userCn+"-@-"+        //usercn 中文名
+                                                chooseClassroomId+"-@-"+              //roomid 直播房间号
+                                                chooseClasstitle+"-@-"+            //直播房间名称
+                                                chooseClasssubjectId+"-@-"+         //学科ID
+                                                chooseClassketangId+"-@-"+         //课堂ID
+                                                chooseClassName+"-@-"+         //课堂名称
+                                                global.constants.userPhoto+"-@-"+
+                                                chooseClassCamera+"-@-"+
+                                                chooseClassMicrophone   );
+                                                setchooseClassmodalVisible(false)
+
+                                            
+
+                                    }}>
+                                    <Text style={{color:'#59B9E0',fontSize:18}}>上课</Text></TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                  </View>
+                  
+                
+                </Modal>
+
     <View style={{height:50,flexDirection:'row',alignItems:'center',backgroundColor:'#FFFFFF',justifyContent:"center",borderBottomWidth:0.5,borderColor:"#CBCBCB"}}>
                         <TouchableOpacity style={{position:'absolute',left:10}}
                                           onPress={()=>{navigation.goBack()
@@ -120,7 +208,7 @@ export default function LiveingLessionInfo_teacher() {
                         <Text style={{color:'#59B9E0',fontSize:20}}>我讲的直播课</Text>
                         <TouchableOpacity style={{position:'absolute',right:10}}onPress={()=>{
                             navigation.navigate("LiveingLession_add",{
-                                        flag:'new',
+                                        type:'save',
                                         roomId:''           //新建直播课   没有roomid
                             }
                         );
@@ -158,9 +246,9 @@ export default function LiveingLessionInfo_teacher() {
                                     onPress={() => {
                                         setdata([])
                                         setmoduleVisible(false)
-                                        settype('1')
+                                        settype('2')
                                         currentPage=1;
-                                        fetchData('1',1)
+                                        fetchData('2',1)
                                     }}
                                 />
                                 <MenuItem
@@ -169,9 +257,9 @@ export default function LiveingLessionInfo_teacher() {
                                     onPress={() => {
                                         setdata([])
                                         setmoduleVisible(false)
-                                        settype('2')
+                                        settype('1')
                                         currentPage=1;
-                                        fetchData('2',1)
+                                        fetchData('1',1)
                                     }}
                                 />
                                 <MenuItem
@@ -226,7 +314,7 @@ export default function LiveingLessionInfo_teacher() {
                         />
             
         </View>
-  </View>
+  </>
 
   )
 }
@@ -235,8 +323,8 @@ class LiveingLessonContent_teacher extends Component {
     constructor(props){
         super(props)
         this.state={
-                title:'纪念刘和珍君',               //名称//直播页面需要传递的参数
-                roomId:'457893492',                //课堂号//直播页面需要传递的参数
+                title:'',               //名称//直播页面需要传递的参数
+                roomId:'',                //课堂号//直播页面需要传递的参数
                 hour:'',                      //课节时长
                 subjectName:'',             //学科名称
                 minutes:'', //授课对象
@@ -250,7 +338,7 @@ class LiveingLessonContent_teacher extends Component {
                 ketangName:'',          //直播页面需要传递的参数
                 stuNum:'',
                 phone:'',               //直播页面需要传递的参数
-                teacherId:'mingming',   //直播页面需要传递的参数
+                teacherId:'',   //直播页面需要传递的参数
                 hostUserName:'',                //主讲人姓名，直播页面需要传递的参
                 teacherName:'',
                 subjectId:'',           //直播页面需要传递的参数
@@ -260,6 +348,7 @@ class LiveingLessonContent_teacher extends Component {
     UNSAFE_componentWillMount(){
        this.setState({...this.props.source.item})
     }
+  
     
     // 删除直播课
     DeleteLivingLession(rommid){
@@ -267,11 +356,32 @@ class LiveingLessonContent_teacher extends Component {
         const params = {roomId:rommid         //房间号
           };
         http.get(url, params).then((resStr) => {
+            console.log(resStr)
             let resJson = JSON.parse(resStr);
             if("success"==resJson.status){
-                Toast.showSuccessToast('删除成功',500)
+                Alert.alert('','刪除成功',[{},
+                    {text:'确定',onPress:()=>{
+                        this.props.navigation.navigate({
+                            name:'LiveingLessionInfo_teacher',
+                            params:{
+                                flag:'refresh'
+                            },
+                            merge:true
+                        })
+                    }}
+                    ])
+                this.props.navigation.navigate(
+                    {name:'LiveingLessionInfo_teacher',
+                    params:{
+                        flag:'refresh'
+                    },
+                    merge:true
+                
+                
+                }
+                )
             }
-            this.props.refresh();
+           
         })
     }
 
@@ -314,13 +424,14 @@ class LiveingLessonContent_teacher extends Component {
                                         name:'LiveingLession_add',
                                         params:{
                                         type:'update',
+                                        roomId:this.state.roomId
                                         }
                                     });
                                 }}>
                             <Image style={{width:13,height:13,marginLeft:3}} source={require('../../assets/teacherLatestPage/tea_edit.png')}/>
                         </TouchableOpacity>
                         <TouchableOpacity
-                                // onPress={()=>{this.DeleteLivingLession(this.state.roomId)}}
+                                onPress={()=>{this.DeleteLivingLession(this.state.roomId)}}
                                 >
                             <Image style={{width:13,height:13,marginLeft:3}} source={require('../../assets/teacherLatestPage/tea_delete.png')}/>
                         </TouchableOpacity>
@@ -357,17 +468,14 @@ class LiveingLessonContent_teacher extends Component {
                 {this.state.showStrTop==""?(
                     <TouchableOpacity style={{backgroundColor:'#66B878',width:75,height:33,justifyContent:'center',alignItems:'center',margin:3}}
                                         onPress={()=>{
-                                            // 跳转教师端直播页面
-                                             NativeModules.IntentMoudle.startActivityFromJS(
-                                                               "MainActivity_tea",
-                                                                global.constants.userName+"-@-"+      //userid id
-                                                                global.constants.userCn+"-@-"+        //usercn 中文名
-                                                                 this.state.roomId+"-@-"+              //roomid 直播房间号
-                                                                 this.state.title+"-@-"+            //直播房间名称
-                                                                this.state.subjectId+"-@-"+         //学科ID
-                                                               this.state.ketangId+"-@-"+         //课堂ID
-                                                                this.state.ketangName+"-@-"+         //课堂名称
-                                                                global.constants.userPhoto   );
+                                            this.props.setchooseClassmodalVisible(true)
+                                            this.props.setchooseClassName(this.state.ketangName)
+                                            this.props.setchooseClassroomId(this.state.roomId)
+                                            this.props.setchooseClasstitle(this.state.title)
+                                            this.props.setchooseClasssubjectId(this.state.subjectId)
+                                            this.props.setchooseClassketangId(this.state.ketangId)
+
+
                                         }}>
                         <Text style={{fontSize:12,color:'white'}}>进入课堂</Text>
                     </TouchableOpacity>
