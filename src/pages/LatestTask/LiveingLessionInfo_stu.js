@@ -7,10 +7,16 @@ import {
     TouchableOpacity,
     Alert,
     NativeModules,
+    Modal,
 } from "react-native";
 import React, { Component, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import { OverflowMenu, MenuItem } from "@ui-kitten/components";
+import {
+    OverflowMenu,
+    MenuItem,
+    Layout,
+    CheckBox,
+} from "@ui-kitten/components";
 import { SearchBar } from "@ant-design/react-native";
 import http from "../../utils/http/request";
 import Toast from "../../utils/Toast/Toast";
@@ -23,11 +29,21 @@ export default function LiveingLessonInfo_stu() {
     const [moduleVisible, setmoduleVisible] = useState(false);
     const [isRefresh, setisRefresh] = useState(false);
     const [showFoot, setshowFoot] = useState("0"); //0代表还可以加载  1代表没数据了
+    const [chooseClassCamera, setchooseClassCamera] = useState(true);
+    const [chooseClassMicrophone, setchooseClassMicrophone] = useState(false);
+    const [chooseClassmodalVisible, setchooseClassmodalVisible] =
+        useState(false);
+    const [chooseClassroomId, setchooseClassroomId] = useState("");
+    const [chooseClasstitle, setchooseClasstitle] = useState("");
+    const [chooseClasssubjectId, setchooseClasssubjectId] = useState("");
+    const [chooseClassketangId, setchooseClassketangId] = useState("");
+    const [chooseTeacherId, setchooseTeacherId] = useState("");
+    const [chooseTeacherName, setchooseTeacherName] = useState("");
     useEffect(() => {
         fetchData("All", 1);
-        return ()=>{
-            SearchText = ''
-          }
+        return () => {
+            SearchText = "";
+        };
     }, []);
 
     function fetchData(newtype, newcurrentPage, isRefreshing = false) {
@@ -77,7 +93,17 @@ export default function LiveingLessonInfo_stu() {
     }
     function _renderItemView(dataItem) {
         return (
-            <LiveingLessonContent navigation={navigation} source={dataItem} />
+            <LiveingLessonContent
+                navigation={navigation}
+                source={dataItem}
+                setchooseClassmodalVisible={setchooseClassmodalVisible}
+                setchooseClassroomId={setchooseClassroomId}
+                setchooseClasstitle={setchooseClasstitle}
+                setchooseClasssubjectId={setchooseClasssubjectId}
+                setchooseClassketangId={setchooseClassketangId}
+                setchooseTeacherId={setchooseTeacherId}
+                setchooseTeacherName={setchooseTeacherName}
+            />
         );
     }
 
@@ -135,116 +161,250 @@ export default function LiveingLessonInfo_stu() {
     }
 
     return (
-        <View style={{ padding: 10, paddingBottom: 0 }}>
-            {/* 筛选框    搜索框 */}
-            <View style={{ flexDirection: "row", margin: 10 }}>
-                <View
-                    style={{
-                        width: 80,
-                        height: 40,
-                        padding: 10,
-                        paddingRight: 0,
-                        backgroundColor: "#fff",
-                        marginTop: 2,
-                    }}
-                >
-                    <OverflowMenu
+        <>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={chooseClassmodalVisible}
+                onRequestClose={() => {
+                    setchooseClassModalVisible(false);
+                }}
+            >
+                <View style={{ backgroundColor: "#000000", opacity: 0.6 }}>
+                    <View
                         style={{
-                            borderColor: "#000",
-                            borderWidth: 0.8,
-                            width: 80,
-                        }}
-                        anchor={renderAvatar}
-                        visible={moduleVisible}
-                        onBackdropPress={() => {
-                            setmoduleVisible(false);
+                            height: "100%",
+                            alignItems: "center",
+                            backgroundColor: "#FFFFFF",
                         }}
                     >
-                        <MenuItem
-                            title={"全部"}
-                            key={0}
-                            onPress={() => {
-                                setdata([]);
-                                setmoduleVisible(false);
-                                settype("All");
-                                currentPage = 1;
-                                fetchData("All", 1);
+                        <View
+                            style={{
+                                backgroundColor: "#FFFFFF",
+                                marginTop: "60%",
                             }}
-                        />
-                        <MenuItem
-                            title={"直播中"}
-                            key={1}
-                            onPress={() => {
-                                setdata([]);
-                                setmoduleVisible(false);
-                                settype("1");
-                                currentPage = 1;
-                                fetchData("1", 1);
-                            }}
-                        />
-                        <MenuItem
-                            title={"未开始"}
-                            key={2}
-                            onPress={() => {
-                                setdata([]);
-                                setmoduleVisible(false);
-                                settype("2");
-                                currentPage = 1;
-                                fetchData("2", 1);
-                            }}
-                        />
-                        <MenuItem
-                            title={"已结束"}
-                            key={3}
-                            onPress={() => {
-                                setdata([]);
-                                setmoduleVisible(false);
-                                settype("3");
-                                currentPage = 1;
-                                fetchData("3", 1);
-                            }}
-                        />
-                    </OverflowMenu>
-                </View>
-                <View style={{ width: "80%" }}>
-                    <SearchBar
-                        style={{ height: 40 }}
-                        value={{ SearchText }}
-                        placeholder="请输入课程名称，教师姓名或课堂号搜索"
-                        // ref={(ref) => (setSearchText(ref))}
-                        onCancel={() => {
-                            setdata([]);
-                            fetchData(type, 1);
-                        }}
-                        onChange={(value) => {
-                            SearchText = value;
-                        }}
-                        onBlur={() => {
-                            setdata([]);
-                            fetchData(type, 1);
-                        }}
-                        cancelText="搜索"
-                        //showCancelButton
-                    />
-                </View>
-            </View>
-            {/* <ScrollView> */}
-            <FlatList
-                style={{ marginBottom: 70 }}
-                showsVerticalScrollIndicator={false}
-                //定义数据显示效果
-                data={data}
-                renderItem={_renderItemView.bind(this)}
-                //下拉刷新相关
-                onRefresh={() => _onRefresh()}
-                refreshing={isRefresh}
-                ListFooterComponent={_renderFooter.bind(this)}
-                onEndReached={_onEndReached.bind(this)}
-                onEndReachedThreshold={0.5}
-            />
+                        >
+                            <View
+                                style={{
+                                    justifyContent: "center",
+                                    backgroundColor: "#FFFFFF",
+                                    padding: 10,
+                                    alignItems: "center",
+                                }}
+                            >
+                                <View style={{ margin: 20 }}>
+                                    <Text
+                                        style={{ fontSize: 20, color: "red" }}
+                                    >
+                                        {chooseClasstitle}
+                                    </Text>
+                                </View>
+                                {/* 选择是否开启  摄像头   麦克风 */}
+                                <Layout style={{ flexDirection: "row" }}>
+                                    <CheckBox
+                                        checked={chooseClassCamera}
+                                        onChange={() => {
+                                            setchooseClassCamera(
+                                                !chooseClassCamera
+                                            );
+                                        }}
+                                    >
+                                        开启摄像头
+                                    </CheckBox>
+                                    <CheckBox
+                                        checked={chooseClassMicrophone}
+                                        onChange={() => {
+                                            setchooseClassMicrophone(
+                                                !chooseClassMicrophone
+                                            );
+                                        }}
+                                    >
+                                        开启麦克风
+                                    </CheckBox>
+                                </Layout>
 
-            {/* </ScrollView> */}
-        </View>
+                                <View
+                                    style={{
+                                        flexDirection: "row",
+                                        width: "50%",
+                                        justifyContent: "space-between",
+                                        marginBottom: 20,
+                                        marginTop: 50,
+                                    }}
+                                >
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setchooseClassmodalVisible(false);
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                color: "#59B9E0",
+                                                fontSize: 18,
+                                            }}
+                                        >
+                                            取消
+                                        </Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            // 跳转直播页面
+                                            NativeModules.IntentMoudle.startActivityFromJS(
+                                                "MainActivity_stu",
+                                                global.constants.userName +
+                                                    "-@-" + //userid id
+                                                    global.constants.userCn +
+                                                    "-@-" + //usercn 中文名
+                                                    chooseClassroomId +
+                                                    "-@-" + //roomid 直播房间号
+                                                    chooseClasstitle +
+                                                    "-@-" + //直播房间名称
+                                                    chooseClasssubjectId +
+                                                    "-@-" + //学科ID
+                                                    chooseClassketangId +
+                                                    "-@-" + //课堂ID
+                                                    chooseClasstitle +
+                                                    "-@-" + //课堂名称
+                                                    global.constants.userPhoto +
+                                                    "-@-" +
+                                                    chooseTeacherId +
+                                                    "-@-" +
+                                                    chooseTeacherName +
+                                                    "-@-" +
+                                                    chooseClassCamera +
+                                                    "-@-" +
+                                                    chooseClassMicrophone
+                                            );
+                                            setchooseClassmodalVisible(false);
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                color: "#59B9E0",
+                                                fontSize: 18,
+                                            }}
+                                        >
+                                            上课
+                                        </Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+                </View>
+            </Modal>
+            <View style={{ padding: 10, paddingBottom: 0 }}>
+                {/* 筛选框    搜索框 */}
+                <View style={{ flexDirection: "row", margin: 10 }}>
+                    <View
+                        style={{
+                            width: 80,
+                            height: 40,
+                            padding: 10,
+                            paddingRight: 0,
+                            backgroundColor: "#fff",
+                            marginTop: 2,
+                        }}
+                    >
+                        <OverflowMenu
+                            style={{
+                                borderColor: "#000",
+                                borderWidth: 0.8,
+                                width: 80,
+                            }}
+                            anchor={renderAvatar}
+                            visible={moduleVisible}
+                            onBackdropPress={() => {
+                                setmoduleVisible(false);
+                            }}
+                        >
+                            <MenuItem
+                                title={"全部"}
+                                key={0}
+                                onPress={() => {
+                                    setdata([]);
+                                    setmoduleVisible(false);
+                                    settype("All");
+                                    currentPage = 1;
+                                    fetchData("All", 1);
+                                }}
+                            />
+                            <MenuItem
+                                title={"直播中"}
+                                key={1}
+                                onPress={() => {
+                                    setdata([]);
+                                    setmoduleVisible(false);
+                                    settype("1");
+                                    currentPage = 1;
+                                    fetchData("1", 1);
+                                }}
+                            />
+                            <MenuItem
+                                title={"未开始"}
+                                key={2}
+                                onPress={() => {
+                                    setdata([]);
+                                    setmoduleVisible(false);
+                                    settype("2");
+                                    currentPage = 1;
+                                    fetchData("2", 1);
+                                }}
+                            />
+                            <MenuItem
+                                title={"已结束"}
+                                key={3}
+                                onPress={() => {
+                                    setdata([]);
+                                    setmoduleVisible(false);
+                                    settype("3");
+                                    currentPage = 1;
+                                    fetchData("3", 1);
+                                }}
+                            />
+                        </OverflowMenu>
+                    </View>
+                    <View style={{ width: "80%" }}>
+                        <SearchBar
+                            style={{ height: 40 }}
+                            value={{ SearchText }}
+                            placeholder="请输入课程名称，教师姓名或课堂号搜索"
+                            // ref={(ref) => (setSearchText(ref))}
+                            onCancel={() => {
+                                setdata([]);
+                                fetchData(type, 1);
+                            }}
+                            onChange={(value) => {
+                                SearchText = value;
+                            }}
+                            onBlur={() => {
+                                setdata([]);
+                                fetchData(type, 1);
+                            }}
+                            cancelText="搜索"
+                            //showCancelButton
+                        />
+                    </View>
+                </View>
+                {/* <ScrollView> */}
+                <FlatList
+                    style={{ marginBottom: 70 }}
+                    showsVerticalScrollIndicator={false}
+                    //定义数据显示效果
+                    data={data}
+                    renderItem={_renderItemView.bind(this)}
+                    //下拉刷新相关
+                    onRefresh={() => _onRefresh()}
+                    refreshing={isRefresh}
+                    ListFooterComponent={_renderFooter.bind(this)}
+                    onEndReached={_onEndReached.bind(this)}
+                    onEndReachedThreshold={0.5}
+                />
+
+                {/* </ScrollView> */}
+            </View>
+        </>
     );
 }
 
@@ -401,32 +561,51 @@ class LiveingLessonContent extends Component {
                             <TouchableOpacity
                                 style={{ position: "absolute", right: 25 }}
                                 onPress={() => {
-                                    NativeModules.IntentMoudle.startActivityFromJS(
-                                        "MainActivity_stu",
-                                        global.constants.userName +
-                                            "-@-" + //userid id
-                                            global.constants.userCn +
-                                            "-@-" + //usercn 中文名
-                                            this.state.roomId +
-                                            "-@-" + //roomid 直播房间号
-                                            this.state.title +
-                                            "-@-" + //直播房间名称
-                                            "subjectId" +
-                                            "-@-" + //学科ID
-                                            "ketangId" +
-                                            "-@-" + //课堂ID
-                                            this.state.title +
-                                            "-@-" + //课堂名称
-                                            global.constants.userPhoto +
-                                            "-@-" +
-                                            this.state.teacherId // 教师ID
-                                            +"-@-" +
-                                            this.state.teacherName
-                                        // 下面这三个暂时没有 传递固定值
-                                        // this.state.subjectId+"-@-"+         //学科ID
-                                        // this.state.ketangId+"-@-"+         //课堂ID
-                                        // this.state.ketangName+"-@-"+         //课堂名称
+                                    this.props.setchooseClassmodalVisible(true);
+                                    this.props.setchooseClassroomId(
+                                        this.state.roomId
                                     );
+                                    this.props.setchooseClasstitle(
+                                        this.state.title
+                                    );
+                                    this.props.setchooseClasssubjectId(
+                                        "subjectId"
+                                    );
+                                    this.props.setchooseClassketangId(
+                                        "ketangId"
+                                    );
+                                    this.props.setchooseTeacherId(
+                                        this.state.teacherId
+                                    );
+                                    this.props.setchooseTeacherName(
+                                        this.state.teacherName
+                                    );
+                                    // NativeModules.IntentMoudle.startActivityFromJS(
+                                    //     "MainActivity_stu",
+                                    //     global.constants.userName +
+                                    //         "-@-" + //userid id
+                                    //         global.constants.userCn +
+                                    //         "-@-" + //usercn 中文名
+                                    //         this.state.roomId +
+                                    //         "-@-" + //roomid 直播房间号
+                                    //         this.state.title +
+                                    //         "-@-" + //直播房间名称
+                                    //         "subjectId" +
+                                    //         "-@-" + //学科ID
+                                    //         "ketangId" +
+                                    //         "-@-" + //课堂ID
+                                    //         this.state.title +
+                                    //         "-@-" + //课堂名称
+                                    //         global.constants.userPhoto +
+                                    //         "-@-" +
+                                    //         this.state.teacherId + // 教师ID
+                                    //         "-@-" +
+                                    //         this.state.teacherName
+                                    //     // 下面这三个暂时没有 传递固定值
+                                    //     // this.state.subjectId+"-@-"+         //学科ID
+                                    //     // this.state.ketangId+"-@-"+         //课堂ID
+                                    //     // this.state.ketangName+"-@-"+         //课堂名称
+                                    // );
                                 }}
                             >
                                 <Text style={{ color: "#77A5BD" }}>

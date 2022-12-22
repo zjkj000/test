@@ -76,7 +76,6 @@ import com.navigationdemo.adapter.HandsUpListViewAdapter;
 import com.navigationdemo.adapter.MemberListViewAdapter;
 import com.navigationdemo.adapter.SetBrd_TabBarAdapter;
 import com.navigationdemo.adapter.TabBarAdapter_stu;
-<<<<<<< HEAD
 import com.navigationdemo.setBoardFragment.Set_Highlighter_Fragment;
 import com.navigationdemo.setBoardFragment.Set_bg_Fragment;
 import com.navigationdemo.setBoardFragment.Set_eraser_Fragment;
@@ -85,7 +84,6 @@ import com.navigationdemo.setBoardFragment.Set_more_Fragment;
 import com.navigationdemo.setBoardFragment.Set_paint_Fragment;
 import com.navigationdemo.setBoardFragment.Set_text_Fragment;
 import com.navigationdemo.MyEvent;
-=======
 import com.navigationdemo.setBoardFragment.Set_Highlighter_Fragment_Stu;
 import com.navigationdemo.setBoardFragment.Set_bg_Fragment_Stu;
 import com.navigationdemo.setBoardFragment.Set_eraser_Fragment_Stu;
@@ -93,7 +91,6 @@ import com.navigationdemo.setBoardFragment.Set_geometry_Fragment_Stu;
 import com.navigationdemo.setBoardFragment.Set_more_Fragment_Stu;
 import com.navigationdemo.setBoardFragment.Set_paint_Fragment_Stu;
 import com.navigationdemo.setBoardFragment.Set_text_Fragment_Stu;
->>>>>>> 6d745360b0e4a2deb2b3eb3f7b6121bc469b93d5
 import com.navigationdemo.utils.UriUtils;
 import com.google.android.material.tabs.TabLayout;
 import com.tencent.cos.xml.CosXmlService;
@@ -247,6 +244,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static String keTangName="";                                                                             //课堂名称     明茗初一语文60人班
     public static String userHead = "";     //用户头像
     public static String subjectId = "";                                                                   //学科ID     10007
+    public static String cameraState = "";
+    public static String microphoneState = "";
     private static String handsState = "down"; //举手状态，up为正在举手，down为手已放下，off为禁止举手
 
 
@@ -837,6 +836,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         userHead = strArr[7];
         teacherId = strArr[8];
         teacherName = strArr[9];
+        cameraState = strArr[10];
+        microphoneState = strArr[11];
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
                 MainActivity_stu.userId = intent.getStringExtra(Constant.USER_ID);
@@ -1280,15 +1281,19 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         mTRTCCloud.setLocalRenderParams(myTRTCRenderParams);
 
         // 开启本地摄像头预览
-        mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
-        cameraOn = true;
+        if(cameraState.toLowerCase().equals("true")) {
+            mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
+            cameraOn = true;
+            studentTRTCBackground.setVisibility(View.INVISIBLE);
+        }
 
 
         // 开启本地麦克风
-        mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
-        musicOn = true;
+        if(microphoneState.toLowerCase().equals("true")) {
+            mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
+            musicOn = true;
+        }
 
-        studentTRTCBackground.setVisibility(View.INVISIBLE);
 //        teacherTRTCBackground.bringToFront();
 
         // 设置姓名旁的静音标记
@@ -1298,6 +1303,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
 
         @SuppressLint("UseCompatLoadingForDrawables") Drawable student_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
+        if(microphoneState.toLowerCase().equals("false")) {
+            student_name_mic_icon = getResources().getDrawable(R.drawable.mic_off);
+        }
         student_name_mic_icon.setBounds(0,0,20,20);
         student_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
 
@@ -1427,7 +1435,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         initParam.timSync=false;
         mBoard = new TEduBoardController(this);
         //（3）添加白板事件回调 实现TEduBoardCallback接口
-<<<<<<< HEAD
         mBoardCallback = new TEduBoardController.TEduBoardCallback(){
             @Override
             public void onTEBError(int code, String msg) {
@@ -1739,7 +1746,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 System.out.println("onTEBPermissionDenied"+"++++");
             }
         };
-=======
          mBoardCallback = new TEduBoardController.TEduBoardCallback(){
              @Override
              public void onTEBError(int code, String msg) {
@@ -2051,7 +2057,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                  System.out.println("onTEBPermissionDenied权限被拒绝"+"++++");
              }
          };
->>>>>>> 6d745360b0e4a2deb2b3eb3f7b6121bc469b93d5
 
         mBoard.addCallback(mBoardCallback);
         //（4）进行初始化

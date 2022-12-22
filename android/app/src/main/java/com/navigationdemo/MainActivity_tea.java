@@ -197,6 +197,8 @@ public class MainActivity_tea extends AppCompatActivity {
     public static String keTangName="";                                                                             //课堂名称     明茗初一语文60人班
     public static String userHead = "";     //用户头像
     public static String subjectId = "";                                                                   //学科ID     10007
+    public static String cameraState = "";
+    public static String microphoneState = "";
 
 
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
@@ -206,13 +208,8 @@ public class MainActivity_tea extends AppCompatActivity {
     private  String TRTCSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
 
     //即时通信SDKAPPID
-<<<<<<< HEAD
-    private  int IMSDKAPPID = 1400772698;//王id
-    private  String IMSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
-=======
     private  int IMSDKAPPID = 1400779599;//王id
     private  String IMSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
->>>>>>> 6d745360b0e4a2deb2b3eb3f7b6121bc469b93d5
 
     //白板SDKAPPID
     private  int BOARDSDKAPPID = 1400779599;//徐id
@@ -807,6 +804,8 @@ public class MainActivity_tea extends AppCompatActivity {
         keTangId = strArr[5];
         keTangName = strArr[6];
         userHead = strArr[7];
+        cameraState = strArr[8];
+        microphoneState = strArr[9];
 
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
@@ -1303,20 +1302,26 @@ public class MainActivity_tea extends AppCompatActivity {
         mTRTCCloud.setLocalRenderParams(myTRTCRenderParams);
 
         // 开启本地摄像头预览
-        mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
-        cameraOn = true;
+        if(cameraState.toLowerCase().equals("true")) {
+            mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
+            cameraOn = true;
+            teacherTRTCBackground.setVisibility(View.INVISIBLE);
+        }
 
 
         // 开启本地麦克风
-        mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
-        musicOn = true;
-
-        teacherTRTCBackground.setVisibility(View.INVISIBLE);
+        if(microphoneState.toLowerCase().equals("true")) {
+            mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
+            musicOn = true;
+        }
 //        teacherTRTCBackground.bringToFront();
 
         // 设置姓名旁的静音标记
 
         @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
+        if(microphoneState.toLowerCase().equals("false")){
+            teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_off);
+        }
         teacher_name_mic_icon.setBounds(0,0,20,20);
         teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
 
@@ -1734,7 +1739,6 @@ public class MainActivity_tea extends AppCompatActivity {
         initParam.timSync=false;
         mBoard = new TEduBoardController(this);
         //（3）添加白板事件回调 实现TEduBoardCallback接口
-<<<<<<< HEAD
         mBoardCallback = new TEduBoardController.TEduBoardCallback(){
             @Override
             public void onTEBError(int code, String msg) {
@@ -2085,7 +2089,6 @@ public class MainActivity_tea extends AppCompatActivity {
                 System.out.println("onTEBPermissionDenied"+"++++");
             }
         };
-=======
          mBoardCallback = new TEduBoardController.TEduBoardCallback(){
              @Override
              public void onTEBError(int code, String msg) {
@@ -2436,7 +2439,6 @@ public class MainActivity_tea extends AppCompatActivity {
                  System.out.println("onTEBPermissionDenied权限被拒绝"+"++++");
              }
          };
->>>>>>> 6d745360b0e4a2deb2b3eb3f7b6121bc469b93d5
 
         mBoard.addCallback(mBoardCallback);
         //（4）进行初始化
