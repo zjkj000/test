@@ -38,6 +38,12 @@ public class HttpActivityTea extends AnswerActivityTea {
         },10,100);
     }
 
+    public static void stopHandsUpTimer() {
+        if(getHandsUpTimer != null) {
+            getHandsUpTimer.cancel();
+        }
+    }
+
 
 
 
@@ -272,6 +278,70 @@ public class HttpActivityTea extends AnswerActivityTea {
     }
 
     /**
+     * 学生主动上下讲台控制
+     *
+     * @param userId       操作用户ID
+     * @param stuName      操作用户用户名
+     * @param type         操作动作
+     */
+
+    public static void speakerController(String userId, String stuName, String type, MainActivity_stu mainActivityStu) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String roomId = roomid;
+                    URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_savePlatform.do?"
+                            + "roomId=" + roomId
+                            + "&stuId=" + userId
+                            + "&name=" + URLEncoder.encode(stuName, "utf-8")
+                            + "&type=" + type
+                    );
+                    Log.e(TAG, "speakerController: " +  url);
+
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(8000);
+                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.connect();
+
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+
+                    while((temp = bufferedReader.readLine()) != null) {
+                        buffer.append(temp);
+                    }
+
+                    // 关闭
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                    Log.e(TAG, "speakerController: " +  buffer.toString());
+                    try{
+                        String backLogJsonStr = buffer.toString();
+//                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
+                        JSONObject jsonObject = stringToJson(backLogJsonStr);
+                        String success = "";
+                        success = jsonObject.getString("success");
+                        if(success.equals("")) {
+                            Toast.makeText(mainActivityStu, "操作失败，请检查网络设置", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
      * 上下讲台控制
      *
      * @param userId       操作用户ID
@@ -280,7 +350,6 @@ public class HttpActivityTea extends AnswerActivityTea {
      * @param position     操作位置
      * @param mainActivityTea 主线程
      */
-
     public static void speakerController(String userId, String stuName, String type, int position, MainActivity_tea mainActivityTea){
         new Thread(new Runnable() {
             @Override

@@ -19,10 +19,11 @@ import {
     Button,
 } from "@ui-kitten/components";
 
-import { screenHeight } from "../../utils/Screen/GetSize";
+import { screenHeight, screenWidth } from "../../utils/Screen/GetSize";
 import { SearchBar } from "@ant-design/react-native";
 import http from "../../utils/http/request";
 import Toast from "../../utils/Toast/Toast";
+import Loading from "../../utils/loading/Loading";
 import Clipboard from "@react-native-community/clipboard";
 let SearchText = "";
 let currentPage = 1;
@@ -39,6 +40,7 @@ export default function LiveingLessionInfo_teacher(props) {
     const [chooseClasstitle, setchooseClasstitle] = useState("");
     const [chooseClasssubjectId, setchooseClasssubjectId] = useState("");
     const [chooseClassketangId, setchooseClassketangId] = useState("");
+    const [showLoading, setShowLoading] = useState(false);
 
     const [chooseClassmodalVisible, setchooseClassmodalVisible] =
         useState(false);
@@ -190,17 +192,15 @@ export default function LiveingLessionInfo_teacher(props) {
                     setchooseClassmodalVisible(false);
                 }}
             >
-                <View style={{ backgroundColor: "#000000", opacity: 0.6 }}>
+                <View style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
                     <View
                         style={{
                             height: "100%",
                             alignItems: "center",
-                            backgroundColor: "#FFFFFF",
                         }}
                     >
                         <View
                             style={{
-                                backgroundColor: "#FFFFFF",
                                 marginTop: "60%",
                             }}
                         >
@@ -220,7 +220,11 @@ export default function LiveingLessionInfo_teacher(props) {
                                     </Text>
                                 </View>
                                 {/* 选择是否开启  摄像头   麦克风 */}
-                                <Layout style={{ flexDirection: "row" }}>
+                                <Layout
+                                    style={{
+                                        flexDirection: "row",
+                                    }}
+                                >
                                     <CheckBox
                                         checked={chooseClassCamera}
                                         onChange={() => {
@@ -269,30 +273,73 @@ export default function LiveingLessionInfo_teacher(props) {
 
                                     <TouchableOpacity
                                         onPress={() => {
-                                            // 跳转教师端直播页面
-                                            NativeModules.IntentMoudle.startActivityFromJS(
-                                                "MainActivity_tea",
-                                                global.constants.userName +
-                                                    "-@-" + //userid id
-                                                    global.constants.userCn +
-                                                    "-@-" + //usercn 中文名
-                                                    chooseClassroomId +
-                                                    "-@-" + //roomid 直播房间号
-                                                    chooseClasstitle +
-                                                    "-@-" + //直播房间名称
-                                                    chooseClasssubjectId +
-                                                    "-@-" + //学科ID
-                                                    chooseClassketangId +
-                                                    "-@-" + //课堂ID
-                                                    chooseClassName +
-                                                    "-@-" + //课堂名称
-                                                    global.constants.userPhoto +
-                                                    "-@-" +
-                                                    chooseClassCamera +
-                                                    "-@-" +
-                                                    chooseClassMicrophone
-                                            );
+                                            setShowLoading(true);
                                             setchooseClassmodalVisible(false);
+                                            const url =
+                                                "http://" +
+                                                "www.cn901.com" +
+                                                "/ShopGoods/ajax/livePlay_deleteMemcached.do";
+                                            const params = {
+                                                roomId: chooseClassroomId,
+                                                ketangId: chooseClassketangId,
+                                                ketangName: chooseClassName,
+                                                userId: global.constants
+                                                    .userName,
+                                                name: global.constants.userCn,
+                                                source: "app",
+                                                width: screenWidth,
+                                                height: screenHeight,
+                                            };
+                                            http.post(url, params)
+                                                .then((res) => {
+                                                    setShowLoading(false);
+                                                    if (res.success) {
+                                                        if (!res.joinStatus) {
+                                                            // 跳转教师端直播页面
+                                                            NativeModules.IntentMoudle.startActivityFromJS(
+                                                                "MainActivity_tea",
+                                                                global.constants
+                                                                    .userName +
+                                                                    "-@-" + //userid id
+                                                                    global
+                                                                        .constants
+                                                                        .userCn +
+                                                                    "-@-" + //usercn 中文名
+                                                                    chooseClassroomId +
+                                                                    "-@-" + //roomid 直播房间号
+                                                                    chooseClasstitle +
+                                                                    "-@-" + //直播房间名称
+                                                                    chooseClasssubjectId +
+                                                                    "-@-" + //学科ID
+                                                                    chooseClassketangId +
+                                                                    "-@-" + //课堂ID
+                                                                    chooseClassName +
+                                                                    "-@-" + //课堂名称
+                                                                    global
+                                                                        .constants
+                                                                        .userPhoto +
+                                                                    "-@-" +
+                                                                    chooseClassCamera +
+                                                                    "-@-" +
+                                                                    chooseClassMicrophone
+                                                            );
+                                                        } else {
+                                                            Toast.showDangerToast(
+                                                                "您的账号已在别处登录"
+                                                            );
+                                                        }
+                                                    } else {
+                                                        Toast.showInfoToast(
+                                                            res.message
+                                                        );
+                                                    }
+                                                })
+                                                .catch((error) => {
+                                                    setShowLoading(false);
+                                                    Toast.showDangerToast(
+                                                        error.message
+                                                    );
+                                                });
                                         }}
                                     >
                                         <Text
@@ -460,6 +507,7 @@ export default function LiveingLessionInfo_teacher(props) {
                     onEndReachedThreshold={0.5}
                 />
             </View>
+            <Loading background={true} show={showLoading}></Loading>
         </>
     );
 }

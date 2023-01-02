@@ -804,6 +804,10 @@
                 app:tabIndicatorColor="@color/blue_white"
                 app:tabTextAppearance="@style/TabBarTextStyle"
                 app:tabTextColor="@color/gray_text"
+                app:tabPaddingBottom="0dp"
+                app:tabPaddingTop="0dp"
+                app:tabPadding="0dp"
+                app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/blue_white"
                 />
 

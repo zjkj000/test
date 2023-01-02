@@ -20,6 +20,8 @@ import {
 import { SearchBar } from "@ant-design/react-native";
 import http from "../../utils/http/request";
 import Toast from "../../utils/Toast/Toast";
+import Loading from "../../utils/loading/Loading";
+import { screenHeight, screenWidth } from "../../utils/Screen/GetSize";
 let SearchText = "";
 let currentPage = 1;
 export default function LiveingLessonInfo_stu() {
@@ -39,6 +41,7 @@ export default function LiveingLessonInfo_stu() {
     const [chooseClassketangId, setchooseClassketangId] = useState("");
     const [chooseTeacherId, setchooseTeacherId] = useState("");
     const [chooseTeacherName, setchooseTeacherName] = useState("");
+    const [showLoading, setShowLoading] = useState(false);
     useEffect(() => {
         fetchData("All", 1);
         return () => {
@@ -170,29 +173,38 @@ export default function LiveingLessonInfo_stu() {
                     setchooseClassModalVisible(false);
                 }}
             >
-                <View style={{ backgroundColor: "#000000", opacity: 0.6 }}>
+                <View style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
                     <View
                         style={{
                             height: "100%",
                             alignItems: "center",
-                            backgroundColor: "#FFFFFF",
+                            justifyContent: "flex-start",
                         }}
                     >
                         <View
                             style={{
-                                backgroundColor: "#FFFFFF",
                                 marginTop: "60%",
                             }}
                         >
                             <View
                                 style={{
+                                    width: "80%",
+                                    height: "65%",
                                     justifyContent: "center",
                                     backgroundColor: "#FFFFFF",
-                                    padding: 10,
+                                    alignItems: "center",
+                                    flexDirection: "column",
+                                    justifyContent: "center",
                                     alignItems: "center",
                                 }}
                             >
-                                <View style={{ margin: 20 }}>
+                                <View
+                                    style={{
+                                        width: "100%",
+                                        flex: 1,
+                                        margin: 20,
+                                    }}
+                                >
                                     <Text
                                         style={{ fontSize: 20, color: "red" }}
                                     >
@@ -200,7 +212,13 @@ export default function LiveingLessonInfo_stu() {
                                     </Text>
                                 </View>
                                 {/* 选择是否开启  摄像头   麦克风 */}
-                                <Layout style={{ flexDirection: "row" }}>
+                                <Layout
+                                    style={{
+                                        width: "100%",
+                                        flex: 1,
+                                        flexDirection: "row",
+                                    }}
+                                >
                                     <CheckBox
                                         checked={chooseClassCamera}
                                         onChange={() => {
@@ -225,14 +243,24 @@ export default function LiveingLessonInfo_stu() {
 
                                 <View
                                     style={{
+                                        flex: 1,
                                         flexDirection: "row",
-                                        width: "50%",
+                                        width: "100%",
                                         justifyContent: "space-between",
-                                        marginBottom: 20,
                                         marginTop: 50,
                                     }}
                                 >
                                     <TouchableOpacity
+                                        style={{
+                                            borderColor: "black",
+                                            borderWidth: 1,
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            borderLeftWidth: 0,
+                                            borderBottomWidth: 0,
+                                            borderRightWidth: 0,
+                                            flex: 1,
+                                        }}
                                         onPress={() => {
                                             setchooseClassmodalVisible(false);
                                         }}
@@ -248,35 +276,87 @@ export default function LiveingLessonInfo_stu() {
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
+                                        style={{
+                                            borderColor: "black",
+                                            borderWidth: 1,
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            flex: 1,
+                                            borderBottomWidth: 0,
+                                            borderRightWidth: 0,
+                                        }}
                                         onPress={() => {
-                                            // 跳转直播页面
-                                            NativeModules.IntentMoudle.startActivityFromJS(
-                                                "MainActivity_stu",
-                                                global.constants.userName +
-                                                    "-@-" + //userid id
-                                                    global.constants.userCn +
-                                                    "-@-" + //usercn 中文名
-                                                    chooseClassroomId +
-                                                    "-@-" + //roomid 直播房间号
-                                                    chooseClasstitle +
-                                                    "-@-" + //直播房间名称
-                                                    chooseClasssubjectId +
-                                                    "-@-" + //学科ID
-                                                    chooseClassketangId +
-                                                    "-@-" + //课堂ID
-                                                    chooseClasstitle +
-                                                    "-@-" + //课堂名称
-                                                    global.constants.userPhoto +
-                                                    "-@-" +
-                                                    chooseTeacherId +
-                                                    "-@-" +
-                                                    chooseTeacherName +
-                                                    "-@-" +
-                                                    chooseClassCamera +
-                                                    "-@-" +
-                                                    chooseClassMicrophone
-                                            );
+                                            setShowLoading(true);
                                             setchooseClassmodalVisible(false);
+                                            const url =
+                                                "http://" +
+                                                "www.cn901.com" +
+                                                "/ShopGoods/ajax/livePlay_deleteMemcached.do";
+                                            const params = {
+                                                roomId: chooseClassroomId,
+                                                ketangId: chooseClassketangId,
+                                                ketangName: chooseClasstitle,
+                                                userId: global.constants
+                                                    .userName,
+                                                name: global.constants.userCn,
+                                                source: "app",
+                                                width: screenWidth,
+                                                height: screenHeight,
+                                            };
+                                            http.post(url, params)
+                                                .then((res) => {
+                                                    setShowLoading(false);
+                                                    if (res.success) {
+                                                        if (!res.joinStatus) {
+                                                            // 跳转直播页面
+                                                            NativeModules.IntentMoudle.startActivityFromJS(
+                                                                "MainActivity_stu",
+                                                                global.constants
+                                                                    .userName +
+                                                                    "-@-" + //userid id
+                                                                    global
+                                                                        .constants
+                                                                        .userCn +
+                                                                    "-@-" + //usercn 中文名
+                                                                    chooseClassroomId +
+                                                                    "-@-" + //roomid 直播房间号
+                                                                    chooseClasstitle +
+                                                                    "-@-" + //直播房间名称
+                                                                    chooseClasssubjectId +
+                                                                    "-@-" + //学科ID
+                                                                    chooseClassketangId +
+                                                                    "-@-" + //课堂ID
+                                                                    chooseClasstitle +
+                                                                    "-@-" + //课堂名称
+                                                                    global
+                                                                        .constants
+                                                                        .userPhoto +
+                                                                    "-@-" +
+                                                                    chooseTeacherId +
+                                                                    "-@-" +
+                                                                    chooseTeacherName +
+                                                                    "-@-" +
+                                                                    chooseClassCamera +
+                                                                    "-@-" +
+                                                                    chooseClassMicrophone
+                                                            );
+                                                        } else {
+                                                            Toast.showDangerToast(
+                                                                "您的账号已在别处登录"
+                                                            );
+                                                        }
+                                                    } else {
+                                                        Toast.showInfoToast(
+                                                            res.message
+                                                        );
+                                                    }
+                                                })
+                                                .catch((error) => {
+                                                    setShowLoading(false);
+                                                    Toast.showDangerToast(
+                                                        error.message
+                                                    );
+                                                });
                                         }}
                                     >
                                         <Text
@@ -404,6 +484,11 @@ export default function LiveingLessonInfo_stu() {
 
                 {/* </ScrollView> */}
             </View>
+            <Loading
+                style={{ zIndex: 100000 }}
+                background={true}
+                show={showLoading}
+            ></Loading>
         </>
     );
 }

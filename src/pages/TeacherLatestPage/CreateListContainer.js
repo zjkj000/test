@@ -36,6 +36,8 @@ let oldsearchStr = ""; //保存上一次搜索框内容
 
 let todosList = []; //复制一份api请求得到的数据
 
+let todo_fNUMBER = 0;
+
 export default function CreateListContainer(props) {
     const navigation = useNavigation();
 
@@ -84,7 +86,7 @@ class CreateList extends React.Component {
         //this.fetchData(pageNo);
     }
 
-    UNSAFE_componentWillUpdate(nextProps) { 
+    UNSAFE_componentWillUpdate(nextProps) {
         if (
             oldtype != nextProps.resourceType ||
             oldsearchStr != nextProps.searchStr ||
@@ -116,7 +118,7 @@ class CreateList extends React.Component {
         pageNo = 1; //当前第几页
         itemNo = 0; //item的个数
         dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
-        
+
         oldtype = ""; //保存上一次查询的资源类型，若此次请求的类型与上次不同再重新发送请求
         oldsearchStr = ""; //保存上一次搜索框内容
         todosList = []; //复制一份api请求得到的数据
@@ -241,6 +243,9 @@ class CreateList extends React.Component {
         if (todo != null) {
             //console.log('tododo' , todo);
             let todo_fNumber = "[" + todo.fNumber + "条]";
+            if(todo_fNUMBER <= 0){
+                todo_fNUMBER = todo.fNumber;
+            }
             return (
                 <TouchableOpacity
                     onPress={() => {
@@ -283,7 +288,7 @@ class CreateList extends React.Component {
                             },
                             merge:true
                         }
-                            
+
                             );
                         } else {
                             this.props.navigation.navigate({
@@ -326,7 +331,7 @@ class CreateList extends React.Component {
                         >
                             {
                                 todo.fType == "10"
-                                ? 
+                                ?
                                     <View
                                         style={{
                                             paddingTop: 5,
@@ -353,7 +358,7 @@ class CreateList extends React.Component {
                                             }}
                                         >
                                             {/**fFlag字段，1未开始2直播中3已结束 */}
-                                            {todo.fFlag == "2" ? ( 
+                                            {todo.fFlag == "2" ? (
                                                 <View
                                                     style={{
                                                         width: 70,
@@ -435,9 +440,14 @@ class CreateList extends React.Component {
                                                     fontWeight: "400",
                                                 }}
                                             >
-                                                {todo_fNumber}
+                                                [{todo_fNUMBER}条]
                                             </Text>
                                         : null
+                                    }
+                                    {
+                                           todo.fType == "10"
+                                           ? console.log("直播条目。。。。。。。。" , todo.fNumber)
+                                           : null
                                     }
                                     <Text
                                         numberOfLines={1}
@@ -686,6 +696,7 @@ class CreateList extends React.Component {
         console.log("下拉刷新！！！");
         pageNo = 1;
         itemNo = 0;
+        todo_fNUMBER = 0;
         this.setState({
             isRefresh: true, //下拉控制
             showFoot: 0, // 控制foot， 0：隐藏footer  1：已加载完成,没有更多数据   2 ：显示加载中

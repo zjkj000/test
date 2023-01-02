@@ -746,7 +746,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 }
             }
         };
-        setClassTitle("测试课堂");
+        setClassTitle(keTangName);
         //初始化存储桶服务
         InitBucket(this);
         initHandsUpList();
@@ -908,7 +908,7 @@ public class MainActivity_tea extends AppCompatActivity {
         if(item != null){
             Log.e(TAG, "switchMemberListAudioIcon: 获取用户item " + item.getName());
             item.setAudioControl(!item.getAudioControl());
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
             Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
@@ -930,7 +930,7 @@ public class MainActivity_tea extends AppCompatActivity {
         MemberItem item = listViewAdapter.getItem(position);
         if(item != null){
             item.setChatControl(!item.getChatControl());
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
             Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
@@ -942,7 +942,7 @@ public class MainActivity_tea extends AppCompatActivity {
         if(item != null){
             this.videoListFragment.setVideo(item.getUserId(),item.getAudioControl(),this, mTRTCCloud );
             item.setSpeakControl(!item.getSpeakControl());
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
             Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
@@ -991,7 +991,7 @@ public class MainActivity_tea extends AppCompatActivity {
         }
         this.videoListFragment.addCameraView(item.getUserId(), mTRTCCloud);
 
-        Toast.makeText(this, "举手成员 " + position + " 上讲台被点击了", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "举手成员 " + position + " 上讲台被点击了", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -1034,7 +1034,7 @@ public class MainActivity_tea extends AppCompatActivity {
         listViewAdapter.setOnItemButtonListener(new MemberListViewAdapter.onItemButtonListener() {
             @Override
             public void onMoveOutClick(int i) {
-                Toast.makeText(MainActivity_tea.this, "成员 " + i + " 移除按钮被点击", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity_tea.this, "成员 " + i + " 移除按钮被点击", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -1046,7 +1046,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     } else {
                         HttpActivityTea.memberController("", "", "openWords", "", item.getUserId(), i, that);
                     }
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
@@ -1073,7 +1073,7 @@ public class MainActivity_tea extends AppCompatActivity {
                         item.setUserType(0);
                         HttpActivityTea.speakerController(item.getUserId(), item.getName(), "up", i, that);
                     }
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
@@ -1089,7 +1089,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     } else {
                         HttpActivityTea.memberController("openMic", "", "", "", item.getUserId(), i, that);
                     }
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
@@ -1098,7 +1098,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
             @Override
             public void onVideoControlClick(int i) {
-                Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁视频按钮被点击", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁视频按钮被点击", Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -1112,7 +1112,7 @@ public class MainActivity_tea extends AppCompatActivity {
                         drawAuthority("drawAuthority" , "yes", item.getUserId());
                         item.setBoardControl(true);
                     }
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁绘画按钮被点击", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁绘画按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
                     Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
@@ -1208,7 +1208,7 @@ public class MainActivity_tea extends AppCompatActivity {
         public void onUserVideoAvailable(String userId, boolean available) {
             MainActivity_tea activity = mContext.get();
             Log.d(TAG, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
-            Toast.makeText(activity, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available , Toast.LENGTH_SHORT).show();
+//            Toast.makeText(activity, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available , Toast.LENGTH_SHORT).show();
             System.out.println("onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
             System.out.println("onUserVideoAvailable:"+userId);
 //            if (userId.equals(mTeacherId+"_camera")&&!available){
@@ -1219,16 +1219,20 @@ public class MainActivity_tea extends AppCompatActivity {
 //            }
             if(available) {
                 if(AnswerActivityTea.findMemberInKetangList(userId) != null) {
-
                     mUserList.add(userId);
                 }
             }
-            else
-                mUserList.remove(userId);
+            else {
+                if(userId.contains("_share")){
+                    mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+                } else {
+                    mUserList.remove(userId);
+                }
+//                mUserList.remove(userId);
+            }
             int userPosition = listViewAdapter.getItemPositionById(userId);
             activity.switchMemberListVideoIcon(userPosition);
-            if(AnswerActivityTea.findMemberInKetangList((userId)) != null)
-                activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
+            activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
 
         }
 
@@ -1301,11 +1305,18 @@ public class MainActivity_tea extends AppCompatActivity {
         myTRTCRenderParams.mirrorType = TRTCCloudDef.TRTC_VIDEO_MIRROR_TYPE_AUTO;
         mTRTCCloud.setLocalRenderParams(myTRTCRenderParams);
 
+        cameraOn = false;
+        cameraBtn.getDrawable().setLevel(10);
+
+        musicOn = false;
+        audioBtn.getDrawable().setLevel(5);
+
         // 开启本地摄像头预览
         if(cameraState.toLowerCase().equals("true")) {
             mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
             cameraOn = true;
             teacherTRTCBackground.setVisibility(View.INVISIBLE);
+            cameraBtn.getDrawable().setLevel(5);
         }
 
 
@@ -1321,6 +1332,7 @@ public class MainActivity_tea extends AppCompatActivity {
         @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
         if(microphoneState.toLowerCase().equals("false")){
             teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_off);
+            audioBtn.getDrawable().setLevel(10);
         }
         teacher_name_mic_icon.setBounds(0,0,20,20);
         teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
@@ -3698,7 +3710,15 @@ public class MainActivity_tea extends AppCompatActivity {
 
 
     public void onExitLiveRoom() {
-        HttpActivityTea.overClass("leave", "skydt", this);
+        if (mTRTCCloud != null) {
+            mTRTCCloud.stopLocalAudio();
+            mTRTCCloud.stopLocalPreview();
+            mTRTCCloud.exitRoom();
+            mTRTCCloud.setListener(null);
+            mTRTCCloud.exitRoom();
+        }
+        mTRTCCloud = null;
+        TRTCCloud.destroySharedInstance();
         final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(
                 "finish".getBytes(),       //data
                 "all"+"_WhiteBoard",     //descripition
@@ -3717,7 +3737,8 @@ public class MainActivity_tea extends AppCompatActivity {
             }
         });
         stopTime();
-        mTRTCCloud.exitRoom();
+        HttpActivityTea.stopHandsUpTimer();
+        HttpActivityTea.overClass("leave", "skydt", this);
     }
 
     //下课 销毁白板实例

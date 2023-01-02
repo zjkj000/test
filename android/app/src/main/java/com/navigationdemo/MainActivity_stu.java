@@ -919,7 +919,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         if(item != null){
             Log.e(TAG, "switchMemberListAudioIcon: 获取用户item " + item.getName());
             item.setAudioControl(!item.getAudioControl());
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
             Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
@@ -941,7 +941,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         MemberItem item = listViewAdapter.getItem(position);
         if(item != null){
             item.setChatControl(!item.getChatControl());
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
             Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
@@ -953,7 +953,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         if(item != null){
 //            this.videoListFragment.setVideo(item.getUserId(),item.getAudioControl(),this, mTRTCCloud );
             item.setSpeakControl(!item.getSpeakControl());
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
             Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
@@ -1002,7 +1002,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         }
         this.videoListFragment.addCameraView(item.getUserId(), mTRTCCloud);
 
-        Toast.makeText(this, "举手成员 " + position + " 上讲台被点击了", Toast.LENGTH_SHORT).show();
+//        Toast.makeText(this, "举手成员 " + position + " 上讲台被点击了", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -1148,7 +1148,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         public void onUserVideoAvailable(String userId, boolean available) {
             MainActivity_stu activity = mContext.get();
             Log.d(TAG, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
-            Toast.makeText(activity, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available , Toast.LENGTH_SHORT).show();
+//            Toast.makeText(activity, "onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available , Toast.LENGTH_SHORT).show();
             System.out.println("onUserVideoAvailable userId " + userId + ", mUserCount " + mUserCount + ",available " + available);
             System.out.println("onUserVideoAvailable:"+userId);
 //            if (userId.equals(mTeacherId+"_camera")&&!available){
@@ -1213,8 +1213,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             MainActivity_stu activity = mContext.get();
             System.out.println("onRemoteUserLeaveRoom userId " + userId );
             if (userId.equals(teacherId +"_camera")){
+                HttpActivityTea.speakerController(userId, userCn, "down", activity );
+                activity.drawAuthority("drawAuthority", "no", userId);
                 System.out.println("teacher exit room");
-                exitRoom();
                 teacher_enable=false;
                 return;
             }
@@ -1281,6 +1282,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         mTRTCCloud.setLocalRenderParams(myTRTCRenderParams);
 
         // 开启本地摄像头预览
+
+
         if(cameraState.toLowerCase().equals("true")) {
             mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
             cameraOn = true;
