@@ -38,6 +38,12 @@ public class HttpActivityTea extends AnswerActivityTea {
         },10,100);
     }
 
+    public static void stopHandsUpTimer() {
+        if(getHandsUpTimer != null) {
+            getHandsUpTimer.cancel();
+        }
+    }
+
 
 
 
@@ -58,10 +64,9 @@ public class HttpActivityTea extends AnswerActivityTea {
         try{
             String roomId = MainActivity_tea.roomid;
             String userId = MainActivity_tea.userId;
-            URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_getChatRoomMessage.do?"
+            URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_getRaiseHandUserIds.do?"
                     + "roomId=" + roomId
-                    + "&userId=" + userId
-                    + "&startTime=" + 0);
+                    + "&userId=" + userId);
             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
             httpURLConnection.connect();
@@ -107,7 +112,7 @@ public class HttpActivityTea extends AnswerActivityTea {
                 }
                 AnswerActivityTea.handsUpList = tempHandsUpList;
                 Message updateHandsUpListMessage = Message.obtain();
-                updateHandsUpListMessage.what = 1;
+                updateHandsUpListMessage.what = MyEvent.UPDATE_HANDS_UP_TIME;
                 mainActivityTea.handler.sendMessage(updateHandsUpListMessage);
             } catch (JSONException e) {
                 e.printStackTrace();
@@ -125,8 +130,10 @@ public class HttpActivityTea extends AnswerActivityTea {
             public void run() {
                 try{
                     String roomId = MainActivity_tea.roomid;
-                    URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_TestGetStuJoinOrLeaveRoomList.do?"
-                            + "roomId=" + roomId);
+//                    URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_TestGetStuJoinOrLeaveRoomList.do?"
+//                            + "roomId=" + roomId);
+                    URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_getRoomMemberList.do?"
+                              + "roomId=" + roomId);
 
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("GET");
@@ -154,24 +161,24 @@ public class HttpActivityTea extends AnswerActivityTea {
                         String backLogJsonStr = buffer.toString();
 //                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
                         JSONObject jsonObject = stringToJson(backLogJsonStr);
-                        JSONArray joinListJsonArray = jsonObject.getJSONArray("joinlist");
-                        JSONArray ketangListJsonArray = jsonObject.getJSONArray("ketanglist");
+                        JSONArray memberListJsonArray = jsonObject.getJSONArray("list");
                         List<StudentDataBean> tempJoinList = new ArrayList<>();
                         List<ClassDataBean> tempKetangList = new ArrayList<>();
-                        for (int i=0; i < joinListJsonArray.length(); i ++) {
-                            JSONObject jsonObj = joinListJsonArray.getJSONObject(i);
-                            StudentDataBean studentDataBean = new StudentDataBean(jsonObj.getString("value"), jsonObj.getString("key"));
-                            tempJoinList.add(studentDataBean);
-                        }
-                        for (int i=0; i < ketangListJsonArray.length(); i ++) {
-                            JSONObject jsonObj = ketangListJsonArray.getJSONObject(i);
-                            ClassDataBean classDataBean = new ClassDataBean(jsonObj.getString("value"), jsonObj.getString("key"), jsonObj.getInt("num"));
-                            tempKetangList.add(classDataBean);
+                        for (int i=0; i < memberListJsonArray.length(); i ++) {
+                            JSONObject jsonObj = memberListJsonArray.getJSONObject(i);
+                            int studentNum = jsonObj.getInt("num");
+                            if(studentNum > 0) {
+                                ClassDataBean classDataBean = new ClassDataBean(jsonObj.getString("value"), jsonObj.getString("key"), studentNum);
+                                tempKetangList.add(classDataBean);
+                            } else {
+                                StudentDataBean studentDataBean = new StudentDataBean(jsonObj.getString("value"), jsonObj.getString("key"));
+                                tempJoinList.add(studentDataBean);
+                            }
                         }
                         joinList = tempJoinList;
                         ketangList = tempKetangList;
                         Message msg = new Message();
-                        msg.what = 7;
+                        msg.what = MyEvent.UPDATE_MEMBER_LIST;
                         mainActivityTea.handler.sendMessage(msg);
                         Log.e(TAG, "getMemberList: " + jsonObject);
                     } catch (Exception e) {
@@ -245,9 +252,9 @@ public class HttpActivityTea extends AnswerActivityTea {
                         if(!success.equals("")) {
                             Message msg = Message.obtain();
                             if(!micAction.equals(""))
-                                msg.what = 2;
+                                msg.what = MyEvent.UPDATE_AUDIO_ICON;
                             else if (!wordAction.equals(""))
-                                msg.what = 3;
+                                msg.what = MyEvent.UPDATE_CHAT_ICON;
                             else if (!cameraAction.equals(""))
                                 msg.what = 4;
                             Bundle bundle = new Bundle();
@@ -271,6 +278,70 @@ public class HttpActivityTea extends AnswerActivityTea {
     }
 
     /**
+     * 学生主动上下讲台控制
+     *
+     * @param userId       操作用户ID
+     * @param stuName      操作用户用户名
+     * @param type         操作动作
+     */
+
+    public static void speakerController(String userId, String stuName, String type, MainActivity_stu mainActivityStu) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    String roomId = roomid;
+                    URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_savePlatform.do?"
+                            + "roomId=" + roomId
+                            + "&stuId=" + userId
+                            + "&name=" + URLEncoder.encode(stuName, "utf-8")
+                            + "&type=" + type
+                    );
+                    Log.e(TAG, "speakerController: " +  url);
+
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestMethod("GET");
+                    httpURLConnection.setConnectTimeout(8000);
+                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.connect();
+
+                    InputStream inputStream = httpURLConnection.getInputStream();
+                    InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
+                    BufferedReader bufferedReader = new BufferedReader(reader);
+                    StringBuffer buffer = new StringBuffer();
+                    String temp = null;
+
+                    while((temp = bufferedReader.readLine()) != null) {
+                        buffer.append(temp);
+                    }
+
+                    // 关闭
+                    bufferedReader.close();
+                    reader.close();
+                    inputStream.close();
+                    httpURLConnection.disconnect();
+
+                    Log.e(TAG, "speakerController: " +  buffer.toString());
+                    try{
+                        String backLogJsonStr = buffer.toString();
+//                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
+                        JSONObject jsonObject = stringToJson(backLogJsonStr);
+                        String success = "";
+                        success = jsonObject.getString("success");
+                        if(success.equals("")) {
+                            Toast.makeText(mainActivityStu, "操作失败，请检查网络设置", Toast.LENGTH_SHORT).show();
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
+    }
+
+    /**
      * 上下讲台控制
      *
      * @param userId       操作用户ID
@@ -279,7 +350,6 @@ public class HttpActivityTea extends AnswerActivityTea {
      * @param position     操作位置
      * @param mainActivityTea 主线程
      */
-
     public static void speakerController(String userId, String stuName, String type, int position, MainActivity_tea mainActivityTea){
         new Thread(new Runnable() {
             @Override
@@ -325,7 +395,7 @@ public class HttpActivityTea extends AnswerActivityTea {
                         success = jsonObject.getString("success");
                         if(!success.equals("")) {
                             Message msg = Message.obtain();
-                            msg.what = 5;
+                            msg.what = MyEvent.UPDATE_SPEAKER_ICON;
                             Bundle bundle = new Bundle();
                             bundle.putInt("position", position);
                             msg.setData(bundle);
@@ -392,11 +462,23 @@ public class HttpActivityTea extends AnswerActivityTea {
 //                        String backLogJsonStr = "{\"joinlist\":[{\"value\":\"李龙龙\",\"key\":\"ming6001\"}],\"ketanglist\":[{\"num\":\"60\",\"value\":\"我校2022级葛舸班\",\"key\":\"4195ketang\"}]}";
                         JSONObject jsonObject = stringToJson(backLogJsonStr);
                         String success = "";
+                        String joinStatus = "";
                         success = jsonObject.getString("success");
+                        joinStatus = jsonObject.getString("joinStatus");
                         if(!success.equals("")) {
                             Toast.makeText(mainActivityTea, "初始化房间成功！", Toast.LENGTH_SHORT).show();
                         } else {
                             Toast.makeText(mainActivityTea, "操作失败，请检查网络设置", Toast.LENGTH_SHORT).show();
+                        }
+                        if(!joinStatus.equals("")) {
+                            String judgement = joinStatus.toLowerCase();
+                            if(judgement.equals("true")) {
+                                Toast.makeText(mainActivityTea, "该账号已在别处登录", Toast.LENGTH_SHORT).show();
+                            } else if (judgement.equals("false")) {
+                                Toast.makeText(mainActivityTea, "登录成功", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Toast.makeText(mainActivityTea, "获取登录状态失败，请检查网络设置", Toast.LENGTH_SHORT).show();
                         }
                     } catch (Exception e) {
                         e.printStackTrace();

@@ -137,6 +137,13 @@ public class VideoListFragment extends Fragment {
         }
     }
 
+    public void stopVideo(String userId, TRTCCloud mTRTCCloud) {
+        CameraFragment cameraFragment = mCameraFragmentMap.get(userId);
+        if(cameraFragment != null) {
+            cameraFragment.hideVideo(mTRTCCloud, userId);
+        }
+    }
+
     public void leaveRoom(String userId, int reason, MainActivity_tea activity, TRTCCloud mTRTCCloud){
         CameraFragment cameraFragment = mCameraFragmentMap.get(userId);
         if(cameraFragment != null) {

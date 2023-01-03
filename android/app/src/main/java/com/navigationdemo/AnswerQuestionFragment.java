@@ -75,6 +75,8 @@ import javax.net.ssl.SSLSession;
 import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
+import android.content.res.Configuration;
+
 
 public class AnswerQuestionFragment extends Fragment implements View.OnClickListener{
     final Context context = getActivity();
@@ -102,7 +104,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     private LinearLayout linear_choose; //txChoose+tx_choosenum+img_choose
     private TextView txChoose  , tx_choosenum; //选项数
     private ImageView img_choose;
-//    private Spinner spinner; //下拉选择框
+    //    private Spinner spinner; //下拉选择框
 //    private TextView spinner;
     private int chooseNum = 4; //默认选项个数是4
     private PopupWindow pw_chooseNum;
@@ -549,9 +551,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             tx_answer2.setText(answer);
         }else{ //未设置答案
 //            if(flag != 1){ //答题详情页面
-                linear_quick.setVisibility(View.GONE);
-                linear_answer.setVisibility(View.GONE);
-                linear_right.setVisibility(View.INVISIBLE);
+            linear_quick.setVisibility(View.GONE);
+            linear_answer.setVisibility(View.GONE);
+            linear_right.setVisibility(View.INVISIBLE);
 //            }
         }
     }
@@ -1136,6 +1138,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             public void onClick(View view) {
                 if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share).getConstantState())){
                     //开始共享屏幕
+                    btEnd.performClick();
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -2343,6 +2346,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             public void onClick(View view) {
                 if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share).getConstantState())){
                     //开始共享屏幕
+                    btEnd.performClick(); //分享屏幕时主动触发结束答题按钮
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -3013,6 +3017,16 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
         }).start();
     }
 
+    /**
+     * 设备类型判断
+     *
+     * @param context 上下文
+     * @return true表示设备为平板 false表示设备为手机
+     */
+    public boolean isTabletDevice() {
+        return (getActivity().getResources().getConfiguration().screenLayout & Configuration.SCREENLAYOUT_SIZE_MASK)>= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
 
     //显示已选择学生信息
     private void showSelectedStu(View view_selectStu){
@@ -3036,7 +3050,18 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 //                pw_selectStu = new PopupWindow(view_selectStu , 200, 200, false);
                 //弹框展示在屏幕中间Gravity.CENTER,x和y是相对于Gravity.CENTER的偏移
 //                pw_selectStu.showAtLocation(view_selectStu , Gravity.TOP | Gravity.RIGHT , (int)(screenWidth * 0.26) , (int)(screenHeight * 0.47));
-                pw_selectStu.showAsDropDown(btSingle , -(pw_selectStu.getWidth() + 35) , 0);
+//                pw_selectStu.showAsDropDown(btSingle , -(pw_selectStu.getWidth() + 35) , 0);
+
+                float scale = getActivity().getResources().getDisplayMetrics().density;
+                int pw_width = 0;
+                if(isTabletDevice()){ //平板
+                    pw_width = (int)(screenWidth * 0.25);
+                }else{ //手机
+                    pw_width = (int) (160 * scale + 0.5f);
+                }
+                int pw_height = (int) (32 * scale + 0.5f) + (int)(screenHeight * 0.07) + 20;
+                pw_selectStu.showAtLocation(view_selectStu , Gravity.RIGHT | Gravity.BOTTOM , pw_width , pw_height);
+//                pw_selectStu.showAtLocation(view_selectStu , Gravity.RIGHT | Gravity.BOTTOM , (int)(screenWidth * 0.2) , 200);
 
                 img_zan = view_selectStu.findViewById(R.id.img_zan);
                 if(answer_sq != null && answer_sq.length() > 0 && stuAnswer_selected.equals(answer_sq)){
