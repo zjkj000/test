@@ -89,7 +89,7 @@ public class ChatRoomFragment extends Fragment {
                     edtext.setHint("请先输入要讨论的内容");
                 }else {
                     //创建消息
-                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm");
+                    SimpleDateFormat sdf = new SimpleDateFormat("HH:mm:ss");
                     Chat_Msg msg = new Chat_Msg(MainActivity_tea.userCn,sdf.format(new Date()),edtext.getText().toString(),1,MainActivity_tea.userHead);  //type 1 主讲人  2  听课端
                     //发送给别人
                     MainActivity_tea activity = (MainActivity_tea) getActivity();

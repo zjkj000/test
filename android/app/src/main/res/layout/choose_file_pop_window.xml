@@ -21,16 +21,6 @@
             android:layout_centerVertical="true"
             android:text="请选择授课内容"
             android:textColor="@color/white" />
-
-        <ImageView
-            android:id="@+id/little_chooseAirFileBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="30dp"
-            android:layout_toStartOf="@+id/little_chooseNativeFileBtn"
-            android:background="@mipmap/littleairfile"
-            android:visibility="gone" />
         <ImageView
             android:id="@+id/little_chooseNativeFileBtn"
             android:layout_centerVertical="true"
@@ -38,8 +28,19 @@
             android:visibility="gone"
             android:layout_marginRight="30dp"
             android:background="@mipmap/littlenativefile"
-            android:layout_toStartOf="@+id/little_choosePackageBtn"
+            android:layout_toStartOf="@+id/little_chooseAirFileBtn"
             android:layout_height="wrap_content"/>
+
+        <ImageView
+            android:id="@+id/little_chooseAirFileBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="30dp"
+            android:layout_toStartOf="@+id/little_choosePackageBtn"
+            android:background="@mipmap/littleairfile"
+            android:visibility="gone" />
+
         <ImageView
             android:id="@+id/little_choosePackageBtn"
             android:layout_centerVertical="true"
@@ -82,11 +83,11 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/chooseAirFileBtn"
+                        android:id="@+id/chooseNativeFileBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/airfile" />
+                        android:background="@mipmap/nativefile" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"
@@ -96,11 +97,11 @@
                     android:layout_height="match_parent">
 
                     <ImageView
-                        android:id="@+id/chooseNativeFileBtn"
+                        android:id="@+id/chooseAirFileBtn"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerVertical="true"
-                        android:background="@mipmap/nativefile" />
+                        android:background="@mipmap/airfile" />
                 </RelativeLayout>
                 <RelativeLayout
                     android:layout_width="match_parent"

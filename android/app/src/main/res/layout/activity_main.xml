@@ -608,7 +608,7 @@
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:textSize="12dp"
-                      android:textColor="@color/gray_text"
+                      android:textColor="#FFFFFF"
                       android:text="请选择授课内容"/>
                   <ImageView
                       android:layout_width="wrap_content"
@@ -659,7 +659,7 @@
                       android:layout_height="wrap_content"
                       android:paddingLeft="20dp"
                       android:textSize="12dp"
-                      android:textColor="@color/gray_text"
+                      android:textColor="#FFFFFF"
                       android:text="请选择文件:   "/>
                   <Button
                       android:layout_width="70dp"
@@ -673,7 +673,7 @@
                       android:paddingLeft="10dp"
                       android:text="未选择任何文件"
                       android:textSize="12dp"
-                      android:textColor="@color/gray_text"
+                      android:textColor="#FFFFFF"
                       android:layout_height="wrap_content"/>
                   <Button
                       android:layout_width="70dp"
@@ -694,7 +694,7 @@
                       android:layout_width="wrap_content"
                       android:id="@+id/msgTips"
                       android:text="文件正在上传："
-                      android:textColor="@color/gray_text"
+                      android:textColor="#FFFFFF"
                       android:layout_height="wrap_content"/>
                   <ProgressBar
                       android:layout_width="wrap_content"

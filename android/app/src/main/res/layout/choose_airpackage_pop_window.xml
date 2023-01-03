@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/airpackagetitle"
-            android:text="(显示最近创建的30个授课包)"
+            android:text="(显示最新创建的30个授课包)"
             android:textColor="@color/white"
             android:textSize="10sp" />
 

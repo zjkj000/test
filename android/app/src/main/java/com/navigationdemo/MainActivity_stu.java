@@ -149,16 +149,16 @@ import java.util.Vector;
 public class MainActivity_stu extends AppCompatActivity implements View.OnClickListener {
 
     //TRTC   SDKAPPID
-    private  int TRTCSDKAPPID = 1400772698;//王id
+    private  int TRTCSDKAPPID = 1400772698;
     private  String TRTCSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
 
     //即时通信SDKAPPID
-    private  int IMSDKAPPID = 1400779599;//王id
-    private  String IMSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
+    private  int IMSDKAPPID = 1400784411;
+    private  String IMSECRETKEY = "f65918edd2bb96d385bba21757e11f4b12656c7e7a589e164f386084ca37fb4d";
 
     //白板SDKAPPID
-    private  int BOARDSDKAPPID = 1400779599;//徐id
-    private  String BOARDSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
+    private  int BOARDSDKAPPID = 1400784411;
+    private  String BOARDSECRETKEY = "f65918edd2bb96d385bba21757e11f4b12656c7e7a589e164f386084ca37fb4d";
 
     private static Timer timer;
 
@@ -209,6 +209,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static boolean musicOn = true;
     public static boolean cameraOn = true;
 
+
     // 监听用户进入房间
     public static ArrayList<String> mUserList = new ArrayList<String>();
     public static ArrayList<String> mCameraUserList = new ArrayList<String>();
@@ -216,9 +217,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static int mUserCount = 0;
 
     private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
-    private String Mbucket = "zjkj-1313356181";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKIDwhBPM6bruXw7A0ZwTovtnQpzwgroY5NQ";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "zlI5sb8TdeZHm4ObllT9duwztkS2Xoqf";                    //存储桶    永久密钥 secretKey
+    private String Mbucket = "zjkj-1257020369";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
+    private String MsecretId = "AKIDa2ILQOCn9CC2dz83jCRTHrESVKvOgkZC";                 //存储桶   永久密钥 secretId
+    private String MsecretKey = "ShhVyHNRM5d2FF2iIhttiKiuvkMkwvhI";                    //存储桶    永久密钥 secretKey
+    private int bucketSDKappID = 1257020369;
+
 
     private  String UserSig ="";                                                        //腾讯服务签名
 //  private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
@@ -274,6 +277,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     private ImageButton geometry11,geometry12,geometry13,geometry14,geometry21,geometry22,geometry23,geometry24,geometry31,geometry32,geometry33,geometry34,geometry41,geometry42,geometry43,geometry44,geometry51,geometry52,geometry53,geometry61,geometry62,geometry63;
     private ImageButton teachingtools1,teachingtools2,teachingtools3,teachingtools4,teachingtools5;
     public static Integer cur_paintsize=100,cur_Highlighterpaintsize=450;  //记录当前 画笔 荧光笔粗细用的
+
+    //几何工具和画笔当前颜色控制
+    public static Integer  CurPaintColor =-65536;
+    public static Integer  CurGeometryColor =-65536;
+    public static Integer  CurGeometrySize= 100;
+
     private PopupWindow pw_selectpaint;                                 //选择画笔 一级弹窗
     private PopupWindow pw_selecgeometry;                               //选择 几何工具  一级弹窗
     private PopupWindow pw_selectteachingtools;                         //选择教学工具   一级弹窗
@@ -1801,7 +1810,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         }else if("TBKTExt".equals(Msg_Extension)){
                             //文本消息
                             System.out.println("+++收到了消息"+Msg_Description);
-                            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
                             Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2,userHead);// type  2 别人 1 自己
 
                             ChatRoomFragmentStu f = (ChatRoomFragmentStu)getmFragmenglist().get(1);
@@ -1901,9 +1910,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 //设置点击效果
+                mBoard.setBrushColor(new TEduBoardController.TEduBoardColor(CurPaintColor));
+                mBoard.setBrushThin(cur_paintsize);
                 mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.NONE);
                 mBoard.setToolType(1);
-                mBoard.setBrushThin(cur_paintsize);
+
                 setLeftmenustatus(true);
                 menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
                 menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
@@ -2035,6 +2046,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 //开启 几何图形弹窗
+                mBoard.setBrushColor(new TEduBoardController.TEduBoardColor(CurGeometryColor));
+                mBoard.setBrushThin(CurGeometrySize);
+
                 mBoard.setToolType(6);
                 setLeftmenustatus(true);
                 menu04.setBackgroundResource(R.mipmap.menu_04_jihe1);
@@ -2954,7 +2968,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     String SecretId  = MsecretId;
                     String SecretKey = MsecretKey;
                     String Region    = MRegion;
-                    String SdkAppId  = SDKappID+"";
+                    String SdkAppId  = bucketSDKappID+"";
                     String link      = slink;
                     URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_CreateTranscode.do?"
                             + "SecretId=" + SecretId + "&SecretKey=" + SecretKey + "&Region=" + Region

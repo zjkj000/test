@@ -11,6 +11,7 @@ import android.widget.LinearLayout;
 import androidx.fragment.app.Fragment;
 
 import com.navigationdemo.MainActivity_stu;
+import com.navigationdemo.MainActivity_tea;
 import com.navigationdemo.R;
 import com.tencent.teduboard.TEduBoardController;
 
@@ -66,6 +67,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
             public void onClick(View v) {
                 setLinSizestatus();
                 activity.getmBoard().setBrushThin(70);
+                MainActivity_stu.CurGeometrySize=70;
                 setgeometrysize2.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -76,6 +78,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
                 setLinSizestatus();
 
                 activity.getmBoard().setBrushThin(100);
+                MainActivity_stu.CurGeometrySize=100;
                 setgeometrysize3.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -85,6 +88,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
             public void onClick(View v) {
                 setLinSizestatus();
                 activity.getmBoard().setBrushThin(150);
+                MainActivity_stu.CurGeometrySize=150;
                 setgeometrysize4.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -93,6 +97,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
             @Override
             public void onClick(View v) {
                 activity.getmBoard().setBrushThin(200);
+                MainActivity_stu.CurGeometrySize=200;
                 setgeometrysize5.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -102,6 +107,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
             public void onClick(View v) {
                 setLinSizestatus();
                 activity.getmBoard().setBrushThin(250);
+                MainActivity_stu.CurGeometrySize=250;
                 setgeometrysize6.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -114,6 +120,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("geometrycolor","gray");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.GRAY));
+                MainActivity_stu.CurGeometryColor=activity.getmBoard().getBrushColor().toInt();
                 setgeometrygray.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -125,6 +132,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("geometrycolor","black");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.BLACK));
+                MainActivity_stu.CurGeometryColor=activity.getmBoard().getBrushColor().toInt();
                 setgeometryblack.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -136,6 +144,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("geometrycolor","blue");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.BLUE));
+                MainActivity_stu.CurGeometryColor=activity.getmBoard().getBrushColor().toInt();
                 setgeometryblue.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -147,6 +156,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("geometrycolor","green");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.GREEN));
+                MainActivity_stu.CurGeometryColor=activity.getmBoard().getBrushColor().toInt();
                 setgeometrygreen.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -158,6 +168,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("geometrycolor","yellow");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.YELLOW));
+                MainActivity_stu.CurGeometryColor=activity.getmBoard().getBrushColor().toInt();
                 setgeometryyellow.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -169,6 +180,7 @@ public class Set_geometry_Fragment_Stu extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("geometrycolor","red");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.RED));
+                MainActivity_stu.CurGeometryColor=activity.getmBoard().getBrushColor().toInt();
                 setgeometryred.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });

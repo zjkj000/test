@@ -79,9 +79,9 @@ class LiveingLession_addContent extends Component {
         const url = "http://www.cn901.com/ShopGoods/ajax/livePlay_saveZbLive.do";
         const params = {
                 userId:global.constants.userName,
-                title:this.state.title,
+                title:encodeURIComponent(this.state.title),
                 subjectId:this.state.subjectId, 
-                subjectName:this.state.subjectName,   //直播课名称
+                subjectName:encodeURIComponent(this.state.subjectName),   //直播课名称
                 startTime:this.state.startTime,     //startTime
                 hour:this.state.class_hour=='00'?0:this.state.class_hour=='01'?1:this.state.class_hour=='02'?2:this.state.class_hour=='03'?3:this.state.class_hour=='04'?4:this.state.class_hour=='05'?5:this.state.class_hour=='06'?6:this.state.class_hour=='07'?7:this.state.class_hour=='08'?8:this.state.class_hour=='09'?9:this.state.class_hour=='10'?10:this.state.class_hour=='11'?11:12,        //对应小时
                 minutes:this.state.class_minute=='00'?0:this.state.class_minute=='10'?1:this.state.class_minute=='20'?2:this.state.class_minute=='30'?3:this.state.class_minute=='40'?4:5,    //对应分钟
@@ -93,7 +93,7 @@ class LiveingLession_addContent extends Component {
                 roomId:this.state.roomId,   //房间号（如果是新创建的传空串，如果是编辑保存，传roomId）
             };
         WaitLoading.show('发布中...',-1)
-        http.get(url, params).then((resStr) => {
+        http.get(url, params,true).then((resStr) => {
             let resJson = JSON.parse(resStr);
             if(resJson.status=='success'){
                 Alert.alert('',this.state.flag=='save'?'发布成功':'修改成功',[{},
@@ -142,6 +142,7 @@ class LiveingLession_addContent extends Component {
         const params = {userId:global.constants.userName};   // 教师用户名
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
+            console.log('学科数据'+resStr)
             this.setState({mList:resJson.mList,subjectList:resJson.subjectList
                         });
           })

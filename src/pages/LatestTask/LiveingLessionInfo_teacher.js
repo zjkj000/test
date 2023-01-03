@@ -29,25 +29,19 @@ export default function LiveingLessionInfo_teacher(props) {
     const [showFoot,setshowFoot]=useState('0')             //0代表还可以加载  1代表没数据了
     useEffect(()=>{
         const timer = setInterval(() => {
-            console.log('刷新')
             currentPage=1
             setisRefresh(true)
             setdata([])
             fetchData(type,1,true);
         }, 30000);
-
-       
-        if(props.route.params.flag=='refresh'){
+            currentPage=1
             setdata([])
             fetchData('0',1)
-        }
-
-        fetchData('0',1)
         return ()=>{
             SearchText = ''
             clearInterval(timer)
           }
-      },[])
+      },[props.route.params.flag])
 
     function fetchData(newtype,newcurrentPage,isRefreshing=false){
         const url = global.constants.baseUrl +"teacherApp_getZBLiveList.do";
@@ -62,7 +56,6 @@ export default function LiveingLessionInfo_teacher(props) {
           };
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
-            console.log('请求到的直播课数据列表')
                 if(newcurrentPage==1){
                     setshowFoot('0')  //第一页还可以请求
                     setdata(resJson.list)
@@ -94,7 +87,11 @@ export default function LiveingLessionInfo_teacher(props) {
                                                     setchooseClassketangId={setchooseClassketangId}
                                                     setchooseClasstitle={setchooseClasstitle}
                                                     setchooseClasssubjectId={setchooseClasssubjectId}
-                                                    setchooseClassroomId={setchooseClassroomId}/>)
+                                                    setchooseClassroomId={setchooseClassroomId}
+                                                    setisRefresh={setisRefresh}
+                                                    setdata={setdata}
+                                                    fetchData={fetchData}
+                                                    />)
       }
 
     function _onRefresh(){
@@ -157,20 +154,24 @@ export default function LiveingLessionInfo_teacher(props) {
                   <View style={{backgroundColor:'#000000',opacity:0.6}}>    
                     <View style={{height:'100%',alignItems:'center',backgroundColor:'#FFFFFF'}}>
                         <View style={{backgroundColor:'#FFFFFF',marginTop:'60%'}}>
-                            <View style={{justifyContent:'center',backgroundColor:'#FFFFFF',padding:10,alignItems:'center'}}>
-                                <View style={{margin:20}}><Text style={{fontSize:20,color:'red'}}>{chooseClasstitle}</Text></View>
-                                {/* 选择是否开启  摄像头   麦克风 */}
-                                    <Layout style={{flexDirection:'row'}}>
-                                        <CheckBox  checked={chooseClassCamera} onChange={()=>{setchooseClassCamera(!chooseClassCamera)}}>开启摄像头</CheckBox>
-                                        <CheckBox checked={chooseClassMicrophone} onChange={()=>{setchooseClassMicrophone(!chooseClassMicrophone)}}>开启麦克风</CheckBox>
-                                    </Layout>
+                            <View style={{justifyContent:'center',backgroundColor:'#FFFFFF',alignItems:'center'}}>
                                 
-                                <View style={{flexDirection:'row',width:'50%',justifyContent:'space-between',marginBottom:20,marginTop:50}}>
-                                    <TouchableOpacity onPress={()=>{
-                                    setchooseClassmodalVisible(false)
-                                    }}><Text style={{color:'#59B9E0',fontSize:18}}>取消</Text></TouchableOpacity>
+                                <View style={{margin:20,width:'80%',alignItems:'center'}}><Text style={{fontSize:20,color:'red'}}>{chooseClasstitle}</Text></View>
+                                <View style={{backgroundColor:'#FFFFFF',marginLeft:'10%',marginRight:'10%'}}>
+                                    {/* 选择是否开启  摄像头   麦克风 */}
+                                    <Layout style={{flexDirection:'row',backgroundColor:'#FFFFFF'}}>
+                                        <CheckBox style={{backgroundColor:'#F1F1F1'}}  checked={chooseClassCamera} onChange={()=>{setchooseClassCamera(!chooseClassCamera)}}>开启摄像头</CheckBox>
+                                        <CheckBox style={{backgroundColor:'#F1F1F1'}} checked={chooseClassMicrophone} onChange={()=>{setchooseClassMicrophone(!chooseClassMicrophone)}}>开启麦克风</CheckBox>
+                                    </Layout>
+                                </View>
+                                
+                                
+                                <View style={{flexDirection:'row',width:'100%',alignItems:'center',borderTopWidth:0.5,marginTop:50}}>
+                                    
+                                    <TouchableOpacity style={{width:'50%',borderRightWidth:0.5,paddingTop:10,paddingBottom:10}} onPress={()=>{setchooseClassmodalVisible(false)}}>
+                                        <Text style={{color:'#59B9E0',fontSize:18,marginLeft:'45%'}}>取消</Text></TouchableOpacity>
 
-                                    <TouchableOpacity onPress={()=>{
+                                    <TouchableOpacity style={{width:'30%',marginLeft:'10%'}} onPress={()=>{
                                             // 跳转教师端直播页面
                                             NativeModules.IntentMoudle.startActivityFromJS(
                                                 "MainActivity_tea",
@@ -185,11 +186,8 @@ export default function LiveingLessionInfo_teacher(props) {
                                                 chooseClassCamera+"-@-"+
                                                 chooseClassMicrophone   );
                                                 setchooseClassmodalVisible(false)
-
-                                            
-
                                     }}>
-                                    <Text style={{color:'#59B9E0',fontSize:18}}>上课</Text></TouchableOpacity>
+                                        <Text style={{color:'#59B9E0',fontSize:18,marginLeft:20}}>上课</Text></TouchableOpacity>
                                 </View>
                             </View>
                         </View>
@@ -219,7 +217,7 @@ export default function LiveingLessionInfo_teacher(props) {
                   </View>
      <View style={{padding:10,paddingBottom:0}}>
             {/* 筛选框    搜索框 */}
-            <View style={{flexDirection:'row',margin:5}}>
+            <View style={{flexDirection:'row',margin:5,marginLeft:0}}>
                 <View style={{width:80,height:40,padding:10,paddingRight:0,backgroundColor:'#fff',marginTop:2}}>
                     <OverflowMenu
                                 style={{borderColor:'#000',borderWidth:0.8,width:80}}
@@ -353,33 +351,18 @@ class LiveingLessonContent_teacher extends Component {
     // 删除直播课
     DeleteLivingLession(rommid){
         const url = "http://www.cn901.com/ShopGoods/ajax/livePlay_deleteZbLive.do";
-        const params = {roomId:rommid         //房间号
-          };
+        const params = {roomId:rommid         };//房间号
         http.get(url, params).then((resStr) => {
-            console.log(resStr)
             let resJson = JSON.parse(resStr);
             if("success"==resJson.status){
                 Alert.alert('','刪除成功',[{},
                     {text:'确定',onPress:()=>{
-                        this.props.navigation.navigate({
-                            name:'LiveingLessionInfo_teacher',
-                            params:{
-                                flag:'refresh'
-                            },
-                            merge:true
-                        })
+                        currentPage=1
+                        this.props.setisRefresh(true)
+                        this.props.setdata([])
+                        this.props.fetchData('All',1,true);
                     }}
                     ])
-                this.props.navigation.navigate(
-                    {name:'LiveingLessionInfo_teacher',
-                    params:{
-                        flag:'refresh'
-                    },
-                    merge:true
-                
-                
-                }
-                )
             }
            
         })
@@ -401,7 +384,7 @@ class LiveingLessonContent_teacher extends Component {
           this.state.status=='3'?<Image style={{position:'absolute',right:0,width:40,height:40}} source={require('../../assets/teacherLatestPage/tea_ed.png')}></Image>:<></>  }
         
         {/* 第一列  名称 时间 信息 */}
-        <View style={{flexDirection:'column',width:'70%',paddingLeft:10}}>
+        <View style={{flexDirection:'column',width:'65%',paddingLeft:10,paddingRight:5,borderColor:'#000000',borderRightWidth:0.5,marginRight:10}}>
             {/* 第一行  学科图标 +名称 */}
             <View style={{flexDirection:'row',justifyItem:'center',alignItems:"center"}}>
                 {   this.state.subjectName.indexOf('语文')>0?(<Image style={{width:40,height:40}} source={require('../../assets/errorQue/yuwen.png')}/>):
@@ -454,7 +437,7 @@ class LiveingLessonContent_teacher extends Component {
                 
             </View>
             {/* 第三行  授课对象 */}
-            <View style={{flexDirection:'row',marginTop:5}}>
+            <View style={{flexDirection:'row',marginTop:5,flexWrap:'wrap'}}>
                 <Text style={{fontSize:10}}>授课对象: </Text>
                 <Text style={{fontSize:10}}>{this.state.minutes}</Text>
             </View>

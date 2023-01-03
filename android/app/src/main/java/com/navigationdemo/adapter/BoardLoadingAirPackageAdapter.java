@@ -1,6 +1,7 @@
 package com.navigationdemo.adapter;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -93,6 +94,7 @@ public class BoardLoadingAirPackageAdapter extends BaseAdapter {
         //textView里面放置bean的数据
         viewHolder.tx_name.setText(data.get(position).getPname());
         viewHolder.tx_datetime.setText(data.get(position).getPdate());
+        viewHolder.tx_datetime.setTextColor(Color.rgb(180,180,180));
 //        根据类型判断
             viewHolder.img.setImageResource(R.mipmap.type_skb);
         viewHolder.zairu.setOnClickListener(new View.OnClickListener() {

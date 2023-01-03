@@ -27,7 +27,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:text="云端存储"
+            android:text="云端资源列表"
             android:textColor="@color/white"
             android:textSize="10sp" />
 
@@ -36,9 +36,9 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_toEndOf="@+id/airflieitemtitle"
-            android:text="(显示最近创建的30条资源)"
+            android:text="(显示最新创建的30条资源)"
             android:textColor="@color/white"
-            android:textSize="7sp" />
+            android:textSize="10sp" />
 
         <ImageView
             android:layout_centerVertical="true"

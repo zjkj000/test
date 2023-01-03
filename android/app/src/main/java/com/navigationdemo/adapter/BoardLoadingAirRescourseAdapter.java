@@ -2,6 +2,7 @@ package com.navigationdemo.adapter;
 
 import com.navigationdemo.R;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,6 +95,7 @@ public class BoardLoadingAirRescourseAdapter extends BaseAdapter {
         //textView里面放置bean的数据
         viewHolder.tx_name.setText(data.get(position).getPname());
         viewHolder.tx_date.setText(data.get(position).getPdate());
+        viewHolder.tx_date.setTextColor(Color.rgb(180,180,180));
 //        根据类型判断
         if(data.get(position).getStyle().equals("ppt")||data.get(position).getStyle().equals("pptx")){
             viewHolder.img.setImageResource(R.mipmap.type_ppt);

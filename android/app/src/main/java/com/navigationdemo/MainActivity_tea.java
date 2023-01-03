@@ -178,10 +178,10 @@ public class MainActivity_tea extends AppCompatActivity {
     public static int mUserCount = 0;
 
     private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
-    private String Mbucket = "zjkj-1313356181";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKIDwhBPM6bruXw7A0ZwTovtnQpzwgroY5NQ";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "zlI5sb8TdeZHm4ObllT9duwztkS2Xoqf";                    //存储桶    永久密钥 secretKey
-
+    private String Mbucket = "zjkj-1257020369";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
+    private String MsecretId = "AKIDa2ILQOCn9CC2dz83jCRTHrESVKvOgkZC";                 //存储桶   永久密钥 secretId
+    private String MsecretKey = "ShhVyHNRM5d2FF2iIhttiKiuvkMkwvhI";                    //存储桶    永久密钥 secretKey
+    private int bucketSDKappID = 1400784411;  //现在是BOARDSDKAPPID
 
 
 
@@ -201,21 +201,21 @@ public class MainActivity_tea extends AppCompatActivity {
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
 
     //TRTC   SDKAPPID
-    private  int TRTCSDKAPPID = 1400772698;//王id
+    private  int TRTCSDKAPPID = 1400772698;
     private  String TRTCSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
 
     //即时通信SDKAPPID
-    private  int IMSDKAPPID = 1400779599;//王id
-    private  String IMSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
+    private  int IMSDKAPPID = 1400784411;
+    private  String IMSECRETKEY = "f65918edd2bb96d385bba21757e11f4b12656c7e7a589e164f386084ca37fb4d";
 
     //白板SDKAPPID
-    private  int BOARDSDKAPPID = 1400779599;//徐id
-    private  String BOARDSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
+    private  int BOARDSDKAPPID = 1400784411;
+    private  String BOARDSECRETKEY = "f65918edd2bb96d385bba21757e11f4b12656c7e7a589e164f386084ca37fb4d";
 
  
     public static String teaName = "";
     public static String teaHead = "";
-    public static String userName = "xgy";
+    public static String userName = "";
 
     //即时通信相关
     private V2TIMManager v2TIMManager;                                        //IM实例
@@ -249,6 +249,12 @@ public class MainActivity_tea extends AppCompatActivity {
     private ImageButton geometry11,geometry12,geometry13,geometry14,geometry21,geometry22,geometry23,geometry24,geometry31,geometry32,geometry33,geometry34,geometry41,geometry42,geometry43,geometry44,geometry51,geometry52,geometry53,geometry61,geometry62,geometry63;
     private ImageButton teachingtools1,teachingtools2,teachingtools3,teachingtools4,teachingtools5;
     public static Integer cur_paintsize=100,cur_Highlighterpaintsize=450;  //记录当前 画笔 荧光笔粗细用的
+    //几何工具和画笔当前颜色控制
+    public static Integer  CurPaintColor =-65536;
+    public static Integer  CurGeometryColor =-65536;
+    public static Integer  CurGeometrySize= 100;
+
+
     private PopupWindow pw_selectpaint;                                 //选择画笔 一级弹窗
     private PopupWindow pw_selecgeometry;                               //选择 几何工具  一级弹窗
     private PopupWindow pw_selectteachingtools;                         //选择教学工具   一级弹窗
@@ -333,8 +339,6 @@ public class MainActivity_tea extends AppCompatActivity {
     private List<BoardRescourseBean> AirBoardPackageList=new ArrayList();       //白板里面载入云端授课包  列表
 
     private List<BoardRescourseBean> curPackageList=new ArrayList();       //白板里面载入云端授课包  详情  列表    上面有curPackageName
-
-
 
     // 成员列表
     private static View memberPopupView;
@@ -743,7 +747,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 }
             }
         };
-        setClassTitle("测试课堂");
+        setClassTitle("");
         //初始化存储桶服务
         InitBucket(this);
         initHandsUpList();
@@ -755,6 +759,7 @@ public class MainActivity_tea extends AppCompatActivity {
     }
 
     private void dealWith_mBoardaddResouce(Integer type,String url,String name){
+        System.out.print("函数+++dealWith_mBoardaddResouce:--"+"type:=="+type+"url:---"+url+"name:---"+name);
         if(type==1){
             uploadfile.setText("正在转换");
             msgTips.setText("文件正在转换：");
@@ -774,6 +779,7 @@ public class MainActivity_tea extends AppCompatActivity {
             uploadfile.setText("正在加载");
             msgTips.setText("文件正在加载：");
             proBar.setProgress(95);
+            System.out.println("++++测试PPT加载"+url);
             mBoardAddTranscodeFile(name,url+"?for_tiw=1");
         }else if(type==5){
             uploadfile.setText("正在加载");
@@ -797,6 +803,7 @@ public class MainActivity_tea extends AppCompatActivity {
         roomid = strArr[2];
         roomName = strArr[3];
         subjectId = strArr[4];
+        System.out.print("+++xuekeID"+subjectId);
         UserSig = GenerateTestUserSig.genTestUserSig(strArr[0]);
         keTangId = strArr[5];
         keTangName = strArr[6];
@@ -1393,6 +1400,8 @@ public class MainActivity_tea extends AppCompatActivity {
         int popUpWindowWidth = (int) (point.x*0.6);
         int popUpWindowHeight = (int) (point.y * 0.75);
 
+        //先默认加载一下云端授课包内容
+        if(AirBoardPackageList.size()<1){livePlay_getResData_Package(userId);}
 
         chooseFilepopupWindow = new PopupWindow(chooseFilePopupView, popUpWindowWidth, popUpWindowHeight, true);
         if(CurBoardFileInfoList.size()>1){
@@ -1565,6 +1574,7 @@ public class MainActivity_tea extends AppCompatActivity {
             }
         });
     }
+
 
     //打开  云端授课包弹窗
     private void openAirPackagePopwindow(View view) {
@@ -1752,10 +1762,17 @@ public class MainActivity_tea extends AppCompatActivity {
              @Override
              public void onTEBInit() {
                  System.out.println("onTEBInit"+"++++白板初始化完成了");
+
+                 CurPaintColor=mBoard.getBrushColor().toInt();
+                 CurGeometryColor=mBoard.getBrushColor().toInt();
+
                  ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+                //白板留白处理
                  if(findViewById(R.id.boardcontent).getMeasuredWidth()>findViewById(R.id.boardcontent).getMeasuredHeight()){
+                     System.out.println("+++左右留白区域"+(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2);
                      params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
                  }else {
+                     System.out.println("+++上下留白区域"+(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2);
                      params.setMargins(0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2,0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2);
                  }
                  Board_container.setLayoutParams(params);
@@ -1823,8 +1840,12 @@ public class MainActivity_tea extends AppCompatActivity {
                          mDialog.dismiss();
                          if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
                              chooseFilepopupWindow.dismiss();
-                         }if(chooseAirFilepopupWindow!=null&&chooseAirFilepopupWindow.isShowing()){
+                         }
+                         if(chooseAirFilepopupWindow!=null&&chooseAirFilepopupWindow.isShowing()){
                              chooseAirFilepopupWindow.dismiss();
+                         }
+                         if(chooseAirPackageItempopupWindow!=null&&curPopwindowType==5&&chooseAirPackageItempopupWindow.isShowing()){
+                             chooseAirPackageItempopupWindow.dismiss();
                          }
                      }
                  System.out.println("onTEBUndoStatusChanged"+"+++当前是否打锚点"+canUndo);
@@ -1862,6 +1883,17 @@ public class MainActivity_tea extends AppCompatActivity {
              public void onTEBAddElement(String id, int type, String url) {
                  SnapshotMarkFlag = true;
                  System.out.println("onTEBAddElement"+"+++");
+                 if(mDialog!=null&&mDialog.isShowing()){
+                     mDialog.dismiss();
+                 }
+                 if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
+                     chooseFilepopupWindow.dismiss();
+                 }
+                 if(chooseAirFilepopupWindow!=null&&curPopwindowType==3&&chooseAirFilepopupWindow.isShowing()){
+                     chooseAirFilepopupWindow.dismiss();
+                 }else if(chooseAirPackageItempopupWindow!=null&&curPopwindowType==5&&chooseAirPackageItempopupWindow.isShowing()){
+                     chooseAirPackageItempopupWindow.dismiss();
+                 }
              }
 
              @Override
@@ -2020,6 +2052,17 @@ public class MainActivity_tea extends AppCompatActivity {
              @Override
              public void onTEBAudioStatusChanged(String elementId, int status, float progress, float duration) {
                  System.out.println("onTEBAudioStatusChanged"+"+++++");
+                 if(mDialog!=null&&mDialog.isShowing()){
+                     mDialog.dismiss();
+                 }
+                 if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
+                     chooseFilepopupWindow.dismiss();
+                 }
+                 if(chooseAirFilepopupWindow!=null&&curPopwindowType==3&&chooseAirFilepopupWindow.isShowing()){
+                    chooseAirFilepopupWindow.dismiss();
+                 }else if(chooseAirPackageItempopupWindow!=null&&curPopwindowType==5&&chooseAirPackageItempopupWindow.isShowing()){
+                     chooseAirPackageItempopupWindow.dismiss();
+                 }
              }
 
              @Override
@@ -2147,7 +2190,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             mBoard.addSyncData(new String(msg.getCustomElem().getData()));
                         }else if("TBKTExt".equals(Msg_Extension)){
                             //文本消息
-                            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
                             Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2,userHead);// type  2 别人 1 自己
                             ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
                             f.setData(msg_rec);
@@ -2266,6 +2309,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.NONE);
                 mBoard.setToolType(1);
                 mBoard.setBrushThin(cur_paintsize);
+                mBoard.setBrushColor(new TEduBoardController.TEduBoardColor(CurPaintColor));
                 setLeftmenustatus(true);
                 menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
                 menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
@@ -2396,6 +2440,8 @@ public class MainActivity_tea extends AppCompatActivity {
             public void onClick(View v) {
                 //开启 几何图形弹窗
                 mBoard.setToolType(6);
+                mBoard.setBrushThin(CurGeometrySize);
+                mBoard.setBrushColor(new TEduBoardController.TEduBoardColor(CurGeometryColor));
                 setLeftmenustatus(true);
                 menu04.setBackgroundResource(R.mipmap.menu_04_jihe1);
                 menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
@@ -3495,6 +3541,7 @@ public class MainActivity_tea extends AppCompatActivity {
         cosxmlUploadTask.setCosXmlProgressListener(new CosXmlProgressListener() {
             @Override
             public void onProgress(long complete, long target) {
+                System.out.print("+++上传进度回调输出"+complete+target);
                 proBar.setProgress((int)(complete*100/target));
             }
         });
@@ -3505,6 +3552,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 COSXMLUploadTask.COSXMLUploadTaskResult uploadResult =
                         (COSXMLUploadTask.COSXMLUploadTaskResult) result;
                 if(needAddtoScreen){
+                    System.out.print("+++返回結果回調函數：===查看返回结果"+"name:---"+name+"----"+result.accessUrl);
                 if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
                     Message msg = Message.obtain();
                     msg.what = 8;
@@ -3760,7 +3808,7 @@ public class MainActivity_tea extends AppCompatActivity {
                         AirBoardFileInfoList.clear();
                         for (int i=0; i < Jsonitemlist.length(); i ++) {
                             JSONObject jsonObj = Jsonitemlist.getJSONObject(i);
-                            BoardRescourseBean BoardRescourseBean = new BoardRescourseBean(jsonObj.getString("format"), jsonObj.getString("name"), jsonObj.getString("createDateStr").substring(0,10),jsonObj.getString("path"), jsonObj.getString("previewUrl"), jsonObj.getString("id"));
+                            BoardRescourseBean BoardRescourseBean = new BoardRescourseBean(jsonObj.getString("format"), jsonObj.getString("name"), jsonObj.getString("createDateStr").substring(0,16),jsonObj.getString("path"), jsonObj.getString("previewUrl"), jsonObj.getString("id"));
                             AirBoardFileInfoList.add(BoardRescourseBean);
                         }
                         if(AirBoardFileInfoList.size()>1){
@@ -3787,7 +3835,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     String SecretKey  = MsecretKey;
                     String Region  = MRegion;
                     String Bucket  = Mbucket;
-                    String SdkAppId  = BOARDSDKAPPID+"";
+                    String SdkAppId  = bucketSDKappID+"";
                     String RoomId  = roomid;
                     Time time = new Time("GMT+8");
                     time.setToNow();
@@ -3835,7 +3883,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     String SecretKey  = MsecretKey;
                     String Region  = MRegion;
                     String bucketName  = Mbucket;
-                    String SdkAppId  = BOARDSDKAPPID+"";
+                    String SdkAppId  = bucketSDKappID+"";
                     String resId  = resid;
                     String subjectid  = subjectId ;
                     String roomId  = roomid;
@@ -3969,6 +4017,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //                        否则就要设置 提示   提示上传进度
                         System.out.println("+++这里是查询云端资源传到存储桶定时任务，上传的文件进度"+progress);
                         if(progress.equals("100")){
+                            System.out.println("+++这里是查询云端资源传到存储桶定时任务：进度100了。定时任务取消");
                             Boardtimer.cancel();
                         }
                     } catch (Exception e) {
@@ -3998,14 +4047,16 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void run() {
                 try{
+                    System.out.println("创建转码任务++++");
                     String SecretId  = MsecretId;
                     String SecretKey = MsecretKey;
                     String Region    = MRegion;
-                    String SdkAppId  = BOARDSDKAPPID+"";
+                    String SdkAppId  = bucketSDKappID+"";
                     String link      = slink;
                     URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_CreateTranscode.do?"
                             + "SecretId=" + SecretId + "&SecretKey=" + SecretKey + "&Region=" + Region
                             + "&SdkAppId="+ SdkAppId   + "&link="+ link);
+                    System.out.println("创建转码任务++++"+url);
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setConnectTimeout(8000);
