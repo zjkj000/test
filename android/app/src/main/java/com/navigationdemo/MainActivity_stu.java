@@ -556,16 +556,15 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
          Board_container = findViewById(R.id.teachingcontent);
 
 
-        rf_leftmenu = findViewById(R.id.menu_left);
+         rf_leftmenu = findViewById(R.id.menu_left);
          rf_bottommenu = findViewById(R.id.menu_bottom);
+         rf_leftmenu.setVisibility(GONE);
+         rf_bottommenu.setVisibility(GONE);
+
          rf_shoukeneirong = findViewById(R.id.bg_shoukeneirong);
 
-
-        //第二次进入就加在不成功白板了
-//        if(mBoard==null||CurType==null){
-            initTIM();
-            initBoard();
-//        }
+         initTIM();
+         initBoard();
 
         if(menu02!=null&&mBoard!=null&&menu02color!=null){
             menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
@@ -639,6 +638,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         // 开启计时器
         startTime();
     }
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
 
     public void initQuestionData() {
         last_actiontime_answer = "";
@@ -931,7 +936,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -942,7 +947,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             item.setVideoControl(!item.getVideoControl());
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1086,6 +1091,21 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         MainActivity_stu.closeUIListener();
         HttpActivityStu.leaveOrJoinClass(userId, roomid, "leave", null);
 //        HttpActivityTea.stopHandsUpTimer();
+
+        V2TIMManager.getInstance().logout(new V2TIMCallback() {
+            @Override
+            public void onError(int i, String s) {
+                System.out.println("+++IM登出错误"+s);
+            }
+
+            @Override
+            public void onSuccess() {
+                System.out.println("+++IM登出成功");
+            }
+        });
+        V2TIMManager.getInstance().unInitSDK();
+
+
     }
 
     public static class MyTRTCCloudListener extends TRTCCloudListener {
@@ -1471,6 +1491,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTEBInit() {
                 System.out.println("onTEBInit"+"++++白板初始化完成了");
+
                 if(mBoard.isDrawEnable()){
                   dealStopDraw();
                 }
@@ -1542,6 +1563,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
                 if(mBoard.getCurrentFile()!=null&&mBoard.getCurrentBoard()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
                     b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
+
                     b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
                 }
             }
@@ -2079,6 +2101,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     }
 
     public void initTIM(){
+        System.out.println("++++++初始化IM");
         //初始化 IMSDK
         V2TIMSDKConfig timSdkConfig = new V2TIMSDKConfig();
         IMLoginresult = V2TIMManager.getInstance().initSDK(this, IMSDKAPPID, timSdkConfig, new V2TIMSDKListener() {
@@ -2125,6 +2148,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
             @Override
             public void onSuccess() {
+                System.out.println("++++++登陆IM成功");
                 //高级消息监听器
                 V2TIMManager.getMessageManager().addAdvancedMsgListener(new V2TIMAdvancedMsgListener() {
                     @Override
@@ -2133,7 +2157,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         String Msg_Description = msg.getCustomElem().getDescription();
                         String Msg_Data = new String(msg.getCustomElem().getData());
                         super.onRecvNewMessage(msg);
-                        System.out.println("+++教师端收到了消息"+Msg_Extension+"**"+Msg_Description+"**"+Msg_Data);
+                        System.out.println("+++学生端收到了消息"+Msg_Extension+"**"+Msg_Description+"**"+Msg_Data);
                         if("TXWhiteBoardExt".equals(Msg_Extension)){
                             //白板消息
                             if(mBoard!=null){
@@ -2153,7 +2177,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                             f.getChatlv().setSelection(f.getChatlv().getBottom());
                         }else if("drawAuthority".equals(Msg_Extension)){
                             //文本消息
-                            System.out.println("+++收到了教师控制学生编办消息"+Msg_Data+Msg_Description+Msg_Extension);
+                            System.out.println("+++收到了教师控制学生白板消息"+Msg_Data+Msg_Description+Msg_Extension);
                             if(Msg_Description.startsWith(userId)){
                                 if(Msg_Data.equals("yes")){
                                     dealAllowDraw();
@@ -3261,10 +3285,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     @Override
     protected void onDestroy() {
+        exitRoom();
         super.onDestroy();
-        if(mBoard!=null&&BoardStatus){
-            destroyBoard();
-        }
     }
 
 
@@ -3978,7 +4000,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             editpic(bitmap);
 
         }else {
-            Toast.makeText(this,"fail to get image",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this,"fail to get image",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -4219,6 +4241,23 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
         }
     }
+
+    //处理允许聊天
+    public void  dealAllowChat(){
+        System.out.println("执行了处理允许聊天函数+++");
+        chatRoomFragment.allowchat();
+
+
+
+    }
+    //处理禁止聊天
+    public void   dealStopChat(){
+        System.out.println("执行了处理禁止聊天函数+++");
+        chatRoomFragment.stopchat();
+    }
+
+
+
     //处理禁止涂鸦啊
      public void   dealStopDraw(){
         if(rf_bottommenu!=null&&rf_leftmenu!=null){
@@ -4236,9 +4275,16 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
      }
      //处理允许涂鸦
      public void  dealAllowDraw(){
-        rf_leftmenu.setVisibility(View.VISIBLE);
-        rf_bottommenu.setVisibility(View.VISIBLE);
-        if(mBoard!=null){
+
+        System.out.println("+++处理允许绘画"+rf_leftmenu.getVisibility());
+        if(rf_bottommenu!=null&&rf_leftmenu!=null) {
+            rf_leftmenu.setVisibility(View.VISIBLE);
+            rf_bottommenu.setVisibility(View.VISIBLE);
+        }
+         rf_leftmenu.bringToFront();
+         rf_bottommenu.bringToFront();
+
+         if(mBoard!=null){
             mBoard.setToolType(1);
             menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
             menu02color.setImageResource(R.mipmap.text_red);

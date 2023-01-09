@@ -88,7 +88,7 @@ class LiveingLession_addContent extends Component {
                 type:this.state.type,      // 类型：1自己的课堂，2协作组，3自己课堂+协作组
                 ketangId:this.state.ketangId.substring(1)+',',  //课堂id串，多个用,号分隔
                 xzzId:this.state.xzzId,     //协作组id（协作组只能选则一个）
-                xzzName:this.state.xzzName,   //协作组名称
+                xzzName:encodeURIComponent(this.state.xzzName),   //协作组名称
                 flag:this.state.flag,     //update(编辑记录),save（新创建的记录保存）
                 roomId:this.state.roomId,   //房间号（如果是新创建的传空串，如果是编辑保存，传roomId）
             };
@@ -388,25 +388,20 @@ class LiveingLession_addContent extends Component {
            <View style={{flexDirection:'row',padding:10,height:50,borderBottomWidth:0.5,borderColor:"#CBCBCB",alignItems:'center'}}>
                 <Text >课堂类型:</Text>
                 <Layout style={{flexDirection:'row',paddingLeft:20}}>
-                    <Radio style={{height:30}} checked={(this.state.type=='1'||this.state.type=='3')?true:false} onChange={()=>{
-                        if(this.state.type==''){
+                    <CheckBox checked={(this.state.type=='1'||this.state.type=='3')?true:false} onChange={()=>{if(this.state.type==''){
                             this.setState({type:'1'})
                         }else if(this.state.type=='1'){
                             this.setState({type:''})
                         }else if(this.state.type=='2'){
                             this.setState({type:'3'})
-                        }else{this.setState({type:'2'})}
-                    }}>自己的课堂</Radio>
-
-                    <Radio style={{height:30}} checked={(this.state.type=='2'||this.state.type=='3')?true:false} onChange={()=>{
-                        if(this.state.type==''){
+                        }else{this.setState({type:'2'})}}}>自己的课堂</CheckBox>
+                    <CheckBox checked={(this.state.type=='2'||this.state.type=='3')?true:false} onChange={()=>{ if(this.state.type==''){
                             this.setState({type:'2'})
                         }else if(this.state.type=='1'){
                             this.setState({type:'3'})
                         }else if(this.state.type=='2'){
                             this.setState({type:''})
-                        }else{this.setState({type:'1'})}
-                    }}>协作组的课堂</Radio>
+                        }else{this.setState({type:'1'})}}}>协作组的课堂</CheckBox>
                 </Layout>
             </View>
 

@@ -1,6 +1,9 @@
 package com.navigationdemo;
 
 
+import android.graphics.Canvas;
+import android.graphics.ColorFilter;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +15,7 @@ import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -26,6 +30,8 @@ import java.util.List;
 public class ChatRoomFragmentStu extends Fragment {
     private List<Chat_Msg> data= new ArrayList<Chat_Msg>();
     private ChatMsgAdapter chatMsgAdapter;
+    private  EditText edtext;
+    private  Button subtext;
     public ChatMsgAdapter getChatMsgAdapter() {
         return chatMsgAdapter;
     }
@@ -51,6 +57,24 @@ public class ChatRoomFragmentStu extends Fragment {
         super.onResume();
         getChatlv().setSelection(getChatlv().getBottom());
     }
+    public void stopchat(){
+        if(edtext!=null){
+            edtext.setHint("您已被禁止聊天!");
+            edtext.setFocusableInTouchMode(false);
+        }if (subtext!=null){
+            subtext.setClickable(false);
+        }
+
+    }
+
+        public void allowchat(){
+            if(edtext!=null){
+                edtext.setFocusableInTouchMode(true);
+                edtext.setHint("请输入讨论的内容");
+            }if (subtext!=null){
+                subtext.setClickable(true);
+            }
+        }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -70,8 +94,8 @@ public class ChatRoomFragmentStu extends Fragment {
             }
         });
 
-        EditText edtext = view.findViewById(R.id.inputtext);
-        Button subtext = view.findViewById(R.id.subtext);
+        edtext = view.findViewById(R.id.inputtext);
+        subtext = view.findViewById(R.id.subtext);
         subtext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,7 +116,6 @@ public class ChatRoomFragmentStu extends Fragment {
                     edtext.setText("");
                     edtext.setHint("请输入讨论的内容");
                 }
-
             }
         });
         return view;

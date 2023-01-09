@@ -151,8 +151,8 @@ android {
         applicationId "com.navigationdemo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 6
-        versionName "6.1.0"
+        versionCode 3
+        versionName "3.3.0"
         // react-native-camera依赖
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true

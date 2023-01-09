@@ -367,6 +367,7 @@ public class MainActivity_tea extends AppCompatActivity {
     public  static Handler handler;
     @SuppressLint("HandlerLeak")
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         // 隐藏标题栏 
@@ -619,7 +620,7 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onClick(View v) {
      //判断元素类型 保存快照
-               if(addBoardtoFragmentstatus){
+               if(addBoardtoFragmentstatus&&BoardStatus){
                    if("Board".equals(CurType)&&FileID!=null){
                        boardBtn.setImageResource(R.drawable.bottom_board);
                        canvasBtn.setImageResource(R.drawable.bottom_file_checked);
@@ -761,8 +762,13 @@ public class MainActivity_tea extends AppCompatActivity {
         startTime();
     }
 
-    private void dealWith_mBoardaddResouce(Integer type,String url,String name){
-        System.out.print("函数+++dealWith_mBoardaddResouce:--"+"type:=="+type+"url:---"+url+"name:---"+name);
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
+    private void dealWith_mBoardaddResouce(Integer type, String url, String name){
+        System.out.println("函数+++dealWith_mBoardaddResouce:--"+"type:=="+type+"url:---"+url+"name:---"+name);
         if(type==1){
             uploadfile.setText("正在转换");
             msgTips.setText("文件正在转换：");
@@ -783,7 +789,11 @@ public class MainActivity_tea extends AppCompatActivity {
             msgTips.setText("文件正在加载：");
             proBar.setProgress(95);
             System.out.println("++++测试PPT加载"+url);
-            mBoardAddTranscodeFile(name,url+"?for_tiw=1");
+
+            TEduBoardController.TEduBoardTranscodeFileResult config = new TEduBoardController.TEduBoardTranscodeFileResult(name,url+"?for_tiw=1");
+            mBoard.addTranscodeFile(config,true);
+            //测试白板行不行
+//            mBoardAddTranscodeFile(name,url+"?for_tiw=1");
         }else if(type==5){
             uploadfile.setText("正在加载");
             msgTips.setText("文件正在加载：");
@@ -1267,7 +1277,7 @@ public class MainActivity_tea extends AppCompatActivity {
             Log.d(TAG, "sdk callback onError");
             MainActivity_tea activity = mContext.get();
             if (activity != null) {
-                Toast.makeText(activity, "onError: " + errMsg + "[" + errCode+ "]" , Toast.LENGTH_SHORT).show();
+//                Toast.makeText(activity, "onError: " + errMsg + "[" + errCode+ "]" , Toast.LENGTH_SHORT).show();
                 if (errCode == TXLiteAVCode.ERR_ROOM_ENTER_FAIL) {
                     activity.exitRoom();
                 }
@@ -1760,356 +1770,7 @@ public class MainActivity_tea extends AppCompatActivity {
         initParam.timSync=false;
         mBoard = new TEduBoardController(this);
         //（3）添加白板事件回调 实现TEduBoardCallback接口
-        mBoardCallback = new TEduBoardController.TEduBoardCallback(){
-            @Override
-            public void onTEBError(int code, String msg) {
-                System.out.println("onTEBError"+"+++++++++++++code"+code+msg);
-                alert_text.setText("白板加载失败！重新加载");
-            }
-            @Override
-            public void onTEBWarning(int code, String msg) {
-                System.out.println("onTEBWarning"+"+++++++++++++code:"+code);
-                if(code==7){  //VIDEO_ALREADY_EXISTS
-                    System.out.println("onTEBWarning"+"+++++++++++++VIDEO已经存在了:");
-                    mBoard.gotoBoard(msg);
-                }else if(code==3){  //H5PPT_ALREADY_EXISTS
-                    System.out.println("onTEBWarning"+"+++++++++++++H5PPT已经存在了:");
-                    mBoard.gotoBoard(msg);
-                }else if(code==6){  //H5PPT_ALREADY_EXISTS
-                    System.out.println("onTEBWarning"+"+++++++++++++H5FILE已经存在了:");
-                    mBoard.gotoBoard(msg);
-                }
-//                TEduBoardController.TEduBoardWarningCode.TEDU_BOARD_WARNING_IMAGE_MEDIA_BITRATE_TOO_LARGE
-            }
-            @Override
-            public void onTEBInit() {
-                System.out.println("onTEBInit"+"++++白板初始化完成了");
-                ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
-                if(findViewById(R.id.boardcontent).getMeasuredWidth()>findViewById(R.id.boardcontent).getMeasuredHeight()){
-                    params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
-                }else {
-                    params.setMargins(0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2,0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2);
-                }
-                Board_container.setLayoutParams(params);
-                findViewById(R.id.bg_shoukeneirong).setVisibility(View.GONE);
-                BoardStatus=true;
-                boardview = mBoard.getBoardRenderView();
-                initBoardMenu();
-                if(AirBoardFileInfoList.size()<1){
-                    livePlay_getResData(userId);//初始化云端资源数组
-                }
-                alert_text.setText("白板加载完成！");
-                if(!addBoardtoFragmentstatus){
-                    addBoardtoFragmentstatus =  mBoard.addBoardViewToContainer(Board_container,boardview,addBoardlayoutParams);
-                    rf_leftmenu.setVisibility(View.VISIBLE);
-                    rf_bottommenu.setVisibility(View.VISIBLE);
-                    rf_shoukeneirong.setVisibility(View.GONE);//默认图片那个消失
-                }
-                //设置 当前白板 文件的BoardFileInfolist
-                CurBoardFileInfoList = mBoard.getFileInfoList();
-            }
-            @Override
-            public void onTEBHistroyDataSyncCompleted() {
-                System.out.println("onTEBHistroyDataSyncCompleted"+"+++++++++++++");
-//                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-            }
-            @Override
-            public void onTEBSyncData(String data) {
-                final V2TIMMessage Board_message = V2TIMManager.getMessageManager().createCustomMessage(
-                        data.getBytes(),                   //data
-                        "",                             //description
-                        "TXWhiteBoardExt".getBytes());     //extension
-                V2TIMManager.getInstance().getConversationManager().getConversation(roomid, new V2TIMValueCallback<V2TIMConversation>() {
-                    @Override
-                    public void onError(int i, String s) {
-                        // 获取回话失败
-                        System.out.println("+++获取会话失败"+s+i);
-                    }
-                    @Override
-                    public void onSuccess(V2TIMConversation v2TIMConversation) {
-                        V2TIMManager.getInstance().getMessageManager().sendMessage(Board_message, null, roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
-                            @Override
-                            public void onSuccess(V2TIMMessage v2TIMMessage) {
-                                // 发送 IM 消息成功
-                                System.out.println("+++发送白板数据成功"+v2TIMMessage.getCustomElem().toString());
-                                if(findViewById(R.id.setBoardWindow).getVisibility()==View.VISIBLE){findViewById(R.id.setBoardWindow).setVisibility(View.GONE);}
-                            }
-                            @Override
-                            public void onError(int i, String s) {
-                                // 发送 IM 消息失败，建议进行重试
-                                System.out.println("+++发送 IM 消息失败，建议进行重试"+s);
-                                mBoard.syncAndReload();
-                            }
-                            @Override
-                            public void onProgress(int i) {
-                            }
-                        });
-                    }
-                });
-            }
 
-            @Override
-            public void onTEBUndoStatusChanged(boolean canUndo) {
-                SnapshotMarkFlag = canUndo;
-                    if(mDialog!=null&&mDialog.isShowing()){
-                        mDialog.dismiss();
-                        if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
-                            chooseFilepopupWindow.dismiss();
-                        }if(chooseAirFilepopupWindow!=null&&chooseAirFilepopupWindow.isShowing()){
-                            chooseAirFilepopupWindow.dismiss();
-                        }
-                    }
-                System.out.println("onTEBUndoStatusChanged"+"+++当前是否打锚点"+canUndo);
-            }
-            @Override
-            public void onTEBRedoStatusChanged(boolean canRedo) {
-                System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
-                select_resources.setVisibility(View.GONE);
-                if(mBoard.getCurrentFile()!=null&&mBoard.getCurrentBoard()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
-                    b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
-                    b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-                }
-
-            }
-
-            @Override
-            public void onTEBImageStatusChanged(String boardId, String url, int status) {
-                SnapshotMarkFlag = true;
-                System.out.println("onTEBImageStatusChanged"+"+++");
-
-            }
-
-            @Override
-            public void onTEBSetBackgroundImage(String url) {
-                SnapshotMarkFlag = true;
-                System.out.println("onTEBSetBackgroundImage"+"+++");
-            }
-
-            @Override
-            public void onTEBAddImageElement(String url) {
-                System.out.println("onTEBAddImageElement"+"+++添加了图片");
-            }
-
-            @Override
-            public void onTEBAddElement(String id, int type, String url) {
-                SnapshotMarkFlag = true;
-                System.out.println("onTEBAddElement"+"+++");
-            }
-
-            @Override
-            public void onTEBDeleteElement(List<String> id) {
-                SnapshotMarkFlag = true;
-                System.out.println("onTEBDeleteElement"+"+++");
-            }
-
-            @Override
-            public void onTEBSelectElement(List<TEduBoardController.ElementItem> elementItemList) {
-                System.out.println("onTEBSelectElement"+"+++");
-            }
-
-            @Override
-            public void onTEBMathGraphEvent(int code, String boardId, String graphId, String message) {
-                SnapshotMarkFlag = true;
-                System.out.println("onTEBMathGraphEvent"+"+++");
-            }
-
-            @Override
-            public void onTEBZoomDragStatus(String fid, int scale, int xOffset, int yOffset) {
-                //远端白板缩放移动状态回调
-                if( mBoard.getBoardScale()>300){
-                    mBoard.setBoardScale(300);
-                    b_size.setText("300");
-                }else {
-                    b_size.setText(mBoard.getBoardScale()+"");
-                }
-
-            }
-
-            @Override
-            public void onTEBBackgroundH5StatusChanged(String boardId, String url, int status) {
-                System.out.println("onTEBBackgroundH5StatusChanged"+"+++");
-            }
-
-            @Override
-            public void onTEBTextElementWarning(String code, String message) {
-                System.out.println("onTEBTextElementWarning"+"++++");
-            }
-
-            @Override
-            public void onTEBImageElementStatusChanged(int status, String currentBoardId, String imgUrl, String currentImgUrl) {
-                System.out.println("onTEBImageElementStatusChanged"+"++");
-            }
-
-            @Override
-            public void onTEBAddBoard(List<String> boardList, String fileId) {
-                if(!"#DEFAULT".equals(fileId)){
-                    FileID=fileId;
-                    CurFileID=null;
-                }
-            }
-
-            @Override
-            public void onTEBDeleteBoard(List<String> boardList, String fileId) {
-
-            }
-
-            @Override
-            public void onTEBGotoBoard(String boardId, String fileId) {
-                b_size.setText(mBoard.getBoardScale()+"");
-                if(BoardID.equals(fileId)){
-                    CurType="Board";
-                    CurBoardID = boardId;
-                }else {
-                    CurType="File";
-                    CurFileID = boardId;
-                }
-                b_cur.setText((mBoard.getFileBoardList(fileId).indexOf(boardId)+1)+"");
-                b_sum.setText(mBoard.getFileBoardList(fileId).size()+"");
-            }
-
-            @Override
-            public void onTEBGotoStep(int currentStep, int totalStep) {
-                System.out.println("onTEBGotoStep"+"+++++");
-            }
-
-            @Override
-            public void onTEBRectSelected() {
-                System.out.println("onTEBRectSelected"+"++++");
-            }
-
-            @Override
-            public void onTEBRefresh() {
-                System.out.println("onTEBRefresh"+"++++");
-            }
-
-            @Override
-            public void onTEBOfflineWarning(int count) {
-                System.out.println("onTEBOfflineWarning"+"+++");
-            }
-            @Override
-            public void onTEBAddTranscodeFile(String fileId) {
-                System.out.println("onTEBAddTranscodeFile"+fileId);
-                select_resources.setVisibility(View.GONE);
-            }
-            @Override
-            public void onTEBDeleteFile(String fileId) {
-                System.out.println("onTEBDeleteFile"+"+++:删除了文件的ID："+fileId);
-                CurFileID=null;
-                CurBoardFileInfoList = mBoard.getFileInfoList();
-
-            }
-            @Override
-            public void onTEBSwitchFile(String fileId) {
-                CurBoardFileInfoList = mBoard.getFileInfoList();
-                if(boardswitchfilelistViewAdapter!=null){
-                    boardswitchfilelistViewAdapter.setCurFileId(fileId);
-                    boardswitchfilelistViewAdapter.notifyDataSetChanged();
-                }
-                if(fileId.equals("#DEFAULT")){
- //                 当是白板的时候就要 跳转到之前相应页码数
-                    CurType="Board";
-                    CurBoardID = mBoard.getCurrentBoard();
-                }else {
- //                 当不是白板的时候 记录一下  打开的文件ID
-                    CurType="File";
-                    if(!fileId.equals(FileID)){
-                        //打开的文件不是上一次打开的文件就需要存起来文件ID了
-                        FileID=fileId;
-                    }
-                    CurFileID = mBoard.getCurrentBoard();
-                }
-            }
-
-            @Override
-            public void onTEBFileUploadProgress(String path, int currentBytes, int totalBytes, int uploadSpeed, float percent) {
-                System.out.println("onTEBFileUploadProgress"+"+++++");
-            }
-
-            @Override
-            public void onTEBFileUploadStatus(String path, int status, int errorCode, String errorMsg) {
-                System.out.println("onTEBFileUploadStatus"+"++++");
-            }
-
-            @Override
-            public void onTEBFileTranscodeProgress(String file, String errorCode, String errorMsg, TEduBoardController.TEduBoardTranscodeFileResult result) {
-                System.out.println("onTEBFileTranscodeProgress"+"+++++FileTranscodeProgress");
-            }
-
-            @Override
-            public void onTEBH5FileStatusChanged(String fileId, int status) {
-                System.out.println("onTEBH5FileStatusChanged"+"+++++++");
-            }
-
-            @Override
-            public void onTEBAddImagesFile(String fileId) {
-                System.out.println("onTEBAddImagesFile"+"++++++");
-            }
-
-            @Override
-            public void onTEBVideoStatusChanged(String fileId, int status, float progress, float duration) {
-            }
-
-            @Override
-            public void onTEBAudioStatusChanged(String elementId, int status, float progress, float duration) {
-                System.out.println("onTEBAudioStatusChanged"+"+++++");
-            }
-
-            @Override
-            public void onTEBSnapshot(String path, int code, String msg) {
-                System.out.println("onTEBSnapshot"+"++++白板快照"+path+msg+code);
-                if(code==0){
-                    File ff = new File(path);
-                    String name = ff.getName();
-                    Time time = new Time("GMT+8");
-                    time.setToNow();
-                    // isquestion  用来区分本次快照是题目的快照还是 切换的时候保存的快照
-                    String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture/";
-                    UploadToBucket(cosprefix,path,name,true,false);
-                }else {
-                    System.out.println("++++白板快照出错"+msg+"   code:"+code);
-                }
-            }
-
-            @Override
-            public void onTEBH5PPTStatusChanged(int statusCode, String fid, String describeMsg) {
-                System.out.println("onTEBH5PPTStatusChanged"+"+++");
-            }
-
-            @Override
-            public void onTEBTextElementStatusChange(String status, String id, String value, int left, int top) {
-                System.out.println("onTEBTextElementStatusChange"+"+++++");
-            }
-
-            @Override
-            public void onTEBScrollChanged(String boardId, int trigger, double scrollLeft, double scrollTop, double scale) {
-                System.out.println("onTEBScrollChanged"+"+++");
-            }
-
-            @Override
-            public void onTEBClassGroupStatusChanged(boolean enable, String classGroupId, int operationType, String message) {
-                System.out.println("onTEBClassGroupStatusChanged"+"++");
-            }
-
-            @Override
-            public void onTEBCursorPositionChanged(Point point) {
-                System.out.println("onTEBCursorPositionChanged"+"+++");
-            }
-
-            @Override
-            public void onTEBElementPositionChange(List<TEduBoardController.ElementItem> elementItemList) {
-                System.out.println("onTEBElementPositionChange"+"++++");
-            }
-
-            @Override
-            public void onTEBPermissionChanged(List<String> permissions, Map<String, List<String>> filters) {
-                System.out.println("onTEBPermissionChange"+"++++");
-            }
-
-            @Override
-            public void onTEBPermissionDenied(String permission) {
-                System.out.println("onTEBPermissionDenied"+"++++");
-            }
-        };
          mBoardCallback = new TEduBoardController.TEduBoardCallback(){
              @Override
              public void onTEBError(int code, String msg) {
@@ -2141,11 +1802,11 @@ public class MainActivity_tea extends AppCompatActivity {
                  ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
                 //白板留白处理
                  if(findViewById(R.id.boardcontent).getMeasuredWidth()>findViewById(R.id.boardcontent).getMeasuredHeight()){
-                     System.out.println("+++左右留白区域"+(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2);
-                     params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
-                 }else {
-                     System.out.println("+++上下留白区域"+(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2);
-                     params.setMargins(0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2,0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2);
+                        System.out.println("+++左右留白区域"+(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2);
+                        params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
+                 }else{
+                         System.out.println("+++上下留白区域" + (findViewById(R.id.boardcontent).getMeasuredHeight() - findViewById(R.id.boardcontent).getMeasuredWidth() * 9 / 16) / 2);
+                         params.setMargins(0, (findViewById(R.id.boardcontent).getMeasuredHeight() - findViewById(R.id.boardcontent).getMeasuredWidth() * 9 / 16) / 2, 0, (findViewById(R.id.boardcontent).getMeasuredHeight() - findViewById(R.id.boardcontent).getMeasuredWidth() * 9 / 16) / 2);
                  }
                  Board_container.setLayoutParams(params);
                  findViewById(R.id.bg_shoukeneirong).setVisibility(View.GONE);
@@ -2170,7 +1831,7 @@ public class MainActivity_tea extends AppCompatActivity {
                  System.out.println("onTEBHistroyDataSyncCompleted"+"+++++++++++++");
  //                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
              }
-             @Override
+                     @Override
              public void onTEBSyncData(String data) {
                  final V2TIMMessage Board_message = V2TIMManager.getMessageManager().createCustomMessage(
                          data.getBytes(),                   //data
@@ -2360,7 +2021,15 @@ public class MainActivity_tea extends AppCompatActivity {
              }
              @Override
              public void onTEBAddTranscodeFile(String fileId) {
-                 System.out.println("onTEBAddTranscodeFile"+fileId);
+                 System.out.println("onTEBAddTranscodeFile+++"+fileId);
+                 if(mDialog!=null&&mDialog.isShowing()){mDialog.dismiss();}
+                 if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
+                     chooseFilepopupWindow.dismiss();
+                 }
+                 if(chooseAirFilepopupWindow!=null&&chooseAirFilepopupWindow.isShowing()){
+                     chooseAirFilepopupWindow.dismiss();
+                 }
+                 mBoard.switchFile(fileId);
                  select_resources.setVisibility(View.GONE);
              }
              @Override
@@ -3666,9 +3335,38 @@ public class MainActivity_tea extends AppCompatActivity {
         }
     }
     /**
+     * 聊天控制
+     * @param extension 消息类型  @param action    操作动作  @param id        操作对象ID
+     */
+
+    public void chatAuthority(String extension, String action, String id) {
+        // 发送关闭学生聊天 消息
+        final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(
+                action.getBytes(),       //action   是否允许  yes no
+                id,                      //descripition    哪个用户
+                extension.getBytes());   //extension
+        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_HIGH, false, null, new V2TIMSendCallback<V2TIMMessage>() {
+            @Override
+            public void onProgress(int progress) {
+            }
+            @Override
+            public void onSuccess(V2TIMMessage message) {
+                System.out.println("+++发送关闭学生聊天消息发送成功了");
+            }
+            @Override
+            public void onError(int code, String desc) {
+                System.out.println("+++发送关闭学生聊天消息发送失败"+desc);
+            }
+        });
+    }
+
+
+
+    /**
      * 白板控制
      * @param extension 消息类型  @param action    操作动作  @param id        操作对象ID
      */
+
     public void drawAuthority(String extension, String action, String id) {
         // 发送关闭学生操作白板 消息
         final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(
@@ -3799,10 +3497,53 @@ public class MainActivity_tea extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        if(mBoard!=null&&BoardStatus){
-            destroyBoard();
+        if(SnapshotMarkFlag){
+            mBoard.addSnapshotMark();
         }
+        onExitLiveRoom();
+        destroyBoard();
+
+        V2TIMManager.getInstance().logout(new V2TIMCallback() {
+            @Override
+            public void onError(int i, String s) {
+                System.out.println("+++IM登出错误"+s);
+            }
+
+            @Override
+            public void onSuccess() {
+                System.out.println("+++IM登出成功");
+            }
+        });
+        V2TIMManager.getInstance().unInitSDK();
+
+        //后面加一个 处理关闭  定时器一类的方法  在这里调用   比如 答题部分：AnswerQuestionFragment.java:3798  如果未关闭 直接下课就会出问题
+        save_livePlay_CreateSnapshotTask();
+        finish();
+
+        addBoardtoFragmentstatus =false;
+        rf_leftmenu.setVisibility(View.GONE);
+        rf_bottommenu.setVisibility(View.GONE);
+        RelativeLayout bg_shoukeneirong = findViewById(R.id.bg_shoukeneirong);
+        bg_shoukeneirong.setVisibility(View.VISIBLE);
+        alert_text.setText("已经下课，请退出教室！");
+        Board_container.setVisibility(View.GONE);
+        canvasBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        contentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        boardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        super.onDestroy();
+
     }
 
 
@@ -4298,6 +4039,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             if(mDialog!=null&&mDialog.isShowing()){
                                 mDialog.dismiss();
                             }
+                            Toast.makeText(MainActivity_tea.this, json.get("link").toString(), Toast.LENGTH_SHORT).show();
                         }else if(json.getString("status").equals("success")){
                             String name = json.getString("name");
                             String fileurl = json.getString("link");
@@ -4417,6 +4159,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
     //创建 查询上传云端资源到存储桶上传进度 定时请求器
     public void GetTransferProgress_Transcodehandler(String resid) {
+        Boardtimer = new Timer();
         Boardtimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -4468,6 +4211,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     try{
                         String backLogJsonStr = buffer.toString();
                         JSONObject json = stringToJson(backLogJsonStr);
+                        System.out.println("+++文件转换结果"+json);
                         String status = json.get("Status").toString();
                         if(status.equals("success")){
                             System.out.println("+++转码接口任务成功：返回了taskId:;"+json.get("TaskId"));
@@ -4477,6 +4221,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             uploadfile.setText("正在转码");
                             DescribeTranscodehandler(MsecretId,MsecretKey,Region,SdkAppId,json.get("TaskId").toString(),mBoard,proBar);
                         }else {
+                            Toast.makeText(MainActivity_tea.this, "出错了，尝试其他文件加载。", Toast.LENGTH_SHORT).show();
 //                            失败，页面提示“创建文件转换任务失败，请稍后重试。”
                         }
 
@@ -4492,6 +4237,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
     //创建 转码任务 定时请求器
     public static void DescribeTranscodehandler(String secretId,String secretKey,String region,String sdkAppId,String taskId,TEduBoardController mBoard,ProgressBar progressBar) {
+        Boardtimer= new Timer();
         Boardtimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -4515,6 +4261,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_DescribeTranscode.do?"
                             + "SecretId=" + SecretId + "&SecretKey=" + SecretKey + "&Region=" + Region
                             + "&SdkAppId="+ SdkAppId  + "&TaskId="+ TaskId);
+                    System.out.println("+++获取转码任务接口："+url);
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setConnectTimeout(8000);

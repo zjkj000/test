@@ -252,8 +252,8 @@ export default function LiveingLessonInfo_stu() {
                                 >
                                     <TouchableOpacity
                                         style={{
-                                            borderColor: "black",
-                                            borderWidth: 1,
+                                            borderColor: "#aaaaaa",
+                                            borderWidth: 0.5,
                                             justifyContent: "center",
                                             alignItems: "center",
                                             borderLeftWidth: 0,
@@ -277,8 +277,8 @@ export default function LiveingLessonInfo_stu() {
 
                                     <TouchableOpacity
                                         style={{
-                                            borderColor: "black",
-                                            borderWidth: 1,
+                                            borderColor: "#aaaaaa",
+                                            borderWidth: 0.5,
                                             justifyContent: "center",
                                             alignItems: "center",
                                             flex: 1,

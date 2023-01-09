@@ -2,9 +2,8 @@ import { Text, View,Image,ScrollView, FlatList, TouchableOpacity,Alert, NativeMo
 import React, { Component,useEffect, useState } from 'react'
 import { useNavigation } from "@react-navigation/native";
 import { CheckBox,Layout,OverflowMenu, MenuItem,Button } from "@ui-kitten/components";
-
-
-import {screenHeight } from '../../utils/Screen/GetSize'
+import Loading from "../../utils/loading/Loading";
+import { screenHeight, screenWidth } from "../../utils/Screen/GetSize";
 import { SearchBar } from "@ant-design/react-native";
 import http from '../../utils/http/request'
 import Toast from '../../utils/Toast/Toast';
@@ -27,6 +26,10 @@ export default function LiveingLessionInfo_teacher(props) {
     
     const [chooseClassmodalVisible,setchooseClassmodalVisible] =useState(false)
     const [showFoot,setshowFoot]=useState('0')             //0代表还可以加载  1代表没数据了
+
+    const [showLoading, setShowLoading] = useState(false);
+
+
     useEffect(()=>{
         const timer = setInterval(() => {
             currentPage=1
@@ -168,25 +171,76 @@ export default function LiveingLessionInfo_teacher(props) {
                                 
                                 <View style={{flexDirection:'row',width:'100%',alignItems:'center',borderTopWidth:0.5,marginTop:50}}>
                                     
-                                    <TouchableOpacity style={{width:'50%',borderRightWidth:0.5,paddingTop:10,paddingBottom:10}} onPress={()=>{setchooseClassmodalVisible(false)}}>
+                                    <TouchableOpacity style={{width:'50%',borderRightWidth:0.5,borderColor:'#aaaaaa',paddingTop:10,paddingBottom:10}} onPress={()=>{setchooseClassmodalVisible(false)}}>
                                         <Text style={{color:'#59B9E0',fontSize:18,marginLeft:'45%'}}>取消</Text></TouchableOpacity>
 
                                     <TouchableOpacity style={{width:'30%',marginLeft:'10%'}} onPress={()=>{
-                                            // 跳转教师端直播页面
-                                            NativeModules.IntentMoudle.startActivityFromJS(
-                                                "MainActivity_tea",
-                                                global.constants.userName+"-@-"+      //userid id
-                                                global.constants.userCn+"-@-"+        //usercn 中文名
-                                                chooseClassroomId+"-@-"+              //roomid 直播房间号
-                                                chooseClasstitle+"-@-"+            //直播房间名称
-                                                chooseClasssubjectId+"-@-"+         //学科ID
-                                                chooseClassketangId+"-@-"+         //课堂ID
-                                                chooseClassName+"-@-"+         //课堂名称
-                                                global.constants.userPhoto+"-@-"+
-                                                chooseClassCamera+"-@-"+
-                                                chooseClassMicrophone   );
-                                                setchooseClassmodalVisible(false)
-                                    }}>
+                                                            setShowLoading(true);
+                                                            setchooseClassmodalVisible(false);
+                                                            const url =
+                                                                "http://" +
+                                                                "www.cn901.com" +
+                                                                "/ShopGoods/ajax/livePlay_deleteMemcached.do";
+                                                            const params = {
+                                                                roomId: chooseClassroomId,
+                                                                ketangId: chooseClassketangId,
+                                                                ketangName: chooseClassName,
+                                                                userId: global.constants
+                                                                    .userName,
+                                                                name: global.constants.userCn,
+                                                                source: "app",
+                                                                width: screenWidth,
+                                                                height: screenHeight,
+                                                            };
+                                                            http.post(url, params)
+                                                                .then((res) => {
+                                                                    setShowLoading(false);
+                                                                    if (res.success) {
+                                                                        if (!res.joinStatus) {
+                                                                            // 跳转教师端直播页面
+                                                                            NativeModules.IntentMoudle.startActivityFromJS(
+                                                                                "MainActivity_tea",
+                                                                                global.constants
+                                                                                    .userName +
+                                                                                    "-@-" + //userid id
+                                                                                    global
+                                                                                        .constants
+                                                                                        .userCn +
+                                                                                    "-@-" + //usercn 中文名
+                                                                                    chooseClassroomId +
+                                                                                    "-@-" + //roomid 直播房间号
+                                                                                    chooseClasstitle +
+                                                                                    "-@-" + //直播房间名称
+                                                                                    chooseClasssubjectId +
+                                                                                    "-@-" + //学科ID
+                                                                                    chooseClassketangId +
+                                                                                    "-@-" + //课堂ID
+                                                                                    chooseClassName +
+                                                                                    "-@-" + //课堂名称
+                                                                                    global.constants.userPhoto +
+                                                                                    "-@-" +
+                                                                                    chooseClassCamera +
+                                                                                    "-@-" +
+                                                                                    chooseClassMicrophone
+                                                                            );
+                                                                        } else {
+                                                                            Toast.showDangerToast(
+                                                                                "您的账号已在别处登录"
+                                                                            );
+                                                                        }
+                                                                    } else {
+                                                                        Toast.showInfoToast(
+                                                                            res.message
+                                                                        );
+                                                                    }
+                                                                })
+                                                                .catch((error) => {
+                                                                    setShowLoading(false);
+                                                                    Toast.showDangerToast(
+                                                                        error.message
+                                                                    );
+                                                                });
+                                                            }}>
                                         <Text style={{color:'#59B9E0',fontSize:18,marginLeft:20}}>上课</Text></TouchableOpacity>
                                 </View>
                             </View>
@@ -312,6 +366,7 @@ export default function LiveingLessionInfo_teacher(props) {
                         />
             
         </View>
+        <Loading background={true} show={showLoading}></Loading>
   </>
 
   )
@@ -384,7 +439,7 @@ class LiveingLessonContent_teacher extends Component {
           this.state.status=='3'?<Image style={{position:'absolute',right:0,width:40,height:40}} source={require('../../assets/teacherLatestPage/tea_ed.png')}></Image>:<></>  }
         
         {/* 第一列  名称 时间 信息 */}
-        <View style={{flexDirection:'column',width:'65%',paddingLeft:10,paddingRight:5,borderColor:'#000000',borderRightWidth:0.5,marginRight:10}}>
+        <View style={{flexDirection:'column',width:'65%',paddingLeft:10,paddingRight:5,borderColor:'#aaaaaa',borderRightWidth:0.5,marginRight:10}}>
             {/* 第一行  学科图标 +名称 */}
             <View style={{flexDirection:'row',justifyItem:'center',alignItems:"center"}}>
                 {   this.state.subjectName.indexOf('语文')>0?(<Image style={{width:40,height:40}} source={require('../../assets/errorQue/yuwen.png')}/>):
