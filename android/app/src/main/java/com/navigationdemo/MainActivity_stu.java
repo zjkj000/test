@@ -173,7 +173,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     private static Handler handlerCount = new Handler();
     private static Runnable runnablere_mBoardaddResouce;
     private static Timer Boardtimer = new Timer();  // 白板定时任务  用于获取转码进度
-    private static Timer handsTimer = new Timer();  // 举手倒计时
+    private static Timer handsTimer = null;  // 举手倒计时
     private static int handsUpTime = 20; // 举手最长时间
 
     //Tabbar三个Fragment
@@ -201,6 +201,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static ImageView contentBtn;  //文件夹按钮  现在是授课内容
     public static ImageView memberBtn;
     public static ImageView handBtn;
+    public static boolean handStatus = false;   //当前举手状态 false表示未举手 true表示已举手
     public static ImageView cameraBtn;   //关闭摄像头按钮
     public static ImageView audioBtn;
     public static boolean mIsFrontCamera = true; // 摄像头前后标志位
@@ -505,7 +506,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     HttpActivityStu.handsUp(userId, roomid, "up", that);
                     handsState = "up";
                     handBtn.setImageResource(R.drawable.bottom_stuhand_down);
-                    startHandsTimer();
+                    if(!handStatus) {
+                        startHandsTimer();
+                    } else {
+                        stopHandsTimer();
+                    }
                     return;
                 }
                 if (handsState.equals("up")) {
@@ -574,7 +579,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 int position = -1;
                 switch (msg.what) {
                     case MyEvent.UPDATE_HANDS_UP_TIME:
-                        setHandsUpData(String.valueOf(handsUpTime));
+                        setHandsUpData(String.valueOf(handsUpTime) + "秒后手放下");
                         break;
                     case MyEvent.UPDATE_AUDIO_ICON:
                         position = msg.getData().getInt("position");
@@ -1132,7 +1137,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         @Override
         public void onUserSubStreamAvailable(String userId, boolean available) {
             MainActivity_stu activity = mContext.get();
-            Toast.makeText(activity, userId + " 的子视频流现在 " + available, Toast.LENGTH_SHORT).show();
+//            Toast.makeText(activity, userId + " 的子视频流现在 " + available, Toast.LENGTH_SHORT).show();
             if(available){
                 mTeacherShare.bringToFront();
                 mTeacherShare.setVisibility(View.VISIBLE);
@@ -1198,7 +1203,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //            HttpActivityTea.getMemberList(activity);
             Log.e(TAG, "onRemoteUserEnterRoom: userId" + userId );
             System.out.println("onRemoteUserEnterRoom userId " + userId );
-            Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
+//            Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
             if (userId.equals(teacherId+"_camera")) {
                 mTRTCCloud.startRemoteView(teacherId + "_camera", TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, activity.mTXCVVTeacherPreviewView);
                 activity.teacherTRTCBackground.setVisibility(View.INVISIBLE);
@@ -1397,7 +1402,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     public void startHandsTimer() {
         MainActivity_stu that = this;
+        // 更改按钮图标
+        handBtn.setImageResource(R.drawable.bottom_stuhand_down);
+        // 改变举手标记
+        handStatus = !handStatus;
         handsUpTimeView.setVisibility(View.VISIBLE);
+        handsTimer = new Timer();
         handsTimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -1416,10 +1426,19 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     }
 
     public void stopHandsTimer() {
-        handsUpTime = 20;
-        handsUpTimeView.setVisibility(View.INVISIBLE);
-        handsTimer.cancel();
-        HttpActivityStu.handsUp(userId, roomid, "down", this);
+        // Timer只能schedule一次，重复使用需要先销毁线程
+        if(handsTimer != null) {
+            handsUpTime = 20;
+            // 更改按钮图标
+            handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+            // 改变举手标记
+            handStatus = !handStatus;
+            handsUpTimeView.setVisibility(View.INVISIBLE);
+            handsTimer.cancel();
+            handsTimer.purge();
+            handsTimer = null;
+            HttpActivityStu.handsUp(userId, roomid, "down", this);
+        }
     }
 
     //初始化白板
@@ -3899,6 +3918,37 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
         System.out.println("httpreturn:"+ httpreturn);
         return bihuanbmp;
+    }
+
+    protected void onActivityResult(int requestCode,int resultCode,Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case 1:
+                if (resultCode == RESULT_OK) {
+                    try {
+                        //将拍摄的图片显示出来
+                        Bitmap bitmap = BitmapFactory.decodeStream(getContentResolver().
+                                openInputStream(imageUri));
+                        editpic(bitmap);
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+                }
+                break;
+            case 2:
+                if(resultCode == RESULT_OK){
+                    //判断手机系统版本号
+                    if(Build.VERSION.SDK_INT >= 19){
+                        //4.4以上系统使用此方法处理图片
+                        handleImageOnKitKat(data);
+                    }else{
+                        //4.4以下系统使用此方法处理图片
+                        handleImageBeforeKitKat(data);
+                    }
+                }
+            default:
+                break;
+        }
     }
 
     /*****************************************************************************************************************/
