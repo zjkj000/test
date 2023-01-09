@@ -1258,7 +1258,7 @@ public class MainActivity_tea extends AppCompatActivity {
             HttpActivityTea.getMemberList(activity);
             Log.e(TAG, "onRemoteUserEnterRoom: userId" + userId );
             System.out.println("onRemoteUserEnterRoom userId " + userId );
-            Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
+//            Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
             if(AnswerActivityTea.findMemberInKetangList(userId) != null)
                 activity.videoListFragment.addCameraView(userId, activity.mTRTCCloud);
         }
@@ -1269,6 +1269,12 @@ public class MainActivity_tea extends AppCompatActivity {
             activity.videoListFragment.leaveRoom(userId, reason, activity,
                     activity.mTRTCCloud);
             HttpActivityTea.getMemberList(activity);
+//              取消所有白板授权
+            for (int i =0; i < activity.memberDataList.size(); i++) {
+                MemberItem item = listViewAdapter.getItem(i);
+                activity.drawAuthority( "drawAuthority", "no", item.getUserId());
+                item.setBoardControl(false);
+            }
 //            Toast.makeText(activity, "onRemoteUserLeaveRoom userId " + userId , Toast.LENGTH_SHORT).show();
         }
 

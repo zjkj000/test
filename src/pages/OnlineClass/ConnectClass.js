@@ -48,6 +48,16 @@ export default ConnectClass = () => {
                 } else {
                     // Toast.showDangerToast(resStr);
                     let resJson = JSON.parse(resStr);
+                    if (resJson.learnPlan.introduction === "unExist") {
+                        Toast.showInfoToast(
+                            "您不是该课堂学生；或账户填写错误，请检查",
+                            2000
+                        );
+                        return;
+                    } else if (resJson.learnPlan.introduction === "noKetang") {
+                        Toast.showInfoToast("请等待教师打开课堂", 2000);
+                        return;
+                    }
                     StorageUtil.get("historyListRemote").then((res) => {
                         res = res ? res : [];
                         let storageFlag = true;

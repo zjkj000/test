@@ -13,8 +13,8 @@ public class BottomButtonActivity extends MainActivity_stu implements View.OnCli
         boolean isSelected = mQiangda.isSelected();
         if (!isSelected) {
             mQiangda.setVisibility(View.GONE);
-//            HttpActivityStu.handsUp(userId, roomid, "up", mainActivity_stu);
-//            HttpActivity.testQiangDa();//举手上讲台
+            HttpActivityStu.handsUp(userId, roomid, "up", mainActivity_stu);
+            HttpActivityStu.testQiangDa(mainActivity_stu);//举手上讲台
 
         } else {
             mQiangda.setVisibility(View.VISIBLE);
