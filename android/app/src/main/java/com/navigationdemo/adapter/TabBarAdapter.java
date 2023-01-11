@@ -1,5 +1,8 @@
 package com.navigationdemo.adapter;
 
+import android.content.Context;
+import android.content.res.Configuration;
+
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
@@ -22,6 +25,10 @@ public class TabBarAdapter extends FragmentPagerAdapter {
     }
     public void setmFragment(List<Fragment> mFragment) {
         this.mFragment = mFragment;
+    }
+
+    public void setTitle(String[] title) {
+        mTitles = title;
     }
 
 

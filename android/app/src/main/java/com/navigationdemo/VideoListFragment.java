@@ -97,7 +97,7 @@ public class VideoListFragment extends Fragment {
         }
    }
 
-    public void addCameraView(String userId, TRTCCloud mTRTCCloud) {
+    public void addCameraView(String userId, String userName, TRTCCloud mTRTCCloud) {
         FragmentManager fragmentManager = getChildFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
         Integer mUserCount = availableFragment.pop();
@@ -105,7 +105,7 @@ public class VideoListFragment extends Fragment {
         mUserList.add(userId);
         mCameraFragmentMap.put(userId, cameraFragmentNow);
         occupiedFragment.put(userId, mUserCount);
-        cameraFragmentNow.setUserName(userId);
+        cameraFragmentNow.setUserName(userName);
         fragmentTransaction.show(cameraFragmentNow);
         cameraFragmentNow.showVideo(mTRTCCloud, userId);
         fragmentTransaction.commit();
@@ -136,6 +136,18 @@ public class VideoListFragment extends Fragment {
             Toast.makeText(activity, "未找到用户", Toast.LENGTH_SHORT).show();
         }
     }
+    public void setVideo(String userId, boolean available, MainActivity_stu activity, TRTCCloud mTRTCCloud) {
+        CameraFragment cameraFragment = mCameraFragmentMap.get(userId);
+        if(cameraFragment != null) {
+            if (available) {
+                cameraFragment.showVideo(mTRTCCloud, userId);
+            } else {
+                cameraFragment.hideVideo(mTRTCCloud, userId);
+            }
+        } else {
+            Toast.makeText(activity, "未找到用户", Toast.LENGTH_SHORT).show();
+        }
+    }
 
     public void stopVideo(String userId, TRTCCloud mTRTCCloud) {
         CameraFragment cameraFragment = mCameraFragmentMap.get(userId);
@@ -155,4 +167,17 @@ public class VideoListFragment extends Fragment {
         if(reason != 12580)
             Toast.makeText(activity, "用户 " + userId + " 退出房间: " + reason, Toast.LENGTH_SHORT).show();
     }
+
+    public void leaveRoom(String userId, int reason, MainActivity_stu activity, TRTCCloud mTRTCCloud){
+        CameraFragment cameraFragment = mCameraFragmentMap.get(userId);
+        if(cameraFragment != null) {
+            cameraFragment.hideVideo(mTRTCCloud, userId);
+            availableFragment.push(occupiedFragment.get(userId));
+        }
+        this.hideFragment(cameraFragment);
+        mUserList.remove(userId);
+        if(reason != 12580)
+            Toast.makeText(activity, "用户 " + userId + " 退出房间: " + reason, Toast.LENGTH_SHORT).show();
+    }
+
 }

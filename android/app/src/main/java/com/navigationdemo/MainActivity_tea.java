@@ -199,6 +199,8 @@ public class MainActivity_tea extends AppCompatActivity {
     public static String subjectId = "";                                                                   //学科ID     10007
     public static String cameraState = "";
     public static String microphoneState = "";
+    public int stuMemberNum = 0;                                                                    //当前课堂学生数
+    public int keTangMemberNum = 0;                                                                 //当前课堂班级数
 
 
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
@@ -724,9 +726,9 @@ public class MainActivity_tea extends AppCompatActivity {
                     case MyEvent.UPDATE_CLASS_TIME:
                         setClassTime((String) msg.obj);
                         break;
-                    case MyEvent.UPDATE_MEMBER_LIST:
-                        updateMemberList();
-                        break;
+//                    case MyEvent.UPDATE_MEMBER_LIST:
+//                        updateMemberList();
+//                        break;
                     case MyEvent.WHITEBOARD_ADD_RESOURCE:  //处理  白板添加资源 任务
                         Integer type = msg.getData().getInt("type");
                         String url = msg.getData().getString("url");
@@ -989,33 +991,101 @@ public class MainActivity_tea extends AppCompatActivity {
             memberNow.setUserType(0);
             listViewAdapter.notifyDataSetChanged();
         }
-        this.videoListFragment.addCameraView(item.getUserId(), mTRTCCloud);
+        this.videoListFragment.addCameraView(item.getUserId(), item.getName(), mTRTCCloud);
 
 //        Toast.makeText(this, "举手成员 " + position + " 上讲台被点击了", Toast.LENGTH_SHORT).show();
     }
 
 
     // 更新成员列表
-    public void updateMemberList() {
+    public void addMemberToList(String userId) {
         memberDataList.clear();
-        if(AnswerActivityTea.joinList != null) {
-            for (int i = 0; i < AnswerActivityTea.joinList.size(); i++) {
-                memberDataList.addElement(new MemberItem(AnswerActivityTea.joinList.get(i).getName(), AnswerActivityTea.joinList.get(i).getUserId(), 1 ,true, false, true, false, true));
-                Log.e(TAG, "initMemberList: " + AnswerActivityTea.joinList.get(i).toString());
-            }
-        }
-        if(AnswerActivityTea.ketangList != null) {
-            for (int i = 0; i < AnswerActivityTea.ketangList.size(); i++) {
-//                Log.e(TAG, "updateMemberList: get No . " + AnswerActivityTea.ketangList.get(i).toString() + " from size " + AnswerActivityTea.ketangList.size());
-                MemberItem memberItemNew = new MemberItem(AnswerActivityTea.ketangList.get(i).getName(), AnswerActivityTea.ketangList.get(i).getUserId(), 0, true, false, true, false, true);
+        StudentDataBean memberInJoinList = AnswerActivityTea.findMemberInJoinList(userId);
+        ClassDataBean memberInKetangList = AnswerActivityTea.findMemberInKetangList(userId);
+        if(memberInJoinList != null) {
+            MemberItem memberItemNew = new MemberItem(memberInJoinList.getName(), memberInJoinList.getUserId(), 1 ,true, false, true, false, true);
+            memberDataList.addElement(memberItemNew);
+            stuMemberNum += 1;
+        } else {
+            if(memberInKetangList != null) {
+                MemberItem memberItemNew = new MemberItem(memberInKetangList.getName(), memberInKetangList.getUserId(), 1 ,true, false, true, false, true);
                 memberDataList.addElement(memberItemNew);
-                Log.e(TAG, "initMemberList: " + AnswerActivityTea.ketangList.get(i).toString());
-                if(!videoListFragment.findUserInUserList(AnswerActivityTea.ketangList.get(i).getUserId())) {
-                    videoListFragment.addCameraView(AnswerActivityTea.ketangList.get(i).getUserId(), mTRTCCloud);
+                keTangMemberNum += 1;
+                if(!videoListFragment.findUserInUserList(memberInKetangList.getUserId())) {
+                    videoListFragment.addCameraView(memberInKetangList.getUserId(), memberInKetangList.getName() ,mTRTCCloud);
                 }
             }
         }
-        setCountMember(AnswerActivityTea.ketangList.size(), AnswerActivityTea.joinList.size());
+//        if(AnswerActivityTea.joinList != null) {
+//            for (int i = 0; i < AnswerActivityTea.joinList.size(); i++) {
+//                memberDataList.addElement(new MemberItem(AnswerActivityTea.joinList.get(i).getName(), AnswerActivityTea.joinList.get(i).getUserId(), 1 ,true, false, true, false, true));
+//                Log.e(TAG, "initMemberList: " + AnswerActivityTea.joinList.get(i).toString());
+//            }
+//        }
+//        if(AnswerActivityTea.ketangList != null) {
+//            for (int i = 0; i < AnswerActivityTea.ketangList.size(); i++) {
+////                Log.e(TAG, "updateMemberList: get No . " + AnswerActivityTea.ketangList.get(i).toString() + " from size " + AnswerActivityTea.ketangList.size());
+//                MemberItem memberItemNew = new MemberItem(AnswerActivityTea.ketangList.get(i).getName(), AnswerActivityTea.ketangList.get(i).getUserId(), 0, true, false, true, false, true);
+//                memberDataList.addElement(memberItemNew);
+//                Log.e(TAG, "initMemberList: " + AnswerActivityTea.ketangList.get(i).toString());
+//                if(!videoListFragment.findUserInUserList(AnswerActivityTea.ketangList.get(i).getUserId())) {
+//                    videoListFragment.addCameraView(AnswerActivityTea.ketangList.get(i).getUserId(), mTRTCCloud);
+//                }
+//            }
+//        }
+        setCountMember(keTangMemberNum, stuMemberNum);
+        listViewAdapter.notifyDataSetChanged();
+    }
+    public void subMemberToList(String userId) {
+        memberDataList.clear();
+        StudentDataBean memberInJoinList = AnswerActivityTea.findMemberInJoinList(userId);
+        ClassDataBean memberInKetangList = AnswerActivityTea.findMemberInKetangList(userId);
+        if(memberInJoinList != null) {
+            boolean hasSub = false;
+            for (int i = 0; i <= memberDataList.size(); i++) {
+                if(memberDataList.get(i).getUserId().equals(userId)) {
+                    memberDataList.remove(i);
+                    i--;
+                    hasSub = true;
+                }
+            }
+            if(videoListFragment.findUserInUserList(memberInKetangList.getUserId())) {
+                videoListFragment.leaveRoom(userId, 12580, this, mTRTCCloud);
+            }
+            if(hasSub)
+                stuMemberNum -=1;
+        } else {
+            if(memberInKetangList != null) {
+                boolean hasSub = false;
+                for (int i = 0; i <= memberDataList.size(); i++) {
+                    if(memberDataList.get(i).getUserId().equals(userId)) {
+                        memberDataList.remove(i);
+                        i--;
+                        hasSub = true;
+                    }
+                }
+                if(hasSub)
+                    keTangMemberNum -=1;
+            }
+        }
+//        if(AnswerActivityTea.joinList != null) {
+//            for (int i = 0; i < AnswerActivityTea.joinList.size(); i++) {
+//                memberDataList.addElement(new MemberItem(AnswerActivityTea.joinList.get(i).getName(), AnswerActivityTea.joinList.get(i).getUserId(), 1 ,true, false, true, false, true));
+//                Log.e(TAG, "initMemberList: " + AnswerActivityTea.joinList.get(i).toString());
+//            }
+//        }
+//        if(AnswerActivityTea.ketangList != null) {
+//            for (int i = 0; i < AnswerActivityTea.ketangList.size(); i++) {
+////                Log.e(TAG, "updateMemberList: get No . " + AnswerActivityTea.ketangList.get(i).toString() + " from size " + AnswerActivityTea.ketangList.size());
+//                MemberItem memberItemNew = new MemberItem(AnswerActivityTea.ketangList.get(i).getName(), AnswerActivityTea.ketangList.get(i).getUserId(), 0, true, false, true, false, true);
+//                memberDataList.addElement(memberItemNew);
+//                Log.e(TAG, "initMemberList: " + AnswerActivityTea.ketangList.get(i).toString());
+//                if(!videoListFragment.findUserInUserList(AnswerActivityTea.ketangList.get(i).getUserId())) {
+//                    videoListFragment.addCameraView(AnswerActivityTea.ketangList.get(i).getUserId(), mTRTCCloud);
+//                }
+//            }
+//        }
+        setCountMember(keTangMemberNum, stuMemberNum);
         listViewAdapter.notifyDataSetChanged();
     }
 
@@ -1023,13 +1093,12 @@ public class MainActivity_tea extends AppCompatActivity {
     public void initMemberList() {
         Log.e(TAG, "initMemberList: hahahahhahaah");
         memberDataList = new Vector<>();
-        HttpActivityTea.getMemberList(this);
 
         setCountMember(AnswerActivityTea.ketangList.size(), AnswerActivityTea.joinList.size());
         MainActivity_tea that = this;
         listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
         memberList.setAdapter(listViewAdapter);
-        HttpActivityTea.getMemberList(this);
+        HttpActivityTea.getAllMember(this);
 
         listViewAdapter.setOnItemButtonListener(new MemberListViewAdapter.onItemButtonListener() {
             @Override
@@ -1069,7 +1138,7 @@ public class MainActivity_tea extends AppCompatActivity {
                         HttpActivityTea.speakerController(item.getUserId(), item.getName(), "down", i, that);
                     } else {
                         that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
-                        that.videoListFragment.addCameraView(item.getUserId(), getmTRTCCloud());
+                        that.videoListFragment.addCameraView(item.getUserId(), item.getName() ,getmTRTCCloud());
                         item.setUserType(0);
                         HttpActivityTea.speakerController(item.getUserId(), item.getName(), "up", i, that);
                     }
@@ -1126,6 +1195,10 @@ public class MainActivity_tea extends AppCompatActivity {
         //使用适配器将ViewPager与Fragment绑定在一起
         ViewPager viewPager = findViewById(R.id.tar_bar_view_page);
         TabBarAdapter tabBarAdapter = new TabBarAdapter(getSupportFragmentManager());
+        if(!isTabletDevice(this)) {
+            String[] mTitlesMobile = new String[]{"视频", "聊天", "答题"};
+            tabBarAdapter.setTitle(mTitlesMobile);
+        }
         tabBarAdapter.setmFragment(mFragmenglist);
         viewPager.setAdapter(tabBarAdapter);
 
@@ -1239,12 +1312,13 @@ public class MainActivity_tea extends AppCompatActivity {
         @Override
         public void onRemoteUserEnterRoom(String userId){
             MainActivity_tea activity = mContext.get();
-            HttpActivityTea.getMemberList(activity);
+//            HttpActivityTea.getMemberList(activity);
+            activity.addMemberToList(userId);
             Log.e(TAG, "onRemoteUserEnterRoom: userId" + userId );
             System.out.println("onRemoteUserEnterRoom userId " + userId );
 //            Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
             if(AnswerActivityTea.findMemberInKetangList(userId) != null)
-                activity.videoListFragment.addCameraView(userId, activity.mTRTCCloud);
+                activity.videoListFragment.addCameraView(userId, AnswerActivityTea.findMemberInKetangList(userId).getName(), activity.mTRTCCloud);
         }
 
         @Override
@@ -1252,7 +1326,8 @@ public class MainActivity_tea extends AppCompatActivity {
             MainActivity_tea activity = mContext.get();
             activity.videoListFragment.leaveRoom(userId, reason, activity,
                     activity.mTRTCCloud);
-            HttpActivityTea.getMemberList(activity);
+            activity.subMemberToList(userId);
+//            HttpActivityTea.getMemberList(activity);
 //              取消所有白板授权
             for (int i =0; i < activity.memberDataList.size(); i++) {
                 MemberItem item = listViewAdapter.getItem(i);

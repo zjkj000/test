@@ -124,14 +124,12 @@ public class HttpActivityTea extends AnswerActivityTea {
 
 
 
-    public static void getMemberList(MainActivity_tea mainActivityTea) {
+    public static void getAllMember(MainActivity_tea mainActivityTea) {
         new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
                     String roomId = MainActivity_tea.roomid;
-//                    URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_TestGetStuJoinOrLeaveRoomList.do?"
-//                            + "roomId=" + roomId);
                     URL url = new URL(baseUrl + "/ShopGoods/ajax/livePlay_getRoomMemberList.do?"
                               + "roomId=" + roomId);
 
@@ -177,9 +175,9 @@ public class HttpActivityTea extends AnswerActivityTea {
                         }
                         joinList = tempJoinList;
                         ketangList = tempKetangList;
-                        Message msg = new Message();
-                        msg.what = MyEvent.UPDATE_MEMBER_LIST;
-                        mainActivityTea.handler.sendMessage(msg);
+//                        Message msg = new Message();
+//                        msg.what = MyEvent.UPDATE_MEMBER_LIST;
+//                        mainActivityTea.handler.sendMessage(msg);
                         Log.e(TAG, "getMemberList: " + jsonObject);
                     } catch (Exception e) {
                         e.printStackTrace();

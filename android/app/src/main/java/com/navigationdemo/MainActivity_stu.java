@@ -381,6 +381,26 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     // UI消息监听器
     public  static Handler UIhandler;
     public  static Handler handler;
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 321) {
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                //如果用户选择禁止，此时程序没有相应权限，执行相应操作
+                if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    //如果没有获取权限，那么可以提示用户去设置界面--->应用权限开启权限
+                    Toast toast = Toast.makeText(this, "设置界面获取权限", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                } else {
+                    //如果用户同意，此时程序获取到需要的权限，执行希望的操作
+                    enterLiveRoom();
+                }
+            }
+        }
+    }
+
     @SuppressLint("HandlerLeak")
 
     @Override
@@ -1005,7 +1025,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             memberNow.setUserType(0);
             listViewAdapter.notifyDataSetChanged();
         }
-        this.videoListFragment.addCameraView(item.getUserId(), mTRTCCloud);
+        this.videoListFragment.addCameraView(item.getUserId(), item.getName(), mTRTCCloud);
 
 //        Toast.makeText(this, "举手成员 " + position + " 上讲台被点击了", Toast.LENGTH_SHORT).show();
     }
@@ -1027,7 +1047,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 memberDataList.addElement(memberItemNew);
                 Log.e(TAG, "initMemberList: " + AnswerActivityTea.ketangList.get(i).toString());
                 if(!videoListFragment.findUserInUserList(AnswerActivityTea.ketangList.get(i).getUserId())) {
-                    videoListFragment.addCameraView(AnswerActivityTea.ketangList.get(i).getUserId(), mTRTCCloud);
+                    videoListFragment.addCameraView(AnswerActivityTea.ketangList.get(i).getUserId(),AnswerActivityTea.ketangList.get(i).getName(), mTRTCCloud);
                 }
             }
         }
@@ -1051,6 +1071,10 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         //使用适配器将ViewPager与Fragment绑定在一起
         ViewPager viewPager = findViewById(R.id.tar_bar_view_page);
         TabBarAdapter_stu tabBarAdapter_stu = new TabBarAdapter_stu(getSupportFragmentManager());
+        if(!isTabletDevice(this)) {
+            String[] mTitlesMobile = new String[]{"视频", "聊天"};
+            tabBarAdapter_stu.setTitle(mTitlesMobile);
+        }
         tabBarAdapter_stu.setmFragment(mFragmenglist);
         viewPager.setAdapter(tabBarAdapter_stu);
 
@@ -1173,9 +1197,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, mTXCVVTeacherPreviewView);
                     teacherTRTCBackground.setVisibility(View.INVISIBLE);
                 } else {
-                    if(AnswerActivityTea.findMemberInKetangList(userId) != null) {
-                        mUserList.add(userId);
-                    }
+                    mUserList.add(userId);
                 }
             }
             else {
@@ -1192,8 +1214,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
 //            int userPosition = listViewAdapter.getItemPositionById(userId);
 //            activity.switchMemberListVideoIcon(userPosition);
-//            if(AnswerActivityTea.findMemberInKetangList((userId)) != null)
-//                activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
+            activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
 
         }
 
@@ -1209,7 +1230,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 activity.teacherTRTCBackground.setVisibility(View.INVISIBLE);
             } else {
                 if(AnswerActivityTea.findMemberInKetangList(userId) != null)
-                    activity.videoListFragment.addCameraView(userId, activity.mTRTCCloud);
+                    activity.videoListFragment.addCameraView(userId, AnswerActivityTea.findMemberInKetangList(userId).getName(), activity.mTRTCCloud);
             }
         }
 
@@ -1224,8 +1245,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 teacher_enable=false;
                 return;
             }
-//            activity.videoListFragment.leaveRoom(userId, reason, activity,
-//                    activity.mTRTCCloud);
+            activity.videoListFragment.leaveRoom(userId, reason, activity,
+                    activity.mTRTCCloud);
 //            HttpActivityTea.getMemberList(activity);
 //            Toast.makeText(activity, "onRemoteUserLeaveRoom userId " + userId , Toast.LENGTH_SHORT).show();
         }
