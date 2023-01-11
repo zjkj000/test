@@ -25,11 +25,6 @@
         app:layout_constraintWidth_percent="1.0">
         <!--        app:layout_constraintHorizontal_bias="0.5"-->
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
     </com.tencent.rtmp.ui.TXCloudVideoView>
 
     <RelativeLayout
@@ -104,6 +99,7 @@
             android:textColor="@color/white"
             android:textSize="7sp"
             tools:ignore="SmallSp" />
+
     </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -121,7 +117,14 @@
             android:id="@+id/teachingcontent"
             android:layout_width="match_parent"
             android:background="@color/teacher_background"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent" >
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </FrameLayout>
 
         <!-- 左侧画笔功能-->
         <androidx.constraintlayout.widget.ConstraintLayout
