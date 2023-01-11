@@ -77,7 +77,7 @@
     <color name="text_orange">#FF6100</color>
 
     <!--弹框内的字体颜色-->
-    <color name="text_gray">#828798</color>
+    <color name="text_gray">#292F39</color>
     <color name="text_black">#FF000000</color>
 
     <color name="text_white">#FFFFFF</color>
@@ -85,7 +85,7 @@
     <color name="text_topbar">#694E42</color>
     <color name="div_white">#E5E5E5</color>
 
-    <color name="div_gray">#636b79</color>
+    <color name="div_gray">#5b5b5b</color>
     <color name="div_shallowgray">#828798</color>
 
     <color name="div_shallowgray1">#f6f5ec</color>

@@ -82,6 +82,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     final Context context = getActivity();
     private View FcontentView; //Fragment页面对应的view
 
+    private boolean ifShare = false;  //是否共享过屏幕
+
     private double screenWidth , screenHeight;
 
     private Chronometer jishiqi;
@@ -1137,8 +1139,15 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share).getConstantState())){
+                    System.out.println("点击了屏幕共享！！！！！！");
+                    Log.e("Tag" , "点击了屏幕共享！！！！！！");
                     //开始共享屏幕
-                    btEnd.performClick();
+                    if(!ifShare){
+                        Toast.makeText(getActivity(),"111点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
+                        btEnd.performClick(); //分享屏幕时主动触发结束答题按钮
+                    }else{
+                        Toast.makeText(getActivity(),"222点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
+                    }
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -1148,6 +1157,10 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         }
                     });
                 }else{
+                    ifShare = true;
+                    System.out.println("点击了屏幕结束结束共享！！！！！！");
+                    Log.e("Tag" , "点击了屏幕结束结束共享！！！！！！");
+                    Toast.makeText(getActivity(),"点击了屏幕结束结束共享！！！！！！",Toast.LENGTH_SHORT).show();
                     //结束共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share)));
                     getActivity().runOnUiThread(new Runnable() {
@@ -2345,8 +2358,16 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 if((img_share.getDrawable().getCurrent().getConstantState()).equals(ContextCompat.getDrawable(getActivity(), R.mipmap.share).getConstantState())){
+                    System.out.println("点击了屏幕共享！！！！！！");
+                    Log.e("Tag" , "点击了屏幕共享！！！！！！");
                     //开始共享屏幕
-                    btEnd.performClick(); //分享屏幕时主动触发结束答题按钮
+                    if(!ifShare){
+                        Toast.makeText(getActivity(),"111点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
+                        btEnd.performClick(); //分享屏幕时主动触发结束答题按钮
+                    }else{
+                        Toast.makeText(getActivity(),"222点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
+                    }
+
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
@@ -2356,6 +2377,10 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         }
                     });
                 }else{
+                    ifShare = true;
+                    System.out.println("点击了屏幕结束结束共享！！！！！！");
+                    Log.e("Tag" , "点击了屏幕结束结束共享！！！！！！");
+                    Toast.makeText(getActivity(),"点击了屏幕结束结束共享！！！！！！",Toast.LENGTH_SHORT).show();
                     //结束共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share)));
                     getActivity().runOnUiThread(new Runnable() {
@@ -3055,9 +3080,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 float scale = getActivity().getResources().getDisplayMetrics().density;
                 int pw_width = 0;
                 if(isTabletDevice()){ //平板
-                    pw_width = (int)(screenWidth * 0.25);
+                    pw_width = (int)(screenWidth * 0.25) + 150;
                 }else{ //手机
-                    pw_width = (int) (160 * scale + 0.5f);
+                    pw_width = (int) (160 * scale + 0.5f) + 20;
                 }
                 int pw_height = (int) (32 * scale + 0.5f) + (int)(screenHeight * 0.07) + 20;
                 pw_selectStu.showAtLocation(view_selectStu , Gravity.RIGHT | Gravity.BOTTOM , pw_width , pw_height);
@@ -3832,6 +3857,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
     //点击开始按钮，生成uuid（answerQuestionId）、全局变量重新初始化
     private void initData(){
+        ifShare = false;
         chooseNum = Integer.valueOf((String) tx_choosenum.getText());
         suiji_qiangda_flag = 0;
         if(mTimer != null){
@@ -4154,6 +4180,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 if(txType_tiwen.isSelected()){
+                    Log.e("Tag" , btEnd.getText() + "");
+                    Log.e("Tag" , "点击了屏幕共享！！！！！！");
+                    System.out.println("点击了屏幕共享！！！！！！" + btEnd.getText());
                     if(btEnd.getText().equals("结束作答")){
                         //调开始答题接口，“提问结束答题”
                         beginOrEndQueAction("stopAnswer");
@@ -4165,6 +4194,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                             mTimer_stuNum = null;
                         }
                     }else{
+                        ifShare = false;
                         //调开始答题接口，“提问开始答题”
                         beginOrEndQueAction("startAnswer");
                         btEnd.setText("结束作答");
