@@ -148,11 +148,12 @@ android {
     aaptOptions.cruncherEnabled = false
     aaptOptions.useNewCruncher = false
     defaultConfig {
+        multiDexEnabled true
         applicationId "com.navigationdemo"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 3
-        versionName "3.3.0"
+        versionName "3.4.0"
         // react-native-camera依赖
         missingDimensionStrategy 'react-native-camera', 'general'
         multiDexEnabled true

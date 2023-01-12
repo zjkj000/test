@@ -169,7 +169,7 @@ export default function LiveingLessionInfo_teacher(props) {
                                 </View>
                                 
                                 
-                                <View style={{flexDirection:'row',width:'100%',alignItems:'center',borderTopWidth:0.5,marginTop:50}}>
+                                <View style={{flexDirection:'row',width:'100%',alignItems:'center',borderColor:'#aaaaaa',borderTopWidth:0.5,marginTop:50}}>
                                     
                                     <TouchableOpacity style={{width:'50%',borderRightWidth:0.5,borderColor:'#aaaaaa',paddingTop:10,paddingBottom:10}} onPress={()=>{setchooseClassmodalVisible(false)}}>
                                         <Text style={{color:'#59B9E0',fontSize:18,marginLeft:'45%'}}>取消</Text></TouchableOpacity>
@@ -271,7 +271,7 @@ export default function LiveingLessionInfo_teacher(props) {
                   </View>
      <View style={{padding:10,paddingBottom:0}}>
             {/* 筛选框    搜索框 */}
-            <View style={{flexDirection:'row',margin:5,marginLeft:0}}>
+            <View style={{flexDirection:'row',margin:5,marginLeft:0,marginRight:0}}>
                 <View style={{width:80,height:40,padding:10,paddingRight:0,backgroundColor:'#fff',marginTop:2}}>
                     <OverflowMenu
                                 style={{borderColor:'#000',borderWidth:0.8,width:80}}
@@ -499,12 +499,12 @@ class LiveingLessonContent_teacher extends Component {
         </View>
 
          {/* 第二列 开始时间  进入课堂 信息 */}
-         <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+         <View style={{flexDirection:'column',alignItems:'center',justifyContent:'center',alignContent:'center'}}>
             {
             // 直播中 状态
-            this.state.status=='1'?(<>
+            this.state.status=='1'?(<View>
                 {this.state.showStrTop==""?(
-                    <TouchableOpacity style={{backgroundColor:'#66B878',width:75,height:33,justifyContent:'center',alignItems:'center',margin:3}}
+                    <TouchableOpacity style={{backgroundColor:'#66B878',width:75,height:33,justifyContent:'center',alignItems:'center',margin:3,marginLeft:10}}
                                         onPress={()=>{
                                             this.props.setchooseClassmodalVisible(true)
                                             this.props.setchooseClassName(this.state.ketangName)
@@ -518,11 +518,10 @@ class LiveingLessonContent_teacher extends Component {
                         <Text style={{fontSize:12,color:'white'}}>进入课堂</Text>
                     </TouchableOpacity>
                     ):<Text style={{color:'#7CA78B',fontSize:30}}>{this.state.showStrTop}</Text>}
-                <Text>{this.state.showStrBottom}</Text>
-            </>):
+                <Text style={{color:'#f6003c',fontSize:13}}>{this.state.showStrBottom}</Text>
+            </View>):
             // 未开始 状态
             this.state.status=='2'?(<>
-               
                 <Text style={{fontSize:30,color:'#66B878'}}>{this.state.showStrTop}</Text>
                 <Text style={{fontSize:13}}>{this.state.showStrBottom}</Text>
                 </>):

@@ -1,4 +1,4 @@
-import { ScrollView, Text, TextInput, View,Image, Alert,Keyboard,TouchableOpacity  } from 'react-native'
+import { ScrollView, Text, TextInput, View,Image, Alert,Keyboard,TouchableOpacity,StyleSheet  } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { CheckBox,Layout,Radio,Button, OverflowMenu ,MenuItem } from '@ui-kitten/components'
 import http from '../../utils/http/request'
@@ -251,6 +251,8 @@ class LiveingLession_addContent extends Component {
         for (let item_num = 0; item_num < 10; item_num++) {
             MenuItem_number_hour.push(
                 <MenuItem
+                style={{height:39,fontSize:8}}
+                // style={{width:(screenWidth-120)*0.5,height:39}}
                     title={"0"+item_num+"小时 "}
                     key={item_num}
                     onPress={() => {
@@ -263,6 +265,7 @@ class LiveingLession_addContent extends Component {
             <MenuItem
                     title={"10小时 "}
                     key={10}
+                    style={{height:40}}
                     onPress={() => {
                         this.setState({ moduleVisible_hour: false,class_hour:'10'});
                     }}
@@ -272,6 +275,7 @@ class LiveingLession_addContent extends Component {
             <MenuItem
                     title={"11小时 "}
                     key={11}
+                    style={{height:40}}
                     onPress={() => {
                         this.setState({ moduleVisible_hour: false,class_hour:'11'});
                     }}
@@ -315,7 +319,7 @@ class LiveingLession_addContent extends Component {
               <Text style={{color:'#59B9E0',fontSize:20}}>创建课堂</Text>
         </View>
 
-        <ScrollView style={{paddingBottom:20}}>
+        <ScrollView style={{paddingBottom:20,height:'100%'}}>
              <View style={{flexDirection:'row',borderBottomWidth:0.5,padding:10,borderColor:"#CBCBCB",width:'100%',alignItems:'center'}}>
                 <Text style={{width:80}}>课堂名称:</Text>
                 <TextInput
@@ -365,7 +369,7 @@ class LiveingLession_addContent extends Component {
                 <Layout style={{flexDirection:'row',paddingLeft:20}}>
                 <View style={{width:(screenWidth-110)*0.4,backgroundColor:'#fff',borderWidth:0.5,height:30,justifyContent:'center'}}>
                         <OverflowMenu
-                                style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.5}}
+                                style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.4}}
                                 anchor={this.renderAvatar_hour}
                                 visible={this.state.moduleVisible_hour}
                                 onBackdropPress={() => {this.setState({moduleVisible_hour:false})}}
@@ -375,7 +379,7 @@ class LiveingLession_addContent extends Component {
                     </View>
                     <View style={{width:(screenWidth-110)*0.4,backgroundColor:'#fff',borderWidth:0.5,height:30,justifyContent:'center',marginLeft:10}}>
                         <OverflowMenu
-                                    style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.5}}
+                                    style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.4}}
                                     anchor={this.renderAvatar_minute}
                                     visible={this.state.moduleVisible_minute}
                                     onBackdropPress={() => {this.setState({moduleVisible_minute:false})}}
@@ -465,3 +469,4 @@ class LiveingLession_addContent extends Component {
   }
 }
 
+const styles = StyleSheet.create({})

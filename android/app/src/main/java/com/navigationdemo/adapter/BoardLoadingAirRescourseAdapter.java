@@ -99,15 +99,15 @@ public class BoardLoadingAirRescourseAdapter extends BaseAdapter {
 //        根据类型判断
         if(data.get(position).getStyle().equals("ppt")||data.get(position).getStyle().equals("pptx")){
             viewHolder.img.setImageResource(R.mipmap.type_ppt);
-        }else if(data.get(position).getStyle().equals("doc")||data.get(position).getStyle().equals("docx")){
+        }else if(data.get(position).getStyle().equals("doc")||data.get(position).getStyle().equals("docx")||data.get(position).getStyle().equals("word")){
             viewHolder.img.setImageResource(R.mipmap.type_word);
         }else if(data.get(position).getStyle().equals("pdf")){
             viewHolder.img.setImageResource(R.mipmap.type_pdf);
-        }else if(data.get(position).getStyle().equals("mp4")){
+        }else if(data.get(position).getStyle().equals("mp4")||data.get(position).getStyle().equals("video")||data.get(position).getStyle().equals("viedo")){
             viewHolder.img.setImageResource(R.mipmap.type_mp4);
-        }else if(data.get(position).getStyle().equals("mp3")){
+        }else if(data.get(position).getStyle().equals("mp3")||data.get(position).getStyle().equals("sound")||data.get(position).getStyle().equals("music")){
             viewHolder.img.setImageResource(R.mipmap.type_mp3);
-        }else if(data.get(position).getStyle().equals("img")||data.get(position).getStyle().equals("jpg")||data.get(position).getStyle().equals("png")){
+        }else if(data.get(position).getStyle().equals("img")||data.get(position).getStyle().equals("jpg")||data.get(position).getStyle().equals("JPEG")||data.get(position).getStyle().equals("image")){
             viewHolder.img.setImageResource(R.mipmap.type_img);
         }else {
             viewHolder.img.setImageResource(R.mipmap.type_other);

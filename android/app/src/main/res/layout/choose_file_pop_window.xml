@@ -28,6 +28,7 @@
             android:visibility="gone"
             android:layout_marginRight="30dp"
             android:background="@mipmap/littlenativefile"
+            android:layout_toEndOf="@+id/member_list_pop_title"
             android:layout_toStartOf="@+id/little_chooseAirFileBtn"
             android:layout_height="wrap_content"/>
 
