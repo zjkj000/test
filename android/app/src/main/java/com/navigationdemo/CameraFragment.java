@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,6 +30,7 @@ public class CameraFragment  extends Fragment {
     private TXCloudVideoView videoView;
     private RelativeLayout cameraBackgroundView;
     private TextView userNameView;
+    private ImageView speakerIcon;
 
 //    private TRTCCloud mTRTCCloud;
 //
@@ -61,6 +63,7 @@ public class CameraFragment  extends Fragment {
         videoView = view.findViewById(R.id.camera_view);
         cameraBackgroundView = view.findViewById(R.id.teacher_background);
         userNameView = view.findViewById(R.id.teacher_name);
+        speakerIcon = view.findViewById(R.id.speaker_icon);
     }
 
     public void initAudioIcon() {
@@ -87,6 +90,13 @@ public class CameraFragment  extends Fragment {
         @SuppressLint("UseCompatLoadingForDrawables") Drawable user_name_mic_icon = getResources().getDrawable(R.drawable.mic_off);
         user_name_mic_icon.setBounds(0,0,20,20);
         getUserNameView().setCompoundDrawables(user_name_mic_icon, null, null, null);
+    }
+
+    public void showSpeakerIcon() {
+        speakerIcon.setVisibility(View.VISIBLE);
+    }
+    public void hideSpeakerIcon() {
+        speakerIcon.setVisibility(View.INVISIBLE);
     }
 
     public void hideVideo(TRTCCloud mTRTCCloud, String userId) {

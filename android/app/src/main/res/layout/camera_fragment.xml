@@ -12,51 +12,67 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         >
-    <RelativeLayout
-        android:id="@+id/camera_block"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-        <com.tencent.rtmp.ui.TXCloudVideoView
-            android:id="@+id/camera_view"
+        <RelativeLayout
+            android:id="@+id/camera_block"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:padding="2dp"
-            app:layout_constraintDimensionRatio="w,9:16"
-            />
+            android:layout_height="match_parent">
+            <com.tencent.rtmp.ui.TXCloudVideoView
+                android:id="@+id/camera_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="2dp"
+                app:layout_constraintDimensionRatio="w,9:16"
+                />
+
+            <RelativeLayout
+                android:id="@+id/teacher_background"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/temp_camera"
+                android:padding="2dp"
+                android:visibility="visible">
+
+                <ImageView
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    android:maxWidth="20dp"
+                    android:maxHeight="20dp"
+                    android:paddingBottom="10dp"
+                    android:src="@drawable/zbcameranoopen" />
+            </RelativeLayout>
+        </RelativeLayout>
 
         <RelativeLayout
-            android:id="@+id/teacher_background"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/temp_camera"
-            android:padding="2dp"
-            android:visibility="visible">
+            android:layout_height="wrap_content"
+            android:background="@color/teacher_background"
+            android:layout_alignBottom="@+id/camera_block"
+            >
+            <TextView
+                android:id="@+id/teacher_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:alpha="0.7"
+                android:layout_centerVertical="true"
+                android:drawablePadding="10dp"
+                android:paddingHorizontal="10dp"
+                android:paddingVertical="3dp"
+                android:text="XX老师"
+                android:textColor="@color/white"
+                android:textSize="7sp" >
 
+            </TextView>
             <ImageView
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_centerInParent="true"
-                android:maxWidth="20dp"
-                android:maxHeight="20dp"
-                android:paddingBottom="10dp"
-                android:src="@drawable/zbcameranoopen" />
-        </RelativeLayout>
-    </RelativeLayout>
+                android:id="@+id/speaker_icon"
+                android:visibility="invisible"
+                android:layout_width="15dp"
+                android:layout_height="15dp"
+                android:layout_alignParentEnd="true"
+                android:src="@drawable/speaker_controller_on" />
 
-    <TextView
-        android:id="@+id/teacher_name"
-        android:layout_alignBottom="@+id/camera_block"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@color/teacher_background"
-        android:drawablePadding="10dp"
-        android:paddingHorizontal="10dp"
-        android:paddingVertical="3dp"
-        android:text="XX老师"
-        android:alpha="0.7"
-        android:textColor="@color/white"
-        android:textSize="7sp"
-        />
+        </RelativeLayout>
+
     </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

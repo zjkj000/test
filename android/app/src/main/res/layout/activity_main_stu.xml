@@ -761,21 +761,33 @@
                             android:src="@drawable/zbcameranoopen" />
                     </RelativeLayout>
                 </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/student_name"
-                    android:layout_alignBottom="@+id/student_camera_block"
-                    android:alpha="0.7"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/teacher_background"
-                    android:drawablePadding="2dp"
-                    android:paddingHorizontal="2dp"
-                    android:paddingVertical="2dp"
-                    android:text="XX老师"
-                    android:textColor="@color/white"
-                    android:textSize="7sp"
-                    />
+                    android:layout_alignBottom="@+id/student_camera_block"
+
+                    >
+                    <TextView
+                        android:id="@+id/student_name"
+                        android:alpha="0.7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/teacher_background"
+                        android:drawablePadding="2dp"
+                        android:paddingHorizontal="2dp"
+                        android:paddingVertical="2dp"
+                        android:text="XX老师"
+                        android:textColor="@color/white"
+                        android:textSize="7sp"
+                        />
+                    <ImageView
+                        android:id="@+id/speaker_icon"
+                        android:visibility="invisible"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/speaker_controller_on" />
+                </RelativeLayout>
             </RelativeLayout>
 
 
@@ -899,11 +911,12 @@
         />
     <TextView
         android:id="@+id/hand_time"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:text="20s"
+        android:textSize="8sp"
+        android:text="20s后自动放下手"
         android:gravity="center"
-        android:textColor="@color/text_gray"
+        android:textColor="@color/text_white"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintStart_toEndOf="@+id/exit_btn"

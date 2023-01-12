@@ -111,6 +111,17 @@ public class VideoListFragment extends Fragment {
         fragmentTransaction.commit();
     }
 
+    public void changeSpeaker(String userId, String action) {
+        CameraFragment cameraFragment = mCameraFragmentMap.get(userId);
+        if(cameraFragment != null) {
+            if(action.equals("up")) {
+                cameraFragment.showSpeakerIcon();
+            } else if (action.equals("down")) {
+                cameraFragment.hideSpeakerIcon();
+            }
+        }
+    }
+
     public void setAudio(String userId, boolean available, MainActivity_tea activity, TRTCCloud mTRTCCloud) {
         CameraFragment cameraFragment = mCameraFragmentMap.get(userId);
         if(cameraFragment != null) {

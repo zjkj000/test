@@ -201,7 +201,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static ImageView contentBtn;  //文件夹按钮  现在是授课内容
     public static ImageView memberBtn;
     public static ImageView handBtn;
-    public static boolean handStatus = false;   //当前举手状态 false表示未举手 true表示已举手
     public static ImageView cameraBtn;   //关闭摄像头按钮
     public static ImageView audioBtn;
     public static boolean mIsFrontCamera = true; // 摄像头前后标志位
@@ -525,18 +524,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 if(handsState.equals("down")) {
                     HttpActivityStu.handsUp(userId, roomid, "up", that);
                     handsState = "up";
-                    handBtn.setImageResource(R.drawable.bottom_stuhand_down);
-                    if(!handStatus) {
-                        startHandsTimer();
-                    } else {
-                        stopHandsTimer();
-                    }
-                    return;
-                }
-                if (handsState.equals("up")) {
+                    startHandsTimer();
+                } else if (handsState.equals("up")) {
+                    Log.e(TAG, "----------xgy----------onHandsBtnClick: 手放下被点击了");
                     HttpActivityStu.handsUp(userId, roomid, "down", that);
                     handsState = "down";
-                    handBtn.setImageResource(R.drawable.bottom_stuhand_up);
                     stopHandsTimer();
                 }
             }
@@ -599,7 +591,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 int position = -1;
                 switch (msg.what) {
                     case MyEvent.UPDATE_HANDS_UP_TIME:
-                        setHandsUpData(String.valueOf(handsUpTime) + "秒后手放下");
+                        setHandsUpData(String.valueOf(handsUpTime) + "秒后手自动放下");
                         break;
                     case MyEvent.UPDATE_AUDIO_ICON:
                         position = msg.getData().getInt("position");
@@ -635,6 +627,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         mBoard.addTranscodeFile(config,true);
                         break;
                     case MyEvent.STOP_HANDS_UP_TIME:    // 结束计时器
+                        HttpActivityStu.handsUp(userId, roomid, "down", that);
                         stopHandsTimer();
                         break;
                     default:
@@ -1026,6 +1019,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             listViewAdapter.notifyDataSetChanged();
         }
         this.videoListFragment.addCameraView(item.getUserId(), item.getName(), mTRTCCloud);
+        this.videoListFragment.changeSpeaker(item.getUserId(), "up");
 
 //        Toast.makeText(this, "举手成员 " + position + " 上讲台被点击了", Toast.LENGTH_SHORT).show();
     }
@@ -1425,14 +1419,13 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         MainActivity_stu that = this;
         // 更改按钮图标
         handBtn.setImageResource(R.drawable.bottom_stuhand_down);
-        // 改变举手标记
-        handStatus = !handStatus;
         handsUpTimeView.setVisibility(View.VISIBLE);
         handsTimer = new Timer();
         handsTimer.schedule(new TimerTask() {
             @Override
             public void run() {
                 if(handsUpTime == 0) {
+                    Log.e(TAG, "------xgy-----hansDown: 手放下被触发");
                     Message updateHandsUpTimeMessage = Message.obtain();
                     updateHandsUpTimeMessage.what = MyEvent.STOP_HANDS_UP_TIME;
                     handler.sendMessage(updateHandsUpTimeMessage);
@@ -1452,13 +1445,10 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             handsUpTime = 20;
             // 更改按钮图标
             handBtn.setImageResource(R.drawable.bottom_stuhand_up);
-            // 改变举手标记
-            handStatus = !handStatus;
             handsUpTimeView.setVisibility(View.INVISIBLE);
             handsTimer.cancel();
             handsTimer.purge();
             handsTimer = null;
-            HttpActivityStu.handsUp(userId, roomid, "down", this);
         }
     }
 
@@ -4044,7 +4034,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //        Toast.makeText(this, "更新互动答题UI", Toast.LENGTH_SHORT).show();
         if(AnswerActivityStu.allHandAction!=null) {
             if(AnswerActivityStu.allHandAction.equals("handAllYes")) {
-                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+                if(handsState.equals("up")) {
+                    MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_down);
+                } else if (handsState.equals("down")) {
+                    MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+                }
             } else if(AnswerActivityStu.allHandAction.equals("handAllNo")) {
                 MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_no);
             }

@@ -197,6 +197,7 @@ export default function LiveingLessionInfo_teacher(props) {
                         style={{
                             height: "100%",
                             alignItems: "center",
+                            justifyContent: "flex-start",
                         }}
                     >
                         <View
@@ -206,13 +207,23 @@ export default function LiveingLessionInfo_teacher(props) {
                         >
                             <View
                                 style={{
+                                    width: "80%",
+                                    height: "65%",
                                     justifyContent: "center",
                                     backgroundColor: "#FFFFFF",
-                                    padding: 10,
+                                    alignItems: "center",
+                                    flexDirection: "column",
+                                    justifyContent: "center",
                                     alignItems: "center",
                                 }}
                             >
-                                <View style={{ margin: 20 }}>
+                                <View
+                                    style={{
+                                        width: "100%",
+                                        flex: 1,
+                                        margin: 20,
+                                    }}
+                                >
                                     <Text
                                         style={{ fontSize: 20, color: "red" }}
                                     >
@@ -222,6 +233,8 @@ export default function LiveingLessionInfo_teacher(props) {
                                 {/* 选择是否开启  摄像头   麦克风 */}
                                 <Layout
                                     style={{
+                                        width: "100%",
+                                        flex: 1,
                                         flexDirection: "row",
                                     }}
                                 >
@@ -249,14 +262,24 @@ export default function LiveingLessionInfo_teacher(props) {
 
                                 <View
                                     style={{
+                                        flex: 1,
                                         flexDirection: "row",
-                                        width: "50%",
+                                        width: "100%",
                                         justifyContent: "space-between",
-                                        marginBottom: 20,
                                         marginTop: 50,
                                     }}
                                 >
                                     <TouchableOpacity
+                                        style={{
+                                            borderColor: "black",
+                                            borderWidth: 1,
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            borderLeftWidth: 0,
+                                            borderBottomWidth: 0,
+                                            borderRightWidth: 0,
+                                            flex: 1,
+                                        }}
                                         onPress={() => {
                                             setchooseClassmodalVisible(false);
                                         }}
@@ -272,6 +295,15 @@ export default function LiveingLessionInfo_teacher(props) {
                                     </TouchableOpacity>
 
                                     <TouchableOpacity
+                                        style={{
+                                            borderColor: "black",
+                                            borderWidth: 1,
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            flex: 1,
+                                            borderBottomWidth: 0,
+                                            borderRightWidth: 0,
+                                        }}
                                         onPress={() => {
                                             setShowLoading(true);
                                             setchooseClassmodalVisible(false);
@@ -313,7 +345,7 @@ export default function LiveingLessionInfo_teacher(props) {
                                                                     "-@-" + //学科ID
                                                                     chooseClassketangId +
                                                                     "-@-" + //课堂ID
-                                                                    chooseClassName +
+                                                                    chooseClasstitle +
                                                                     "-@-" + //课堂名称
                                                                     global
                                                                         .constants
