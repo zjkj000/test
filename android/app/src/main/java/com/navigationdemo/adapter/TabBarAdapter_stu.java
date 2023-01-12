@@ -24,6 +24,9 @@ public class TabBarAdapter_stu extends FragmentPagerAdapter {
         this.mFragment = mFragment;
     }
 
+    public void setTitle(String[] title) {
+        mTitles = title;
+    }
 
     @NonNull
     @Override
