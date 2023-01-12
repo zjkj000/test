@@ -1115,18 +1115,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         HttpActivityStu.leaveOrJoinClass(userId, roomid, "leave", null);
 //        HttpActivityTea.stopHandsUpTimer();
 
-        V2TIMManager.getInstance().logout(new V2TIMCallback() {
-            @Override
-            public void onError(int i, String s) {
-                System.out.println("+++IM登出错误"+s);
-            }
-
-            @Override
-            public void onSuccess() {
-                System.out.println("+++IM登出成功");
-            }
-        });
-        V2TIMManager.getInstance().unInitSDK();
 
 
     }
@@ -3306,16 +3294,32 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public void destroyBoard() {
         System.out.println("+++执行了销毁函数");
         CurType=null;
-        mBoard.removeCallback(mBoardCallback);
-        mBoard.uninit();
-        mBoard=null;
-        BoardStatus=false;
-        addBoardtoFragmentstatus=false;
+        if(mBoard!=null){
+            mBoard.removeCallback(mBoardCallback);
+            mBoard.uninit();
+            mBoard=null;
+            BoardStatus=false;
+            addBoardtoFragmentstatus=false;
+        }
+
     }
 
     @Override
     protected void onDestroy() {
         exitRoom();
+        V2TIMManager.getInstance().logout(new V2TIMCallback() {
+            @Override
+            public void onError(int i, String s) {
+                System.out.println("+++IM登出错误"+s);
+            }
+
+            @Override
+            public void onSuccess() {
+                System.out.println("+++IM登出成功");
+            }
+        });
+
+        V2TIMManager.getInstance().unInitSDK();
         super.onDestroy();
     }
 

@@ -4051,7 +4051,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             curPackageList.add(BoardRescourseBean);
                             System.out.println("+++要看的授课包详情    列表"+BoardRescourseBean.toString());
                         }
-                        if(curPackageList.size()>1){
+                        if(boardchoosepackageitemlistViewAdapter!=null&&curPackageList.size()>1){
                             boardchoosepackageitemlistViewAdapter.notifyDataSetChanged();
                         }
 
@@ -4394,7 +4394,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             System.out.println("+++转码接口任务成功：返回了taskId:;"+json.get("TaskId"));
                             DescribeTranscodehandler(MsecretId,MsecretKey,Region,SdkAppId,json.get("TaskId").toString(),mBoard,proBar);
 //                          上传任务创建成功 就要调用查看转码状态
-                            proBar.setProgress(10);
+                            proBar.setProgress(0);
                             msgTips.setText("文件正在加载：");
                             uploadfile.setText("正在加载");
                             }else {

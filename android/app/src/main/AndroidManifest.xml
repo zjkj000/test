@@ -28,7 +28,7 @@
         android:fullBackupContent="@xml/backup_rules"
         android:requestLegacyExternalStorage="true"
         android:name=".MainApplication"
-        android:label="34授课一点通"
+        android:label="35授课一点通"
         android:icon="@mipmap/ic_launcher"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
@@ -40,7 +40,7 @@
         <activity
             android:name=".MainActivity"
             android:exported="true"
-            android:label="34授课一点通"
+            android:label="35授课一点通"
             android:configChanges="keyboard|keyboardHidden|orientation|screenSize|uiMode"
             android:launchMode="singleTask"
             android:windowSoftInputMode="adjustPan">

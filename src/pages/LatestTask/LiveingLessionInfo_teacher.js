@@ -234,8 +234,8 @@ export default function LiveingLessionInfo_teacher(props) {
                                 >
                                     <TouchableOpacity
                                         style={{
-                                            borderColor: "black",
-                                            borderWidth: 1,
+                                            borderColor: "#aaaaaa",
+                                            borderWidth:0.5,
                                             justifyContent: "center",
                                             alignItems: "center",
                                             borderLeftWidth: 0,
@@ -259,8 +259,8 @@ export default function LiveingLessionInfo_teacher(props) {
 
                                     <TouchableOpacity
                                         style={{
-                                            borderColor: "black",
-                                            borderWidth: 1,
+                                            borderColor: "#aaaaaa",
+                                            borderWidth: 0.5,
                                             justifyContent: "center",
                                             alignItems: "center",
                                             flex: 1,
@@ -454,7 +454,9 @@ export default function LiveingLessionInfo_teacher(props) {
                                     />
                 </View>
             </View>
+            
                 {/* 展示直播课数据 */}
+
                 <FlatList
                             style={{height:screenHeight-120}}
                             showsVerticalScrollIndicator={false}

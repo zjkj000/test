@@ -40,29 +40,12 @@
         <TextView
             android:id="@+id/class_title"
             android:layout_width="wrap_content"
-<<<<<<< HEAD
-            android:layout_height="fill_parent"
-            android:layout_centerInParent="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-            <TextView
-                android:id="@+id/class_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:layout_marginLeft="32dp"
-                android:text="基因突变和基因重组"
-                android:textColor="@color/white"
-                android:textSize="7sp" />
-=======
             android:layout_height="match_parent"
             android:gravity="center_vertical"
             android:layout_marginLeft="32dp"
             android:text="基因突变和基因重组"
             android:textColor="@color/white"
             android:textSize="7sp" />
->>>>>>> 4eb5aed810894b8813dcd682c003e2b429594f47
 
         <View
             android:id="@+id/divider_1"
