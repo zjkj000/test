@@ -1024,6 +1024,7 @@ public class MainActivity_tea extends AppCompatActivity {
             listViewAdapter.notifyDataSetChanged();
         }
         this.videoListFragment.addCameraView(item.getUserId(), item.getName(), mTRTCCloud);
+        this.videoListFragment.changeSpeaker(item.getUserId(), "up");
 
 //        Toast.makeText(this, "举手成员 " + position + " 上讲台被点击了", Toast.LENGTH_SHORT).show();
     }
@@ -1074,26 +1075,34 @@ public class MainActivity_tea extends AppCompatActivity {
         ClassDataBean memberInKetangList = AnswerActivityTea.findMemberInKetangList(userId);
         if(memberInJoinList != null) {
             boolean hasSub = false;
-            for (int i = 0; i <= memberDataList.size(); i++) {
-                if(memberDataList.get(i).getUserId().equals(userId)) {
-                    memberDataList.remove(i);
-                    i--;
-                    hasSub = true;
+            for (int i = 0; i < memberDataList.size(); i++) {
+                if(i >= 0) {
+                    try {
+                        if (memberDataList.get(i).getUserId().equals(userId)) {
+                            memberDataList.remove(i);
+                            i--;
+                            hasSub = true;
+                        }
+                    } catch (Exception e) {
+                        Toast.makeText(this, "发生异常：" + e.toString(), Toast.LENGTH_SHORT).show();
+                    }
                 }
             }
             if(videoListFragment.findUserInUserList(memberInKetangList.getUserId())) {
                 videoListFragment.leaveRoom(userId, 12580, this, mTRTCCloud);
             }
             if(hasSub)
-                stuMemberNum -=1;
+                stuMemberNum -= 1;
         } else {
             if(memberInKetangList != null) {
                 boolean hasSub = false;
-                for (int i = 0; i <= memberDataList.size(); i++) {
-                    if(memberDataList.get(i).getUserId().equals(userId)) {
-                        memberDataList.remove(i);
-                        i--;
-                        hasSub = true;
+                for (int i = 0; i < memberDataList.size(); i++) {
+                    if(i >= 0) {
+                        if (memberDataList.get(i).getUserId().equals(userId)) {
+                            memberDataList.remove(i);
+                            i--;
+                            hasSub = true;
+                        }
                     }
                 }
                 if(hasSub)
@@ -1126,7 +1135,7 @@ public class MainActivity_tea extends AppCompatActivity {
         Log.e(TAG, "initMemberList: hahahahhahaah");
         memberDataList = new Vector<>();
 
-        setCountMember(AnswerActivityTea.ketangList.size(), AnswerActivityTea.joinList.size());
+        setCountMember(keTangMemberNum, stuMemberNum);
         MainActivity_tea that = this;
         listViewAdapter = new MemberListViewAdapter(this, memberList, memberDataList);
         memberList.setAdapter(listViewAdapter);
@@ -1164,6 +1173,7 @@ public class MainActivity_tea extends AppCompatActivity {
                         if(memberInKetangList != null)
                             item.setUserType(0);
                         if(studentDataBean != null) {
+                            that.videoListFragment.changeSpeaker(item.getUserId(), "down");
                             that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
                             item.setUserType(1);
                         }
@@ -1171,6 +1181,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     } else {
                         that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());
                         that.videoListFragment.addCameraView(item.getUserId(), item.getName() ,getmTRTCCloud());
+                        that.videoListFragment.changeSpeaker(item.getUserId(), "up");
                         item.setUserType(0);
                         HttpActivityTea.speakerController(item.getUserId(), item.getName(), "up", i, that);
                     }
@@ -1325,6 +1336,10 @@ public class MainActivity_tea extends AppCompatActivity {
             if(available) {
                 if(AnswerActivityTea.findMemberInKetangList(userId) != null) {
                     mUserList.add(userId);
+                    activity.videoListFragment.changeSpeaker(userId, "down");
+                }
+                if(AnswerActivityTea.findMemberInJoinList(userId) != null) {
+                    activity.videoListFragment.changeSpeaker(userId, "up");
                 }
             }
             else {
@@ -1333,6 +1348,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 } else {
                     mUserList.remove(userId);
                 }
+                activity.videoListFragment.changeSpeaker(userId, "down");
 //                mUserList.remove(userId);
             }
             int userPosition = listViewAdapter.getItemPositionById(userId);
@@ -1349,8 +1365,8 @@ public class MainActivity_tea extends AppCompatActivity {
             Log.e(TAG, "onRemoteUserEnterRoom: userId" + userId );
             System.out.println("onRemoteUserEnterRoom userId " + userId );
 //            Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
-            if(AnswerActivityTea.findMemberInKetangList(userId) != null)
-                activity.videoListFragment.addCameraView(userId, AnswerActivityTea.findMemberInKetangList(userId).getName(), activity.mTRTCCloud);
+//            if(AnswerActivityTea.findMemberInKetangList(userId) != null)
+//                activity.videoListFragment.addCameraView(userId, AnswerActivityTea.findMemberInKetangList(userId).getName(), activity.mTRTCCloud);
         }
 
         @Override
@@ -1361,7 +1377,7 @@ public class MainActivity_tea extends AppCompatActivity {
             activity.subMemberToList(userId);
 //            HttpActivityTea.getMemberList(activity);
 //              取消所有白板授权
-            for (int i =0; i < activity.memberDataList.size(); i++) {
+            for (int i = 0; i < activity.memberDataList.size(); i++) {
                 MemberItem item = listViewAdapter.getItem(i);
                 activity.drawAuthority( "drawAuthority", "no", item.getUserId());
                 item.setBoardControl(false);
@@ -3611,7 +3627,6 @@ public class MainActivity_tea extends AppCompatActivity {
             mTRTCCloud.stopLocalPreview();
             mTRTCCloud.exitRoom();
             mTRTCCloud.setListener(null);
-            mTRTCCloud.exitRoom();
         }
         mTRTCCloud = null;
         TRTCCloud.destroySharedInstance();

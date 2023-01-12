@@ -145,103 +145,207 @@ export default function LiveingLessionInfo_teacher(props) {
         } 
     }
 
-  return (
-  <>
-     <Modal        animationType='slide'
-                              transparent={true}
-                              visible={chooseClassmodalVisible}
-                              onRequestClose={()=>{
-                                setchooseClassmodalVisible(false)
+    return (
+        <>
+            <Modal
+                animationType="slide"
+                transparent={true}
+                visible={chooseClassmodalVisible}
+                onRequestClose={() => {
+                    setchooseClassmodalVisible(false);
+                }}
+            >
+                <View style={{ backgroundColor: "rgba(0,0,0,0.5)" }}>
+                    <View
+                        style={{
+                            height: "100%",
+                            alignItems: "center",
+                            justifyContent: "flex-start",
+                        }}
+                    >
+                        <View
+                            style={{
+                                marginTop: "60%",
+                            }}
+                        >
+                            <View
+                                style={{
+                                    width: "80%",
+                                    height: "65%",
+                                    justifyContent: "center",
+                                    backgroundColor: "#FFFFFF",
+                                    alignItems: "center",
+                                    flexDirection: "column",
+                                    justifyContent: "center",
+                                    alignItems: "center",
                                 }}
                             >
-                  <View style={{backgroundColor:'#000000',opacity:0.6}}>    
-                    <View style={{height:'100%',alignItems:'center',backgroundColor:'#FFFFFF'}}>
-                        <View style={{backgroundColor:'#FFFFFF',marginTop:'60%'}}>
-                            <View style={{justifyContent:'center',backgroundColor:'#FFFFFF',alignItems:'center'}}>
-                                
-                                <View style={{margin:20,width:'80%',alignItems:'center'}}><Text style={{fontSize:20,color:'red'}}>{chooseClasstitle}</Text></View>
-                                <View style={{backgroundColor:'#FFFFFF',marginLeft:'10%',marginRight:'10%'}}>
-                                    {/* 选择是否开启  摄像头   麦克风 */}
-                                    <Layout style={{flexDirection:'row',backgroundColor:'#FFFFFF'}}>
-                                        <CheckBox style={{backgroundColor:'#F1F1F1'}}  checked={chooseClassCamera} onChange={()=>{setchooseClassCamera(!chooseClassCamera)}}>开启摄像头</CheckBox>
-                                        <CheckBox style={{backgroundColor:'#F1F1F1'}} checked={chooseClassMicrophone} onChange={()=>{setchooseClassMicrophone(!chooseClassMicrophone)}}>开启麦克风</CheckBox>
-                                    </Layout>
+                                <View
+                                    style={{
+                                        width: "100%",
+                                        flex: 1,
+                                        margin: 20,
+                                    }}
+                                >
+                                    <Text
+                                        style={{ fontSize: 20, color: "red" }}
+                                    >
+                                        {chooseClasstitle}
+                                    </Text>
                                 </View>
-                                
-                                
-                                <View style={{flexDirection:'row',width:'100%',alignItems:'center',borderColor:'#aaaaaa',borderTopWidth:0.5,marginTop:50}}>
-                                    
-                                    <TouchableOpacity style={{width:'50%',borderRightWidth:0.5,borderColor:'#aaaaaa',paddingTop:10,paddingBottom:10}} onPress={()=>{setchooseClassmodalVisible(false)}}>
-                                        <Text style={{color:'#59B9E0',fontSize:18,marginLeft:'45%'}}>取消</Text></TouchableOpacity>
+                                {/* 选择是否开启  摄像头   麦克风 */}
+                                <Layout
+                                    style={{
+                                        width: "100%",
+                                        flex: 1,
+                                        flexDirection: "row",
+                                    }}
+                                >
+                                    <CheckBox
+                                        checked={chooseClassCamera}
+                                        onChange={() => {
+                                            setchooseClassCamera(
+                                                !chooseClassCamera
+                                            );
+                                        }}
+                                    >
+                                        开启摄像头
+                                    </CheckBox>
+                                    <CheckBox
+                                        checked={chooseClassMicrophone}
+                                        onChange={() => {
+                                            setchooseClassMicrophone(
+                                                !chooseClassMicrophone
+                                            );
+                                        }}
+                                    >
+                                        开启麦克风
+                                    </CheckBox>
+                                </Layout>
 
-                                    <TouchableOpacity style={{width:'30%',marginLeft:'10%'}} onPress={()=>{
-                                                            setShowLoading(true);
-                                                            setchooseClassmodalVisible(false);
-                                                            const url =
-                                                                "http://" +
-                                                                "www.cn901.com" +
-                                                                "/ShopGoods/ajax/livePlay_deleteMemcached.do";
-                                                            const params = {
-                                                                roomId: chooseClassroomId,
-                                                                ketangId: chooseClassketangId,
-                                                                ketangName: chooseClassName,
-                                                                userId: global.constants
-                                                                    .userName,
-                                                                name: global.constants.userCn,
-                                                                source: "app",
-                                                                width: screenWidth,
-                                                                height: screenHeight,
-                                                            };
-                                                            http.post(url, params)
-                                                                .then((res) => {
-                                                                    setShowLoading(false);
-                                                                    if (res.success) {
-                                                                        if (!res.joinStatus) {
-                                                                            // 跳转教师端直播页面
-                                                                            NativeModules.IntentMoudle.startActivityFromJS(
-                                                                                "MainActivity_tea",
-                                                                                global.constants
-                                                                                    .userName +
-                                                                                    "-@-" + //userid id
-                                                                                    global
-                                                                                        .constants
-                                                                                        .userCn +
-                                                                                    "-@-" + //usercn 中文名
-                                                                                    chooseClassroomId +
-                                                                                    "-@-" + //roomid 直播房间号
-                                                                                    chooseClasstitle +
-                                                                                    "-@-" + //直播房间名称
-                                                                                    chooseClasssubjectId +
-                                                                                    "-@-" + //学科ID
-                                                                                    chooseClassketangId +
-                                                                                    "-@-" + //课堂ID
-                                                                                    chooseClassName +
-                                                                                    "-@-" + //课堂名称
-                                                                                    global.constants.userPhoto +
-                                                                                    "-@-" +
-                                                                                    chooseClassCamera +
-                                                                                    "-@-" +
-                                                                                    chooseClassMicrophone
-                                                                            );
-                                                                        } else {
-                                                                            Toast.showDangerToast(
-                                                                                "您的账号已在别处登录"
-                                                                            );
-                                                                        }
-                                                                    } else {
-                                                                        Toast.showInfoToast(
-                                                                            res.message
-                                                                        );
-                                                                    }
-                                                                })
-                                                                .catch((error) => {
-                                                                    setShowLoading(false);
-                                                                    Toast.showDangerToast(
-                                                                        error.message
-                                                                    );
-                                                                });
-                                                            }}>
-                                        <Text style={{color:'#59B9E0',fontSize:18,marginLeft:20}}>上课</Text></TouchableOpacity>
+                                <View
+                                    style={{
+                                        flex: 1,
+                                        flexDirection: "row",
+                                        width: "100%",
+                                        justifyContent: "space-between",
+                                        marginTop: 50,
+                                    }}
+                                >
+                                    <TouchableOpacity
+                                        style={{
+                                            borderColor: "black",
+                                            borderWidth: 1,
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            borderLeftWidth: 0,
+                                            borderBottomWidth: 0,
+                                            borderRightWidth: 0,
+                                            flex: 1,
+                                        }}
+                                        onPress={() => {
+                                            setchooseClassmodalVisible(false);
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                color: "#59B9E0",
+                                                fontSize: 18,
+                                            }}
+                                        >
+                                            取消
+                                        </Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        style={{
+                                            borderColor: "black",
+                                            borderWidth: 1,
+                                            justifyContent: "center",
+                                            alignItems: "center",
+                                            flex: 1,
+                                            borderBottomWidth: 0,
+                                            borderRightWidth: 0,
+                                        }}
+                                        onPress={() => {
+                                            setShowLoading(true);
+                                            setchooseClassmodalVisible(false);
+                                            const url =
+                                                "http://" +
+                                                "www.cn901.com" +
+                                                "/ShopGoods/ajax/livePlay_deleteMemcached.do";
+                                            const params = {
+                                                roomId: chooseClassroomId,
+                                                ketangId: chooseClassketangId,
+                                                ketangName: chooseClassName,
+                                                userId: global.constants
+                                                    .userName,
+                                                name: global.constants.userCn,
+                                                source: "app",
+                                                width: screenWidth,
+                                                height: screenHeight,
+                                            };
+                                            http.post(url, params)
+                                                .then((res) => {
+                                                    setShowLoading(false);
+                                                    if (res.success) {
+                                                        if (!res.joinStatus) {
+                                                            // 跳转教师端直播页面
+                                                            NativeModules.IntentMoudle.startActivityFromJS(
+                                                                "MainActivity_tea",
+                                                                global.constants
+                                                                    .userName +
+                                                                    "-@-" + //userid id
+                                                                    global
+                                                                        .constants
+                                                                        .userCn +
+                                                                    "-@-" + //usercn 中文名
+                                                                    chooseClassroomId +
+                                                                    "-@-" + //roomid 直播房间号
+                                                                    chooseClasstitle +
+                                                                    "-@-" + //直播房间名称
+                                                                    chooseClasssubjectId +
+                                                                    "-@-" + //学科ID
+                                                                    chooseClassketangId +
+                                                                    "-@-" + //课堂ID
+                                                                    chooseClasstitle +
+                                                                    "-@-" + //课堂名称
+                                                                    global
+                                                                        .constants
+                                                                        .userPhoto +
+                                                                    "-@-" +
+                                                                    chooseClassCamera +
+                                                                    "-@-" +
+                                                                    chooseClassMicrophone
+                                                            );
+                                                        } else {
+                                                            Toast.showDangerToast(
+                                                                "您的账号已在别处登录"
+                                                            );
+                                                        }
+                                                    } else {
+                                                        Toast.showInfoToast(
+                                                            res.message
+                                                        );
+                                                    }
+                                                })
+                                                .catch((error) => {
+                                                    setShowLoading(false);
+                                                    Toast.showDangerToast(
+                                                        error.message
+                                                    );
+                                                });
+                                        }}
+                                    >
+                                        <Text
+                                            style={{
+                                                color: "#59B9E0",
+                                                fontSize: 18,
+                                            }}
+                                        >
+                                            上课
+                                        </Text>
+                                    </TouchableOpacity>
                                 </View>
                             </View>
                         </View>
@@ -512,8 +616,6 @@ class LiveingLessonContent_teacher extends Component {
                                             this.props.setchooseClasstitle(this.state.title)
                                             this.props.setchooseClasssubjectId(this.state.subjectId)
                                             this.props.setchooseClassketangId(this.state.ketangId)
-
-
                                         }}>
                         <Text style={{fontSize:12,color:'white'}}>进入课堂</Text>
                     </TouchableOpacity>

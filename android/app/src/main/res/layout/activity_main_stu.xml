@@ -45,52 +45,6 @@
         <TextView
             android:id="@+id/class_title"
             android:layout_width="wrap_content"
-<<<<<<< HEAD
-            android:layout_height="fill_parent"
-            android:layout_centerInParent="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
-
-            <TextView
-                android:id="@+id/class_title"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_marginLeft="32dp"
-                android:gravity="center_vertical"
-                android:text="基因突变和基因重组"
-                android:textColor="@color/white"
-                android:textSize="7sp" />
-
-
-            <TextView
-                android:id="@+id/class_time"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:background="@drawable/border_right_background"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="3dp"
-                android:text="已上课 00:05:32"
-                android:textColor="@color/white"
-
-                android:textSize="7sp"
-                tools:ignore="SmallSp" />
-
-            <TextView
-                android:id="@+id/class_id"
-                android:layout_width="wrap_content"
-                android:layout_height="match_parent"
-                android:layout_toStartOf="@id/class_time"
-                android:background="@drawable/border_right_background"
-                android:gravity="center_vertical"
-                android:paddingHorizontal="3dp"
-                android:text="课堂号: 5723908"
-                android:textColor="@color/white"
-                android:textSize="7sp"
-                tools:ignore="SmallSp" />
-        </LinearLayout>
-=======
             android:layout_height="match_parent"
             android:layout_marginLeft="32dp"
             android:gravity="center_vertical"
@@ -129,7 +83,6 @@
             android:textColor="@color/white"
             android:textSize="7sp"
             tools:ignore="SmallSp" />
->>>>>>> 4eb5aed810894b8813dcd682c003e2b429594f47
     </RelativeLayout>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -816,21 +769,33 @@
                             android:src="@drawable/zbcameranoopen" />
                     </RelativeLayout>
                 </RelativeLayout>
-
-                <TextView
-                    android:id="@+id/student_name"
-                    android:layout_alignBottom="@+id/student_camera_block"
-                    android:alpha="0.7"
+                <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:background="@color/teacher_background"
-                    android:drawablePadding="2dp"
-                    android:paddingHorizontal="2dp"
-                    android:paddingVertical="2dp"
-                    android:text="XX老师"
-                    android:textColor="@color/white"
-                    android:textSize="7sp"
-                    />
+                    android:layout_alignBottom="@+id/student_camera_block"
+
+                    >
+                    <TextView
+                        android:id="@+id/student_name"
+                        android:alpha="0.7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:background="@color/teacher_background"
+                        android:drawablePadding="2dp"
+                        android:paddingHorizontal="2dp"
+                        android:paddingVertical="2dp"
+                        android:text="XX老师"
+                        android:textColor="@color/white"
+                        android:textSize="7sp"
+                        />
+                    <ImageView
+                        android:id="@+id/speaker_icon"
+                        android:visibility="invisible"
+                        android:layout_width="15dp"
+                        android:layout_height="15dp"
+                        android:layout_alignParentEnd="true"
+                        android:src="@drawable/speaker_controller_on" />
+                </RelativeLayout>
             </RelativeLayout>
 
 
@@ -954,11 +919,12 @@
         />
     <TextView
         android:id="@+id/hand_time"
-        android:layout_width="50dp"
+        android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:text="20s"
+        android:textSize="8sp"
+        android:text="20s后自动放下手"
         android:gravity="center"
-        android:textColor="@color/text_gray"
+        android:textColor="@color/text_white"
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintStart_toEndOf="@+id/exit_btn"
