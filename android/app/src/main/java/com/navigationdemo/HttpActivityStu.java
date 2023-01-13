@@ -31,7 +31,7 @@ public class HttpActivityStu extends AnswerActivityStu {
     private static final String TAG = "xiao";
     private static Timer getControlMessageTimer;
     private static String baseUrl = "http://www.cn901.com";
-
+    private static String curdeviceWordsAction = "openWords";
 
     public static void startGetControlMessageTimer(String roomId, String userId, MainActivity_stu mainActivity_stu) {
 
@@ -529,13 +529,16 @@ public class HttpActivityStu extends AnswerActivityStu {
                     System.out.print("deviceCameraAction==>"+deviceCameraAction);
                     System.out.println(" deviceCameraTime==>"+deviceCameraTime);
                 }
-
                 String deviceWordsAction_Time = sec.getString("deviceWordsAction");
                 if(deviceWordsAction_Time.length()>0){
                     deviceWordsAction = deviceWordsAction_Time.split("_")[0];
                     deviceWordsTime = deviceWordsAction_Time.split("_")[1];
-                    System.out.print("deviceWordsAction==>"+deviceWordsAction);
-                    System.out.println(" deviceWordsTime==>"+deviceWordsTime);
+                  if(deviceWordsAction.startsWith("open")&&curdeviceWordsAction.startsWith("close")){
+                        mainActivity_stu.dealAllowChat();
+                    }else if(deviceWordsAction.startsWith("close")&&curdeviceWordsAction.startsWith("open")){
+                        mainActivity_stu.dealStopChat();
+                    }
+                    curdeviceWordsAction=deviceWordsAction;
                 }
 
                 platformUserId = sec.getString("platformUserId");

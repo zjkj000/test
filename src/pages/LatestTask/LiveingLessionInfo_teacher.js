@@ -18,12 +18,11 @@ import {
     MenuItem,
     Button,
 } from "@ui-kitten/components";
-
+import Loading from "../../utils/loading/Loading";
 import { screenHeight, screenWidth } from "../../utils/Screen/GetSize";
 import { SearchBar } from "@ant-design/react-native";
 import http from "../../utils/http/request";
 import Toast from "../../utils/Toast/Toast";
-import Loading from "../../utils/loading/Loading";
 import Clipboard from "@react-native-community/clipboard";
 let SearchText = "";
 let currentPage = 1;
@@ -40,32 +39,29 @@ export default function LiveingLessionInfo_teacher(props) {
     const [chooseClasstitle, setchooseClasstitle] = useState("");
     const [chooseClasssubjectId, setchooseClasssubjectId] = useState("");
     const [chooseClassketangId, setchooseClassketangId] = useState("");
-    const [showLoading, setShowLoading] = useState(false);
-    const [startTime, setStartTime] = useState("");
 
     const [chooseClassmodalVisible, setchooseClassmodalVisible] =
         useState(false);
     const [showFoot, setshowFoot] = useState("0"); //0代表还可以加载  1代表没数据了
+
+    const [showLoading, setShowLoading] = useState(false);
+    const [startTime, setStartTime] = useState("");
+
     useEffect(() => {
         const timer = setInterval(() => {
-            console.log("刷新");
             currentPage = 1;
             setisRefresh(true);
             setdata([]);
             fetchData(type, 1, true);
         }, 30000);
-
-        if (props.route.params.flag == "refresh") {
-            setdata([]);
-            fetchData("0", 1);
-        }
-
+        currentPage = 1;
+        setdata([]);
         fetchData("0", 1);
         return () => {
             SearchText = "";
             clearInterval(timer);
         };
-    }, []);
+    }, [props.route.params.flag]);
 
     function fetchData(newtype, newcurrentPage, isRefreshing = false) {
         const url = global.constants.baseUrl + "teacherApp_getZBLiveList.do";
@@ -80,7 +76,6 @@ export default function LiveingLessionInfo_teacher(props) {
         };
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
-            console.log("请求到的直播课数据列表");
             if (newcurrentPage == 1) {
                 setshowFoot("0"); //第一页还可以请求
                 setdata(resJson.list);
@@ -126,6 +121,9 @@ export default function LiveingLessionInfo_teacher(props) {
                 setchooseClasssubjectId={setchooseClasssubjectId}
                 setchooseClassroomId={setchooseClassroomId}
                 setStartTime={setStartTime}
+                setisRefresh={setisRefresh}
+                setdata={setdata}
+                fetchData={fetchData}
             />
         );
     }
@@ -273,8 +271,8 @@ export default function LiveingLessionInfo_teacher(props) {
                                 >
                                     <TouchableOpacity
                                         style={{
-                                            borderColor: "black",
-                                            borderWidth: 1,
+                                            borderColor: "#aaaaaa",
+                                            borderWidth: 0.5,
                                             justifyContent: "center",
                                             alignItems: "center",
                                             borderLeftWidth: 0,
@@ -298,8 +296,8 @@ export default function LiveingLessionInfo_teacher(props) {
 
                                     <TouchableOpacity
                                         style={{
-                                            borderColor: "black",
-                                            borderWidth: 1,
+                                            borderColor: "#aaaaaa",
+                                            borderWidth: 0.5,
                                             justifyContent: "center",
                                             alignItems: "center",
                                             flex: 1,
@@ -437,7 +435,14 @@ export default function LiveingLessionInfo_teacher(props) {
             </View>
             <View style={{ padding: 10, paddingBottom: 0 }}>
                 {/* 筛选框    搜索框 */}
-                <View style={{ flexDirection: "row", margin: 5 }}>
+                <View
+                    style={{
+                        flexDirection: "row",
+                        margin: 5,
+                        marginLeft: 0,
+                        marginRight: 0,
+                    }}
+                >
                     <View
                         style={{
                             width: 80,
@@ -528,7 +533,9 @@ export default function LiveingLessionInfo_teacher(props) {
                         />
                     </View>
                 </View>
+
                 {/* 展示直播课数据 */}
+
                 <FlatList
                     style={{ height: screenHeight - 120 }}
                     showsVerticalScrollIndicator={false}
@@ -555,12 +562,12 @@ class LiveingLessonContent_teacher extends Component {
             title: "", //名称//直播页面需要传递的参数
             roomId: "", //课堂号//直播页面需要传递的参数
             hour: "", //课节时长
+            startDate: "", //课程已开始时长
             subjectName: "", //学科名称
             minutes: "", //授课对象
             showStrTop: "", //顶部时间  //status==1,此处显示进入课堂按钮   2 则顶部时间位置显示按钮，提示”进入教室
             showStrBottom: "", //底部时间
             status: "", //1直播中  2未开始  3已结束
-
             className: "",
             hostUserId: "", //主讲人登录名，需要传递的参数
             ketangId: "", //直播页面需要传递的参数
@@ -582,11 +589,8 @@ class LiveingLessonContent_teacher extends Component {
     DeleteLivingLession(rommid) {
         const url =
             "http://www.cn901.com/ShopGoods/ajax/livePlay_deleteZbLive.do";
-        const params = {
-            roomId: rommid, //房间号
-        };
+        const params = { roomId: rommid }; //房间号
         http.get(url, params).then((resStr) => {
-            console.log(resStr);
             let resJson = JSON.parse(resStr);
             if ("success" == resJson.status) {
                 Alert.alert("", "刪除成功", [
@@ -594,23 +598,13 @@ class LiveingLessonContent_teacher extends Component {
                     {
                         text: "确定",
                         onPress: () => {
-                            this.props.navigation.navigate({
-                                name: "LiveingLessionInfo_teacher",
-                                params: {
-                                    flag: "refresh",
-                                },
-                                merge: true,
-                            });
+                            currentPage = 1;
+                            this.props.setisRefresh(true);
+                            this.props.setdata([]);
+                            this.props.fetchData("All", 1, true);
                         },
                     },
                 ]);
-                this.props.navigation.navigate({
-                    name: "LiveingLessionInfo_teacher",
-                    params: {
-                        flag: "refresh",
-                    },
-                    merge: true,
-                });
             }
         });
     }
@@ -670,8 +664,12 @@ class LiveingLessonContent_teacher extends Component {
                 <View
                     style={{
                         flexDirection: "column",
-                        width: "70%",
+                        width: "65%",
                         paddingLeft: 10,
+                        paddingRight: 5,
+                        borderColor: "#aaaaaa",
+                        borderRightWidth: 0.5,
+                        marginRight: 10,
                     }}
                 >
                     {/* 第一行  学科图标 +名称 */}
@@ -786,35 +784,14 @@ class LiveingLessonContent_teacher extends Component {
                         </View>
                     </View>
 
-                    {/* 第二行 课程时长 课堂号 */}
+                    {/* 第三行  授课对象 */}
                     <View
                         style={{
                             flexDirection: "row",
-                            marginTop: 10,
-                            alignItems: "center",
+                            marginTop: 5,
+                            flexWrap: "wrap",
                         }}
                     >
-                        <Text style={{ fontSize: 10 }}>课程时长:</Text>
-                        <Text style={{ fontSize: 10 }}>{this.state.hour}</Text>
-                        <Text style={{ marginLeft: 5, fontSize: 10 }}>
-                            课堂号:
-                        </Text>
-                        <Text style={{ fontSize: 10 }}>
-                            {this.state.roomId}
-                        </Text>
-                        <TouchableOpacity
-                            onPress={() => {
-                                this.copyToClipboard;
-                            }}
-                        >
-                            <Image
-                                style={{ width: 10, height: 10, marginLeft: 3 }}
-                                source={require("../../assets/teacherLatestPage/tea_copy.png")}
-                            />
-                        </TouchableOpacity>
-                    </View>
-                    {/* 第三行  授课对象 */}
-                    <View style={{ flexDirection: "row", marginTop: 5 }}>
                         <Text style={{ fontSize: 10 }}>授课对象: </Text>
                         <Text style={{ fontSize: 10 }}>
                             {this.state.minutes}
@@ -828,12 +805,13 @@ class LiveingLessonContent_teacher extends Component {
                         flexDirection: "column",
                         alignItems: "center",
                         justifyContent: "center",
+                        alignContent: "center",
                     }}
                 >
                     {
                         // 直播中 状态
                         this.state.status == "1" ? (
-                            <>
+                            <View>
                                 {this.state.showStrTop == "" ? (
                                     <TouchableOpacity
                                         style={{
@@ -843,6 +821,7 @@ class LiveingLessonContent_teacher extends Component {
                                             justifyContent: "center",
                                             alignItems: "center",
                                             margin: 3,
+                                            marginLeft: 10,
                                         }}
                                         onPress={() => {
                                             this.props.setchooseClassmodalVisible(
@@ -864,7 +843,7 @@ class LiveingLessonContent_teacher extends Component {
                                                 this.state.ketangId
                                             );
                                             this.props.setStartTime(
-                                                this.state.showStrBottom
+                                                this.state.startDate.time
                                             );
                                         }}
                                     >
@@ -887,8 +866,12 @@ class LiveingLessonContent_teacher extends Component {
                                         {this.state.showStrTop}
                                     </Text>
                                 )}
-                                <Text>{this.state.showStrBottom}</Text>
-                            </>
+                                <Text
+                                    style={{ color: "#f6003c", fontSize: 13 }}
+                                >
+                                    {this.state.showStrBottom}
+                                </Text>
+                            </View>
                         ) : // 未开始 状态
                         this.state.status == "2" ? (
                             <>

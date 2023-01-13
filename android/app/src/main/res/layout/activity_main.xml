@@ -451,8 +451,10 @@
                         android:background="@mipmap/menu_b04" />
                     <TextView
                         android:id="@+id/board_size"
-                        android:layout_width="24dp"
-                        android:layout_height="20dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@color/bg_select_menu"
                         android:gravity="center"
                         android:textSize="10sp"
@@ -460,7 +462,7 @@
                     <TextView
                         android:id="@+id/b_per"
                         android:layout_width="8dp"
-                        android:layout_height="20dp"
+                        android:layout_height="wrap_content"
                         android:background="@color/bg_select_menu"
                         android:gravity="center"
                         android:text="%"
@@ -487,8 +489,10 @@
                         android:background="@mipmap/menu_b06" />
                     <TextView
                         android:id="@+id/board_curpage"
-                        android:layout_width="18dp"
-                        android:layout_height="20dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textSize="10sp"
                         android:background="@color/bg_select_menu"
                         android:gravity="center"
@@ -496,8 +500,8 @@
                         android:textColor="@color/white" />
                     <TextView
                         android:id="@+id/b_chu"
-                        android:layout_width="8dp"
-                        android:layout_height="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@color/bg_select_menu"
                         android:gravity="center"
                         android:textSize="10sp"
@@ -505,8 +509,10 @@
                         android:textColor="@color/white" />
                     <TextView
                         android:id="@+id/board_sumpage"
-                        android:layout_width="18dp"
-                        android:layout_height="20dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textSize="10sp"
                         android:background="@color/bg_select_menu"
                         android:gravity="center"
@@ -624,7 +630,7 @@
                       android:layout_width="wrap_content"
                       android:layout_height="wrap_content"
                       android:textSize="12dp"
-                      android:textColor="@color/gray_text"
+                      android:textColor="#FFFFFF"
                       android:text="请选择授课内容"/>
                   <ImageView
                       android:layout_width="wrap_content"
@@ -675,7 +681,7 @@
                       android:layout_height="wrap_content"
                       android:paddingLeft="20dp"
                       android:textSize="12dp"
-                      android:textColor="@color/gray_text"
+                      android:textColor="#FFFFFF"
                       android:text="请选择文件:   "/>
                   <Button
                       android:layout_width="70dp"
@@ -689,7 +695,7 @@
                       android:paddingLeft="10dp"
                       android:text="未选择任何文件"
                       android:textSize="12dp"
-                      android:textColor="@color/gray_text"
+                      android:textColor="#FFFFFF"
                       android:layout_height="wrap_content"/>
                   <Button
                       android:layout_width="70dp"
@@ -710,7 +716,7 @@
                       android:layout_width="wrap_content"
                       android:id="@+id/msgTips"
                       android:text="文件正在上传："
-                      android:textColor="@color/gray_text"
+                      android:textColor="#FFFFFF"
                       android:layout_height="wrap_content"/>
                   <ProgressBar
                       android:layout_width="wrap_content"

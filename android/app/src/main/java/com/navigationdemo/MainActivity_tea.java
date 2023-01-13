@@ -5,20 +5,26 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Point;
 import android.graphics.drawable.Drawable;
+import android.media.projection.MediaProjectionManager;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.text.format.Time;
+import android.util.Base64;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
@@ -115,14 +121,20 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -179,10 +191,10 @@ public class MainActivity_tea extends AppCompatActivity {
     public static int mUserCount = 0;
 
     private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
-    private String Mbucket = "zjkj-1313356181";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKIDwhBPM6bruXw7A0ZwTovtnQpzwgroY5NQ";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "zlI5sb8TdeZHm4ObllT9duwztkS2Xoqf";                    //存储桶    永久密钥 secretKey
-
+    private static String Mbucket = "zjkj-1312575671";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
+    private String MsecretId = "AKIDa1C6j7F6gy1oKYXEeng8JDqCH5cssb2D";                 //存储桶   永久密钥 secretId
+    private String MsecretKey = "wc07yYqrc6IDsGNCk12mEPJwIPFo67sM";                    //存储桶    永久密钥 secretKey
+    private int bucketSDKappID = 1400695721;  //这里应该是BOARDSDKAPPID
 
 
 
@@ -207,21 +219,21 @@ public class MainActivity_tea extends AppCompatActivity {
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
 
     //TRTC   SDKAPPID
-    private  int TRTCSDKAPPID = 1400772698;//王id
+    private  int TRTCSDKAPPID = 1400772698;
     private  String TRTCSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
 
     //即时通信SDKAPPID
-    private  int IMSDKAPPID = 1400779599;//王id
-    private  String IMSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
+    private  int IMSDKAPPID = 1400695721;
+    private  String IMSECRETKEY = "8926bc8a7cb907f1694aca0da0f270b9bb1903193202de8a0a2779de9e144b1c";
 
     //白板SDKAPPID
-    private  int BOARDSDKAPPID = 1400779599;//徐id
-    private  String BOARDSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
+    private  int BOARDSDKAPPID = 1400695721;
+    private  String BOARDSECRETKEY = "8926bc8a7cb907f1694aca0da0f270b9bb1903193202de8a0a2779de9e144b1c";
 
  
     public static String teaName = "";
     public static String teaHead = "";
-    public static String userName = "xgy";
+    public static String userName = "";
 
     //即时通信相关
     private V2TIMManager v2TIMManager;                                        //IM实例
@@ -242,7 +254,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
     private PopupWindow  chooseFilepopupWindow = null,chooseAirFilepopupWindow = null, chooseAirPackagepopupWindow = null,chooseAirPackageItempopupWindow = null;        //切换文件弹窗  选择文件弹窗
     private TextView alert_text, upload_btn;                                    //提示白板当前的状态
-    private View boardview;                                                     //白板的view
+    private static View boardview;                                                     //白板的view
     public static TEduBoardController mBoard;                                  //白板实例
     public TEduBoardController getmBoard() {return this.mBoard;}                //获取到白班实例
     private Boolean BoardStatus=false;                                          //记录白板初始化 状态
@@ -255,6 +267,12 @@ public class MainActivity_tea extends AppCompatActivity {
     private ImageButton geometry11,geometry12,geometry13,geometry14,geometry21,geometry22,geometry23,geometry24,geometry31,geometry32,geometry33,geometry34,geometry41,geometry42,geometry43,geometry44,geometry51,geometry52,geometry53,geometry61,geometry62,geometry63;
     private ImageButton teachingtools1,teachingtools2,teachingtools3,teachingtools4,teachingtools5;
     public static Integer cur_paintsize=100,cur_Highlighterpaintsize=450;  //记录当前 画笔 荧光笔粗细用的
+    //几何工具和画笔当前颜色控制
+    public static Integer  CurPaintColor =-65536;
+    public static Integer  CurGeometryColor =-65536;
+    public static Integer  CurGeometrySize= 100;
+
+
     private PopupWindow pw_selectpaint;                                 //选择画笔 一级弹窗
     private PopupWindow pw_selecgeometry;                               //选择 几何工具  一级弹窗
     private PopupWindow pw_selectteachingtools;                         //选择教学工具   一级弹窗
@@ -268,7 +286,7 @@ public class MainActivity_tea extends AppCompatActivity {
     private TextView classTitle;
     private TextView classTime;
     private long baseTimer;
-    private CosXmlService cosXmlService;                                //初始化 COS Service，获取实例
+    private static CosXmlService cosXmlService;                                //初始化 COS Service，获取实例
 
     // 记录当前文件ID 文件当前页ID，  白板页ID
     private String FileID=null;                     //当前文件ID
@@ -282,10 +300,11 @@ public class MainActivity_tea extends AppCompatActivity {
 
     private Button choosefile,uploadfile;                       //选择文件弹窗  选择文件  上传文件 按钮
     private TextView msgTips,filename;                          //选择文件弹窗  提示当前文件名称  提示当前文件状态
-    private ProgressBar  proBar;                                //上传文件 进度条
+    private static ProgressBar  proBar;                                //上传文件 进度条
     private ImageView close_select_resources,resupload;         //关闭选择文件弹窗  右上角本地上传
     private Boolean isincludeType  = false;                     //判断文件格式是否上传
-    private String curfilepath,curfilename;                     //记录当前文件路径   当前文件名称
+    private static String curfilepath;
+    private static String curfilename;                     //记录当前文件路径   当前文件名称
     private LinearLayout uploadprogress;                        //选择文件弹窗布局  用来设置Visiable
 
     //TabBarFragment
@@ -340,8 +359,6 @@ public class MainActivity_tea extends AppCompatActivity {
 
     private List<BoardRescourseBean> curPackageList=new ArrayList();       //白板里面载入云端授课包  详情  列表    上面有curPackageName
 
-
-
     // 成员列表
     private static View memberPopupView;
     private static ImageView memberPopupCloseBtn;
@@ -365,6 +382,7 @@ public class MainActivity_tea extends AppCompatActivity {
     // UI消息监听器
     public  static Handler handler;
     @SuppressLint("HandlerLeak")
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -618,7 +636,7 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void onClick(View v) {
      //判断元素类型 保存快照
-               if(addBoardtoFragmentstatus){
+               if(addBoardtoFragmentstatus&&BoardStatus){
                    if("Board".equals(CurType)&&FileID!=null){
                        boardBtn.setImageResource(R.drawable.bottom_board);
                        canvasBtn.setImageResource(R.drawable.bottom_file_checked);
@@ -760,7 +778,13 @@ public class MainActivity_tea extends AppCompatActivity {
         startTime();
     }
 
-    private void dealWith_mBoardaddResouce(Integer type,String url,String name){
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
+    private void dealWith_mBoardaddResouce(Integer type, String url, String name){
+        System.out.println("函数+++dealWith_mBoardaddResouce:--"+"type:=="+type+"url:---"+url+"name:---"+name);
         if(type==1){
             uploadfile.setText("正在转换");
             msgTips.setText("文件正在转换：");
@@ -770,17 +794,25 @@ public class MainActivity_tea extends AppCompatActivity {
             uploadfile.setText("正在加载");
             msgTips.setText("文件正在加载：");
             proBar.setProgress(95);
-            mBoard.addElement(TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_IMAGE,url);
+            List imageList = new ArrayList();
+            imageList.add(url);
+
+            mBoard.addImagesFile(imageList,"imagesfile_"+name,true);
         }else if(type==3){
             uploadfile.setText("正在加载");
             msgTips.setText("文件正在加载：");
             proBar.setProgress(95);
-            mBoard.addElement(TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_AUDIO,url);
+            mBoard.addAudioElement(url,name);
         }else if(type==4){
             uploadfile.setText("正在加载");
             msgTips.setText("文件正在加载：");
             proBar.setProgress(95);
-            mBoardAddTranscodeFile(name,url+"?for_tiw=1");
+            System.out.println("++++测试PPT加载"+url);
+
+            TEduBoardController.TEduBoardTranscodeFileResult config = new TEduBoardController.TEduBoardTranscodeFileResult(name,url+"?for_tiw=1");
+            mBoard.addTranscodeFile(config,true);
+            //测试白板行不行
+//            mBoardAddTranscodeFile(name,url+"?for_tiw=1");
         }else if(type==5){
             uploadfile.setText("正在加载");
             msgTips.setText("文件正在加载：");
@@ -835,12 +867,12 @@ public class MainActivity_tea extends AppCompatActivity {
 
     public void startTime() {
         MainActivity_tea that = this;
-        baseTimer = SystemClock.elapsedRealtime();
+        baseTimer = Long.parseLong(classAlreadtStartTime);
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                int time = (int)((SystemClock.elapsedRealtime() - that.baseTimer) / 1000);
+                int time = (int)((System.currentTimeMillis() - that.baseTimer) / 1000);
                 String hh = new DecimalFormat("00").format(time / 3600);
                 String mm = new DecimalFormat("00").format(time % 3600 / 60);
                 String ss = new DecimalFormat("00").format(time % 60);
@@ -1360,7 +1392,7 @@ public class MainActivity_tea extends AppCompatActivity {
             Log.d(TAG, "sdk callback onError");
             MainActivity_tea activity = mContext.get();
             if (activity != null) {
-                Toast.makeText(activity, "onError: " + errMsg + "[" + errCode+ "]" , Toast.LENGTH_SHORT).show();
+//                Toast.makeText(activity, "onError: " + errMsg + "[" + errCode+ "]" , Toast.LENGTH_SHORT).show();
                 if (errCode == TXLiteAVCode.ERR_ROOM_ENTER_FAIL) {
                     activity.exitRoom();
                 }
@@ -1509,119 +1541,137 @@ public class MainActivity_tea extends AppCompatActivity {
 
     //打开  选择文件方式的弹窗
     private void openchooseTypePopwindow(View view) {
-        curPopwindowType=1;
-        Point point = new Point();
-        this.getWindowManager().getDefaultDisplay().getSize(point);
-        int popUpWindowWidth = (int) (point.x*0.6);
-        int popUpWindowHeight = (int) (point.y * 0.75);
+        if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
+
+        }else {
+              curPopwindowType=1;
+                Point point = new Point();
+                this.getWindowManager().getDefaultDisplay().getSize(point);
+                int popUpWindowWidth = (int) (point.x*0.6);
+                int popUpWindowHeight = (int) (point.y * 0.75);
+
+                //先默认加载一下云端授课包内容
+                if(AirBoardPackageList!=null&&AirBoardPackageList.size()<1){livePlay_getResData_Package(userId);}
+
+                chooseFilepopupWindow = new PopupWindow(chooseFilePopupView, popUpWindowWidth, popUpWindowHeight, true);
+                if(CurBoardFileInfoList!=null&&CurBoardFileInfoList.size()>1){
+                    choosefileLinerLayout.setVisibility(View.GONE);
+                    chooseFileRecyclerView.setVisibility(View.VISIBLE);
+                    littlechooseAirFilePopupBtn.setVisibility(View.VISIBLE);
+                    boardswitchfilelistViewAdapter = new ChooseFileRecyclerViewAdapter(CurBoardFileInfoList.subList(1, CurBoardFileInfoList.size()),getBaseContext(),mBoard.getCurrentFile());
+                    chooseFileRecyclerView.setAdapter(boardswitchfilelistViewAdapter);
+                    boardswitchfilelistViewAdapter.setOnSwitchFileClickListener(new ChooseFileRecyclerViewAdapter.OnSwitchFileClickListener() {
+                        @Override
+                        public void onSwitchFileClick(TEduBoardController.TEduBoardFileInfo item) {
+                            //处理切换文件
+                            if(!boardswitchfilelistViewAdapter.getCurFileId().equals(item.getFileId())){
+                                boardswitchfilelistViewAdapter.setCurFileId(item.fileId);
+                                mBoard.switchFile(item.fileId);
+                                mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "载入中...");
+                            }
+                        }
+                        @Override
+                        public void onDelectFileCilck(TEduBoardController.TEduBoardFileInfo item) {
+                            if(!boardswitchfilelistViewAdapter.getCurFileId().equals(item.getFileId())){
+                                mBoard.deleteFile(item.getFileId());
+                                CurBoardFileInfoList = mBoard.getFileInfoList();
+                                boardswitchfilelistViewAdapter.setData(mBoard.getFileInfoList().subList(1, mBoard.getFileInfoList().size())  );
+
+                                if(boardchoosefilelistViewAdapter!=null){
+                                    boardchoosefilelistViewAdapter.notifyDataSetChanged();
+                                }else {
+                                    boardchoosefilelistViewAdapter = new BoardLoadingAirRescourseAdapter(AirBoardFileInfoList,getBaseContext());
+                                    boardchoosefilelistViewAdapter.notifyDataSetChanged();
+                                }
 
 
-        chooseFilepopupWindow = new PopupWindow(chooseFilePopupView, popUpWindowWidth, popUpWindowHeight, true);
-        if(CurBoardFileInfoList.size()>1){
-            choosefileLinerLayout.setVisibility(View.GONE);
-            chooseFileRecyclerView.setVisibility(View.VISIBLE);
-            littlechooseAirFilePopupBtn.setVisibility(View.VISIBLE);
-            boardswitchfilelistViewAdapter = new ChooseFileRecyclerViewAdapter(CurBoardFileInfoList.subList(1, CurBoardFileInfoList.size()),getBaseContext(),mBoard.getCurrentFile());
-            chooseFileRecyclerView.setAdapter(boardswitchfilelistViewAdapter);
-            boardswitchfilelistViewAdapter.setOnSwitchFileClickListener(new ChooseFileRecyclerViewAdapter.OnSwitchFileClickListener() {
-                @Override
-                public void onSwitchFileClick(TEduBoardController.TEduBoardFileInfo item) {
-                    //处理切换文件
-                    if(!boardswitchfilelistViewAdapter.getCurFileId().equals(item.getFileId())){
-                        boardswitchfilelistViewAdapter.setCurFileId(item.fileId);
-                        mBoard.switchFile(item.fileId);
-                        mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "载入中...");
-                    }
-                }
-                @Override
-                public void onDelectFileCilck(TEduBoardController.TEduBoardFileInfo item) {
-                    if(!boardswitchfilelistViewAdapter.getCurFileId().equals(item.getFileId())){
-                        mBoard.deleteFile(item.getFileId());
-                        CurBoardFileInfoList = mBoard.getFileInfoList();
-                        boardswitchfilelistViewAdapter.setData(mBoard.getFileInfoList().subList(1, mBoard.getFileInfoList().size())  );
-                        boardchoosefilelistViewAdapter.notifyDataSetChanged();
-                        if(!(CurBoardFileInfoList.size()>2)){
+                                if(!(CurBoardFileInfoList.size()>2)){
+                                    chooseFilepopupWindow.dismiss();
+                                }
+                            }
+
+
+                        }
+                    });
+                    StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+                    chooseFileRecyclerView.setLayoutManager(layoutManager);
+                    littlechooseNativeFilePopupBtn.setVisibility(View.VISIBLE);
+                    littlechooseNativeFilePopupBtn.setOnClickListener(new View.OnClickListener() {   //点击 本地上传打开的弹窗
+                        @Override
+                        public void onClick(View v) {
                             chooseFilepopupWindow.dismiss();
+                            if(addBoardtoFragmentstatus){
+                                if(select_resources.getVisibility()==View.VISIBLE){
+                                    select_resources.setVisibility(View.GONE);
+                                }else {
+                                    select_resources.setVisibility(View.VISIBLE);
+                                    filename.setText("未选择任何文件");
+                                    uploadfile.setText("开始上传");
+                                    uploadprogress.setVisibility(View.GONE);
+                                    curfilename="";
+                                    curfilepath="";
+                                    intoFileManager();
+                                }
+                            }
                         }
-                    }
-                }
-            });
-            StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-            chooseFileRecyclerView.setLayoutManager(layoutManager);
-            littlechooseNativeFilePopupBtn.setVisibility(View.VISIBLE);
-            littlechooseNativeFilePopupBtn.setOnClickListener(new View.OnClickListener() {   //点击 本地上传打开的弹窗
-                @Override
-                public void onClick(View v) {
-                    chooseFilepopupWindow.dismiss();
-                    if(addBoardtoFragmentstatus){
-                        if(select_resources.getVisibility()==View.VISIBLE){
-                            select_resources.setVisibility(View.GONE);
-                        }else {
-                            select_resources.setVisibility(View.VISIBLE);
-                            filename.setText("未选择任何文件");
-                            uploadfile.setText("开始上传");
-                            uploadprogress.setVisibility(View.GONE);
-                            curfilename="";
-                            curfilepath="";
-                            intoFileManager();
+                    });
+                    littlechooseAirFilePopupBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openAirFilePopwindow(view);
                         }
+                    });
+                    littlechooseAirPackagePopupBtn.setVisibility(View.VISIBLE);
+                    littlechooseAirPackagePopupBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openAirPackagePopwindow(view);
+                        }
+                    });
+
+                }
+                else {
+                    chooseAirFilePopupBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            //要做的就是 打开另一个云端资源列表 popupwindow
+                            openAirFilePopwindow(view);
+                        }
+                    });
+                    chooseAirPackagePopupBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            openAirPackagePopwindow(view);
+                        }
+
+                    });
+                    chooseNativeFilePopupBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            chooseFilepopupWindow.dismiss();
+                            openNativeFilePopwindow(view);
+
+                        }
+                    });
+                }
+
+                //设置关闭弹窗按钮
+                chooseFilePopupCloseBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        chooseFilepopupWindow.dismiss();
+                        Boardtimer.cancel();
                     }
-                }
-            });
-            littlechooseAirFilePopupBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openAirFilePopwindow(view);
-                }
-            });
-            littlechooseAirPackagePopupBtn.setVisibility(View.VISIBLE);
-            littlechooseAirPackagePopupBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openAirPackagePopwindow(view);
-                }
-            });
+                });
 
-        }
-        else {
-            chooseAirFilePopupBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    //要做的就是 打开另一个云端资源列表 popupwindow
-                    openAirFilePopwindow(view);
-                }
-            });
-            chooseAirPackagePopupBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    openAirPackagePopwindow(view);
-                }
+                //显示这个choosefilepopupwindow
+                chooseFilePopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
+                int offsetX = - popUpWindowWidth / 8;
+                int offsetY = - popUpWindowHeight - (view.getHeight())-20;
 
-            });
-            chooseNativeFilePopupBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    chooseFilepopupWindow.dismiss();
-                    openNativeFilePopwindow(view);
-
-                }
-            });
+                chooseFilepopupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
         }
 
-        //设置关闭弹窗按钮
-        chooseFilePopupCloseBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                chooseFilepopupWindow.dismiss();
-                Boardtimer.cancel();
-            }
-        });
-
-        //显示这个choosefilepopupwindow
-        chooseFilePopupView.measure(View.MeasureSpec.UNSPECIFIED, View.MeasureSpec.UNSPECIFIED);
-        int offsetX = - popUpWindowWidth / 8;
-        int offsetY = - popUpWindowHeight - (view.getHeight())-20;
-        chooseFilepopupWindow.showAsDropDown(view, offsetX, offsetY, Gravity.START);
     }
 
     //打开  选择本地文件 的弹窗
@@ -1687,6 +1737,7 @@ public class MainActivity_tea extends AppCompatActivity {
             }
         });
     }
+
 
     //打开  云端授课包弹窗
     private void openAirPackagePopwindow(View view) {
@@ -1764,16 +1815,25 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void OnChoosePackageItemClick(BoardRescourseBean item) {
                 mDialog = LoadingUtils.createLoadingDialog(MainActivity_tea.this, "导入中...");
-                //这里是没做完的   要按照资源类型开始导入  还有就是绑定返回按钮
-               if(item.getStyle().equals("question")||item.getStyle().equals("pdf")){
-                   mBoard.addElement( TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_H5,item.getPreviewUrl());
-               }else  if(item.getStyle().equals("png")||item.getStyle().equals("jpg")){
-                   mBoard.addElement( TEduBoardController.TEduBoardElementType.TEDU_BOARD_ELEMENT_IMAGE,item.getPreviewUrl());
-               }else{
+               System.out.println("+++加载云端资源包里面的类型"+item.getStyle()+item.getPreviewUrl());
+                if(item.getStyle().equals("question")||item.getStyle().equals("pdf")){
+                   mBoard.addH5File(item.getPreviewUrl(),item.getPname(),true);
+               }else  if(item.getStyle().equals("png")||item.getStyle().equals("jpg")||item.getStyle().equals("JPEG")||item.getStyle().equals("image")||item.getStyle().equals("img")){
+                    List imageList = new ArrayList();
+                    imageList.add(item.getPreviewUrl());
+                    mBoard.addImagesFile(imageList,"imagesfile_"+item.getPname(),true);
+               }
+//                else  if(item.getStyle().equals("MP3")||item.getStyle().equals("music")||item.getStyle().equals("mp3")||item.getStyle().equals("sound")){
+//                   mBoard.addAudioElement(item.getPreviewUrl(),item.getPname());
+//               }
+//                else  if(item.getStyle().equals("MP4")||item.getStyle().equals("video")||item.getStyle().equals("viedo")){
+//                   mBoard.addVideoFile(item.getPreviewUrl(),item.getPname(),true);
+//               }
+
+                else{
                    livePlay_uploadFileToCOS(item.getId());               //上传文件到存储桶
-                   if(item.getStyle().equals("ppt")||item.getStyle().equals("doc")||item.getStyle().equals("MP3")||item.getStyle().equals("MP4")){
-                        GetTransferProgress_Transcodehandler(item.getId());   //2s后开始查询  1s查询一次 上传进度
-                   }
+                   GetTransferProgress_Transcodehandler(item.getId());   //2s后开始查询  1s查询一次 上传进度
+
                }
 
 
@@ -1850,356 +1910,7 @@ public class MainActivity_tea extends AppCompatActivity {
         initParam.timSync=false;
         mBoard = new TEduBoardController(this);
         //（3）添加白板事件回调 实现TEduBoardCallback接口
-        mBoardCallback = new TEduBoardController.TEduBoardCallback(){
-            @Override
-            public void onTEBError(int code, String msg) {
-                System.out.println("onTEBError"+"+++++++++++++code"+code+msg);
-                alert_text.setText("白板加载失败！重新加载");
-            }
-            @Override
-            public void onTEBWarning(int code, String msg) {
-                System.out.println("onTEBWarning"+"+++++++++++++code:"+code);
-                if(code==7){  //VIDEO_ALREADY_EXISTS
-                    System.out.println("onTEBWarning"+"+++++++++++++VIDEO已经存在了:");
-                    mBoard.gotoBoard(msg);
-                }else if(code==3){  //H5PPT_ALREADY_EXISTS
-                    System.out.println("onTEBWarning"+"+++++++++++++H5PPT已经存在了:");
-                    mBoard.gotoBoard(msg);
-                }else if(code==6){  //H5PPT_ALREADY_EXISTS
-                    System.out.println("onTEBWarning"+"+++++++++++++H5FILE已经存在了:");
-                    mBoard.gotoBoard(msg);
-                }
-//                TEduBoardController.TEduBoardWarningCode.TEDU_BOARD_WARNING_IMAGE_MEDIA_BITRATE_TOO_LARGE
-            }
-            @Override
-            public void onTEBInit() {
-                System.out.println("onTEBInit"+"++++白板初始化完成了");
-                ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
-                if(findViewById(R.id.boardcontent).getMeasuredWidth()>findViewById(R.id.boardcontent).getMeasuredHeight()){
-                    params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
-                }else {
-                    params.setMargins(0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2,0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2);
-                }
-                Board_container.setLayoutParams(params);
-                findViewById(R.id.bg_shoukeneirong).setVisibility(View.GONE);
-                BoardStatus=true;
-                boardview = mBoard.getBoardRenderView();
-                initBoardMenu();
-                if(AirBoardFileInfoList.size()<1){
-                    livePlay_getResData(userId);//初始化云端资源数组
-                }
-                alert_text.setText("白板加载完成！");
-                if(!addBoardtoFragmentstatus){
-                    addBoardtoFragmentstatus =  mBoard.addBoardViewToContainer(Board_container,boardview,addBoardlayoutParams);
-                    rf_leftmenu.setVisibility(View.VISIBLE);
-                    rf_bottommenu.setVisibility(View.VISIBLE);
-                    rf_shoukeneirong.setVisibility(View.GONE);//默认图片那个消失
-                }
-                //设置 当前白板 文件的BoardFileInfolist
-                CurBoardFileInfoList = mBoard.getFileInfoList();
-            }
-            @Override
-            public void onTEBHistroyDataSyncCompleted() {
-                System.out.println("onTEBHistroyDataSyncCompleted"+"+++++++++++++");
-//                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-            }
-            @Override
-            public void onTEBSyncData(String data) {
-                final V2TIMMessage Board_message = V2TIMManager.getMessageManager().createCustomMessage(
-                        data.getBytes(),                   //data
-                        "",                             //description
-                        "TXWhiteBoardExt".getBytes());     //extension
-                V2TIMManager.getInstance().getConversationManager().getConversation(roomid, new V2TIMValueCallback<V2TIMConversation>() {
-                    @Override
-                    public void onError(int i, String s) {
-                        // 获取回话失败
-                        System.out.println("+++获取会话失败"+s+i);
-                    }
-                    @Override
-                    public void onSuccess(V2TIMConversation v2TIMConversation) {
-                        V2TIMManager.getInstance().getMessageManager().sendMessage(Board_message, null, roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
-                            @Override
-                            public void onSuccess(V2TIMMessage v2TIMMessage) {
-                                // 发送 IM 消息成功
-                                System.out.println("+++发送白板数据成功"+v2TIMMessage.getCustomElem().toString());
-                                if(findViewById(R.id.setBoardWindow).getVisibility()==View.VISIBLE){findViewById(R.id.setBoardWindow).setVisibility(View.GONE);}
-                            }
-                            @Override
-                            public void onError(int i, String s) {
-                                // 发送 IM 消息失败，建议进行重试
-                                System.out.println("+++发送 IM 消息失败，建议进行重试"+s);
-                                mBoard.syncAndReload();
-                            }
-                            @Override
-                            public void onProgress(int i) {
-                            }
-                        });
-                    }
-                });
-            }
 
-            @Override
-            public void onTEBUndoStatusChanged(boolean canUndo) {
-                SnapshotMarkFlag = canUndo;
-                    if(mDialog!=null&&mDialog.isShowing()){
-                        mDialog.dismiss();
-                        if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
-                            chooseFilepopupWindow.dismiss();
-                        }if(chooseAirFilepopupWindow!=null&&chooseAirFilepopupWindow.isShowing()){
-                            chooseAirFilepopupWindow.dismiss();
-                        }
-                    }
-                System.out.println("onTEBUndoStatusChanged"+"+++当前是否打锚点"+canUndo);
-            }
-            @Override
-            public void onTEBRedoStatusChanged(boolean canRedo) {
-                System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
-                select_resources.setVisibility(View.GONE);
-                if(mBoard.getCurrentFile()!=null&&mBoard.getCurrentBoard()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
-                    b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
-                    b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-                }
-
-            }
-
-            @Override
-            public void onTEBImageStatusChanged(String boardId, String url, int status) {
-                SnapshotMarkFlag = true;
-                System.out.println("onTEBImageStatusChanged"+"+++");
-
-            }
-
-            @Override
-            public void onTEBSetBackgroundImage(String url) {
-                SnapshotMarkFlag = true;
-                System.out.println("onTEBSetBackgroundImage"+"+++");
-            }
-
-            @Override
-            public void onTEBAddImageElement(String url) {
-                System.out.println("onTEBAddImageElement"+"+++添加了图片");
-            }
-
-            @Override
-            public void onTEBAddElement(String id, int type, String url) {
-                SnapshotMarkFlag = true;
-                System.out.println("onTEBAddElement"+"+++");
-            }
-
-            @Override
-            public void onTEBDeleteElement(List<String> id) {
-                SnapshotMarkFlag = true;
-                System.out.println("onTEBDeleteElement"+"+++");
-            }
-
-            @Override
-            public void onTEBSelectElement(List<TEduBoardController.ElementItem> elementItemList) {
-                System.out.println("onTEBSelectElement"+"+++");
-            }
-
-            @Override
-            public void onTEBMathGraphEvent(int code, String boardId, String graphId, String message) {
-                SnapshotMarkFlag = true;
-                System.out.println("onTEBMathGraphEvent"+"+++");
-            }
-
-            @Override
-            public void onTEBZoomDragStatus(String fid, int scale, int xOffset, int yOffset) {
-                //远端白板缩放移动状态回调
-                if( mBoard.getBoardScale()>300){
-                    mBoard.setBoardScale(300);
-                    b_size.setText("300");
-                }else {
-                    b_size.setText(mBoard.getBoardScale()+"");
-                }
-
-            }
-
-            @Override
-            public void onTEBBackgroundH5StatusChanged(String boardId, String url, int status) {
-                System.out.println("onTEBBackgroundH5StatusChanged"+"+++");
-            }
-
-            @Override
-            public void onTEBTextElementWarning(String code, String message) {
-                System.out.println("onTEBTextElementWarning"+"++++");
-            }
-
-            @Override
-            public void onTEBImageElementStatusChanged(int status, String currentBoardId, String imgUrl, String currentImgUrl) {
-                System.out.println("onTEBImageElementStatusChanged"+"++");
-            }
-
-            @Override
-            public void onTEBAddBoard(List<String> boardList, String fileId) {
-                if(!"#DEFAULT".equals(fileId)){
-                    FileID=fileId;
-                    CurFileID=null;
-                }
-            }
-
-            @Override
-            public void onTEBDeleteBoard(List<String> boardList, String fileId) {
-
-            }
-
-            @Override
-            public void onTEBGotoBoard(String boardId, String fileId) {
-                b_size.setText(mBoard.getBoardScale()+"");
-                if(BoardID.equals(fileId)){
-                    CurType="Board";
-                    CurBoardID = boardId;
-                }else {
-                    CurType="File";
-                    CurFileID = boardId;
-                }
-                b_cur.setText((mBoard.getFileBoardList(fileId).indexOf(boardId)+1)+"");
-                b_sum.setText(mBoard.getFileBoardList(fileId).size()+"");
-            }
-
-            @Override
-            public void onTEBGotoStep(int currentStep, int totalStep) {
-                System.out.println("onTEBGotoStep"+"+++++");
-            }
-
-            @Override
-            public void onTEBRectSelected() {
-                System.out.println("onTEBRectSelected"+"++++");
-            }
-
-            @Override
-            public void onTEBRefresh() {
-                System.out.println("onTEBRefresh"+"++++");
-            }
-
-            @Override
-            public void onTEBOfflineWarning(int count) {
-                System.out.println("onTEBOfflineWarning"+"+++");
-            }
-            @Override
-            public void onTEBAddTranscodeFile(String fileId) {
-                System.out.println("onTEBAddTranscodeFile"+fileId);
-                select_resources.setVisibility(View.GONE);
-            }
-            @Override
-            public void onTEBDeleteFile(String fileId) {
-                System.out.println("onTEBDeleteFile"+"+++:删除了文件的ID："+fileId);
-                CurFileID=null;
-                CurBoardFileInfoList = mBoard.getFileInfoList();
-
-            }
-            @Override
-            public void onTEBSwitchFile(String fileId) {
-                CurBoardFileInfoList = mBoard.getFileInfoList();
-                if(boardswitchfilelistViewAdapter!=null){
-                    boardswitchfilelistViewAdapter.setCurFileId(fileId);
-                    boardswitchfilelistViewAdapter.notifyDataSetChanged();
-                }
-                if(fileId.equals("#DEFAULT")){
- //                 当是白板的时候就要 跳转到之前相应页码数
-                    CurType="Board";
-                    CurBoardID = mBoard.getCurrentBoard();
-                }else {
- //                 当不是白板的时候 记录一下  打开的文件ID
-                    CurType="File";
-                    if(!fileId.equals(FileID)){
-                        //打开的文件不是上一次打开的文件就需要存起来文件ID了
-                        FileID=fileId;
-                    }
-                    CurFileID = mBoard.getCurrentBoard();
-                }
-            }
-
-            @Override
-            public void onTEBFileUploadProgress(String path, int currentBytes, int totalBytes, int uploadSpeed, float percent) {
-                System.out.println("onTEBFileUploadProgress"+"+++++");
-            }
-
-            @Override
-            public void onTEBFileUploadStatus(String path, int status, int errorCode, String errorMsg) {
-                System.out.println("onTEBFileUploadStatus"+"++++");
-            }
-
-            @Override
-            public void onTEBFileTranscodeProgress(String file, String errorCode, String errorMsg, TEduBoardController.TEduBoardTranscodeFileResult result) {
-                System.out.println("onTEBFileTranscodeProgress"+"+++++FileTranscodeProgress");
-            }
-
-            @Override
-            public void onTEBH5FileStatusChanged(String fileId, int status) {
-                System.out.println("onTEBH5FileStatusChanged"+"+++++++");
-            }
-
-            @Override
-            public void onTEBAddImagesFile(String fileId) {
-                System.out.println("onTEBAddImagesFile"+"++++++");
-            }
-
-            @Override
-            public void onTEBVideoStatusChanged(String fileId, int status, float progress, float duration) {
-            }
-
-            @Override
-            public void onTEBAudioStatusChanged(String elementId, int status, float progress, float duration) {
-                System.out.println("onTEBAudioStatusChanged"+"+++++");
-            }
-
-            @Override
-            public void onTEBSnapshot(String path, int code, String msg) {
-                System.out.println("onTEBSnapshot"+"++++白板快照"+path+msg+code);
-                if(code==0){
-                    File ff = new File(path);
-                    String name = ff.getName();
-                    Time time = new Time("GMT+8");
-                    time.setToNow();
-                    // isquestion  用来区分本次快照是题目的快照还是 切换的时候保存的快照
-                    String cosprefix = isquestion?"class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/question/" : "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/capture/";
-                    UploadToBucket(cosprefix,path,name,true,false);
-                }else {
-                    System.out.println("++++白板快照出错"+msg+"   code:"+code);
-                }
-            }
-
-            @Override
-            public void onTEBH5PPTStatusChanged(int statusCode, String fid, String describeMsg) {
-                System.out.println("onTEBH5PPTStatusChanged"+"+++");
-            }
-
-            @Override
-            public void onTEBTextElementStatusChange(String status, String id, String value, int left, int top) {
-                System.out.println("onTEBTextElementStatusChange"+"+++++");
-            }
-
-            @Override
-            public void onTEBScrollChanged(String boardId, int trigger, double scrollLeft, double scrollTop, double scale) {
-                System.out.println("onTEBScrollChanged"+"+++");
-            }
-
-            @Override
-            public void onTEBClassGroupStatusChanged(boolean enable, String classGroupId, int operationType, String message) {
-                System.out.println("onTEBClassGroupStatusChanged"+"++");
-            }
-
-            @Override
-            public void onTEBCursorPositionChanged(Point point) {
-                System.out.println("onTEBCursorPositionChanged"+"+++");
-            }
-
-            @Override
-            public void onTEBElementPositionChange(List<TEduBoardController.ElementItem> elementItemList) {
-                System.out.println("onTEBElementPositionChange"+"++++");
-            }
-
-            @Override
-            public void onTEBPermissionChanged(List<String> permissions, Map<String, List<String>> filters) {
-                System.out.println("onTEBPermissionChange"+"++++");
-            }
-
-            @Override
-            public void onTEBPermissionDenied(String permission) {
-                System.out.println("onTEBPermissionDenied"+"++++");
-            }
-        };
          mBoardCallback = new TEduBoardController.TEduBoardCallback(){
              @Override
              public void onTEBError(int code, String msg) {
@@ -2224,11 +1935,18 @@ public class MainActivity_tea extends AppCompatActivity {
              @Override
              public void onTEBInit() {
                  System.out.println("onTEBInit"+"++++白板初始化完成了");
+
+                 CurPaintColor=mBoard.getBrushColor().toInt();
+                 CurGeometryColor=mBoard.getBrushColor().toInt();
+
                  ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+                //白板留白处理
                  if(findViewById(R.id.boardcontent).getMeasuredWidth()>findViewById(R.id.boardcontent).getMeasuredHeight()){
-                     params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
-                 }else {
-                     params.setMargins(0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2,0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2);
+                        System.out.println("+++左右留白区域"+(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2);
+                        params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
+                 }else{
+                         System.out.println("+++上下留白区域" + (findViewById(R.id.boardcontent).getMeasuredHeight() - findViewById(R.id.boardcontent).getMeasuredWidth() * 9 / 16) / 2);
+                         params.setMargins(0, (findViewById(R.id.boardcontent).getMeasuredHeight() - findViewById(R.id.boardcontent).getMeasuredWidth() * 9 / 16) / 2, 0, (findViewById(R.id.boardcontent).getMeasuredHeight() - findViewById(R.id.boardcontent).getMeasuredWidth() * 9 / 16) / 2);
                  }
                  Board_container.setLayoutParams(params);
                  findViewById(R.id.bg_shoukeneirong).setVisibility(View.GONE);
@@ -2253,7 +1971,7 @@ public class MainActivity_tea extends AppCompatActivity {
                  System.out.println("onTEBHistroyDataSyncCompleted"+"+++++++++++++");
  //                b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
              }
-             @Override
+                     @Override
              public void onTEBSyncData(String data) {
                  final V2TIMMessage Board_message = V2TIMManager.getMessageManager().createCustomMessage(
                          data.getBytes(),                   //data
@@ -2295,8 +2013,12 @@ public class MainActivity_tea extends AppCompatActivity {
                          mDialog.dismiss();
                          if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
                              chooseFilepopupWindow.dismiss();
-                         }if(chooseAirFilepopupWindow!=null&&chooseAirFilepopupWindow.isShowing()){
+                         }
+                         if(chooseAirFilepopupWindow!=null&&chooseAirFilepopupWindow.isShowing()){
                              chooseAirFilepopupWindow.dismiss();
+                         }
+                         if(chooseAirPackageItempopupWindow!=null&&curPopwindowType==5&&chooseAirPackageItempopupWindow.isShowing()){
+                             chooseAirPackageItempopupWindow.dismiss();
                          }
                      }
                  System.out.println("onTEBUndoStatusChanged"+"+++当前是否打锚点"+canUndo);
@@ -2334,6 +2056,24 @@ public class MainActivity_tea extends AppCompatActivity {
              public void onTEBAddElement(String id, int type, String url) {
                  SnapshotMarkFlag = true;
                  System.out.println("onTEBAddElement"+"+++");
+                 if(mDialog!=null&&mDialog.isShowing()){
+                     mDialog.dismiss();
+                 }
+                 if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
+                     chooseFilepopupWindow.dismiss();
+                 }
+
+                 if(chooseAirFilepopupWindow!=null&&curPopwindowType==3&&chooseAirFilepopupWindow.isShowing()){
+                     chooseAirFilepopupWindow.dismiss();
+                 }else if(chooseAirPackageItempopupWindow!=null&&curPopwindowType==5&&chooseAirPackageItempopupWindow.isShowing()){
+                     chooseAirPackageItempopupWindow.dismiss();
+                 }
+
+                 if(select_resources.getVisibility()==View.VISIBLE){
+                     select_resources.setVisibility(View.GONE);
+                 }
+
+
              }
 
              @Override
@@ -2428,7 +2168,18 @@ public class MainActivity_tea extends AppCompatActivity {
              }
              @Override
              public void onTEBAddTranscodeFile(String fileId) {
-                 System.out.println("onTEBAddTranscodeFile"+fileId);
+                 System.out.println("onTEBAddTranscodeFile+++"+fileId);
+                 if(mDialog!=null&&mDialog.isShowing()){mDialog.dismiss();}
+                 if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
+                     chooseFilepopupWindow.dismiss();
+                 }
+                 if(chooseAirFilepopupWindow!=null&&chooseAirFilepopupWindow.isShowing()){
+                     chooseAirFilepopupWindow.dismiss();
+                 }
+                 if(chooseAirPackageItempopupWindow!=null&&curPopwindowType==5&&chooseAirPackageItempopupWindow.isShowing()){
+                     chooseAirPackageItempopupWindow.dismiss();
+                 }
+                 mBoard.switchFile(fileId);
                  select_resources.setVisibility(View.GONE);
              }
              @Override
@@ -2436,7 +2187,17 @@ public class MainActivity_tea extends AppCompatActivity {
                  System.out.println("onTEBDeleteFile"+"+++:删除了文件的ID："+fileId);
                  CurFileID=null;
                  CurBoardFileInfoList = mBoard.getFileInfoList();
-
+                 if(mDialog!=null&&mDialog.isShowing()){
+                     mDialog.dismiss();
+                 }
+                 if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
+                     chooseFilepopupWindow.dismiss();
+                 }
+                 if(chooseAirFilepopupWindow!=null&&curPopwindowType==3&&chooseAirFilepopupWindow.isShowing()){
+                     chooseAirFilepopupWindow.dismiss();
+                 }else if(chooseAirPackageItempopupWindow!=null&&curPopwindowType==5&&chooseAirPackageItempopupWindow.isShowing()){
+                     chooseAirPackageItempopupWindow.dismiss();
+                 }
              }
              @Override
              public void onTEBSwitchFile(String fileId) {
@@ -2483,6 +2244,17 @@ public class MainActivity_tea extends AppCompatActivity {
              @Override
              public void onTEBAddImagesFile(String fileId) {
                  System.out.println("onTEBAddImagesFile"+"++++++");
+                 if(mDialog!=null&&mDialog.isShowing()){
+                     mDialog.dismiss();
+                 }
+                 if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
+                     chooseFilepopupWindow.dismiss();
+                 }
+                 if(chooseAirFilepopupWindow!=null&&curPopwindowType==3&&chooseAirFilepopupWindow.isShowing()){
+                     chooseAirFilepopupWindow.dismiss();
+                 }else if(chooseAirPackageItempopupWindow!=null&&curPopwindowType==5&&chooseAirPackageItempopupWindow.isShowing()){
+                     chooseAirPackageItempopupWindow.dismiss();
+                 }
              }
 
              @Override
@@ -2492,6 +2264,17 @@ public class MainActivity_tea extends AppCompatActivity {
              @Override
              public void onTEBAudioStatusChanged(String elementId, int status, float progress, float duration) {
                  System.out.println("onTEBAudioStatusChanged"+"+++++");
+                 if(mDialog!=null&&mDialog.isShowing()){
+                     mDialog.dismiss();
+                 }
+                 if(chooseFilepopupWindow!=null&&chooseFilepopupWindow.isShowing()){
+                     chooseFilepopupWindow.dismiss();
+                 }
+                 if(chooseAirFilepopupWindow!=null&&curPopwindowType==3&&chooseAirFilepopupWindow.isShowing()){
+                    chooseAirFilepopupWindow.dismiss();
+                 }else if(chooseAirPackageItempopupWindow!=null&&curPopwindowType==5&&chooseAirPackageItempopupWindow.isShowing()){
+                     chooseAirPackageItempopupWindow.dismiss();
+                 }
              }
 
              @Override
@@ -2619,7 +2402,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             mBoard.addSyncData(new String(msg.getCustomElem().getData()));
                         }else if("TBKTExt".equals(Msg_Extension)){
                             //文本消息
-                            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
                             Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2,userHead);// type  2 别人 1 自己
                             ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
                             f.setData(msg_rec);
@@ -2738,6 +2521,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.NONE);
                 mBoard.setToolType(1);
                 mBoard.setBrushThin(cur_paintsize);
+                mBoard.setBrushColor(new TEduBoardController.TEduBoardColor(CurPaintColor));
                 setLeftmenustatus(true);
                 menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
                 menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
@@ -2868,6 +2652,8 @@ public class MainActivity_tea extends AppCompatActivity {
             public void onClick(View v) {
                 //开启 几何图形弹窗
                 mBoard.setToolType(6);
+                mBoard.setBrushThin(CurGeometrySize);
+                mBoard.setBrushColor(new TEduBoardController.TEduBoardColor(CurGeometryColor));
                 setLeftmenustatus(true);
                 menu04.setBackgroundResource(R.mipmap.menu_04_jihe1);
                 menu04color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
@@ -3720,9 +3506,38 @@ public class MainActivity_tea extends AppCompatActivity {
         }
     }
     /**
+     * 聊天控制
+     * @param extension 消息类型  @param action    操作动作  @param id        操作对象ID
+     */
+
+    public void chatAuthority(String extension, String action, String id) {
+        // 发送关闭学生聊天 消息
+        final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(
+                action.getBytes(),       //action   是否允许  yes no
+                id,                      //descripition    哪个用户
+                extension.getBytes());   //extension
+        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_HIGH, false, null, new V2TIMSendCallback<V2TIMMessage>() {
+            @Override
+            public void onProgress(int progress) {
+            }
+            @Override
+            public void onSuccess(V2TIMMessage message) {
+                System.out.println("+++发送关闭学生聊天消息发送成功了");
+            }
+            @Override
+            public void onError(int code, String desc) {
+                System.out.println("+++发送关闭学生聊天消息发送失败"+desc);
+            }
+        });
+    }
+
+
+
+    /**
      * 白板控制
      * @param extension 消息类型  @param action    操作动作  @param id        操作对象ID
      */
+
     public void drawAuthority(String extension, String action, String id) {
         // 发送关闭学生操作白板 消息
         final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(
@@ -3843,19 +3658,64 @@ public class MainActivity_tea extends AppCompatActivity {
     public void destroyBoard() {
         System.out.println("+++执行了销毁函数");
         CurType=null;
-        mBoard.removeCallback(mBoardCallback);
-        mBoard.uninit();
-        mBoard=null;
-        BoardStatus=false;
+        if(mBoard!=null){
+            mBoard.removeCallback(mBoardCallback);
+            mBoard.uninit();
+            mBoard=null;
+            BoardStatus=false;
+        }
         addBoardtoFragmentstatus=false;
     }
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
-        if(mBoard!=null&&BoardStatus){
-            destroyBoard();
+        if(mBoard!=null&&SnapshotMarkFlag){
+            mBoard.addSnapshotMark();
         }
+        onExitLiveRoom();
+        destroyBoard();
+
+        V2TIMManager.getInstance().logout(new V2TIMCallback() {
+            @Override
+            public void onError(int i, String s) {
+                System.out.println("+++IM登出错误"+s);
+            }
+
+            @Override
+            public void onSuccess() {
+                System.out.println("+++IM登出成功");
+            }
+        });
+        V2TIMManager.getInstance().unInitSDK();
+
+        //后面加一个 处理关闭  定时器一类的方法  在这里调用   比如 答题部分：AnswerQuestionFragment.java:3798  如果未关闭 直接下课就会出问题
+        save_livePlay_CreateSnapshotTask();
+        finish();
+
+        addBoardtoFragmentstatus =false;
+        rf_leftmenu.setVisibility(View.GONE);
+        rf_bottommenu.setVisibility(View.GONE);
+        RelativeLayout bg_shoukeneirong = findViewById(R.id.bg_shoukeneirong);
+        bg_shoukeneirong.setVisibility(View.VISIBLE);
+        alert_text.setText("已经下课，请退出教室！");
+        Board_container.setVisibility(View.GONE);
+        canvasBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        contentBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        boardBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+            }
+        });
+        super.onDestroy();
+
     }
 
 
@@ -3950,7 +3810,7 @@ public class MainActivity_tea extends AppCompatActivity {
     }
 
     //上传文件到存储桶  存储桶公共路径  、  文件本地路径  、   文件名称   、   是否删除本地缓存        是否添加到屏幕
-    private void UploadToBucket(String cosprefix,String path,String name,boolean isdelete,boolean needAddtoScreen){
+    private static void UploadToBucket(String cosprefix, String path, String name, boolean isdelete, boolean needAddtoScreen){
         isquestion=false;
         //cosprefix  存储桶目录    path 本地文件路径   name  名称
         // 访问 COS 服务  上传对象
@@ -3975,6 +3835,7 @@ public class MainActivity_tea extends AppCompatActivity {
         cosxmlUploadTask.setCosXmlProgressListener(new CosXmlProgressListener() {
             @Override
             public void onProgress(long complete, long target) {
+                System.out.print("+++上传进度回调输出"+complete+"---"+target);
                 proBar.setProgress((int)(complete*100/target));
             }
         });
@@ -3985,6 +3846,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 COSXMLUploadTask.COSXMLUploadTaskResult uploadResult =
                         (COSXMLUploadTask.COSXMLUploadTaskResult) result;
                 if(needAddtoScreen){
+                    System.out.print("+++返回結果回調函數：===查看返回结果"+"name:---"+name+"----"+result.accessUrl);
                 if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
                     Message msg = Message.obtain();
                     msg.what = MyEvent.WHITEBOARD_ADD_RESOURCE;
@@ -4191,7 +4053,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             curPackageList.add(BoardRescourseBean);
                             System.out.println("+++要看的授课包详情    列表"+BoardRescourseBean.toString());
                         }
-                        if(curPackageList.size()>1){
+                        if(boardchoosepackageitemlistViewAdapter!=null&&curPackageList.size()>1){
                             boardchoosepackageitemlistViewAdapter.notifyDataSetChanged();
                         }
 
@@ -4240,10 +4102,10 @@ public class MainActivity_tea extends AppCompatActivity {
                         AirBoardFileInfoList.clear();
                         for (int i=0; i < Jsonitemlist.length(); i ++) {
                             JSONObject jsonObj = Jsonitemlist.getJSONObject(i);
-                            BoardRescourseBean BoardRescourseBean = new BoardRescourseBean(jsonObj.getString("format"), jsonObj.getString("name"), jsonObj.getString("createDateStr").substring(0,10),jsonObj.getString("path"), jsonObj.getString("previewUrl"), jsonObj.getString("id"));
+                            BoardRescourseBean BoardRescourseBean = new BoardRescourseBean(jsonObj.getString("format"), jsonObj.getString("name"), jsonObj.getString("createDateStr").substring(0,16),jsonObj.getString("path"), jsonObj.getString("previewUrl"), jsonObj.getString("id"));
                             AirBoardFileInfoList.add(BoardRescourseBean);
                         }
-                        if(AirBoardFileInfoList.size()>1){
+                        if(boardchoosefilelistViewAdapter!=null&&AirBoardFileInfoList!=null&&AirBoardFileInfoList.size()>1){
                             boardchoosefilelistViewAdapter.notifyDataSetChanged();
                         }
 
@@ -4267,7 +4129,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     String SecretKey  = MsecretKey;
                     String Region  = MRegion;
                     String Bucket  = Mbucket;
-                    String SdkAppId  = BOARDSDKAPPID+"";
+                    String SdkAppId  = bucketSDKappID+"";
                     String RoomId  = roomid;
                     Time time = new Time("GMT+8");
                     time.setToNow();
@@ -4315,7 +4177,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     String SecretKey  = MsecretKey;
                     String Region  = MRegion;
                     String bucketName  = Mbucket;
-                    String SdkAppId  = BOARDSDKAPPID+"";
+                    String SdkAppId  = bucketSDKappID+"";
                     String resId  = resid;
                     String subjectid  = subjectId ;
                     String roomId  = roomid;
@@ -4325,8 +4187,8 @@ public class MainActivity_tea extends AppCompatActivity {
                     System.out.println("+++监控上传云端资源到存储桶："+url);
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("GET");
-                    httpURLConnection.setConnectTimeout(8000);
-                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.setConnectTimeout(80000);
+                    httpURLConnection.setReadTimeout(80000);
                     httpURLConnection.connect();
                     InputStream inputStream = httpURLConnection.getInputStream();
                     InputStreamReader reader = new InputStreamReader(inputStream, "GBK");
@@ -4341,11 +4203,23 @@ public class MainActivity_tea extends AppCompatActivity {
                     reader.close();
                     inputStream.close();
                     httpURLConnection.disconnect();
+                    System.out.println("+++监控上传云端资源到存储桶结果展示之前：");
                     try{
+
                         String backLogJsonStr = buffer.toString();
+                        System.out.println("+++监控上传云端资源到存储桶结果展示tryzhihou："+backLogJsonStr);
                         JSONObject json = stringToJson(backLogJsonStr);
                         String taskId  = json.getString("taskId");
-                        if(json.getString("status").equals("success")){
+
+                        System.out.println("+++这里是上传到存储桶的结果展示"+json.getString("status")+"---"+json.getString("name")+"---"+json.getString("link"));
+                        if(json.getString("status").equals("error")){
+                            if(mDialog!=null&&mDialog.isShowing()){
+                                mDialog.dismiss();
+                            }
+
+                            Toast.makeText(MainActivity_tea.this, json.get("link").toString(), Toast.LENGTH_LONG).show();
+                        }else if(json.getString("status").equals("success")){
+                            System.out.println("+++监控上传云端资源到存储桶结果："+json.getString("status"));
                             String name = json.getString("name");
                             String fileurl = json.getString("link");
                             if(name.endsWith("doc")||name.endsWith("pdf")||name.endsWith("docx")){    //doc  pdf  docx  三种文件调用接口转码
@@ -4449,6 +4323,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //                        否则就要设置 提示   提示上传进度
                         System.out.println("+++这里是查询云端资源传到存储桶定时任务，上传的文件进度"+progress);
                         if(progress.equals("100")){
+                            System.out.println("+++这里是查询云端资源传到存储桶定时任务：进度100了。定时任务取消");
                             Boardtimer.cancel();
                         }
                     } catch (Exception e) {
@@ -4463,6 +4338,7 @@ public class MainActivity_tea extends AppCompatActivity {
 
     //创建 查询上传云端资源到存储桶上传进度 定时请求器
     public void GetTransferProgress_Transcodehandler(String resid) {
+        Boardtimer = new Timer();
         Boardtimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -4478,18 +4354,20 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void run() {
                 try{
+                    System.out.println("创建转码任务++++");
                     String SecretId  = MsecretId;
                     String SecretKey = MsecretKey;
                     String Region    = MRegion;
-                    String SdkAppId  = BOARDSDKAPPID+"";
+                    String SdkAppId  = bucketSDKappID+"";
                     String link      = slink;
                     URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_CreateTranscode.do?"
                             + "SecretId=" + SecretId + "&SecretKey=" + SecretKey + "&Region=" + Region
                             + "&SdkAppId="+ SdkAppId   + "&link="+ link);
+                    System.out.println("创建转码任务++++"+url);
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("GET");
-                    httpURLConnection.setConnectTimeout(8000);
-                    httpURLConnection.setReadTimeout(8000);
+                    httpURLConnection.setConnectTimeout(80000);
+                    httpURLConnection.setReadTimeout(80000);
                     httpURLConnection.connect();
 
                     InputStream inputStream = httpURLConnection.getInputStream();
@@ -4512,15 +4390,17 @@ public class MainActivity_tea extends AppCompatActivity {
                     try{
                         String backLogJsonStr = buffer.toString();
                         JSONObject json = stringToJson(backLogJsonStr);
+                        System.out.println("+++文件转换结果"+json);
                         String status = json.get("Status").toString();
                         if(status.equals("success")){
                             System.out.println("+++转码接口任务成功：返回了taskId:;"+json.get("TaskId"));
+                            DescribeTranscodehandler(MsecretId,MsecretKey,Region,SdkAppId,json.get("TaskId").toString(),mBoard,proBar);
 //                          上传任务创建成功 就要调用查看转码状态
                             proBar.setProgress(0);
-                            msgTips.setText("文件正在转码：");
-                            uploadfile.setText("正在转码");
-                            DescribeTranscodehandler(MsecretId,MsecretKey,Region,SdkAppId,json.get("TaskId").toString(),mBoard,proBar);
-                        }else {
+                            msgTips.setText("文件正在加载：");
+                            uploadfile.setText("正在加载");
+                            }else {
+                                Toast.makeText(MainActivity_tea.this, "出错了，尝试其他文件加载。", Toast.LENGTH_SHORT).show();
 //                            失败，页面提示“创建文件转换任务失败，请稍后重试。”
                         }
 
@@ -4536,6 +4416,8 @@ public class MainActivity_tea extends AppCompatActivity {
 
     //创建 转码任务 定时请求器
     public static void DescribeTranscodehandler(String secretId,String secretKey,String region,String sdkAppId,String taskId,TEduBoardController mBoard,ProgressBar progressBar) {
+        System.out.println("+++DescribeTranscodehandler转码任务 定时请求器任务进行了");
+        Boardtimer= new Timer();
         Boardtimer.schedule(new TimerTask() {
             @Override
             public void run() {
@@ -4551,6 +4433,7 @@ public class MainActivity_tea extends AppCompatActivity {
             @Override
             public void run() {
                 try{
+                    System.out.println("+++DescribeTranscode 获取转码进度任务进行了");
                     String SecretId  = secretId;
                     String SecretKey = secretKey;
                     String Region    = region;
@@ -4559,6 +4442,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_DescribeTranscode.do?"
                             + "SecretId=" + SecretId + "&SecretKey=" + SecretKey + "&Region=" + Region
                             + "&SdkAppId="+ SdkAppId  + "&TaskId="+ TaskId);
+                    System.out.println("+++获取转码任务接口："+url);
                     HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
                     httpURLConnection.setRequestMethod("GET");
                     httpURLConnection.setConnectTimeout(8000);
@@ -4622,14 +4506,207 @@ public class MainActivity_tea extends AppCompatActivity {
         }).start();
     }
 
+    //截图
+
+
+
+    // 开始截屏
+    private byte[] screenshotView() {
+        View view = getWindow().getDecorView();
+        // view.setDrawingCacheEnabled(true); // 设置缓存，可用于实时截图
+        Bitmap bitmap = Bitmap.createBitmap(view.getWidth(), view.getHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        view.draw(canvas);
+        // view.setDrawingCacheEnabled(false); // 清空缓存，可用于实时截图
+        byte[] drawByte = getBitmapByte(bitmap); // 位图转为 Byte
+       System.out.println("+++2222+"+Base64.encodeToString(drawByte, Base64.DEFAULT));
+        return drawByte;
+    }
+
+    // 位图转 Base64 String
+    private static String getBitmapString(Bitmap bitmap) {
+        String result = null;
+        ByteArrayOutputStream out = null;
+        try {
+            if (bitmap != null) {
+                out = new ByteArrayOutputStream();
+                bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+                out.flush();
+                out.close();
+                byte[] bitmapBytes = out.toByteArray();
+                result = Base64.encodeToString(bitmapBytes, Base64.DEFAULT);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (out != null) {
+                    out.flush();
+                    out.close();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return result;
+    }
+    // 位图转 Byte
+    private static byte[] getBitmapByte(Bitmap bitmap){
+        ByteArrayOutputStream out = new ByteArrayOutputStream();
+        // 参数1转换类型，参数2压缩质量，参数3字节流资源
+        bitmap.compress(Bitmap.CompressFormat.PNG, 100, out);
+        try {
+            out.flush();
+            out.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return out.toByteArray();
+    }
+
+    private String screenshotView1() {
+        View boardscreenview = boardview;
+        boardscreenview.setDrawingCacheEnabled(true);
+        boardscreenview.buildDrawingCache();
+        Bitmap bitmap = Bitmap.createBitmap(boardscreenview.getDrawingCache());
+        saveBitmapFile(bitmap,MainActivity_tea.this);
+        String drawString = getBitmapString(bitmap);
+        return drawString;
+    }
+
+    //保存Bitmap图片
+    public static File saveBitmapFile(Bitmap bitmap, Activity activity){
+        File file = new File(createRootPath(activity) + "/hongyi.jpg");
+        try {
+            BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream(file));
+            bitmap.compress(Bitmap.CompressFormat.JPEG, 100, bos);
+            bos.flush();
+            bos.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return file;
+    }
+
+    //创建根目录
+    public static String createRootPath(Context context) {
+        String cacheRootPath = "";
+        if (isSdCardAvailable()) {
+            // /sdcard/Android/data/<application package>/cache
+            cacheRootPath = context.getExternalCacheDir().getPath();
+        } else {
+            // /data/data/<application package>/cache
+            cacheRootPath = context.getCacheDir().getPath();
+        }
+        return cacheRootPath;
+    }
+
+    public static boolean isSdCardAvailable() {
+        return Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState());
+    }
+
+        //保存图片
+        public void  saveScreenShotImg(String answerQuestionId,String base) {
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    try {
+                        URL url = new URL("http://www.cn901.com/ShopGoods/ajax/tpdata_uploadQueImg.do");
+
+                        System.out.println("+++测试是否上传成功" + "http://59.151.9.6/plan/tpKetangQuestionImage/2023/01/12/" + roomid + "/" + answerQuestionId + ".jpg");
+                        HttpURLConnection conn = (HttpURLConnection) url
+                                .openConnection();
+                        conn.setRequestMethod("POST");
+                        conn.setReadTimeout(8000);
+                        conn.setConnectTimeout(8000);
+                        String params = "roomId=" + URLEncoder.encode(roomid)
+                                + "&questionId=" + URLEncoder.encode(answerQuestionId)
+                                + "&base64=" + URLEncoder.encode(base);
+                        conn.setRequestProperty("Content-Type",
+                                "application/x-www-form-urlencoded");
+                        conn.setRequestProperty("Content-Length", params.length()
+                                + "");
+// 设置打开输出流
+                        conn.setDoOutput(true);
+// 拿到输出流
+                        OutputStream os = conn.getOutputStream();
+                        os.write(params.getBytes());
+                        os.flush();
+                        if (conn.getResponseCode() == 200) {
+                            InputStream is = conn.getInputStream();
+                            byte[] b = new byte[1024];
+                            int len = 0;
+// 创建字节数组输出流,读取输入流的文本数据时,同步把数据写入数组输出流
+                            ByteArrayOutputStream bos = new ByteArrayOutputStream();
+                            while ((len = is.read(b)) != -1) {
+                                bos.write(b, 0, len);
+                            }
+// 把字节数组输出流的数据转换成字节数组
+                            String text = new String(bos.toByteArray(), "utf-8");
+                            System.out.println("+++截图上传结果" + text);
+                        } else {
+                            System.out.println("+++截图上传失败了");
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+
+            }).start();
+
+        }
+
     //白板快照   王璐瑶调用
-    public static void ScreenShotBoard(Context context,String answerQuestionId,TEduBoardController mBoard){
+    public void ScreenShotBoard(Context context, String answerQuestionId, TEduBoardController mBoard){
+
+//        View screenView =getWindow().getDecorView();
+//        screenView.setDrawingCacheEnabled(true);
+//        screenView.buildDrawingCache();
+//        //获取屏幕整张图片
+//        Bitmap bitmap = screenView.getDrawingCache();
+//        if (bitmap != null) {
+//            //需要截取的长和宽
+//            int outWidth = boardview.getWidth();
+//            int outHeight = boardview.getHeight();
+//            //获取需要截图部分的在屏幕上的坐标(view的左上角坐标）
+//            int[] viewLocationArray = new int[2];
+//            boardview.getLocationOnScreen(viewLocationArray);
+//            //从屏幕整张图片中截取指定区域
+//            bitmap = Bitmap.createBitmap(bitmap, viewLocationArray[0], viewLocationArray[1], outWidth, outHeight);
+//        }
+//
+////            //使控件可以进行缓存
+////            boardview.setDrawingCacheEnabled(true);
+////            //获取缓存的 Bitmap
+////            Bitmap drawingCache = Board_container.getDrawingCache();
+//
+//            String ScreenShotBase64 =  Base64.encodeToString(getBitmapByte(bitmap), Base64.DEFAULT);
+////            //关闭视图的缓存
+////            boardview.setDrawingCacheEnabled(false);
+////            boardview.destroyDrawingCache();
+//        screenView.setDrawingCacheEnabled(false);
+//
+//        saveScreenShotImg(answerQuestionId,ScreenShotBase64);
+//
+//        String   path=context.getCacheDir()+"/"+answerQuestionId+".png";
+//        Time time = new Time("GMT+8");
+//        time.setToNow();
+//        String cosprefix = "class/"+time.year+"/"+(time.month+1)+"/"+time.monthDay+"/"+subjectId+"/"+roomid+"/question/" ;
+//        System.out.println("+++上传截图到存储桶");
+//        UploadToBucket(cosprefix,path,answerQuestionId+".png",false,false);
+//
+
         isquestion=true;//调用的时候把这个值设置为true  后面改变存储的路径
         //白板快照
         TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
         path.path=context.getCacheDir()+"/"+answerQuestionId+".png";
         mBoard.snapshot(path);
+
+
         // class/年/月/日/subjectId/roomId/question/questionId.png   王璐瑶那块
+
+
     }
 
     // 清空 几何工具 弹窗  左侧的选中状态

@@ -97,13 +97,13 @@ public class BoardLoadingAirPackageItemAdapter extends BaseAdapter {
             viewHolder.img.setImageResource(R.mipmap.type_word);
         }else if(data.get(position).getStyle().equals("pdf")){
             viewHolder.img.setImageResource(R.mipmap.type_pdf);
-        }else if(data.get(position).getStyle().equals("mp4")){
+        }else if(data.get(position).getStyle().equals("mp4")||data.get(position).getStyle().equals("video")||data.get(position).getStyle().equals("viedo")){
             viewHolder.img.setImageResource(R.mipmap.type_mp4);
         }else if(data.get(position).getStyle().equals("question")){
             viewHolder.img.setImageResource(R.mipmap.type_que);
-        }else if(data.get(position).getStyle().equals("mp3")){
+        }else if(data.get(position).getStyle().equals("mp3")||data.get(position).getStyle().equals("sound")||data.get(position).getStyle().equals("music")){
             viewHolder.img.setImageResource(R.mipmap.type_mp3);
-        }else if(data.get(position).getStyle().equals("img")||data.get(position).getStyle().equals("jpg")||data.get(position).getStyle().equals("png")){
+        }else if(data.get(position).getStyle().equals("image")||data.get(position).getStyle().equals("jpg")||data.get(position).getStyle().equals("png")||data.get(position).getStyle().equals("JPEG")||data.get(position).getStyle().equals("img")){
             viewHolder.img.setImageResource(R.mipmap.type_img);
         }else {
             viewHolder.img.setImageResource(R.mipmap.type_other);

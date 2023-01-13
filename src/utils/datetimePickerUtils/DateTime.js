@@ -7,7 +7,7 @@ import {
   Image
 } from 'react-native';
 import Picker from 'react-native-picker';
-
+import moment from 'moment'
 
 
 //这是一个时间选择器  两个参数：    
@@ -88,8 +88,19 @@ export default class DateTime extends Component {
         mm = mm.padStart(2,'0')
         let str = hh+':'+mm
         let date =this.state.selectedDatetime.substring(0,10)+' '
-        this.props.setDateTime(date+str)
-        this.setState({selectedDatetime:date+str})
+        //判断是否选择的时间在这个之前
+
+        
+        // moment("date+str"+":00:000").isBefore(Date.now().toLocaleString)
+        if(moment(date+str).isBefore(Date.now())){
+            this.props.setDateTime(new Date().toISOString().substring(0,10)+" "+(parseInt(new Date().toISOString().substring(11,13))+8).toString().padStart(2,'0')+new Date().toISOString().substring(13,16))
+            this.setState({selectedDatetime:new Date().toISOString().substring(0,10)+" "+(parseInt(new Date().toISOString().substring(11,13))+8).toString().padStart(2,'0')+new Date().toISOString().substring(13,16)})
+          }else{
+          this.props.setDateTime(date+str)
+          this.setState({selectedDatetime:date+str})
+        }
+
+       
       },
     });
     Picker.show();

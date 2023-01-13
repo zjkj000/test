@@ -1,4 +1,4 @@
-import { ScrollView, Text, TextInput, View,Image, Alert,Keyboard,TouchableOpacity  } from 'react-native'
+import { ScrollView, Text, TextInput, View,Image, Alert,Keyboard,TouchableOpacity,StyleSheet  } from 'react-native'
 import React, { Component, useEffect, useState } from 'react'
 import { CheckBox,Layout,Radio,Button, OverflowMenu ,MenuItem } from '@ui-kitten/components'
 import http from '../../utils/http/request'
@@ -79,21 +79,21 @@ class LiveingLession_addContent extends Component {
         const url = "http://www.cn901.com/ShopGoods/ajax/livePlay_saveZbLive.do";
         const params = {
                 userId:global.constants.userName,
-                title:this.state.title,
+                title:encodeURIComponent(this.state.title),
                 subjectId:this.state.subjectId, 
-                subjectName:this.state.subjectName,   //直播课名称
+                subjectName:encodeURIComponent(this.state.subjectName),   //直播课名称
                 startTime:this.state.startTime,     //startTime
                 hour:this.state.class_hour=='00'?0:this.state.class_hour=='01'?1:this.state.class_hour=='02'?2:this.state.class_hour=='03'?3:this.state.class_hour=='04'?4:this.state.class_hour=='05'?5:this.state.class_hour=='06'?6:this.state.class_hour=='07'?7:this.state.class_hour=='08'?8:this.state.class_hour=='09'?9:this.state.class_hour=='10'?10:this.state.class_hour=='11'?11:12,        //对应小时
                 minutes:this.state.class_minute=='00'?0:this.state.class_minute=='10'?1:this.state.class_minute=='20'?2:this.state.class_minute=='30'?3:this.state.class_minute=='40'?4:5,    //对应分钟
                 type:this.state.type,      // 类型：1自己的课堂，2协作组，3自己课堂+协作组
                 ketangId:this.state.ketangId.substring(1)+',',  //课堂id串，多个用,号分隔
                 xzzId:this.state.xzzId,     //协作组id（协作组只能选则一个）
-                xzzName:this.state.xzzName,   //协作组名称
+                xzzName:encodeURIComponent(this.state.xzzName),   //协作组名称
                 flag:this.state.flag,     //update(编辑记录),save（新创建的记录保存）
                 roomId:this.state.roomId,   //房间号（如果是新创建的传空串，如果是编辑保存，传roomId）
             };
         WaitLoading.show('发布中...',-1)
-        http.get(url, params).then((resStr) => {
+        http.get(url, params,true).then((resStr) => {
             let resJson = JSON.parse(resStr);
             if(resJson.status=='success'){
                 Alert.alert('',this.state.flag=='save'?'发布成功':'修改成功',[{},
@@ -142,6 +142,7 @@ class LiveingLession_addContent extends Component {
         const params = {userId:global.constants.userName};   // 教师用户名
         http.get(url, params).then((resStr) => {
             let resJson = JSON.parse(resStr);
+            console.log('学科数据'+resStr)
             this.setState({mList:resJson.mList,subjectList:resJson.subjectList
                         });
           })
@@ -250,6 +251,8 @@ class LiveingLession_addContent extends Component {
         for (let item_num = 0; item_num < 10; item_num++) {
             MenuItem_number_hour.push(
                 <MenuItem
+                style={{height:39,fontSize:8}}
+                // style={{width:(screenWidth-120)*0.5,height:39}}
                     title={"0"+item_num+"小时 "}
                     key={item_num}
                     onPress={() => {
@@ -262,6 +265,7 @@ class LiveingLession_addContent extends Component {
             <MenuItem
                     title={"10小时 "}
                     key={10}
+                    style={{height:40}}
                     onPress={() => {
                         this.setState({ moduleVisible_hour: false,class_hour:'10'});
                     }}
@@ -271,6 +275,7 @@ class LiveingLession_addContent extends Component {
             <MenuItem
                     title={"11小时 "}
                     key={11}
+                    style={{height:40}}
                     onPress={() => {
                         this.setState({ moduleVisible_hour: false,class_hour:'11'});
                     }}
@@ -314,7 +319,7 @@ class LiveingLession_addContent extends Component {
               <Text style={{color:'#59B9E0',fontSize:20}}>创建课堂</Text>
         </View>
 
-        <ScrollView style={{paddingBottom:20}}>
+        <ScrollView style={{paddingBottom:20,height:'100%'}}>
              <View style={{flexDirection:'row',borderBottomWidth:0.5,padding:10,borderColor:"#CBCBCB",width:'100%',alignItems:'center'}}>
                 <Text style={{width:80}}>课堂名称:</Text>
                 <TextInput
@@ -364,7 +369,7 @@ class LiveingLession_addContent extends Component {
                 <Layout style={{flexDirection:'row',paddingLeft:20}}>
                 <View style={{width:(screenWidth-110)*0.4,backgroundColor:'#fff',borderWidth:0.5,height:30,justifyContent:'center'}}>
                         <OverflowMenu
-                                style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.5}}
+                                style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.4}}
                                 anchor={this.renderAvatar_hour}
                                 visible={this.state.moduleVisible_hour}
                                 onBackdropPress={() => {this.setState({moduleVisible_hour:false})}}
@@ -374,7 +379,7 @@ class LiveingLession_addContent extends Component {
                     </View>
                     <View style={{width:(screenWidth-110)*0.4,backgroundColor:'#fff',borderWidth:0.5,height:30,justifyContent:'center',marginLeft:10}}>
                         <OverflowMenu
-                                    style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.5}}
+                                    style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.4}}
                                     anchor={this.renderAvatar_minute}
                                     visible={this.state.moduleVisible_minute}
                                     onBackdropPress={() => {this.setState({moduleVisible_minute:false})}}
@@ -387,25 +392,20 @@ class LiveingLession_addContent extends Component {
            <View style={{flexDirection:'row',padding:10,height:50,borderBottomWidth:0.5,borderColor:"#CBCBCB",alignItems:'center'}}>
                 <Text >课堂类型:</Text>
                 <Layout style={{flexDirection:'row',paddingLeft:20}}>
-                    <Radio style={{height:30}} checked={(this.state.type=='1'||this.state.type=='3')?true:false} onChange={()=>{
-                        if(this.state.type==''){
+                    <CheckBox checked={(this.state.type=='1'||this.state.type=='3')?true:false} onChange={()=>{if(this.state.type==''){
                             this.setState({type:'1'})
                         }else if(this.state.type=='1'){
                             this.setState({type:''})
                         }else if(this.state.type=='2'){
                             this.setState({type:'3'})
-                        }else{this.setState({type:'2'})}
-                    }}>自己的课堂</Radio>
-
-                    <Radio style={{height:30}} checked={(this.state.type=='2'||this.state.type=='3')?true:false} onChange={()=>{
-                        if(this.state.type==''){
+                        }else{this.setState({type:'2'})}}}>自己的课堂</CheckBox>
+                    <CheckBox checked={(this.state.type=='2'||this.state.type=='3')?true:false} onChange={()=>{ if(this.state.type==''){
                             this.setState({type:'2'})
                         }else if(this.state.type=='1'){
                             this.setState({type:'3'})
                         }else if(this.state.type=='2'){
                             this.setState({type:''})
-                        }else{this.setState({type:'1'})}
-                    }}>协作组的课堂</Radio>
+                        }else{this.setState({type:'1'})}}}>协作组的课堂</CheckBox>
                 </Layout>
             </View>
 
@@ -469,3 +469,4 @@ class LiveingLession_addContent extends Component {
   }
 }
 
+const styles = StyleSheet.create({})

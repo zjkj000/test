@@ -157,16 +157,16 @@ import java.util.Vector;
 public class MainActivity_stu extends AppCompatActivity implements View.OnClickListener {
 
     //TRTC   SDKAPPID
-    private  int TRTCSDKAPPID = 1400772698;//王id
+    private  int TRTCSDKAPPID = 1400772698;
     private  String TRTCSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
 
     //即时通信SDKAPPID
-    private  int IMSDKAPPID = 1400779599;//王id
-    private  String IMSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
+    private  int IMSDKAPPID = 1400695721;
+    private  String IMSECRETKEY = "8926bc8a7cb907f1694aca0da0f270b9bb1903193202de8a0a2779de9e144b1c";
 
     //白板SDKAPPID
-    private  int BOARDSDKAPPID = 1400779599;//徐id
-    private  String BOARDSECRETKEY = "449f8e95e5675571a0b2ede09a48633fce8171d5b917029e30af1ef3bb1e8c71";
+    private  int BOARDSDKAPPID = 1400695721;
+    private  String BOARDSECRETKEY = "8926bc8a7cb907f1694aca0da0f270b9bb1903193202de8a0a2779de9e144b1c";
 
     private static Timer timer;
 
@@ -217,6 +217,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static boolean musicOn = true;
     public static boolean cameraOn = true;
 
+
     // 监听用户进入房间
     public static ArrayList<String> mUserList = new ArrayList<String>();
     public static ArrayList<String> mCameraUserList = new ArrayList<String>();
@@ -224,9 +225,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static int mUserCount = 0;
 
     private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
-    private String Mbucket = "zjkj-1313356181";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKIDwhBPM6bruXw7A0ZwTovtnQpzwgroY5NQ";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "zlI5sb8TdeZHm4ObllT9duwztkS2Xoqf";                    //存储桶    永久密钥 secretKey
+    private String Mbucket = "zjkj-1312575671";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
+    private String MsecretId = "AKIDa1C6j7F6gy1oKYXEeng8JDqCH5cssb2D";                 //存储桶   永久密钥 secretId
+    private String MsecretKey = "wc07yYqrc6IDsGNCk12mEPJwIPFo67sM";                    //存储桶    永久密钥 secretKey
+    private int bucketSDKappID = 1400695721;  //这里应该是BOARDSDKAPPID
+
 
     private  String UserSig ="";                                                        //腾讯服务签名
 //  private  String UserSig =GenerateTestUserSig.genTestUserSig(UserId);
@@ -247,7 +250,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static String cameraState = "";
     public static String microphoneState = "";
     private static String handsState = "down"; //举手状态，up为正在举手，down为手已放下，off为禁止举手
-
+    public String classAlreadtStartTime = "";                                                       //当前课堂已经开始的时间
 
 
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
@@ -284,6 +287,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     private ImageButton geometry11,geometry12,geometry13,geometry14,geometry21,geometry22,geometry23,geometry24,geometry31,geometry32,geometry33,geometry34,geometry41,geometry42,geometry43,geometry44,geometry51,geometry52,geometry53,geometry61,geometry62,geometry63;
     private ImageButton teachingtools1,teachingtools2,teachingtools3,teachingtools4,teachingtools5;
     public static Integer cur_paintsize=100,cur_Highlighterpaintsize=450;  //记录当前 画笔 荧光笔粗细用的
+
+    //几何工具和画笔当前颜色控制
+    public static Integer  CurPaintColor =-65536;
+    public static Integer  CurGeometryColor =-65536;
+    public static Integer  CurGeometrySize= 100;
+
     private PopupWindow pw_selectpaint;                                 //选择画笔 一级弹窗
     private PopupWindow pw_selecgeometry;                               //选择 几何工具  一级弹窗
     private PopupWindow pw_selectteachingtools;                         //选择教学工具   一级弹窗
@@ -564,16 +573,15 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
          Board_container = findViewById(R.id.teachingcontent);
 
 
-        rf_leftmenu = findViewById(R.id.menu_left);
+         rf_leftmenu = findViewById(R.id.menu_left);
          rf_bottommenu = findViewById(R.id.menu_bottom);
+         rf_leftmenu.setVisibility(GONE);
+         rf_bottommenu.setVisibility(GONE);
+
          rf_shoukeneirong = findViewById(R.id.bg_shoukeneirong);
 
-
-        //第二次进入就加在不成功白板了
-//        if(mBoard==null||CurType==null){
-            initTIM();
-            initBoard();
-//        }
+         initTIM();
+         initBoard();
 
         if(menu02!=null&&mBoard!=null&&menu02color!=null){
             menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
@@ -648,6 +656,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         // 开启计时器
         startTime();
     }
+
+    @Override
+    public void onBackPressed() {
+        return;
+    }
+
 
     public void initQuestionData() {
         last_actiontime_answer = "";
@@ -856,6 +870,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         teacherName = strArr[9];
         cameraState = strArr[10];
         microphoneState = strArr[11];
+        classAlreadtStartTime = strArr[12];
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
                 MainActivity_stu.userId = intent.getStringExtra(Constant.USER_ID);
@@ -880,7 +895,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     public void startTime() {
         MainActivity_stu that = this;
-        baseTimer = SystemClock.elapsedRealtime();
+        baseTimer = Long.parseLong(classAlreadtStartTime);
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
@@ -940,7 +955,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -951,7 +966,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             item.setVideoControl(!item.getVideoControl());
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1100,6 +1115,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         MainActivity_stu.closeUIListener();
         HttpActivityStu.leaveOrJoinClass(userId, roomid, "leave", null);
 //        HttpActivityTea.stopHandsUpTimer();
+
+
+
     }
 
     public static class MyTRTCCloudListener extends TRTCCloudListener {
@@ -1492,6 +1510,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTEBInit() {
                 System.out.println("onTEBInit"+"++++白板初始化完成了");
+
                 if(mBoard.isDrawEnable()){
                   dealStopDraw();
                 }
@@ -1563,6 +1582,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
                 if(mBoard.getCurrentFile()!=null&&mBoard.getCurrentBoard()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
                     b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
+
                     b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
                 }
             }
@@ -2100,6 +2120,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     }
 
     public void initTIM(){
+        System.out.println("++++++初始化IM");
         //初始化 IMSDK
         V2TIMSDKConfig timSdkConfig = new V2TIMSDKConfig();
         IMLoginresult = V2TIMManager.getInstance().initSDK(this, IMSDKAPPID, timSdkConfig, new V2TIMSDKListener() {
@@ -2146,6 +2167,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
             @Override
             public void onSuccess() {
+                System.out.println("++++++登陆IM成功");
                 //高级消息监听器
                 V2TIMManager.getMessageManager().addAdvancedMsgListener(new V2TIMAdvancedMsgListener() {
                     @Override
@@ -2154,7 +2176,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         String Msg_Description = msg.getCustomElem().getDescription();
                         String Msg_Data = new String(msg.getCustomElem().getData());
                         super.onRecvNewMessage(msg);
-                        System.out.println("+++教师端收到了消息"+Msg_Extension+"**"+Msg_Description+"**"+Msg_Data);
+                        System.out.println("+++学生端收到了消息"+Msg_Extension+"**"+Msg_Description+"**"+Msg_Data);
                         if("TXWhiteBoardExt".equals(Msg_Extension)){
                             //白板消息
                             if(mBoard!=null){
@@ -2164,7 +2186,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                         }else if("TBKTExt".equals(Msg_Extension)){
                             //文本消息
                             System.out.println("+++收到了消息"+Msg_Description);
-                            SimpleDateFormat format = new SimpleDateFormat("HH:mm");
+                            SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
                             Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2,userHead);// type  2 别人 1 自己
 
                             ChatRoomFragmentStu f = (ChatRoomFragmentStu)getmFragmenglist().get(1);
@@ -2174,7 +2196,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                             f.getChatlv().setSelection(f.getChatlv().getBottom());
                         }else if("drawAuthority".equals(Msg_Extension)){
                             //文本消息
-                            System.out.println("+++收到了教师控制学生编办消息"+Msg_Data+Msg_Description+Msg_Extension);
+                            System.out.println("+++收到了教师控制学生白板消息"+Msg_Data+Msg_Description+Msg_Extension);
                             if(Msg_Description.startsWith(userId)){
                                 if(Msg_Data.equals("yes")){
                                     dealAllowDraw();
@@ -2264,9 +2286,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 //设置点击效果
+                mBoard.setBrushColor(new TEduBoardController.TEduBoardColor(CurPaintColor));
+                mBoard.setBrushThin(cur_paintsize);
                 mBoard.setPenAutoFittingMode(TEduBoardController.TEduBoardPenFittingMode.NONE);
                 mBoard.setToolType(1);
-                mBoard.setBrushThin(cur_paintsize);
+
                 setLeftmenustatus(true);
                 menu02.setBackgroundResource(R.mipmap.menu_02_paint1);
                 menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
@@ -2398,6 +2422,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onClick(View v) {
                 //开启 几何图形弹窗
+                mBoard.setBrushColor(new TEduBoardController.TEduBoardColor(CurGeometryColor));
+                mBoard.setBrushThin(CurGeometrySize);
+
                 mBoard.setToolType(6);
                 setLeftmenustatus(true);
                 menu04.setBackgroundResource(R.mipmap.menu_04_jihe1);
@@ -3268,19 +3295,33 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public void destroyBoard() {
         System.out.println("+++执行了销毁函数");
         CurType=null;
-        mBoard.removeCallback(mBoardCallback);
-        mBoard.uninit();
-        mBoard=null;
-        BoardStatus=false;
-        addBoardtoFragmentstatus=false;
+        if(mBoard!=null){
+            mBoard.removeCallback(mBoardCallback);
+            mBoard.uninit();
+            mBoard=null;
+            BoardStatus=false;
+            addBoardtoFragmentstatus=false;
+        }
+
     }
 
     @Override
     protected void onDestroy() {
+        exitRoom();
+        V2TIMManager.getInstance().logout(new V2TIMCallback() {
+            @Override
+            public void onError(int i, String s) {
+                System.out.println("+++IM登出错误"+s);
+            }
+
+            @Override
+            public void onSuccess() {
+                System.out.println("+++IM登出成功");
+            }
+        });
+
+        V2TIMManager.getInstance().unInitSDK();
         super.onDestroy();
-        if(mBoard!=null&&BoardStatus){
-            destroyBoard();
-        }
     }
 
 
@@ -3317,7 +3358,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     String SecretId  = MsecretId;
                     String SecretKey = MsecretKey;
                     String Region    = MRegion;
-                    String SdkAppId  = SDKappID+"";
+                    String SdkAppId  = bucketSDKappID+"";
                     String link      = slink;
                     URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_CreateTranscode.do?"
                             + "SecretId=" + SecretId + "&SecretKey=" + SecretKey + "&Region=" + Region
@@ -4025,7 +4066,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             editpic(bitmap);
 
         }else {
-            Toast.makeText(this,"fail to get image",Toast.LENGTH_SHORT).show();
+//            Toast.makeText(this,"fail to get image",Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -4270,6 +4311,23 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
         }
     }
+
+    //处理允许聊天
+    public void  dealAllowChat(){
+        System.out.println("执行了处理允许聊天函数+++");
+        chatRoomFragment.allowchat();
+
+
+
+    }
+    //处理禁止聊天
+    public void   dealStopChat(){
+        System.out.println("执行了处理禁止聊天函数+++");
+        chatRoomFragment.stopchat();
+    }
+
+
+
     //处理禁止涂鸦啊
      public void   dealStopDraw(){
         if(rf_bottommenu!=null&&rf_leftmenu!=null){
@@ -4287,9 +4345,16 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
      }
      //处理允许涂鸦
      public void  dealAllowDraw(){
-        rf_leftmenu.setVisibility(View.VISIBLE);
-        rf_bottommenu.setVisibility(View.VISIBLE);
-        if(mBoard!=null){
+
+        System.out.println("+++处理允许绘画"+rf_leftmenu.getVisibility());
+        if(rf_bottommenu!=null&&rf_leftmenu!=null) {
+            rf_leftmenu.setVisibility(View.VISIBLE);
+            rf_bottommenu.setVisibility(View.VISIBLE);
+        }
+         rf_leftmenu.bringToFront();
+         rf_bottommenu.bringToFront();
+
+         if(mBoard!=null){
             mBoard.setToolType(1);
             menu02color.setBackground(getResources().getDrawable(R.color.bg_selected_menu));
             menu02color.setImageResource(R.mipmap.text_red);

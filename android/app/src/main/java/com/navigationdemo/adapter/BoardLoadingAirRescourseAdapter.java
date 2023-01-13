@@ -2,6 +2,7 @@ package com.navigationdemo.adapter;
 
 import com.navigationdemo.R;
 import android.content.Context;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -94,18 +95,19 @@ public class BoardLoadingAirRescourseAdapter extends BaseAdapter {
         //textView里面放置bean的数据
         viewHolder.tx_name.setText(data.get(position).getPname());
         viewHolder.tx_date.setText(data.get(position).getPdate());
+        viewHolder.tx_date.setTextColor(Color.rgb(180,180,180));
 //        根据类型判断
         if(data.get(position).getStyle().equals("ppt")||data.get(position).getStyle().equals("pptx")){
             viewHolder.img.setImageResource(R.mipmap.type_ppt);
-        }else if(data.get(position).getStyle().equals("doc")||data.get(position).getStyle().equals("docx")){
+        }else if(data.get(position).getStyle().equals("doc")||data.get(position).getStyle().equals("docx")||data.get(position).getStyle().equals("word")){
             viewHolder.img.setImageResource(R.mipmap.type_word);
         }else if(data.get(position).getStyle().equals("pdf")){
             viewHolder.img.setImageResource(R.mipmap.type_pdf);
-        }else if(data.get(position).getStyle().equals("mp4")){
+        }else if(data.get(position).getStyle().equals("mp4")||data.get(position).getStyle().equals("video")||data.get(position).getStyle().equals("viedo")){
             viewHolder.img.setImageResource(R.mipmap.type_mp4);
-        }else if(data.get(position).getStyle().equals("mp3")){
+        }else if(data.get(position).getStyle().equals("mp3")||data.get(position).getStyle().equals("sound")||data.get(position).getStyle().equals("music")){
             viewHolder.img.setImageResource(R.mipmap.type_mp3);
-        }else if(data.get(position).getStyle().equals("img")||data.get(position).getStyle().equals("jpg")||data.get(position).getStyle().equals("png")){
+        }else if(data.get(position).getStyle().equals("img")||data.get(position).getStyle().equals("jpg")||data.get(position).getStyle().equals("JPEG")||data.get(position).getStyle().equals("image")){
             viewHolder.img.setImageResource(R.mipmap.type_img);
         }else {
             viewHolder.img.setImageResource(R.mipmap.type_other);

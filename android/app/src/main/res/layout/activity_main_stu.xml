@@ -370,9 +370,10 @@
         <!-- 底部功能-->
         <RelativeLayout
             android:layout_width="match_parent"
+
             android:layout_height="match_parent"
             android:id="@+id/menu_bottom"
-            android:visibility="gone"
+            android:visibility="visible"
             android:gravity="right|bottom">
             <TableLayout
                 android:layout_width="wrap_content"
@@ -427,18 +428,21 @@
                         android:background="@mipmap/menu_b04" />
                     <TextView
                         android:id="@+id/board_size"
-                        android:layout_width="24dp"
-                        android:layout_height="20dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="2dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@color/bg_select_menu"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
+                        android:text="100"
                         android:textSize="10sp"
                         android:textColor="@color/white" />
                     <TextView
                         android:id="@+id/b_per"
                         android:layout_width="8dp"
-                        android:layout_height="20dp"
+                        android:layout_height="wrap_content"
                         android:background="@color/bg_select_menu"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:text="%"
                         android:textSize="10sp"
                         android:textColor="@color/white" />
@@ -463,29 +467,33 @@
                         android:background="@mipmap/menu_b06" />
                     <TextView
                         android:id="@+id/board_curpage"
-                        android:layout_width="18dp"
-                        android:layout_height="20dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textSize="10sp"
                         android:background="@color/bg_select_menu"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:text="1"
                         android:textColor="@color/white" />
                     <TextView
                         android:id="@+id/b_chu"
-                        android:layout_width="8dp"
-                        android:layout_height="20dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:background="@color/bg_select_menu"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:textSize="10sp"
                         android:text="/"
                         android:textColor="@color/white" />
                     <TextView
                         android:id="@+id/board_sumpage"
-                        android:layout_width="18dp"
-                        android:layout_height="20dp"
+                        android:layout_marginLeft="3dp"
+                        android:layout_marginRight="3dp"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:textSize="10sp"
                         android:background="@color/bg_select_menu"
-                        android:gravity="center"
+                        android:gravity="center_vertical"
                         android:text="1"
                         android:textColor="@color/white" />
                     <ImageButton

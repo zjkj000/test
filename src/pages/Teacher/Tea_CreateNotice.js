@@ -57,7 +57,6 @@ class Tea_CreateNoticeContent extends Component {
     }
 
     UNSAFE_componentWillMount(){
-        console.log('will--公告',this.props.data,this.props.type)
         this.setState({
             noticeId:this.props.noticeId,
             saveOrUpdate:this.props.data!=''?'update':'save',

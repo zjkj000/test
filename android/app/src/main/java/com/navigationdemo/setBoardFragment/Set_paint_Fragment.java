@@ -40,6 +40,11 @@ public class Set_paint_Fragment extends Fragment {
                              Bundle savedInstanceState) {
         View view =  inflater.inflate(R.layout.set_paint_fragment, container, false);
         MainActivity_tea activity = (MainActivity_tea) getActivity();
+
+        System.out.print("+++当前几何工具的颜色" +activity.getmBoard().getBrushColor().toInt());
+        System.out.print("+++当前几何工具的大小" + activity.getmBoard().getBrushThin());
+
+
         paintsize1 = view.findViewById(R.id.paintsize1);
         setpaintsize1 = view.findViewById(R.id.setpaintsize1);
         paintsize1.setOnClickListener(new View.OnClickListener() {
@@ -126,6 +131,7 @@ public class Set_paint_Fragment extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("paintcolor","black");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.BLACK));
+                MainActivity_tea.CurPaintColor=activity.getmBoard().getBrushColor().toInt();
                 setpaintblack.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -137,6 +143,7 @@ public class Set_paint_Fragment extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("paintcolor","blue");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.BLUE));
+                MainActivity_tea.CurPaintColor=activity.getmBoard().getBrushColor().toInt();
                 setpaintblue.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -148,6 +155,7 @@ public class Set_paint_Fragment extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("paintcolor","green");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.GREEN));
+                MainActivity_tea.CurPaintColor=activity.getmBoard().getBrushColor().toInt();
                 setpaintgreen.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -159,6 +167,7 @@ public class Set_paint_Fragment extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("paintcolor","yellow");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.YELLOW));
+                MainActivity_tea.CurPaintColor=activity.getmBoard().getBrushColor().toInt();
                 setpaintyellow.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });
@@ -170,6 +179,7 @@ public class Set_paint_Fragment extends Fragment {
                 setLinColorstatus();
                 activity.forSetFragmentSet("paintcolor","red");
                 activity.getmBoard().setBrushColor(new TEduBoardController.TEduBoardColor(Color.RED));
+                MainActivity_tea.CurPaintColor=activity.getmBoard().getBrushColor().toInt();
                 setpaintred.setBackground(getContext().getResources().getDrawable(R.color.blue_white));
             }
         });

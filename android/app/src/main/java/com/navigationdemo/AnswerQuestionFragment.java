@@ -1143,10 +1143,10 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     Log.e("Tag" , "点击了屏幕共享！！！！！！");
                     //开始共享屏幕
                     if(!ifShare){
-                        Toast.makeText(getActivity(),"111点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),"111点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
                         btEnd.performClick(); //分享屏幕时主动触发结束答题按钮
                     }else{
-                        Toast.makeText(getActivity(),"222点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),"222点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
                     }
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
                     getActivity().runOnUiThread(new Runnable() {

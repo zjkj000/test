@@ -70,7 +70,12 @@ public class ChooseFileRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHo
     @Override
     public void onBindViewHolder(@NonNull MyViewHoder holder, @SuppressLint("RecyclerView") int position) {
         TEduBoardController.TEduBoardFileInfo mdata = data.get(position);
-        holder.mTitle.setText(mdata.getTitle());
+        if(mdata.getTitle().startsWith("imagesfile")){
+            holder.mTitle.setText(mdata.getTitle().split("_")[1]);
+        }else{
+            holder.mTitle.setText(mdata.getTitle());
+        }
+
         if(mdata.getTitle().endsWith("ppt")||mdata.getTitle().endsWith("pptx")){
             holder.mImg.setImageResource(R.mipmap.file_ppt);
         }else if(mdata.getTitle().endsWith("doc")||mdata.getTitle().endsWith("docx")){
@@ -79,6 +84,12 @@ public class ChooseFileRecyclerViewAdapter extends RecyclerView.Adapter<MyViewHo
             holder.mImg.setImageResource(R.mipmap.file_pdf);
         }else if(mdata.getTitle().endsWith("mp4")){
             holder.mImg.setImageResource(R.mipmap.file_mp4);
+        }else if(mdata.getTitle().startsWith("imagesfile")){
+            holder.mImg.setImageResource(R.mipmap.file_img);
+        }else if(mdata.getTitle().startsWith("单项")||mdata.getTitle().startsWith("填空")||mdata.getTitle().startsWith("判断")||mdata.getTitle().startsWith("多项")){
+            holder.mImg.setImageResource(R.mipmap.file_que);
+        }else {
+            holder.mImg.setImageResource(R.mipmap.file_other);
         }
         if(mdata.fileId.equals(curFileId)){
             holder.fileRL.setBackgroundResource(R.drawable.fileitembg_ed);
