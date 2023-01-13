@@ -250,7 +250,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static String cameraState = "";
     public static String microphoneState = "";
     private static String handsState = "down"; //举手状态，up为正在举手，down为手已放下，off为禁止举手
-
+    public String classAlreadtStartTime = "";                                                       //当前课堂已经开始的时间
 
 
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
@@ -870,6 +870,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         teacherName = strArr[9];
         cameraState = strArr[10];
         microphoneState = strArr[11];
+        classAlreadtStartTime = strArr[12];
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
                 MainActivity_stu.userId = intent.getStringExtra(Constant.USER_ID);
@@ -894,7 +895,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     public void startTime() {
         MainActivity_stu that = this;
-        baseTimer = SystemClock.elapsedRealtime();
+        baseTimer = Long.parseLong(classAlreadtStartTime);
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override

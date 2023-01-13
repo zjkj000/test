@@ -213,6 +213,7 @@ public class MainActivity_tea extends AppCompatActivity {
     public static String microphoneState = "";
     public int stuMemberNum = 0;                                                                    //当前课堂学生数
     public int keTangMemberNum = 0;                                                                 //当前课堂班级数
+    public String classAlreadtStartTime = "";                                                       //当前课堂已经开始的时间
 
 
     private  int SDKappID =GenerateTestUserSig.SDKAPPID;                                                  //SDKAppID
@@ -840,6 +841,7 @@ public class MainActivity_tea extends AppCompatActivity {
         userHead = strArr[7];
         cameraState = strArr[8];
         microphoneState = strArr[9];
+        classAlreadtStartTime = strArr[10];
 
         if (null != intent) {
             if (intent.getStringExtra(Constant.USER_ID) != null) {
@@ -865,12 +867,12 @@ public class MainActivity_tea extends AppCompatActivity {
 
     public void startTime() {
         MainActivity_tea that = this;
-        baseTimer = SystemClock.elapsedRealtime();
+        baseTimer = Long.parseLong(classAlreadtStartTime);
         timer = new Timer();
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                int time = (int)((SystemClock.elapsedRealtime() - that.baseTimer) / 1000);
+                int time = (int)((System.currentTimeMillis() - that.baseTimer) / 1000);
                 String hh = new DecimalFormat("00").format(time / 3600);
                 String mm = new DecimalFormat("00").format(time % 3600 / 60);
                 String ss = new DecimalFormat("00").format(time % 60);
@@ -1032,7 +1034,6 @@ public class MainActivity_tea extends AppCompatActivity {
 
     // 更新成员列表
     public void addMemberToList(String userId) {
-        memberDataList.clear();
         StudentDataBean memberInJoinList = AnswerActivityTea.findMemberInJoinList(userId);
         ClassDataBean memberInKetangList = AnswerActivityTea.findMemberInKetangList(userId);
         if(memberInJoinList != null) {
@@ -1070,7 +1071,6 @@ public class MainActivity_tea extends AppCompatActivity {
         listViewAdapter.notifyDataSetChanged();
     }
     public void subMemberToList(String userId) {
-        memberDataList.clear();
         StudentDataBean memberInJoinList = AnswerActivityTea.findMemberInJoinList(userId);
         ClassDataBean memberInKetangList = AnswerActivityTea.findMemberInKetangList(userId);
         if(memberInJoinList != null) {
@@ -1088,7 +1088,7 @@ public class MainActivity_tea extends AppCompatActivity {
                     }
                 }
             }
-            if(videoListFragment.findUserInUserList(memberInKetangList.getUserId())) {
+            if(videoListFragment.findUserInUserList(memberInJoinList.getUserId())) {
                 videoListFragment.leaveRoom(userId, 12580, this, mTRTCCloud);
             }
             if(hasSub)
@@ -1170,8 +1170,10 @@ public class MainActivity_tea extends AppCompatActivity {
                     if(item.getSpeakControl()){
                         ClassDataBean memberInKetangList = AnswerActivityTea.findMemberInKetangList(item.getUserId());
                         StudentDataBean studentDataBean = AnswerActivityTea.findMemberInJoinList(item.getUserId());
-                        if(memberInKetangList != null)
+                        if(memberInKetangList != null) {
                             item.setUserType(0);
+                            that.videoListFragment.changeSpeaker(item.getUserId(), "down");
+                        }
                         if(studentDataBean != null) {
                             that.videoListFragment.changeSpeaker(item.getUserId(), "down");
                             that.videoListFragment.leaveRoom(item.getUserId(), 12580, that, getmTRTCCloud());

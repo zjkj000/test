@@ -42,6 +42,7 @@ export default function LiveingLessonInfo_stu() {
     const [chooseTeacherId, setchooseTeacherId] = useState("");
     const [chooseTeacherName, setchooseTeacherName] = useState("");
     const [showLoading, setShowLoading] = useState(false);
+    const [startTime, setStartTime] = useState("");
     useEffect(() => {
         fetchData("All", 1);
         return () => {
@@ -106,6 +107,7 @@ export default function LiveingLessonInfo_stu() {
                 setchooseClassketangId={setchooseClassketangId}
                 setchooseTeacherId={setchooseTeacherId}
                 setchooseTeacherName={setchooseTeacherName}
+                setStartTime={setStartTime}
             />
         );
     }
@@ -338,7 +340,9 @@ export default function LiveingLessonInfo_stu() {
                                                                     "-@-" +
                                                                     chooseClassCamera +
                                                                     "-@-" +
-                                                                    chooseClassMicrophone
+                                                                    chooseClassMicrophone +
+                                                                    "-@-" +
+                                                                    startTime
                                                             );
                                                         } else {
                                                             Toast.showDangerToast(
@@ -499,6 +503,7 @@ class LiveingLessonContent extends Component {
         this.state = {
             time1: "",
             time2: "",
+            startDate: "", //课程已开始时长
             teacherName: "",
             subject: "",
             title: "",
@@ -664,6 +669,9 @@ class LiveingLessonContent extends Component {
                                     );
                                     this.props.setchooseTeacherName(
                                         this.state.teacherName
+                                    );
+                                    this.props.setStartTime(
+                                        this.state.startDate.time
                                     );
                                     // NativeModules.IntentMoudle.startActivityFromJS(
                                     //     "MainActivity_stu",

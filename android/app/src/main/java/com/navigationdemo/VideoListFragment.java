@@ -131,7 +131,7 @@ public class VideoListFragment extends Fragment {
                 cameraFragment.stopAudio(mTRTCCloud, userId);
             }
         } else {
-            Toast.makeText(activity, "未找到用户", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(activity, "未找到用户", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -144,7 +144,7 @@ public class VideoListFragment extends Fragment {
                 cameraFragment.hideVideo(mTRTCCloud, userId);
             }
         } else {
-            Toast.makeText(activity, "未找到用户", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(activity, "未找到用户", Toast.LENGTH_SHORT).show();
         }
     }
     public void setVideo(String userId, boolean available, MainActivity_stu activity, TRTCCloud mTRTCCloud) {
@@ -156,7 +156,7 @@ public class VideoListFragment extends Fragment {
                 cameraFragment.hideVideo(mTRTCCloud, userId);
             }
         } else {
-            Toast.makeText(activity, "未找到用户", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(activity, "未找到用户", Toast.LENGTH_SHORT).show();
         }
     }
 
