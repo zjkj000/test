@@ -41,6 +41,7 @@ export default function LiveingLessionInfo_teacher(props) {
     const [chooseClasssubjectId, setchooseClasssubjectId] = useState("");
     const [chooseClassketangId, setchooseClassketangId] = useState("");
     const [showLoading, setShowLoading] = useState(false);
+    const [startTime, setStartTime] = useState("");
 
     const [chooseClassmodalVisible, setchooseClassmodalVisible] =
         useState(false);
@@ -124,6 +125,7 @@ export default function LiveingLessionInfo_teacher(props) {
                 setchooseClasstitle={setchooseClasstitle}
                 setchooseClasssubjectId={setchooseClasssubjectId}
                 setchooseClassroomId={setchooseClassroomId}
+                setStartTime={setStartTime}
             />
         );
     }
@@ -353,7 +355,9 @@ export default function LiveingLessionInfo_teacher(props) {
                                                                     "-@-" +
                                                                     chooseClassCamera +
                                                                     "-@-" +
-                                                                    chooseClassMicrophone
+                                                                    chooseClassMicrophone +
+                                                                    "-@-" +
+                                                                    startTime
                                                             );
                                                         } else {
                                                             Toast.showDangerToast(
@@ -858,6 +862,9 @@ class LiveingLessonContent_teacher extends Component {
                                             );
                                             this.props.setchooseClassketangId(
                                                 this.state.ketangId
+                                            );
+                                            this.props.setStartTime(
+                                                this.state.showStrBottom
                                             );
                                         }}
                                     >
