@@ -23,6 +23,7 @@ import http from "../../utils/http/request";
 import ImageHandler from "../../utils/Camera/Camera";
 import { styles } from "./styles";
 import Toast from "../../utils/Toast/Toast";
+import StorageUtil from "../../utils/Storage/Storage";
 
 const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 import { useNavigation } from "@react-navigation/native";
@@ -119,6 +120,14 @@ class MyPageComponent extends Component {
     };
     logout = () => {
         const { navigation } = this.props;
+
+        //清空登录账户密码缓存
+        let propertys = {
+            loginName: "",
+            loginPassword:  ""
+        };
+        StorageUtil.save("namePassword" , propertys);
+
         navigation.navigate("Login");
     };
     upLoadAvatar = (img) => {

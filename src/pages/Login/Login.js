@@ -12,18 +12,51 @@ import { useNavigation } from "@react-navigation/native";
 import "../../utils/global/constants.js";
 import Loading from "../../utils/loading/Loading";
 import Toast from "../../utils/Toast/Toast.js";
+import StorageUtil from "../../utils/Storage/Storage";
 
 const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 
+// let LoginName = "";
+// let LoginPassword = "";
+
 export default Login = () => {
     const navigation = useNavigation();
-    const [Name, setName] = React.useState("");
-    const [Password, setPassword] = React.useState("");
+    const [Name, setName] = React.useState(function getInitName() {
+        //console.log("获取缓存账户名以及密码");
+        StorageUtil.get("namePassword").then((res) => {
+            console.log("获取缓存账户名以及密码111"  , res);
+            if (res) {
+                //LoginName = res.loginName;
+                //console.log("缓存中的账户名：" , LoginName);
+                return res.loginName;
+            }else{
+                //console.log("缓存中的账户名为空");
+                //LoginName = "";
+                return "";
+            }
+        });
+    });
+    const [Password, setPassword] = React.useState(function getInitPassword() {
+        StorageUtil.get("namePassword").then((res) => {
+            //console.log("获取缓存账户名以及密码222"  , res);
+            if (res) {
+                //LoginPassword = res.loginPassword;
+                //console.log("缓存中的密码：" , LoginPassword);
+                return res.loginPassword;
+            }else{
+                //console.log("缓存中的密码为空");
+                //LoginPassword = "";
+                return "";
+            }
+        });
+    });
     const [secureTextEntry, setSecureTextEntry] = React.useState(true);
     const [showLoading, setShowLoading] = React.useState(false);
     const toggleSecureEntry = () => {
         setSecureTextEntry(!secureTextEntry);
     };
+
+
     //密码显隐图标
     const renderEyeIcon = (props) => (
         <TouchableWithoutFeedback onPress={toggleSecureEntry}>
@@ -80,6 +113,26 @@ export default Login = () => {
                     userType = "TEACHER";
                 }
                 if (res.success == true) {
+                    StorageUtil.get("namePassword").then((res) => {
+                        console.log("登录账户名以及密码111: " , res);
+                        if (res) {
+                            if(res.loginName != Name){
+                                let propertys = {
+                                    loginName: Name,
+                                    loginPassword:  Password
+                                };
+                                StorageUtil.save("namePassword" , propertys);
+                            }
+                        }else{
+                            let propertys = {
+                                loginName: Name,
+                                loginPassword:  Password
+                            };
+                            StorageUtil.save("namePassword" , propertys);
+                        }
+
+                        console.log("登录账户名以及密码222: " , res);
+                    });
                     //console.log(res.data.STUDENT.userId)
                     //设置全局信息
                     global.constants.company = res.data[property].company;
@@ -104,7 +157,7 @@ export default Login = () => {
                 } else if (res.success == false) {
                     setShowLoading(false);
                     Toast.showWarningToast(
-                        "用户名密码错误！请重新输入！",
+                        "用户名密码错误！请重新输入！" + param,
                         2000
                     );
                     // Alert.alert(res.message);
@@ -112,12 +165,31 @@ export default Login = () => {
             })
             .catch((err) => {
                 setShowLoading(false);
-                Toast.showDangerToast("用户名密码错误！请重新输入！", 2000);
+                Toast.showDangerToast("用户名密码错误！请重新输入！" + param, 2000);
             });
     };
+
+    const getStorageUtil = () => {
+        console.log("************getStorageUtil**********")
+        StorageUtil.get("namePassword").then((res) => {
+            if (res) {
+                //LoginName = res.loginName;
+                //LoginPassword = res.loginPassword;
+                setName(res.loginName);
+                setPassword(res.loginPassword);
+            }else{
+                //LoginName = "";
+                //LoginPassword = "";
+            }
+        });
+    }
+
     //渲染
     return (
         <View style={styles.View}>
+            {
+                Name == null || Name == "" ? getStorageUtil() : null
+            }
             <Layout style={styles.Layout}>
                 <Image
                     source={require("../../assets/image/bottomWave.jpg")}
@@ -128,12 +200,17 @@ export default Login = () => {
                 source={require("../../assets/image/91.png")}
                 style={styles.Image}
             />
+            {console.log("--------缓存中的账户名和密码-------" , Name , Password)}
             <Input
                 value={Name}
                 placeholder="请输入用户名"
                 //caption={renderNameCaption}
                 accessoryLeft={<Icon name="person" />}
-                onChangeText={(nextValue) => setName(nextValue)}
+                onChangeText={(nextValue) => {
+                    console.log("nextValue类型" , typeof(nextValue) , nextValue);
+                    //LoginName = nextValue;
+                    setName(nextValue)
+                }}
                 style={styles.Input}
             />
 
@@ -144,7 +221,10 @@ export default Login = () => {
                 accessoryLeft={<Icon name="lock" />}
                 accessoryRight={renderEyeIcon}
                 secureTextEntry={secureTextEntry}
-                onChangeText={(nextValue) => setPassword(nextValue)}
+                onChangeText={(nextValue) => {
+                    //LoginPassword = nextValue;
+                    setPassword(nextValue)
+                }}
                 style={styles.Input}
             />
             <Button

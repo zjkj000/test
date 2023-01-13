@@ -1160,7 +1160,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     ifShare = true;
                     System.out.println("点击了屏幕结束结束共享！！！！！！");
                     Log.e("Tag" , "点击了屏幕结束结束共享！！！！！！");
-                    Toast.makeText(getActivity(),"点击了屏幕结束结束共享！！！！！！",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(),"点击了屏幕结束结束共享！！！！！！",Toast.LENGTH_SHORT).show();
                     //结束共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share)));
                     getActivity().runOnUiThread(new Runnable() {
@@ -2362,10 +2362,10 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     Log.e("Tag" , "点击了屏幕共享！！！！！！");
                     //开始共享屏幕
                     if(!ifShare){
-                        Toast.makeText(getActivity(),"111点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),"111点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
                         btEnd.performClick(); //分享屏幕时主动触发结束答题按钮
                     }else{
-                        Toast.makeText(getActivity(),"222点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
+//                        Toast.makeText(getActivity(),"222点击了屏幕共享！！！！！！",Toast.LENGTH_SHORT).show();
                     }
 
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share_end)));
@@ -2380,7 +2380,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     ifShare = true;
                     System.out.println("点击了屏幕结束结束共享！！！！！！");
                     Log.e("Tag" , "点击了屏幕结束结束共享！！！！！！");
-                    Toast.makeText(getActivity(),"点击了屏幕结束结束共享！！！！！！",Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(),"点击了屏幕结束结束共享！！！！！！",Toast.LENGTH_SHORT).show();
                     //结束共享屏幕
                     img_share.setImageDrawable(getResources().getDrawable((R.mipmap.share)));
                     getActivity().runOnUiThread(new Runnable() {
