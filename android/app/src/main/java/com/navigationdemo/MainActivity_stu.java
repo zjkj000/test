@@ -900,14 +900,14 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         timer.schedule(new TimerTask() {
             @Override
             public void run() {
-                int time = (int)((SystemClock.elapsedRealtime() - that.baseTimer) / 1000);
+                int time = (int)((System.currentTimeMillis() - that.baseTimer) / 1000);
                 String hh = new DecimalFormat("00").format(time / 3600);
                 String mm = new DecimalFormat("00").format(time % 3600 / 60);
                 String ss = new DecimalFormat("00").format(time % 60);
                 String timeFormat = new String(hh + ":" + mm + ":" + ss);
                 Message msg = new Message();
                 msg.what = MyEvent.UPDATE_CLASS_TIME;
-                msg.obj = timeFormat;
+                msg.obj = "已上课 " + timeFormat;
                 that.handler.sendMessage(msg);
             }
         }, 0, 1000L);
@@ -1170,20 +1170,20 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 }
             }
         }
-        @Override
-        public void onUserSubStreamAvailable(String userId, boolean available) {
-            MainActivity_stu activity = mContext.get();
-//            Toast.makeText(activity, userId + " 的子视频流现在 " + available, Toast.LENGTH_SHORT).show();
-            if(available){
-                mTeacherShare.bringToFront();
-                mTeacherShare.setVisibility(View.VISIBLE);
-                mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
-                mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB,mTeacherShare);
-            } else {
-                mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB);
-                mTeacherShare.setVisibility(View.INVISIBLE);
-            }
-        }
+//        @Override
+//        public void onUserSubStreamAvailable(String userId, boolean available) {
+//            MainActivity_stu activity = mContext.get();
+////            Toast.makeText(activity, userId + " 的子视频流现在 " + available, Toast.LENGTH_SHORT).show();
+//            if(available){
+//                mTeacherShare.bringToFront();
+//                mTeacherShare.setVisibility(View.VISIBLE);
+//                mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
+//                mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB,mTeacherShare);
+//            } else {
+//                mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB);
+//                mTeacherShare.setVisibility(View.INVISIBLE);
+//            }
+//        }
 
         @Override
         public void onUserVideoAvailable(String userId, boolean available) {
@@ -1198,6 +1198,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //                teacher_enable=false;
 //                return;
 //            }
+//            Toast.makeText(activity, userId + " 的子视频流现在 " + available, Toast.LENGTH_SHORT).show();
             if(available) {
                 if(userId.contains("_share")){
                     mTeacherShare.bringToFront();
@@ -1320,19 +1321,29 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         mTRTCCloud.setLocalRenderParams(myTRTCRenderParams);
 
         // 开启本地摄像头预览
+        mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
+        // 开启本地语音频道
+        mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
 
 
         if(cameraState.toLowerCase().equals("true")) {
-            mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
+            mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, false);
             cameraOn = true;
             studentTRTCBackground.setVisibility(View.INVISIBLE);
+        } else if (cameraState.toLowerCase().equals("false")){
+            mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, true);
+            cameraOn = false;
+            studentTRTCBackground.setVisibility(View.VISIBLE);
         }
 
 
         // 开启本地麦克风
         if(microphoneState.toLowerCase().equals("true")) {
-            mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
+            mTRTCCloud.muteLocalAudio(false);
             musicOn = true;
+        } else if (microphoneState.toLowerCase().equals("false")) {
+            mTRTCCloud.muteLocalAudio(true);
+            musicOn = false;
         }
 
 //        teacherTRTCBackground.bringToFront();
@@ -1370,16 +1381,16 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         if(mTRTCCloud!=null){
             if(cameraOn) {
                 Log.e(TAG, "switchCamera: close");
-                mTRTCCloud.stopLocalPreview();
+//                mTRTCCloud.stopLocalPreview();
                 studentTRTCBackground.setVisibility(View.VISIBLE);
-//            mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, true);
+                mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, true);
                 cameraOn = false;
                 cameraBtn.getDrawable().setLevel(10);
             } else {
                 Log.e(TAG, "switchCamera: open");
-                mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
+//                mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
                 studentTRTCBackground.setVisibility(View.INVISIBLE);
-//            mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, false);
+                mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, false);
                 cameraOn = true;
                 cameraBtn.getDrawable().setLevel(5);
             }
@@ -1393,7 +1404,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 
     public void switchMusic(View view) {
         if(musicOn) {
-            mTRTCCloud.stopLocalAudio();
+            mTRTCCloud.muteLocalAudio(true);
+//            mTRTCCloud.stopLocalAudio();
             musicOn = false;
             audioBtn.getDrawable().setLevel(10);
 
@@ -1402,7 +1414,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             teacher_name_mic_icon.setBounds(0,0,20,20);
             student_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
         } else {
-            mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
+//            mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
+            mTRTCCloud.muteLocalAudio(false);
             musicOn = true;
             audioBtn.getDrawable().setLevel(5);
             // 设置图标
@@ -1458,11 +1471,11 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     }
 
     public void stopHandsTimer() {
+        handBtn.setImageResource(R.drawable.bottom_stuhand_up);
         // Timer只能schedule一次，重复使用需要先销毁线程
         if(handsTimer != null) {
             handsUpTime = 20;
             // 更改按钮图标
-            handBtn.setImageResource(R.drawable.bottom_stuhand_up);
             handsUpTimeView.setVisibility(View.INVISIBLE);
             handsTimer.cancel();
             handsTimer.purge();

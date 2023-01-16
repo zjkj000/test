@@ -42,7 +42,7 @@
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:gravity="center_vertical"
-            android:layout_marginLeft="32dp"
+            android:layout_marginLeft="2dp"
             android:text="基因突变和基因重组"
             android:textColor="@color/white"
             android:textSize="7sp" />
@@ -73,14 +73,15 @@
             android:layout_marginVertical="3dp"
             android:background="@color/white"
             android:layout_toStartOf="@+id/class_time" />
+
         <TextView
             android:id="@+id/class_time"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_toStartOf="@id/divider_1"
             android:background="@drawable/border_right_background"
-            android:paddingHorizontal="3dp"
             android:gravity="center_vertical"
+            android:paddingHorizontal="3dp"
             android:text="已上课 00:05:32"
             android:textColor="@color/white"
 
@@ -975,8 +976,8 @@
 
         <TextView
             android:id="@+id/hand_btn_badge"
-            android:layout_width="22dp"
-            android:layout_height="22dp"
+            android:layout_width="15dp"
+            android:layout_height="15dp"
             android:layout_alignTop="@+id/hand_btn"
             android:layout_alignEnd="@+id/hand_btn"
             android:background="@drawable/round_text_view_style"
@@ -984,7 +985,7 @@
             android:maxLines="1"
             android:text="99+"
             android:textColor="@color/white"
-            android:textSize="9sp"
+            android:textSize="6sp"
             android:visibility="invisible" />
     </RelativeLayout>
     <ImageView
