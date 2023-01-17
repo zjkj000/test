@@ -947,7 +947,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -958,7 +958,7 @@ public class MainActivity_tea extends AppCompatActivity {
             item.setVideoControl(!item.getVideoControl());
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -969,7 +969,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -981,7 +981,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1159,7 +1159,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1190,7 +1190,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1206,7 +1206,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1229,7 +1229,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁绘画按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -1266,19 +1266,35 @@ public class MainActivity_tea extends AppCompatActivity {
 //        HttpActivityTea.stopHandsUpTimer();
     }
     public void startScreenCapture() {
+        startService(new Intent(this, MediaService.class));
         TRTCCloudDef.TRTCVideoEncParam encParam = new TRTCCloudDef.TRTCVideoEncParam();
-        encParam.videoResolution = 1920 * 1080;
+        encParam.videoResolution = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_1920_1080;
+        encParam.videoResolutionMode = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_MODE_PORTRAIT;
+//        encParam.videoResolution = 1920 * 1080;
         encParam.videoFps = 15;
         encParam.videoBitrate = 1600;
         encParam.enableAdjustRes = true;
-        myTRTCParams.userId = userId + "_share";
+//        mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
         TRTCCloudDef.TRTCScreenShareParams trtcScreenShareParams = new TRTCCloudDef.TRTCScreenShareParams();
-        mTRTCCloud.startScreenCapture(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, encParam, trtcScreenShareParams);
+        mTRTCCloud.stopLocalPreview();
+        mTRTCCloud.startScreenCapture(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB, encParam, trtcScreenShareParams);
+//        mTRTCCloud.stopLocalPreview();
     }
 
     public void stopScreenCapture() {
-        myTRTCParams.userId = userId + "_camera";
+        stopService(new Intent(this, MediaService.class));
+        mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
         mTRTCCloud.stopScreenCapture();
+        if(cameraOn) {
+            mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, false);
+        } else {
+            mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, true);
+        }
+        if(musicOn) {
+            mTRTCCloud.muteLocalAudio(false);
+        } else {
+            mTRTCCloud.muteLocalAudio(true);
+        }
     }
 
     public void handleSareScreen(View view) {

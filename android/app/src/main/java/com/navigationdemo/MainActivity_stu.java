@@ -977,7 +977,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -989,7 +989,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1170,20 +1170,20 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 }
             }
         }
-//        @Override
-//        public void onUserSubStreamAvailable(String userId, boolean available) {
-//            MainActivity_stu activity = mContext.get();
-////            Toast.makeText(activity, userId + " 的子视频流现在 " + available, Toast.LENGTH_SHORT).show();
-//            if(available){
-//                mTeacherShare.bringToFront();
-//                mTeacherShare.setVisibility(View.VISIBLE);
-//                mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
-//                mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB,mTeacherShare);
-//            } else {
-//                mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB);
-//                mTeacherShare.setVisibility(View.INVISIBLE);
-//            }
-//        }
+        @Override
+        public void onUserSubStreamAvailable(String userId, boolean available) {
+            MainActivity_stu activity = mContext.get();
+//            Toast.makeText(activity, userId + " 的子视频流现在 " + available, Toast.LENGTH_SHORT).show();
+            if(available){
+                mTeacherShare.bringToFront();
+                mTeacherShare.setVisibility(View.VISIBLE);
+                mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
+                mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB,mTeacherShare);
+            } else {
+                mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB);
+                mTeacherShare.setVisibility(View.INVISIBLE);
+            }
+        }
 
         @Override
         public void onUserVideoAvailable(String userId, boolean available) {
