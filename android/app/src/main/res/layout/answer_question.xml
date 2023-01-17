@@ -200,10 +200,10 @@
                     <LinearLayout
                         android:id="@+id/linear_choose"
                         android:layout_width="wrap_content"
-                        android:layout_height="25dp"
+                        android:layout_height="20dp"
                         android:layout_marginRight="3dp"
                         android:layout_gravity="center"
-                        android:background="@drawable/tx_choose"
+                        android:background="#ffffff"
                         android:layout_marginLeft="5dp"
                         android:orientation="horizontal">
 
@@ -211,11 +211,11 @@
                             android:id="@+id/tx_choosenum"
                             android:text="4"
                             android:textSize="12sp"
-                            android:textColor="#0eabe5"
+                            android:textColor="#000000"
                             android:layout_gravity="center"
                             android:gravity="center"
                             android:layout_width="30dp"
-                            android:layout_height="20dp" />
+                            android:layout_height="15dp" />
 
                         <ImageView
                             android:id="@+id/img_choose"
@@ -484,10 +484,11 @@
 
             <!-- 开始按钮：不可点击 -->
             <!-- 开始按钮：可点击 -->
+
             <Button
                 android:id="@+id/btBegin1"
                 android:layout_width="80dp"
-                android:layout_height="25dp"
+                android:layout_height="32dp"
                 android:layout_gravity="center"
                 android:layout_marginTop="5dp"
                 android:background="@drawable/btn_begin_unenable"
@@ -496,8 +497,8 @@
                 android:paddingTop="0dp"
                 android:state_enabled="false"
                 android:text="开始"
-                android:textSize="12sp"
-                android:textColor="@color/black" />
+                android:textColor="#44464C"
+                android:textSize="12sp" />
 
             <Button
                 android:visibility="gone"
@@ -602,17 +603,18 @@
                 android:gravity="center"
                 android:layout_marginTop="3dp"
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="100dp"
                 android:orientation="vertical"
                 android:background="@color/div_shallowgray">
+
                 <Chronometer
                     android:id="@+id/id_jishiqi"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/text_orange"
-                    android:textSize="20sp"
+                    android:layout_gravity="center"
                     android:text="00:00"
-                    android:layout_gravity="center" />
+                    android:textColor="@color/text_orange"
+                    android:textSize="20sp" />
 
                 <TextView
                     android:layout_gravity="center"
