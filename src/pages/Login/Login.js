@@ -18,6 +18,7 @@ const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 
 // let LoginName = "";
 // let LoginPassword = "";
+let changeLogin = false;
 
 export default Login = () => {
     const navigation = useNavigation();
@@ -99,7 +100,9 @@ export default Login = () => {
         )
             .then((response) => response.text())
             .then((text) => {
+                console.log("************接口返回数据****************", text);
                 let res = eval("(" + text.substring(2) + ")");
+                console.log("************接口返回数据********res********", res);
                 let homePage = "Home";
                 let property = "STUDENT";
                 let userType = "STUDENT";
@@ -113,6 +116,7 @@ export default Login = () => {
                     userType = "TEACHER";
                 }
                 if (res.success == true) {
+                    console.log("************接口返回数据*****111***********", text);
                     StorageUtil.get("namePassword").then((res) => {
                         console.log("登录账户名以及密码111: " , res);
                         if (res) {
@@ -155,9 +159,10 @@ export default Login = () => {
                         },
                     });
                 } else if (res.success == false) {
+                    console.log("************接口返回数据********222********", text);
                     setShowLoading(false);
                     Toast.showWarningToast(
-                        "用户名密码错误！请重新输入！" + param,
+                        "用户名密码错误！请重新输入！",
                         2000
                     );
                     // Alert.alert(res.message);
@@ -165,17 +170,28 @@ export default Login = () => {
             })
             .catch((err) => {
                 setShowLoading(false);
-                Toast.showDangerToast("用户名密码错误！请重新输入！" + param, 2000);
+                Toast.showDangerToast("用户名密码错误！请重新输入！", 2000);
             });
     };
 
-    const getStorageUtil = () => {
-        console.log("************getStorageUtil**********")
+    const getStorageUtil_name = () => {
+        console.log("************getStorageUtil*****111*****")
         StorageUtil.get("namePassword").then((res) => {
             if (res) {
                 //LoginName = res.loginName;
                 //LoginPassword = res.loginPassword;
                 setName(res.loginName);
+            }else{
+                //LoginName = "";
+                //LoginPassword = "";
+            }
+        });
+    }
+
+    const getStorageUtil_Password = () => {
+        console.log("************getStorageUtil*****222*****")
+        StorageUtil.get("namePassword").then((res) => {
+            if (res) {
                 setPassword(res.loginPassword);
             }else{
                 //LoginName = "";
@@ -188,7 +204,10 @@ export default Login = () => {
     return (
         <View style={styles.View}>
             {
-                Name == null || Name == "" ? getStorageUtil() : null
+                (Name == null || Name == "") && changeLogin == false  ? getStorageUtil_name() : null
+            }
+            {
+                (Password == null || Password == "") && changeLogin == false ? getStorageUtil_Password() : null
             }
             <Layout style={styles.Layout}>
                 <Image
@@ -200,7 +219,7 @@ export default Login = () => {
                 source={require("../../assets/image/91.png")}
                 style={styles.Image}
             />
-            {console.log("--------缓存中的账户名和密码-------" , Name , Password)}
+            {/* {console.log("--------缓存中的账户名和密码-------" , Name , Password)} */}
             <Input
                 value={Name}
                 placeholder="请输入用户名"
@@ -209,6 +228,7 @@ export default Login = () => {
                 onChangeText={(nextValue) => {
                     console.log("nextValue类型" , typeof(nextValue) , nextValue);
                     //LoginName = nextValue;
+                    changeLogin = true;
                     setName(nextValue)
                 }}
                 style={styles.Input}
@@ -223,6 +243,7 @@ export default Login = () => {
                 secureTextEntry={secureTextEntry}
                 onChangeText={(nextValue) => {
                     //LoginPassword = nextValue;
+                    changeLogin = true;
                     setPassword(nextValue)
                 }}
                 style={styles.Input}
@@ -235,6 +256,7 @@ export default Login = () => {
                         Toast.showWarningToast("请输入密码", 1000);
                     } else {
                         handleLogin(true);
+                        console.log("************输入的账户名和密码是****************", Name , Password);
                     }
                 }}
                 style={styles.Button}

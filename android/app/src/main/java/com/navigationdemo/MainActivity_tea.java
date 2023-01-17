@@ -146,6 +146,7 @@ import java.util.TimerTask;
 import java.util.Vector;
 
 public class MainActivity_tea extends AppCompatActivity {
+    public static int screenRightWidth;  //右侧区域宽度
     public static Dialog mDialog = null;
     private Timer timer;
     private static Timer Boardtimer = new Timer();  // 白板定时任务  用于获取转码进度
@@ -533,6 +534,7 @@ public class MainActivity_tea extends AppCompatActivity {
         } else {
             scroll_block_params.width = UtilTools.dip2px(this, 160);
         }
+        screenRightWidth = scroll_block_params.width;
         scroll_block.setLayoutParams(scroll_block_params);
 
         MainActivity_tea that = this;

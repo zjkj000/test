@@ -2922,7 +2922,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                             }
                             getSelectedStuAnswer(v); //调取接口，获取学生答案
 
-                            tx_answers_sum.setVisibility(View.INVISIBLE);
+                            tx_answers_sum.setVisibility(View.GONE);
                             jishiqi.setVisibility(View.VISIBLE);
                             jishiqi.setBase(SystemClock.elapsedRealtime());  //设置起始时间 ，这里是从0开始
                             jishiqi.start();   //开始计时
@@ -2989,7 +2989,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         public void run() {  //|| isClick_btClose == false
                             if (txModle_luru.isSelected()) { //主观题，激活”点赞“，不激活”设置答案“
                                 btSingle.setTextColor(Color.parseColor("#FFFFFFFF"));
-                                btAnswers.setTextColor(Color.parseColor("#80000000"));
+                                btAnswers.setTextColor(Color.parseColor("#44464C"));
                                 btSingle.setBackground(getResources().getDrawable((R.drawable.btn_begin_enable)));
                                 btAnswers.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
                             } else { //客观题，激活”点赞“”设置答案“
@@ -3045,7 +3045,6 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
     /**
      * 设备类型判断
      *
-     * @param context 上下文
      * @return true表示设备为平板 false表示设备为手机
      */
     public boolean isTabletDevice() {
@@ -3079,12 +3078,13 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
                 float scale = getActivity().getResources().getDisplayMetrics().density;
                 int pw_width = 0;
-                if(isTabletDevice()){ //平板
-                    pw_width = (int)(screenWidth * 0.25) + 150;
-                }else{ //手机
-                    pw_width = (int) (160 * scale + 0.5f) + 20;
-                }
-                int pw_height = (int) (32 * scale + 0.5f) + (int)(screenHeight * 0.07) + 20;
+//                if(isTabletDevice()){ //平板
+//                    pw_width = (int)(screenWidth * 0.25) + 150;
+//                }else{ //手机
+//                    pw_width = (int) (160 * scale + 0.5f) + 20;
+//                }
+                pw_width = MainActivity_tea.screenRightWidth + 5;
+                int pw_height = (int) (32 * scale + 0.5f) + (int)(screenHeight * 0.07) + 5;
                 pw_selectStu.showAtLocation(view_selectStu , Gravity.RIGHT | Gravity.BOTTOM , pw_width , pw_height);
 //                pw_selectStu.showAtLocation(view_selectStu , Gravity.RIGHT | Gravity.BOTTOM , (int)(screenWidth * 0.2) , 200);
 
@@ -3719,7 +3719,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 setChooseStatus();
-                tx_2.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                tx_2.setBackgroundColor(Color.parseColor("#FF1C93FC"));
+                tx_2.setTextColor(Color.parseColor("#FFFFFF"));
                 tx_choosenum.setText("2");
                 chooseNum = 2;
 //                Toast.makeText(getActivity(),"选项个数" + chooseNum,Toast.LENGTH_SHORT).show();
@@ -3731,7 +3732,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 setChooseStatus();
-                tx_3.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                tx_3.setBackgroundColor(Color.parseColor("#FF1C93FC"));
+                tx_3.setTextColor(Color.parseColor("#FFFFFF"));
                 chooseNum = 3;
 //                Toast.makeText(getActivity(),"选项个数" + chooseNum,Toast.LENGTH_SHORT).show();
                 tx_choosenum.setText("3");
@@ -3743,7 +3745,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 setChooseStatus();
-                tx_4.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                tx_4.setBackgroundColor(Color.parseColor("#FF1C93FC"));
+                tx_4.setTextColor(Color.parseColor("#FFFFFF"));
                 chooseNum = 4;
 //                Toast.makeText(getActivity(),"选项个数" + chooseNum,Toast.LENGTH_SHORT).show();
                 tx_choosenum.setText("4");
@@ -3755,7 +3758,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 setChooseStatus();
-                tx_5.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                tx_5.setBackgroundColor(Color.parseColor("#FF1C93FC"));
+                tx_5.setTextColor(Color.parseColor("#FFFFFF"));
                 tx_choosenum.setText("5");
                 chooseNum = 5;
 //                Toast.makeText(getActivity(),"选项个数" + chooseNum,Toast.LENGTH_SHORT).show();
@@ -3767,7 +3771,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 setChooseStatus();
-                tx_6.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                tx_6.setBackgroundColor(Color.parseColor("#FF1C93FC"));
+                tx_6.setTextColor(Color.parseColor("#FFFFFF"));
                 tx_choosenum.setText("6");
                 chooseNum = 6;
 //                Toast.makeText(getActivity(),"选项个数" + chooseNum,Toast.LENGTH_SHORT).show();
@@ -3779,7 +3784,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 setChooseStatus();
-                tx_7.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                tx_7.setBackgroundColor(Color.parseColor("#FF1C93FC"));
+                tx_7.setTextColor(Color.parseColor("#FFFFFF"));
                 tx_choosenum.setText("7");
                 chooseNum = 7;
 //                Toast.makeText(getActivity(),"选项个数" + chooseNum,Toast.LENGTH_SHORT).show();
@@ -3791,7 +3797,8 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
             @Override
             public void onClick(View view) {
                 setChooseStatus();
-                tx_8.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+                tx_8.setBackgroundColor(Color.parseColor("#FF1C93FC"));
+                tx_8.setTextColor(Color.parseColor("#FFFFFF"));
                 tx_choosenum.setText("8");
                 chooseNum = 8;
 //                Toast.makeText(getActivity(),"选项个数" + chooseNum,Toast.LENGTH_SHORT).show();
@@ -3801,24 +3808,38 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
         setChooseStatus();
         if(chooseNum == 2){
-            tx_2.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+            tx_2.setTextColor(Color.parseColor("#FFFFFF"));
+            tx_2.setBackgroundColor(Color.parseColor("#FF1C93FC"));
         }else if(chooseNum == 3){
-            tx_3.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+            tx_3.setTextColor(Color.parseColor("#FFFFFF"));
+            tx_3.setBackgroundColor(Color.parseColor("#FF1C93FC"));
         }else if(chooseNum == 4){
-            tx_4.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+            tx_4.setTextColor(Color.parseColor("#FFFFFF"));
+            tx_4.setBackgroundColor(Color.parseColor("#FF1C93FC"));
         }else if(chooseNum == 5){
-            tx_5.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+            tx_5.setTextColor(Color.parseColor("#FFFFFF"));
+            tx_5.setBackgroundColor(Color.parseColor("#FF1C93FC"));
         }else if(chooseNum == 6){
-            tx_6.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+            tx_6.setTextColor(Color.parseColor("#FFFFFF"));
+            tx_6.setBackgroundColor(Color.parseColor("#FF1C93FC"));
         }else if(chooseNum == 7){
-            tx_7.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+            tx_7.setTextColor(Color.parseColor("#FFFFFF"));
+            tx_7.setBackgroundColor(Color.parseColor("#FF1C93FC"));
         }else if(chooseNum == 8){
-            tx_8.setBackgroundColor(Color.parseColor("#FFBB86FC"));
+            tx_8.setTextColor(Color.parseColor("#FFFFFF"));
+            tx_8.setBackgroundColor(Color.parseColor("#FF1C93FC"));
         }
     }
 
     //设置选项数item状态
     private void setChooseStatus(){
+        tx_2.setTextColor(Color.parseColor("#000000"));
+        tx_3.setTextColor(Color.parseColor("#000000"));
+        tx_4.setTextColor(Color.parseColor("#000000"));
+        tx_5.setTextColor(Color.parseColor("#000000"));
+        tx_6.setTextColor(Color.parseColor("#000000"));
+        tx_7.setTextColor(Color.parseColor("#000000"));
+        tx_8.setTextColor(Color.parseColor("#000000"));
         tx_2.setBackgroundColor(Color.parseColor("#FFFFFF"));
         tx_3.setBackgroundColor(Color.parseColor("#FFFFFF"));
         tx_4.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -4046,11 +4067,11 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     btClosed.setText("关闭随机");
                     tx_answers_sum.setVisibility(View.VISIBLE);
                     tx_answers_sum.setText("学生正在随机中");
-                    jishiqi.setVisibility(View.INVISIBLE);
+                    jishiqi.setVisibility(View.GONE);
                     //点赞、设置答案、重新随机不可点
-                    btSingle.setTextColor(Color.parseColor("#80000000"));
-                    btAnswers.setTextColor(Color.parseColor("#80000000"));
-                    btEnd.setTextColor(Color.parseColor("#80000000"));
+                    btSingle.setTextColor(Color.parseColor("#44464C"));
+                    btAnswers.setTextColor(Color.parseColor("#44464C"));
+                    btEnd.setTextColor(Color.parseColor("#44464C"));
                     btSingle.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
                     btAnswers.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
                     btEnd.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
@@ -4068,11 +4089,11 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                     btClosed.setText("关闭抢答");
                     tx_answers_sum.setVisibility(View.VISIBLE);
                     tx_answers_sum.setText("学生正在抢答中");
-                    jishiqi.setVisibility(View.INVISIBLE);
+                    jishiqi.setVisibility(View.GONE);
                     //点赞、设置答案、重新随机不可点
-                    btSingle.setTextColor(Color.parseColor("#80000000"));
-                    btAnswers.setTextColor(Color.parseColor("#80000000"));
-                    btEnd.setTextColor(Color.parseColor("#80000000"));
+                    btSingle.setTextColor(Color.parseColor("#44464C"));
+                    btAnswers.setTextColor(Color.parseColor("#44464C"));
+                    btEnd.setTextColor(Color.parseColor("#44464C"));
                     btSingle.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
                     btAnswers.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
                     btEnd.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
@@ -4213,9 +4234,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         initData();
                         beginOrEndQueAction("startAnswerSuiji");
 
-                        btSingle.setTextColor(Color.parseColor("#80000000"));
-                        btAnswers.setTextColor(Color.parseColor("#80000000"));
-                        btEnd.setTextColor(Color.parseColor("#80000000"));
+                        btSingle.setTextColor(Color.parseColor("#44464C"));
+                        btAnswers.setTextColor(Color.parseColor("#44464C"));
+                        btEnd.setTextColor(Color.parseColor("#44464C"));
                         btSingle.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
                         btAnswers.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
                         btEnd.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
@@ -4231,7 +4252,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         }
 
                         linear2.setVisibility(View.VISIBLE);
-                        jishiqi.setVisibility(View.INVISIBLE);
+                        jishiqi.setVisibility(View.GONE);
                         tx_answers_sum.setVisibility(View.VISIBLE);
                         tx_answers_sum.setText("学生正在随机中");
 
@@ -4249,9 +4270,9 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         initData();
                         beginOrEndQueAction("startQiangDa");
 
-                        btSingle.setTextColor(Color.parseColor("#80000000"));
-                        btAnswers.setTextColor(Color.parseColor("#80000000"));
-                        btEnd.setTextColor(Color.parseColor("#80000000"));
+                        btSingle.setTextColor(Color.parseColor("#44464C"));
+                        btAnswers.setTextColor(Color.parseColor("#44464C"));
+                        btEnd.setTextColor(Color.parseColor("#44464C"));
                         btSingle.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
                         btAnswers.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
                         btEnd.setBackground(getResources().getDrawable((R.drawable.btn_begin_unenable)));
@@ -4267,7 +4288,7 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                         }
 
                         linear2.setVisibility(View.VISIBLE);
-                        jishiqi.setVisibility(View.INVISIBLE);
+                        jishiqi.setVisibility(View.GONE);
                         tx_answers_sum.setVisibility(View.VISIBLE);
                         tx_answers_sum.setText("学生正在抢答中");
 
