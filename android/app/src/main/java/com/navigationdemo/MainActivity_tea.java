@@ -294,7 +294,7 @@ public class MainActivity_tea extends AppCompatActivity {
     private String CurFileID=null;                  //当前文件页面ID
     private String BoardID="#DEFAULT";              //当前文件ID
     private String CurBoardID=null;                 //当前白板页ID
-    private String CurType=null;                    // 初试为空   两种类型  Board和File
+    private String CurType=null;                    // 初始为空   两种类型  Board和File
     private static Boolean isquestion=false;        //用于记录是不是  题目保存调用快照
 
 
@@ -2439,7 +2439,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2,userHead);// type  2 别人 1 自己
                             ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
                             f.setData(msg_rec);
-                            f.getChatMsgAdapter().notifyDataSetChanged();
+                            f.getChatMsgAdapter_tea().notifyDataSetChanged();
                             f.getChatlv().setSelection(f.getChatlv().getBottom());
                         }
                     }
@@ -3596,7 +3596,7 @@ public class MainActivity_tea extends AppCompatActivity {
         // 发送聊天消息
         final V2TIMMessage v2TIMMessage_chat = V2TIMManager.getMessageManager().createCustomMessage(
                 msg.getContent().getBytes(),       //data
-                ("2@#@"+userName+"@#@"+userHead),  //descripition
+                ("1@#@"+userCn+"@#@"+userHead),  //descripition
                 "TBKTExt".getBytes());             //extension
         V2TIMManager.getMessageManager().sendMessage(v2TIMMessage_chat, null,roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
             @Override
@@ -4552,7 +4552,6 @@ public class MainActivity_tea extends AppCompatActivity {
         view.draw(canvas);
         // view.setDrawingCacheEnabled(false); // 清空缓存，可用于实时截图
         byte[] drawByte = getBitmapByte(bitmap); // 位图转为 Byte
-       System.out.println("+++2222+"+Base64.encodeToString(drawByte, Base64.DEFAULT));
         return drawByte;
     }
 
@@ -4645,9 +4644,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        URL url = new URL("http://www.cn901.com/ShopGoods/ajax/tpdata_uploadQueImg.do");
-
-                        System.out.println("+++测试是否上传成功" + "http://59.151.9.6/plan/tpKetangQuestionImage/2023/01/12/" + roomid + "/" + answerQuestionId + ".jpg");
+                        URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_uploadQueImg.do");
                         HttpURLConnection conn = (HttpURLConnection) url
                                 .openConnection();
                         conn.setRequestMethod("POST");
@@ -4698,16 +4695,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //        screenView.buildDrawingCache();
 //        //获取屏幕整张图片
 //        Bitmap bitmap = screenView.getDrawingCache();
-//        if (bitmap != null) {
-//            //需要截取的长和宽
-//            int outWidth = boardview.getWidth();
-//            int outHeight = boardview.getHeight();
-//            //获取需要截图部分的在屏幕上的坐标(view的左上角坐标）
-//            int[] viewLocationArray = new int[2];
-//            boardview.getLocationOnScreen(viewLocationArray);
-//            //从屏幕整张图片中截取指定区域
-//            bitmap = Bitmap.createBitmap(bitmap, viewLocationArray[0], viewLocationArray[1], outWidth, outHeight);
-//        }
+
 //
 ////            //使控件可以进行缓存
 ////            boardview.setDrawingCacheEnabled(true);
@@ -4720,8 +4708,36 @@ public class MainActivity_tea extends AppCompatActivity {
 ////            boardview.destroyDrawingCache();
 //        screenView.setDrawingCacheEnabled(false);
 //
-//        saveScreenShotImg(answerQuestionId,ScreenShotBase64);
-//
+
+        if(CurType=="Board"){
+            isquestion=true;//调用的时候把这个值设置为true  后面改变存储的路径
+            //白板快照
+            TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
+            path.path=context.getCacheDir()+"/"+answerQuestionId+".png";
+            mBoard.snapshot(path);
+        }else {
+            getWindow().getDecorView().setDrawingCacheEnabled(true);
+            Bitmap bitmap = getWindow().getDecorView().getDrawingCache();
+
+            if (bitmap != null) {
+                //需要截取的长和宽
+                int outWidth = boardview.getWidth();
+                int outHeight = boardview.getHeight();
+                //获取需要截图部分的在屏幕上的坐标(view的左上角坐标）
+                int[] viewLocationArray = new int[2];
+                boardview.getLocationOnScreen(viewLocationArray);
+                //从屏幕整张图片中截取指定区域
+                bitmap = Bitmap.createBitmap(bitmap, viewLocationArray[0], viewLocationArray[1], outWidth, outHeight);
+            }
+
+            String ScreenShotBase64 =  Base64.encodeToString(getBitmapByte(bitmap), Base64.DEFAULT);
+
+            getWindow().getDecorView().setDrawingCacheEnabled(false);
+            getWindow().getDecorView().destroyDrawingCache();
+            saveScreenShotImg(answerQuestionId,ScreenShotBase64);
+        }
+
+
 //        String   path=context.getCacheDir()+"/"+answerQuestionId+".png";
 //        Time time = new Time("GMT+8");
 //        time.setToNow();
@@ -4730,11 +4746,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //        UploadToBucket(cosprefix,path,answerQuestionId+".png",false,false);
 //
 
-        isquestion=true;//调用的时候把这个值设置为true  后面改变存储的路径
-        //白板快照
-        TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
-        path.path=context.getCacheDir()+"/"+answerQuestionId+".png";
-        mBoard.snapshot(path);
+
 
 
         // class/年/月/日/subjectId/roomId/question/questionId.png   王璐瑶那块

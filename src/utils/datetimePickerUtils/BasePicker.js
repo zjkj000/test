@@ -106,8 +106,59 @@ export default class BasePicker extends Component {
   _createDateData(){
     let date = [];
     var currDate_Year = new Date().toISOString().substring(0,4)
-    for(let i=parseInt(currDate_Year)-5;i<=parseInt(currDate_Year)+5;i++){
-        let month = [];
+    for(let i=parseInt(currDate_Year);i<=parseInt(currDate_Year)+10;i++){
+      let month = [];
+      let day = [];
+      if(i==parseInt(currDate_Year)){
+        for(let j = parseInt(new Date().toISOString().substring(5,7));j<13;j++){
+          if(j==parseInt(new Date().toISOString().substring(5,7))){
+            let day = [];
+            if(j === 2){
+              for(let k=parseInt(new Date().toISOString().substring(8,10));k<29;k++){
+                day.push(k+'日');
+              }
+              if(i%4 === 0){
+                  day.push(29+'日');
+              }
+            }else if(j in {1:1, 3:1, 5:1, 7:1, 8:1, 10:1, 12:1}){
+                for(let k=parseInt(new Date().toISOString().substring(8,10));k<32;k++){
+                    day.push(k+'日');
+                }
+            }else{
+                for(let k=parseInt(new Date().toISOString().substring(8,10));k<31;k++){
+                    day.push(k+'日');
+                }
+            }
+            let _month = {};
+            _month[j+'月'] = day;
+            month.push(_month);
+          }else{
+            let day = [];
+            if(j === 2){
+              for(let k=1;k<29;k++){
+                day.push(k+'日');
+              }
+              if(i%4 === 0){
+                  day.push(29+'日');
+              }
+            }else if(j in {1:1, 3:1, 5:1, 7:1, 8:1, 10:1, 12:1}){
+                for(let k=1;k<32;k++){
+                    day.push(k+'日');
+                }
+            }else{
+                for(let k=1;k<31;k++){
+                    day.push(k+'日');
+                }
+            }
+            let _month = {};
+            _month[j+'月'] = day;
+            month.push(_month);
+          }
+          
+        }
+
+
+      }else{
         for(let j = 1;j<13;j++){
             let day = [];
             if(j === 2){
@@ -132,10 +183,13 @@ export default class BasePicker extends Component {
             _month[j+'月'] = day;
             month.push(_month);
         }
+      }
+
         let _date = {};
         _date[i+'年'] = month;
         date.push(_date);
     }
+
     return date;
   }
   _showDatePicker() {

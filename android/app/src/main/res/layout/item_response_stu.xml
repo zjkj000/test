@@ -12,7 +12,7 @@
         <ImageView
             android:layout_width="30dp"
             android:id="@+id/msg_head"
-            android:background="@mipmap/teachathead"
+            android:background="@mipmap/stuchathead"
             android:layout_height="30dp"/>
     </LinearLayout>
     <LinearLayout
