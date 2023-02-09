@@ -431,7 +431,7 @@ public class MainActivity_tea extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView class_id_text_view = findViewById(R.id.class_id);
-        class_id_text_view.setText(roomid);
+        class_id_text_view.setText("课堂号：" + roomid);
 
         // 获取CameraView
         mTXCVVTeacherPreviewView = findViewById(R.id.teacher_camera);
@@ -1457,7 +1457,7 @@ public class MainActivity_tea extends AppCompatActivity {
         mTRTCCloud.setLocalRenderParams(myTRTCRenderParams);
 
         cameraOn = false;
-        cameraBtn.getDrawable().setLevel(10);
+        cameraBtn.getDrawable().setLevel(5);
 
         musicOn = false;
         audioBtn.getDrawable().setLevel(5);
@@ -1484,9 +1484,11 @@ public class MainActivity_tea extends AppCompatActivity {
         if(microphoneState.toLowerCase().equals("true")) {
             mTRTCCloud.muteLocalAudio(false);
             musicOn = true;
+            audioBtn.getDrawable().setLevel(5);
         } else if (microphoneState.toLowerCase().equals("false")) {
             mTRTCCloud.muteLocalAudio(true);
             musicOn = false;
+            audioBtn.getDrawable().setLevel(10);
         }
 //        teacherTRTCBackground.bringToFront();
 
@@ -4719,16 +4721,16 @@ public class MainActivity_tea extends AppCompatActivity {
             getWindow().getDecorView().setDrawingCacheEnabled(true);
             Bitmap bitmap = getWindow().getDecorView().getDrawingCache();
 
-            if (bitmap != null) {
-                //需要截取的长和宽
-                int outWidth = boardview.getWidth();
-                int outHeight = boardview.getHeight();
-                //获取需要截图部分的在屏幕上的坐标(view的左上角坐标）
-                int[] viewLocationArray = new int[2];
-                boardview.getLocationOnScreen(viewLocationArray);
-                //从屏幕整张图片中截取指定区域
-                bitmap = Bitmap.createBitmap(bitmap, viewLocationArray[0], viewLocationArray[1], outWidth, outHeight);
-            }
+//            if (bitmap != null) {
+//                //需要截取的长和宽
+//                int outWidth = boardview.getWidth();
+//                int outHeight = boardview.getHeight();
+//                //获取需要截图部分的在屏幕上的坐标(view的左上角坐标）
+//                int[] viewLocationArray = new int[2];
+//                boardview.getLocationOnScreen(viewLocationArray);
+//                //从屏幕整张图片中截取指定区域
+//                bitmap = Bitmap.createBitmap(bitmap, viewLocationArray[0], viewLocationArray[1], outWidth, outHeight);
+//            }
 
             String ScreenShotBase64 =  Base64.encodeToString(getBitmapByte(bitmap), Base64.DEFAULT);
 

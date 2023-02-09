@@ -1141,6 +1141,72 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
         }
 
+//        @Override
+//        public void onRemoteAudioStatusUpdated(String userId, int status, int reason, Bundle extrainfo) {
+//            MainActivity_stu activity = mContext.get();
+//            Log.d(TAG, "onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
+//            System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
+//            System.out.println("onUserVideoAvailable:"+userId);
+//            if(status == TRTCCloudDef.) {
+//                if (userId.equals(teacherId+"_camera")) {
+//                    mTRTCCloud.muteRemoteAudio(userId, false);
+//                    @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_on);
+//                    teacher_name_mic_icon.setBounds(0,0,20,20);
+//                    teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+//                } else {
+////            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
+////            int userPosition = listViewAdapter.getItemPositionById(userId);
+////            activity.switchMemberListAudioIcon(userPosition);
+//                }
+//            }
+//            else {
+//                if (userId.equals(teacherId+"_camera")) {
+//                    mTRTCCloud.muteRemoteAudio(userId, true);
+//                    @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_off);
+//                    teacher_name_mic_icon.setBounds(0,0,20,20);
+//                    teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+//                } else {
+//                    mUserList.remove(userId);
+//                }
+//            }
+//        }
+
+        @Override
+        public void onRemoteVideoStatusUpdated(String userId, int streamType, int status, int reason, Bundle extrainfo) {
+            MainActivity_stu activity = mContext.get();
+            boolean available = false;
+            if(status == TRTCCloudDef.TRTCAVStatusStopped) {
+                if(userId.contains("_share")){
+                    mTeacherShare.bringToFront();
+                    mTeacherShare.setVisibility(View.VISIBLE);
+                    mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
+                    mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTeacherShare);
+                }
+                else if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, mTXCVVTeacherPreviewView);
+                    teacherTRTCBackground.setVisibility(View.INVISIBLE);
+                } else {
+                    mUserList.add(userId);
+                }
+            }
+            else if(status == TRTCCloudDef.TRTCAVStatusPlaying){
+                available = true;
+                if(userId.contains("_share")){
+                    mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+                    mTeacherShare.setVisibility(View.INVISIBLE);
+                }
+                else if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.stopRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+                    activity.teacherTRTCBackground.setVisibility(View.VISIBLE);
+                } else {
+                    mUserList.remove(userId);
+                }
+            }
+//            int userPosition = listViewAdapter.getItemPositionById(userId);
+//            activity.switchMemberListVideoIcon(userPosition);
+            activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
+        }
+
         @Override
         public void onUserAudioAvailable(String userId, boolean available) {
             MainActivity_stu activity = mContext.get();
@@ -1326,14 +1392,17 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
 
 
+
         if(cameraState.toLowerCase().equals("true")) {
             mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, false);
             cameraOn = true;
             studentTRTCBackground.setVisibility(View.INVISIBLE);
+            cameraBtn.getDrawable().setLevel(5);
         } else if (cameraState.toLowerCase().equals("false")){
             mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, true);
             cameraOn = false;
             studentTRTCBackground.setVisibility(View.VISIBLE);
+            cameraBtn.getDrawable().setLevel(10);
         }
 
 
@@ -1341,16 +1410,18 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         if(microphoneState.toLowerCase().equals("true")) {
             mTRTCCloud.muteLocalAudio(false);
             musicOn = true;
+            audioBtn.getDrawable().setLevel(5);
         } else if (microphoneState.toLowerCase().equals("false")) {
             mTRTCCloud.muteLocalAudio(true);
             musicOn = false;
+            audioBtn.getDrawable().setLevel(10);
         }
 
 //        teacherTRTCBackground.bringToFront();
 
         // 设置姓名旁的静音标记
 
-        @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
+        @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_off);
         teacher_name_mic_icon.setBounds(0,0,20,20);
         teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
 
@@ -1449,29 +1520,32 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public void startHandsTimer() {
         MainActivity_stu that = this;
         // 更改按钮图标
-        handBtn.setImageResource(R.drawable.bottom_stuhand_down);
+//        handBtn.setImageResource(R.drawable.bottom_stuhand_down);
+        handBtn.getDrawable().setLevel(5);
         handsUpTimeView.setVisibility(View.VISIBLE);
         handsTimer = new Timer();
         handsTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(handsUpTime == 0) {
-                    Log.e(TAG, "------xgy-----hansDown: 手放下被触发");
-                    Message updateHandsUpTimeMessage = Message.obtain();
-                    updateHandsUpTimeMessage.what = MyEvent.STOP_HANDS_UP_TIME;
-                    handler.sendMessage(updateHandsUpTimeMessage);
-                    return;
-                }
                 Message updateHandsUpTimeMessage = Message.obtain();
                 updateHandsUpTimeMessage.what = MyEvent.UPDATE_HANDS_UP_TIME;
                 handler.sendMessage(updateHandsUpTimeMessage);
                 handsUpTime--;
+                if(handsUpTime == 0) {
+                    Log.e(TAG, "------xgy-----hansDown: 手放下被触发");
+                    handsState = "down";
+                    updateHandsUpTimeMessage = Message.obtain();
+                    updateHandsUpTimeMessage.what = MyEvent.STOP_HANDS_UP_TIME;
+                    handler.sendMessage(updateHandsUpTimeMessage);
+                    return;
+                }
             }
         }, 0, 1000);
     }
 
     public void stopHandsTimer() {
-        handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+//        handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+        handBtn.getDrawable().setLevel(10);
         // Timer只能schedule一次，重复使用需要先销毁线程
         if(handsTimer != null) {
             handsUpTime = 20;
@@ -3775,12 +3849,15 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         if(AnswerActivityStu.allHandAction!=null) {
             if(AnswerActivityStu.allHandAction.equals("handAllYes")) {
                 if(handsState.equals("up")) {
-                    MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_down);
+//                    MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_down);
+                    MainActivity_stu.handBtn.getDrawable().setLevel(5);
                 } else if (handsState.equals("down")) {
-                    MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+//                    MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+                    MainActivity_stu.handBtn.getDrawable().setLevel(10);
                 }
             } else if(AnswerActivityStu.allHandAction.equals("handAllNo")) {
-                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_no);
+//                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_no);
+                MainActivity_stu.handBtn.getDrawable().setLevel(20);
             }
         }
         if(AnswerActivityStu.questionAction!=null){

@@ -236,11 +236,13 @@ class OnlineClassTemp extends Component {
         const routeParams = this.props.route.params;
         // const { courseName, introduction, teacherName } = routeParams.learnPlan;
         return (
-            <ScrollView
+            <View
                 style={{
                     width: "100%",
                     height: "100%",
                     backgroundColor: "#fff",
+                    alignItems: "center",
+                    justifyContent: "center",
                 }}
             >
                 <View
@@ -281,7 +283,7 @@ class OnlineClassTemp extends Component {
                         </Text>
                     </TouchableOpacity>
                 </View>
-            </ScrollView>
+            </View>
         );
     }
 
