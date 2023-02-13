@@ -192,10 +192,10 @@ public class MainActivity_tea extends AppCompatActivity {
     public static int mUserCount = 0;
 
     private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
-    private static String Mbucket = "zjkj-1312575671";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKIDa1C6j7F6gy1oKYXEeng8JDqCH5cssb2D";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "wc07yYqrc6IDsGNCk12mEPJwIPFo67sM";                    //存储桶    永久密钥 secretKey
-    private int bucketSDKappID = 1400695721;  //这里应该是BOARDSDKAPPID
+    private static String Mbucket = "zjkj-1305170119";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
+    private String MsecretId = "AKIDwjMo371g8MNCpMzZxAHDTagdOxJQIzVr";                 //存储桶   永久密钥 secretId
+    private String MsecretKey = "Cev068GOOBqKeolMn095oVFoz5A7xnT3";                    //存储桶    永久密钥 secretKey
+    private int bucketSDKappID = 1400791138;  //这里应该是BOARDSDKAPPID
 
 
 
@@ -224,12 +224,12 @@ public class MainActivity_tea extends AppCompatActivity {
     private  String TRTCSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
 
     //即时通信SDKAPPID
-    private  int IMSDKAPPID = 1400695721;
-    private  String IMSECRETKEY = "8926bc8a7cb907f1694aca0da0f270b9bb1903193202de8a0a2779de9e144b1c";
+    private  int IMSDKAPPID = 1400791138;
+    private  String IMSECRETKEY = "ff24b7cf67098baab5ee002c904ffd1d985d1f34ce858086d9c9ab9c515a53df";
 
     //白板SDKAPPID
-    private  int BOARDSDKAPPID = 1400695721;
-    private  String BOARDSECRETKEY = "8926bc8a7cb907f1694aca0da0f270b9bb1903193202de8a0a2779de9e144b1c";
+    private  int BOARDSDKAPPID = 1400791138;
+    private  String BOARDSECRETKEY = "ff24b7cf67098baab5ee002c904ffd1d985d1f34ce858086d9c9ab9c515a53df";
 
  
     public static String teaName = "";
@@ -294,7 +294,7 @@ public class MainActivity_tea extends AppCompatActivity {
     private String CurFileID=null;                  //当前文件页面ID
     private String BoardID="#DEFAULT";              //当前文件ID
     private String CurBoardID=null;                 //当前白板页ID
-    private String CurType=null;                    // 初试为空   两种类型  Board和File
+    private String CurType=null;                    // 初始为空   两种类型  Board和File
     private static Boolean isquestion=false;        //用于记录是不是  题目保存调用快照
 
 
@@ -431,7 +431,7 @@ public class MainActivity_tea extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         TextView class_id_text_view = findViewById(R.id.class_id);
-        class_id_text_view.setText(roomid);
+        class_id_text_view.setText("课堂号：" + roomid);
 
         // 获取CameraView
         mTXCVVTeacherPreviewView = findViewById(R.id.teacher_camera);
@@ -949,7 +949,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -960,7 +960,7 @@ public class MainActivity_tea extends AppCompatActivity {
             item.setVideoControl(!item.getVideoControl());
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -971,7 +971,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -983,7 +983,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1161,7 +1161,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1192,7 +1192,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1208,7 +1208,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
 
@@ -1231,7 +1231,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 禁绘画按钮被点击", Toast.LENGTH_SHORT).show();
                     listViewAdapter.notifyDataSetChanged();
                 } else {
-                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MainActivity_tea.this, "成员 " + i + " 非法", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -1268,19 +1268,35 @@ public class MainActivity_tea extends AppCompatActivity {
 //        HttpActivityTea.stopHandsUpTimer();
     }
     public void startScreenCapture() {
+        startService(new Intent(this, MediaService.class));
         TRTCCloudDef.TRTCVideoEncParam encParam = new TRTCCloudDef.TRTCVideoEncParam();
-        encParam.videoResolution = 1920 * 1080;
+        encParam.videoResolution = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_1920_1080;
+        encParam.videoResolutionMode = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_MODE_PORTRAIT;
+//        encParam.videoResolution = 1920 * 1080;
         encParam.videoFps = 15;
         encParam.videoBitrate = 1600;
         encParam.enableAdjustRes = true;
-        myTRTCParams.userId = userId + "_share";
+//        mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
         TRTCCloudDef.TRTCScreenShareParams trtcScreenShareParams = new TRTCCloudDef.TRTCScreenShareParams();
-        mTRTCCloud.startScreenCapture(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, encParam, trtcScreenShareParams);
+        mTRTCCloud.stopLocalPreview();
+        mTRTCCloud.startScreenCapture(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB, encParam, trtcScreenShareParams);
+//        mTRTCCloud.stopLocalPreview();
     }
 
     public void stopScreenCapture() {
-        myTRTCParams.userId = userId + "_camera";
+        stopService(new Intent(this, MediaService.class));
+        mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
         mTRTCCloud.stopScreenCapture();
+        if(cameraOn) {
+            mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, false);
+        } else {
+            mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, true);
+        }
+        if(musicOn) {
+            mTRTCCloud.muteLocalAudio(false);
+        } else {
+            mTRTCCloud.muteLocalAudio(true);
+        }
     }
 
     public void handleSareScreen(View view) {
@@ -1441,7 +1457,7 @@ public class MainActivity_tea extends AppCompatActivity {
         mTRTCCloud.setLocalRenderParams(myTRTCRenderParams);
 
         cameraOn = false;
-        cameraBtn.getDrawable().setLevel(10);
+        cameraBtn.getDrawable().setLevel(5);
 
         musicOn = false;
         audioBtn.getDrawable().setLevel(5);
@@ -1468,9 +1484,11 @@ public class MainActivity_tea extends AppCompatActivity {
         if(microphoneState.toLowerCase().equals("true")) {
             mTRTCCloud.muteLocalAudio(false);
             musicOn = true;
+            audioBtn.getDrawable().setLevel(5);
         } else if (microphoneState.toLowerCase().equals("false")) {
             mTRTCCloud.muteLocalAudio(true);
             musicOn = false;
+            audioBtn.getDrawable().setLevel(10);
         }
 //        teacherTRTCBackground.bringToFront();
 
@@ -2423,7 +2441,7 @@ public class MainActivity_tea extends AppCompatActivity {
                             Chat_Msg msg_rec = new Chat_Msg(Msg_Description.split("@#@")[1],format.format(new Date(msg.getTimestamp()*1000)),new String(msg.getCustomElem().getData()),2,userHead);// type  2 别人 1 自己
                             ChatRoomFragment f = (ChatRoomFragment)getmFragmenglist().get(1);
                             f.setData(msg_rec);
-                            f.getChatMsgAdapter().notifyDataSetChanged();
+                            f.getChatMsgAdapter_tea().notifyDataSetChanged();
                             f.getChatlv().setSelection(f.getChatlv().getBottom());
                         }
                     }
@@ -3580,7 +3598,7 @@ public class MainActivity_tea extends AppCompatActivity {
         // 发送聊天消息
         final V2TIMMessage v2TIMMessage_chat = V2TIMManager.getMessageManager().createCustomMessage(
                 msg.getContent().getBytes(),       //data
-                ("2@#@"+userName+"@#@"+userHead),  //descripition
+                ("1@#@"+userCn+"@#@"+userHead),  //descripition
                 "TBKTExt".getBytes());             //extension
         V2TIMManager.getMessageManager().sendMessage(v2TIMMessage_chat, null,roomid, V2TIMMessage.V2TIM_PRIORITY_NORMAL, false, null, new V2TIMSendCallback<V2TIMMessage>() {
             @Override
@@ -4536,7 +4554,6 @@ public class MainActivity_tea extends AppCompatActivity {
         view.draw(canvas);
         // view.setDrawingCacheEnabled(false); // 清空缓存，可用于实时截图
         byte[] drawByte = getBitmapByte(bitmap); // 位图转为 Byte
-       System.out.println("+++2222+"+Base64.encodeToString(drawByte, Base64.DEFAULT));
         return drawByte;
     }
 
@@ -4629,9 +4646,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 @Override
                 public void run() {
                     try {
-                        URL url = new URL("http://www.cn901.com/ShopGoods/ajax/tpdata_uploadQueImg.do");
-
-                        System.out.println("+++测试是否上传成功" + "http://59.151.9.6/plan/tpKetangQuestionImage/2023/01/12/" + roomid + "/" + answerQuestionId + ".jpg");
+                        URL url = new URL("http://www.cn901.com/ShopGoods/ajax/livePlay_uploadQueImg.do");
                         HttpURLConnection conn = (HttpURLConnection) url
                                 .openConnection();
                         conn.setRequestMethod("POST");
@@ -4682,16 +4697,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //        screenView.buildDrawingCache();
 //        //获取屏幕整张图片
 //        Bitmap bitmap = screenView.getDrawingCache();
-//        if (bitmap != null) {
-//            //需要截取的长和宽
-//            int outWidth = boardview.getWidth();
-//            int outHeight = boardview.getHeight();
-//            //获取需要截图部分的在屏幕上的坐标(view的左上角坐标）
-//            int[] viewLocationArray = new int[2];
-//            boardview.getLocationOnScreen(viewLocationArray);
-//            //从屏幕整张图片中截取指定区域
-//            bitmap = Bitmap.createBitmap(bitmap, viewLocationArray[0], viewLocationArray[1], outWidth, outHeight);
-//        }
+
 //
 ////            //使控件可以进行缓存
 ////            boardview.setDrawingCacheEnabled(true);
@@ -4704,8 +4710,36 @@ public class MainActivity_tea extends AppCompatActivity {
 ////            boardview.destroyDrawingCache();
 //        screenView.setDrawingCacheEnabled(false);
 //
-//        saveScreenShotImg(answerQuestionId,ScreenShotBase64);
-//
+
+        if(CurType=="Board"){
+            isquestion=true;//调用的时候把这个值设置为true  后面改变存储的路径
+            //白板快照
+            TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
+            path.path=context.getCacheDir()+"/"+answerQuestionId+".png";
+            mBoard.snapshot(path);
+        }else {
+            getWindow().getDecorView().setDrawingCacheEnabled(true);
+            Bitmap bitmap = getWindow().getDecorView().getDrawingCache();
+
+//            if (bitmap != null) {
+//                //需要截取的长和宽
+//                int outWidth = boardview.getWidth();
+//                int outHeight = boardview.getHeight();
+//                //获取需要截图部分的在屏幕上的坐标(view的左上角坐标）
+//                int[] viewLocationArray = new int[2];
+//                boardview.getLocationOnScreen(viewLocationArray);
+//                //从屏幕整张图片中截取指定区域
+//                bitmap = Bitmap.createBitmap(bitmap, viewLocationArray[0], viewLocationArray[1], outWidth, outHeight);
+//            }
+
+            String ScreenShotBase64 =  Base64.encodeToString(getBitmapByte(bitmap), Base64.DEFAULT);
+
+            getWindow().getDecorView().setDrawingCacheEnabled(false);
+            getWindow().getDecorView().destroyDrawingCache();
+            saveScreenShotImg(answerQuestionId,ScreenShotBase64);
+        }
+
+
 //        String   path=context.getCacheDir()+"/"+answerQuestionId+".png";
 //        Time time = new Time("GMT+8");
 //        time.setToNow();
@@ -4714,11 +4748,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //        UploadToBucket(cosprefix,path,answerQuestionId+".png",false,false);
 //
 
-        isquestion=true;//调用的时候把这个值设置为true  后面改变存储的路径
-        //白板快照
-        TEduBoardController.TEduBoardSnapshotInfo path = new TEduBoardController.TEduBoardSnapshotInfo();
-        path.path=context.getCacheDir()+"/"+answerQuestionId+".png";
-        mBoard.snapshot(path);
+
 
 
         // class/年/月/日/subjectId/roomId/question/questionId.png   王璐瑶那块

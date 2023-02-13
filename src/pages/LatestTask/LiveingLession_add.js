@@ -369,7 +369,7 @@ class LiveingLession_addContent extends Component {
                 <Layout style={{flexDirection:'row',paddingLeft:20}}>
                 <View style={{width:(screenWidth-110)*0.4,backgroundColor:'#fff',borderWidth:0.5,height:30,justifyContent:'center'}}>
                         <OverflowMenu
-                                style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.4}}
+                                style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.4,height:530,maxHeight:530}}
                                 anchor={this.renderAvatar_hour}
                                 visible={this.state.moduleVisible_hour}
                                 onBackdropPress={() => {this.setState({moduleVisible_hour:false})}}
@@ -379,7 +379,7 @@ class LiveingLession_addContent extends Component {
                     </View>
                     <View style={{width:(screenWidth-110)*0.4,backgroundColor:'#fff',borderWidth:0.5,height:30,justifyContent:'center',marginLeft:10}}>
                         <OverflowMenu
-                                    style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.4}}
+                                    style={{borderColor:'#000',borderWidth:1,width:(screenWidth-120)*0.4,height:270}}
                                     anchor={this.renderAvatar_minute}
                                     visible={this.state.moduleVisible_minute}
                                     onBackdropPress={() => {this.setState({moduleVisible_minute:false})}}

@@ -13,6 +13,8 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
     <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+    
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
@@ -76,6 +78,10 @@
             android:screenOrientation="landscape">
 
         </activity>
+        <service android:name=".MediaService"
+            android:enabled="true"
+            android:foregroundServiceType="mediaProjection"
+            android:exported="true"/>
         <!--    分享视频功能需要    -->
 <!--        <activity-->
 <!--            android:name="com.tencent.rtmp.video.TXScreenCapture$TXScreenCaptureAssistantActivity"-->

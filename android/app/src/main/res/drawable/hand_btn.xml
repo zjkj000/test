@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<level-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:maxLevel="5" android:drawable="@drawable/bottom_stuhand_down" />
+    <item android:maxLevel="10" android:drawable="@drawable/bottom_stuhand_up" />
+    <item android:maxLevel="20" android:drawable="@drawable/bottom_stuhand_no" />
+</level-list>

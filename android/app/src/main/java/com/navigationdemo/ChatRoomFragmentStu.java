@@ -81,7 +81,7 @@ public class ChatRoomFragmentStu extends Fragment {
         View view = inflater.inflate(R.layout.chat_room, container, false);
         chatlv =  view.findViewById(R.id.chatlv);
 
-        chatMsgAdapter=new ChatMsgAdapter(view.getContext(), R.layout.item_response_tea,data);
+        chatMsgAdapter=new ChatMsgAdapter(view.getContext(), R.layout.item_response_stu,data);
 
         chatlv.setAdapter(chatMsgAdapter);
 

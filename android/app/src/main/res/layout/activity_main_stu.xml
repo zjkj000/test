@@ -71,6 +71,7 @@
             android:textColor="@color/white"
             android:textSize="7sp"
             tools:ignore="SmallSp" />
+
         <TextView
             android:id="@+id/class_id"
             android:layout_width="wrap_content"
@@ -893,7 +894,7 @@
         android:id="@+id/hand_btn"
         android:layout_width="50dp"
         android:layout_height="0dp"
-        android:src="@drawable/bottom_stuhand_up"
+        android:src="@drawable/hand_btn"
         app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
         app:layout_constraintEnd_toEndOf="@+id/group_buttons"
         app:layout_constraintStart_toStartOf="@+id/group_buttons"

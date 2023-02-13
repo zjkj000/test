@@ -514,7 +514,7 @@ export default function LiveingLessionInfo_teacher(props) {
                     {/* 搜索框 */}
                     <View style={{ width: "80%" }}>
                         <SearchBar
-                            style={{ height: 40 }}
+                            style={{ height: 40, maxWidth:screenWidth ,width:"100%"}}
                             value={{ SearchText }}
                             placeholder="请输入课程名称或课堂号搜索"
                             onCancel={() => {

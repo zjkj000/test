@@ -451,7 +451,7 @@ export default function LiveingLessonInfo_stu() {
                     </View>
                     <View style={{ width: "80%" }}>
                         <SearchBar
-                            style={{ height: 40 }}
+                            style={{ height: 40 ,maxWidth:screenWidth,width:"100%"}}
                             value={{ SearchText }}
                             placeholder="请输入课程名称，教师姓名或课堂号搜索"
                             // ref={(ref) => (setSearchText(ref))}

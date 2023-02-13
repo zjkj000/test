@@ -1,9 +1,7 @@
 package com.navigationdemo.adapter;
 
 import android.content.Context;
-import android.content.res.ColorStateList;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,18 +9,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import com.navigationdemo.R;
 
 import androidx.annotation.NonNull;
 
 import com.navigationdemo.Chat_Msg;
+import com.navigationdemo.R;
 
-import com.navigationdemo.utils.MyChatHead_ImageView;
 import java.util.List;
 
-public class ChatMsgAdapter extends ArrayAdapter {
+public class ChatMsgAdapter_tea extends ArrayAdapter {
     private int resourceId;
-    public ChatMsgAdapter(@NonNull Context context, int resource, @NonNull List objects) {
+    public ChatMsgAdapter_tea(@NonNull Context context, int resource, @NonNull List objects) {
         super(context, resource, objects);
         this.resourceId=resource;
     }
@@ -57,15 +54,15 @@ public class ChatMsgAdapter extends ArrayAdapter {
         mViewHolder.Msgdate.setText(mMsg.getDate());
         mViewHolder.Msgcontent.setText(mMsg.getContent());
         //设置格式
-        if(mMsg.getType() == 2)      //  接受  听课端的
-        {
-            mViewHolder.Layout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-            mViewHolder.Layout1.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
-            mViewHolder.msg_head.setBackgroundResource(R.mipmap.teachathead);
-        }else if(mMsg.getType() == 1)  //  发送的消息  主讲人
+        if(mMsg.getType() == 1)      //  接受  听课端的
         {
             mViewHolder.Layout.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
             mViewHolder.Layout1.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
+            mViewHolder.msg_head.setBackgroundResource(R.mipmap.teachathead);
+        }else if(mMsg.getType() == 2)  //  发送的消息  主讲人
+        {
+            mViewHolder.Layout.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
+            mViewHolder.Layout1.setLayoutDirection(View.LAYOUT_DIRECTION_LTR);
             mViewHolder.Msgname.setTextColor(Color.WHITE);
             mViewHolder.Msgdate.setTextColor(Color.WHITE);
             mViewHolder.Msgcontent.setTextColor(Color.WHITE);

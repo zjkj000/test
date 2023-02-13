@@ -161,12 +161,12 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     private  String TRTCSECRETKEY = "f13ab8df0cb5d17c8582f78fe4d4627f87df224dfda7c2062e9cb7368c0cac1a";
 
     //即时通信SDKAPPID
-    private  int IMSDKAPPID = 1400695721;
-    private  String IMSECRETKEY = "8926bc8a7cb907f1694aca0da0f270b9bb1903193202de8a0a2779de9e144b1c";
+    private  int IMSDKAPPID = 1400791138;
+    private  String IMSECRETKEY = "ff24b7cf67098baab5ee002c904ffd1d985d1f34ce858086d9c9ab9c515a53df";
 
     //白板SDKAPPID
-    private  int BOARDSDKAPPID = 1400695721;
-    private  String BOARDSECRETKEY = "8926bc8a7cb907f1694aca0da0f270b9bb1903193202de8a0a2779de9e144b1c";
+    private  int BOARDSDKAPPID = 1400791138;
+    private  String BOARDSECRETKEY = "ff24b7cf67098baab5ee002c904ffd1d985d1f34ce858086d9c9ab9c515a53df";
 
     private static Timer timer;
 
@@ -225,10 +225,10 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public static int mUserCount = 0;
 
     private String MRegion="ap-guangzhou"	;                                          //存储桶配置的大区 	ap-guangzhou
-    private String Mbucket = "zjkj-1312575671";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
-    private String MsecretId = "AKIDa1C6j7F6gy1oKYXEeng8JDqCH5cssb2D";                 //存储桶   永久密钥 secretId
-    private String MsecretKey = "wc07yYqrc6IDsGNCk12mEPJwIPFo67sM";                    //存储桶    永久密钥 secretKey
-    private int bucketSDKappID = 1400695721;  //这里应该是BOARDSDKAPPID
+    private String Mbucket = "zjkj-1305170119";                                        //存储桶名称   由bucketname-appid 组成，appid必须填入
+    private String MsecretId = "AKIDwjMo371g8MNCpMzZxAHDTagdOxJQIzVr";                 //存储桶   永久密钥 secretId
+    private String MsecretKey = "Cev068GOOBqKeolMn095oVFoz5A7xnT3";                    //存储桶    永久密钥 secretKey
+    private int bucketSDKappID = 1400791138;  //这里应该是BOARDSDKAPPID
 
 
     private  String UserSig ="";                                                        //腾讯服务签名
@@ -977,7 +977,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 禁言按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -989,7 +989,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(MainActivity_stu.this, "成员 " + position + " 非法", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -1141,6 +1141,72 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
         }
 
+//        @Override
+//        public void onRemoteAudioStatusUpdated(String userId, int status, int reason, Bundle extrainfo) {
+//            MainActivity_stu activity = mContext.get();
+//            Log.d(TAG, "onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
+//            System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
+//            System.out.println("onUserVideoAvailable:"+userId);
+//            if(status == TRTCCloudDef.) {
+//                if (userId.equals(teacherId+"_camera")) {
+//                    mTRTCCloud.muteRemoteAudio(userId, false);
+//                    @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_on);
+//                    teacher_name_mic_icon.setBounds(0,0,20,20);
+//                    teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+//                } else {
+////            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
+////            int userPosition = listViewAdapter.getItemPositionById(userId);
+////            activity.switchMemberListAudioIcon(userPosition);
+//                }
+//            }
+//            else {
+//                if (userId.equals(teacherId+"_camera")) {
+//                    mTRTCCloud.muteRemoteAudio(userId, true);
+//                    @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_off);
+//                    teacher_name_mic_icon.setBounds(0,0,20,20);
+//                    teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
+//                } else {
+//                    mUserList.remove(userId);
+//                }
+//            }
+//        }
+
+        @Override
+        public void onRemoteVideoStatusUpdated(String userId, int streamType, int status, int reason, Bundle extrainfo) {
+            MainActivity_stu activity = mContext.get();
+            boolean available = false;
+            if(status == TRTCCloudDef.TRTCAVStatusStopped) {
+                if(userId.contains("_share")){
+                    mTeacherShare.bringToFront();
+                    mTeacherShare.setVisibility(View.VISIBLE);
+                    mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
+                    mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTeacherShare);
+                }
+                else if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, mTXCVVTeacherPreviewView);
+                    teacherTRTCBackground.setVisibility(View.INVISIBLE);
+                } else {
+                    mUserList.add(userId);
+                }
+            }
+            else if(status == TRTCCloudDef.TRTCAVStatusPlaying){
+                available = true;
+                if(userId.contains("_share")){
+                    mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+                    mTeacherShare.setVisibility(View.INVISIBLE);
+                }
+                else if (userId.equals(teacherId+"_camera")) {
+                    mTRTCCloud.stopRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
+                    activity.teacherTRTCBackground.setVisibility(View.VISIBLE);
+                } else {
+                    mUserList.remove(userId);
+                }
+            }
+//            int userPosition = listViewAdapter.getItemPositionById(userId);
+//            activity.switchMemberListVideoIcon(userPosition);
+            activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
+        }
+
         @Override
         public void onUserAudioAvailable(String userId, boolean available) {
             MainActivity_stu activity = mContext.get();
@@ -1170,20 +1236,20 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 }
             }
         }
-//        @Override
-//        public void onUserSubStreamAvailable(String userId, boolean available) {
-//            MainActivity_stu activity = mContext.get();
-////            Toast.makeText(activity, userId + " 的子视频流现在 " + available, Toast.LENGTH_SHORT).show();
-//            if(available){
-//                mTeacherShare.bringToFront();
-//                mTeacherShare.setVisibility(View.VISIBLE);
-//                mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
-//                mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB,mTeacherShare);
-//            } else {
-//                mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB);
-//                mTeacherShare.setVisibility(View.INVISIBLE);
-//            }
-//        }
+        @Override
+        public void onUserSubStreamAvailable(String userId, boolean available) {
+            MainActivity_stu activity = mContext.get();
+//            Toast.makeText(activity, userId + " 的子视频流现在 " + available, Toast.LENGTH_SHORT).show();
+            if(available){
+                mTeacherShare.bringToFront();
+                mTeacherShare.setVisibility(View.VISIBLE);
+                mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
+                mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB,mTeacherShare);
+            } else {
+                mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB);
+                mTeacherShare.setVisibility(View.INVISIBLE);
+            }
+        }
 
         @Override
         public void onUserVideoAvailable(String userId, boolean available) {
@@ -1326,14 +1392,17 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
 
 
+
         if(cameraState.toLowerCase().equals("true")) {
             mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, false);
             cameraOn = true;
             studentTRTCBackground.setVisibility(View.INVISIBLE);
+            cameraBtn.getDrawable().setLevel(5);
         } else if (cameraState.toLowerCase().equals("false")){
             mTRTCCloud.muteLocalVideo(TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, true);
             cameraOn = false;
             studentTRTCBackground.setVisibility(View.VISIBLE);
+            cameraBtn.getDrawable().setLevel(10);
         }
 
 
@@ -1341,16 +1410,18 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         if(microphoneState.toLowerCase().equals("true")) {
             mTRTCCloud.muteLocalAudio(false);
             musicOn = true;
+            audioBtn.getDrawable().setLevel(5);
         } else if (microphoneState.toLowerCase().equals("false")) {
             mTRTCCloud.muteLocalAudio(true);
             musicOn = false;
+            audioBtn.getDrawable().setLevel(10);
         }
 
 //        teacherTRTCBackground.bringToFront();
 
         // 设置姓名旁的静音标记
 
-        @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_on);
+        @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = getResources().getDrawable(R.drawable.mic_off);
         teacher_name_mic_icon.setBounds(0,0,20,20);
         teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
 
@@ -1449,29 +1520,32 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public void startHandsTimer() {
         MainActivity_stu that = this;
         // 更改按钮图标
-        handBtn.setImageResource(R.drawable.bottom_stuhand_down);
+//        handBtn.setImageResource(R.drawable.bottom_stuhand_down);
+        handBtn.getDrawable().setLevel(5);
         handsUpTimeView.setVisibility(View.VISIBLE);
         handsTimer = new Timer();
         handsTimer.schedule(new TimerTask() {
             @Override
             public void run() {
-                if(handsUpTime == 0) {
-                    Log.e(TAG, "------xgy-----hansDown: 手放下被触发");
-                    Message updateHandsUpTimeMessage = Message.obtain();
-                    updateHandsUpTimeMessage.what = MyEvent.STOP_HANDS_UP_TIME;
-                    handler.sendMessage(updateHandsUpTimeMessage);
-                    return;
-                }
                 Message updateHandsUpTimeMessage = Message.obtain();
                 updateHandsUpTimeMessage.what = MyEvent.UPDATE_HANDS_UP_TIME;
                 handler.sendMessage(updateHandsUpTimeMessage);
                 handsUpTime--;
+                if(handsUpTime == 0) {
+                    Log.e(TAG, "------xgy-----hansDown: 手放下被触发");
+                    handsState = "down";
+                    updateHandsUpTimeMessage = Message.obtain();
+                    updateHandsUpTimeMessage.what = MyEvent.STOP_HANDS_UP_TIME;
+                    handler.sendMessage(updateHandsUpTimeMessage);
+                    return;
+                }
             }
         }, 0, 1000);
     }
 
     public void stopHandsTimer() {
-        handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+//        handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+        handBtn.getDrawable().setLevel(10);
         // Timer只能schedule一次，重复使用需要先销毁线程
         if(handsTimer != null) {
             handsUpTime = 20;
@@ -1523,10 +1597,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void onTEBInit() {
                 System.out.println("onTEBInit"+"++++白板初始化完成了");
-
-                if(mBoard.isDrawEnable()){
-                  dealStopDraw();
-                }
+                    dealStopDraw();
                 ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
                 if(findViewById(R.id.boardcontent).getMeasuredWidth()>findViewById(R.id.boardcontent).getMeasuredHeight()){
                     params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
@@ -1812,317 +1883,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 System.out.println("onTEBPermissionDenied"+"++++");
             }
         };
-         mBoardCallback = new TEduBoardController.TEduBoardCallback(){
-             @Override
-             public void onTEBError(int code, String msg) {
-                 System.out.println("onTEBError"+"+++++++++++++code"+code+msg);
-                 alert_text.setText("白板加载失败！重新加载");
-             }
-             @Override
-             public void onTEBWarning(int code, String msg) {
-                 System.out.println("onTEBWarning"+"+++++++++++++code:"+code);
-                 if(code==7){  //VIDEO_ALREADY_EXISTS
-                     System.out.println("onTEBWarning"+"+++++++++++++VIDEO已经存在了:");
-                     mBoard.gotoBoard(msg);
-                 }else if(code==3){  //H5PPT_ALREADY_EXISTS
-                     System.out.println("onTEBWarning"+"+++++++++++++H5PPT已经存在了:");
-                     mBoard.gotoBoard(msg);
-                 }else if(code==6){  //H5PPT_ALREADY_EXISTS
-                     System.out.println("onTEBWarning"+"+++++++++++++H5FILE已经存在了:");
-                     mBoard.gotoBoard(msg);
-                 }
- //                TEduBoardController.TEduBoardWarningCode.TEDU_BOARD_WARNING_IMAGE_MEDIA_BITRATE_TOO_LARGE
-             }
-             @Override
-             public void onTEBInit() {
-                 System.out.println("onTEBInit"+"++++白板初始化完成了");
-                 if(mBoard.isDrawEnable()){
-                   dealStopDraw();
-                 }
-                 ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
-                 if(findViewById(R.id.boardcontent).getMeasuredWidth()>findViewById(R.id.boardcontent).getMeasuredHeight()){
-                     params.setMargins((findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0,(findViewById(R.id.boardcontent).getMeasuredWidth()-findViewById(R.id.boardcontent).getMeasuredHeight()*16/9)/2,0);
-                 }else {
-                     params.setMargins(0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2,0,(findViewById(R.id.boardcontent).getMeasuredHeight()-findViewById(R.id.boardcontent).getMeasuredWidth()*9/16)/2);
-                 }
-                 Board_container.setLayoutParams(params);
-                 findViewById(R.id.bg_shoukeneirong).setVisibility(View.GONE);
-                 BoardStatus=true;
-                 boardview = mBoard.getBoardRenderView();
-                 initBoardMenu();
-                 alert_text.setText("白板加载完成！");
-                 if(!addBoardtoFragmentstatus){
-                     addBoardtoFragmentstatus =  mBoard.addBoardViewToContainer(Board_container,boardview,addBoardlayoutParams);
-                     mBoard.setToolType(0);
-                     rf_shoukeneirong.setVisibility(View.GONE);//默认图片那个消失
-                 }
-             }
-             @Override
-             public void onTEBHistroyDataSyncCompleted() {
-                 System.out.println("onTEBHistroyDataSyncCompleted"+"+++++++++++++");
-             }
-             @Override
-             public void onTEBSyncData(String data) {
-                 final V2TIMMessage Board_message = V2TIMManager.getMessageManager().createCustomMessage(
-                         data.getBytes(),                   //data
-                         "",                             //description
-                         "TXWhiteBoardExt".getBytes());     //extension
-                 V2TIMManager.getInstance().getConversationManager().getConversation(roomid, new V2TIMValueCallback<V2TIMConversation>() {
-                     @Override
-                     public void onError(int i, String s) {
-                         // 获取回话失败
-                         System.out.println("+++获取会话失败"+s+i);
-                     }
-                     @Override
-                     public void onSuccess(V2TIMConversation v2TIMConversation) {
-                         V2TIMManager.getInstance().getMessageManager().sendMessage(Board_message, null, roomid, 1, false, null,  new V2TIMSendCallback<V2TIMMessage>() {
-                             @Override
-                             public void onSuccess(V2TIMMessage v2TIMMessage) {
-                                 // 发送 IM 消息成功
-                                 System.out.println("+++发送白板数据成功"+v2TIMMessage.getCustomElem().toString());
-                                 if(findViewById(R.id.setBoardWindow).getVisibility()==View.VISIBLE){findViewById(R.id.setBoardWindow).setVisibility(View.GONE);}
-                             }
-                             @Override
-                             public void onError(int i, String s) {
-                                 // 发送 IM 消息失败，建议进行重试
-                                 System.out.println("+++发送 IM 消息失败，建议进行重试"+s+i);
-                                 mBoard.syncAndReload();
-                             }
-                             @Override
-                             public void onProgress(int i) {
-                             }
-                         });
-                     }
-                 });
-             }
 
-             @Override
-             public void onTEBUndoStatusChanged(boolean canUndo) {
-                 System.out.println("onTEBUndoStatusChanged"+"+++"+canUndo);
-
-             }
-
-             @Override
-             public void onTEBRedoStatusChanged(boolean canRedo) {
-                 System.out.println("onTEBRedoStatusChanged"+"++++++"+canRedo);
-                 if(mBoard.getCurrentFile()!=null&&mBoard.getCurrentBoard()!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile())!=null&&mBoard.getFileBoardList(mBoard.getCurrentFile()).size()>1){
-                     b_cur.setText((mBoard.getFileBoardList(mBoard.getCurrentFile()).indexOf(mBoard.getCurrentBoard())+1)+"");
-                     b_sum.setText(mBoard.getFileBoardList(mBoard.getCurrentFile()).size()+"");
-                 }
-             }
-
-             @Override
-             public void onTEBImageStatusChanged(String boardId, String url, int status) {
-                 System.out.println("onTEBImageStatusChanged"+"+++");
-
-             }
-
-             @Override
-             public void onTEBSetBackgroundImage(String url) {
-                 System.out.println("onTEBSetBackgroundImage"+"+++");
-             }
-
-             @Override
-             public void onTEBAddImageElement(String url) {
-                 System.out.println("onTEBAddImageElement"+"+++");
-             }
-
-             @Override
-             public void onTEBAddElement(String id, int type, String url) {
-                 System.out.println("onTEBAddElement"+"+++");
-             }
-
-             @Override
-             public void onTEBDeleteElement(List<String> id) {
-                 System.out.println("onTEBDeleteElement"+"+++");
-             }
-
-             @Override
-             public void onTEBSelectElement(List<TEduBoardController.ElementItem> elementItemList) {
-                 System.out.println("onTEBSelectElement"+"+++");
-             }
-
-             @Override
-             public void onTEBMathGraphEvent(int code, String boardId, String graphId, String message) {
-                 System.out.println("onTEBMathGraphEvent"+"+++");
-             }
-
-             @Override
-             public void onTEBZoomDragStatus(String fid, int scale, int xOffset, int yOffset) {
-                 //远端白板缩放移动状态回调
-                 if( mBoard.getBoardScale()>300){
-                     mBoard.setBoardScale(300);
-                     b_size.setText("300");
-                 }else {
-                     b_size.setText(mBoard.getBoardScale()+"");
-                 }
-
-             }
-
-             @Override
-             public void onTEBBackgroundH5StatusChanged(String boardId, String url, int status) {
-                 System.out.println("onTEBBackgroundH5StatusChanged"+"+++");
-             }
-
-             @Override
-             public void onTEBTextElementWarning(String code, String message) {
-                 System.out.println("onTEBTextElementWarning"+"++++");
-             }
-
-             @Override
-             public void onTEBImageElementStatusChanged(int status, String currentBoardId, String imgUrl, String currentImgUrl) {
-                 System.out.println("onTEBImageElementStatusChanged"+"++");
-             }
-
-             @Override
-             public void onTEBAddBoard(List<String> boardList, String fileId) {
-                 if(!"#DEFAULT".equals(fileId)){
-                     FileID=fileId;
-                     CurFileID=null;
-                 }
-             }
-
-             @Override
-             public void onTEBDeleteBoard(List<String> boardList, String fileId) {
-
-             }
-
-             @Override
-             public void onTEBGotoBoard(String boardId, String fileId) {
-                 if(BoardID.equals(fileId)){
-                     CurType="Board";
-                     CurBoardID = boardId;
-                 }else {
-                     CurType="File";
-                     CurFileID = boardId;
-                 }
-                 b_cur.setText((mBoard.getFileBoardList(fileId).indexOf(boardId)+1)+"");
-                 b_sum.setText(mBoard.getFileBoardList(fileId).size()+"");
-             }
-
-             @Override
-             public void onTEBGotoStep(int currentStep, int totalStep) {
-                 System.out.println("onTEBGotoStep"+"+++++");
-             }
-
-             @Override
-             public void onTEBRectSelected() {
-                 System.out.println("onTEBRectSelected"+"++++");
-             }
-
-             @Override
-             public void onTEBRefresh() {
-                 System.out.println("onTEBRefresh"+"++++");
-             }
-
-             @Override
-             public void onTEBOfflineWarning(int count) {
-                 System.out.println("onTEBOfflineWarning"+"+++");
-             }
-             @Override
-             public void onTEBAddTranscodeFile(String fileId) {
-                 System.out.println("onTEBAddTranscodeFile"+fileId);
-             }
-             @Override
-             public void onTEBDeleteFile(String fileId) {
-                 System.out.println("onTEBDeleteFile"+"+++:删除了文件的ID："+fileId);
-             }
-             @Override
-             public void onTEBSwitchFile(String fileId) {
-                 if(fileId.equals("#DEFAULT")){
-  //                 当是白板的时候就要 跳转到之前相应页码数
-                     CurType="Board";
-                     CurBoardID = mBoard.getCurrentBoard();
-                 }else {
-  //                 当不是白板的时候 记录一下  打开的文件ID
-                     CurType="File";
-                     if(!fileId.equals(FileID)){
-                         //打开的文件不是上一次打开的文件就需要存起来文件ID了
-                         FileID=fileId;
-                     }
-                     CurFileID = mBoard.getCurrentBoard();
-                 }
-             }
-
-             @Override
-             public void onTEBFileUploadProgress(String path, int currentBytes, int totalBytes, int uploadSpeed, float percent) {
-                 System.out.println("onTEBFileUploadProgress"+"+++++");
-             }
-
-             @Override
-             public void onTEBFileUploadStatus(String path, int status, int errorCode, String errorMsg) {
-                 System.out.println("onTEBFileUploadStatus"+"++++");
-             }
-
-             @Override
-             public void onTEBFileTranscodeProgress(String file, String errorCode, String errorMsg, TEduBoardController.TEduBoardTranscodeFileResult result) {
-                 System.out.println("onTEBFileTranscodeProgress"+"+++++FileTranscodeProgress");
-             }
-
-             @Override
-             public void onTEBH5FileStatusChanged(String fileId, int status) {
-                 System.out.println("onTEBH5FileStatusChanged"+"+++++++");
-             }
-
-             @Override
-             public void onTEBAddImagesFile(String fileId) {
-                 System.out.println("onTEBAddImagesFile"+"++++++");
-             }
-
-             @Override
-             public void onTEBVideoStatusChanged(String fileId, int status, float progress, float duration) {
-             }
-
-             @Override
-             public void onTEBAudioStatusChanged(String elementId, int status, float progress, float duration) {
-                 System.out.println("onTEBAudioStatusChanged"+"+++++");
-             }
-
-             @Override
-             public void onTEBSnapshot(String path, int code, String msg) {
-                 System.out.println("onTEBSnapshot"+"++++白板快照"+path+msg+code);
-             }
-
-             @Override
-             public void onTEBH5PPTStatusChanged(int statusCode, String fid, String describeMsg) {
-                 System.out.println("onTEBH5PPTStatusChanged"+"+++");
-             }
-
-             @Override
-             public void onTEBTextElementStatusChange(String status, String id, String value, int left, int top) {
-                 System.out.println("onTEBTextElementStatusChange"+"+++++");
-             }
-
-             @Override
-             public void onTEBScrollChanged(String boardId, int trigger, double scrollLeft, double scrollTop, double scale) {
-                 System.out.println("onTEBScrollChanged"+"+++");
-             }
-
-             @Override
-             public void onTEBClassGroupStatusChanged(boolean enable, String classGroupId, int operationType, String message) {
-                 System.out.println("onTEBClassGroupStatusChanged"+"++");
-             }
-
-             @Override
-             public void onTEBCursorPositionChanged(Point point) {
-                 System.out.println("onTEBCursorPositionChanged"+"+++");
-             }
-
-             @Override
-             public void onTEBElementPositionChange(List<TEduBoardController.ElementItem> elementItemList) {
-                 System.out.println("onTEBElementPositionChange"+"++++");
-             }
-
-             @Override
-             public void onTEBPermissionChanged(List<String> permissions, Map<String, List<String>> filters) {
-                 System.out.println("onTEBPermissionChanged权限改变"+"++++");
-             }
-
-             @Override
-             public void onTEBPermissionDenied(String permission) {
-                 System.out.println("onTEBPermissionDenied权限被拒绝"+"++++");
-             }
-         };
 
         mBoard.addCallback(mBoardCallback);
         //（4）进行初始化
@@ -2281,8 +2042,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
     public void initBoardMenu(){
 
         b_size.setText(mBoard.getBoardScale()+"");
-        dealStopDraw();
-
+            dealStopDraw();
         //左侧功能栏  第一个按钮  鼠标按钮
         menu01 = findViewById(R.id.menu01);
         menu01.setOnClickListener(new View.OnClickListener() {
@@ -4089,12 +3849,15 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         if(AnswerActivityStu.allHandAction!=null) {
             if(AnswerActivityStu.allHandAction.equals("handAllYes")) {
                 if(handsState.equals("up")) {
-                    MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_down);
+//                    MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_down);
+                    MainActivity_stu.handBtn.getDrawable().setLevel(5);
                 } else if (handsState.equals("down")) {
-                    MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+//                    MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_up);
+                    MainActivity_stu.handBtn.getDrawable().setLevel(10);
                 }
             } else if(AnswerActivityStu.allHandAction.equals("handAllNo")) {
-                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_no);
+//                MainActivity_stu.handBtn.setImageResource(R.drawable.bottom_stuhand_no);
+                MainActivity_stu.handBtn.getDrawable().setLevel(20);
             }
         }
         if(AnswerActivityStu.questionAction!=null){

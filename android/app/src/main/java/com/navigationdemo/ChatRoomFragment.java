@@ -16,6 +16,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.navigationdemo.adapter.ChatMsgAdapter;
+import com.navigationdemo.adapter.ChatMsgAdapter_tea;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -25,13 +26,16 @@ import java.util.List;
 
 public class ChatRoomFragment extends Fragment {
     private List<Chat_Msg> data= new ArrayList<Chat_Msg>();
-    private ChatMsgAdapter chatMsgAdapter;
-    public ChatMsgAdapter getChatMsgAdapter() {
-        return chatMsgAdapter;
+    private ChatMsgAdapter_tea chatMsgAdapter_tea;
+
+    public ChatMsgAdapter_tea getChatMsgAdapter_tea() {
+        return chatMsgAdapter_tea;
     }
-    public void setChatMsgAdapter(ChatMsgAdapter chatMsgAdapter) {
-        this.chatMsgAdapter = chatMsgAdapter;
+
+    public void setChatMsgAdapter_tea(ChatMsgAdapter_tea chatMsgAdapter_tea) {
+        this.chatMsgAdapter_tea = chatMsgAdapter_tea;
     }
+
     private ListView chatlv;
 
     public ListView getChatlv() {
@@ -57,16 +61,16 @@ public class ChatRoomFragment extends Fragment {
         View view = inflater.inflate(R.layout.chat_room, container, false);
         chatlv =  view.findViewById(R.id.chatlv);
 
-        chatMsgAdapter=new ChatMsgAdapter(view.getContext(), R.layout.item_response_tea,data);
+        chatMsgAdapter_tea=new ChatMsgAdapter_tea(view.getContext(), R.layout.item_response_tea,data);
 
-        chatlv.setAdapter(chatMsgAdapter);
+        chatlv.setAdapter(chatMsgAdapter_tea);
 
         TextView cleanall = view.findViewById(R.id.cleanall);
         cleanall.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 data.clear();
-                chatMsgAdapter.notifyDataSetChanged();
+                chatMsgAdapter_tea.notifyDataSetChanged();
             }
         });
 
