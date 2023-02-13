@@ -3083,7 +3083,6 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
                 }else{ //手机
                     pw_width = MainActivity_tea.screenRightWidth + 5;
                 }
-                Toast.makeText(getActivity(),"屏幕右侧区域宽度" + pw_width,Toast.LENGTH_SHORT).show();
 //                pw_width = MainActivity_tea.screenRightWidth + 5;
                 int pw_height = (int) (32 * scale + 0.5f) + (int)(screenHeight * 0.07) + 10;
                 pw_selectStu.showAtLocation(view_selectStu , Gravity.RIGHT | Gravity.BOTTOM , pw_width , pw_height);

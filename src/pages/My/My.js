@@ -128,6 +128,12 @@ class MyPageComponent extends Component {
         };
         StorageUtil.save("namePassword" , propertys);
 
+        // navigation.navigate({
+        //     name: "Login",
+        //     params:{
+        //         isExit: true,
+        //     }
+        // });
         navigation.navigate("Login");
     };
     upLoadAvatar = (img) => {
