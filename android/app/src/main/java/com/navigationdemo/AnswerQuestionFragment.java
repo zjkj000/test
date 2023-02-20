@@ -3078,13 +3078,13 @@ public class AnswerQuestionFragment extends Fragment implements View.OnClickList
 
                 float scale = getActivity().getResources().getDisplayMetrics().density;
                 int pw_width = 0;
-//                if(isTabletDevice()){ //平板
-//                    pw_width = (int)(screenWidth * 0.25) + 150;
-//                }else{ //手机
-//                    pw_width = (int) (160 * scale + 0.5f) + 20;
-//                }
-                pw_width = MainActivity_tea.screenRightWidth + 5;
-                int pw_height = (int) (32 * scale + 0.5f) + (int)(screenHeight * 0.07) + 5;
+                if(isTabletDevice()){ //平板
+                    pw_width = (int)(screenWidth * 0.25) + 5;
+                }else{ //手机
+                    pw_width = MainActivity_tea.screenRightWidth + 5;
+                }
+//                pw_width = MainActivity_tea.screenRightWidth + 5;
+                int pw_height = (int) (32 * scale + 0.5f) + (int)(screenHeight * 0.07) + 10;
                 pw_selectStu.showAtLocation(view_selectStu , Gravity.RIGHT | Gravity.BOTTOM , pw_width , pw_height);
 //                pw_selectStu.showAtLocation(view_selectStu , Gravity.RIGHT | Gravity.BOTTOM , (int)(screenWidth * 0.2) , 200);
 

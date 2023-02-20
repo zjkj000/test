@@ -20,8 +20,14 @@ const AlertIcon = (props) => <Icon {...props} name="alert-circle-outline" />;
 // let LoginPassword = "";
 let changeLogin = false;
 
-export default Login = () => {
+export default Login = (props) => {
     const navigation = useNavigation();
+    // const isExit = props != null 
+    //                 && props.route != null 
+    //                 && props.route.params != null
+    //                 && props.route.params.isExit != null
+    //                 ? props.route.params.isExit 
+    //                 : false;
     const [Name, setName] = React.useState(function getInitName() {
         //console.log("获取缓存账户名以及密码");
         StorageUtil.get("namePassword").then((res) => {
@@ -57,6 +63,20 @@ export default Login = () => {
         setSecureTextEntry(!secureTextEntry);
     };
 
+    useEffect(()=>{
+        handleLogin_store()
+    },[])
+
+    const handleLogin_store = () => {
+        StorageUtil.get("namePassword").then((res) => {
+            if (res != null && res.loginName != null && res.loginName != "" && res.loginPassword != null && res.loginPassword != "") {
+                handleLogin(res.loginName , res.loginPassword);
+                setName(res.loginName);
+                setPassword(res.loginPassword);
+            }
+        });
+    };
+
 
     //密码显隐图标
     const renderEyeIcon = (props) => (
@@ -83,10 +103,10 @@ export default Login = () => {
             </View>
         );
     };
-    const handleLogin = () => {
+    const handleLogin = (name_store , passWord_store) => {
         const param = {
-            userName: Name,
-            passWord: Password,
+            userName: name_store,
+            passWord: passWord_store,
         };
         setShowLoading(true);
         fetch(
@@ -100,9 +120,7 @@ export default Login = () => {
         )
             .then((response) => response.text())
             .then((text) => {
-                console.log("************接口返回数据****************", text);
                 let res = eval("(" + text.substring(2) + ")");
-                console.log("************接口返回数据********res********", res);
                 let homePage = "Home";
                 let property = "STUDENT";
                 let userType = "STUDENT";
@@ -116,7 +134,7 @@ export default Login = () => {
                     userType = "TEACHER";
                 }
                 if (res.success == true) {
-                    console.log("************接口返回数据*****111***********", text);
+                    console.log("************接口返回数据*****111***********");
                     StorageUtil.get("namePassword").then((res) => {
                         console.log("登录账户名以及密码111: " , res);
                         if (res) {
@@ -204,10 +222,17 @@ export default Login = () => {
     return (
         <View style={styles.View}>
             {
-                (Name == null || Name == "") && changeLogin == false  ? getStorageUtil_name() : null
+                // (Name == null || Name == "") && changeLogin == false  ? getStorageUtil_name() : null
             }
             {
-                (Password == null || Password == "") && changeLogin == false ? getStorageUtil_Password() : null
+                // (Password == null || Password == "") && changeLogin == false ? getStorageUtil_Password() : null
+            }
+            {
+                // (Name != null && Name != "" &&  Password != null && Password != "") 
+                //     && changeLogin == false
+                //     && isExit == false
+                //     ? handleLogin_store() 
+                //     : null
             }
             <Layout style={styles.Layout}>
                 <Image
@@ -255,7 +280,7 @@ export default Login = () => {
                     } else if (Password == "") {
                         Toast.showWarningToast("请输入密码", 1000);
                     } else {
-                        handleLogin(true);
+                        handleLogin(Name , Password);
                         console.log("************输入的账户名和密码是****************", Name , Password);
                     }
                 }}

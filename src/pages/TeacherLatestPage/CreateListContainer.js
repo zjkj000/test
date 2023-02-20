@@ -27,7 +27,7 @@ import Loading from "../../utils/loading/Loading"; //Loading组件使用export {
 
 import "../../utils/global/constants";
 
-let pageNo = 1; //当前第几页
+let pageNo = 0; //当前第几页
 let itemNo = 0; //item的个数
 let dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
 
@@ -103,7 +103,7 @@ class CreateList extends React.Component {
                 isRefresh: true,
                 showFoot: 0,
             });
-            pageNo = 1; //当前第几页
+            pageNo = 0; //当前第几页
             itemNo = 0; //item的个数
             dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
             this.fetchData(pageNo, oldtype, oldsearchStr, true);
@@ -115,7 +115,7 @@ class CreateList extends React.Component {
     }
 
     componentWillUnmount() {
-        pageNo = 1; //当前第几页
+        pageNo = 0; //当前第几页
         itemNo = 0; //item的个数
         dataFlag = true; //此次是否请求到了数据，若请求的数据为空，则表示全部数据都请求到了
 
@@ -694,7 +694,7 @@ class CreateList extends React.Component {
     //下拉刷新
     _onRefresh = () => {
         console.log("下拉刷新！！！");
-        pageNo = 1;
+        pageNo = 0;
         itemNo = 0;
         todo_fNUMBER = 0;
         this.setState({
@@ -762,7 +762,7 @@ class CreateList extends React.Component {
             return;
         }
         //如果当前页大于或等于总页数，那就是到最后一页了，返回
-        if (pageNo != 1 && dataFlag == false) {
+        if (pageNo != 0 && dataFlag == false) {
             return;
         } else {
             pageNo++;
