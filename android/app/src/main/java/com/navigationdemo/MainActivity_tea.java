@@ -569,7 +569,7 @@ public class MainActivity_tea extends AppCompatActivity {
                 if(SnapshotMarkFlag){
                     mBoard.addSnapshotMark();
                 }
-                onExitLiveRoom();
+                onExitLiveRoom(0);
                 destroyBoard();
                 //后面加一个 处理关闭  定时器一类的方法  在这里调用   比如 答题部分：AnswerQuestionFragment.java:3798  如果未关闭 直接下课就会出问题
                 save_livePlay_CreateSnapshotTask();
@@ -928,10 +928,10 @@ public class MainActivity_tea extends AppCompatActivity {
         handsUpItemList.clear();
         List<HandsUpItem> tempHandsUpItemList = new ArrayList<>();
         for (int i = 0; i < AnswerActivityTea.handsUpList.size(); i++) {
-            tempHandsUpItemList.add(new HandsUpItem( AnswerActivityTea.handsUpList.get(i).getUserType(), AnswerActivityTea.handsUpList.get(i).getName(), AnswerActivityTea.handsUpList.get(i).getUserId(), false));
-        }
-        for (int i =0; i< tempHandsUpItemList.size(); i++) {
-            Log.e(TAG, "updateHandsUpList: "  + tempHandsUpItemList.get(i).toString());
+            MemberDataBean memberDataBean = AnswerActivityTea.handsUpList.get(i);
+            if(!videoListFragment.findUserInUserList(memberDataBean.getUserId())) {
+                tempHandsUpItemList.add(new HandsUpItem(memberDataBean.getUserType(), memberDataBean.getName(), memberDataBean.getUserId(), false));
+            }
         }
         handsUpItemList.addAll(tempHandsUpItemList);
         setHandBtnBadge(handsUpItemList.size());
@@ -945,6 +945,11 @@ public class MainActivity_tea extends AppCompatActivity {
             item = listViewAdapter.getItem(position);
         if(item != null){
             Log.e(TAG, "switchMemberListAudioIcon: 获取用户item " + item.getName());
+            if(item.getAudioControl()){
+                mTRTCCloud.muteRemoteAudio(item.getUserId(), true);
+            } else {
+                mTRTCCloud.muteRemoteAudio(item.getUserId(), false);
+            }
             item.setAudioControl(!item.getAudioControl());
 //            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 禁音按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
@@ -978,8 +983,8 @@ public class MainActivity_tea extends AppCompatActivity {
     public void switchSpeakerIcon(int position) {
         MemberItem item = listViewAdapter.getItem(position);
         if(item != null){
-            this.videoListFragment.setVideo(item.getUserId(),item.getAudioControl(),this, mTRTCCloud );
             item.setSpeakControl(!item.getSpeakControl());
+            this.videoListFragment.setVideo(item.getUserId(), item.getSpeakControl(), mTRTCCloud);
 //            Toast.makeText(MainActivity_tea.this, "成员 " + position + " 上讲台按钮被点击", Toast.LENGTH_SHORT).show();
             listViewAdapter.notifyDataSetChanged();
         } else {
@@ -991,8 +996,11 @@ public class MainActivity_tea extends AppCompatActivity {
     public void initHandsUpList() {
         if(AnswerActivityTea.handsUpList != null) {
             for (int i = 0; i < AnswerActivityTea.handsUpList.size(); i++) {
-                handsUpItemList.add(new HandsUpItem(AnswerActivityTea.handsUpList.get(i).getUserType() , AnswerActivityTea.handsUpList.get(i).getName(), AnswerActivityTea.handsUpList.get(i).getUserId(), false));
-                Log.e(TAG, "initHandsUpList: "  + AnswerActivityTea.handsUpList.get(i).toString());
+                MemberDataBean memberDataBean = AnswerActivityTea.handsUpList.get(i);
+                if(!videoListFragment.findUserInUserList(memberDataBean.getUserId())) {
+                    handsUpItemList.add(new HandsUpItem(memberDataBean.getUserType(), memberDataBean.getName(), memberDataBean.getUserId(), false));
+                }
+                Log.e(TAG, "initHandsUpList: "  + memberDataBean.toString());
             }
 
         }
@@ -1039,12 +1047,12 @@ public class MainActivity_tea extends AppCompatActivity {
         StudentDataBean memberInJoinList = AnswerActivityTea.findMemberInJoinList(userId);
         ClassDataBean memberInKetangList = AnswerActivityTea.findMemberInKetangList(userId);
         if(memberInJoinList != null) {
-            MemberItem memberItemNew = new MemberItem(memberInJoinList.getName(), memberInJoinList.getUserId(), 1 ,true, false, true, false, true);
+            MemberItem memberItemNew = new MemberItem(memberInJoinList.getName(), memberInJoinList.getUserId(), 1 ,true, false, false, false, false);
             memberDataList.addElement(memberItemNew);
             stuMemberNum += 1;
         } else {
             if(memberInKetangList != null) {
-                MemberItem memberItemNew = new MemberItem(memberInKetangList.getName(), memberInKetangList.getUserId(), 1 ,true, false, true, false, true);
+                MemberItem memberItemNew = new MemberItem(memberInKetangList.getName(), memberInKetangList.getUserId(), 1 ,true, false, false, false, false);
                 memberDataList.addElement(memberItemNew);
                 keTangMemberNum += 1;
                 if(!videoListFragment.findUserInUserList(memberInKetangList.getUserId())) {
@@ -1337,7 +1345,7 @@ public class MainActivity_tea extends AppCompatActivity {
             Log.d(TAG, "onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserVideoAvailable:"+userId);
-            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
+            activity.videoListFragment.setAudio(userId, available, activity.mTRTCCloud);
             int userPosition = listViewAdapter.getItemPositionById(userId);
             activity.switchMemberListAudioIcon(userPosition);
         }
@@ -1375,7 +1383,7 @@ public class MainActivity_tea extends AppCompatActivity {
             }
             int userPosition = listViewAdapter.getItemPositionById(userId);
             activity.switchMemberListVideoIcon(userPosition);
-            activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
+            activity.videoListFragment.setVideo(userId, available, mTRTCCloud);
 
         }
 
@@ -3658,7 +3666,7 @@ public class MainActivity_tea extends AppCompatActivity {
     }
 
 
-    public void onExitLiveRoom() {
+    public void onExitLiveRoom(int status) {
         if (mTRTCCloud != null) {
             mTRTCCloud.stopLocalAudio();
             mTRTCCloud.stopLocalPreview();
@@ -3667,23 +3675,27 @@ public class MainActivity_tea extends AppCompatActivity {
         }
         mTRTCCloud = null;
         TRTCCloud.destroySharedInstance();
-        final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(
-                "finish".getBytes(),       //data
-                "all"+"_WhiteBoard",     //descripition
-                "exitRoomNotice".getBytes());   //extension
-        V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null,roomid, V2TIMMessage.V2TIM_PRIORITY_HIGH, false, null, new V2TIMSendCallback<V2TIMMessage>() {
-            @Override
-            public void onProgress(int progress) {
-            }
-            @Override
-            public void onSuccess(V2TIMMessage message) {
-                System.out.println("+++发送下课消息发送成功了");
-            }
-            @Override
-            public void onError(int code, String desc) {
-                System.out.println("+++发送下课发送失败"+desc);
-            }
-        });
+        if(status == 0) {
+            final V2TIMMessage v2TIMMessage = V2TIMManager.getMessageManager().createCustomMessage(
+                    "finish".getBytes(),       //data
+                    "all" + "_WhiteBoard",     //descripition
+                    "exitRoomNotice".getBytes());   //extension
+            V2TIMManager.getMessageManager().sendMessage(v2TIMMessage, null, roomid, V2TIMMessage.V2TIM_PRIORITY_HIGH, false, null, new V2TIMSendCallback<V2TIMMessage>() {
+                @Override
+                public void onProgress(int progress) {
+                }
+
+                @Override
+                public void onSuccess(V2TIMMessage message) {
+                    System.out.println("+++发送下课消息发送成功了");
+                }
+
+                @Override
+                public void onError(int code, String desc) {
+                    System.out.println("+++发送下课发送失败" + desc);
+                }
+            });
+        }
         stopTime();
         HttpActivityTea.stopHandsUpTimer();
         HttpActivityTea.overClass("leave", "skydt", this);
@@ -3707,7 +3719,7 @@ public class MainActivity_tea extends AppCompatActivity {
         if(mBoard!=null&&SnapshotMarkFlag){
             mBoard.addSnapshotMark();
         }
-        onExitLiveRoom();
+        onExitLiveRoom(1);
         destroyBoard();
 
         V2TIMManager.getInstance().logout(new V2TIMCallback() {

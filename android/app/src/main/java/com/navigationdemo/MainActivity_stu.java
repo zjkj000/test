@@ -901,6 +901,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             @Override
             public void run() {
                 int time = (int)((System.currentTimeMillis() - that.baseTimer) / 1000);
+                if(time < 0) {
+                    time = 0;
+                }
                 String hh = new DecimalFormat("00").format(time / 3600);
                 String mm = new DecimalFormat("00").format(time % 3600 / 60);
                 String ss = new DecimalFormat("00").format(time % 60);
@@ -1141,71 +1144,6 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
         }
 
-//        @Override
-//        public void onRemoteAudioStatusUpdated(String userId, int status, int reason, Bundle extrainfo) {
-//            MainActivity_stu activity = mContext.get();
-//            Log.d(TAG, "onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
-//            System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
-//            System.out.println("onUserVideoAvailable:"+userId);
-//            if(status == TRTCCloudDef.) {
-//                if (userId.equals(teacherId+"_camera")) {
-//                    mTRTCCloud.muteRemoteAudio(userId, false);
-//                    @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_on);
-//                    teacher_name_mic_icon.setBounds(0,0,20,20);
-//                    teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
-//                } else {
-////            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
-////            int userPosition = listViewAdapter.getItemPositionById(userId);
-////            activity.switchMemberListAudioIcon(userPosition);
-//                }
-//            }
-//            else {
-//                if (userId.equals(teacherId+"_camera")) {
-//                    mTRTCCloud.muteRemoteAudio(userId, true);
-//                    @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_off);
-//                    teacher_name_mic_icon.setBounds(0,0,20,20);
-//                    teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
-//                } else {
-//                    mUserList.remove(userId);
-//                }
-//            }
-//        }
-
-        @Override
-        public void onRemoteVideoStatusUpdated(String userId, int streamType, int status, int reason, Bundle extrainfo) {
-            MainActivity_stu activity = mContext.get();
-            boolean available = false;
-            if(status == TRTCCloudDef.TRTCAVStatusStopped) {
-                if(userId.contains("_share")){
-                    mTeacherShare.bringToFront();
-                    mTeacherShare.setVisibility(View.VISIBLE);
-                    mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
-                    mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTeacherShare);
-                }
-                else if (userId.equals(teacherId+"_camera")) {
-                    mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, mTXCVVTeacherPreviewView);
-                    teacherTRTCBackground.setVisibility(View.INVISIBLE);
-                } else {
-                    mUserList.add(userId);
-                }
-            }
-            else if(status == TRTCCloudDef.TRTCAVStatusPlaying){
-                available = true;
-                if(userId.contains("_share")){
-                    mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
-                    mTeacherShare.setVisibility(View.INVISIBLE);
-                }
-                else if (userId.equals(teacherId+"_camera")) {
-                    mTRTCCloud.stopRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
-                    activity.teacherTRTCBackground.setVisibility(View.VISIBLE);
-                } else {
-                    mUserList.remove(userId);
-                }
-            }
-//            int userPosition = listViewAdapter.getItemPositionById(userId);
-//            activity.switchMemberListVideoIcon(userPosition);
-            activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
-        }
 
         @Override
         public void onUserAudioAvailable(String userId, boolean available) {
@@ -1213,21 +1151,24 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             Log.d(TAG, "onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserAudioAvailable userId " + userId + ", mUserCount " + userId + ",available " + available);
             System.out.println("onUserVideoAvailable:"+userId);
+            Toast.makeText(activity, userId + " 的音频发生了变化", Toast.LENGTH_SHORT).show();
             if(available) {
                 if (userId.equals(teacherId+"_camera")) {
-                    mTRTCCloud.muteRemoteAudio(userId, false);
+                    Toast.makeText(activity, userId + " 用户的音频现在可用", Toast.LENGTH_SHORT).show();
+//                    mTRTCCloud.muteRemoteAudio(userId, false);
                     @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_on);
                     teacher_name_mic_icon.setBounds(0,0,20,20);
                     teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
                 } else {
-//            activity.videoListFragment.setAudio(userId, available, activity, activity.mTRTCCloud);
-//            int userPosition = listViewAdapter.getItemPositionById(userId);
-//            activity.switchMemberListAudioIcon(userPosition);
+                    activity.videoListFragment.setAudio(userId, true, activity.mTRTCCloud);
+                    int userPosition = listViewAdapter.getItemPositionById(userId);
+                    activity.switchMemberListAudioIcon(userPosition);
                 }
             }
             else {
                 if (userId.equals(teacherId+"_camera")) {
-                    mTRTCCloud.muteRemoteAudio(userId, true);
+                    Toast.makeText(activity, userId + " 用户的音频现在禁用", Toast.LENGTH_SHORT).show();
+//                    mTRTCCloud.muteRemoteAudio(userId, true);
                     @SuppressLint("UseCompatLoadingForDrawables") Drawable teacher_name_mic_icon = activity.getResources().getDrawable(R.drawable.mic_off);
                     teacher_name_mic_icon.setBounds(0,0,20,20);
                     teacher_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
@@ -1273,7 +1214,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTeacherShare);
                 }
                 else if (userId.equals(teacherId+"_camera")) {
-                    mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, mTXCVVTeacherPreviewView);
+                    Toast.makeText(activity, userId + " 的视频现在可以使用了", Toast.LENGTH_SHORT).show();
+                    mTRTCCloud.muteRemoteVideoStream(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, false);
                     teacherTRTCBackground.setVisibility(View.INVISIBLE);
                 } else {
                     mUserList.add(userId);
@@ -1285,15 +1227,16 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                     mTeacherShare.setVisibility(View.INVISIBLE);
                 }
                 else if (userId.equals(teacherId+"_camera")) {
-                    mTRTCCloud.stopRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG);
-                    activity.teacherTRTCBackground.setVisibility(View.VISIBLE);
+                    Toast.makeText(activity, userId + " 的视频现在停止使用了", Toast.LENGTH_SHORT).show();
+                    mTRTCCloud.muteRemoteVideoStream(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, true);
+                    teacherTRTCBackground.setVisibility(View.VISIBLE);
                 } else {
                     mUserList.remove(userId);
                 }
             }
 //            int userPosition = listViewAdapter.getItemPositionById(userId);
 //            activity.switchMemberListVideoIcon(userPosition);
-            activity.videoListFragment.setVideo(userId, available, activity, activity.mTRTCCloud);
+            activity.videoListFragment.setVideo(userId, available, mTRTCCloud);
 
         }
 
@@ -1306,7 +1249,8 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
 //            Toast.makeText(activity, "onRemoteUserEnterRoom userId " + userId , Toast.LENGTH_SHORT).show();
             if (userId.equals(teacherId+"_camera")) {
                 mTRTCCloud.startRemoteView(teacherId + "_camera", TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG, activity.mTXCVVTeacherPreviewView);
-                activity.teacherTRTCBackground.setVisibility(View.INVISIBLE);
+                Toast.makeText(activity, "老师进入教师", Toast.LENGTH_SHORT).show();
+                teacherTRTCBackground.setVisibility(View.INVISIBLE);
             } else {
                 if(AnswerActivityTea.findMemberInKetangList(userId) != null)
                     activity.videoListFragment.addCameraView(userId, AnswerActivityTea.findMemberInKetangList(userId).getName(), activity.mTRTCCloud);
@@ -1318,16 +1262,15 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             MainActivity_stu activity = mContext.get();
             System.out.println("onRemoteUserLeaveRoom userId " + userId );
             if (userId.equals(teacherId +"_camera")){
-                HttpActivityTea.speakerController(userId, userCn, "down", activity );
+                HttpActivityTea.speakerController(activity.userId, userCn, "down", activity );
                 activity.drawAuthority("drawAuthority", "no", userId);
                 System.out.println("teacher exit room");
                 teacher_enable=false;
                 return;
             }
-            activity.videoListFragment.leaveRoom(userId, reason, activity,
-                    activity.mTRTCCloud);
-//            HttpActivityTea.getMemberList(activity);
-//            Toast.makeText(activity, "onRemoteUserLeaveRoom userId " + userId , Toast.LENGTH_SHORT).show();
+            activity.videoListFragment.leaveRoom(userId, reason, activity, mTRTCCloud);
+//            HttpActivityStu.getMemberList(activity);
+            Toast.makeText(activity, "onRemoteUserLeaveRoom userId " + userId , Toast.LENGTH_SHORT).show();
         }
 
         @Override
@@ -1433,7 +1376,7 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         student_name_view.setCompoundDrawables(teacher_name_mic_icon, null, null, null);
 
         // 初始化教师视频
-//        mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTXCVVTeacherPreviewView);
+        mTRTCCloud.startRemoteView(teacherId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_BIG,mTXCVVTeacherPreviewView);
         teacherTRTCBackground.setVisibility(View.VISIBLE);
 
         // 初始化房间信息
@@ -3401,9 +3344,9 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
             }
         }
 
-//        else if(id==R.id.qiangda){
-//            BottomButtonActivity.qiangDa();
-//        }
+        else if(id==R.id.qiangda){
+            BottomButtonActivity.qiangDa(this);
+        }
 //
 //        //举手上讲�?
 //        else if(id == R.id.hands){

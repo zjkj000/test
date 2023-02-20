@@ -122,7 +122,7 @@ public class VideoListFragment extends Fragment {
         }
     }
 
-    public void setAudio(String userId, boolean available, MainActivity_tea activity, TRTCCloud mTRTCCloud) {
+    public void setAudio(String userId, boolean available,TRTCCloud mTRTCCloud) {
         CameraFragment cameraFragment = mCameraFragmentMap.get(userId);
         if(cameraFragment != null) {
             if (available) {
@@ -135,19 +135,7 @@ public class VideoListFragment extends Fragment {
         }
     }
 
-    public void setVideo(String userId, boolean available, MainActivity_tea activity, TRTCCloud mTRTCCloud) {
-        CameraFragment cameraFragment = mCameraFragmentMap.get(userId);
-        if(cameraFragment != null) {
-            if (available) {
-                cameraFragment.showVideo(mTRTCCloud, userId);
-            } else {
-                cameraFragment.hideVideo(mTRTCCloud, userId);
-            }
-        } else {
-//            Toast.makeText(activity, "未找到用户", Toast.LENGTH_SHORT).show();
-        }
-    }
-    public void setVideo(String userId, boolean available, MainActivity_stu activity, TRTCCloud mTRTCCloud) {
+    public void setVideo(String userId, boolean available, TRTCCloud mTRTCCloud) {
         CameraFragment cameraFragment = mCameraFragmentMap.get(userId);
         if(cameraFragment != null) {
             if (available) {
