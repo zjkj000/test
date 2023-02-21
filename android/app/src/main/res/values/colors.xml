@@ -93,6 +93,7 @@
     <color name="popupWindow_title">#535353</color>
     <color name="popupWindow_container">#424242</color>
     <color name="popupWindow_text_gray">#9FA7B9</color>
+    <color name="tab_bar_title_text_color">#9fa7b9</color>
 
 
 

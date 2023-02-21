@@ -869,7 +869,7 @@
                 app:tabRippleColor="@color/blue_white"
                 app:tabIndicatorColor="@color/blue_white"
                 app:tabTextAppearance="@style/TabBarTextStyle"
-                app:tabTextColor="@color/gray_text"
+                app:tabTextColor="@color/tab_bar_title_text_color"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/blue_white"
                 />
