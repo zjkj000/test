@@ -1186,6 +1186,20 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
                 mTeacherShare.setVisibility(View.VISIBLE);
                 mTRTCCloud.setRemoteRenderParams(userId,TRTCCloudDef.TRTC_VIDEO_RENDER_MODE_FIT,trtcRenderParams);
                 mTRTCCloud.startRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB,mTeacherShare);
+                ConstraintLayout.LayoutParams params= new ConstraintLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, ConstraintLayout.LayoutParams.MATCH_PARENT);
+                //获取屏幕宽高
+                DisplayMetrics dm = new DisplayMetrics();
+//                activity.getWindowManager().getDefaultDisplay().getMetrics(dm);
+                activity.getWindow().getWindowManager().getDefaultDisplay().getMetrics(dm);
+                int screenWidth = dm.widthPixels;
+                int screenHeight = dm.heightPixels;
+                //白板留白处理
+                if(screenWidth/screenHeight > 16/9){
+                    params.setMargins((screenWidth-screenHeight*16/9)/2 + 30 ,0,(screenWidth-screenHeight*16/9)/2 + 30,0);
+                }else{
+                    params.setMargins(0, (screenHeight-screenWidth* 9 / 16) / 2 + 300, 0, (screenHeight - screenWidth * 9 / 16) / 2 + 30);
+                }
+                mTeacherShare.setLayoutParams(params);
             } else {
                 mTRTCCloud.stopRemoteView(userId, TRTCCloudDef.TRTC_VIDEO_STREAM_TYPE_SUB);
                 mTeacherShare.setVisibility(View.INVISIBLE);

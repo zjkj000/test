@@ -1282,12 +1282,12 @@ public class MainActivity_tea extends AppCompatActivity {
         startService(new Intent(this, MediaService.class));
         TRTCCloudDef.TRTCVideoEncParam encParam = new TRTCCloudDef.TRTCVideoEncParam();
         encParam.videoResolution = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_1920_1080;
-        encParam.videoResolutionMode = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_MODE_PORTRAIT;
-//        encParam.videoResolution = 1920 * 1080;
+//        encParam.videoResolutionMode = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_MODE_PORTRAIT;
+        encParam.videoResolution = 1920 * 1080;
         encParam.videoFps = 15;
         encParam.videoBitrate = 1600;
         encParam.videoResolutionMode = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_MODE_LANDSCAPE;
-        encParam.enableAdjustRes = true;
+//        encParam.enableAdjustRes = true;
 //        mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
         TRTCCloudDef.TRTCScreenShareParams trtcScreenShareParams = new TRTCCloudDef.TRTCScreenShareParams();
         mTRTCCloud.stopLocalPreview();
