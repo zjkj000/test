@@ -18,11 +18,11 @@
 
 
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="1.0"
+        app:layout_constraintHeight_percent="0.97"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
 
-        app:layout_constraintWidth_percent="1.0">
+        app:layout_constraintWidth_percent="0.98">
         <!--        app:layout_constraintHorizontal_bias="0.5"-->
 
     </com.tencent.rtmp.ui.TXCloudVideoView>
@@ -866,15 +866,10 @@
                 android:layout_height="wrap_content"
                 android:background="@color/background_chatroom"
                 app:layout_constraintTop_toBottomOf="@id/teacher_camera_block"
-                app:tabPaddingStart="5dp"
-                app:tabPaddingEnd="5dp"
                 app:tabRippleColor="@color/blue_white"
                 app:tabIndicatorColor="@color/blue_white"
                 app:tabTextAppearance="@style/TabBarTextStyle"
                 app:tabTextColor="@color/gray_text"
-                app:tabPaddingBottom="0dp"
-                app:tabPaddingTop="0dp"
-                app:tabPadding="0dp"
                 app:tabMode="fixed"
                 app:tabSelectedTextColor="@color/blue_white"
                 />
@@ -1031,19 +1026,6 @@
         android:src="@drawable/bottom_line"
         />
 
-
-    <ImageView
-        android:id="@+id/share_btn"
-        android:layout_width="50dp"
-        android:layout_height="0dp"
-        android:adjustViewBounds="true"
-        android:visibility="gone"
-        android:onClick="handleSareScreen"
-        app:layout_constraintEnd_toStartOf="@id/exit_btn"
-        app:layout_constraintBottom_toBottomOf="@+id/group_buttons"
-        app:layout_constraintTop_toTopOf="@+id/group_buttons"
-        android:src="@drawable/bottom_share"
-        />
     <ImageView
         android:id="@+id/exit_btn"
         android:layout_width="50dp"
@@ -1054,16 +1036,6 @@
         app:layout_constraintTop_toTopOf="@+id/group_buttons"
         android:src="@drawable/bottom_exit"
         />
-<!--    共享屏幕按钮-->
-<!--    <ImageView-->
-<!--        android:id="@+id/share_btn"-->
-<!--        android:layout_width="50dp"-->
-<!--        android:layout_height="0dp"-->
-<!--        app:layout_constraintEnd_toStartOf="@id/exit_btn"-->
-<!--        app:layout_constraintBottom_toBottomOf="@+id/group_buttons"-->
-<!--        app:layout_constraintTop_toTopOf="@+id/group_buttons"-->
-<!--        android:src="@drawable/bottom_share"-->
-<!--        />-->
 
 
 

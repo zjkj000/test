@@ -18,7 +18,6 @@ public class BottomButtonActivity extends MainActivity_stu implements View.OnCli
 
         } else {
             mQiangda.setVisibility(View.VISIBLE);
-
         }
         mQiangda.setSelected(!isSelected);
     }

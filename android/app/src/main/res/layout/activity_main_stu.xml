@@ -17,11 +17,11 @@
         app:layout_constraintBottom_toTopOf="parent"
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHeight_percent="1.0"
+        app:layout_constraintHeight_percent="0.97"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="parent"
 
-        app:layout_constraintWidth_percent="1.0">
+        app:layout_constraintWidth_percent="0.98">
         <!--        app:layout_constraintHorizontal_bias="0.5"-->
 
         <androidx.constraintlayout.widget.ConstraintLayout

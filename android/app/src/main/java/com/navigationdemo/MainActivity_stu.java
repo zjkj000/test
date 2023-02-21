@@ -1330,7 +1330,13 @@ public class MainActivity_stu extends AppCompatActivity implements View.OnClickL
         mTRTCCloud.setLocalRenderParams(myTRTCRenderParams);
 
         // 开启本地摄像头预览
-        mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            while (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
+            }
+        } else {
+            mTRTCCloud.startLocalPreview(mIsFrontCamera, mTXCVVStudentPreviewView);
+        }
         // 开启本地语音频道
         mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
 

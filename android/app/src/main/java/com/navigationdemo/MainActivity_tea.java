@@ -418,6 +418,10 @@ public class MainActivity_tea extends AppCompatActivity {
                 ActivityCompat.requestPermissions(this, sList, 10000);
             }
         }
+        int cameraPermission = ActivityCompat.checkSelfPermission(getBaseContext(),"android.permission.CAMERA");
+        if(cameraPermission==PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(MainActivity_tea.this, new String[]{Manifest.permission.CAMERA},1002);
+        }
 
        //初始化测试参数
         handleIntent();
@@ -522,7 +526,6 @@ public class MainActivity_tea extends AppCompatActivity {
         handBtn = findViewById(R.id.hand_btn);
         audioBtn = findViewById(R.id.mic_btn);
         cameraBtn = findViewById(R.id.camera_btn);
-        shareBtn = findViewById(R.id.share_btn);
 //        overClassBtn = findViewById(R.id.exit_btn);
 
         teacher_name_view = findViewById(R.id.teacher_name);
@@ -1283,6 +1286,7 @@ public class MainActivity_tea extends AppCompatActivity {
 //        encParam.videoResolution = 1920 * 1080;
         encParam.videoFps = 15;
         encParam.videoBitrate = 1600;
+        encParam.videoResolutionMode = TRTCCloudDef.TRTC_VIDEO_RESOLUTION_MODE_LANDSCAPE;
         encParam.enableAdjustRes = true;
 //        mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
         TRTCCloudDef.TRTCScreenShareParams trtcScreenShareParams = new TRTCCloudDef.TRTCScreenShareParams();
@@ -1471,7 +1475,13 @@ public class MainActivity_tea extends AppCompatActivity {
         audioBtn.getDrawable().setLevel(5);
 
         // 开启本地摄像头预览
-        mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
+        if(ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            while (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+                mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
+            }
+        } else {
+            mTRTCCloud.startLocalPreview(true, mTXCVVTeacherPreviewView);
+        }
         // 开启本地音频
         mTRTCCloud.startLocalAudio(TRTCCloudDef.TRTC_AUDIO_QUALITY_SPEECH);
 
